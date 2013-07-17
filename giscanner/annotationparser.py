@@ -225,12 +225,12 @@ OPT_TRANSFER_FLOATING = 'floating'
 # Results in 0 symbolic groups.
 COMMENT_START_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    /                                        # 1 forward slash character
-    \*{2}                                    # exactly 2 asterisk characters
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    /                                                    # 1 forward slash character
+    \*{2}                                                # exactly 2 asterisk characters
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE)
 
@@ -242,14 +242,14 @@ COMMENT_START_RE = re.compile(
 #    - group 1 = description
 COMMENT_END_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<description>.*?)                     # description text
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    \*+                                      # 1 or more asterisk characters
-    /                                        # 1 forward slash character
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<description>.*?)                                 # description text
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    \*+                                                  # 1 or more asterisk characters
+    /                                                    # 1 forward slash character
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE)
 
@@ -257,13 +257,13 @@ COMMENT_END_RE = re.compile(
 # line inside a comment block.
 COMMENT_ASTERISK_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    \*                                       # 1 asterisk character
-    [^\S\n\r]?                               # 0 or 1 whitespace characters
-                                             #   WARNING: removing more than 1
-                                             #   whitespace character breaks
-                                             #   embedded example program indentation
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    \*                                                   # 1 asterisk character
+    [^\S\n\r]?                                           # 0 or 1 whitespace characters
+                                                         #   WARNING: removing more than 1
+                                                         #   whitespace character breaks
+                                                         #   embedded example program indentation
     ''',
     re.VERBOSE)
 
@@ -275,7 +275,7 @@ COMMENT_ASTERISK_RE = re.compile(
 COMMENT_INDENTATION_RE = re.compile(
     r'''
     ^
-    (?P<indentation>[^\S\n\r]*)              # 0 or more whitespace characters
+    (?P<indentation>[^\S\n\r]*)                          # 0 or more whitespace characters
     .*
     $
     ''',
@@ -284,9 +284,9 @@ COMMENT_INDENTATION_RE = re.compile(
 # Pattern matching an empty line.
 EMPTY_LINE_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE)
 
@@ -297,14 +297,14 @@ EMPTY_LINE_RE = re.compile(
 #   - group 2 = section_name
 SECTION_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    SECTION                                  # SECTION
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<colon>:?)                            # colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<section_name>\w\S+)?                 # section name
-    [^\S\n\r]*                               # 0 or more whitespace characters
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    SECTION                                              # SECTION
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<colon>:?)                                        # colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<section_name>\w\S+)?                             # section name
+    [^\S\n\r]*                                           # 0 or more whitespace characters
     $
     ''',
     re.VERBOSE)
@@ -317,15 +317,15 @@ SECTION_RE = re.compile(
 #   - group 3 = annotations
 SYMBOL_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<symbol_name>[\w-]*\w)                # symbol name
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<colon>:?)                            # colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)  # annotations
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<symbol_name>[\w-]*\w)                            # symbol name
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<colon>:?)                                        # colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE)
 
@@ -338,19 +338,19 @@ SYMBOL_RE = re.compile(
 #   - group 4 = annotations
 PROPERTY_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<class_name>[\w]+)                    # class name
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    :{1}                                     # required colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<property_name>[\w-]*\w)              # property name
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<colon>:?)                            # colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)  # annotations
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<class_name>[\w]+)                                # class name
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    :{1}                                                 # required colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<property_name>[\w-]*\w)                          # property name
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<colon>:?)                                        # colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE)
 
@@ -363,19 +363,19 @@ PROPERTY_RE = re.compile(
 #   - group 4 = annotations
 SIGNAL_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<class_name>[\w]+)                    # class name
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    :{2}                                     # 2 required colons
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<signal_name>[\w-]*\w)                # signal name
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<colon>:?)                            # colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)  # annotations
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<class_name>[\w]+)                                # class name
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    :{2}                                                 # 2 required colons
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<signal_name>[\w-]*\w)                            # signal name
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<colon>:?)                                        # colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE)
 
@@ -388,19 +388,19 @@ SIGNAL_RE = re.compile(
 #   - group 4 = description
 PARAMETER_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    @                                        # @ character
-    (?P<parameter_name>[\w-]*\w|\.\.\.)      # parameter name
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    :{1}                                     # required colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)  # annotations
-    (?P<colon>:?)                            # colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<description>.*?)                     # description
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    @                                                    # @ character
+    (?P<parameter_name>[\w-]*\w|\.\.\.)                  # parameter name
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    :{1}                                                 # required colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
+    (?P<colon>:?)                                        # colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<description>.*?)                                 # description
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE)
 
@@ -414,18 +414,18 @@ PARAMETER_RE = re.compile(
 _all_tags = '|'.join(_ALL_TAGS).replace(' ', '\\ ')
 TAG_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<tag_name>''' + _all_tags + r''')     # tag name
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    :{1}                                     # required colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)  # annotations
-    (?P<colon>:?)                            # colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<description>.*?)                     # description
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<tag_name>''' + _all_tags + r''')                 # tag name
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    :{1}                                                 # required colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
+    (?P<colon>:?)                                        # colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<description>.*?)                                 # description
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE | re.IGNORECASE)
 
@@ -439,14 +439,14 @@ TAG_RE = re.compile(
 #   - group 4 = description
 MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
     r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)  # annotations
-    (?P<colon>:)                             # colon
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    (?P<description>.*?)                     # description
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    $                                        # end
+    ^                                                    # start
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
+    (?P<colon>:)                                         # colon
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    (?P<description>.*?)                                 # description
+    [^\S\n\r]*                                           # 0 or more whitespace characters
+    $                                                    # end
     ''',
     re.VERBOSE)
 
