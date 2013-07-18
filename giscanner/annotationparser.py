@@ -1175,32 +1175,6 @@ class GtkDocCommentBlockParser(object):
 
         # If we get this far, we must be inside something
         # that looks like a GTK-Doc comment block.
-        return self._parse_comment_block(comment_lines, filename, lineno)
-
-    def _parse_comment_block(self, comment_lines, filename, lineno):
-        """
-        Parses a single GTK-Doc comment block already stripped from its
-        comment start (/**) and comment end (*/) marker lines.
-
-        :param comment_lines: list of (line_offset, line) tuples representing a
-                              GTK-Doc comment block already stripped from it's
-                              start (/**) and end (*/) marker lines
-        :param filename: source file name where the comment block originated from
-        :param lineno:  line in the source file where the comment block starts
-        :returns: a :class:`GtkDocCommentBlock` object or ``None``
-
-        .. NOTE:: If you are tempted to refactor this method and split it
-            further up (for example into _parse_identifier(), _parse_parameters(),
-            _parse_description(), _parse_tags() methods) then please resist the
-            urge. It is considered important that this method should be more or
-            less easily comparable with gtkdoc-mkdb's `ScanSourceFile()`_ function.
-
-            The different parsing steps are marked with a comment surrounded
-            by `#` characters in an attempt to make it clear what is going on.
-
-        .. _ScanSourceFile():
-                http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
-        """
         comment_block = None
         identifier_warned = False
         part_indent = None
