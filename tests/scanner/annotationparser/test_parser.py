@@ -99,10 +99,7 @@ class TestCommentBlock(unittest.TestCase):
             parsed += '<docblock>\n'
 
             parsed += '  <identifier>\n'
-            # An identifier name is always required, but we can't trust our
-            # own parser to ensure this when testing so fall back to an empty
-            # string when no name has been parsed...
-            parsed += '    <name>%s</name>\n' % (docblock.name or '', )
+            parsed += '    <name>%s</name>\n' % (docblock.name, )
             if docblock.options.values:
                 parsed += '    <annotations>\n'
                 for key, value in docblock.options.values:
@@ -195,7 +192,6 @@ class TestCommentBlock(unittest.TestCase):
 
             if docblock.find(ns('{}identifier')) is not None:
                 expected += '  <identifier>\n'
-                # Expecting an identifier name is required, don't bother checking if it's there or not
                 expected += '    <name>%s</name>\n' % (docblock.find(ns('{}identifier/{}name')).text, )
                 annotations = docblock.find(ns('{}identifier/{}annotations'))
                 if annotations is not None:
