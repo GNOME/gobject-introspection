@@ -589,6 +589,14 @@ class TestProgram(TestCase):
 
             match = program.match(text)
 
+            if match is not None:
+                msg = 'Test matched pattern but specifies no expected named groups.'
+                self.assertTrue(isinstance(expected, dict), msg)
+
+                for group in match.groupdict().keys():
+                    msg = 'Test case is missing expected results for named group "%s".' % (group)
+                    self.assertTrue(group in expected.keys(), msg)
+
             if expected is None:
                 msg = 'Program matched text but shouldn\'t:\n"%s"'
                 self.assertTrue(match is None, msg % (text, ))
