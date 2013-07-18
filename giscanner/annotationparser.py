@@ -282,6 +282,9 @@ TRANSFER_OPTIONS = [OPT_TRANSFER_CONTAINER,
                     OPT_TRANSFER_NONE]
 
 
+# Pattern used to normalize different types of line endings
+LINE_BREAK_RE = re.compile(r'\r\n|\r|\n', re.UNICODE)
+
 # Program matching the start of a comment block.
 #
 # Results in 0 symbolic groups.
@@ -1143,10 +1146,7 @@ class GtkDocCommentBlockParser(object):
         :returns: a :class:`GtkDocCommentBlock` object or ``None``
         '''
 
-        # Assign line numbers to each line of the comment block,
-        # which will later be used as the offset to calculate the
-        # real line number in the source file
-        comment_lines = list(enumerate(comment.split('\n')))
+        comment_lines = list(enumerate(re.sub(LINE_BREAK_RE, '\n', comment).split('\n')))
 
         # Check for the start the comment block.
         if COMMENT_START_RE.match(comment_lines[0][1]):
