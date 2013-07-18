@@ -288,11 +288,7 @@ EMPTY_LINE_RE = re.compile(
     ''',
     re.UNICODE | re.VERBOSE)
 
-# Program matching SECTION identifiers.
-#
-# Results in 2 symbolic groups:
-#   - group 1 = delimiter
-#   - group 2 = section_name
+# Pattern matching SECTION identifiers.
 SECTION_RE = re.compile(
     r'''
     ^                                                    # start
@@ -301,7 +297,9 @@ SECTION_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     (?P<delimiter>:?)                                    # delimiter
     \s*                                                  # 0 or more whitespace characters
-    (?P<section_name>\w\S+)?                             # section name
+    (?P<section_name>\w\S+?)                             # section name
+    \s*                                                  # 0 or more whitespace characters
+    :?                                                   # invalid delimiter
     \s*                                                  # 0 or more whitespace characters
     $
     ''',
