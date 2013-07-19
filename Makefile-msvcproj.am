@@ -120,10 +120,25 @@
 	done >>./build/win32/vs9/gir.vs9.install
 	echo '' >>./build/win32/vs9/gir.vs9.install
 	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;' >>./build/win32/vs9/gir.vs9.install
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\collections&#x0D;&#x0A;' >>./build/win32/vs9/gir.vs9.install
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates&#x0D;&#x0A;' >>./build/win32/vs9/gir.vs9.install
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C&#x0D;&#x0A;' >>./build/win32/vs9/gir.vs9.install
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs&#x0D;&#x0A;' >>./build/win32/vs9/gir.vs9.install
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python&#x0D;&#x0A;' >>./build/win32/vs9/gir.vs9.install
 	echo '' >>./build/win32/vs9/gir.vs9.install
-	for F in `echo $(pkgpyexec_PYTHON) | tr '/' '\\'`; do \
+	for F in `echo $(pkgpyexec_PYTHON) $(collections_PYTHON) $(nobase_dist_template_DATA) | tr '/' '\\'`; do \
 		case $$F in \
-		*.py|*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;' \
+		giscanner\\doctemplates\\C\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C&#x0D;&#x0A;' \
+			;; \
+		giscanner\\doctemplates\\Gjs\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs&#x0D;&#x0A;' \
+			;; \
+		giscanner\\doctemplates\\Python\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python&#x0D;&#x0A;' \
+			;; \
+		giscanner\\doctemplates\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates&#x0D;&#x0A;' \
+			;; \
+		giscanner\\collections\\*.py) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\collections&#x0D;&#x0A;' \
+			;; \
+		giscanner\\*.py) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;' \
 			;; \
 		esac; \
 	done >>./build/win32/vs9/gir.vs9.install
@@ -141,10 +156,23 @@
 	echo '' >>./build/win32/vs10/gir.vs10.install
 	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\collections' >>./build/win32/vs10/gir.vs10.install
 	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates' >>./build/win32/vs10/gir.vs10.install
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C' >>./build/win32/vs10/gir.vs10.install
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs' >>./build/win32/vs10/gir.vs10.install
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python' >>./build/win32/vs10/gir.vs10.install
 	echo '' >>./build/win32/vs10/gir.vs10.install
 	for F in `echo $(pkgpyexec_PYTHON) $(collections_PYTHON) $(nobase_dist_template_DATA) | tr '/' '\\'`; do \
 		case $$F in \
-		*.py|*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner' && \
+		giscanner\\doctemplates\\C\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C' \
+			;; \
+		giscanner\\doctemplates\\Gjs\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs' \
+			;; \
+		giscanner\\doctemplates\\Python\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python' \
+			;; \
+		giscanner\\doctemplates\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates' \
+			;; \
+		giscanner\\collections\\*.py) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\collections' \
+			;; \
+		giscanner\\*.py) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner' && \
 			echo '' \
 			;; \
 		esac; \
