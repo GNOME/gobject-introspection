@@ -56,6 +56,16 @@
                ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_object_inout:
+ * @object: a #GObject
+ * @inoutarg: (inout): This is an argument test
+ * @inoutarg2: (inout): This is an argument test
+ *
+ * This is a test for inout arguments
+ *
+ * Returns: an int
+ */</output>
 </test>
 
 </tests>

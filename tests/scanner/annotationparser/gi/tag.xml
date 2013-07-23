@@ -34,6 +34,13 @@
                         ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_tag_missing_colon:
+ *
+ * Forgotten colon below will result in a warning.
+ *
+ * Returns: (allow-none): return value
+ */</output>
 </test>
 
 <test>
@@ -77,6 +84,17 @@ the "Returns:"" tag description field.</description>
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_unexpected_tag:
+ * @param1: first parameter
+ * does something
+ *
+ * Returns: something
+ * returning something
+ *
+ * Probably intended as the comment block description part but in reality belongs to
+ * the "Returns:"" tag description field.
+ */</output>
 </test>
 
 <test>
@@ -181,6 +199,14 @@ Moo: anything</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_multiline_annotations_on_tag:
+ *
+ * Annotations spanning multiple lines are not valid
+ *
+ * Returns: (allow-none):
+ * (transfer full): something
+ */</output>
 </test>
 
 <test>
@@ -212,6 +238,14 @@ Moo: anything</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * test_multiline_annotations_on_tag:
+ *
+ * Annotations spanning multiple lines are not valid
+ *
+ * Returns: (allow-none): Returns tag having a second line which looks
+ * (like an annotation), but isn't. This should not result in a warning.
+ */</output>
 </test>
 
 <test>
@@ -273,6 +307,18 @@ the axes that @device currently has.</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * gdk_device_list_axes:
+ * @device: a pointer #GdkDevice
+ *
+ * Returns a #GList of #GdkAtom<!-- -->s, containing the labels for
+ * the axes that @device currently has.
+ *
+ * Returns: (transfer container) (element-type GdkAtom):
+ *     A #GList of #GdkAtom<!-- -->s, free
+ *     with g_list_free().
+ * Since: 3.0
+ */</output>
 </test>
 
 <test>
@@ -336,6 +382,20 @@ dynamically assigned payload type.</description>
      ^</message>
     </messages>
   </parser>
+  <output>  /**
+   * FsSession:codec-preferences: (type GLib.List(FsCodec)) (transfer full)
+   *
+   * This is the current preferences list for the local codecs. It is
+   * set by the user to specify the codec options and priorities. The user may
+   * change its value with fs_session_set_codec_preferences() at any time
+   * during a session. It is a #GList of #FsCodec.
+   * The user must free this codec list using fs_codec_list_destroy() when done.
+   *
+   * The payload type may be a valid dynamic PT (96-127), %FS_CODEC_ID_DISABLE
+   * or %FS_CODEC_ID_ANY. If the encoding name is "reserve-pt", then the
+   * payload type of the codec will be "reserved" and not be used by any
+   * dynamically assigned payload type.
+   */</output>
 </test>
 
 </tests>

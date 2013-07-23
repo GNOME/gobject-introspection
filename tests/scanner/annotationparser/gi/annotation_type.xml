@@ -56,6 +56,14 @@
 known by GObject as it's only marked as G_TYPE_POINTER</description>
     </docblock>
   </parser>
+  <output>/**
+ * AnnotationObject::list-signal:
+ * @annotation: the annotation object
+ * @list: (type GLib.List) (element-type utf8) (transfer container): a list of strings
+ *
+ * This is a signal which takes a list of strings, but it's not
+ * known by GObject as it's only marked as G_TYPE_POINTER
+ */</output>
 </test>
 
 <test>
@@ -87,6 +95,9 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
       </identifier>
     </docblock>
   </parser>
+  <output>/**
+ * AnnotationObject:hash-table: (type GLib.HashTable(utf8,gint8)) (transfer container)
+ */</output>
 </test>
 
 <test>
@@ -121,6 +132,9 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
       </identifier>
     </docblock>
   </parser>
+  <output>/**
+ * AnnotationObject:hash-table: (type GLib.HashTable(utf8,gint8)) (transfer container)
+ */</output>
 </test>
 
 <test>
@@ -157,6 +171,11 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * RegressTestObj:hash-table: (type GLib.HashTable(utf8,gint8))
+ *
+ * Test.
+ */</output>
 </test>
 
 <test>
@@ -193,6 +212,11 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * RegressTestObj:hash-table: (type GLib.HashTable(utf8,gint8))
+ *
+ * Test.
+ */</output>
 </test>
 
 <test>
@@ -229,6 +253,11 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
    ^]]></message>
     </messages>
   </parser>
+  <output>/**
+ * RegressTestObj:hash-table: (type GLib.HashTable(utf8,gint8))
+ *
+ * Test.
+ */</output>
 </test>
 
 </tests>

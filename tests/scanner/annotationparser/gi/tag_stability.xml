@@ -21,6 +21,11 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_versioned:
+ *
+ * Stability: Stable
+ */</output>
 </test>
 
 <test>
@@ -42,6 +47,11 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_versioned:
+ *
+ * Stability: Unstable
+ */</output>
 </test>
 
 <test>
@@ -63,6 +73,11 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_versioned:
+ *
+ * Stability: Private
+ */</output>
 </test>
 
 <test>
@@ -84,6 +99,11 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_versioned:
+ *
+ * Stability: behavior tends to vary depending on the phase of the moon.
+ */</output>
 </test>
 
 <test>
@@ -111,6 +131,13 @@
       <message>6: Error: Test: annotations not supported for tag "Stability:".</message>
     </messages>
   </parser>
+  <output>/**
+ * test_tag_not_annotatable:
+ *
+ * Tags (except Returns:) don't have annotations
+ *
+ * Stability: Private
+ */</output>
 </test>
 
 <test>
@@ -141,6 +168,11 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_multiple_tags:
+ *
+ * Stability: Private
+ */</output>
 </test>
 
 <test>
@@ -168,6 +200,12 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * test_stability_description:
+ *
+ * Stability: Unstable: maybe one day this will work
+ *                      correctly...
+ */</output>
 </test>
 
 </tests>

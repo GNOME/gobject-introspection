@@ -72,6 +72,12 @@
       <message>3: Warning: Test: unknown annotation: invalid-annotation-option</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test: (hello) (world)
+ * @param: (invalid-annotation-option): sizeof (x) == 1
+ *
+ * Test unknown annotations without options.
+ */</output>
 </test>
 
 <test>
@@ -126,6 +132,12 @@
       <description>Oops.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotationtest:
+ * @object: some data (foo bar)
+ *
+ * Oops.
+ */</output>
 </test>
 
 <test>
@@ -147,6 +159,11 @@
                     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test:
+ *
+ * Oops.
+ */</output>
 </test>
 
 <test>
@@ -175,6 +192,11 @@
       <message>2: Warning: Test: unknown annotation: world</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test: (hello) (world)
+ *
+ * Test unknown annotations without options.
+ */</output>
 </test>
 
 <test>
@@ -213,6 +235,11 @@
       <message>2: Warning: Test: unknown annotation: world</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test: (hello x=y    z) (world something else)
+ *
+ * Test unknown annotations with options.
+ */</output>
 </test>
 
 <test>
@@ -256,6 +283,12 @@
       <description>Test multiple identical option names.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_test:
+ * @test: (element-type gint gint) (transfer none):
+ *
+ * Test multiple identical option names.
+ */</output>
 </test>
 
 <test>
@@ -295,6 +328,11 @@
       <description>Test nested parentheses.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_test: (type GLib.HashTable(utf8,gint8)) (attributes x=1 y=2)
+ *
+ * Test nested parentheses.
+ */</output>
 </test>
 
 <test>
@@ -334,6 +372,11 @@
       <description>Test nested parentheses.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_test: (type GLib.HashTable(utf8,GLib.HashTable(utf8,gint8))) (attributes x=1 y=2)
+ *
+ * Test nested parentheses.
+ */</output>
 </test>
 
 <test>
@@ -373,6 +416,11 @@
       <description>Test deprecated angled brackets.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_test: (type GLib.HashTable(utf8,GLib.HashTable(utf8,gint8))) (attributes x=1 y=2)
+ *
+ * Test deprecated angled brackets.
+ */</output>
 </test>
 
 <test>
@@ -394,6 +442,11 @@
                      ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test:
+ *
+ * Test too many '('.
+ */</output>
 </test>
 
 <test>
@@ -430,6 +483,11 @@
                      ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test:
+ *
+ * Closing should not follow an opening parentheses.
+ */</output>
 </test>
 
 <test>
@@ -451,6 +509,11 @@
                            ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test:
+ *
+ * Closing should not follow an opening parentheses.
+ */</output>
 </test>
 
 <test>
@@ -472,6 +535,11 @@
                           ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test:
+ *
+ * Test too many ')'.
+ */</output>
 </test>
 
 <test>
@@ -499,6 +567,12 @@
                                          ^]]></message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test:
+ * @test:
+ *
+ * Test missing '('.
+ */</output>
 </test>
 
 <test>
@@ -520,6 +594,11 @@
                                              ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test:
+ *
+ * Test missing ')'.
+ */</output>
 </test>
 
 <test>
@@ -547,6 +626,12 @@
                                                               ^]]></message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_test:
+ * @test:
+ *
+ * Test missing ')'.
+ */</output>
 </test>
 
 </tests>

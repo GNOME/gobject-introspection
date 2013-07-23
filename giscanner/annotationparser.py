@@ -882,31 +882,6 @@ class GtkDocParameter(GtkDocAnnotatable):
     def __repr__(self):
         return '<GtkDocParameter %r %r>' % (self.name, self.annotations)
 
-    def _get_gtk_doc_value(self):
-        def serialize_one(option, value, fmt, fmt2):
-            if value:
-                if type(value) != str:
-                    if isinstance(value, list):
-                        value = ' '.join(value)
-                    else:
-                        value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
-                                          for k, v in value.items()))
-                return fmt % (option, value)
-            else:
-                return fmt2 % (option, )
-        serialized = ''
-        annotations = []
-        for ann_name, options in self.annotations.items():
-            annotations.append(serialize_one(ann_name, options, '(%s %s)', '(%s)'))
-        if annotations:
-            serialized += ' '.join(annotations)
-        if self.description and annotations:
-            serialized += ': '
-        return serialized
-
-    def to_gtk_doc(self):
-        return '@%s: %s%s' % (self.name, self._get_gtk_doc_value(), self.description)
-
 
 class GtkDocTag(GtkDocAnnotatable):
     '''
@@ -932,37 +907,6 @@ class GtkDocTag(GtkDocAnnotatable):
 
     def __repr__(self):
         return '<GtkDocTag %r %r>' % (self.name, self.annotations)
-
-    def _get_gtk_doc_value(self):
-        def serialize_one(option, value, fmt, fmt2):
-            if value:
-                if type(value) != str:
-                    if isinstance(value, list):
-                        value = ' '.join(value)
-                    else:
-                        value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
-                                          for k, v in value.items()))
-                return fmt % (option, value)
-            else:
-                return fmt2 % (option, )
-        serialized = ''
-        annotations = []
-        for ann_name, options in self.annotations.items():
-            annotations.append(serialize_one(ann_name, options, '(%s %s)', '(%s)'))
-        if annotations:
-            serialized += ' '.join(annotations)
-        if self.value and annotations:
-            serialized += ': '
-        if self.value:
-            serialized += self.value
-        if self.description and (annotations or self.value):
-            serialized += ': '
-        return serialized
-
-    def to_gtk_doc(self):
-        return '%s: %s%s' % (self.name.capitalize(),
-                             self._get_gtk_doc_value(),
-                             self.description or '')
 
 
 class GtkDocCommentBlock(GtkDocAnnotatable):
@@ -1013,53 +957,6 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
 
     def __repr__(self):
         return '<GtkDocCommentBlock %r %r>' % (self.name, self.annotations)
-
-    def to_gtk_doc(self):
-        def serialize_one(option, value, fmt, fmt2):
-            if value:
-                if type(value) != str:
-                    if isinstance(value, list):
-                        value = ' '.join(value)
-                    else:
-                        value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
-                                          for k, v in value.items()))
-                return fmt % (option, value)
-            else:
-                return fmt2 % (option, )
-
-        lines = [self.name]
-        if 'SECTION' not in self.name:
-            lines[0] += ':'
-
-        annotations = []
-        for ann_name, options in self.annotations.items():
-            annotations.append(serialize_one(ann_name, options, '(%s %s)', '(%s)'))
-        if annotations:
-            annotations = ' '.join(annotations)
-            lines[0] += ' ' + annotations
-
-        for param in self.params.values():
-            for l in param.to_gtk_doc().split('\n'):
-                lines.append(l)
-        if self.description:
-            lines.append('')
-            for l in self.description.split('\n'):
-                lines.append(l)
-        if self.tags:
-            lines.append('')
-            for tag in self.tags.values():
-                for l in tag.to_gtk_doc().split('\n'):
-                    lines.append(l)
-
-        comment = ''
-        comment += '/**\n'
-        for line in lines:
-            if line:
-                comment += ' * %s\n' % (line, )
-            else:
-                comment += ' *\n'
-        comment += ' */\n'
-        return comment
 
     def validate(self):
         '''
@@ -1957,3 +1854,198 @@ class GtkDocCommentBlockParser(object):
                              position)
 
         return (annotations, description_field)
+
+
+class GtkDocCommentBlockWriter(object):
+    '''
+    Serialized :class:`GtkDocCommentBlock` objects into GTK-Doc comment blocks.
+    '''
+
+    def __init__(self, indent=True):
+        #: :const:`True` if the original indentation preceding the "``*``" needs to be retained,
+        #: :const:`False` otherwise. Default value is :const:`True`.
+        self.indent = indent
+
+    def _serialize_annotations(self, annotations):
+        '''
+        Serialize an annotation field. For example::
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ {'name': {'opt1': 'value1', 'opt2':'value2', 'opt3':None}    │ ◁─ GtkDocAnnotations
+            ├──────────────────────────────────────────────────────────────┤
+            │ '(name opt1=value1 opt2=value2 opt3)'                        │ ─▷ serialized
+            └──────────────────────────────────────────────────────────────┘
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ {'name': ['opt1', 'opt2']}                                   │ ◁─ GtkDocAnnotations
+            ├──────────────────────────────────────────────────────────────┤
+            │ '(name opt1 opt2)'                                           │ ─▷ serialized
+            └──────────────────────────────────────────────────────────────┘
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ {'unkownname': ['unknown list of options']}                  │ ◁─ GtkDocAnnotations
+            ├──────────────────────────────────────────────────────────────┤
+            │ '(unkownname unknown list of options)'                       │ ─▷ serialized
+            └──────────────────────────────────────────────────────────────┘
+
+        :param annotations: :class:`GtkDocAnnotations` to be serialized
+        :returns: a string
+        '''
+
+        serialized = []
+
+        for ann_name, options in annotations.items():
+            if options:
+                if isinstance(options, list):
+                    serialize_options = ' '.join(options)
+                else:
+                    serialize_options = ''
+
+                    for key, value in options.items():
+                        if value:
+                            serialize_options += '%s=%s ' % (key, value)
+                        else:
+                            serialize_options += '%s ' % (key, )
+
+                    serialize_options = serialize_options.strip()
+
+                serialized.append('(%s %s)' % (ann_name, serialize_options))
+            else:
+                serialized.append('(%s)' % (ann_name, ))
+
+        return ' '.join(serialized)
+
+    def _serialize_parameter(self, parameter):
+        '''
+        Serialize a parameter.
+
+        :param parameter: :class:`GtkDocParameter` to be serialized
+        :returns: a string
+        '''
+
+        # parameter_name field
+        serialized = '@%s' % (parameter.name, )
+
+        # annotations field
+        if parameter.annotations:
+            serialized += ': ' + self._serialize_annotations(parameter.annotations)
+
+        # description field
+        if parameter.description:
+            if parameter.description.startswith('\n'):
+                serialized += ':' + parameter.description
+            else:
+                serialized += ': ' + parameter.description
+        else:
+            serialized += ':'
+
+        return serialized.split('\n')
+
+    def _serialize_tag(self, tag):
+        '''
+        Serialize a tag.
+
+        :param tag: :class:`GtkDocTag` to be serialized
+        :returns: a string
+        '''
+
+        # tag_name field
+        serialized = tag.name.capitalize()
+
+        # annotations field
+        if tag.annotations:
+            serialized += ': ' + self._serialize_annotations(tag.annotations)
+
+        # value field
+        if tag.value:
+            serialized += ': ' + tag.value
+
+        # description field
+        if tag.description:
+            if tag.description.startswith('\n'):
+                serialized += ':' + tag.description
+            else:
+                serialized += ': ' + tag.description
+
+        if not tag.value and not tag.description:
+            serialized += ':'
+
+        return serialized.split('\n')
+
+    def write(self, block):
+        '''
+        Serialize a :class:`GtkDocCommentBlock` object.
+
+        :param block: :class:`GtkDocCommentBlock` to be serialized
+        :returns: a string
+        '''
+
+        if block is None:
+            return ''
+        else:
+            lines = []
+
+            # Identifier part
+            if block.name.startswith('SECTION'):
+                lines.append(block.name)
+            else:
+                if block.annotations:
+                    annotations = self._serialize_annotations(block.annotations)
+                    lines.append('%s: %s' % (block.name, annotations))
+                else:
+                    # Note: this delimiter serves no purpose other than most people being used
+                    #       to reading/writing it. It is completely legal to ommit this.
+                    lines.append('%s:' % (block.name, ))
+
+            # Parameter parts
+            for param in block.params.values():
+                lines.extend(self._serialize_parameter(param))
+
+            # Comment block description part
+            if block.description:
+                lines.append('')
+                for l in block.description.split('\n'):
+                    lines.append(l)
+
+            # Tag parts
+            if block.tags:
+                # Note: this empty line servers no purpose other than most people being used
+                #       to reading/writing it. It is completely legal to ommit this.
+                lines.append('')
+                for tag in block.tags.values():
+                    lines.extend(self._serialize_tag(tag))
+
+            # Restore comment block indentation and *
+            if self.indent:
+                indent = Counter(block.indentation).most_common(1)[0][0] or ' '
+                if indent.endswith('\t'):
+                    start_indent = indent
+                    line_indent = indent + ' '
+                else:
+                    start_indent = indent[:-1]
+                    line_indent = indent
+            else:
+                start_indent = ''
+                line_indent = ' '
+
+            i = 0
+            while i < len(lines):
+                line = lines[i]
+                if line:
+                    lines[i] = '%s* %s\n' % (line_indent, line)
+                else:
+                    lines[i] = '%s*\n' % (line_indent, )
+                i += 1
+
+            # Restore comment block start and end tokens
+            lines.insert(0, '%s/**\n' % (start_indent, ))
+            lines.append('%s*/\n' % (line_indent, ))
+
+            # Restore code before and after comment block start and end tokens
+            if block.code_before:
+                lines.insert(0, '%s\n' % (block.code_before, ))
+
+            if block.code_after:
+                lines.append('%s\n' % (block.code_after, ))
+
+            return ''.join(lines)

@@ -32,6 +32,12 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * regress_forced_method: (skip)
+ * @obj: A #RegressTestObj
+ *
+ * (method)
+ */</output>
 </test>
 
 <test>
@@ -64,6 +70,12 @@
        ^</message>
     </messages>
   </parser>
+  <output>/**
+ * regress_forced_method: (skip)
+ * @obj: A #RegressTestObj
+ *
+ * (method)
+ */</output>
 </test>
 
 </tests>

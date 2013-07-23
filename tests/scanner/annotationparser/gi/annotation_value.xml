@@ -26,6 +26,11 @@
       <description>Constant to define a calculated large value</description>
     </docblock>
   </parser>
+  <output>/**
+ * ANNOTATION_CALCULATED_LARGE: (value 10000000000UL)
+ *
+ * Constant to define a calculated large value
+ */</output>
 </test>
 
 <test>
@@ -62,6 +67,11 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * ANNOTATION_CALCULATED_LARGE: (value 10000000000UL)
+ *
+ * Constant to define a calculated large value
+ */</output>
 </test>
 
 <test>
@@ -98,6 +108,11 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * ANNOTATION_CALCULATED_LARGE: (value 10000000000UL)
+ *
+ * Constant to define a calculated large value
+ */</output>
 </test>
 
 </tests>

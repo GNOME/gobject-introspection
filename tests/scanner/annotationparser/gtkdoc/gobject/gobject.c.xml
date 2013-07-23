@@ -100,6 +100,46 @@ This example serves two main purposes:
 Nothing more to say.]]></description>
     </docblock>
   </parser>
+  <output><![CDATA[/**
+ * SECTION:object
+ * @title: GtkdocObject
+ * @short_description: class for gtk-doc unit test
+ * @see_also: #GtkdocIface
+ * @Image: object.png
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
+ * signal.
+ *
+ * When subclassing it is useful to override the #GtkdocObjectClass.test()
+ * method. The #GtkdocObjectClass.foo_bar() vmethod lets you refine your
+ * frobnicator.
+ *
+ * A new instance can be created using the gtkdoc_object_new() function. The
+ * whole lifecycle usualy looks like shown in this example:
+ * |[{{!-- language="C" --!}}
+ * GObject *myobj;
+ *
+ * myobj = gtkdoc_object_new();
+ * // do somehing
+ * g_object_unref (myobj);
+ * ]|
+ *
+ * # Examples #
+ *
+ * You can also change parameters:
+ * <informalexample>
+ * <programlisting language="c"><xi:include xmlns:xi="http://www.w3.org/2003/XInclude" parse="text" href="../../examples/gobject.c" /></programlisting>
+ * </informalexample>
+ *
+ * This example serves two main purposes:
+ * - testing conversion (long description
+ *   follows here)
+ * - catching bugs
+ * - having an example
+ *
+ * Nothing more to say.
+ */]]></output>
 </test>
 
 <test>
@@ -145,6 +185,20 @@ All the internal details go here or not:
 - single item list</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:object2
+ * @title: GtkdocObject2
+ * @short_description: class with interface for gtk-doc unit test
+ * @see_also: #GtkdocIface
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ *
+ * Internals
+ * =========
+ *
+ * All the internal details go here or not:
+ * - single item list
+ */</output>
 </test>
 
 <test>
@@ -180,6 +234,17 @@ All the internal details go here or not:
       </tags>
     </docblock>
   </parser>
+  <output><![CDATA[/**
+ * gtkdoc_object_new:
+ *
+ * Create a new instance
+ * <note><para>
+ *   This will only work if you have called g_type_init() before.
+ * </para></note>
+ *
+ * Returns: the instance or %NULL in case of an error
+ * Since: 0.1
+ */]]></output>
 </test>
 
 <test>
@@ -224,6 +289,17 @@ All the internal details go here or not:
       </tags>
     </docblock>
   </parser>
+  <output><![CDATA[/**
+ * gtkdoc_object_set_otest:
+ * @self: the object
+ * @value: the new otest value, whose description extends further than one
+ *  line will allow
+ *
+ * Set the #GtkdocObject:otest property.
+ *
+ * Deprecated: Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.
+ * Since: 0.5
+ */]]></output>
 </test>
 
 <test>
@@ -272,6 +348,21 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       </tags>
     </docblock>
   </parser>
+  <output><![CDATA[/**
+ * gtkdoc_object_frobnicate:
+ * @self: the object
+ * @n: number of iterations
+ *
+ * Frobnicate the content of @self @n times. This implements a
+ * complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
+ * <footnote>
+ *  <para>
+ *    Negative frobnication can lead to unexpected behaviour.
+ *  </para>
+ * </footnote>
+ *
+ * Since: 0.5
+ */]]></output>
 </test>
 
 <test>
@@ -308,6 +399,15 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * gtkdoc_object_fooify:
+ * @self: the object
+ * @...: a NULL terminated list of arguments
+ *
+ * Fooify the content of @self.
+ *
+ * Returns: %TRUE for success
+ */</output>
 </test>
 
 <test>
@@ -331,6 +431,12 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       <description>The event has been triggered.</description>
     </docblock>
   </parser>
+  <output>  /**
+   * GtkdocObject::otest:
+   * @self: myself
+   *
+   * The event has been triggered.
+   */</output>
 </test>
 
 <test>
@@ -362,6 +468,14 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       </tags>
     </docblock>
   </parser>
+  <output>  /**
+   * GtkdocObject::dep-otest:
+   * @self: myself
+   *
+   * The event has been triggered.
+   *
+   * Deprecated: Use the #GtkdocObject::otest signal instead.
+   */</output>
 </test>
 
 <test>
@@ -378,6 +492,11 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       <description>Something has happened.</description>
     </docblock>
   </parser>
+  <output>  /**
+   * GtkdocObject::strings-changed:
+   *
+   * Something has happened.
+   */</output>
 </test>
 
 <test>
@@ -394,6 +513,11 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       <description>Something has happened.</description>
     </docblock>
   </parser>
+  <output>  /**
+   * GtkdocObject::variant-changed:
+   *
+   * Something has happened.
+   */</output>
 </test>
 
 <test>
@@ -415,6 +539,11 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       </tags>
     </docblock>
   </parser>
+  <output>  /**
+   * GtkdocObject:otest:
+   *
+   * Since: 0.1
+   */</output>
 </test>
 
 <test>
@@ -436,6 +565,11 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       </tags>
     </docblock>
   </parser>
+  <output>  /**
+   * GtkdocObject:dep-otest:
+   *
+   * Deprecated: use #GtkdocObject:otest property
+   */</output>
 </test>
 
 </tests>

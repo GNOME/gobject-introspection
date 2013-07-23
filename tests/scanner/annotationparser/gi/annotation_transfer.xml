@@ -56,6 +56,14 @@
 known by GObject as it's only marked as G_TYPE_POINTER</description>
     </docblock>
   </parser>
+  <output>/**
+ * AnnotationObject::list-signal:
+ * @annotation: the annotation object
+ * @list: (type GLib.List) (element-type utf8) (transfer container): a list of strings
+ *
+ * This is a signal which takes a list of strings, but it's not
+ * known by GObject as it's only marked as G_TYPE_POINTER
+ */</output>
 </test>
 
 <test>
@@ -105,6 +113,15 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_object_in:
+ * @object: a #GObject
+ * @inarg: (in) (transfer none): This is an argument test
+ *
+ * This is a test for in arguments
+ *
+ * Returns: an int
+ */</output>
 </test>
 
 <test>
@@ -136,6 +153,11 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_transfer_floating:
+ *
+ * Returns: (transfer floating): A floating object
+ */</output>
 </test>
 
 <test>
@@ -164,6 +186,12 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
 without....</description>
     </docblock>
   </parser>
+  <output>/**
+ * FsSession:codecs-without-config: (transfer full)
+ *
+ * This is the same list of codecs as #FsSession:codecs
+ * without....
+ */</output>
 </test>
 
 <test>
@@ -202,6 +230,12 @@ without....</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * FsSession:codecs-without-config: (transfer full)
+ *
+ * This is the same list of codecs as #FsSession:codecs
+ * without....
+ */</output>
 </test>
 
 <test>
@@ -240,6 +274,12 @@ without....</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * FsSession:codecs-without-config: (transfer full)
+ *
+ * This is the same list of codecs as #FsSession:codecs
+ * without....
+ */</output>
 </test>
 
 </tests>

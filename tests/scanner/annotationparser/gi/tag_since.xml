@@ -21,6 +21,11 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_versioned:
+ *
+ * Since: 0.6
+ */</output>
 </test>
 
 <test>
@@ -72,6 +77,11 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_versioned:
+ *
+ * Since: this function is available since version 0.6
+ */</output>
 </test>
 
 <test>
@@ -94,6 +104,11 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_versioned:
+ *
+ * Since: 0.6: this function is available since version 0.6
+ */</output>
 </test>
 
 <test>
@@ -121,6 +136,13 @@
       <message>6: Error: Test: annotations not supported for tag "Since:".</message>
     </messages>
   </parser>
+  <output>/**
+ * test_tag_not_annotatable:
+ *
+ * Tags (except Returns:) don't have annotations
+ *
+ * Since: 2.24
+ */</output>
 </test>
 
 <test>
@@ -154,6 +176,12 @@ tags is wrong...</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_multiple_tags:
+ *
+ * Since: 2.0: one of these "Since:"
+ * tags is wrong...
+ */</output>
 </test>
 
 </tests>

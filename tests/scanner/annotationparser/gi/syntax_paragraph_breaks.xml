@@ -24,6 +24,13 @@
 So this is considered a new paragraph.</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:test
+ *
+ * The following line is ' *' (blank-asterisk).
+ *
+ * So this is considered a new paragraph.
+ */</output>
 </test>
 
 <test>
@@ -53,6 +60,13 @@ So this is considered a new paragraph.</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:test
+ *
+ * The following line is ' *' (blank-asterisk).
+ *
+ * So this is considered a new paragraph.
+ */</output>
 </test>
 
 <test>
@@ -76,6 +90,13 @@ So this is considered a new paragraph.</description>
 So this is considered a new paragraph.</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:test
+ *
+ * The following line is ' * ' (blank-asterisk-blank).
+ *
+ * So this is considered a new paragraph.
+ */</output>
 </test>
 
 <test>
@@ -104,6 +125,13 @@ So this is considered a new paragraph.</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:test
+ *
+ * The following line is ' * ' (blank-asterisk-blank).
+ *
+ * So this is considered a new paragraph.
+ */</output>
 </test>
 
 <test>
@@ -129,6 +157,13 @@ So this is considered a new paragraph.</description>
 So this is preceded by an empty line and is not considered a new paragraph.</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:test
+ *
+ * The following line is (blank-asterisk-blank-blank).
+ *  
+ * So this is preceded by an empty line and is not considered a new paragraph.
+ */</output>
 </test>
 
 <test>
@@ -159,6 +194,13 @@ So this is preceded by an empty line and is not considered a new paragraph.</des
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:test
+ *
+ * The following line is (blank-asterisk-blank-blank).
+ *  
+ * So this is preceded by an empty line and is not considered a new paragraph.
+ */</output>
 </test>
 
 <test>
@@ -212,6 +254,27 @@ print_attributes (GIBaseInfo *info)
 </example>]]></description>
     </docblock>
   </parser>
+  <output><![CDATA[/**
+ * SECTION:test
+ *
+ * <example>
+ * <title>Iterating over attributes</title>
+ * <programlisting>
+ * void
+ * print_attributes (GIBaseInfo *info)
+ * {
+ *   GIAttributeIter iter = { 0, };
+ *   char *name;
+ *   char *value;
+ *  
+ *   while (g_base_info_iterate_attributes (info, &iter, &name, &value))
+ *     {
+ *       g_print ("attribute name: %s value: %s", name, value);
+ *     }
+ * }
+ * </programlisting>
+ * </example>
+ */]]></output>
 </test>
 
 <test>
@@ -270,6 +333,27 @@ print_attributes (GIBaseInfo *info)
    ^]]></message>
     </messages>
   </parser>
+  <output><![CDATA[/**
+ * SECTION:test
+ *
+ * <example>
+ * <title>Iterating over attributes</title>
+ * <programlisting>
+ * void
+ * print_attributes (GIBaseInfo *info)
+ * {
+ *   GIAttributeIter iter = { 0, };
+ *   char *name;
+ *   char *value;
+ *  
+ *   while (g_base_info_iterate_attributes (info, &iter, &name, &value))
+ *     {
+ *       g_print ("attribute name: %s value: %s", name, value);
+ *     }
+ * }
+ * </programlisting>
+ * </example>
+ */]]></output>
 </test>
 
 </tests>

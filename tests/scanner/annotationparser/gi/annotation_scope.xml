@@ -43,6 +43,14 @@
       <description>Test taking a call-scoped callback</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_object_foreach:
+ * @object: a #AnnotationObject
+ * @func: (scope call): Callback to invoke
+ * @user_data: Callback user data
+ *
+ * Test taking a call-scoped callback
+ */</output>
 </test>
 
 <test>
@@ -77,6 +85,13 @@
 is invoked.</description>
     </docblock>
   </parser>
+  <output>/**
+ * regress_test_callback_destroy_notify:
+ * @callback: (scope notified):
+ *
+ * Notified - callback persists until a DestroyNotify delegate
+ * is invoked.
+ */</output>
 </test>
 
 <test>
@@ -107,6 +122,10 @@ is invoked.</description>
       </parameters>
     </docblock>
   </parser>
+  <output>/**
+ * regress_test_callback_async:
+ * @callback: (scope async):
+ */</output>
 </test>
 
 </tests>

@@ -30,6 +30,13 @@
 'user_data' and hence has to be annotated.</description>
     </docblock>
   </parser>
+  <output>/**
+ * AnnotationNotifyFunc:
+ * @data: (closure): The user data
+ *
+ * This is a callback with a 'closure' argument that is not named
+ * 'user_data' and hence has to be annotated.
+ */</output>
 </test>
 
 <test>
@@ -73,6 +80,13 @@
 detection, and fixing it via annotations.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_custom_destroy:
+ * @callback: (destroy destroy) (closure data): Destroy notification
+ *
+ * Test messing up the heuristic of closure/destroy-notification
+ * detection, and fixing it via annotations.
+ */</output>
 </test>
 
 <test>
@@ -121,6 +135,13 @@ detection, and fixing it via annotations.</description>
                                              ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_custom_destroy:
+ * @callback: (destroy destroy) (closure data=invalid): Destroy notification
+ *
+ * Test messing up the heuristic of closure/destroy-notification
+ * detection, and fixing it via annotations.
+ */</output>
 </test>
 
 </tests>

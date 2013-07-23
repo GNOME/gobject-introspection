@@ -22,8 +22,7 @@
 '''
 test_parser.py
 
-Tests ensuring the "parse tree" built by annotationparser.py
-continues to function correctly.
+Tests ensuring annotationparser.py continues to function correctly.
 '''
 
 
@@ -33,7 +32,7 @@ import subprocess
 import unittest
 import xml.etree.ElementTree as etree
 
-from giscanner.annotationparser import GtkDocCommentBlockParser
+from giscanner.annotationparser import GtkDocCommentBlockParser, GtkDocCommentBlockWriter
 from giscanner.ast import Namespace
 from giscanner.message import MessageLogger, WARNING, ERROR, FATAL
 
@@ -119,6 +118,31 @@ class TestCommentBlock(unittest.TestCase):
                 msg += '%s\n\n' % (commentblock, )
                 msg += self._diff_messages([expected_message], [emitted_message])
                 self.assertTrue(expected_message == emitted_message, msg)
+
+            # Compare serialized with expected comment block
+            expected_serialized = testcase.find(ns('{}output'))
+            indent = True
+
+            if expected_serialized is None:
+                expected_serialized = ''
+            else:
+                if 'indent' in expected_serialized.attrib:
+                    indent = expected_serialized.attrib['indent']
+                    if indent.lower() in ('false', '0'):
+                        indent = False
+                    elif indent.lower() in ('true', '1'):
+                        indent = True
+                    else:
+                        self.assert_(False, 'Unknown value for "indent" attribute: %s' % (indent))
+
+                expected_serialized = expected_serialized.text + '\n' or None
+
+            commentblockwriter = GtkDocCommentBlockWriter(indent=indent)
+            serialized = commentblockwriter.write(parsed_docblock)
+
+            msg = 'Serialized comment block does not match expected output:\n\n'
+            msg += self._diff_messages(expected_serialized.split('\n'), serialized.split('\n'))
+            self.assertTrue(expected_serialized == serialized, msg)
 
         return do_test
 
@@ -230,8 +254,6 @@ class TestCommentBlock(unittest.TestCase):
         return parsed
 
     def expected2tree(self, docblock):
-        # Note: this sucks, but we can't rely on etree.tostring() to generate useable output :(
-
         expected = ''
 
         if docblock is not None:
@@ -364,6 +386,7 @@ def create_tests(logger, tests_dir, tests_file):
 
     fix_cdata_elements = tests_tree.findall(ns('{}test/{}input'))
     fix_cdata_elements += tests_tree.findall(ns('.//{}description'))
+    fix_cdata_elements += tests_tree.findall(ns('{}test/{}output'))
 
     for element in fix_cdata_elements:
         if element.text:

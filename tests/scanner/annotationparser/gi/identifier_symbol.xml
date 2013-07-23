@@ -16,6 +16,11 @@
       <description>test_symbol does something nifty.</description>
     </docblock>
   </parser>
+  <output>/**
+ * test_symbol:
+ *
+ * test_symbol does something nifty.
+ */</output>
 </test>
 
 <test>
@@ -32,6 +37,11 @@
       <description>Unnecessary colon.</description>
     </docblock>
   </parser>
+  <output>/**
+ * test_symbol_unnecessary_colon:
+ *
+ * Unnecessary colon.
+ */</output>
 </test>
 
 <test>
@@ -53,6 +63,11 @@
       <description>test_annotated_symbol does something nifty.</description>
     </docblock>
   </parser>
+  <output>/**
+ * test_annotated_symbol: (skip)
+ *
+ * test_annotated_symbol does something nifty.
+ */</output>
 </test>
 
 <test>
@@ -79,6 +94,11 @@
                              ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_symbol_missing_colon: (skip)
+ *
+ * Missing colon will result in a warning.
+ */</output>
 </test>
 
 <test>
@@ -100,6 +120,11 @@
       <description>Malformed symbol identifier.</description>
     </docblock>
   </parser>
+  <output>/**
+ * test_malformed_symbol: (skip)
+ *
+ * Malformed symbol identifier.
+ */</output>
 </test>
 
 <test>
@@ -116,6 +141,11 @@
       <description>Some property.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkWidget:test_property:
+ *
+ * Some property.
+ */</output>
 </test>
 
 <test>
@@ -132,6 +162,11 @@
       <description>Unnecessary colon.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkWidget:test_property_unnecessary_colon:
+ *
+ * Unnecessary colon.
+ */</output>
 </test>
 
 <test>
@@ -153,6 +188,11 @@
       <description>Some annotated property.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkWidget:test_annotated_property: (skip)
+ *
+ * Some annotated property.
+ */</output>
 </test>
 
 <test>
@@ -179,6 +219,11 @@
                                          ^</message>
     </messages>
   </parser>
+  <output>/**
+ * GtkWidget:test_property_missing_colon: (skip)
+ *
+ * Missing colon will result in a warning.
+ */</output>
 </test>
 
 <test>
@@ -200,6 +245,11 @@
       <description>Malformed property identifier.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkWidget:test_malformed_property: (skip)
+ *
+ * Malformed property identifier.
+ */</output>
 </test>
 
 <test>
@@ -216,6 +266,11 @@
       <description>Some signal.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkWidget::test_signal:
+ *
+ * Some signal.
+ */</output>
 </test>
 
 <test>
@@ -232,6 +287,11 @@
       <description>Unnecessary colon.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkWidget::test_signal_unnecessary_colon:
+ *
+ * Unnecessary colon.
+ */</output>
 </test>
 
 <test>
@@ -253,6 +313,11 @@
       <description>Some annotated signal.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkWidget::test_annotated_signal: (skip)
+ *
+ * Some annotated signal.
+ */</output>
 </test>
 
 <test>
@@ -279,6 +344,11 @@
                                         ^</message>
     </messages>
   </parser>
+  <output>/**
+ * GtkWidget::test_signal_missing_colon: (skip)
+ *
+ * Missing colon will result in a warning.
+ */</output>
 </test>
 
 <test>
@@ -300,6 +370,11 @@
       <description>Malformed signal identifier.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkWidget::test_malformed_signal: (skip)
+ *
+ * Malformed signal identifier.
+ */</output>
 </test>
 
 <test>
@@ -348,6 +423,13 @@ Annotations spanning multiple lines are not valid</description>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_multiline_annotations_on_identifier: (skip)
+ * @param1: (allow-none) (transfer full): first parameter
+ *
+ * (foreign)
+ * Annotations spanning multiple lines are not valid
+ */</output>
 </test>
 
 </tests>

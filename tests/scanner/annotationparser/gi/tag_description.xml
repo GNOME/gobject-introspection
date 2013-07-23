@@ -23,6 +23,12 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * shiny_function:
+ *
+ * This is a callback with a 'closure' argument that is not named
+ * 'user_data' and hence has to be annotated.
+ */</output>
 </test>
 
 <test>
@@ -45,6 +51,12 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * shiny_function:
+ *
+ * This is a callback with a 'closure' argument that is not named
+ * 'user_data' and hence has to be annotated.
+ */</output>
 </test>
 
 <test>
@@ -72,6 +84,14 @@ This is a callback with a 'closure' argument that is not named
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * shiny_function:
+ *
+ * Some description here, but also below...
+ *
+ * This is a callback with a 'closure' argument that is not named
+ * 'user_data' and hence has to be annotated.
+ */</output>
 </test>
 
 <test>
@@ -99,6 +119,14 @@ This is a callback with a 'closure' argument that is not named
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * shiny_function:
+ *
+ * This is a callback with a 'closure' argument that is not named
+ * 'user_data' and hence has to be annotated.
+ *
+ *   etc...
+ */</output>
 </test>
 
 </tests>

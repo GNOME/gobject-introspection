@@ -28,6 +28,12 @@
       <description>small struct</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocAnnotation:
+ * @that: (allow-none): eventualy points to something
+ *
+ * small struct
+ */</output>
 </test>
 
 </tests>

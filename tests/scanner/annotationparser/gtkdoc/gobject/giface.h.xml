@@ -16,6 +16,11 @@
       <description>opaque instance of gtk-doc unit test interface</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocIface:
+ *
+ * opaque instance of gtk-doc unit test interface
+ */</output>
 </test>
 
 <test>
@@ -32,6 +37,11 @@
       <description>opaque instance of gtk-doc unit test interface</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocIface2:
+ *
+ * opaque instance of gtk-doc unit test interface
+ */</output>
 </test>
 
 <test>
@@ -60,6 +70,13 @@
       <description>class data of gtk-doc unit test interface</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocIfaceInterface:
+ * @parent: this is a bug :/
+ * @test: overideable method
+ *
+ * class data of gtk-doc unit test interface
+ */</output>
 </test>
 
 <test>
@@ -88,6 +105,13 @@
       <description>This macro does nothing.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GTKDOC_IFACE_MACRO_DUMMY:
+ * @parameter_1: first arg
+ * @parameter_2: second arg
+ *
+ * This macro does nothing.
+ */</output>
 </test>
 
 <test>
@@ -124,6 +148,15 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * GTKDOC_IFACE_MACRO_SUM:
+ * @parameter_1: first arg
+ * @parameter_2: second arg
+ *
+ * This macro adds its args.
+ *
+ * Returns: the sum of @parameter_1 and @parameter_2
+ */</output>
 </test>
 
 </tests>

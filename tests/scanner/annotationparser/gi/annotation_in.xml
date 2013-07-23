@@ -49,6 +49,15 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_object_in:
+ * @object: a #GObject
+ * @inarg: (in) (transfer none): This is an argument test
+ *
+ * This is a test for in arguments
+ *
+ * Returns: an int
+ */</output>
 </test>
 
 </tests>

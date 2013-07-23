@@ -57,6 +57,19 @@ Test overriding via the "Rename To" annotation.</description>
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * whitespace_test:
+ * @object: (skip):
+ * @func: The callback
+ *
+ * A #AnnotationObject
+ *        
+ *        
+ *
+ * Test overriding via the "Rename To" annotation.
+ *
+ * Returns: nothing
+ */</output>
 </test>
 
 </tests>

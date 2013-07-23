@@ -23,6 +23,12 @@
       <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:tester
+ * @short_description: module for gtk-doc unit test
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</output>
 </test>
 
 <test>
@@ -67,6 +73,14 @@
       <description>Document parameter relation for array length.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_array_length:
+ * @list: a #GtkListStore
+ * @n_columns: number of columns
+ * @types: (array length=n_columns): list of types
+ *
+ * Document parameter relation for array length.
+ */</output>
 </test>
 
 <test>
@@ -125,6 +139,17 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_nullable:
+ * @uri: a uri
+ * @label: (allow-none): an optional string, which is used in ways too
+ *  complicated to describe in a single line, making it necessary to wrap it
+ *
+ * Document optional parameters.
+ *
+ * Returns: (transfer full) (allow-none): Returns stuff which you have to
+ *  free after use, whose description is also rather long
+ */</output>
 </test>
 
 <test>
@@ -166,6 +191,14 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_elementtype:
+ * @list: (element-type GObject): list of #GObject instances to search
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */</output>
 </test>
 
 <test>
@@ -215,6 +248,14 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_elementtype_transfer:
+ * @list: (element-type utf8) (transfer full): list of #GObject instances to search
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */</output>
 </test>
 
 <test>
@@ -249,6 +290,13 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_elementtype_returns:
+ *
+ * Document optional parameters.
+ *
+ * Returns: (element-type GObject): A list of #GObject instances.
+ */</output>
 </test>
 
 <test>
@@ -293,6 +341,14 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_outparams:
+ * @list: (out) (transfer none): a pointer to take a list
+ *
+ * Document optional parameters.
+ *
+ * Returns: %TRUE for success
+ */</output>
 </test>
 
 <test>
@@ -321,6 +377,12 @@
       <description>Documentation for this function.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_skip: (skip)
+ * @list: a pointer to take a list
+ *
+ * Documentation for this function.
+ */</output>
 </test>
 
 <test>
@@ -359,6 +421,13 @@
       <description>Documentation for this function.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_scope:
+ * @callback: (scope async): a callback
+ * @user_data: data to pass to callback
+ *
+ * Documentation for this function.
+ */</output>
 </test>
 
 </tests>

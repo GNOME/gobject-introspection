@@ -26,6 +26,11 @@
       <description>This object tests regressions...</description>
     </docblock>
   </parser>
+  <output>/**
+ * RegressTestFundamentalObject: (unref-func regress_test_fundamental_object_unref)
+ *
+ * This object tests regressions...
+ */</output>
 </test>
 
 <test>
@@ -62,6 +67,11 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * RegressTestFundamentalObject: (unref-func regress_test_fundamental_object_unref)
+ *
+ * This object tests regressions...
+ */</output>
 </test>
 
 <test>
@@ -98,6 +108,11 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * RegressTestFundamentalObject: (unref-func regress_test_fundamental_object_unref)
+ *
+ * This object tests regressions...
+ */</output>
 </test>
 
 </tests>

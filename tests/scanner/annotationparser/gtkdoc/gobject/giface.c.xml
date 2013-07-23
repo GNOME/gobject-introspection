@@ -57,6 +57,26 @@ Just incase you wonder, special caracters can be escaped with a \ like in \%
 or \# or even \@.]]></description>
     </docblock>
   </parser>
+  <output><![CDATA[/**
+ * SECTION:iface
+ * @title: GtkdocIface
+ * @short_description: interface for gtk-doc unit test
+ * @see_also: #GtkdocObject
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ * We can link to the #GtkdocIface:itest property and the #GtkdocIface::itest
+ * signal.
+ * An instance can be configured using the gtkdoc_iface_configure() function.
+ *
+ * I can haz pictures too!
+ * <mediaobject>
+ *   <imageobject><imagedata fileref="home.png" format="PNG"/></imageobject>
+ *   <caption><para>Home sweet home.</para></caption>
+ * </mediaobject>
+ *
+ * Just incase you wonder, special caracters can be escaped with a \ like in \%
+ * or \# or even \@.
+ */]]></output>
 </test>
 
 <test>
@@ -90,6 +110,14 @@ or \# or even \@.]]></description>
       <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:iface2
+ * @title: GtkdocIface2
+ * @short_description: interface with a prerequisite for gtk-doc unit test
+ * @see_also: #GtkdocObject, #GtkdocIface
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</output>
 </test>
 
 <test>
@@ -126,6 +154,15 @@ or \# or even \@.]]></description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * gtkdoc_iface_configure:
+ * @config: settings
+ *
+ * Configure a new instance
+ *
+ * Returns: %TRUE for sucess or %FALSE in case of an error
+ * Since: 0.1
+ */</output>
 </test>
 
 <test>
@@ -149,6 +186,12 @@ or \# or even \@.]]></description>
       <description>The event has been triggered.</description>
     </docblock>
   </parser>
+  <output>    /**
+     * GtkdocIface::itest:
+     * @self: myself
+     *
+     * The event has been triggered.
+     */</output>
 </test>
 
 </tests>

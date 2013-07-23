@@ -55,6 +55,18 @@
       <description>The application class handles ...</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:meepapp
+ * @short_description: the application class
+ * @title: Meep application
+ * @section_id:
+ * @see_also: #MeepSettings
+ * @stability: Stable
+ * @include: meep/app.h
+ * @image: application.png
+ *
+ * The application class handles ...
+ */</output>
 </test>
 
 <test>
@@ -116,6 +128,18 @@
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:meepapp
+ * @short_description: the application class
+ * @title: Meep application
+ * @section_id:
+ * @see_also: #MeepSettings
+ * @stability: Stable
+ * @include: meep/app.h
+ * @image: application.png
+ *
+ * The application class handles ...
+ */</output>
 </test>
 
 <test>
@@ -176,6 +200,18 @@
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:meepapp
+ * @short_description: the application class
+ * @title: Meep application
+ * @section_id:
+ * @see_also: #MeepSettings
+ * @stability: Stable
+ * @include: meep/app.h
+ * @image: application.png
+ *
+ * The application class handles ...
+ */</output>
 </test>
 
 <test>
@@ -237,6 +273,18 @@
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:meepapp
+ * @short_description: the application class
+ * @title: Meep application
+ * @section_id:
+ * @see_also: #MeepSettings
+ * @stability: Stable
+ * @include: meep/app.h
+ * @image: application.png
+ *
+ * The application class handles ...
+ */</output>
 </test>
 
 <test>
@@ -270,6 +318,15 @@ As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
 returns nothing.</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:tester
+ * @short_description: module for gtk-doc unit test
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ *
+ * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
+ * returns nothing.
+ */</output>
 </test>
 
 </tests>

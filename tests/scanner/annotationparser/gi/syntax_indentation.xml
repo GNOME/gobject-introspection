@@ -16,6 +16,11 @@
       <description>Describe section here</description>
     </docblock>
   </parser>
+  <output>  /**
+   * SECTION:test
+   *
+   * Describe section here
+   */</output>
 </test>
 
 <test>
@@ -32,6 +37,11 @@
       <description>Describe section here</description>
     </docblock>
   </parser>
+  <output>	/**
+	 * SECTION:test
+	 *
+	 * Describe section here
+	 */</output>
 </test>
 
 <test>
@@ -48,6 +58,11 @@
       <description>Describe section here</description>
     </docblock>
   </parser>
+  <output>	/**
+	 * SECTION:test
+	 *
+	 * Describe section here
+	 */</output>
 </test>
 
 <test>
@@ -64,6 +79,11 @@
       <description>Describe section here</description>
     </docblock>
   </parser>
+  <output indent="false">/**
+ * SECTION:test
+ *
+ * Describe section here
+ */</output>
 </test>
 
 </tests>

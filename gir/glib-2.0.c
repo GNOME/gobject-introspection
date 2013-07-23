@@ -9896,7 +9896,7 @@
  * that the returned binary data is not necessarily zero-terminated,
  * so it should not be used as a character string.
  *
- * Returns: (transfer full) (array length=out_len) (element-type guint8): 
+ * Returns: (transfer full) (array length=out_len) (element-type guint8):
  *               newly allocated buffer containing the binary data
  *               that @text represents. The returned buffer must
  *               be freed with g_free().
@@ -11194,7 +11194,7 @@
 
 /**
  * g_bytes_new:
- * @data: (transfer none) (array length=size) (element-type guint8): 
+ * @data: (transfer none) (array length=size) (element-type guint8):
  *        the data to be used for the bytes
  * @size: the size of @data
  *
@@ -11226,7 +11226,7 @@
 
 /**
  * g_bytes_new_static: (skip)
- * @data: (transfer full) (array length=size) (element-type guint8): 
+ * @data: (transfer full) (array length=size) (element-type guint8):
  *           the data to be used for the bytes
  * @size: the size of @data
  *
@@ -11241,7 +11241,7 @@
 
 /**
  * g_bytes_new_take:
- * @data: (transfer full) (array length=size) (element-type guint8): 
+ * @data: (transfer full) (array length=size) (element-type guint8):
  *           the data to be used for the bytes
  * @size: the size of @data
  *
@@ -14804,7 +14804,7 @@
  * on other platforms, this function indirectly depends on the
  * <link linkend="setlocale">current locale</link>.
  *
- * Returns: (array length=bytes_written) (element-type guint8) (transfer full): 
+ * Returns: (array length=bytes_written) (element-type guint8) (transfer full):
  *               The converted string, or %NULL on an error.
  */
 
@@ -16939,7 +16939,7 @@
 /**
  * g_io_channel_read_chars:
  * @channel: a #GIOChannel
- * @buf: (out caller-allocates) (array length=count) (element-type guint8): 
+ * @buf: (out caller-allocates) (array length=count) (element-type guint8):
  *     a buffer to read data into
  * @count: (in): the size of the buffer. Note that the buffer may not be
  *     complelely filled even if there is data in the buffer if the
@@ -17449,7 +17449,7 @@
  * with @key cannot be interpreted as booleans then %NULL is returned
  * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
  *
- * Returns: (array length=length) (element-type gboolean) (transfer container): 
+ * Returns: (array length=length) (element-type gboolean) (transfer container):
  *    the values associated with the key as a list of booleans, or %NULL if the
  *    key was not found or could not be parsed. The returned list of booleans
  *    should be freed with g_free() when no longer needed.
@@ -17511,7 +17511,7 @@
  * with @key cannot be interpreted as doubles then %NULL is returned
  * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
  *
- * Returns: (array length=length) (element-type gdouble) (transfer container): 
+ * Returns: (array length=length) (element-type gdouble) (transfer container):
  *     the values associated with the key as a list of doubles, or %NULL if the
  *     key was not found or could not be parsed. The returned list of doubles
  *     should be freed with g_free() when no longer needed.
@@ -17588,7 +17588,7 @@
  * with @key cannot be interpreted as integers then %NULL is returned
  * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
  *
- * Returns: (array length=length) (element-type gint) (transfer container): 
+ * Returns: (array length=length) (element-type gint) (transfer container):
  *     the values associated with the key as a list of integers, or %NULL if
  *     the key was not found or could not be parsed. The returned list of
  *     integers should be freed with g_free() when no longer needed.
@@ -17713,7 +17713,7 @@
  * event that the @group_name cannot be found, %NULL is returned
  * and @error is set to #G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
  *
- * Returns: (array zero-terminated=1 length=length) (element-type utf8) (transfer full): 
+ * Returns: (array zero-terminated=1 length=length) (element-type utf8) (transfer full):
  *  a %NULL-terminated string array or %NULL if the specified
  *  key cannot be found. The array should be freed with g_strfreev().
  * Since: 2.6
@@ -32539,7 +32539,7 @@
  *
  * The return value must be freed using g_free().
  *
- * Returns: (transfer full) (array zero-terminated=1 length=length) (element-type guint8): 
+ * Returns: (transfer full) (array zero-terminated=1 length=length) (element-type guint8):
  *          a newly allocated string
  * Since: 2.26
  */
@@ -32715,7 +32715,7 @@
  *
  * The return value remains valid as long as @value exists.
  *
- * Returns: (transfer none) (array zero-terminated=1) (element-type guint8): 
+ * Returns: (transfer none) (array zero-terminated=1) (element-type guint8):
  *          the constant string
  * Since: 2.26
  */

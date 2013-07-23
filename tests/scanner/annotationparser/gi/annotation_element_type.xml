@@ -74,6 +74,13 @@
       <message>4: Warning: Test: "element-type" annotation takes at most 2 options, 3 given</message>
     </messages>
   </parser>
+  <output>/**
+ * foo_test_array:
+ * @a: (element-type):
+ * @b: (element-type x y z):
+ *
+ * Returns: (element-type utf8) (transfer container): returns %NULL.
+ */</output>
 </test>
 
 <test>
@@ -116,6 +123,14 @@
  TpAccount::status-changed</description>
     </docblock>
   </parser>
+  <output>/**
+ * RegressTestObj::sig-with-hash-prop:
+ * @self: an object
+ * @hash: (element-type utf8 GObject.Value):
+ *
+ * This test signal is like TelepathyGlib's
+ *  TpAccount::status-changed
+ */</output>
 </test>
 
 <test>
@@ -162,6 +177,14 @@ element-type annotation.</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * regress_test_ghash_nested_everything_return2:
+ *
+ * Another way of specifying nested parameterized types: using the
+ * element-type annotation.
+ *
+ * Returns: (element-type utf8 GLib.HashTable(utf8,utf8)) (transfer full):
+ */</output>
 </test>
 
 <test>
@@ -198,6 +221,11 @@ element-type annotation.</description>
                                        ^</message>
     </messages>
   </parser>
+  <output> /**
+  * foo_test_array:
+  *
+  * Returns: (element-type invalid utf8=invalid GLib.HashTable(utf8,utf8)): returns %NULL.
+  */</output>
 </test>
 
 <test>
@@ -234,6 +262,11 @@ element-type annotation.</description>
                                ^</message>
     </messages>
   </parser>
+  <output> /**
+  * foo_test_array:
+  *
+  * Returns: (element-type utf8=invalid GLib.HashTable(utf8,utf8) invalid): returns %NULL.
+  */</output>
 </test>
 
 </tests>

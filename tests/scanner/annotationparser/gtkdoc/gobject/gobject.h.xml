@@ -16,6 +16,11 @@
       <description>instance data of gtk-doc unit test class</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocObject:
+ *
+ * instance data of gtk-doc unit test class
+ */</output>
 </test>
 
 <test>
@@ -54,6 +59,15 @@
       <description>class data of gtk-doc unit test class</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocObjectClass:
+ * @parent: this is a bug :/
+ * @test: overideable method
+ * @ping: can be used before calling the @test() function
+ * @foo_bar: lets you refine your frobnicator
+ *
+ * class data of gtk-doc unit test class
+ */</output>
 </test>
 
 <test>
@@ -70,6 +84,11 @@
       <description>instance data of gtk-doc unit test class</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocObject2:
+ *
+ * instance data of gtk-doc unit test class
+ */</output>
 </test>
 
 <test>
@@ -93,6 +112,12 @@
       <description>class data of gtk-doc unit test class</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocObject2Class:
+ * @parent: this is a bug :/
+ *
+ * class data of gtk-doc unit test class
+ */</output>
 </test>
 
 <test>
@@ -129,6 +154,15 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * GTKDOC_OBJECT_MACRO_DUMMY:
+ * @parameter_1: first arg
+ * @parameter_2: second arg
+ *
+ * This macro does nothing.
+ *
+ * Since: 0.1
+ */</output>
 </test>
 
 <test>
@@ -165,6 +199,15 @@
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * GTKDOC_OBJECT_MACRO_SUM:
+ * @parameter_1: first arg
+ * @parameter_2: second arg
+ *
+ * This macro adds its args.
+ *
+ * Returns: the sum of @parameter_1 and @parameter_2
+ */</output>
 </test>
 
 </tests>

@@ -2076,7 +2076,7 @@
 /**
  * GSettings::change-event:
  * @settings: the object on which the signal was emitted
- * @keys: (array length=n_keys) (element-type GQuark) (allow-none): 
+ * @keys: (array length=n_keys) (element-type GQuark) (allow-none):
  *        an array of #GQuark<!-- -->s for the changed keys, or %NULL
  * @n_keys: the length of the @keys array, or 0
  *
@@ -10621,7 +10621,7 @@
  * g_app_info_add_supports_type(), but only those exported directly by
  * the application.
  *
- * Returns: (transfer none) (array zero-terminated=1) (element-type utf8): 
+ * Returns: (transfer none) (array zero-terminated=1) (element-type utf8):
  *    a list of content types.
  * Since: 2.34
  */
@@ -11973,7 +11973,7 @@
  * buffer must not be modified and will become invalid when reading from
  * the stream or filling the buffer.
  *
- * Returns: (array length=count) (element-type guint8) (transfer none): 
+ * Returns: (array length=count) (element-type guint8) (transfer none):
  *          read-only buffer
  */
 
@@ -28626,7 +28626,7 @@
  * @path: (out): the location to save the path
  * @keys: (out) (transfer container) (array zero-terminated=1): the
  *        location to save the relative keys
- * @values: (out) (allow-none) (transfer container) (array zero-terminated=1): 
+ * @values: (out) (allow-none) (transfer container) (array zero-terminated=1):
  *          the location to save the values, or %NULL
  *
  * Calculate the longest common prefix of all keys in a tree and write
@@ -35713,7 +35713,7 @@
  * allowing for checking if the mounts have changed with
  * g_unix_mount_points_changed_since().
  *
- * Returns: (element-type GUnixMountPoint) (transfer full): 
+ * Returns: (element-type GUnixMountPoint) (transfer full):
  *     a #GList of the UNIX mountpoints.
  */
 
@@ -35737,7 +35737,7 @@
  * timestamp, allowing for checking if the mounts have changed
  * with g_unix_mounts_changed_since().
  *
- * Returns: (element-type GUnixMountEntry) (transfer full): 
+ * Returns: (element-type GUnixMountEntry) (transfer full):
  *     a #GList of the UNIX mounts.
  */
 

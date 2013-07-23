@@ -19,6 +19,9 @@
       </identifier>
     </docblock>
   </parser>
+  <output>/**
+ * FooForeignStruct: (foreign)
+ */</output>
 </test>
 
 </tests>

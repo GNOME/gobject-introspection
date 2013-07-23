@@ -30,6 +30,14 @@
       <description>Enum values for the #GtkdocEnum type.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocEnum:
+ * @GTKDOC_ENUM_V1: first
+ * @GTKDOC_ENUM_V2: second
+ *    Since: 0.10
+ *
+ * Enum values for the #GtkdocEnum type.
+ */</output>
 </test>
 
 <test>
@@ -58,6 +66,13 @@
       <description>Unboxed plain old data that should default to public members.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocPlainOldData:
+ * @n: Some integer member.
+ * @x: Some floating point member.
+ *
+ * Unboxed plain old data that should default to public members.
+ */</output>
 </test>
 
 <test>
@@ -86,6 +101,13 @@
       <description>Boxed plain old data that should default to public members.</description>
     </docblock>
   </parser>
+  <output>/**
+ * GtkdocBoxedPlainOldData:
+ * @n: Some integer member.
+ * @x: Some floating point member.
+ *
+ * Boxed plain old data that should default to public members.
+ */</output>
 </test>
 
 </tests>

@@ -25,6 +25,10 @@
       </parameters>
     </docblock>
   </parser>
+  <output>/**
+ * regress_forced_method: (method)
+ * @obj: A #RegressTestObj
+ */</output>
 </test>
 
 </tests>

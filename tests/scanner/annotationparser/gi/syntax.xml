@@ -89,6 +89,9 @@ something */</input>
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * Test:
+ */</output>
 </test>
 
 <test>
@@ -106,6 +109,9 @@ Test */
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * Test:
+ */</output>
 </test>
 
 <test>
@@ -127,6 +133,11 @@ something */
          ^</message>
     </messages>
   </parser>
+  <output>/**
+ * Test:
+ *
+ * something
+ */</output>
 </test>
 
 <test>
@@ -146,6 +157,11 @@ something */
          ^</message>
     </messages>
   </parser>
+  <output>/**
+ * Test:
+ *
+ * something
+ */</output>
 </test>
 
 <test>
@@ -165,6 +181,11 @@ something **/
          ^</message>
     </messages>
   </parser>
+  <output>/**
+ * Test:
+ *
+ * something
+ */</output>
 </test>
 
 <test>
@@ -192,6 +213,13 @@ something */ code goes here
          ^</message>
     </messages>
   </parser>
+  <output><![CDATA[code goes here
+/**
+ * Test:
+ *
+ * something
+ */
+ code goes here]]></output>
 </test>
 
 <test>
@@ -225,6 +253,12 @@ something */ code goes here
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:meepapp
+ * @short_description: the application class
+ *
+ * The application class handles ...
+ */</output>
 </test>
 
 <test>
@@ -261,6 +295,13 @@ https://bugzilla.gnome.org/show_bug.cgi?id=673806</description>
 ^</message>
     </messages>
   </parser>
+  <output>/**
+ * regress_test_invalid_comment:
+ * @foo: a param
+ *
+ * comment having lines without ' * '
+ * https://bugzilla.gnome.org/show_bug.cgi?id=673806
+ */</output>
 </test>
 
 <test>
@@ -301,6 +342,18 @@ a *</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * atk_hyperlink_is_inline:
+ * @link_: an #AtkHyperlink
+ *
+ * Indicates whether the link currently displays some or all of its
+ *           content inline.  Ordinary HTML links will usually return
+ *           %FALSE, but an inline &lt;src&gt; HTML element will return
+ *           %TRUE.
+ * a *
+ *
+ * Returns: whether or not this link displays its content inline.
+ */</output>
 </test>
 
 <test>
@@ -336,6 +389,18 @@ and gtk_tooltip_set_icon().</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * gtk_tooltip_set_custom:
+ *
+ * Replaces the widget packed into the tooltip with
+ * @custom_widget. @custom_widget does not get destroyed when the tooltip goes
+ * away.
+ * By default a box with a #GtkImage and #GtkLabel is embedded in
+ * the tooltip, which can be configured using gtk_tooltip_set_markup()
+ * and gtk_tooltip_set_icon().
+ *
+ * Since: 2.12
+ */</output>
 </test>
 
 <test>
@@ -363,6 +428,12 @@ and gtk_tooltip_set_icon().</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * clutter_text_coords_to_position:
+ * @self: a #ClutterText
+ *
+ * Returns: the position of the character
+ */</output>
 </test>
 
 <test>
@@ -383,6 +454,11 @@ and gtk_tooltip_set_icon().</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * clutter_text_coords_to_position:
+ *
+ * Returns: the position of the character
+ */</output>
 </test>
 
 </tests>

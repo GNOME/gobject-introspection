@@ -25,6 +25,11 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:test_invalid_section_identifier
+ *
+ * Above identifier is not on the first line.
+ */</output>
 </test>
 
 <test>
@@ -49,6 +54,9 @@
 ^</message>
     </messages>
   </parser>
+  <output>/**
+ * SECTION:meepapp
+ */</output>
 </test>
 
 <test>
@@ -77,6 +85,13 @@
 The application class handles ...</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:meepapp
+ * @short_description: the application class
+ *
+ * SECTION:meepapp2
+ * The application class handles ...
+ */</output>
 </test>
 
 <test>

@@ -34,6 +34,11 @@
       <description>This is an object used to test annotations.</description>
     </docblock>
   </parser>
+  <output>/**
+ * AnnotationObject: (attributes org.example.test1=horses org.example.test2 org.example.test3=cows)
+ *
+ * This is an object used to test annotations.
+ */</output>
 </test>
 
 <test>
@@ -78,6 +83,11 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * AnnotationObject: (attributes org.example.test1=horses org.example.test2 org.example.test3=cows)
+ *
+ * This is an object used to test annotations.
+ */</output>
 </test>
 
 <test>
@@ -153,6 +163,11 @@ Attributes: (org.example.test1 horses))
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * AnnotationObject: (attributes org.example.test1=horses)
+ *
+ * This is an object used to test annotations.
+ */</output>
 </test>
 
 <test>
@@ -194,6 +209,11 @@ Attributes: (org.example.test1 horses))
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * AnnotationObject: (attributes org.example.Test=horses org.example.test2=cows)
+ *
+ * This is an object used to test annotations.
+ */</output>
 </test>
 
 <test>
@@ -220,6 +240,11 @@ Attributes: (org.example.test1 horses))
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * AnnotationObject:
+ *
+ * This is an object used to test annotations.
+ */</output>
 </test>
 
 <test>
@@ -310,6 +335,17 @@ Attributes: (org.example.test1 horses))
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * AnnotationObject::attribute-signal:
+ * @annotation: the annotation object
+ * @arg1: (attributes some.annotation.foo1=val1): a value
+ * @arg2: (attributes some.annotation.foo2=val2): another value
+ * @arg3: (array fixed-size=2): a third value
+ *
+ * This signal tests a signal with attributes.
+ *
+ * Returns: (attributes some.annotation.foo3=val3): the return value
+ */</output>
 </test>
 
 <test>
@@ -424,6 +460,18 @@ Attributes: (org.example.test1 horses))
             ^</message>
     </messages>
   </parser>
+  <output>/**
+ * AnnotationObject::attribute-signal:
+ * @annotation: the annotation object
+ * @arg1: (attributes some.annotation.foo1): a value
+ * @arg2: (attributes some.annotation.foo2=val2): another value
+ * @arg3: something special
+ * @arg4: (array fixed-size=2): a third value
+ *
+ * This signal tests a signal with attributes.
+ *
+ * Returns: (attributes some.annotation.foo3=val3): the return value
+ */</output>
 </test>
 
 </tests>

@@ -43,6 +43,13 @@
 detection, and fixing it via annotations.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_custom_destroy:
+ * @callback: (destroy destroy) (closure data): Destroy notification
+ *
+ * Test messing up the heuristic of closure/destroy-notification
+ * detection, and fixing it via annotations.
+ */</output>
 </test>
 
 <test>
@@ -91,6 +98,13 @@ detection, and fixing it via annotations.</description>
                               ^</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_custom_destroy:
+ * @callback: (destroy destroy=invalid) (closure data): Destroy notification
+ *
+ * Test messing up the heuristic of closure/destroy-notification
+ * detection, and fixing it via annotations.
+ */</output>
 </test>
 
 </tests>

@@ -61,6 +61,22 @@ other declarations (which may be documented elsewhere).</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * function_name:
+ * @par1: description of parameter 1. These can extend over more than
+ * one line.
+ * @par2: description of parameter 2
+ * @...: a %NULL-terminated list of bars
+ *
+ * The function description goes here. You can use @par1 to refer to parameters
+ * so that they are highlighted in the output. You can also use %constant
+ * for constants, function_name2() for functions and #GtkWidget for links to
+ * other declarations (which may be documented elsewhere).
+ *
+ * Returns: an integer.
+ * Since: 2.2
+ * Deprecated: 2.18: Use other_function() instead.
+ */</output>
 </test>
 
 <test>
@@ -104,6 +120,14 @@ name it is called in.</description>
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * DBG:
+ * @fmt: format string
+ * @...: list of arguments
+ *
+ * Simple macro around btd_debug() which also include the function
+ * name it is called in.
+ */</output>
 </test>
 
 <test>
@@ -173,6 +197,22 @@ other declarations (which may be documented elsewhere).</description>
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * function_name:
+ * @par1: description of parameter 1. These can extend over more than
+ * one line.
+ * @par2: description of parameter 2
+ * @...: a %NULL-terminated list of bars
+ *
+ * The function description goes here. You can use @par1 to refer to parameters
+ * so that they are highlighted in the output. You can also use %constant
+ * for constants, function_name2() for functions and #GtkWidget for links to
+ * other declarations (which may be documented elsewhere).
+ *
+ * Returns: an integer.
+ * Since: 2.2
+ * Deprecated: 2.18: Use other_function() instead.
+ */</output>
 </test>
 
 <test>
@@ -237,6 +277,22 @@ other declarations (which may be documented elsewhere).</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * function_name:
+ * @par1: description of parameter 1. These can extend over more than
+ * one line.
+ * @par2: description of parameter 2
+ * @varargs: a %NULL-terminated list of bars
+ *
+ * The function description goes here. You can use @par1 to refer to parameters
+ * so that they are highlighted in the output. You can also use %constant
+ * for constants, function_name2() for functions and #GtkWidget for links to
+ * other declarations (which may be documented elsewhere).
+ *
+ * Returns: an integer.
+ * Since: 2.2
+ * Deprecated: 2.18: Use other_function() instead.
+ */</output>
 </test>
 
 </tests>

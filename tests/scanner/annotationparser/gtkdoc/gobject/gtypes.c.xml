@@ -33,6 +33,14 @@
       <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
     </docblock>
   </parser>
+  <output>/**
+ * SECTION:types
+ * @title: GtkdocTypes
+ * @short_description: other gobject types for gtk-doc unit test
+ * @see_also: #GtkdocObject, #GtkdocIface
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</output>
 </test>
 
 </tests>

@@ -29,6 +29,15 @@ As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
 returns nothing.]]></description>
     </docblock>
   </parser>
+  <output><![CDATA[/**
+ * SECTION:tester
+ * @short_description: module for gtk-doc unit test
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ *
+ * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
+ * returns nothing.
+ */]]></output>
 </test>
 
 <test>
@@ -52,6 +61,12 @@ returns nothing.]]></description>
       <description>lonely function</description>
     </docblock>
   </parser>
- </test>
+  <output>/**
+ * test:
+ * @a: arg
+ *
+ * lonely function
+ */</output>
+</test>
 
 </tests>

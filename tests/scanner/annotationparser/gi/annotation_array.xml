@@ -28,6 +28,12 @@
       <description>Test taking a zero-terminated array</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_object_compute_sum:
+ * @nums: (array): Sequence of numbers
+ *
+ * Test taking a zero-terminated array
+ */</output>
 </test>
 
 <test>
@@ -78,6 +84,15 @@
       <description>Test taking an array with length parameter</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_object_compute_sum_n:
+ * @object: a #AnnotationObject
+ * @nums: (array length=n_nums zero-terminated=0): Sequence of
+ *   numbers that are zero-terminated
+ * @n_nums: Length of number array
+ *
+ * Test taking an array with length parameter
+ */</output>
 </test>
 
 <test>
@@ -128,6 +143,15 @@ are zero-terminated</description>
       <description>Test taking a zero-terminated array with length parameter</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_object_compute_sum_nz:
+ * @object: a #AnnotationObject
+ * @nums: (array length=n_nums zero-terminated=1): Sequence of numbers that
+ * are zero-terminated
+ * @n_nums: Length of number array
+ *
+ * Test taking a zero-terminated array with length parameter
+ */</output>
 </test>
 
 <test>
@@ -184,6 +208,14 @@ are zero-terminated</description>
       <description>Test taking a zero-terminated array with length parameter</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_object_parse_args:
+ * @object: a #AnnotationObject
+ * @argc: (inout): Length of the argument vector
+ * @argv: (inout) (array length=argc zero-terminated=1): Argument vector
+ *
+ * Test taking a zero-terminated array with length parameter
+ */</output>
 </test>
 
 <test>
@@ -228,6 +260,14 @@ are zero-terminated</description>
       <description>Test taking a guchar * with a length.</description>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_object_set_data:
+ * @object: a #AnnotationObject
+ * @data: (array length=length): The data
+ * @length: Length of the data
+ *
+ * Test taking a guchar * with a length.
+ */</output>
 </test>
 
 <test>
@@ -286,6 +326,12 @@ are zero-terminated</description>
       </tags>
     </docblock>
   </parser>
+  <output>/**
+ * annotation_string_zero_terminated:
+ * @data: (array fixed-size=2): a third value
+ *
+ * Returns: (transfer full) (array zero-terminated=1): The return value
+ */</output>
 </test>
 
 <test>
@@ -350,6 +396,12 @@ are zero-terminated</description>
       <message>3: Warning: Test: invalid "array" annotation option: "invalid"</message>
     </messages>
   </parser>
+  <output>/**
+ * annotation_string_zero_terminated:
+ * @data: (array invalid fixed-size=2): a third value
+ *
+ * Returns: (transfer full) (array zero-terminated=1): The return value
+ */</output>
 </test>
 
 <test>
@@ -419,6 +471,13 @@ are zero-terminated</description>
       <message>6: Warning: Test: invalid "array" annotation option "zero-terminated" value "yes", must be an integer</message>
     </messages>
   </parser>
+  <output>/**
+ * g_app_launch_context_get_environment:
+ * @arg1: (array zero-terminated): ...
+ * @arg2: (array length): ...
+ *
+ * Returns: (array zero-terminated=yes): the child's environment
+ */</output>
 </test>
 
 </tests>

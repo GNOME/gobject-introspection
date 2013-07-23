@@ -33,6 +33,12 @@
                         ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_parameter_missing_colon:
+ * @param1: (allow-none): first parameter
+ *
+ * Forgotten colon above will result in a warning.
+ */</output>
 </test>
 
 <test>
@@ -72,6 +78,14 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_unexpected_parameter:
+ * @param1: first parameter
+ *
+ * Parameters should go before the comment block description.
+ *
+ * Returns: something
+ */</output>
 </test>
 
 <test>
@@ -98,6 +112,10 @@
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_multiple_parameters:
+ * @param1: first parameter again
+ */</output>
 </test>
 
 <test>
@@ -133,6 +151,13 @@
    ^</message>
     </messages>
   </parser>
+  <output>/**
+ * test_multiline_annotations_on_parameter:
+ * @param1: (allow-none):
+ * (transfer full): first parameter
+ *
+ * Annotations spanning multiple lines are not valid
+ */</output>
 </test>
 
 <test>
@@ -163,6 +188,13 @@
       <description>Annotations spanning multiple lines are not valid</description>
     </docblock>
   </parser>
+  <output>/**
+ * test_multiline_annotations_on_parameter:
+ * @param1: (allow-none): first parameter having a second line which looks
+ * (like an annotation), but isn't. This should not result in a warning.
+ *
+ * Annotations spanning multiple lines are not valid
+ */</output>
 </test>
 
 <test>
@@ -199,6 +231,14 @@
     ^</message>
     </messages>
   </parser>
+  <output>/**
+ * anjuta_async_notify_get_error:
+ * @self: An #AnjutaAsyncNotify object
+ * @error: Return location for the error set by the called interface to which
+ *                 this object was passed. If no error is set, @error is set to NULL.
+ *
+ * Gets the error set on @self.
+ */</output>
 </test>
 
 <test>
@@ -253,6 +293,24 @@ after #GtkPrintOperation::done was emitted.</description>
       </tags>
     </docblock>
   </parser>
+  <output>  /**
+   * GtkPrintOperation::done:
+   * @operation: the #GtkPrintOperation on which the signal was emitted
+   * @result: the result of the print operation
+   *
+   * Emitted when the print operation run has finished doing
+   * everything required for printing.
+   *
+   * @result gives you information about what happened during the run.
+   * If @result is %GTK_PRINT_OPERATION_RESULT_ERROR then you can call
+   * gtk_print_operation_get_error() for more information.
+   *
+   * If you enabled print status tracking then
+   * gtk_print_operation_is_finished() may still return %FALSE
+   * after #GtkPrintOperation::done was emitted.
+   *
+   * Since: 2.10
+   */</output>
 </test>
 
 <test>
