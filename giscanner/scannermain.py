@@ -452,7 +452,8 @@ def scanner_main(args):
     namespace = create_namespace(options)
     logger = message.MessageLogger.get(namespace=namespace)
     if options.warn_all:
-        logger.enable_warnings(True)
+        logger.enable_warnings((message.WARNING, message.ERROR, message.FATAL))
+
     transformer = create_transformer(namespace, options)
 
     packages = set(options.packages)
