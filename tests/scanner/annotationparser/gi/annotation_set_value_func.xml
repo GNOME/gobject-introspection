@@ -22,7 +22,7 @@
       <tags>
         <tag>
           <name>set value func</name>
-          <description>regress_test_value_set_fundamental_object</description>
+          <value>regress_test_value_set_fundamental_object</value>
         </tag>
       </tags>
     </docblock>

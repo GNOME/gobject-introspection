@@ -16,7 +16,7 @@
       <tags>
         <tag>
           <name>stability</name>
-          <description>Stable</description>
+          <value>Stable</value>
         </tag>
       </tags>
     </docblock>
@@ -37,7 +37,7 @@
       <tags>
         <tag>
           <name>stability</name>
-          <description>Unstable</description>
+          <value>Unstable</value>
         </tag>
       </tags>
     </docblock>
@@ -58,7 +58,7 @@
       <tags>
         <tag>
           <name>stability</name>
-          <description>Private</description>
+          <value>Private</value>
         </tag>
       </tags>
     </docblock>
@@ -103,7 +103,7 @@
       <tags>
         <tag>
           <name>stability</name>
-          <description>Private</description>
+          <value>Private</value>
         </tag>
       </tags>
     </docblock>
@@ -131,7 +131,7 @@
       <tags>
         <tag>
           <name>stability</name>
-          <description>Private</description>
+          <value>Private</value>
         </tag>
       </tags>
     </docblock>

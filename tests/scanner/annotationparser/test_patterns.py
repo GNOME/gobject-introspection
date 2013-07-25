@@ -33,6 +33,7 @@ against the expected output.
 
 from giscanner.annotationparser import (SECTION_RE, SYMBOL_RE, PROPERTY_RE,
                                         SIGNAL_RE, PARAMETER_RE, TAG_RE,
+                                        TAG_VALUE_VERSION_RE, TAG_VALUE_STABILITY_RE,
                                         COMMENT_END_RE)
 from unittest import (TestCase, main)
 
@@ -539,6 +540,72 @@ tag_tests = [
           'delimiter': ':',
           'description': ''})]
 
+tag_value_version_tests = [
+    (TAG_VALUE_VERSION_RE, ' abc',
+         {'value': '',
+          'delimiter': '',
+          'description': 'abc'}),
+    (TAG_VALUE_VERSION_RE, '5 abc',
+         {'value': '5',
+          'delimiter': '',
+          'description': 'abc'}),
+    (TAG_VALUE_VERSION_RE, '5:abc',
+         {'value': '5',
+          'delimiter': ':',
+          'description': 'abc'}),
+    (TAG_VALUE_VERSION_RE, ' 0.1: abc',
+         {'value': '0.1',
+          'delimiter': ':',
+          'description': 'abc'}),
+    (TAG_VALUE_VERSION_RE, ' 12.10.3698: abc',
+         {'value': '12.10.3698',
+          'delimiter': ':',
+          'description': 'abc'})]
+
+
+tag_value_stability_tests = [
+    (TAG_VALUE_STABILITY_RE, ' abc',
+         {'value': '',
+          'delimiter': '',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, 'stable abc',
+         {'value': 'stable',
+          'delimiter': '',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, 'unstable abc',
+         {'value': 'unstable',
+          'delimiter': '',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, 'private abc',
+         {'value': 'private',
+          'delimiter': '',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, 'internal abc',
+         {'value': 'internal',
+          'delimiter': '',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, 'StAbLe: abc',
+         {'value': 'StAbLe',
+          'delimiter': ':',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, 'uNsTaBlE: abc',
+         {'value': 'uNsTaBlE',
+          'delimiter': ':',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, 'PRIVATE: abc',
+         {'value': 'PRIVATE',
+          'delimiter': ':',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, '  internal  : abc',
+         {'value': 'internal',
+          'delimiter': ':',
+          'description': 'abc'}),
+    (TAG_VALUE_STABILITY_RE, 'xyz: abc',
+         {'value': '',
+          'delimiter': '',
+          'description': 'xyz: abc'})]
+
+
 comment_end_tests = [
     (COMMENT_END_RE, '*/',
          {'description': ''}),
@@ -615,6 +682,8 @@ if __name__ == '__main__':
     create_tests('test_parameter', parameter_tests)
     create_tests('test_tag', tag_tests)
     create_tests('test_comment_end', comment_end_tests)
+    create_tests('test_tag_value_version', tag_value_version_tests)
+    create_tests('test_tag_value_stability', tag_value_stability_tests)
 
     # Run test suite
     main()

@@ -16,7 +16,8 @@
       <tags>
         <tag>
           <name>deprecated</name>
-          <description>0.6: Use something else instead</description>
+          <value>0.6</value>
+          <description>Use something else instead</description>
         </tag>
       </tags>
     </docblock>
@@ -37,7 +38,7 @@
       <tags>
         <tag>
           <name>deprecated</name>
-          <description>0.6</description>
+          <value>0.6</value>
         </tag>
       </tags>
     </docblock>
@@ -61,7 +62,7 @@
       <tags>
         <tag>
           <name>deprecated</name>
-          <description>2.24</description>
+          <value>2.24</value>
         </tag>
       </tags>
     </docblock>
@@ -89,7 +90,7 @@
       <tags>
         <tag>
           <name>deprecated</name>
-          <description>2.0</description>
+          <value>2.0</value>
         </tag>
       </tags>
     </docblock>

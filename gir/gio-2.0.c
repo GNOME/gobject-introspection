@@ -2162,7 +2162,7 @@
  * 'settings-schema' property if you wish to pass in a
  * #GSettingsSchema.
  *
- * Deprecated: 2.32:Use the 'schema-id' property instead.  In a future version, this property may instead refer to a #GSettingsSchema.
+ * Deprecated: 2.32: Use the 'schema-id' property instead.  In a future version, this property may instead refer to a #GSettingsSchema.
  */
 
 
@@ -11456,7 +11456,7 @@
  * Now there is #GActionMap for that.
  *
  * Since: 2.28
- * Deprecated: 2.32:Use the #GActionMap interface instead.  Never ever mix use of this API with use of #GActionMap on the same @application or things will go very badly wrong.  This function is known to introduce buggy behaviour (ie: signals not emitted on changes to the action group), so you should really use #GActionMap instead.
+ * Deprecated: 2.32: Use the #GActionMap interface instead.  Never ever mix use of this API with use of #GActionMap on the same @application or things will go very badly wrong.  This function is known to introduce buggy behaviour (ie: signals not emitted on changes to the action group), so you should really use #GActionMap instead.
  */
 
 

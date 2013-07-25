@@ -148,7 +148,7 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
       <tags>
         <tag>
           <name>since</name>
-          <description>0.1</description>
+          <value>0.1</value>
         </tag>
         <tag>
           <name>returns</name>

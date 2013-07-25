@@ -203,8 +203,10 @@ class TestCommentBlock(unittest.TestCase):
                                 parsed += '          </options>\n'
                             parsed += '        </annotation>\n'
                         parsed += '      </annotations>\n'
-                    if tag.description or tag.value:
-                        parsed += '      <description>%s</description>\n' % (tag.description or tag.value, )
+                    if tag.value:
+                        parsed += '      <value>%s</value>\n' % (tag.value, )
+                    if tag.description:
+                        parsed += '      <description>%s</description>\n' % (tag.description, )
                     parsed += '    </tag>\n'
                 parsed += '  </tags>\n'
 
@@ -297,6 +299,8 @@ class TestCommentBlock(unittest.TestCase):
                                 expected += '          </options>\n'
                             expected += '        </annotation>\n'
                         expected += '      </annotations>\n'
+                    if tag.find(ns('{}value')) is not None:
+                        expected += '      <value>%s</value>\n' % (tag.find(ns('{}value')).text, )
                     if tag.find(ns('{}description')) is not None:
                         expected += '      <description>%s</description>\n' % (tag.find(ns('{}description')).text, )
                     expected += '    </tag>\n'

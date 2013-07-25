@@ -595,30 +595,20 @@ class MainTransformer(object):
 
         since_tag = block.tags.get(TAG_SINCE)
         if since_tag is not None:
-            node.version = since_tag.value
+            if since_tag.value:
+                node.version = since_tag.value
 
         deprecated_tag = block.tags.get(TAG_DEPRECATED)
         if deprecated_tag is not None:
-            value = deprecated_tag.value
-            if ': ' in value:
-                delimiter = value.find(': ')
-                version = value[:delimiter]
-                desc = value[delimiter + 2:]
-            else:
-                desc = value
-                version = None
-            node.deprecated = desc
-            if version is not None:
-                node.deprecated_version = version
+            if deprecated_tag.value:
+                node.deprecated_version = deprecated_tag.value
+            if deprecated_tag.description:
+                node.deprecated = deprecated_tag.description
 
         stability_tag = block.tags.get(TAG_STABILITY)
         if stability_tag is not None:
-            stability = stability_tag.value.capitalize()
-            if stability in ["Stable", "Unstable", "Private", "Internal"]:
-                node.stability = stability
-            else:
-                message.warn('unknown value "%s" for Stability tag' % (
-                    stability_tag.value), stability_tag.position)
+            if stability_tag.value:
+                node.stability = stability_tag.value
 
         annos_tag = block.tags.get(TAG_ATTRIBUTES)
         if annos_tag is not None:

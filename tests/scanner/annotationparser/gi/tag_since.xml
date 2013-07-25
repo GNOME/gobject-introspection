@@ -16,7 +16,7 @@
       <tags>
         <tag>
           <name>since</name>
-          <description>0.6</description>
+          <value>0.6</value>
         </tag>
       </tags>
     </docblock>
@@ -61,7 +61,7 @@
       <tags>
         <tag>
           <name>since</name>
-          <description>2.24</description>
+          <value>2.24</value>
         </tag>
       </tags>
     </docblock>
@@ -79,7 +79,8 @@
  * test_multiple_tags:
  *
  * Since: 3.0
- * Since: 2.0
+ * Since: 2.0: one of these "Since:"
+ * tags is wrong...
  **/</input>
   <parser>
     <docblock>
@@ -89,13 +90,14 @@
       <tags>
         <tag>
           <name>since</name>
-          <description>2.0</description>
+          <value>2.0</value>
+          <description>one of these "Since:" tags is wrong...</description>
         </tag>
       </tags>
     </docblock>
     <messages>
       <message>5: Warning: Test: multiple 'Since:' tags for identifier 'test_multiple_tags':
- * Since: 2.0
+ * Since: 2.0: one of these "Since:"
    ^</message>
     </messages>
   </parser>

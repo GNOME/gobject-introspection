@@ -459,6 +459,36 @@ MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
     ''',
     re.UNICODE | re.VERBOSE)
 
+# Pattern matching value and description fields for TAG_DEPRECATED & TAG_SINCE tags.
+TAG_VALUE_VERSION_RE = re.compile(
+    r'''
+    ^                                                    # start
+    \s*                                                  # 0 or more whitespace characters
+    (?P<value>([0-9\.])*)                                # value
+    \s*                                                  # 0 or more whitespace characters
+    (?P<delimiter>:?)                                    # delimiter
+    \s*                                                  # 0 or more whitespace characters
+    (?P<description>.*?)                                 # description
+    \s*                                                  # 0 or more whitespace characters
+    $                                                    # end
+    ''',
+    re.UNICODE | re.VERBOSE)
+
+# Pattern matching value and description fields for TAG_STABILITY tags.
+TAG_VALUE_STABILITY_RE = re.compile(
+    r'''
+    ^                                                    # start
+    \s*                                                  # 0 or more whitespace characters
+    (?P<value>(stable|unstable|private|internal)?)       # value
+    \s*                                                  # 0 or more whitespace characters
+    (?P<delimiter>:?)                                    # delimiter
+    \s*                                                  # 0 or more whitespace characters
+    (?P<description>.*?)                                 # description
+    \s*                                                  # 0 or more whitespace characters
+    $                                                    # end
+    ''',
+    re.UNICODE | re.VERBOSE | re.IGNORECASE)
+
 
 class DocOption(object):
 
@@ -645,13 +675,19 @@ class GtkDocTag(object):
                 return fmt % (option, value)
             else:
                 return fmt2 % (option, )
+        serialized = ''
         annotations = []
         for ann_name, options in self.annotations.items():
             annotations.append(serialize_one(ann_name, options, '(%s %s)', '(%s)'))
         if annotations:
-            return ' '.join(annotations) + ': '
-        else:
-            return self.value
+            serialized += ' '.join(annotations)
+        if self.value and annotations:
+            serialized += ': '
+        if self.value:
+            serialized += self.value
+        if self.description and (annotations or self.value):
+            serialized += ': '
+        return serialized
 
     def to_gtk_doc_param(self):
         return '@%s: %s%s' % (self.name, self._get_gtk_doc_value(), self.description)
@@ -1185,7 +1221,7 @@ class GtkDocCommentBlockParser(object):
 
                     tag = GtkDocTag(tag_name.lower())
                     tag.position = position
-                    tag.value = tag_description
+
                     if tag_annotations:
                         if tag_name.lower() == TAG_ATTRIBUTES:
                             tag.annotations = self.parse_annotations(tag, tag_annotations)
@@ -1193,6 +1229,19 @@ class GtkDocCommentBlockParser(object):
                             warn("annotations not supported for tag '%s:'." %
                                  (tag_name, ),
                                  position)
+
+                    if tag_name.lower() in [TAG_DEPRECATED, TAG_SINCE]:
+                        result = TAG_VALUE_VERSION_RE.match(tag_description)
+                        tag.value = result.group('value')
+                        tag.description = result.group('description')
+                    elif tag_name.lower() == TAG_STABILITY:
+                        result = TAG_VALUE_STABILITY_RE.match(tag_description)
+                        tag.value = result.group('value').capitalize()
+                        tag.description = result.group('description')
+                    elif tag_name.lower() in GI_ANN_TAGS:
+                        tag.value = tag_description
+                        tag.description = ''
+
                     comment_block.tags[tag_name.lower()] = tag
                     current_tag = tag
                     continue
@@ -1216,11 +1265,7 @@ class GtkDocCommentBlockParser(object):
             elif in_part == PART_TAGS:
                 self._validate_multiline_annotation_continuation(line, original_line,
                                                                  column_offset, position)
-                # Append to tag description.
-                if current_tag.name.lower() in [TAG_RETURNS, TAG_RETURN_VALUE]:
-                    current_tag.description += ' ' + line.strip()
-                else:
-                    current_tag.value += ' ' + line.strip()
+                current_tag.description += ' ' + line.strip()
                 continue
 
         ########################################################################

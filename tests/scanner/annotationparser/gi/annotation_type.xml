@@ -78,7 +78,7 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
       <tags>
         <tag>
           <name>type</name>
-          <description>GLib.HashTable(utf8,gint8)</description>
+          <value>GLib.HashTable(utf8,gint8)</value>
         </tag>
       </tags>
     </docblock>

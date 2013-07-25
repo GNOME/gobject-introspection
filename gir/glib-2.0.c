@@ -3379,7 +3379,7 @@
  * before the spelling was fixed in GLib 2.30.  It is kept here for
  * compatibility reasons.
  *
- * Deprecated: 2.30:Use G_IO_FLAG_IS_WRITABLE instead.
+ * Deprecated: 2.30: Use G_IO_FLAG_IS_WRITABLE instead.
  */
 
 

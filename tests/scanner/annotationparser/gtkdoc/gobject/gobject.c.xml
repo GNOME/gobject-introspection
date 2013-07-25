@@ -175,7 +175,7 @@ All the internal details go here or not:
         </tag>
         <tag>
           <name>since</name>
-          <description>0.1</description>
+          <value>0.1</value>
         </tag>
       </tags>
     </docblock>
@@ -218,7 +218,7 @@ All the internal details go here or not:
         </tag>
         <tag>
           <name>since</name>
-          <description>0.5</description>
+          <value>0.5</value>
         </tag>
       </tags>
     </docblock>
@@ -266,7 +266,7 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       <tags>
         <tag>
           <name>since</name>
-          <description>0.5</description>
+          <value>0.5</value>
         </tag>
       </tags>
     </docblock>
@@ -409,7 +409,7 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
       <tags>
         <tag>
           <name>since</name>
-          <description>0.1</description>
+          <value>0.1</value>
         </tag>
       </tags>
     </docblock>

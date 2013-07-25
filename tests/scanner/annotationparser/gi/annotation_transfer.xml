@@ -160,7 +160,7 @@ without....</description>
       <tags>
         <tag>
           <name>transfer</name>
-          <description>full</description>
+          <value>full</value>
         </tag>
       </tags>
     </docblock>

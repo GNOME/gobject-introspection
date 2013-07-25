@@ -124,7 +124,7 @@
       <tags>
         <tag>
           <name>since</name>
-          <description>0.1</description>
+          <value>0.1</value>
         </tag>
       </tags>
     </docblock>

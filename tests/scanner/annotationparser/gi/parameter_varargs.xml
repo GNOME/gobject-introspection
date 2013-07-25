@@ -50,11 +50,12 @@ other declarations (which may be documented elsewhere).</description>
         </tag>
         <tag>
           <name>since</name>
-          <description>2.2</description>
+          <value>2.2</value>
         </tag>
         <tag>
           <name>deprecated</name>
-          <description>2.18: Use other_function() instead.</description>
+          <value>2.18</value>
+          <description>Use other_function() instead.</description>
         </tag>
       </tags>
     </docblock>
@@ -155,11 +156,12 @@ other declarations (which may be documented elsewhere).</description>
         </tag>
         <tag>
           <name>since</name>
-          <description>2.2</description>
+          <value>2.2</value>
         </tag>
         <tag>
           <name>deprecated</name>
-          <description>2.18: Use other_function() instead.</description>
+          <value>2.18</value>
+          <description>Use other_function() instead.</description>
         </tag>
       </tags>
     </docblock>
@@ -222,11 +224,12 @@ other declarations (which may be documented elsewhere).</description>
         </tag>
         <tag>
           <name>since</name>
-          <description>2.2</description>
+          <value>2.2</value>
         </tag>
         <tag>
           <name>deprecated</name>
-          <description>2.18: Use other_function() instead.</description>
+          <value>2.18</value>
+          <description>Use other_function() instead.</description>
         </tag>
       </tags>
     </docblock>

@@ -22,7 +22,7 @@
       <tags>
         <tag>
           <name>get value func</name>
-          <description>regress_test_value_get_fundamental_object</description>
+          <value>regress_test_value_get_fundamental_object</value>
         </tag>
       </tags>
     </docblock>

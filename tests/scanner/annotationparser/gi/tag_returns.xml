@@ -275,7 +275,7 @@ parameter is encountered.</description>
         </tag>
         <tag>
           <name>since</name>
-          <description>1.10</description>
+          <value>1.10</value>
         </tag>
       </tags>
     </docblock>
@@ -326,7 +326,7 @@ parameter is encountered.</description>
         </tag>
         <tag>
           <name>since</name>
-          <description>1.10</description>
+          <value>1.10</value>
         </tag>
       </tags>
     </docblock>

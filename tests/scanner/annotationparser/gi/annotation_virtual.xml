@@ -39,7 +39,7 @@
       <tags>
         <tag>
           <name>virtual</name>
-          <description>read_fn</description>
+          <value>read_fn</value>
         </tag>
       </tags>
     </docblock>

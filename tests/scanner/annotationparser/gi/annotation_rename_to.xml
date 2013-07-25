@@ -44,7 +44,7 @@
       <tags>
         <tag>
           <name>rename to</name>
-          <description>annotation_object_watch</description>
+          <value>annotation_object_watch</value>
         </tag>
       </tags>
     </docblock>
