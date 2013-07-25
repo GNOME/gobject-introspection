@@ -515,7 +515,7 @@ pygi_source_scanner_lex_filename (PyGISourceScanner *self,
   if (!PyArg_ParseTuple (args, "s:SourceScanner.lex_filename", &filename))
     return NULL;
 
-  self->scanner->current_filename = g_strdup (filename);
+  self->scanner->current_filename = g_realpath (filename);
   if (!gi_source_scanner_lex_filename (self->scanner, filename))
     {
       g_print ("Something went wrong during lexing.\n");
