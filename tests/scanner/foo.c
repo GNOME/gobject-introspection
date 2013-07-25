@@ -285,14 +285,12 @@ regress_foo_object_dup_name (RegressFooObject *object)
 }
 
 /**
- * regress_foo_object_read:
+ * regress_foo_object_read: (virtual read_fn)
  * @object: obj
  * @offset: offset
  * @length: length
  *
  * Read some stuff.
- *
- * Virtual: read_fn
  */
 void
 regress_foo_object_read (RegressFooObject *object, int offset, int length)

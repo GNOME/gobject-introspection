@@ -10333,7 +10333,7 @@
 
 
 /**
- * g_app_info_delete:
+ * g_app_info_delete: (virtual do_delete)
  * @appinfo: a #GAppInfo
  *
  * Tries to delete a #GAppInfo.
@@ -10342,7 +10342,6 @@
  * #GAppInfo<!-- -->s which can be deleted, and system-wide ones which
  * cannot. See g_app_info_can_delete().
  *
- * Virtual: do_delete
  * Returns: %TRUE if @appinfo has been deleted
  * Since: 2.20
  */
@@ -12122,7 +12121,7 @@
 
 
 /**
- * g_bus_own_name_on_connection_with_closures:
+ * g_bus_own_name_on_connection_with_closures: (rename-to g_bus_own_name_on_connection)
  * @connection: A #GDBusConnection.
  * @name: The well-known name to own.
  * @flags: A set of flags from the #GBusNameOwnerFlags enumeration.
@@ -12133,13 +12132,12 @@
  * easier binding in other languages.
  *
  * Returns: An identifier (never 0) that an be used with g_bus_unown_name() to stop owning the name.
- * Rename to: g_bus_own_name_on_connection
  * Since: 2.26
  */
 
 
 /**
- * g_bus_own_name_with_closures:
+ * g_bus_own_name_with_closures: (rename-to g_bus_own_name)
  * @bus_type: The type of bus to own a name on.
  * @name: The well-known name to own.
  * @flags: A set of flags from the #GBusNameOwnerFlags enumeration.
@@ -12151,7 +12149,6 @@
  * easier binding in other languages.
  *
  * Returns: An identifier (never 0) that an be used with g_bus_unown_name() to stop owning the name.
- * Rename to: g_bus_own_name
  * Since: 2.26
  */
 
@@ -12240,7 +12237,7 @@
 
 
 /**
- * g_bus_watch_name_on_connection_with_closures:
+ * g_bus_watch_name_on_connection_with_closures: (rename-to g_bus_watch_name_on_connection)
  * @connection: A #GDBusConnection.
  * @name: The name (well-known or unique) to watch.
  * @flags: Flags from the #GBusNameWatcherFlags enumeration.
@@ -12251,13 +12248,12 @@
  * easier binding in other languages.
  *
  * Returns: An identifier (never 0) that an be used with g_bus_unwatch_name() to stop watching the name.
- * Rename to: g_bus_watch_name_on_connection
  * Since: 2.26
  */
 
 
 /**
- * g_bus_watch_name_with_closures:
+ * g_bus_watch_name_with_closures: (rename-to g_bus_watch_name)
  * @bus_type: The type of bus to watch a name on.
  * @name: The name (well-known or unique) to watch.
  * @flags: Flags from the #GBusNameWatcherFlags enumeration.
@@ -12268,7 +12264,6 @@
  * easier binding in other languages.
  *
  * Returns: An identifier (never 0) that an be used with g_bus_unwatch_name() to stop watching the name.
- * Rename to: g_bus_watch_name
  * Since: 2.26
  */
 
@@ -15136,14 +15131,13 @@
 
 
 /**
- * g_dbus_interface_dup_object:
+ * g_dbus_interface_dup_object: (rename-to g_dbus_interface_get_object)
  * @interface_: An exported D-Bus interface.
  *
  * Gets the #GDBusObject that @interface_ belongs to, if any.
  *
  * Returns: (transfer full): A #GDBusObject or %NULL. The returned reference should be freed with g_object_unref().
  * Since: 2.32
- * Rename to: g_dbus_interface_get_object
  */
 
 
@@ -18943,7 +18937,7 @@
 
 
 /**
- * g_file_delete:
+ * g_file_delete: (virtual delete_file)
  * @file: input #GFile
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @error: a #GError, or %NULL
@@ -18955,13 +18949,12 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Virtual: delete_file
  * Returns: %TRUE if the file was deleted. %FALSE otherwise.
  */
 
 
 /**
- * g_file_delete_async:
+ * g_file_delete_async: (virtual delete_file_async)
  * @file: input #GFile
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
@@ -18972,20 +18965,18 @@
  * only be deleted if it is empty.  This has the same semantics as
  * g_unlink().
  *
- * Virtual: delete_file_async
  * Since: 2.34
  */
 
 
 /**
- * g_file_delete_finish:
+ * g_file_delete_finish: (virtual delete_file_finish)
  * @file: input #GFile
  * @result: a #GAsyncResult
  * @error: a #GError, or %NULL
  *
  * Finishes deleting a file started with g_file_delete_async().
  *
- * Virtual: delete_file_finish
  * Returns: %TRUE if the file was deleted. %FALSE otherwise.
  * Since: 2.34
  */
@@ -19575,7 +19566,7 @@
 
 
 /**
- * g_file_has_prefix:
+ * g_file_has_prefix: (virtual prefix_matches)
  * @file: input #GFile
  * @prefix: input #GFile
  *
@@ -19591,7 +19582,6 @@
  * filesystem point of view), because the prefix of @file is an alias
  * of @prefix.
  *
- * Virtual: prefix_matches
  * Returns: %TRUE if the @files's parent, grandparent, etc is @prefix, %FALSE otherwise.
  */
 
@@ -19610,14 +19600,13 @@
 
 
 /**
- * g_file_hash:
+ * g_file_hash: (virtual hash)
  * @file: (type GFile): #gconstpointer to a #GFile
  *
  * Creates a hash value for a #GFile.
  *
  * This call does no blocking I/O.
  *
- * Virtual: hash
  * Returns: 0 if @file is not a valid #GFile, otherwise an integer that can be used as hash value for the #GFile. This function is intended for easily hashing a #GFile to add to a #GHashTable or similar data structure.
  */
 
@@ -20613,7 +20602,7 @@
 
 
 /**
- * g_file_make_directory_async:
+ * g_file_make_directory_async: (virtual make_directory_async)
  * @file: input #GFile
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
@@ -20622,13 +20611,12 @@
  *
  * Asynchronously creates a directory.
  *
- * Virtual: make_directory_async
  * Since: 2.38
  */
 
 
 /**
- * g_file_make_directory_finish:
+ * g_file_make_directory_finish: (virtual make_directory_finish)
  * @file: input #GFile
  * @result: a #GAsyncResult
  * @error: a #GError, or %NULL
@@ -20636,7 +20624,6 @@
  * Finishes an asynchronous directory creation, started with
  * g_file_make_directory_async().
  *
- * Virtual: make_directory_finish
  * Returns: %TRUE on successful directory creation, %FALSE otherwise.
  * Since: 2.38
  */
@@ -20789,7 +20776,7 @@
 
 
 /**
- * g_file_monitor_directory:
+ * g_file_monitor_directory: (virtual monitor_dir)
  * @file: input #GFile
  * @flags: a set of #GFileMonitorFlags
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
@@ -20808,7 +20795,6 @@
  * directory for changes made via hard links; if you want to do this then
  * you must register individual watches with g_file_monitor().
  *
- * Virtual: monitor_dir
  * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error. Free the returned object with g_object_unref().
  */
 
@@ -21525,7 +21511,7 @@
 
 
 /**
- * g_file_read:
+ * g_file_read: (virtual read_fn)
  * @file: #GFile to read
  * @cancellable: (allow-none): a #GCancellable
  * @error: a #GError, or %NULL
@@ -21542,7 +21528,6 @@
  * error will be returned. Other errors are possible too, and depend
  * on what kind of filesystem the file is on.
  *
- * Virtual: read_fn
  * Returns: (transfer full): #GFileInputStream or %NULL on error. Free the returned object with g_object_unref().
  */
 
@@ -22182,7 +22167,7 @@
 
 
 /**
- * g_file_trash:
+ * g_file_trash: (virtual trash)
  * @file: #GFile to send to trash
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @error: a #GError, or %NULL
@@ -22196,13 +22181,12 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Virtual: trash
  * Returns: %TRUE on successful trash, %FALSE otherwise.
  */
 
 
 /**
- * g_file_trash_async:
+ * g_file_trash_async: (virtual trash_async)
  * @file: input #GFile
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
@@ -22211,13 +22195,12 @@
  *
  * Asynchronously sends @file to the Trash location, if possible.
  *
- * Virtual: trash_async
  * Since: 2.38
  */
 
 
 /**
- * g_file_trash_finish:
+ * g_file_trash_finish: (virtual trash_finish)
  * @file: input #GFile
  * @result: a #GAsyncResult
  * @error: a #GError, or %NULL
@@ -22225,7 +22208,6 @@
  * Finishes an asynchronous file trashing operation, started with
  * g_file_trash_async().
  *
- * Virtual: trash_finish
  * Returns: %TRUE on successful trash, %FALSE otherwise.
  * Since: 2.38
  */
@@ -22433,12 +22415,11 @@
 
 
 /**
- * g_icon_hash:
+ * g_icon_hash: (virtual hash)
  * @icon: #gconstpointer to an icon object.
  *
  * Gets a hash for an icon.
  *
- * Virtual: hash
  * Returns: a #guint containing a hash for the @icon, suitable for use in a #GHashTable or similar data structure.
  */
 
@@ -22476,7 +22457,7 @@
 
 
 /**
- * g_icon_to_string:
+ * g_icon_to_string: (virtual to_tokens)
  * @icon: a #GIcon.
  *
  * Generates a textual representation of @icon that can be used for
@@ -22501,7 +22482,6 @@
  * </para></listitem>
  * </itemizedlist>
  *
- * Virtual: to_tokens
  * Returns: An allocated NUL-terminated UTF8 string or %NULL if @icon can't be serialized. Use g_free() to free.
  * Since: 2.20
  */
@@ -26204,7 +26184,7 @@
 
 
 /**
- * g_output_stream_write:
+ * g_output_stream_write: (virtual write_fn)
  * @stream: a #GOutputStream.
  * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
@@ -26232,7 +26212,6 @@
  *
  * On error -1 is returned and @error is set accordingly.
  *
- * Virtual: write_fn
  * Returns: Number of bytes written, or -1 on error
  */
 
@@ -26621,7 +26600,7 @@
 
 
 /**
- * g_pollable_input_stream_read_nonblocking:
+ * g_pollable_input_stream_read_nonblocking: (virtual read_nonblocking)
  * @stream: a #GPollableInputStream
  * @buffer: a buffer to read data into (which should be at least @count bytes long).
  * @count: the number of bytes you want to read
@@ -26640,7 +26619,6 @@
  * may happen if you call this method after a source triggers due
  * to having been cancelled.
  *
- * Virtual: read_nonblocking
  * Returns: the number of bytes read, or -1 on error (including %G_IO_ERROR_WOULD_BLOCK).
  */
 
@@ -26700,7 +26678,7 @@
 
 
 /**
- * g_pollable_output_stream_write_nonblocking:
+ * g_pollable_output_stream_write_nonblocking: (virtual write_nonblocking)
  * @stream: a #GPollableOutputStream
  * @buffer: (array length=count) (element-type guint8): a buffer to write data from
  * @count: the number of bytes you want to write
@@ -26719,7 +26697,6 @@
  * may happen if you call this method after a source triggers due
  * to having been cancelled.
  *
- * Virtual: write_nonblocking
  * Returns: the number of bytes written, or -1 on error (including %G_IO_ERROR_WOULD_BLOCK).
  */
 
@@ -27788,7 +27765,7 @@
 
 
 /**
- * g_seekable_truncate:
+ * g_seekable_truncate: (virtual truncate_fn)
  * @seekable: a #GSeekable.
  * @offset: a #goffset.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
@@ -27802,7 +27779,6 @@
  * operation was partially finished when the operation was cancelled the
  * partial result will be returned, without an error.
  *
- * Virtual: truncate_fn
  * Returns: %TRUE if successful. If an error has occurred, this function will return %FALSE and set @error appropriately if present.
  */
 
@@ -33988,7 +33964,7 @@
 
 
 /**
- * g_tls_password_set_value_full:
+ * g_tls_password_set_value_full: (virtual set_value)
  * @password: a #GTlsPassword object
  * @value: the value for the password
  * @length: the length of the password, or -1
@@ -34004,7 +33980,6 @@
  * calculated automatically. (Note that the terminating nul is not
  * considered part of the password in this case.)
  *
- * Virtual: set_value
  * Since: 2.30
  */
 
@@ -35435,7 +35410,7 @@
 
 
 /**
- * g_volume_mount:
+ * g_volume_mount: (virtual mount_fn)
  * @volume: a #GVolume.
  * @flags: flags affecting the operation
  * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
@@ -35446,8 +35421,6 @@
  * Mounts a volume. This is an asynchronous operation, and is
  * finished by calling g_volume_mount_finish() with the @volume
  * and #GAsyncResult returned in the @callback.
- *
- * Virtual: mount_fn
  */
 
 

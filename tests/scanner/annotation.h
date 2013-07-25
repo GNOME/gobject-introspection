@@ -173,22 +173,18 @@ GObject * regress_annotation_transfer_floating(void);
 #define REGRESS_ANNOTATION_CALCULATED_DEFINE (10 * 10)
 
 /**
- * REGRESS_ANNOTATION_CALCULATED_LARGE:
+ * REGRESS_ANNOTATION_CALCULATED_LARGE: (value 10000000000UL)
  *
  * Constant to define a calculated large value
- *
- * Value: 10000000000UL
  *
  * Since: 1.4
  */
 #define REGRESS_ANNOTATION_CALCULATED_LARGE (1000 * G_GINT64_CONSTANT (10000000))
 
 /**
- * REGRESS_ANNOTATION_CALCULATED_LARGE_DIV:
+ * REGRESS_ANNOTATION_CALCULATED_LARGE_DIV: (value 1000000UL)
  *
  * Constant to define a calculated large value
- *
- * Value: 1000000UL
  */
 #define REGRESS_ANNOTATION_CALCULATED_LARGE_DIV (1000 / G_GINT64_CONSTANT (10000000))
 

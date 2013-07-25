@@ -59,29 +59,175 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
 </test>
 
 <test>
+  <input>/**
+ * AnnotationObject:hash-table: (type GLib.HashTable(utf8,gint8)) (transfer container)
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>AnnotationObject:hash-table</name>
+        <annotations>
+          <annotation>
+            <name>type</name>
+            <options>
+              <option>
+                <name>GLib.HashTable(utf8,gint8)</name>
+              </option>
+            </options>
+          </annotation>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>container</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+    </docblock>
+  </parser>
+</test>
+
+<test>
   <!--
-  "Type:" tag syntax
+  Deprecated inequality sign/angled brackets notation.
+  -->
+  <input><![CDATA[/**
+ * AnnotationObject:hash-table: (type GLib.HashTable<utf8,gint8>) (transfer container)
+ */]]></input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>AnnotationObject:hash-table</name>
+        <annotations>
+          <annotation>
+            <name>type</name>
+            <options>
+              <option>
+                <name>GLib.HashTable(utf8,gint8)</name>
+              </option>
+            </options>
+          </annotation>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>container</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Deprecated "Type:" tag syntax
   -->
   <input>/**
-   * RegressTestObj:hash-table:
-   *
-   * Test.
-   *
-   * Type: GLib.HashTable(utf8,gint8)
-   */</input>
+ * RegressTestObj:hash-table:
+ *
+ * Test.
+ *
+ * Type: GLib.HashTable(utf8,gint8)
+ */</input>
   <parser>
     <docblock>
       <identifier>
         <name>RegressTestObj:hash-table</name>
+        <annotations>
+          <annotation>
+            <name>type</name>
+            <options>
+              <option>
+                <name>GLib.HashTable(utf8,gint8)</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
       </identifier>
       <description>Test.</description>
-      <tags>
-        <tag>
-          <name>type</name>
-          <value>GLib.HashTable(utf8,gint8)</value>
-        </tag>
-      </tags>
     </docblock>
+    <messages>
+      <message>6: Warning: Test: GObject-Introspection specific GTK-Doc tag "Type" has been deprecated, please use annotations on the identifier instead:
+ * Type: GLib.HashTable(utf8,gint8)
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Deprecated "Type:" tag syntax in the wrong location
+  -->
+  <input>/**
+ * RegressTestObj:hash-table:
+ *
+ * Type: GLib.HashTable(utf8,gint8)
+ *
+ * Test.
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>RegressTestObj:hash-table</name>
+        <annotations>
+          <annotation>
+            <name>type</name>
+            <options>
+              <option>
+                <name>GLib.HashTable(utf8,gint8)</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Test.</description>
+    </docblock>
+    <messages>
+      <message>4: Warning: Test: GObject-Introspection specific GTK-Doc tag "Type" has been deprecated, please use annotations on the identifier instead:
+ * Type: GLib.HashTable(utf8,gint8)
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Deprecated angled brackets in deprecated "Type:" tag syntax
+  -->
+  <input><![CDATA[/**
+ * RegressTestObj:hash-table:
+ *
+ * Test.
+ *
+ * Type: GLib.HashTable<utf8,gint8>
+ */]]></input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>RegressTestObj:hash-table</name>
+        <annotations>
+          <annotation>
+            <name>type</name>
+            <options>
+              <option>
+                <name>GLib.HashTable(utf8,gint8)</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Test.</description>
+    </docblock>
+    <messages>
+      <message><![CDATA[6: Warning: Test: GObject-Introspection specific GTK-Doc tag "Type" has been deprecated, please use annotations on the identifier instead:
+ * Type: GLib.HashTable<utf8,gint8>
+   ^]]></message>
+    </messages>
   </parser>
 </test>
 

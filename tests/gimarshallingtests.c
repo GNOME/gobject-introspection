@@ -4114,11 +4114,9 @@ static void
 }
 
 /**
- * gi_marshalling_tests_object_vfunc_with_callback:
+ * gi_marshalling_tests_object_vfunc_with_callback: (virtual vfunc_with_callback)
  * @callback: (scope call) (closure callback_data):
  * @callback_data: (allow-none):
- *
- * Virtual: vfunc_with_callback
  */
 void
 gi_marshalling_tests_object_vfunc_with_callback (GIMarshallingTestsObject *
@@ -5312,10 +5310,7 @@ static void gi_marshalling_tests_properties_object_class_init (GIMarshallingTest
                                                        (), G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
     /**
-     * GIMarshallingTestsPropertiesObject:some-boxed-glist:
-     *
-     * Type: GLib.List(gint)
-     * Transfer: none
+     * GIMarshallingTestsPropertiesObject:some-boxed-glist: (type GLib.List(gint)) (transfer none):
      */
   g_object_class_install_property (object_class, SOME_BOXED_GLIST_PROPERTY,
                                    g_param_spec_boxed ("some-boxed-glist",

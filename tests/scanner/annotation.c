@@ -163,9 +163,7 @@ regress_annotation_object_class_init (RegressAnnotationObjectClass *klass)
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   /**
-   * RegressAnnotationObject:function-property:
-   *
-   * Type: RegressAnnotationCallback
+   * RegressAnnotationObject:function-property: (type RegressAnnotationCallback)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_FUNCTION_PROPERTY,
@@ -616,15 +614,13 @@ regress_annotation_object_watch (RegressAnnotationObject *object,
 }
 
 /**
- * regress_annotation_object_watch_full:
+ * regress_annotation_object_watch_full: (rename-to regress_annotation_object_watch)
  * @object: A #RegressAnnotationObject
  * @func: The callback
  * @user_data: The callback data
  * @destroy: Destroy notification
  *
  * Test overriding via the "Rename To" annotation.
- *
- * Rename to: regress_annotation_object_watch
  */
 void
 regress_annotation_object_watch_full (RegressAnnotationObject *object,

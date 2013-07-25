@@ -139,8 +139,36 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
 </test>
 
 <test>
+  <input>/**
+ * FsSession:codecs-without-config: (transfer full)
+ *
+ * This is the same list of codecs as #FsSession:codecs
+ * without....
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>FsSession:codecs-without-config</name>
+        <annotations>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>full</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>This is the same list of codecs as #FsSession:codecs
+without....</description>
+    </docblock>
+  </parser>
+</test>
+
+<test>
   <!--
-  "Transfer:" tag syntax
+  Deprecated "Transfer:" tag syntax
   -->
   <input>/**
  * FsSession:codecs-without-config:
@@ -154,16 +182,63 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
     <docblock>
       <identifier>
         <name>FsSession:codecs-without-config</name>
+        <annotations>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>full</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
       </identifier>
       <description>This is the same list of codecs as #FsSession:codecs
 without....</description>
-      <tags>
-        <tag>
-          <name>transfer</name>
-          <value>full</value>
-        </tag>
-      </tags>
     </docblock>
+    <messages>
+      <message>7: Warning: Test: GObject-Introspection specific GTK-Doc tag "Transfer" has been deprecated, please use annotations on the identifier instead:
+ * Transfer: full
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Deprecated "Transfer:" tag syntax in the wrong location
+  -->
+  <input>/**
+ * FsSession:codecs-without-config:
+ *
+ * Transfer: full
+ *
+ * This is the same list of codecs as #FsSession:codecs
+ * without....
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>FsSession:codecs-without-config</name>
+        <annotations>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>full</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>This is the same list of codecs as #FsSession:codecs
+without....</description>
+    </docblock>
+    <messages>
+      <message>4: Warning: Test: GObject-Introspection specific GTK-Doc tag "Transfer" has been deprecated, please use annotations on the identifier instead:
+ * Transfer: full
+   ^</message>
+    </messages>
   </parser>
 </test>
 

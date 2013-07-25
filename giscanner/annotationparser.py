@@ -148,7 +148,12 @@ TAG_RETURNS_VALUE = 'returns value'
 DEPRECATED_GI_TAGS = [TAG_RETURN,
                       TAG_RETURNS_VALUE]
 
-#   4) GObject-Introspection annotation tags.
+#   4) Deprecated GObject-Introspection annotation tags.
+#      Accepted by old versions of this module while they should have been
+#      annotations on the identifier part instead.
+#      Note: This list can not be extended ever again. The GObject-Introspection project is not
+#            allowed to invent GTK-Doc tags. Please create new annotations instead.
+TAG_ATTRIBUTES = 'attributes'
 TAG_GET_VALUE_FUNC = 'get value func'
 TAG_REF_FUNC = 'ref func'
 TAG_RENAME_TO = 'rename to'
@@ -159,27 +164,18 @@ TAG_UNREF_FUNC = 'unref func'
 TAG_VALUE = 'value'
 TAG_VFUNC = 'virtual'
 
-GI_ANN_TAGS = [TAG_GET_VALUE_FUNC,
-               TAG_REF_FUNC,
-               TAG_RENAME_TO,
-               TAG_SET_VALUE_FUNC,
-               TAG_TRANSFER,
-               TAG_TYPE,
-               TAG_UNREF_FUNC,
-               TAG_VALUE,
-               TAG_VFUNC]
+DEPRECATED_GI_ANN_TAGS = [TAG_ATTRIBUTES,
+                          TAG_GET_VALUE_FUNC,
+                          TAG_REF_FUNC,
+                          TAG_RENAME_TO,
+                          TAG_SET_VALUE_FUNC,
+                          TAG_TRANSFER,
+                          TAG_TYPE,
+                          TAG_UNREF_FUNC,
+                          TAG_VALUE,
+                          TAG_VFUNC]
 
-#   5) Deprecated GObject-Introspection annotation tags.
-#      Accepted by old versions of this module while they should have been
-#      annotations on the identifier part instead.
-#      Note: This list can not be extended ever again. The GObject-Introspection project is not
-#            allowed to invent GTK-Doc tags. Please create new annotations instead.
-TAG_ATTRIBUTES = 'attributes'
-
-DEPRECATED_GI_ANN_TAGS = [TAG_ATTRIBUTES]
-
-ALL_TAGS = (GTKDOC_TAGS + DEPRECATED_GTKDOC_TAGS + DEPRECATED_GI_TAGS + GI_ANN_TAGS +
-            DEPRECATED_GI_ANN_TAGS)
+ALL_TAGS = GTKDOC_TAGS + DEPRECATED_GTKDOC_TAGS + DEPRECATED_GI_TAGS + DEPRECATED_GI_ANN_TAGS
 
 # GObject-Introspection annotation start/end tokens
 ANN_LPAR = '('
@@ -196,14 +192,21 @@ ANN_CONSTRUCTOR = 'constructor'
 ANN_DESTROY = 'destroy'
 ANN_ELEMENT_TYPE = 'element-type'
 ANN_FOREIGN = 'foreign'
+ANN_GET_VALUE_FUNC = 'get-value-func'
 ANN_IN = 'in'
 ANN_INOUT = 'inout'
 ANN_METHOD = 'method'
 ANN_OUT = 'out'
+ANN_REF_FUNC = 'ref-func'
+ANN_RENAME_TO = 'rename-to'
 ANN_SCOPE = 'scope'
+ANN_SET_VALUE_FUNC = 'set-value-func'
 ANN_SKIP = 'skip'
 ANN_TRANSFER = 'transfer'
 ANN_TYPE = 'type'
+ANN_UNREF_FUNC = 'unref-func'
+ANN_VFUNC = 'virtual'
+ANN_VALUE = 'value'
 
 GI_ANNS = [ANN_ALLOW_NONE,
            ANN_ARRAY,
@@ -213,14 +216,21 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_DESTROY,
            ANN_ELEMENT_TYPE,
            ANN_FOREIGN,
+           ANN_GET_VALUE_FUNC,
            ANN_IN,
            ANN_INOUT,
            ANN_METHOD,
            ANN_OUT,
+           ANN_REF_FUNC,
+           ANN_RENAME_TO,
            ANN_SCOPE,
+           ANN_SET_VALUE_FUNC,
            ANN_SKIP,
            ANN_TRANSFER,
-           ANN_TYPE]
+           ANN_TYPE,
+           ANN_UNREF_FUNC,
+           ANN_VFUNC,
+           ANN_VALUE]
 
 #   2) Deprecated GObject-Introspection annotations
 ANN_ATTRIBUTE = 'attribute'
@@ -507,8 +517,7 @@ class GtkDocTag(object):
                 s = 'one value'
             else:
                 s = '%d values' % (n_params, )
-            if ((n_params > 0 and (len(options) == 0 or len(options) != n_params))
-            or n_params == 0 and len(options) != 0):
+            if len(options) != n_params:
                 length = len(options)
                 warn('%s annotation needs %s, not %d' % (ann_name, s, length),
                      self.position)
@@ -696,14 +705,29 @@ class GtkDocCommentBlock(object):
         return '<GtkDocCommentBlock %r %r>' % (self.name, self.annotations)
 
     def to_gtk_doc(self):
-        annotations = ''
-        if self.annotations:
-            annotations += ' '
-            annotations += ' '.join('(%s)' % o for o in self.annotations)
+        def serialize_one(option, value, fmt, fmt2):
+            if value:
+                if type(value) != str:
+                    if isinstance(value, list):
+                        value = ' '.join(value)
+                    else:
+                        value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
+                                          for k, v in value.items()))
+                return fmt % (option, value)
+            else:
+                return fmt2 % (option, )
+
         lines = [self.name]
         if 'SECTION' not in self.name:
             lines[0] += ':'
-        lines[0] += annotations
+
+        annotations = []
+        for ann_name, options in self.annotations.items():
+            annotations.append(serialize_one(ann_name, options, '(%s %s)', '(%s)'))
+        if annotations:
+            annotations = ' '.join(annotations)
+            lines[0] += ' ' + annotations
+
         for param in self.params.values():
             lines.append(param.to_gtk_doc_param())
         if self.description:
@@ -1196,9 +1220,6 @@ class GtkDocCommentBlockParser(object):
                             result = TAG_VALUE_STABILITY_RE.match(d)
                             tag.value = result.group('value').capitalize()
                             tag.description = result.group('description')
-                        elif tag_name_lower in GI_ANN_TAGS:
-                            tag.value = d
-                            tag.description = ''
 
                     comment_block.tags[tag_name_lower] = tag
                     current_tag = tag

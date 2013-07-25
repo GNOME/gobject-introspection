@@ -1770,7 +1770,7 @@
 
 
 /**
- * g_object_bind_property_with_closures:
+ * g_object_bind_property_with_closures: (rename-to g_object_bind_property_full)
  * @source: (type GObject.Object): the source #GObject
  * @source_property: the property on @source to bind
  * @target: (type GObject.Object): the target #GObject
@@ -1787,7 +1787,6 @@
  * g_object_bind_property_full(), using #GClosure<!-- -->s instead of
  * function pointers.
  *
- * Rename to: g_object_bind_property_full
  * Returns: (transfer none): the #GBinding instance representing the binding between the two #GObject instances. The binding is released whenever the #GBinding reference count reaches zero.
  * Since: 2.26
  */
@@ -2300,7 +2299,7 @@
 
 
 /**
- * g_object_newv:
+ * g_object_newv: (rename-to g_object_new)
  * @object_type: the type id of the #GObject subtype to instantiate
  * @n_parameters: the length of the @parameters array
  * @parameters: (array length=n_parameters): an array of #GParameter
@@ -2310,7 +2309,6 @@
  * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
  *
- * Rename to: g_object_new
  * Returns: (type GObject.Object) (transfer full): a new instance of @object_type
  */
 
@@ -5218,7 +5216,7 @@
 
 
 /**
- * g_value_array_sort_with_data:
+ * g_value_array_sort_with_data: (rename-to g_value_array_sort)
  * @value_array: #GValueArray to sort
  * @compare_func: (scope call): function to compare elements
  * @user_data: (closure): extra data argument provided for @compare_func
@@ -5229,7 +5227,6 @@
  * The current implementation uses the same sorting algorithm as standard
  * C qsort() function.
  *
- * Rename to: g_value_array_sort
  * Returns: (transfer none): the #GValueArray passed in as @value_array
  * Deprecated: 2.32: Use #GArray and g_array_sort_with_data().
  */

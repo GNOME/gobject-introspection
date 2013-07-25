@@ -2455,10 +2455,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * RegressTestObj:hash-table:
-   *
-   * Type: GLib.HashTable(utf8,gint8)
-   * Transfer: container
+   * RegressTestObj:hash-table: (type GLib.HashTable(utf8,gint8)) (transfer container)
    */
   pspec = g_param_spec_boxed ("hash-table",
                               "GHashTable property",
@@ -2470,10 +2467,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * RegressTestObj:list:
-   *
-   * Type: GLib.List(utf8)
-   * Transfer: none
+   * RegressTestObj:list: (type GLib.List(utf8)) (transfer none)
    */
   pspec = g_param_spec_pointer ("list",
                                 "GList property",
@@ -2484,10 +2478,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * RegressTestObj:hash-table-old:
-   *
-   * Type: GLib.HashTable<utf8,gint8>
-   * Transfer: container
+   * RegressTestObj:hash-table-old: (type GLib.HashTable<utf8,gint8>) (transfer container)
    */
   pspec = g_param_spec_boxed ("hash-table-old",
                               "GHashTable property with <>",
@@ -2499,10 +2490,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * RegressTestObj:list-old:
-   *
-   * Type: GLib.List<utf8>
-   * Transfer: none
+   * RegressTestObj:list-old: (type GLib.List<utf8>) (transfer none)
    */
   pspec = g_param_spec_pointer ("list-old",
                                 "GList property with ()",
@@ -2923,15 +2911,13 @@ regress_test_obj_skip_inout_param (RegressTestObj *obj,
 }
 
 /**
- * regress_test_obj_do_matrix:
+ * regress_test_obj_do_matrix: (virtual matrix)
  * @obj: A #RegressTestObj
  * @somestr: Meaningless string
  *
  * This method is virtual.  Notably its name differs from the virtual
  * slot name, which makes it useful for testing bindings handle this
  * case.
- *
- * Virtual: matrix
  */
 int
 regress_test_obj_do_matrix (RegressTestObj *obj, const char *somestr)
@@ -3181,12 +3167,7 @@ regress_test_fundamental_object_init (GTypeInstance * instance, gpointer klass)
 }
 
 /**
- * RegressTestFundamentalObject:
- *
- * Ref Func: regress_test_fundamental_object_ref
- * Unref Func: regress_test_fundamental_object_unref
- * Set Value Func: regress_test_value_set_fundamental_object
- * Get Value Func: regress_test_value_get_fundamental_object
+ * RegressTestFundamentalObject: (ref-func regress_test_fundamental_object_ref) (unref-func regress_test_fundamental_object_unref) (set-value-func regress_test_value_set_fundamental_object) (get-value-func regress_test_value_get_fundamental_object)
  */
 
 GType

@@ -3,8 +3,34 @@
 <tests xmlns="http://schemas.gnome.org/gobject-introspection/2013/test">
 
 <test>
+  <input>/**
+ * ANNOTATION_CALCULATED_LARGE: (value 10000000000UL)
+ *
+ * Constant to define a calculated large value
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>ANNOTATION_CALCULATED_LARGE</name>
+        <annotations>
+          <annotation>
+            <name>value</name>
+            <options>
+              <option>
+                <name>10000000000UL</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Constant to define a calculated large value</description>
+    </docblock>
+  </parser>
+</test>
+
+<test>
   <!--
-  "Value:" tag syntax
+  Deprecated "Value:" tag syntax
   -->
   <input>/**
  * ANNOTATION_CALCULATED_LARGE:
@@ -17,15 +43,60 @@
     <docblock>
       <identifier>
         <name>ANNOTATION_CALCULATED_LARGE</name>
+        <annotations>
+          <annotation>
+            <name>value</name>
+            <options>
+              <option>
+                <name>10000000000UL</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
       </identifier>
       <description>Constant to define a calculated large value</description>
-      <tags>
-        <tag>
-         <name>value</name>
-         <value>10000000000UL</value>
-        </tag>
-      </tags>
     </docblock>
+    <messages>
+      <message>6: Warning: Test: GObject-Introspection specific GTK-Doc tag "Value" has been deprecated, please use annotations on the identifier instead:
+ * Value: 10000000000UL
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Deprecated "Value:" tag syntax in the wrong location
+  -->
+  <input>/**
+ * ANNOTATION_CALCULATED_LARGE:
+ *
+ * Value: 10000000000UL
+ *
+ * Constant to define a calculated large value
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>ANNOTATION_CALCULATED_LARGE</name>
+        <annotations>
+          <annotation>
+            <name>value</name>
+            <options>
+              <option>
+                <name>10000000000UL</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Constant to define a calculated large value</description>
+    </docblock>
+    <messages>
+      <message>4: Warning: Test: GObject-Introspection specific GTK-Doc tag "Value" has been deprecated, please use annotations on the identifier instead:
+ * Value: 10000000000UL
+   ^</message>
+    </messages>
   </parser>
 </test>
 

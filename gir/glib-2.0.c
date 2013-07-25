@@ -11182,7 +11182,7 @@
 
 
 /**
- * g_child_watch_add_full:
+ * g_child_watch_add_full: (rename-to g_child_watch_add)
  * @priority: the priority of the idle source. Typically this will be in the range between #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE.
  * @pid: process to watch. On POSIX the pid of a child process. On Windows a handle for a process (which doesn't have to be a child).
  * @function: function to call
@@ -11213,7 +11213,6 @@
  * need greater control.
  *
  * Returns: the ID (greater than 0) of the event source.
- * Rename to: g_child_watch_add
  * Since: 2.4
  */
 
@@ -16027,7 +16026,7 @@
 
 
 /**
- * g_idle_add_full:
+ * g_idle_add_full: (rename-to g_idle_add)
  * @priority: the priority of the idle source. Typically this will be in the range between #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE.
  * @function: function to call
  * @data: data to pass to @function
@@ -16042,7 +16041,6 @@
  * You can do these steps manually if you need greater control.
  *
  * Returns: the ID (greater than 0) of the event source.
- * Rename to: g_idle_add
  */
 
 
@@ -16179,7 +16177,7 @@
 
 
 /**
- * g_io_add_watch_full:
+ * g_io_add_watch_full: (rename-to g_io_add_watch)
  * @channel: a #GIOChannel
  * @priority: the priority of the #GIOChannel source
  * @condition: the condition to watch for
@@ -16195,7 +16193,6 @@
  * You can do these steps manually if you need greater control.
  *
  * Returns: the event source id
- * Rename to: g_io_add_watch
  */
 
 
@@ -29106,7 +29103,7 @@
 
 
 /**
- * g_timeout_add_full:
+ * g_timeout_add_full: (rename-to g_timeout_add)
  * @priority: the priority of the timeout source. Typically this will be in the range between #G_PRIORITY_DEFAULT and #G_PRIORITY_HIGH.
  * @interval: the time between calls to the function, in milliseconds (1/1000ths of a second)
  * @function: function to call
@@ -29134,7 +29131,6 @@
  * See g_get_monotonic_time().
  *
  * Returns: the ID (greater than 0) of the event source.
- * Rename to: g_timeout_add
  */
 
 
@@ -29167,7 +29163,7 @@
 
 
 /**
- * g_timeout_add_seconds_full:
+ * g_timeout_add_seconds_full: (rename-to g_timeout_add_seconds)
  * @priority: the priority of the timeout source. Typically this will be in the range between #G_PRIORITY_DEFAULT and #G_PRIORITY_HIGH.
  * @interval: the time between calls to the function, in seconds
  * @function: function to call
@@ -29209,7 +29205,6 @@
  * time.  See g_get_monotonic_time().
  *
  * Returns: the ID (greater than 0) of the event source.
- * Rename to: g_timeout_add_seconds
  * Since: 2.14
  */
 
@@ -30367,7 +30362,7 @@
 
 
 /**
- * g_unix_signal_add_full:
+ * g_unix_signal_add_full: (rename-to g_unix_signal_add)
  * @priority: the priority of the signal source. Typically this will be in the range between #G_PRIORITY_DEFAULT and #G_PRIORITY_HIGH.
  * @signum: Signal number
  * @handler: Callback
@@ -30379,7 +30374,6 @@
  * using g_source_remove().
  *
  * Returns: An ID (greater than 0) for the event source
- * Rename to: g_unix_signal_add
  * Since: 2.30
  */
 

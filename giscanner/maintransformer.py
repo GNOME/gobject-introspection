@@ -21,19 +21,16 @@ import re
 
 from . import ast
 from . import message
-from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS,
-                               TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE,
-                               TAG_UNREF_FUNC, TAG_REF_FUNC, TAG_SET_VALUE_FUNC,
-                               TAG_GET_VALUE_FUNC, TAG_VALUE, TAG_TRANSFER,
-                               TAG_STABILITY)
-from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES,
-                               ANN_ELEMENT_TYPE, ANN_IN, ANN_INOUT,
-                               ANN_INOUT_ALT, ANN_OUT, ANN_SCOPE,
-                               ANN_TYPE, ANN_CLOSURE, ANN_DESTROY, ANN_TRANSFER, ANN_SKIP,
-                               ANN_FOREIGN, ANN_CONSTRUCTOR, ANN_METHOD,
-                               OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
-                               OPT_OUT_CALLER_ALLOCATES, OPT_OUT_CALLEE_ALLOCATES,
-                               OPT_TRANSFER_NONE, OPT_TRANSFER_FLOATING)
+from .annotationparser import (TAG_DEPRECATED, TAG_SINCE, TAG_STABILITY, TAG_RETURNS)
+from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CLOSURE,
+                               ANN_CONSTRUCTOR, ANN_DESTROY, ANN_ELEMENT_TYPE, ANN_FOREIGN,
+                               ANN_GET_VALUE_FUNC, ANN_IN, ANN_INOUT, ANN_METHOD, ANN_OUT,
+                               ANN_REF_FUNC, ANN_RENAME_TO, ANN_SCOPE, ANN_SET_VALUE_FUNC,
+                               ANN_SKIP, ANN_TRANSFER, ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE,
+                               ANN_VFUNC)
+from .annotationparser import (OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
+                               OPT_OUT_CALLEE_ALLOCATES, OPT_OUT_CALLER_ALLOCATES,
+                               OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
 
 from .utils import to_underscores_noprefix
 
@@ -136,12 +133,10 @@ class MainTransformer(object):
     def _apply_annotation_rename_to(self, node, chain, block):
         if not block:
             return
-        rename_to = block.tags.get(TAG_RENAME_TO)
+        rename_to = block.annotations.get(ANN_RENAME_TO)
         if not rename_to:
             return
-        rename_to = rename_to.value
-        if not rename_to:
-            return
+        rename_to = rename_to[0]
         target = self._namespace.get_by_symbol(rename_to)
         if not target:
             message.warn_node(node,
@@ -229,14 +224,14 @@ class MainTransformer(object):
         if isinstance(node, ast.Class):
             block = self._get_block(node)
             if block:
-                tag = block.tags.get(TAG_UNREF_FUNC)
-                node.unref_func = tag.value if tag else None
-                tag = block.tags.get(TAG_REF_FUNC)
-                node.ref_func = tag.value if tag else None
-                tag = block.tags.get(TAG_SET_VALUE_FUNC)
-                node.set_value_func = tag.value if tag else None
-                tag = block.tags.get(TAG_GET_VALUE_FUNC)
-                node.get_value_func = tag.value if tag else None
+                annotation = block.annotations.get(ANN_UNREF_FUNC)
+                node.unref_func = annotation[0] if annotation else None
+                annotation = block.annotations.get(ANN_REF_FUNC)
+                node.ref_func = annotation[0] if annotation else None
+                annotation = block.annotations.get(ANN_SET_VALUE_FUNC)
+                node.set_value_func = annotation[0] if annotation else None
+                annotation = block.annotations.get(ANN_GET_VALUE_FUNC)
+                node.get_value_func = annotation[0] if annotation else None
         if isinstance(node, ast.Constant):
             self._apply_annotations_constant(node)
         return True
@@ -733,17 +728,17 @@ class MainTransformer(object):
         self._apply_annotations_annotated(prop, block)
         if not block:
             return
-        transfer_tag = block.tags.get(TAG_TRANSFER)
-        if transfer_tag is not None:
-            transfer = transfer_tag.value
+        transfer_annotation = block.annotations.get(ANN_TRANSFER)
+        if transfer_annotation is not None:
+            transfer = transfer_annotation[0]
             if transfer == OPT_TRANSFER_FLOATING:
                 transfer = OPT_TRANSFER_NONE
             prop.transfer = transfer
         else:
             prop.transfer = self._get_transfer_default(parent, prop)
-        type_tag = block.tags.get(TAG_TYPE)
-        if type_tag:
-            prop.type = self._resolve_toplevel(type_tag.value, prop.type, prop, parent)
+        type_annotation = block.annotations.get(ANN_TYPE)
+        if type_annotation:
+            prop.type = self._resolve_toplevel(type_annotation[0], prop.type, prop, parent)
 
     def _apply_annotations_signal(self, parent, signal):
         names = []
@@ -788,9 +783,9 @@ class MainTransformer(object):
 
         self._apply_annotations_annotated(node, block)
 
-        tag = block.tags.get(TAG_VALUE)
-        if tag:
-            node.value = tag.value
+        value_annotation = block.annotations.get(ANN_VALUE)
+        if value_annotation:
+            node.value = value_annotation[0]
 
     def _apply_annotations_enum_members(self, node, block):
         if block is None:
@@ -810,9 +805,9 @@ class MainTransformer(object):
             # Handle virtual invokers
             parent = chain[-1] if chain else None
             if (block and parent):
-                virtual_annotation = block.tags.get(TAG_VFUNC)
+                virtual_annotation = block.annotations.get(ANN_VFUNC)
                 if virtual_annotation:
-                    invoker_name = virtual_annotation.value
+                    invoker_name = virtual_annotation[0]
                     matched = False
                     for vfunc in parent.virtual_methods:
                         if vfunc.name == invoker_name:
@@ -824,7 +819,7 @@ class MainTransformer(object):
                     if not matched:
                         message.warn_node(node,
                             "Virtual slot %r not found for %r annotation" % (invoker_name,
-                                                                             TAG_VFUNC))
+                                                                             ANN_VFUNC))
         return True
 
     def _resolve_and_filter_type_list(self, typelist):
