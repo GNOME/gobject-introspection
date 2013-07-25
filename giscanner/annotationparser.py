@@ -490,16 +490,202 @@ class GtkDocAnnotations(OrderedDict):
         self.position = position
 
 
-class GtkDocTag(object):
+class GtkDocParameter(object):
+    '''
+    Represents a GTK-Doc parameter part.
+    '''
 
-    __slots__ = ('name', 'annotations', 'description', 'value', 'position')
+    __slots__ = ('name', 'annotations', 'description', 'position')
 
-    def __init__(self, name):
+    def __init__(self, name, position=None):
+        #: Parameter name.
         self.name = name
-        self.annotations = GtkDocAnnotations()
+
+        #: Parameter description or :const:`None`.
         self.description = None
-        self.value = ''
-        self.position = None
+
+        self.annotations = GtkDocAnnotations()
+        self.position = position
+
+    def __repr__(self):
+        return '<GtkDocParameter %r %r>' % (self.name, self.annotations)
+
+    def _validate_annotation(self, ann_name, options, required=False,
+                             n_params=None, choices=None):
+        if required and len(options) == 0:
+            warn('%s annotation needs a value' % (ann_name, ), self.position)
+            return
+
+        if n_params is not None:
+            if n_params == 0:
+                s = 'no value'
+            elif n_params == 1:
+                s = 'one value'
+            else:
+                s = '%d values' % (n_params, )
+            if len(options) != n_params:
+                length = len(options)
+                warn('%s annotation needs %s, not %d' % (ann_name, s, length),
+                     self.position)
+                return
+
+        if choices is not None:
+            option = options[0]
+            if option not in choices:
+                warn('invalid %s annotation value: %r' % (ann_name, option, ),
+                     self.position)
+                return
+
+    def _validate_array(self, ann_name, options):
+        if len(options) == 0:
+            return
+
+        for option, value in options.items():
+            if option in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
+                try:
+                    int(value)
+                except (TypeError, ValueError):
+                    if value is None:
+                        warn('array option %s needs a value' % (option, ),
+                             positions=self.position)
+                    else:
+                        warn('invalid array %s option value %r, '
+                             'must be an integer' % (option, value, ),
+                             positions=self.position)
+            elif option == OPT_ARRAY_LENGTH:
+                if value is None:
+                    warn('array option length needs a value',
+                         positions=self.position)
+            else:
+                warn('invalid array annotation value: %r' % (option, ),
+                     self.position)
+
+    def _validate_closure(self, ann_name, options):
+        if len(options) != 0 and len(options) > 1:
+            warn('closure takes at most 1 value, %d given' % (len(options), ),
+                 self.position)
+
+    def _validate_element_type(self, ann_name, options):
+        self._validate_annotation(ann_name, options, required=True)
+        if len(options) == 0:
+            warn('element-type takes at least one value, none given',
+                 self.position)
+            return
+        if len(options) > 2:
+            warn('element-type takes at most 2 values, %d given' % (len(options), ),
+                 self.position)
+            return
+
+    def _validate_out(self, ann_name, options):
+        if len(options) == 0:
+            return
+        if len(options) > 1:
+            warn('out annotation takes at most 1 value, %d given' % (len(options), ),
+                 self.position)
+            return
+        option = options[0]
+        if option not in [OPT_OUT_CALLEE_ALLOCATES,
+                          OPT_OUT_CALLER_ALLOCATES]:
+            warn("out annotation value is invalid: %r" % (option, ),
+                 self.position)
+            return
+
+    def _get_gtk_doc_value(self):
+        def serialize_one(option, value, fmt, fmt2):
+            if value:
+                if type(value) != str:
+                    if isinstance(value, list):
+                        value = ' '.join(value)
+                    else:
+                        value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
+                                          for k, v in value.items()))
+                return fmt % (option, value)
+            else:
+                return fmt2 % (option, )
+        serialized = ''
+        annotations = []
+        for ann_name, options in self.annotations.items():
+            annotations.append(serialize_one(ann_name, options, '(%s %s)', '(%s)'))
+        if annotations:
+            serialized += ' '.join(annotations)
+        if self.description and annotations:
+            serialized += ': '
+        return serialized
+
+    def to_gtk_doc(self):
+        return '@%s: %s%s' % (self.name, self._get_gtk_doc_value(), self.description)
+
+    def validate(self):
+        for ann_name, value in self.annotations.items():
+            if ann_name == ANN_ALLOW_NONE:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_ARRAY:
+                self._validate_array(ann_name, value)
+            elif ann_name == ANN_ATTRIBUTES:
+                # The 'attributes' annotation allows free form annotations.
+                pass
+            elif ann_name == ANN_CLOSURE:
+                self._validate_closure(ann_name, value)
+            elif ann_name == ANN_DESTROY:
+                self._validate_annotation(ann_name, value, n_params=1)
+            elif ann_name == ANN_ELEMENT_TYPE:
+                self._validate_element_type(ann_name, value)
+            elif ann_name == ANN_FOREIGN:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_IN:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name in [ANN_INOUT, ANN_INOUT_ALT]:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_OUT:
+                self._validate_out(ann_name, value)
+            elif ann_name == ANN_SCOPE:
+                self._validate_annotation(
+                    ann_name, value, required=True,
+                    n_params=1,
+                    choices=[OPT_SCOPE_ASYNC,
+                             OPT_SCOPE_CALL,
+                             OPT_SCOPE_NOTIFIED])
+            elif ann_name == ANN_SKIP:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_TRANSFER:
+                self._validate_annotation(
+                    ann_name, value, required=True,
+                    n_params=1,
+                    choices=[OPT_TRANSFER_FULL,
+                             OPT_TRANSFER_CONTAINER,
+                             OPT_TRANSFER_NONE,
+                             OPT_TRANSFER_FLOATING])
+            elif ann_name == ANN_TYPE:
+                self._validate_annotation(ann_name, value, required=True,
+                                          n_params=1)
+            elif ann_name == ANN_CONSTRUCTOR:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_METHOD:
+                self._validate_annotation(ann_name, value, n_params=0)
+            else:
+                warn('unknown annotation: %s' % (ann_name, ),
+                     self.position)
+
+
+class GtkDocTag(object):
+    '''
+    Represents a GTK-Doc tag part.
+    '''
+
+    __slots__ = ('name', 'annotations', 'value', 'description', 'position')
+
+    def __init__(self, name, position=None):
+        #: Tag name.
+        self.name = name
+
+        #: Tag value or :const:`None`.
+        self.value = None
+
+        #: Tag description or :const:`None`.
+        self.description = None
+
+        self.annotations = GtkDocAnnotations()
+        self.position = position
 
     def __repr__(self):
         return '<GtkDocTag %r %r>' % (self.name, self.annotations)
@@ -610,10 +796,7 @@ class GtkDocTag(object):
             serialized += ': '
         return serialized
 
-    def to_gtk_doc_param(self):
-        return '@%s: %s%s' % (self.name, self._get_gtk_doc_value(), self.description)
-
-    def to_gtk_doc_tag(self):
+    def to_gtk_doc(self):
         return '%s: %s%s' % (self.name.capitalize(),
                              self._get_gtk_doc_value(),
                              self.description or '')
@@ -729,7 +912,7 @@ class GtkDocCommentBlock(object):
             lines[0] += ' ' + annotations
 
         for param in self.params.values():
-            lines.append(param.to_gtk_doc_param())
+            lines.append(param.to_gtk_doc())
         if self.description:
             lines.append('')
             for l in self.description.split('\n'):
@@ -737,7 +920,7 @@ class GtkDocCommentBlock(object):
         if self.tags:
             lines.append('')
             for tag in self.tags.values():
-                lines.append(tag.to_gtk_doc_tag())
+                lines.append(tag.to_gtk_doc())
 
         comment = ''
         comment += '/**\n'
@@ -898,8 +1081,7 @@ class GtkDocCommentBlockParser(object):
         part_indent = None
         line_indent = None
         in_part = None
-        current_param = None
-        current_tag = None
+        current_part = None
         returns_seen = False
 
         for line_offset, line in comment_lines:
@@ -1029,6 +1211,19 @@ class GtkDocCommentBlockParser(object):
                         warn("encountered multiple 'Returns' parameters or tags for "
                              "'%s'." % (comment_block.name, ),
                              position)
+
+                    tag = GtkDocTag(TAG_RETURNS, position)
+
+                    if param_fields:
+                        (a, d) = self._parse_fields(position,
+                                                    column_offset + param_fields_start,
+                                                    original_line,
+                                                    param_fields)
+                        tag.annotations = a
+                        tag.description = d
+                    comment_block.tags[TAG_RETURNS] = tag
+                    current_part = tag
+                    continue
                 elif (param_name == 'Varargs'
                 or (param_name.endswith('...') and param_name != '...')):
                     # Deprecated @Varargs notation or named __VA_ARGS__ instead of @...
@@ -1042,21 +1237,17 @@ class GtkDocCommentBlockParser(object):
                          (param_name, comment_block.name, original_line, marker),
                          position)
 
-                tag = GtkDocTag(param_name)
-                tag.position = position
+                parameter = GtkDocParameter(param_name, position)
 
                 if param_fields:
                     (a, d) = self._parse_fields(position,
                                                 column_offset + param_fields_start,
                                                 original_line, param_fields)
-                    tag.annotations = a
-                    tag.description = d
+                    parameter.annotations = a
+                    parameter.description = d
 
-                if param_name == TAG_RETURNS:
-                    comment_block.tags[param_name] = tag
-                else:
-                    comment_block.params[param_name] = tag
-                current_param = tag
+                comment_block.params[param_name] = parameter
+                current_part = parameter
                 continue
 
             ####################################################################
@@ -1180,8 +1371,7 @@ class GtkDocCommentBlockParser(object):
                              "'%s'." % (comment_block.name, ),
                              position)
 
-                    tag = GtkDocTag(TAG_RETURNS)
-                    tag.position = position
+                    tag = GtkDocTag(TAG_RETURNS, position)
 
                     if tag_fields:
                         (a, d) = self._parse_fields(position,
@@ -1192,7 +1382,7 @@ class GtkDocCommentBlockParser(object):
                         tag.description = d
 
                     comment_block.tags[TAG_RETURNS] = tag
-                    current_tag = tag
+                    current_part = tag
                     continue
                 else:
                     if tag_name_lower in comment_block.tags.keys():
@@ -1200,8 +1390,7 @@ class GtkDocCommentBlockParser(object):
                              (tag_name, comment_block.name, original_line, marker),
                              position)
 
-                    tag = GtkDocTag(tag_name_lower)
-                    tag.position = position
+                    tag = GtkDocTag(tag_name_lower, position)
 
                     if tag_fields:
                         (a, d) = self._parse_fields(position,
@@ -1222,7 +1411,7 @@ class GtkDocCommentBlockParser(object):
                             tag.description = result.group('description')
 
                     comment_block.tags[tag_name_lower] = tag
-                    current_tag = tag
+                    current_part = tag
                     continue
 
             ####################################################################
@@ -1236,22 +1425,19 @@ class GtkDocCommentBlockParser(object):
                     comment_block.description += '\n' + line
                 continue
             elif in_part == PART_PARAMETERS:
-                if not current_param.description:
+                if not current_part.description:
                     self._validate_multiline_annotation_continuation(line, original_line,
                                                                      column_offset, position)
                 # Append to parameter description.
-                if current_param.description is None:
-                    current_param.description = line
-                else:
-                    current_param.description += ' ' + line.strip()
+                current_part.description += ' ' + line.strip()
                 continue
             elif in_part == PART_TAGS:
-                if not current_tag.description:
+                if not current_part.description:
                     self._validate_multiline_annotation_continuation(line, original_line,
                                                                      column_offset, position)
 
                 # Append to tag description.
-                current_tag.description += ' ' + line.strip()
+                current_part.description += ' ' + line.strip()
 
         ########################################################################
         # Finished parsing this comment block.
@@ -1279,11 +1465,6 @@ class GtkDocCommentBlockParser(object):
             part.description = part.description.strip()
         else:
             part.description = None
-
-        if part.value:
-            part.value = part.value.strip()
-        else:
-            part.value = ''
 
     def _validate_multiline_annotation_continuation(self, line, original_line,
                                                     column_offset, position):

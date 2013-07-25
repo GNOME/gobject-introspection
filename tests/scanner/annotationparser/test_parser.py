@@ -182,8 +182,8 @@ class TestCommentBlock(unittest.TestCase):
                                 parsed += '          </options>\n'
                             parsed += '        </annotation>\n'
                         parsed += '      </annotations>\n'
-                    if param.description or param.value:
-                        parsed += '      <description>%s</description>\n' % (param.description or param.value, )
+                    if param.description:
+                        parsed += '      <description>%s</description>\n' % (param.description, )
                     parsed += '    </parameter>\n'
                 parsed += '  </parameters>\n'
 
