@@ -10,6 +10,13 @@
 *
 * SECTION:meepapp
 */</input>
+  <parser>
+    <messages>
+      <message>2: Warning: Test: ignoring unrecognized GTK-Doc comment block, identifier not found:
+*
+ ^</message>
+    </messages>
+  </parser>
 </test>
 
 <test>
@@ -148,6 +155,29 @@ The application class handles ...</description>
       </parameters>
       <description>The application class handles ...</description>
     </docblock>
+    <messages>
+      <message>4: Warning: Test: '@short_description' parameter unexpected at this location:
+ * @short_description: the application class
+    ^</message>
+      <message>5: Warning: Test: '@title' parameter unexpected at this location:
+ * @title: Meep application
+    ^</message>
+      <message>6: Warning: Test: '@section_id' parameter unexpected at this location:
+ * @section_id:
+    ^</message>
+      <message>7: Warning: Test: '@see_also' parameter unexpected at this location:
+ * @see_also: #MeepSettings
+    ^</message>
+      <message>8: Warning: Test: '@stability' parameter unexpected at this location:
+ * @stability: Stable
+    ^</message>
+      <message>9: Warning: Test: '@include' parameter unexpected at this location:
+ * @include: meep/app.h
+    ^</message>
+      <message>10: Warning: Test: '@image' parameter unexpected at this location:
+ * @image: application.png
+    ^</message>
+    </messages>
   </parser>
 </test>
 
@@ -203,6 +233,29 @@ The application class handles ...</description>
       </parameters>
       <description>The application class handles ...</description>
     </docblock>
+    <messages>
+      <message>5: Warning: Test: '@short_description' parameter unexpected at this location:
+ * @short_description: the application class
+    ^</message>
+      <message>6: Warning: Test: '@title' parameter unexpected at this location:
+ * @title: Meep application
+    ^</message>
+      <message>7: Warning: Test: '@section_id' parameter unexpected at this location:
+ * @section_id:
+    ^</message>
+      <message>8: Warning: Test: '@see_also' parameter unexpected at this location:
+ * @see_also: #MeepSettings
+    ^</message>
+      <message>9: Warning: Test: '@stability' parameter unexpected at this location:
+ * @stability: Stable
+    ^</message>
+      <message>10: Warning: Test: '@include' parameter unexpected at this location:
+ * @include: meep/app.h
+    ^</message>
+      <message>11: Warning: Test: '@image' parameter unexpected at this location:
+ * @image: application.png
+    ^</message>
+    </messages>
   </parser>
 </test>
 
@@ -259,6 +312,29 @@ The application class handles ...</description>
       </parameters>
       <description>The application class handles ...</description>
     </docblock>
+    <messages>
+      <message>6: Warning: Test: '@short_description' parameter unexpected at this location:
+ * @short_description: the application class
+    ^</message>
+      <message>7: Warning: Test: '@title' parameter unexpected at this location:
+ * @title: Meep application
+    ^</message>
+      <message>8: Warning: Test: '@section_id' parameter unexpected at this location:
+ * @section_id:
+    ^</message>
+      <message>9: Warning: Test: '@see_also' parameter unexpected at this location:
+ * @see_also: #MeepSettings
+    ^</message>
+      <message>10: Warning: Test: '@stability' parameter unexpected at this location:
+ * @stability: Stable
+    ^</message>
+      <message>11: Warning: Test: '@include' parameter unexpected at this location:
+ * @include: meep/app.h
+    ^</message>
+      <message>12: Warning: Test: '@image' parameter unexpected at this location:
+ * @image: application.png
+    ^</message>
+    </messages>
   </parser>
 </test>
 
@@ -311,6 +387,13 @@ returns nothing.</description>
  *
  * NOTE : This DOES check for array partitioning.
  */</input>
+  <parser>
+    <messages>
+      <message>2: Warning: Test: ignoring unrecognized GTK-Doc comment block, identifier not found:
+ * gnm_cell_set_expr_and_value: Stores (WITHOUT COPYING) the supplied value, and
+   ^</message>
+    </messages>
+  </parser>
 </test>
 
 </tests>

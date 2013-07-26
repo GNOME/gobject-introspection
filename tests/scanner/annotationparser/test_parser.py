@@ -43,6 +43,17 @@ XML_SCHEMA = os.path.abspath(os.path.join(os.path.dirname(__file__), 'tests.xsd'
 XML_LINT = None
 
 
+class ChunkedIO(object):
+    def __init__(self):
+        self.buffer = []
+
+    def write(self, s):
+        self.buffer.append(s)
+
+    def getvalue(self):
+        return self.buffer
+
+
 def ns(x):
     return x.replace('{}', '{%s}' % (XML_NS, ))
 
@@ -65,18 +76,26 @@ def validate(tests_file):
 
 class TestCommentBlock(unittest.TestCase):
     @classmethod
-    def __create_test__(cls, testcase):
+    def __create_test__(cls, logger, testcase):
         def do_test(self):
+            output = ChunkedIO()
+            logger._output = output
+
             # Parse GTK-Doc comment block
             commentblock = testcase.find(ns('{}input')).text
             parsed_docblock = AnnotationParser().parse_comment_block((commentblock, 'test.c', 1))
             parsed_tree = self.parsed2tree(parsed_docblock).split('\n')
+            emitted_messages = [w[w.find(':') + 1:].strip() for w in output.getvalue()]
 
             # Get expected parser output
             expected_docblock = testcase.find(ns('{}parser/{}docblock'))
             expected_tree = self.expected2tree(expected_docblock).split('\n')
 
-            # Construct a meaningful message
+            expected_messages = []
+            for w in testcase.findall(ns('{}parser/{}messages/{}message')):
+                expected_messages.append(w.text.strip())
+
+            # Compare parsed with expected GtkDocCommentBlock
             msg = 'Parsed DocBlock object tree does not match expected output:\n\n'
             msg += '%s\n\n' % (commentblock, )
 
@@ -87,8 +106,19 @@ class TestCommentBlock(unittest.TestCase):
             for line in diff:
                 msg += '%s\n' % (line, )
 
-            # Compare parsed with expected DocBlock tree
-            self.assertEqual(parsed_tree, expected_tree, msg)
+            self.assertTrue(parsed_tree == expected_tree, msg)
+
+            # Compare emitted with expected messages
+            msg = 'Emitted messages do not match expected messages:\n\n'
+            msg += '%s\n\n' % (commentblock, )
+            msg += self._diff_messages(expected_messages, emitted_messages)
+            self.assertTrue(len(expected_messages) == len(emitted_messages), msg)
+
+            for emitted_message, expected_message in zip(emitted_messages, expected_messages):
+                msg = 'Emitted message does not match expected message:\n\n'
+                msg += '%s\n\n' % (commentblock, )
+                msg += self._diff_messages([expected_message], [emitted_message])
+                self.assertTrue(expected_message == emitted_message, msg)
 
         return do_test
 
@@ -276,11 +306,41 @@ class TestCommentBlock(unittest.TestCase):
 
         return expected
 
+    def _diff_messages(self, a, b):
+        retval = ''
+        started = False
 
-def create_tests(tests_dir, tests_file):
-    tests_name = os.path.relpath(tests_file[:-4], tests_dir)
-    tests_name = tests_name.replace('/', '.').replace('\\', '.')
+        for group in difflib.SequenceMatcher(None, a, b).get_grouped_opcodes(3):
+            if not started:
+                started = True
+                retval += '--- expected\n'
+                retval += '+++ emitted\n'
 
+            for tag, i1, i2, j1, j2 in group:
+                if tag == 'equal':
+                    for line in a[i1:i2]:
+                        for l in line.split('\n'):
+                            if l != '':
+                                retval += ' ' + l + '\n'
+                    continue
+
+                if tag in ('replace', 'delete'):
+                    for line in a[i1:i2]:
+                        for l in line.split('\n'):
+                            if l != '':
+                                retval += '-' + l + '\n'
+
+                if tag in ('replace', 'insert'):
+                    for line in b[j1:j2]:
+                        for l in line.split('\n'):
+                            if l != '':
+                                retval += '+' + l + '\n'
+
+        return retval
+
+
+def create_tests(logger, tests_dir, tests_file):
+    tests_name = os.path.relpath(tests_file[:-4], tests_dir).replace('/', '.').replace('\\', '.')
     tests_tree = etree.parse(tests_file).getroot()
 
     fix_cdata_elements = tests_tree.findall(ns('{}test/{}input'))
@@ -293,17 +353,15 @@ def create_tests(tests_dir, tests_file):
 
     for counter, test in enumerate(tests_tree.findall(ns('{}test'))):
         test_name = 'test_%s.%03d' % (tests_name, counter + 1)
-        test_method = TestCommentBlock.__create_test__(test)
+        test_method = TestCommentBlock.__create_test__(logger, test)
         setattr(TestCommentBlock, test_name, test_method)
 
 
 if __name__ == '__main__':
     # Initialize message logger
-    # TODO: at some point it might be a good idea to test warnings emitted
-    # by annotationparser here, instead of having them in tests/warn/annotationparser.h?
     namespace = Namespace('Test', '1.0')
     logger = MessageLogger.get(namespace=namespace)
-    logger.enable_warnings(False)
+    logger.enable_warnings(True)
 
     # Load test cases from disc
     tests_dir = os.path.dirname(os.path.abspath(__file__))
@@ -313,7 +371,7 @@ if __name__ == '__main__':
             tests_file = os.path.join(dirpath, filename)
             if os.path.basename(tests_file).endswith('.xml'):
                 validate(tests_file)
-                create_tests(tests_dir, tests_file)
+                create_tests(logger, tests_dir, tests_file)
 
     # Run test suite
     unittest.main()

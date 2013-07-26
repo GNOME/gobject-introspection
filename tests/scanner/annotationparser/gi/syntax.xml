@@ -91,6 +91,14 @@ something */</input>
       </identifier>
       <description>something</description>
     </docblock>
+    <messages>
+      <message>3: Warning: Test: Comments should end with */ on a new line:
+something */
+         ^</message>
+      <message>2: Warning: Test: missing ':' at column 5:
+Test
+    ^</message>
+    </messages>
   </parser>
 </test>
 
@@ -108,6 +116,14 @@ something **/</input>
       </identifier>
       <description>something</description>
     </docblock>
+    <messages>
+      <message>3: Warning: Test: Comments should end with */ on a new line:
+something **/
+         ^</message>
+      <message>2: Warning: Test: missing ':' at column 5:
+Test
+    ^</message>
+    </messages>
   </parser>
 </test>
 
@@ -136,6 +152,11 @@ something **/</input>
       </parameters>
       <description>The application class handles ...</description>
     </docblock>
+    <messages>
+      <message>4: Warning: Test: '@short_description' parameter unexpected at this location:
+ * @short_description: the application class
+    ^</message>
+    </messages>
   </parser>
 </test>
 

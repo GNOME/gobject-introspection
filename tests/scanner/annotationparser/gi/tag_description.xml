@@ -17,6 +17,11 @@
       <description>This is a callback with a 'closure' argument that is not named
 'user_data' and hence has to be annotated.</description>
     </docblock>
+    <messages>
+      <message>4: Warning: Test: GTK-Doc tag "Description:" has been deprecated:
+ * Description: This is a callback with a 'closure' argument that is not named
+   ^</message>
+    </messages>
   </parser>
 </test>
 
