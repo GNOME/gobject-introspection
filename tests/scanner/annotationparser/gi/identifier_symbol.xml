@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests xmlns="http://schemas.gnome.org/gobject-introspection/2013/test">
+
+<test>
+  <input>/**
+ * test_symbol
+ *
+ * test_symbol does something nifty.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_symbol</name>
+      </identifier>
+      <description>test_symbol does something nifty.</description>
+    </docblock>
+    <messages>
+      <message>2: Warning: Test: missing ':' at column 15:
+ * test_symbol
+              ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * test_symbol_unnecessary_colon:
+ *
+ * Unnecessary colon.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_symbol_unnecessary_colon</name>
+      </identifier>
+      <description>Unnecessary colon.</description>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * test_annotated_symbol: (skip)
+ *
+ * test_annotated_symbol does something nifty.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_annotated_symbol</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>test_annotated_symbol does something nifty.</description>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * test_symbol_missing_colon (skip)
+ *
+ * Missing colon will result in a warning.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_symbol_missing_colon</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Missing colon will result in a warning.</description>
+    </docblock>
+    <messages>
+      <message>2: Warning: Test: missing ':' at column 30:
+ * test_symbol_missing_colon (skip)
+                             ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * GtkWidget:test_property
+ *
+ * Some property.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkWidget:test_property</name>
+      </identifier>
+      <description>Some property.</description>
+    </docblock>
+    <messages>
+      <message>2: Warning: Test: missing ':' at column 27:
+ * GtkWidget:test_property
+                          ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * GtkWidget:test_property_unnecessary_colon:
+ *
+ * Unnecessary colon.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkWidget:test_property_unnecessary_colon</name>
+      </identifier>
+      <description>Unnecessary colon.</description>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * GtkWidget:test_annotated_property: (skip)
+ *
+ * Some annotated property.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkWidget:test_annotated_property</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Some annotated property.</description>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * GtkWidget:test_property_missing_colon (skip)
+ *
+ * Missing colon will result in a warning.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkWidget:test_property_missing_colon</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Missing colon will result in a warning.</description>
+    </docblock>
+    <messages>
+      <message>2: Warning: Test: missing ':' at column 42:
+ * GtkWidget:test_property_missing_colon (skip)
+                                         ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * GtkWidget::test_signal
+ *
+ * Some signal.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkWidget::test_signal</name>
+      </identifier>
+      <description>Some signal.</description>
+    </docblock>
+    <messages>
+      <message>2: Warning: Test: missing ':' at column 26:
+ * GtkWidget::test_signal
+                         ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * GtkWidget::test_signal_unnecessary_colon:
+ *
+ * Unnecessary colon.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkWidget::test_signal_unnecessary_colon</name>
+      </identifier>
+      <description>Unnecessary colon.</description>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * GtkWidget::test_annotated_signal: (skip)
+ *
+ * Some annotated signal.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkWidget::test_annotated_signal</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Some annotated signal.</description>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * GtkWidget::test_signal_missing_colon (skip)
+ *
+ * Missing colon will result in a warning.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkWidget::test_signal_missing_colon</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>Missing colon will result in a warning.</description>
+    </docblock>
+    <messages>
+      <message>2: Warning: Test: missing ':' at column 41:
+ * GtkWidget::test_signal_missing_colon (skip)
+                                        ^</message>
+    </messages>
+  </parser>
+</test>
+
+</tests>

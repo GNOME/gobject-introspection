@@ -8,7 +8,7 @@
  *
  * Test returning a string as an out parameter
  *
- * Returns: some boolean
+ * Returns: (allow-none): some boolean
  **/</input>
   <parser>
     <docblock>
@@ -19,10 +19,50 @@
       <tags>
         <tag>
           <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>allow-none</name>
+            </annotation>
+          </annotations>
           <description>some boolean</description>
         </tag>
       </tags>
     </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * test_unexpected_tag:
+ * @param1: first parameter
+ * Returns: something
+ *
+ * Tags should go after the comment block description
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_unexpected_tag</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>param1</name>
+          <description>first parameter</description>
+        </parameter>
+      </parameters>
+      <description>Tags should go after the comment block description</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>something</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>4: Warning: Test: 'Returns:' tag unexpected at this location:
+ * Returns: something
+   ^</message>
+    </messages>
   </parser>
 </test>
 
@@ -35,7 +75,7 @@
  *
  * Test returning a string as an out parameter
  *
- * Return value: some boolean
+ * Return value: (allow-none): some boolean
  **/</input>
   <parser>
     <docblock>
@@ -46,6 +86,11 @@
       <tags>
         <tag>
           <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>allow-none</name>
+            </annotation>
+          </annotations>
           <description>some boolean</description>
         </tag>
       </tags>
@@ -59,7 +104,7 @@
   -->
   <input>/**
  * annotation_object_string_out:
- * @returns: some boolean
+ * @returns: (allow-none): some boolean
  *
  * Test returning a string as an out parameter
  **/</input>
@@ -72,10 +117,117 @@
       <tags>
         <tag>
           <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>allow-none</name>
+            </annotation>
+          </annotations>
           <description>some boolean</description>
         </tag>
       </tags>
     </docblock>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Variation of multiple "Returns:" notations
+  -->
+  <input>/**
+ * test_multiple_returns_tag_and_parameter:
+ *
+ * Multiple return value warnings are checked for when a returns
+ * parameter is encountered.
+ *
+ * Return Value: something
+ * @returns: something else
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiple_returns_tag_and_parameter</name>
+      </identifier>
+      <description>Multiple return value warnings are checked for when a returns
+parameter is encountered.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>something else</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>8: Warning: Test: '@returns' parameter unexpected at this location:
+ * @returns: something else
+    ^</message>
+      <message>8: Warning: Test: encountered multiple 'Returns' parameters or tags for 'test_multiple_returns_tag_and_parameter'.</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Variation of multiple "Returns:" notations
+  -->
+  <input>/**
+ * test_multiple_returns_tag_and_parameter:
+ * @returns: something
+ *
+ * Multiple return value warnings are checked for when a returns
+ * parameter is encountered.
+ *
+ * Return Value: something else
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiple_returns_tag_and_parameter</name>
+      </identifier>
+      <description>Multiple return value warnings are checked for when a returns
+parameter is encountered.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>something else</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>8: Warning: Test: encountered multiple 'Returns' parameters or tags for 'test_multiple_returns_tag_and_parameter'.</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Variation of multiple "Returns:" notations
+  -->
+  <input>/**
+ * test_multiple_returns_tag_and_parameter:
+ * @returns: something
+ *
+ * Multiple return value warnings are checked for when a returns
+ * parameter is encountered.
+ *
+ * Returns: something else
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiple_returns_tag_and_parameter</name>
+      </identifier>
+      <description>Multiple return value warnings are checked for when a returns
+parameter is encountered.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>something else</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>8: Warning: Test: encountered multiple 'Returns' parameters or tags for 'test_multiple_returns_tag_and_parameter'.</message>
+    </messages>
   </parser>
 </test>
 

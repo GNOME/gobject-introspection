@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests xmlns="http://schemas.gnome.org/gobject-introspection/2013/test">
+
+<test>
+  <input>/**
+ * test_unexpected_parameter:
+ *
+ * Parameters should go before the comment block description.
+ *
+ * @param1: first parameter
+ * Returns: something
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_unexpected_parameter</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>param1</name>
+          <description>first parameter</description>
+        </parameter>
+      </parameters>
+      <description>Parameters should go before the comment block description.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>something</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>6: Warning: Test: '@param1' parameter unexpected at this location:
+ * @param1: first parameter
+    ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * test_multiple_parameters:
+ * @param1: first parameter
+ * @param1: first parameter again
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiple_parameters</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>param1</name>
+          <description>first parameter again</description>
+        </parameter>
+      </parameters>
+    </docblock>
+    <messages>
+      <message>4: Warning: Test: multiple '@param1' parameters for identifier 'test_multiple_parameters':
+ * @param1: first parameter again
+    ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * test_multiline_annotations_on_parameter:
+ * @param1: (allow-none)
+ * (transfer full): first parameter
+ *
+ * Annotations spanning multiple lines are not valid
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiline_annotations_on_parameter</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>param1</name>
+          <annotations>
+            <annotation>
+              <name>allow-none</name>
+            </annotation>
+          </annotations>
+          <description>(transfer full): first parameter</description>
+        </parameter>
+      </parameters>
+      <description>Annotations spanning multiple lines are not valid</description>
+    </docblock>
+    <messages>
+      <message>4: Warning: Test: ignoring invalid multiline annotation continuation:
+ * (transfer full): first parameter
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * test_multiline_annotations_on_parameter:
+ * @param1: (allow-none): first parameter having a second line which looks
+ * (like an annotation), but isn't. This should not result in a warning.
+ *
+ * Annotations spanning multiple lines are not valid
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiline_annotations_on_parameter</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>param1</name>
+          <annotations>
+            <annotation>
+              <name>allow-none</name>
+            </annotation>
+          </annotations>
+          <description>first parameter having a second line which looks (like an annotation), but isn't. This should not result in a warning.</description>
+        </parameter>
+      </parameters>
+      <description>Annotations spanning multiple lines are not valid</description>
+    </docblock>
+  </parser>
+</test>
+
+</tests>

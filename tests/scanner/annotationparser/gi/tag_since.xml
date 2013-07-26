@@ -44,4 +44,61 @@
   </parser>
 </test>
 
+<test>
+  <input>/**
+ * test_tag_not_annotatable:
+ *
+ * Tags (except Returns:) don't have annotations
+ *
+ * Since: (allow-none): 2.24
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_tag_not_annotatable</name>
+      </identifier>
+      <description>Tags (except Returns:) don't have annotations</description>
+      <tags>
+        <tag>
+          <name>since</name>
+          <description>2.24</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>6: Warning: Test: annotations not supported for tag 'Since:'.</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Multiple "Since:" tags
+  -->
+  <input>/**
+ * test_multiple_tags:
+ *
+ * Since: 3.0
+ * Since: 2.0
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiple_tags</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>since</name>
+          <description>2.0</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>5: Warning: Test: multiple 'Since:' tags for identifier 'test_multiple_tags':
+ * Since: 2.0
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
 </tests>

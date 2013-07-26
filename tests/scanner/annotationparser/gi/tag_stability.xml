@@ -86,4 +86,61 @@
   </parser>
 </test>
 
+<test>
+  <input>/**
+ * test_tag_not_annotatable:
+ *
+ * Tags (except Returns:) don't have annotations
+ *
+ * Stability: (allow-none): Private
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_tag_not_annotatable</name>
+      </identifier>
+      <description>Tags (except Returns:) don't have annotations</description>
+      <tags>
+        <tag>
+          <name>stability</name>
+          <description>Private</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>6: Warning: Test: annotations not supported for tag 'Stability:'.</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Multiple "Stability:" tags
+  -->
+  <input>/**
+ * test_multiple_tags:
+ *
+ * Stability: Public
+ * Stability: Private
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiple_tags</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>stability</name>
+          <description>Private</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>5: Warning: Test: multiple 'Stability:' tags for identifier 'test_multiple_tags':
+ * Stability: Private
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
 </tests>

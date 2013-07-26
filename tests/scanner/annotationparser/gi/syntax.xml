@@ -80,6 +80,7 @@ something */</input>
 <test>
   <!--
   Technically not GTK-Doc, but we need to support this for backwards compatibility
+  with the old annotationparser.
   -->
   <input>/**
 Test
@@ -105,6 +106,7 @@ Test
 <test>
   <!--
   Technically not GTK-Doc, but we need to support this for backwards compatibility
+  with the old annotationparser.
   -->
   <input>/**
 Test

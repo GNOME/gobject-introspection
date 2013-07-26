@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests xmlns="http://schemas.gnome.org/gobject-introspection/2013/test">
+
+<test>
+  <input>/**
+ * test_multiline_annotations_on_tag:
+ *
+ * Annotations spanning multiple lines are not valid
+ *
+ * Returns: (allow-none)
+ * (transfer full): something
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiline_annotations_on_tag</name>
+      </identifier>
+      <description>Annotations spanning multiple lines are not valid</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>allow-none</name>
+            </annotation>
+          </annotations>
+          <description>(transfer full): something</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>7: Warning: Test: ignoring invalid multiline annotation continuation:
+ * (transfer full): something
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * test_multiline_annotations_on_tag:
+ *
+ * Annotations spanning multiple lines are not valid
+ *
+ * Returns: (allow-none): Returns tag having a second line which looks
+ * (like an annotation), but isn't. This should not result in a warning.
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_multiline_annotations_on_tag</name>
+      </identifier>
+      <description>Annotations spanning multiple lines are not valid</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>allow-none</name>
+            </annotation>
+          </annotations>
+          <description>Returns tag having a second line which looks (like an annotation), but isn't. This should not result in a warning.</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+</test>
+
+</tests>
