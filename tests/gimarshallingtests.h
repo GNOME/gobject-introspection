@@ -1047,6 +1047,8 @@ void gi_marshalling_tests_int_three_in_three_out(gint a, gint b, gint c,
                                                  gint *out0, gint *out1, gint *out2);
 gint gi_marshalling_tests_int_return_out (gint *int_);
 
+/* Default arguments */
+void gi_marshalling_tests_int_two_in_utf8_two_in_with_allow_none  (gint a, gint b, const gchar *c, const gchar *d);
 
 /* GError */
 

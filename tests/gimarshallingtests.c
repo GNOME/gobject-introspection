@@ -4735,6 +4735,24 @@ gi_marshalling_tests_int_return_out (gint *int_)
   return 6;
 }
 
+/**
+* gi_marshalling_tests_int_two_in_utf8_two_in_with_allow_none:
+* @a: (in):
+* @b: (in):
+* @c: (in) (allow-none): Must be "3" or NULL
+* @d: (in) (allow-none): Must be "4" or NULL
+*/
+void
+gi_marshalling_tests_int_two_in_utf8_two_in_with_allow_none (gint a, gint b, const gchar *c, const gchar *d)
+{
+    g_assert_cmpint (a, ==, 1);
+    g_assert_cmpint (b, ==, 2);
+    if (c != NULL)
+        g_assert_cmpstr (c, ==, "3");
+    if (d != NULL)
+        g_assert_cmpstr (d, ==, "4");
+}
+
 /* GError */
 
 void
