@@ -535,24 +535,29 @@ class GtkDocAnnotatable(object):
         '''
 
         if self.annotations:
+            position = self.annotations.position
+
             for ann_name, options in self.annotations.items():
                 if ann_name in self.valid_annotations:
                     validate = getattr(self, '_do_validate_' + ann_name.replace('-', '_'))
-                    validate(ann_name, options)
+                    validate(position, ann_name, options)
                 elif ann_name in ALL_ANNOTATIONS:
                     # Not error() as ann_name might be valid in some newer
                     # GObject-Instrospection version.
-                    warn('unexpected annotation: %s' % (ann_name, ), self.position)
+                    warn('unexpected annotation: %s' % (ann_name, ), position)
                 else:
                     # Not error() as ann_name might be valid in some newer
                     # GObject-Instrospection version.
-                    warn('unknown annotation: %s' % (ann_name, ), self.position)
+                    warn('unknown annotation: %s' % (ann_name, ), position)
 
-    def _validate_options(self, ann_name, n_options, expected_n_options, operator, message):
+    def _validate_options(self, position, ann_name, n_options, expected_n_options, operator,
+                          message):
         '''
         Validate the number of options held by an annotation according to the test
         ``operator(n_options, expected_n_options)``.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param n_options: number of options held by the annotation
         :param expected_n_options: number of expected options
@@ -575,13 +580,15 @@ class GtkDocAnnotatable(object):
             s = '%d options' % (expected_n_options, )
 
         if operator(n_options, expected_n_options):
-            warn('"%s" annotation %s %s, %s given' % (ann_name, message, s, t), self.position)
+            warn('"%s" annotation %s %s, %s given' % (ann_name, message, s, t), position)
 
-    def _validate_annotation(self, ann_name, options, choices=None,
+    def _validate_annotation(self, position, ann_name, options, choices=None,
                              exact_n_options=None, min_n_options=None, max_n_options=None):
         '''
         Validate an annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to be validated
         :param choices: an iterable of allowed option names or :const:`None` to skip this test
@@ -593,33 +600,40 @@ class GtkDocAnnotatable(object):
         n_options = len(options)
 
         if exact_n_options is not None:
-            self._validate_options(ann_name, n_options, exact_n_options, ne, 'needs')
+            self._validate_options(position,
+                                   ann_name, n_options, exact_n_options, ne, 'needs')
 
         if min_n_options is not None:
-            self._validate_options(ann_name, n_options, min_n_options, lt, 'takes at least')
+            self._validate_options(position,
+                                   ann_name, n_options, min_n_options, lt, 'takes at least')
 
         if max_n_options is not None:
-            self._validate_options(ann_name, n_options, max_n_options, gt, 'takes at most')
+            self._validate_options(position,
+                                   ann_name, n_options, max_n_options, gt, 'takes at most')
 
         if options and choices is not None:
             option = options[0]
             if option not in choices:
-                warn('invalid "%s" annotation option: "%s"' % (ann_name, option), self.position)
+                warn('invalid "%s" annotation option: "%s"' % (ann_name, option), position)
 
-    def _do_validate_allow_none(self, ann_name, options):
+    def _do_validate_allow_none(self, position, ann_name, options):
         '''
         Validate the ``(allow-none)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options held by the annotation
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=0)
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
-    def _do_validate_array(self, ann_name, options):
+    def _do_validate_array(self, position, ann_name, options):
         '''
         Validate the ``(array)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options held by the annotation
         '''
@@ -634,23 +648,25 @@ class GtkDocAnnotatable(object):
                 except (TypeError, ValueError):
                     if value is None:
                         warn('"%s" annotation option "%s" needs a value' % (ann_name, option),
-                             self.position)
+                             position)
                     else:
                         warn('invalid "%s" annotation option "%s" value "%s", must be an integer' %
                              (ann_name, option, value),
-                             self.position)
+                             position)
             elif option == OPT_ARRAY_LENGTH:
                 if value is None:
                     warn('"%s" annotation option "length" needs a value' % (ann_name, ),
-                         self.position)
+                         position)
             else:
                 warn('invalid "%s" annotation option: "%s"' % (ann_name, option),
-                     self.position)
+                     position)
 
-    def _do_validate_attributes(self, ann_name, options):
+    def _do_validate_attributes(self, position, ann_name, options):
         '''
         Validate the ``(attributes)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
@@ -658,205 +674,248 @@ class GtkDocAnnotatable(object):
         # The 'attributes' annotation allows free form annotations.
         pass
 
-    def _do_validate_closure(self, ann_name, options):
+    def _do_validate_closure(self, position, ann_name, options):
         '''
         Validate the ``(closure)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, max_n_options=1)
+        self._validate_annotation(position, ann_name, options, max_n_options=1)
 
-    def _do_validate_constructor(self, ann_name, options):
+    def _do_validate_constructor(self, position, ann_name, options):
         '''
         Validate the ``(constructor)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=0)
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
-    def _do_validate_destroy(self, ann_name, options):
+    def _do_validate_destroy(self, position, ann_name, options):
         '''
         Validate the ``(destroy)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
-    def _do_validate_element_type(self, ann_name, options):
+    def _do_validate_element_type(self, position, ann_name, options):
         '''
         Validate the ``(element)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, min_n_options=1, max_n_options=2)
+        self._validate_annotation(position, ann_name, options, min_n_options=1, max_n_options=2)
 
-    def _do_validate_foreign(self, ann_name, options):
+    def _do_validate_foreign(self, position, ann_name, options):
         '''
         Validate the ``(foreign)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=0)
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
-    def _do_validate_get_value_func(self, ann_name, options):
+    def _do_validate_get_value_func(self, position, ann_name, options):
         '''
         Validate the ``(value-func)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
-    def _do_validate_in(self, ann_name, options):
+    def _do_validate_in(self, position, ann_name, options):
         '''
         Validate the ``(in)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=0)
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
-    def _do_validate_inout(self, ann_name, options):
+    def _do_validate_inout(self, position, ann_name, options):
         '''
         Validate the ``(in-out)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=0)
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
-    def _do_validate_method(self, ann_name, options):
+    def _do_validate_method(self, position, ann_name, options):
         '''
         Validate the ``(method)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=0)
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
-    def _do_validate_out(self, ann_name, options):
+    def _do_validate_out(self, position, ann_name, options):
         '''
         Validate the ``(out)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, max_n_options=1, choices=OUT_OPTIONS)
+        self._validate_annotation(position, ann_name, options, max_n_options=1,
+                                  choices=OUT_OPTIONS)
 
-    def _do_validate_ref_func(self, ann_name, options):
+    def _do_validate_ref_func(self, position, ann_name, options):
         '''
         Validate the ``(ref-func)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
-    def _do_validate_rename_to(self, ann_name, options):
+    def _do_validate_rename_to(self, position, ann_name, options):
         '''
         Validate the ``(rename-to)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
-    def _do_validate_scope(self, ann_name, options):
+    def _do_validate_scope(self, position, ann_name, options):
         '''
         Validate the ``(scope)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1, choices=SCOPE_OPTIONS)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1,
+                                  choices=SCOPE_OPTIONS)
 
-    def _do_validate_set_value_func(self, ann_name, options):
+    def _do_validate_set_value_func(self, position, ann_name, options):
         '''
         Validate the ``(value-func)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
-    def _do_validate_skip(self, ann_name, options):
+    def _do_validate_skip(self, position, ann_name, options):
         '''
         Validate the ``(skip)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=0)
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
-    def _do_validate_transfer(self, ann_name, options):
+    def _do_validate_transfer(self, position, ann_name, options):
         '''
         Validate the ``(transfer)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1, choices=TRANSFER_OPTIONS)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1,
+                                  choices=TRANSFER_OPTIONS)
 
-    def _do_validate_type(self, ann_name, options):
+    def _do_validate_type(self, position, ann_name, options):
         '''
         Validate the ``(type)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
-    def _do_validate_unref_func(self, ann_name, options):
+    def _do_validate_unref_func(self, position, ann_name, options):
         '''
         Validate the ``(unref-func)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
-    def _do_validate_value(self, ann_name, options):
+    def _do_validate_value(self, position, ann_name, options):
         '''
         Validate the ``(value)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
-    def _do_validate_virtual(self, ann_name, options):
+    def _do_validate_virtual(self, position, ann_name, options):
         '''
         Validate the ``(virtual)`` annotation.
 
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(ann_name, options, exact_n_options=1)
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
 
 class GtkDocParameter(GtkDocAnnotatable):
@@ -1051,6 +1110,7 @@ class GtkDocCommentBlockParser(object):
 
         code_before = ''
         code_after = ''
+        comment_block_pos = Position(filename, lineno)
         comment_lines = re.sub(LINE_BREAK_RE, '\n', comment).split('\n')
         comment_lines_len = len(comment_lines)
 
@@ -1192,7 +1252,7 @@ class GtkDocCommentBlockParser(object):
                     in_part = PART_IDENTIFIER
                     part_indent = line_indent
 
-                    comment_block = GtkDocCommentBlock(identifier_name, position)
+                    comment_block = GtkDocCommentBlock(identifier_name, comment_block_pos)
                     comment_block.code_before = code_before
                     comment_block.code_after = code_after
 

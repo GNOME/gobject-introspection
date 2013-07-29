@@ -15,7 +15,7 @@ void test_symbol_thrice_documented();
  * no annotations at all. The last comment block seen by the parser "wins"...
  **/
 
-// EXPECT:12: Warning: Test: multiple comment blocks documenting 'test_symbol_thrice_documented:' identifier (already seen at annotationparser.h:4).
+// EXPECT:11: Warning: Test: multiple comment blocks documenting 'test_symbol_thrice_documented:' identifier (already seen at annotationparser.h:3).
 
 
 /**
@@ -24,4 +24,4 @@ void test_symbol_thrice_documented();
  * ...and yet another one.
  **/
 
-// EXPECT:22: Warning: Test: multiple comment blocks documenting 'test_symbol_thrice_documented:' identifier (already seen at annotationparser.h:12).
+// EXPECT:21: Warning: Test: multiple comment blocks documenting 'test_symbol_thrice_documented:' identifier (already seen at annotationparser.h:11).

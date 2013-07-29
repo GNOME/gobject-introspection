@@ -10,4 +10,4 @@ GObject * test_get_object(void);
  */
 GObject * test_get_object2(void);
 
-// EXPECT:8: Warning: Test: test_get_object2: return value: Missing (transfer) annotation
+// EXPECT:7: Warning: Test: test_get_object2: return value: Missing (transfer) annotation
