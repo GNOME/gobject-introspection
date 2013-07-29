@@ -673,18 +673,18 @@ raise ValueError."""
 
     def _create_parameter(self, parent_symbol, index, symbol):
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
-            ptype = ast.Varargs()
+            return ast.Parameter('...', ast.Varargs())
         else:
             ptype = self._create_type_from_base(symbol.base_type, is_parameter=True)
 
-        if symbol.ident is None:
-            if symbol.base_type and symbol.base_type.type != CTYPE_VOID:
-                message.warn_symbol(parent_symbol, "missing parameter name; undocumentable")
-            ident = 'arg%d' % (index, )
-        else:
-            ident = symbol.ident
+            if symbol.ident is None:
+                if symbol.base_type and symbol.base_type.type != CTYPE_VOID:
+                    message.warn_symbol(parent_symbol, "missing parameter name; undocumentable")
+                ident = 'arg%d' % (index, )
+            else:
+                ident = symbol.ident
 
-        return ast.Parameter(ident, ptype)
+            return ast.Parameter(ident, ptype)
 
     def _create_return(self, source_type):
         typeval = self._create_type_from_base(source_type, is_return=True)
