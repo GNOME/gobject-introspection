@@ -1073,4 +1073,36 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  */</output>
 </test>
 
+<test>
+  <input>/**
+ * deprecation_notice:
+ *
+ * Foo.
+ *
+ * Deprecated: 3.10: Use named icon "bar" instead.
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>deprecation_notice</name>
+      </identifier>
+      <description>Foo.</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <value>3.10</value>
+          <description>Use named icon "bar" instead.</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+  <output>/**
+ * deprecation_notice:
+ *
+ * Foo.
+ *
+ * Deprecated: 3.10: Use named icon "bar" instead.
+ */</output>
+</test>
+
 </tests>

@@ -387,6 +387,55 @@
 
 <test>
   <input>/**
+ * annotation_skip_return: (skip)
+ * @list: a pointer to take a list
+ *
+ * Documentation for this function.
+ *
+ * Returns: (skip): %TRUE for success
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_skip_return</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>list</name>
+          <description>a pointer to take a list</description>
+        </parameter>
+      </parameters>
+      <description>Documentation for this function.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>skip</name>
+            </annotation>
+          </annotations>
+          <description>%TRUE for success</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+  <output>/**
+ * annotation_skip_return: (skip)
+ * @list: a pointer to take a list
+ *
+ * Documentation for this function.
+ *
+ * Returns: (skip): %TRUE for success
+ */</output>
+</test>
+
+<test>
+  <input>/**
  * annotation_scope:
  * @callback: (scope async): a callback
  * @user_data: data to pass to callback
