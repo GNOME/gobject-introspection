@@ -1153,18 +1153,18 @@ class GtkDocCommentBlockParser(object):
 
         code_before = ''
         code_after = ''
-        comment_lines = list(enumerate(re.sub(LINE_BREAK_RE, '\n', comment).split('\n')))
+        comment_lines = re.sub(LINE_BREAK_RE, '\n', comment).split('\n')
         comment_lines_len = len(comment_lines)
 
         # Check for the start of the comment block.
-        result = COMMENT_BLOCK_START_RE.match(comment_lines[0][1])
+        result = COMMENT_BLOCK_START_RE.match(comment_lines[0])
         if result:
             # Skip single line comment blocks
             if comment_lines_len == 1:
                 position = Position(filename, lineno)
                 marker = ' ' * result.end('code') + '^'
                 error('Skipping invalid GTK-Doc comment block:'
-                      '\n%s\n%s' % (comment_lines[0][1], marker),
+                      '\n%s\n%s' % (comment_lines[0], marker),
                      position)
                 return None
 
@@ -1175,17 +1175,17 @@ class GtkDocCommentBlockParser(object):
                 position = Position(filename, lineno)
                 marker = ' ' * result.end('code') + '^'
                 warn('GTK-Doc comment block start token "/**" should '
-                     'not be preceded by code:\n%s\n%s' % (comment_lines[0][1], marker),
+                     'not be preceded by code:\n%s\n%s' % (comment_lines[0], marker),
                      position)
 
             if comment:
                 position = Position(filename, lineno)
                 marker = ' ' * result.start('comment') + '^'
                 warn('GTK-Doc comment block start token "/**" should '
-                     'not be followed by comment text:\n%s\n%s' % (comment_lines[0][1], marker),
+                     'not be followed by comment text:\n%s\n%s' % (comment_lines[0], marker),
                      position)
 
-                comment_lines[0] = (comment_lines[0][0], comment)
+                comment_lines[0] = comment
             else:
                 del comment_lines[0]
         else:
@@ -1193,7 +1193,7 @@ class GtkDocCommentBlockParser(object):
             return None
 
         # Check for the end of the comment block.
-        result = COMMENT_BLOCK_END_RE.match(comment_lines[-1][1])
+        result = COMMENT_BLOCK_END_RE.match(comment_lines[-1])
         if result:
             code_after = result.group('code')
             comment = result.group('comment')
@@ -1201,17 +1201,17 @@ class GtkDocCommentBlockParser(object):
                 position = Position(filename, lineno + comment_lines_len - 1)
                 marker = ' ' * result.end('code') + '^'
                 warn('GTK-Doc comment block end token "*/" should '
-                     'not be followed by code:\n%s\n%s' % (comment_lines[-1][1], marker),
+                     'not be followed by code:\n%s\n%s' % (comment_lines[-1], marker),
                      position)
 
             if comment:
                 position = Position(filename, lineno + comment_lines_len - 1)
                 marker = ' ' * result.end('comment') + '^'
                 warn('GTK-Doc comment block end token "*/" should '
-                     'not be preceded by comment text:\n%s\n%s' % (comment_lines[-1][1], marker),
+                     'not be preceded by comment text:\n%s\n%s' % (comment_lines[-1], marker),
                      position)
 
-                comment_lines[-1] = (comment_lines[-1][0], comment)
+                comment_lines[-1] = comment
             else:
                 del comment_lines[-1]
         else:
@@ -1229,8 +1229,9 @@ class GtkDocCommentBlockParser(object):
         current_part = None
         returns_seen = False
 
-        for line_offset, line in comment_lines:
-            position = Position(filename, line_offset + lineno)
+        for line in comment_lines:
+            lineno += 1
+            position = Position(filename, lineno)
 
             # Store the original line (without \n) and column offset
             # so we can generate meaningful warnings later on.
