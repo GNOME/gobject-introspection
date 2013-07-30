@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
 # Copyright (C) 2008-2010 Johan Dahlin
-# Copyright (C) 2012 Dieter Verfaillie <dieterv@optionexplicit.be>
+# Copyright (C) 2012-2013 Dieter Verfaillie <dieterv@optionexplicit.be>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +21,88 @@
 #
 
 
-# AnnotationParser - extract annotations from GTK-Doc comment blocks
+'''
+GTK-Doc comment block format
+----------------------------
+
+A GTK-Doc comment block is built out of multiple parts. Each part can be further
+divided into fields which are separated by a colon ("``:``") delimiter.
+
+Known parts and the fields they are constructed from look like the following
+(optional fields are enclosed in square brackets)::
+
+    ┌───────────────────────────────────────────────────────────┐
+    │ /**                                                       │ ─▷ start token
+    ├────────────────────┬──────────────────────────────────────┤
+    │  * identifier_name │ [: annotations]                      │ ─▷ identifier part
+    ├────────────────────┼─────────────────┬────────────────────┤
+    │  * @parameter_name │ [: annotations] │ : description      │ ─▷ parameter part
+    ├────────────────────┴─────────────────┴────────────────────┤
+    │  *                                                        │ ─▷ comment block description
+    │  * comment_block_description                              │
+    ├─────────────┬─────────────────┬───────────┬───────────────┤
+    │  * tag_name │ [: annotations] │ [: value] │ : description │ ─▷ tag part
+    ├─────────────┴─────────────────┴───────────┴───────────────┤
+    │  */                                                       │ ─▷ end token
+    └───────────────────────────────────────────────────────────┘
+
+There are two conditions that must be met before a comment block is recognized
+as a GTK-Doc comment block:
+
+#. The comment block is opened with a GTK-Doc start token ("``/**``")
+#. The first line following the start token contains a valid identifier part
+
+Once a GTK-Doc comment block has been identified as such and has been stripped
+from its start and end tokens the remaining parts have to be written in a
+specific order:
+
+#. There must be exactly 1 `identifier` part on the first line of the
+   comment block which consists of:
+
+   * a required `identifier_name` field
+   * an optional `annotations` field
+
+#. Zero or more `parameter` parts, each consisting of:
+
+   * a required `parameter_name` field
+   * an optional `annotations` field
+   * a required `description` field (can be the empty string)
+
+#. One optional `comment block description` part which must begin with at
+   least 1 empty line signaling the start of this part.
+
+#. Zero or more `tag` parts, each consisting of:
+
+   * a required `tag_name` field
+   * an optional `annotations` field
+   * an optional `value` field
+   * a required `description` field (can be the empty string)
+
+Additionally, the following restrictions are in effect:
+
+#. Separating parts with an empty line:
+
+   * `identifier` and `parameter` parts cannot be separated from each other by
+     an empty line as this would signal the start of the
+     `comment block description` part (see above).
+   * it is required to separate the `comment block description` part from the
+     `identifier` or `parameter` parts with an empty line (see above)
+   * `comment block description` and `tag` parts can optionally be separated
+     by an empty line
+
+#. Parts and fields cannot span multiple lines, except for:
+
+   * the `comment_block_description` part
+   * `parameter description` and `tag description` fields
+
+#. Taking the above restrictions into account, spanning multiple paragraphs is
+   limited to the `comment block description` part and `tag description` fields.
+
+Refer to the `GTK-Doc manual`_ for more detailed usage information.
+
+.. _GTK-Doc manual:
+        http://developer.gnome.org/gtk-doc-manual/1.18/documenting.html.en
+'''
 
 
 import re
@@ -171,19 +253,17 @@ COMMENT_END_RE = re.compile(
     ''',
     re.VERBOSE)
 
-# Program matching the ' * ' at the beginning of every
+# Pattern matching the ' * ' at the beginning of every
 # line inside a comment block.
-#
-# Results in 0 symbolic groups.
 COMMENT_ASTERISK_RE = re.compile(
     r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     \*                                       # 1 asterisk character
-    [^\S\n\r]?                               # 0 or 1 whitespace characters. Careful,
-                                             # removing more than 1 whitespace
-                                             # character would break embedded
-                                             # example program indentation
+    [^\S\n\r]?                               # 0 or 1 whitespace characters
+                                             #   WARNING: removing more than 1
+                                             #   whitespace character breaks
+                                             #   embedded example program indentation
     ''',
     re.VERBOSE)
 
@@ -201,9 +281,7 @@ COMMENT_INDENTATION_RE = re.compile(
     ''',
     re.VERBOSE)
 
-# Program matching an empty line.
-#
-# Results in 0 symbolic groups.
+# Pattern matching an empty line.
 EMPTY_LINE_RE = re.compile(
     r'''
     ^                                        # start
@@ -385,6 +463,9 @@ class DocBlock(object):
         self.position = None
 
     def __cmp__(self, other):
+        # Note: This is used by g-ir-annotation-tool, which does a ``sorted(blocks.values())``,
+        #       meaning that keeping this around makes update-glib-annotations.py patches
+        #       easier to review.
         return cmp(self.name, other.name)
 
     def __repr__(self):
@@ -753,12 +834,12 @@ class AnnotationParser(object):
     """
 
     def parse(self, comments):
-        """
-        Parses multiple GTK-Doc comment blocks.
+        '''
+        Parse multiple GTK-Doc comment blocks.
 
-        :param comments: a list of (comment, filename, lineno) tuples
-        :returns: a dictionary mapping identifier names to :class:`DocBlock` objects
-        """
+        :param comments: an iterable of ``(comment, filename, lineno)`` tuples
+        :returns: a dictionary mapping identifier names to :class:`GtkDocCommentBlock` objects
+        '''
 
         comment_blocks = {}
 
@@ -788,12 +869,13 @@ class AnnotationParser(object):
         return comment_blocks
 
     def parse_comment_block(self, comment):
-        """
-        Parses a single GTK-Doc comment block.
+        '''
+        Parse a single GTK-Doc comment block.
 
-        :param comment: a (comment, filename, lineno) tuple
+        :param comment: string representing the GTK-Doc comment block including it's
+                        start ("``/**``") and end ("``*/``") tokens.
         :returns: a :class:`DocBlock` object or ``None``
-        """
+        '''
 
         comment, filename, lineno = comment
 
@@ -827,7 +909,8 @@ class AnnotationParser(object):
             # Not a GTK-Doc comment block.
             return None
 
-        # If we get this far, we are inside a GTK-Doc comment block.
+        # If we get this far, we must be inside something
+        # that looks like a GTK-Doc comment block.
         return self._parse_comment_block(comment_lines, filename, lineno)
 
     def _parse_comment_block(self, comment_lines, filename, lineno):
@@ -871,7 +954,7 @@ class AnnotationParser(object):
             original_line = line
             column_offset = 0
 
-            # Get rid of ' * ' at start of the line.
+            # Get rid of the ' * ' at the start of the line.
             result = COMMENT_ASTERISK_RE.match(line)
             if result:
                 column_offset = result.end(0)
