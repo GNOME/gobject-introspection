@@ -462,10 +462,9 @@ MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
 
 class DocOption(object):
 
-    __slots__ = ('tag', '_array', '_dict')
+    __slots__ = ('_array', '_dict')
 
-    def __init__(self, tag, option):
-        self.tag = tag
+    def __init__(self, option):
         self._array = []
         self._dict = OrderedDict()
         # (annotation option1=value1 option2=value2) etc
@@ -541,10 +540,9 @@ class GtkDocAnnotations(object):
 
 class GtkDocTag(object):
 
-    __slots__ = ('block', 'name', 'annotations', 'description', 'value', 'position')
+    __slots__ = ('name', 'annotations', 'description', 'value', 'position')
 
-    def __init__(self, block, name):
-        self.block = block
+    def __init__(self, name):
         self.name = name
         self.annotations = GtkDocAnnotations()
         self.description = None
@@ -1098,7 +1096,7 @@ class GtkDocCommentBlockParser(object):
                                  (param_name, comment_block.name, original_line, marker),
                                  position)
 
-                tag = GtkDocTag(comment_block, param_name)
+                tag = GtkDocTag(param_name)
                 tag.position = position
                 tag.description = param_description
                 if param_annotations:
@@ -1170,7 +1168,7 @@ class GtkDocCommentBlockParser(object):
                                      "'%s'." % (comment_block.name, ),
                                      position)
 
-                    tag = GtkDocTag(comment_block, TAG_RETURNS)
+                    tag = GtkDocTag(TAG_RETURNS)
                     tag.position = position
                     tag.description = tag_description
                     if tag_annotations:
@@ -1186,7 +1184,7 @@ class GtkDocCommentBlockParser(object):
                                      (tag_name, comment_block.name, original_line, marker),
                                      position)
 
-                    tag = GtkDocTag(comment_block, tag_name.lower())
+                    tag = GtkDocTag(tag_name.lower())
                     tag.position = position
                     tag.value = tag_description
                     if tag_annotations:
@@ -1301,7 +1299,7 @@ class GtkDocCommentBlockParser(object):
                 else:
                     raise AssertionError
                 if option is not None:
-                    option = DocOption(tag, option)
+                    option = DocOption(option)
                 annotations.add(name, option)
                 opened = -1
 
