@@ -320,21 +320,18 @@ class TestCommentBlock(unittest.TestCase):
                 if tag == 'equal':
                     for line in a[i1:i2]:
                         for l in line.split('\n'):
-                            if l != '':
-                                retval += ' ' + l + '\n'
+                            retval += ' ' + l + '\n'
                     continue
 
                 if tag in ('replace', 'delete'):
                     for line in a[i1:i2]:
                         for l in line.split('\n'):
-                            if l != '':
-                                retval += '-' + l + '\n'
+                            retval += '-' + l + '\n'
 
                 if tag in ('replace', 'insert'):
                     for line in b[j1:j2]:
                         for l in line.split('\n'):
-                            if l != '':
-                                retval += '+' + l + '\n'
+                            retval += '+' + l + '\n'
 
         return retval
 
