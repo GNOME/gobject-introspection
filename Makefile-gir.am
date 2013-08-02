@@ -11,7 +11,8 @@ STATIC_GIRSOURCES =                 \
         gir/xft-2.0.gir             \
         gir/xlib-2.0.gir            \
         gir/xfixes-4.0.gir          \
-        gir/xrandr-1.3.gir
+        gir/xrandr-1.3.gir          \
+        gir/win32-1.0.gir
 EXTRA_DIST += $(STATIC_GIRSOURCES)
 
 gir/cairo-1.0.gir: gir/cairo-1.0.gir.in Makefile
