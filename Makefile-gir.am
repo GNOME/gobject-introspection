@@ -38,6 +38,7 @@ gir/xft-2.0.typelib: g-ir-compiler
 gir/xlib-2.0.typelib: g-ir-compiler
 gir/xfixes-4.0.typelib: g-ir-compiler
 gir/xrandr-1.3.typelib: g-ir-compiler
+gir/win32-1.0.typelib: g-ir-compiler
 
 # glib with source (to enable documentation)
 if WITH_GLIBSRC
