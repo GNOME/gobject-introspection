@@ -297,7 +297,7 @@ blob containing data gleaned from GObject's primitive introspection."""
         (ns, name) = self._transformer.split_csymbol(get_type)
         assert ns is self._namespace
         if name in ('get_type', '_get_gtype'):
-            message.fatal("""The GObject name %r isn't compatibile
+            message.fatal("""The GObject name %r isn't compatible
 with the configured identifier prefixes:
   %r
 The class would have no name.  Most likely you want to specify a
