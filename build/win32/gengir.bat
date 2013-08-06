@@ -90,7 +90,7 @@ rem Setup the command line flags to g-ir-scanner for GLib-2.0.gir...
 rem ================================================================
 echo python ..\..\tools\g-ir-scanner --verbose -I..\.. --add-include-path=..\.. ^^>> glib_gir.bat
 echo --add-include-path=..\..\gir --add-include-path=. --namespace=GLib --nsversion=2.0 ^^>> glib_gir.bat
-echo --no-libtool --pkg=glib-2.0 --library=glib-2-vs%VSVER% --library=gobject-2-vs%VSVER% ^^>> glib_gir.bat
+echo --no-libtool --pkg=glib-2.0 --include=win32-1.0 --library=glib-2-vs%VSVER% --library=gobject-2-vs%VSVER% ^^>> glib_gir.bat
 echo --external-library --reparse-validate --identifier-prefix=G --symbol-prefix=g ^^>> glib_gir.bat
 echo --symbol-prefix=glib --c-include="glib.h" -I%BASEDIR%\include\glib-2.0 ^^>> glib_gir.bat
 echo -I%BASEDIR%\lib\glib-2.0\include -I%BASEDIR%\include -DGETTEXT_PACKAGE=Dummy ^^>> glib_gir.bat
@@ -250,11 +250,11 @@ echo You need to specify a valid BASEDIR.
 goto DONE
 :DO_COMPILE_GIR
 rem Now compile the generated .gir files
-g-ir-compiler --includedir=. --debug --verbose GLib-2.0.gir -o GLib-2.0.typelib
-g-ir-compiler --includedir=. --debug --verbose GModule-2.0.gir -o GModule-2.0.typelib
-g-ir-compiler --includedir=. --debug --verbose GObject-2.0.gir -o GObject-2.0.typelib
-g-ir-compiler --includedir=. --debug --verbose Gio-2.0.gir -o Gio-2.0.typelib
-g-ir-compiler --includedir=. --debug --verbose GIRepository-2.0.gir -o GIRepository-2.0.typelib
+g-ir-compiler --includedir=. --includedir=..\..\gir --debug --verbose GLib-2.0.gir -o GLib-2.0.typelib
+g-ir-compiler --includedir=. --includedir=..\..\gir --debug --verbose GModule-2.0.gir -o GModule-2.0.typelib
+g-ir-compiler --includedir=. --includedir=..\..\gir --debug --verbose GObject-2.0.gir -o GObject-2.0.typelib
+g-ir-compiler --includedir=. --includedir=..\..\gir --debug --verbose Gio-2.0.gir -o Gio-2.0.typelib
+g-ir-compiler --includedir=. --includedir=..\..\gir --debug --verbose GIRepository-2.0.gir -o GIRepository-2.0.typelib
 
 rem Now process the bundled .gir files
 python create_nonglib_gir.py --vsver=%VSVER%
@@ -264,6 +264,7 @@ g-ir-compiler --includedir=. --debug --verbose cairo-1.0.gir -o cairo-1.0.typeli
 g-ir-compiler --includedir=. --debug --verbose freetype2-2.0.gir -o freetype2-2.0.typelib
 g-ir-compiler --includedir=. --debug --verbose GL-1.0.gir -o GL-1.0.typelib
 g-ir-compiler --includedir=. --debug --verbose libxml2-2.0.gir -o libxml2-2.0.typelib
+g-ir-compiler --includedir=. --debug --verbose win32-1.0.gir -o win32-1.0.typelib
 cd %CURRDIR%
 
 rem Copy the generated .girs and .typelibs to their appropriate places
@@ -274,6 +275,7 @@ copy /y ..\..\gir\freetype2-2.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\sh
 copy /y ..\..\gir\GL-1.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
 copy /y ..\..\gir\libxml2-2.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
 copy /y ..\..\gir\cairo-1.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
+copy /y ..\..\gir\win32-1.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
 
 mkdir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\lib\girepository-1.0
 move /y *.typelib ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\lib\girepository-1.0\
