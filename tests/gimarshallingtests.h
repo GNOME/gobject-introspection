@@ -1049,6 +1049,9 @@ gint gi_marshalling_tests_int_return_out (gint *int_);
 
 /* Default arguments */
 void gi_marshalling_tests_int_two_in_utf8_two_in_with_allow_none  (gint a, gint b, const gchar *c, const gchar *d);
+void gi_marshalling_tests_int_one_in_utf8_two_in_one_allows_none  (gint a, const gchar *b, const gchar *c);
+void gi_marshalling_tests_array_in_utf8_two_in (const gint *ints, gint length, const gchar *a, const gchar *b);
+void gi_marshalling_tests_array_in_utf8_two_in_out_of_order (gint length, const gchar *a, const gint *ints, const gchar *b);
 
 /* GError */
 

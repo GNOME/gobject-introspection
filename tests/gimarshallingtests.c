@@ -4737,8 +4737,8 @@ gi_marshalling_tests_int_return_out (gint *int_)
 
 /**
 * gi_marshalling_tests_int_two_in_utf8_two_in_with_allow_none:
-* @a: (in):
-* @b: (in):
+* @a: (in): Must be 1
+* @b: (in): Must be 2
 * @c: (in) (allow-none): Must be "3" or NULL
 * @d: (in) (allow-none): Must be "4" or NULL
 */
@@ -4751,6 +4751,65 @@ gi_marshalling_tests_int_two_in_utf8_two_in_with_allow_none (gint a, gint b, con
         g_assert_cmpstr (c, ==, "3");
     if (d != NULL)
         g_assert_cmpstr (d, ==, "4");
+}
+
+/**
+* gi_marshalling_tests_int_one_in_utf8_two_in_one_allows_none:
+* @a: (in): Must be 1
+* @b: (in) (allow-none): Must be "2" or NULL
+* @c: (in): Must be "3"
+*/
+void
+gi_marshalling_tests_int_one_in_utf8_two_in_one_allows_none (gint a, const gchar *b, const gchar *c)
+{
+    g_assert_cmpint (a, ==, 1);
+    if (b != NULL)
+        g_assert_cmpstr (b, ==, "2");
+    g_assert_cmpstr (c, ==, "3");
+}
+
+/**
+ * gi_marshalling_tests_array_in_utf8_two_in:
+ * @ints: (array length=length):
+ * @length:
+ * @a: (in) (allow-none): Must be "1" or NULL
+ * @b: (in) (allow-none): Must be "2" or NULL
+ */
+void
+gi_marshalling_tests_array_in_utf8_two_in (const gint *ints, gint length, const gchar *a, const gchar *b)
+{
+  g_assert_cmpint (length, ==, 4);
+  g_assert_cmpint (ints[0], ==, -1);
+  g_assert_cmpint (ints[1], ==, 0);
+  g_assert_cmpint (ints[2], ==, 1);
+  g_assert_cmpint (ints[3], ==, 2);
+
+  if (a != NULL)
+      g_assert_cmpstr (a, ==, "1");
+  if (b != NULL)
+      g_assert_cmpstr (b, ==, "2");
+}
+
+/**
+ * gi_marshalling_tests_array_in_utf8_two_in_out_of_order:
+ * @length:
+ * @a: (in) (allow-none): Must be "1" or NULL
+ * @ints: (array length=length):
+ * @b: (in) (allow-none): Must be "2" or NULL
+ */
+void
+gi_marshalling_tests_array_in_utf8_two_in_out_of_order (gint length, const gchar *a, const gint *ints, const gchar *b)
+{
+  g_assert_cmpint (length, ==, 4);
+  g_assert_cmpint (ints[0], ==, -1);
+  g_assert_cmpint (ints[1], ==, 0);
+  g_assert_cmpint (ints[2], ==, 1);
+  g_assert_cmpint (ints[3], ==, 2);
+
+  if (a != NULL)
+      g_assert_cmpstr (a, ==, "1");
+  if (b != NULL)
+      g_assert_cmpstr (b, ==, "2");
 }
 
 /* GError */
