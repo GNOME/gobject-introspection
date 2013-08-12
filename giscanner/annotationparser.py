@@ -483,57 +483,48 @@ class DocTag(object):
                     int(v)
                 except (TypeError, ValueError):
                     if v is None:
-                        message.warn(
-                            'array option %s needs a value' % (
-                            name, ),
-                            positions=self.position)
+                        message.warn('array option %s needs a value' % (name, ),
+                                     positions=self.position)
                     else:
-                        message.warn(
-                            'invalid array %s option value %r, '
-                            'must be an integer' % (name, v, ),
-                            positions=self.position)
+                        message.warn('invalid array %s option value %r, '
+                                     'must be an integer' % (name, v, ),
+                                     positions=self.position)
             elif name == OPT_ARRAY_LENGTH:
                 if v is None:
-                    message.warn(
-                        'array option length needs a value',
-                        positions=self.position)
+                    message.warn('array option length needs a value',
+                                 positions=self.position)
             else:
-                message.warn(
-                    'invalid array annotation value: %r' % (
-                    name, ), self.position)
+                message.warn('invalid array annotation value: %r' % (name, ),
+                             self.position)
 
     def _validate_closure(self, option, value):
         if value is not None and value.length() > 1:
-            message.warn(
-                'closure takes at most 1 value, %d given' % (
-                value.length(), ), self.position)
+            message.warn('closure takes at most 1 value, %d given' % (value.length(), ),
+                         self.position)
 
     def _validate_element_type(self, option, value):
         self._validate_option(option, value, required=True)
         if value is None:
-            message.warn(
-                'element-type takes at least one value, none given',
-                self.position)
+            message.warn('element-type takes at least one value, none given',
+                         self.position)
             return
         if value.length() > 2:
-            message.warn(
-                'element-type takes at most 2 values, %d given' % (
-                value.length(), ), self.position)
+            message.warn('element-type takes at most 2 values, %d given' % (value.length(), ),
+                         self.position)
             return
 
     def _validate_out(self, option, value):
         if value is None:
             return
         if value.length() > 1:
-            message.warn(
-                'out annotation takes at most 1 value, %d given' % (
-                value.length(), ), self.position)
+            message.warn('out annotation takes at most 1 value, %d given' % (value.length(), ),
+                         self.position)
             return
         value_str = value.one()
         if value_str not in [OPT_OUT_CALLEE_ALLOCATES,
                              OPT_OUT_CALLER_ALLOCATES]:
-            message.warn("out annotation value is invalid: %r" % (
-                value_str, ), self.position)
+            message.warn("out annotation value is invalid: %r" % (value_str, ),
+                         self.position)
             return
 
     def _get_gtk_doc_value(self):

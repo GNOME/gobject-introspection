@@ -143,20 +143,19 @@ class MainTransformer(object):
         target = self._namespace.get_by_symbol(rename_to)
         if not target:
             message.warn_node(node,
-                "Can't find symbol %r referenced by Rename annotation" % (
-                rename_to, ))
+                "Can't find symbol %r referenced by Rename annotation" % (rename_to, ))
         elif target.shadowed_by:
             message.warn_node(node,
-                "Function %r already shadowed by %r, can't overwrite with %r" % (
-                target.symbol,
-                target.shadowed_by,
-                rename_to))
+                "Function %r already shadowed by %r, can't overwrite "
+                "with %r" % (target.symbol,
+                             target.shadowed_by,
+                             rename_to))
         elif target.shadows:
             message.warn_node(node,
-                "Function %r already shadows %r, can't multiply shadow with %r" % (
-                target.symbol,
-                target.shadows,
-                rename_to))
+                "Function %r already shadows %r, can't multiply shadow "
+                "with %r" % (target.symbol,
+                             target.shadows,
+                             rename_to))
         else:
             target.shadowed_by = node.name
             node.shadows = target.name
@@ -723,10 +722,9 @@ class MainTransformer(object):
                 text = ', should be one of %s' % (', '.join(repr(p) for p in unused), )
 
             tag = block.params.get(doc_name)
-            message.warn(
-                '%s: unknown parameter %r in documentation comment%s' % (
-                block.name, doc_name, text),
-                tag.position)
+            message.warn('%s: unknown parameter %r in documentation '
+                         'comment%s' % (block.name, doc_name, text),
+                         tag.position)
 
     def _apply_annotations_callable(self, node, chain, block):
         self._apply_annotations_annotated(node, block)
@@ -1201,20 +1199,20 @@ method or constructor of some type."""
                     parent = None
                 if parent is None:
                     message.warn_node(func,
-                        "Return value is not superclass for constructor; "
-                        "symbol=%r constructed=%r return=%r" % (
-                        func.symbol,
-                        str(origin_node.create_type()),
-                        str(func.retval.type)))
+                                      "Return value is not superclass for constructor; "
+                                      "symbol=%r constructed=%r return=%r" %
+                                      (func.symbol,
+                                       str(origin_node.create_type()),
+                                       str(func.retval.type)))
                     return False
         else:
             if origin_node != target:
                 message.warn_node(func,
-                    "Constructor return type mismatch symbol=%r "
-                    "constructed=%r return=%r" % (
-                    func.symbol,
-                    str(origin_node.create_type()),
-                    str(func.retval.type)))
+                                  "Constructor return type mismatch symbol=%r "
+                                  "constructed=%r return=%r" %
+                                  (func.symbol,
+                                   str(origin_node.create_type()),
+                                   str(func.retval.type)))
                 return False
 
         return True

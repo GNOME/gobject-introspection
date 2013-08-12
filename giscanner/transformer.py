@@ -294,8 +294,7 @@ raise ValueError."""
                 return name
         (ns, name) = matches[-1]
         raise TransformerException(
-            "Skipping foreign identifier %r from namespace %s" % (
-            ident, ns.name, ))
+            "Skipping foreign identifier %r from namespace %s" % (ident, ns.name, ))
         return None
 
     def _strip_symbol(self, symbol):
