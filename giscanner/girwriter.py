@@ -123,7 +123,7 @@ class GIRWriter(XMLWriter):
             attrs.append(('version', node.version))
 
     def _write_generic(self, node):
-        for key, value in node.attributes:
+        for key, value in node.attributes.items():
             self.write_tag('attribute', [('name', key), ('value', value)])
 
         if hasattr(node, 'doc') and node.doc:

@@ -516,7 +516,7 @@ properties."""
         self.version_doc = None
         self.skip = False
         self.introspectable = True
-        self.attributes = []    # (key, value)*
+        self.attributes = OrderedDict()
         self.stability = None
         self.stability_doc = None
         self.deprecated = None

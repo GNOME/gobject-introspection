@@ -576,7 +576,7 @@ class MainTransformer(object):
             if attributes_annotation is not None:
                 for key, value in attributes_annotation.items():
                     if value:
-                        node.attributes.append((key, value))
+                        node.attributes[key] = value
 
     def _apply_annotations_annotated(self, node, block):
         if block is None:
@@ -610,7 +610,7 @@ class MainTransformer(object):
         if attributes_annotation is not None:
             for key, value in attributes_annotation.items():
                 if value:
-                    node.attributes.append((key, value))
+                    node.attributes[key] = value
 
         if ANN_SKIP in block.annotations:
             node.skip = True
