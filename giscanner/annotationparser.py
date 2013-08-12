@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # -*- Mode: Python -*-
+
 # GObject-Introspection - a framework for introspecting GObject libraries
 # Copyright (C) 2008-2010 Johan Dahlin
 # Copyright (C) 2012-2013 Dieter Verfaillie <dieterv@optionexplicit.be>
@@ -109,7 +110,7 @@ import os
 import re
 
 from .collections import OrderedDict
-from .message import Position, warn
+from .message import Position, warn, error
 
 
 # GTK-Doc comment block parts
@@ -148,7 +149,6 @@ DEPRECATED_GI_TAGS = [TAG_RETURN,
                       TAG_RETURNS_VALUE]
 
 #   4) GObject-Introspection annotation tags.
-TAG_ATTRIBUTES = 'attributes'
 TAG_GET_VALUE_FUNC = 'get value func'
 TAG_REF_FUNC = 'ref func'
 TAG_RENAME_TO = 'rename to'
@@ -159,8 +159,7 @@ TAG_UNREF_FUNC = 'unref func'
 TAG_VALUE = 'value'
 TAG_VFUNC = 'virtual'
 
-GI_ANN_TAGS = [TAG_ATTRIBUTES,
-               TAG_GET_VALUE_FUNC,
+GI_ANN_TAGS = [TAG_GET_VALUE_FUNC,
                TAG_REF_FUNC,
                TAG_RENAME_TO,
                TAG_SET_VALUE_FUNC,
@@ -170,12 +169,28 @@ GI_ANN_TAGS = [TAG_ATTRIBUTES,
                TAG_VALUE,
                TAG_VFUNC]
 
-ALL_TAGS = GTKDOC_TAGS + DEPRECATED_GTKDOC_TAGS + DEPRECATED_GI_TAGS + GI_ANN_TAGS
+#   5) Deprecated GObject-Introspection annotation tags.
+#      Accepted by old versions of this module while they should have been
+#      annotations on the identifier part instead.
+#      Note: This list can not be extended ever again. The GObject-Introspection project is not
+#            allowed to invent GTK-Doc tags. Please create new annotations instead.
+TAG_ATTRIBUTES = 'attributes'
+
+DEPRECATED_GI_ANN_TAGS = [TAG_ATTRIBUTES]
+
+ALL_TAGS = (GTKDOC_TAGS + DEPRECATED_GTKDOC_TAGS + DEPRECATED_GI_TAGS + GI_ANN_TAGS +
+            DEPRECATED_GI_ANN_TAGS)
+
+# GObject-Introspection annotation start/end tokens
+ANN_LPAR = '('
+ANN_RPAR = ')'
 
 # GObject-Introspection annotations
+#   1) Supported annotations
+#      Note: when adding new annotations, GTK-Doc project's gtkdoc-mkdb needs to be modified too!
 ANN_ALLOW_NONE = 'allow-none'
 ANN_ARRAY = 'array'
-ANN_ATTRIBUTE = 'attribute'
+ANN_ATTRIBUTES = 'attributes'
 ANN_CLOSURE = 'closure'
 ANN_CONSTRUCTOR = 'constructor'
 ANN_DESTROY = 'destroy'
@@ -183,7 +198,6 @@ ANN_ELEMENT_TYPE = 'element-type'
 ANN_FOREIGN = 'foreign'
 ANN_IN = 'in'
 ANN_INOUT = 'inout'
-ANN_INOUT_ALT = 'in-out'
 ANN_METHOD = 'method'
 ANN_OUT = 'out'
 ANN_SCOPE = 'scope'
@@ -191,24 +205,33 @@ ANN_SKIP = 'skip'
 ANN_TRANSFER = 'transfer'
 ANN_TYPE = 'type'
 
-ALL_ANNOTATIONS = [
-    ANN_ALLOW_NONE,
-    ANN_ARRAY,
-    ANN_ATTRIBUTE,
-    ANN_CLOSURE,
-    ANN_CONSTRUCTOR,
-    ANN_DESTROY,
-    ANN_ELEMENT_TYPE,
-    ANN_FOREIGN,
-    ANN_IN,
-    ANN_INOUT,
-    ANN_INOUT_ALT,
-    ANN_METHOD,
-    ANN_OUT,
-    ANN_SCOPE,
-    ANN_SKIP,
-    ANN_TRANSFER,
-    ANN_TYPE]
+GI_ANNS = [ANN_ALLOW_NONE,
+           ANN_ARRAY,
+           ANN_ATTRIBUTES,
+           ANN_CLOSURE,
+           ANN_CONSTRUCTOR,
+           ANN_DESTROY,
+           ANN_ELEMENT_TYPE,
+           ANN_FOREIGN,
+           ANN_IN,
+           ANN_INOUT,
+           ANN_METHOD,
+           ANN_OUT,
+           ANN_SCOPE,
+           ANN_SKIP,
+           ANN_TRANSFER,
+           ANN_TYPE]
+
+#   2) Deprecated GObject-Introspection annotations
+ANN_ATTRIBUTE = 'attribute'
+ANN_INOUT_ALT = 'in-out'
+
+DEPRECATED_GI_ANNS = [ANN_ATTRIBUTE,
+                      ANN_INOUT_ALT]
+
+ALL_ANNOTATIONS = GI_ANNS + DEPRECATED_GI_ANNS
+DICT_ANNOTATIONS = [ANN_ARRAY, ANN_ATTRIBUTES]
+LIST_ANNOTATIONS = [ann for ann in ALL_ANNOTATIONS if ann not in DICT_ANNOTATIONS]
 
 # (array) annotation options
 OPT_ARRAY_FIXED_SIZE = 'fixed-size'
@@ -318,12 +341,7 @@ SECTION_RE = re.compile(
     ''',
     re.UNICODE | re.VERBOSE)
 
-# Program matching symbol (function, constant, struct and enum) identifiers.
-#
-# Results in 3 symbolic groups:
-#   - group 1 = symbol_name
-#   - group 2 = delimiter
-#   - group 3 = annotations
+# Pattern matching symbol (function, constant, struct and enum) identifiers.
 SYMBOL_RE = re.compile(
     r'''
     ^                                                    # start
@@ -332,44 +350,36 @@ SYMBOL_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     (?P<delimiter>:?)                                    # delimiter
     \s*                                                  # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)\s*)*)                     # annotations
+    (?P<fields>.*?)                                      # annotations + description
+    \s*                                                  # 0 or more whitespace characters
+    :?                                                   # invalid delimiter
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
     re.UNICODE | re.VERBOSE)
 
-# Program matching property identifiers.
-#
-# Results in 4 symbolic groups:
-#   - group 1 = class_name
-#   - group 2 = property_name
-#   - group 3 = delimiter
-#   - group 4 = annotations
+# Pattern matching property identifiers.
 PROPERTY_RE = re.compile(
     r'''
     ^                                                    # start
     \s*                                                  # 0 or more whitespace characters
     (?P<class_name>[\w]+)                                # class name
     \s*                                                  # 0 or more whitespace characters
-    :{1}                                                 # required colon
+    :{1}                                                 # 1 required colon
     \s*                                                  # 0 or more whitespace characters
     (?P<property_name>[\w-]*\w)                          # property name
     \s*                                                  # 0 or more whitespace characters
     (?P<delimiter>:?)                                    # delimiter
     \s*                                                  # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)\s*)*)                     # annotations
+    (?P<fields>.*?)                                      # annotations + description
+    \s*                                                  # 0 or more whitespace characters
+    :?                                                   # invalid delimiter
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
     re.UNICODE | re.VERBOSE)
 
-# Program matching signal identifiers.
-#
-# Results in 4 symbolic groups:
-#   - group 1 = class_name
-#   - group 2 = signal_name
-#   - group 3 = delimiter
-#   - group 4 = annotations
+# Pattern matching signal identifiers.
 SIGNAL_RE = re.compile(
     r'''
     ^                                                    # start
@@ -382,19 +392,15 @@ SIGNAL_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     (?P<delimiter>:?)                                    # delimiter
     \s*                                                  # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)\s*)*)                     # annotations
+    (?P<fields>.*?)                                      # annotations + description
+    \s*                                                  # 0 or more whitespace characters
+    :?                                                   # invalid delimiter
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
     re.UNICODE | re.VERBOSE)
 
-# Program matching parameters.
-#
-# Results in 4 symbolic groups:
-#   - group 1 = parameter_name
-#   - group 2 = annotations
-#   - group 3 = delimiter
-#   - group 4 = description
+# Pattern matching parameters.
 PARAMETER_RE = re.compile(
     r'''
     ^                                                    # start
@@ -402,62 +408,29 @@ PARAMETER_RE = re.compile(
     @                                                    # @ character
     (?P<parameter_name>[\w-]*\w|.*?\.\.\.)               # parameter name
     \s*                                                  # 0 or more whitespace characters
-    :{1}                                                 # required colon
+    :{1}                                                 # 1 required delimiter
     \s*                                                  # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)\s*)*)                     # annotations
-    (?P<delimiter>:?)                                    # delimiter
-    \s*                                                  # 0 or more whitespace characters
-    (?P<description>.*?)                                 # description
+    (?P<fields>.*?)                                      # annotations + description
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
     re.UNICODE | re.VERBOSE)
 
-# Program matching tags.
-#
-# Results in 4 symbolic groups:
-#   - group 1 = tag_name
-#   - group 2 = annotations
-#   - group 3 = delimiter
-#   - group 4 = description
-_all_tags = '|'.join(ALL_TAGS).replace(' ', '\\ ')
+# Pattern matching tags.
+_all_tags = '|'.join(ALL_TAGS).replace(' ', r'\s')
 TAG_RE = re.compile(
     r'''
     ^                                                    # start
     \s*                                                  # 0 or more whitespace characters
     (?P<tag_name>''' + _all_tags + r''')                 # tag name
     \s*                                                  # 0 or more whitespace characters
-    :{1}                                                 # required colon
+    :{1}                                                 # 1 required delimiter
     \s*                                                  # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)\s*)*)                     # annotations
-    (?P<delimiter>:?)                                    # delimiter
-    \s*                                                  # 0 or more whitespace characters
-    (?P<description>.*?)                                 # description
+    (?P<fields>.*?)                                      # annotations + value + description
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
     re.UNICODE | re.VERBOSE | re.IGNORECASE)
-
-# Program matching multiline annotation continuations.
-# This is used on multiline parameters and tags (but not on the first line) to
-# generate warnings about invalid annotations spanning multiple lines.
-#
-# Results in 3 symbolic groups:
-#   - group 2 = annotations
-#   - group 3 = delimiter
-#   - group 4 = description
-MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
-    r'''
-    ^                                                    # start
-    \s*                                                  # 0 or more whitespace characters
-    (?P<annotations>(?:\(.*?\)\s*)*)                     # annotations
-    (?P<delimiter>:)                                     # delimiter
-    \s*                                                  # 0 or more whitespace characters
-    (?P<description>.*?)                                 # description
-    \s*                                                  # 0 or more whitespace characters
-    $                                                    # end
-    ''',
-    re.UNICODE | re.VERBOSE)
 
 # Pattern matching value and description fields for TAG_DEPRECATED & TAG_SINCE tags.
 TAG_VALUE_VERSION_RE = re.compile(
@@ -490,82 +463,21 @@ TAG_VALUE_STABILITY_RE = re.compile(
     re.UNICODE | re.VERBOSE | re.IGNORECASE)
 
 
-class DocOption(object):
+class GtkDocAnnotations(OrderedDict):
+    '''
+    An ordered dictionary mapping annotation names to annotation options (if any). Annotation
+    options can be either a :class:`list`, a :class:`giscanner.collections.OrderedDict`
+    (depending on the annotation name)or :const:`None`.
+    '''
 
-    __slots__ = ('_array', '_dict')
+    __slots__ = ('position')
 
-    def __init__(self, option):
-        self._array = []
-        self._dict = OrderedDict()
-        # (annotation option1=value1 option2=value2) etc
-        for p in option.split(' '):
-            if '=' in p:
-                name, value = p.split('=', 1)
-            else:
-                name = p
-                value = None
-            self._dict[name] = value
-            if value is None:
-                self._array.append(name)
-            else:
-                self._array.append((name, value))
+    def __init__(self, position=None):
+        OrderedDict.__init__(self)
 
-    def __repr__(self):
-        return '<DocOption %r>' % (self._array, )
-
-    def length(self):
-        return len(self._array)
-
-    def one(self):
-        assert len(self._array) == 1
-        return self._array[0]
-
-    def flat(self):
-        return self._array
-
-    def all(self):
-        return self._dict
-
-
-class GtkDocAnnotations(object):
-
-    __slots__ = ('values', 'position')
-
-    def __init__(self):
-        self.values = []
-        self.position = None
-
-    def __repr__(self):
-        return '<GtkDocAnnotations %r>' % (self.values, )
-
-    def __getitem__(self, item):
-        for key, value in self.values:
-            if key == item:
-                return value
-        raise KeyError
-
-    def __nonzero__(self):
-        return bool(self.values)
-
-    def __iter__(self):
-        return (k for k, v in self.values)
-
-    def add(self, name, value):
-        self.values.append((name, value))
-
-    def get(self, item, default=None):
-        for key, value in self.values:
-            if key == item:
-                return value
-        return default
-
-    def getall(self, item):
-        for key, value in self.values:
-            if key == item:
-                yield value
-
-    def items(self):
-        return iter(self.values)
+        #: A :class:`giscanner.message.Position` instance specifying the location of the
+        #: annotations in the source file or :const:`None`.
+        self.position = position
 
 
 class GtkDocTag(object):
@@ -584,7 +496,7 @@ class GtkDocTag(object):
 
     def _validate_annotation(self, ann_name, options, required=False,
                              n_params=None, choices=None):
-        if required and options is None:
+        if required and len(options) == 0:
             warn('%s annotation needs a value' % (ann_name, ), self.position)
             return
 
@@ -595,28 +507,25 @@ class GtkDocTag(object):
                 s = 'one value'
             else:
                 s = '%d values' % (n_params, )
-            if ((n_params > 0 and (options is None or options.length() != n_params))
-            or n_params == 0 and options is not None):
-                if options is None:
-                    length = 0
-                else:
-                    length = options.length()
+            if ((n_params > 0 and (len(options) == 0 or len(options) != n_params))
+            or n_params == 0 and len(options) != 0):
+                length = len(options)
                 warn('%s annotation needs %s, not %d' % (ann_name, s, length),
                      self.position)
                 return
 
         if choices is not None:
-            option = options.one()
+            option = options[0]
             if option not in choices:
                 warn('invalid %s annotation value: %r' % (ann_name, option, ),
                      self.position)
                 return
 
     def _validate_array(self, ann_name, options):
-        if options is None:
+        if len(options) == 0:
             return
 
-        for option, value in options.all().items():
+        for option, value in options.items():
             if option in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
                 try:
                     int(value)
@@ -637,29 +546,29 @@ class GtkDocTag(object):
                      self.position)
 
     def _validate_closure(self, ann_name, options):
-        if options is not None and options.length() > 1:
-            warn('closure takes at most 1 value, %d given' % (options.length(), ),
+        if len(options) != 0 and len(options) > 1:
+            warn('closure takes at most 1 value, %d given' % (len(options), ),
                  self.position)
 
     def _validate_element_type(self, ann_name, options):
         self._validate_annotation(ann_name, options, required=True)
-        if options is None:
+        if len(options) == 0:
             warn('element-type takes at least one value, none given',
                  self.position)
             return
-        if options.length() > 2:
-            warn('element-type takes at most 2 values, %d given' % (options.length(), ),
+        if len(options) > 2:
+            warn('element-type takes at most 2 values, %d given' % (len(options), ),
                  self.position)
             return
 
     def _validate_out(self, ann_name, options):
-        if options is None:
+        if len(options) == 0:
             return
-        if options.length() > 1:
-            warn('out annotation takes at most 1 value, %d given' % (options.length(), ),
+        if len(options) > 1:
+            warn('out annotation takes at most 1 value, %d given' % (len(options), ),
                  self.position)
             return
-        option = options.one()
+        option = options[0]
         if option not in [OPT_OUT_CALLEE_ALLOCATES,
                           OPT_OUT_CALLER_ALLOCATES]:
             warn("out annotation value is invalid: %r" % (option, ),
@@ -670,8 +579,11 @@ class GtkDocTag(object):
         def serialize_one(option, value, fmt, fmt2):
             if value:
                 if type(value) != str:
-                    value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
-                                      for k, v in value.all().items()))
+                    if isinstance(value, list):
+                        value = ' '.join(value)
+                    else:
+                        value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
+                                          for k, v in value.items()))
                 return fmt % (option, value)
             else:
                 return fmt2 % (option, )
@@ -698,18 +610,14 @@ class GtkDocTag(object):
                              self.description or '')
 
     def validate(self):
-        if self.name == TAG_ATTRIBUTES:
-            # The 'Attributes:' tag allows free form annotations so the
-            # validation below is most certainly going to fail.
-            return
-
         for ann_name, value in self.annotations.items():
             if ann_name == ANN_ALLOW_NONE:
                 self._validate_annotation(ann_name, value, n_params=0)
             elif ann_name == ANN_ARRAY:
                 self._validate_array(ann_name, value)
-            elif ann_name == ANN_ATTRIBUTE:
-                self._validate_annotation(ann_name, value, n_params=2)
+            elif ann_name == ANN_ATTRIBUTES:
+                # The 'attributes' annotation allows free form annotations.
+                pass
             elif ann_name == ANN_CLOSURE:
                 self._validate_closure(ann_name, value)
             elif ann_name == ANN_DESTROY:
@@ -827,73 +735,34 @@ class GtkDocCommentBlock(object):
 
 
 class GtkDocCommentBlockParser(object):
-    """
-    GTK-Doc comment block parser.
-
+    '''
     Parse GTK-Doc comment blocks into a parse tree built out of :class:`GtkDocCommentBlock`,
-    :class:`GtkDocTag`, :class:`GtkDocAnnotations` and :class:`DocOption` objects. This
-    parser tries to accept malformed input whenever possible and does not emit
-    syntax errors. However, it does emit warnings at the slightest indication
-    of malformed input when possible. It is usually a good idea to heed these
-    warnings as malformed input is known to result in invalid GTK-Doc output.
+    :class:`GtkDocParameter`, :class:`GtkDocTag` and :class:`GtkDocAnnotations`
+    objects. This parser tries to accept malformed input whenever possible and does
+    not cause the process to exit on syntax errors. It does however emit:
 
-    A GTK-Doc comment block can be constructed out of multiple parts that can
-    be combined to write different types of documentation.
-    See `GTK-Doc's documentation`_ to learn more about possible valid combinations.
-    Each part can be further divided into fields which are separated by `:` characters.
+        * warning messages at the slightest indication of recoverable malformed input and
+        * error messages for unrecoverable malformed input
 
-    Possible parts and the fields they are constructed from look like the
-    following (optional fields are enclosed in square brackets):
+    whenever possible. Recoverable, in this context, means that we can serialize the
+    :class:`GtkDocCommentBlock` instance using a :class:`GtkDocCommentBlockWriter` without
+    information being lost. It is usually a good idea to heed these warning and error messages
+    as malformed input can result in both:
 
-    .. code-block:: c
-        /**
-         * identifier_name [:annotations]
-         * @parameter_name [:annotations] [:description]
-         *
-         * comment_block_description
-         * tag_name [:annotations] [:description]
-         */
-
-    The order in which the different parts have to be specified is important::
-
-        - There has to be exactly 1 `identifier` part on the first line of the
-          comment block which consists of:
-              * an `identifier_name` field
-              * an optional `annotations` field
-        - Followed by 0 or more `parameters` parts, each consisting of:
-              * a `parameter_name` field
-              * an optional `annotations` field
-              * an optional `description` field
-        - Followed by at least 1 empty line signaling the beginning of
-          the `comment_block_description` part
-        - Followed by an optional `comment block description` part.
-        - Followed by 0 or more `tag` parts, each consisting of:
-              * a `tag_name` field
-              * an optional `annotations` field
-              * an optional `description` field
-
-    Additionally, the following restrictions are in effect::
-
-        - Parts can optionally be separated by an empty line, except between
-          the `parameter` parts and the `comment block description` part where
-          an empty line is required (see above).
-        - Parts and fields cannot span multiple lines, except for
-          `parameter descriptions`, `tag descriptions` and the
-          `comment_block_description` fields.
-        - `parameter descriptions` fields can not span multiple paragraphs.
-        - `tag descriptions` and `comment block description` fields can
-          span multiple paragraphs.
+        * invalid GTK-Doc output (HTML, pdf, ...) when the comment blocks are parsed
+          with GTK-Doc's gtkdoc-mkdb
+        * unexpected introspection behavior, for example missing parameters in the
+          generated .gir and .typelib files
 
     .. NOTE:: :class:`GtkDocCommentBlockParser` functionality is heavily based on gtkdoc-mkdb's
         `ScanSourceFile()`_ function and is currently in sync with GTK-Doc
         commit `47abcd5`_.
 
-    .. _GTK-Doc's documentation:
-            http://developer.gnome.org/gtk-doc-manual/1.18/documenting.html.en
     .. _ScanSourceFile():
-            http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
-    .. _47abcd5: 47abcd53b8489ebceec9e394676512a181c1f1f6
-    """
+           http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
+    .. _47abcd5:
+           https://git.gnome.org/browse/gtk-doc/commit/?id=47abcd53b8489ebceec9e394676512a181c1f1f6
+    '''
 
     def parse_comment_blocks(self, comments):
         '''
@@ -1030,32 +899,40 @@ class GtkDocCommentBlockParser(object):
             ####################################################################
             # Check for GTK-Doc comment block identifier.
             ####################################################################
-            if not comment_block:
+            if comment_block is None:
                 result = SECTION_RE.match(line)
 
                 if result:
                     identifier_name = 'SECTION:%s' % (result.group('section_name'), )
-                    column = result.start('section_name') + column_offset
+                    identifier_delimiter = None
+                    identifier_fields = None
+                    identifier_fields_start = None
                 else:
                     result = PROPERTY_RE.match(line)
 
                     if result:
                         identifier_name = '%s:%s' % (result.group('class_name'),
                                                      result.group('property_name'))
-                        column = result.start('property_name') + column_offset
+                        identifier_delimiter = result.group('delimiter')
+                        identifier_fields = result.group('fields')
+                        identifier_fields_start = result.start('fields')
                     else:
                         result = SIGNAL_RE.match(line)
 
                         if result:
                             identifier_name = '%s::%s' % (result.group('class_name'),
                                                           result.group('signal_name'))
-                            column = result.start('signal_name') + column_offset
+                            identifier_delimiter = result.group('delimiter')
+                            identifier_fields = result.group('fields')
+                            identifier_fields_start = result.start('fields')
                         else:
                             result = SYMBOL_RE.match(line)
 
                             if result:
                                 identifier_name = '%s' % (result.group('symbol_name'), )
-                                column = result.start('symbol_name') + column_offset
+                                identifier_delimiter = result.group('delimiter')
+                                identifier_fields = result.group('fields')
+                                identifier_fields_start = result.start('fields')
 
                 if result:
                     in_part = PART_IDENTIFIER
@@ -1064,17 +941,26 @@ class GtkDocCommentBlockParser(object):
                     comment_block = GtkDocCommentBlock(identifier_name)
                     comment_block.position = position
 
-                    if 'annotations' in result.groupdict() and result.group('annotations') != '':
-                        comment_block.annotations = self.parse_annotations(comment_block,
-                                                                       result.group('annotations'))
+                    if identifier_fields:
+                        (a, d) = self._parse_fields(position,
+                                                    column_offset + identifier_fields_start,
+                                                    original_line,
+                                                    identifier_fields, True, False)
+                        if d:
+                            # Not an identifier due to invalid trailing description field
+                            in_part = None
+                            part_indent = None
+                            comment_block = None
+                            result = None
+                        else:
+                            comment_block.annotations = a
 
-                        if 'delimiter' in result.groupdict() and result.group('delimiter') != ':':
-                            delimiter_start = result.start('delimiter')
-                            delimiter_column = column_offset + delimiter_start
-                            marker = ' ' * delimiter_column + '^'
-                            warn("missing ':' at column %s:\n%s\n%s" %
-                                 (delimiter_column + 1, original_line, marker),
-                                 position)
+                            if not identifier_delimiter and a:
+                                marker_position = column_offset + result.start('delimiter')
+                                marker = ' ' * marker_position + '^'
+                                warn('missing ":" at column %s:\n%s\n%s' %
+                                     (marker_position + 1, original_line, marker),
+                                     position)
 
                 if not result:
                     # Emit a single warning when the identifier is not found on the first line
@@ -1091,10 +977,11 @@ class GtkDocCommentBlockParser(object):
             ####################################################################
             result = PARAMETER_RE.match(line)
             if result:
-                marker = ' ' * (result.start('parameter_name') + column_offset) + '^'
                 param_name = result.group('parameter_name')
-                param_annotations = result.group('annotations')
-                param_description = result.group('description')
+                param_name_lower = param_name.lower()
+                param_fields = result.group('fields')
+                param_fields_start = result.start('fields')
+                marker = ' ' * (result.start('parameter_name') + column_offset) + '^'
 
                 if in_part == PART_IDENTIFIER:
                     in_part = PART_PARAMETERS
@@ -1109,7 +996,7 @@ class GtkDocCommentBlockParser(object):
 
                 # Old style GTK-Doc allowed return values to be specified as
                 # parameters instead of tags.
-                if param_name.lower() == TAG_RETURNS:
+                if param_name_lower == TAG_RETURNS:
                     param_name = TAG_RETURNS
 
                     if not returns_seen:
@@ -1133,9 +1020,14 @@ class GtkDocCommentBlockParser(object):
 
                 tag = GtkDocTag(param_name)
                 tag.position = position
-                tag.description = param_description
-                if param_annotations:
-                    tag.annotations = self.parse_annotations(tag, param_annotations)
+
+                if param_fields:
+                    (a, d) = self._parse_fields(position,
+                                                column_offset + param_fields_start,
+                                                original_line, param_fields)
+                    tag.annotations = a
+                    tag.description = d
+
                 if param_name == TAG_RETURNS:
                     comment_block.tags[param_name] = tag
                 else:
@@ -1146,9 +1038,13 @@ class GtkDocCommentBlockParser(object):
             ####################################################################
             # Check for comment block description.
             #
-            # When we are parsing comment block parameters or the comment block
-            # identifier (when there are no parameters) and encounter an empty
-            # line, we must be parsing the comment block description.
+            # When we are parsing parameter parts or the identifier part (when
+            # there are no parameters) and encounter an empty line, we must be
+            # parsing the comment block description.
+            #
+            # Note: it is unclear why GTK-Doc does not allow paragraph breaks
+            #       at this location as those might be handy describing
+            #       parameters from time to time...
             ####################################################################
             if (EMPTY_LINE_RE.match(line) and in_part in [PART_IDENTIFIER, PART_PARAMETERS]):
                 in_part = PART_DESCRIPTION
@@ -1160,42 +1056,99 @@ class GtkDocCommentBlockParser(object):
             ####################################################################
             result = TAG_RE.match(line)
             if result and line_indent <= part_indent:
+                part_indent = line_indent
                 tag_name = result.group('tag_name')
-                tag_annotations = result.group('annotations')
-                tag_description = result.group('description')
-
+                tag_name_lower = tag_name.lower()
+                tag_fields = result.group('fields')
+                tag_fields_start = result.start('fields')
                 marker = ' ' * (result.start('tag_name') + column_offset) + '^'
 
-                # Deprecated GTK-Doc Description: tag
-                if tag_name.lower() == TAG_DESCRIPTION:
-                    warn("GTK-Doc tag \"Description:\" has been deprecated:\n%s\n%s" %
+                if tag_name_lower in DEPRECATED_GI_ANN_TAGS:
+                    # Deprecated GObject-Introspection specific tags.
+                    # Emit a warning and transform these into annotations on the identifier
+                    # instead, as agreed upon in http://bugzilla.gnome.org/show_bug.cgi?id=676133
+                    warn('GObject-Introspection specific GTK-Doc tag "%s" '
+                         'has been deprecated, please use annotations on the identifier '
+                         'instead:\n%s\n%s' % (tag_name, original_line, marker),
+                         position)
+
+                    # Translate deprecated tag name into corresponding annotation name
+                    ann_name = tag_name_lower.replace(' ', '-')
+
+                    if tag_name_lower == TAG_ATTRIBUTES:
+                        transformed = ''
+                        (a, d) = self._parse_fields(position,
+                                                    result.start('tag_name') + column_offset,
+                                                    line,
+                                                    tag_fields.strip(),
+                                                    False,
+                                                    False)
+
+                        if a:
+                            for annotation in a:
+                                ann_options = self._parse_annotation_options_list(position, marker,
+                                                                                  line, annotation)
+                                n_options = len(ann_options)
+                                if n_options == 1:
+                                    transformed = '%s %s' % (transformed, ann_options[0], )
+                                elif n_options == 2:
+                                    transformed = '%s %s=%s' % (transformed, ann_options[0],
+                                                                ann_options[1])
+                                else:
+                                    # Malformed Attributes: tag
+                                    error('malformed "Attributes:" tag will be ignored:\n%s\n%s' %
+                                          (original_line, marker),
+                                          position)
+                                    transformed = None
+
+                            if transformed:
+                                transformed = '%s %s' % (ann_name, transformed.strip())
+                                ann_name, docannotation = self._parse_annotation(
+                                    position,
+                                    column_offset + tag_fields_start,
+                                    original_line,
+                                    transformed)
+                                stored_annotation = comment_block.annotations.get('attributes')
+                                if stored_annotation:
+                                    error('Duplicate "Attributes:" annotation will '
+                                          'be ignored:\n%s\n%s' % (original_line, marker),
+                                          position)
+                                else:
+                                    comment_block.annotations[ann_name] = docannotation
+                    else:
+                        ann_name, options = self._parse_annotation(position,
+                                                               column_offset + tag_fields_start,
+                                                               line,
+                                                               '%s %s' % (ann_name, tag_fields))
+                        comment_block.annotations[ann_name] = options
+
+                    continue
+                elif tag_name_lower == TAG_DESCRIPTION:
+                    # Deprecated GTK-Doc Description: tag
+                    warn('GTK-Doc tag "Description:" has been deprecated:\n%s\n%s' %
                          (original_line, marker),
                          position)
 
                     in_part = PART_DESCRIPTION
-                    part_indent = line_indent
 
                     if not comment_block.description:
-                        comment_block.description = tag_description
+                        comment_block.description = tag_fields
                     else:
-                        comment_block.description += '\n' + tag_description
+                        comment_block.description += '\n' + tag_fields
                     continue
 
                 # Now that the deprecated stuff is out of the way, continue parsing real tags
                 if in_part == PART_DESCRIPTION:
                     in_part = PART_TAGS
 
-                part_indent = line_indent
-
                 if in_part != PART_TAGS:
                     column = result.start('tag_name') + column_offset
-                    marker = ' ' * column + '^'
                     warn("'%s:' tag unexpected at this location:\n%s\n%s" %
                          (tag_name, original_line, marker),
                          position)
 
-                if tag_name.lower() in [TAG_RETURN, TAG_RETURNS,
-                                        TAG_RETURN_VALUE, TAG_RETURNS_VALUE]:
+                if tag_name_lower in [TAG_RETURN, TAG_RETURNS,
+                                      TAG_RETURN_VALUE, TAG_RETURNS_VALUE]:
                     if not returns_seen:
                         returns_seen = True
                     else:
@@ -1205,44 +1158,49 @@ class GtkDocCommentBlockParser(object):
 
                     tag = GtkDocTag(TAG_RETURNS)
                     tag.position = position
-                    tag.description = tag_description
-                    if tag_annotations:
-                        tag.annotations = self.parse_annotations(tag, tag_annotations)
+
+                    if tag_fields:
+                        (a, d) = self._parse_fields(position,
+                                                    column_offset + tag_fields_start,
+                                                    original_line,
+                                                    tag_fields)
+                        tag.annotations = a
+                        tag.description = d
+
                     comment_block.tags[TAG_RETURNS] = tag
                     current_tag = tag
                     continue
                 else:
-                    if tag_name.lower() in comment_block.tags.keys():
-                        column = result.start('tag_name') + column_offset
-                        marker = ' ' * column + '^'
+                    if tag_name_lower in comment_block.tags.keys():
                         warn("multiple '%s:' tags for identifier '%s':\n%s\n%s" %
                              (tag_name, comment_block.name, original_line, marker),
                              position)
 
-                    tag = GtkDocTag(tag_name.lower())
+                    tag = GtkDocTag(tag_name_lower)
                     tag.position = position
 
-                    if tag_annotations:
-                        if tag_name.lower() == TAG_ATTRIBUTES:
-                            tag.annotations = self.parse_annotations(tag, tag_annotations)
-                        else:
-                            warn("annotations not supported for tag '%s:'." %
-                                 (tag_name, ),
-                                 position)
+                    if tag_fields:
+                        (a, d) = self._parse_fields(position,
+                                                    column_offset + tag_fields_start,
+                                                    original_line,
+                                                    tag_fields)
+                        if a:
+                            error('annotations not supported for tag "%s:".' % (tag_name, ),
+                                  position)
 
-                    if tag_name.lower() in [TAG_DEPRECATED, TAG_SINCE]:
-                        result = TAG_VALUE_VERSION_RE.match(tag_description)
-                        tag.value = result.group('value')
-                        tag.description = result.group('description')
-                    elif tag_name.lower() == TAG_STABILITY:
-                        result = TAG_VALUE_STABILITY_RE.match(tag_description)
-                        tag.value = result.group('value').capitalize()
-                        tag.description = result.group('description')
-                    elif tag_name.lower() in GI_ANN_TAGS:
-                        tag.value = tag_description
-                        tag.description = ''
+                        if tag_name_lower in [TAG_DEPRECATED, TAG_SINCE]:
+                            result = TAG_VALUE_VERSION_RE.match(d)
+                            tag.value = result.group('value')
+                            tag.description = result.group('description')
+                        elif tag_name_lower == TAG_STABILITY:
+                            result = TAG_VALUE_STABILITY_RE.match(d)
+                            tag.value = result.group('value').capitalize()
+                            tag.description = result.group('description')
+                        elif tag_name_lower in GI_ANN_TAGS:
+                            tag.value = d
+                            tag.description = ''
 
-                    comment_block.tags[tag_name.lower()] = tag
+                    comment_block.tags[tag_name_lower] = tag
                     current_tag = tag
                     continue
 
@@ -1257,16 +1215,22 @@ class GtkDocCommentBlockParser(object):
                     comment_block.description += '\n' + line
                 continue
             elif in_part == PART_PARAMETERS:
-                self._validate_multiline_annotation_continuation(line, original_line,
-                                                                 column_offset, position)
+                if not current_param.description:
+                    self._validate_multiline_annotation_continuation(line, original_line,
+                                                                     column_offset, position)
                 # Append to parameter description.
-                current_param.description += ' ' + line.strip()
+                if current_param.description is None:
+                    current_param.description = line
+                else:
+                    current_param.description += ' ' + line.strip()
                 continue
             elif in_part == PART_TAGS:
-                self._validate_multiline_annotation_continuation(line, original_line,
-                                                                 column_offset, position)
+                if not current_tag.description:
+                    self._validate_multiline_annotation_continuation(line, original_line,
+                                                                     column_offset, position)
+
+                # Append to tag description.
                 current_tag.description += ' ' + line.strip()
-                continue
 
         ########################################################################
         # Finished parsing this comment block.
@@ -1303,48 +1267,328 @@ class GtkDocCommentBlockParser(object):
     def _validate_multiline_annotation_continuation(self, line, original_line,
                                                     column_offset, position):
         '''
-        Validate parameters and tags (except the first line) and generate
-        warnings about invalid annotations spanning multiple lines.
+        Validate annotatable parts' source text ensuring annotations don't span multiple lines.
+        For example, the following comment block would result in a warning being emitted for
+        the forth line::
 
-        :param line: line to validate, stripped from ' * ' at start of the line.
-        :param original_line: original line to validate (used in warning messages)
-        :param column_offset: column width of ' * ' at the time it was stripped from `line`
-        :param position: position of `line` in the source file
+            /**
+             * shiny_function:
+             * @array_: (out caller-allocates) (array)
+             *          (element-type utf8) (transfer full): A beautiful array
+             */
+
+        :param line: line to validate, stripped from  ("``*/``") at start of the line.
+        :param original_line: original line (including  ("``*/``"))  being validated
+        :param column_offset: number of characters stripped from `line` when   ("``*/``")
+                              was removed
+        :param position: :class:`giscanner.message.Position` of `line` in the source file
         '''
 
-        result = MULTILINE_ANNOTATION_CONTINUATION_RE.match(line)
-        if result:
-            column = result.start('annotations') + column_offset
-            marker = ' ' * column + '^'
-            warn('ignoring invalid multiline annotation continuation:\n'
-                 '%s\n%s' % (original_line, marker),
+        success, annotations, start_pos, end_pos = self._parse_annotations(position, column_offset,
+                                                                           original_line, line,
+                                                                           False)
+        if annotations:
+            marker = ' ' * (start_pos + column_offset) + '^'
+            warn('ignoring invalid multiline annotation continuation:\n%s\n%s' %
+                 (original_line, marker),
                  position)
 
-    @classmethod
-    def parse_annotations(cls, tag, value):
-        # (annotation)
-        # (annotation opt1 opt2 ...)
-        # (annotation opt1=value1 opt2=value2 ...)
-        opened = -1
-        annotations = GtkDocAnnotations()
-        annotations.position = tag.position
+    def _parse_annotation_options_list(self, position, column, line, options):
+        '''
+        Parse annotation options into a list. For example::
 
-        for i, c in enumerate(value):
-            if c == '(' and opened == -1:
-                opened = i + 1
-            if c == ')' and opened != -1:
-                segment = value[opened:i]
-                parts = segment.split(' ', 1)
-                if len(parts) == 2:
-                    name, option = parts
-                elif len(parts) == 1:
-                    name = parts[0]
-                    option = None
+            ┌──────────────────────────────────────────────────────────────┐
+            │ 'option1 option2 option3'                                    │ ─▷ source
+            ├──────────────────────────────────────────────────────────────┤
+            │ ['option1', 'option2', 'option3']                            │ ◁─ parsed options
+            └──────────────────────────────────────────────────────────────┘
+
+        :param position: :class:`giscanner.message.Position` of `line` in the source file
+        :param column: start column of the `options` in the source file
+        :param line: complete source line
+        :param options: annotation options to parse
+        :returns: a list of annotation options
+        '''
+
+        parsed = []
+
+        if options:
+            result = options.find('=')
+            if result >= 0:
+                marker = ' ' * (column + result) + '^'
+                warn('invalid annotation options: expected a "list" but '
+                     'received "key=value pairs":\n%s\n%s' % (line, marker),
+                     position)
+                parsed = self._parse_annotation_options_unknown(position, column, line, options)
+            else:
+                parsed = options.split(' ')
+
+        return parsed
+
+    def _parse_annotation_options_dict(self, position, column, line, options):
+        '''
+        Parse annotation options into a dict. For example::
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ 'option1=value1 option2 option3=value2'                      │ ─▷ source
+            ├──────────────────────────────────────────────────────────────┤
+            │ {'option1': 'value1', 'option2': None, 'option3': 'value2'}  │ ◁─ parsed options
+            └──────────────────────────────────────────────────────────────┘
+
+        :param position: :class:`giscanner.message.Position` of `line` in the source file
+        :param column: start column of the `options` in the source file
+        :param line: complete source line
+        :param options: annotation options to parse
+        :returns: an ordered dictionary of annotation options
+        '''
+
+        parsed = OrderedDict()
+
+        if options:
+            for p in options.split(' '):
+                parts = p.split('=', 1)
+                key = parts[0]
+                value = parts[1] if len(parts) == 2 else None
+                parsed[key] = value
+
+        return parsed
+
+    def _parse_annotation_options_unknown(self, position, column, line, options):
+        '''
+        Parse annotation options into a list holding a single item. This is used when the
+        annotation options to parse in not known to be a list nor dict. For example::
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ '   option1 option2   option3=value1   '                     │ ─▷ source
+            ├──────────────────────────────────────────────────────────────┤
+            │ ['option1 option2   option3=value1']                         │ ◁─ parsed options
+            └──────────────────────────────────────────────────────────────┘
+
+        :param position: :class:`giscanner.message.Position` of `line` in the source file
+        :param column: start column of the `options` in the source file
+        :param line: complete source line
+        :param options: annotation options to parse
+        :returns: a list of annotation options
+        '''
+
+        if options:
+            return [options.strip()]
+
+    def _parse_annotation(self, position, column, line, annotation):
+        '''
+        Parse an annotation into the annotation name and a list or dict (depending on the
+        name of the annotation) holding the options. For example::
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ 'name opt1=value1 opt2=value2 opt3'                          │ ─▷ source
+            ├──────────────────────────────────────────────────────────────┤
+            │ 'name', {'opt1': 'value1', 'opt2':'value2', 'opt3':None}     │ ◁─ parsed annotation
+            └──────────────────────────────────────────────────────────────┘
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ 'name   opt1 opt2'                                           │ ─▷ source
+            ├──────────────────────────────────────────────────────────────┤
+            │ 'name', ['opt1', 'opt2']                                     │ ◁─ parsed annotation
+            └──────────────────────────────────────────────────────────────┘
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ 'unkownname   unknown list of options'                       │ ─▷ source
+            ├──────────────────────────────────────────────────────────────┤
+            │ 'unkownname', ['unknown list of options']                    │ ◁─ parsed annotation
+            └──────────────────────────────────────────────────────────────┘
+
+        :param position: :class:`giscanner.message.Position` of `line` in the source file
+        :param column: start column of the `annotation` in the source file
+        :param line: complete source line
+        :param annotation: annotation to parse
+        :returns: a tuple containing the annotation name and options
+        '''
+
+        # Transform deprecated type syntax "tokens"
+        annotation = annotation.replace('<', ANN_LPAR).replace('>', ANN_RPAR)
+
+        parts = annotation.split(' ', 1)
+        ann_name = parts[0].lower()
+        ann_options = parts[1] if len(parts) == 2 else None
+
+        if ann_name == ANN_INOUT_ALT:
+            marker = ' ' * (column) + '^'
+            warn('"%s" annotation has been deprecated, please use "%s" instead:\n%s\n%s' %
+                 (ANN_INOUT_ALT, ANN_INOUT, line, marker),
+                 position)
+
+            ann_name = ANN_INOUT
+        elif ann_name == ANN_ATTRIBUTE:
+            marker = ' ' * (column) + '^'
+            warn('"%s" annotation has been deprecated, please use "%s" instead:\n%s\n%s' %
+                 (ANN_ATTRIBUTE, ANN_ATTRIBUTES, line, marker),
+                 position)
+
+            ann_name = ANN_ATTRIBUTES
+            ann_options = self._parse_annotation_options_list(position, column, line, ann_options)
+            n_options = len(ann_options)
+            if n_options == 1:
+                ann_options = ann_options[0]
+            elif n_options == 2:
+                ann_options = '%s=%s' % (ann_options[0], ann_options[1])
+            else:
+                marker = ' ' * (column) + '^'
+                error('malformed "(attribute)" annotation will be ignored:\n%s\n%s' %
+                      (line, marker),
+                      position)
+                return None, None
+
+        column += len(ann_name) + 2
+
+        if ann_name in LIST_ANNOTATIONS:
+            ann_options = self._parse_annotation_options_list(position, column, line, ann_options)
+        elif ann_name in DICT_ANNOTATIONS:
+            ann_options = self._parse_annotation_options_dict(position, column, line, ann_options)
+        else:
+            ann_options = self._parse_annotation_options_unknown(position, column, line,
+                                                                 ann_options)
+
+        return ann_name, ann_options
+
+    def _parse_annotations(self, position, column, line, fields, parse_options=True):
+        '''
+        Parse annotations into a :class:`GtkDocAnnotations` object.
+
+        :param position: :class:`giscanner.message.Position` of `line` in the source file
+        :param column: start column of the `annotations` in the source file
+        :param line: complete source line
+        :param fields: string containing the fields to parse
+        :param parse_options: whether options will be parsed into a :class:`GtkDocAnnotations`
+                              object or into a :class:`list`
+        :returns: if `parse_options` evaluates to True a :class:`GtkDocAnnotations` object,
+                  a :class:`list` otherwise. If `line` does not contain any annotations,
+                  :const:`None`
+        '''
+
+        if parse_options:
+            parsed_annotations = GtkDocAnnotations(position)
+        else:
+            parsed_annotations = []
+
+        i = 0
+        parens_level = 0
+        prev_char = ''
+        char_buffer = []
+        start_pos = 0
+        end_pos = 0
+
+        for i, cur_char in enumerate(fields):
+            cur_char_is_space = cur_char.isspace()
+
+            if cur_char == ANN_LPAR:
+                parens_level += 1
+
+                if parens_level == 1:
+                    start_pos = i
+
+                if prev_char == ANN_LPAR:
+                    marker = ' ' * (column + i) + '^'
+                    error('unexpected parentheses, annotations will be ignored:\n%s\n%s' %
+                          (line, marker),
+                          position)
+                    return (False, None, None, None)
+                elif parens_level > 1:
+                    char_buffer.append(cur_char)
+            elif cur_char == ANN_RPAR:
+                parens_level -= 1
+
+                if prev_char == ANN_LPAR:
+                    marker = ' ' * (column + i) + '^'
+                    error('unexpected parentheses, annotations will be ignored:\n%s\n%s' %
+                          (line, marker),
+                          position)
+                    return (False, None, None, None)
+                elif parens_level < 0:
+                    marker = ' ' * (column + i) + '^'
+                    error('unbalanced parentheses, annotations will be ignored:\n%s\n%s' %
+                          (line, marker),
+                          position)
+                    return (False, None, None, None)
+                elif parens_level == 0:
+                    end_pos = i + 1
+
+                    if parse_options is True:
+                        name, options = self._parse_annotation(position,
+                                                               column + start_pos,
+                                                               line,
+                                                               ''.join(char_buffer).strip())
+                        if name is not None:
+                            if name in parsed_annotations:
+                                marker = ' ' * (column + i) + '^'
+                                error('multiple "%s" annotations:\n%s\n%s' %
+                                      (name, line, marker), position)
+                            parsed_annotations[name] = options
+                    else:
+                        parsed_annotations.append(''.join(char_buffer).strip())
+
+                    char_buffer = []
                 else:
-                    raise AssertionError
-                if option is not None:
-                    option = DocOption(option)
-                annotations.add(name, option)
-                opened = -1
+                    char_buffer.append(cur_char)
+            elif cur_char_is_space:
+                if parens_level > 0:
+                    char_buffer.append(cur_char)
+            else:
+                if parens_level == 0:
+                    break
+                else:
+                    char_buffer.append(cur_char)
 
-        return annotations
+            prev_char = cur_char
+
+        if parens_level > 0:
+            marker = ' ' * (column + i) + '^'
+            error('unbalanced parentheses, annotations will be ignored:\n%s\n%s' %
+                  (line, marker),
+                  position)
+            return (False, None, None, None)
+        else:
+            return (True, parsed_annotations, start_pos, end_pos)
+
+    def _parse_fields(self, position, column, line, fields, parse_options=True,
+                      validate_description_field=True):
+        '''
+        Parse annotations out of field data. For example::
+
+            ┌──────────────────────────────────────────────────────────────┐
+            │ '(skip): description of some parameter                       │ ─▷ source
+            ├──────────────────────────────────────────────────────────────┤
+            │ ({'skip': []}, 'description of some parameter')              │ ◁─ annotations and
+            └──────────────────────────────────────────────────────────────┘    remaining fields
+
+        :param position: :class:`giscanner.message.Position` of `line` in the source file
+        :param column: start column of `fields` in the source file
+        :param line: complete source line
+        :param fields: string containing the fields to parse
+        :param parse_options: whether options will be parsed into a :class:`GtkDocAnnotations`
+                              object or into a :class:`list`
+        :param validate_description_field: :const:`True` to validate the description field
+        :returns: if `parse_options` evaluates to True a :class:`GtkDocAnnotations` object,
+                  a :class:`list` otherwise. If `line` does not contain any annotations,
+                  :const:`None` and a string holding the remaining fields
+        '''
+        description_field = ''
+        success, annotations, start_pos, end_pos = self._parse_annotations(position,
+                                                                           column,
+                                                                           line,
+                                                                           fields,
+                                                                           parse_options)
+        if success:
+            description_field = fields[end_pos:].strip()
+
+            if description_field and validate_description_field:
+                if description_field.startswith(':'):
+                    description_field = description_field[1:]
+                else:
+                    if end_pos > 0:
+                        marker_position = column + end_pos
+                        marker = ' ' * marker_position + '^'
+                        warn('missing ":" at column %s:\n%s\n%s' %
+                             (marker_position + 1, line, marker),
+                             position)
+
+        return (annotations, description_field)

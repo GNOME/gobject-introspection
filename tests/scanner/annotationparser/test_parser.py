@@ -130,20 +130,25 @@ class TestCommentBlock(unittest.TestCase):
 
             parsed += '  <identifier>\n'
             parsed += '    <name>%s</name>\n' % (docblock.name, )
-            if docblock.annotations.values:
+            if docblock.annotations:
                 parsed += '    <annotations>\n'
-                for key, value in docblock.annotations.values:
+                for ann_name, ann_options in docblock.annotations.items():
                     parsed += '      <annotation>\n'
-                    parsed += '        <name>%s</name>\n' % (key, )
-                    if value is not None:
-                        options = value.all()
+                    parsed += '        <name>%s</name>\n' % (ann_name, )
+                    if ann_options:
                         parsed += '        <options>\n'
-                        for option in options:
-                            parsed += '          <option>\n'
-                            parsed += '            <name>%s</name>\n' % (option, )
-                            if options[option] is not None:
-                                parsed += '            <value>%s</value>\n' % (options[option], )
-                            parsed += '          </option>\n'
+                        if isinstance(ann_options, list):
+                            for option in ann_options:
+                                parsed += '          <option>\n'
+                                parsed += '            <name>%s</name>\n' % (option, )
+                                parsed += '          </option>\n'
+                        else:
+                            for (option, value) in ann_options.items():
+                                parsed += '          <option>\n'
+                                parsed += '            <name>%s</name>\n' % (option, )
+                                if value:
+                                    parsed += '            <value>%s</value>\n' % (value, )
+                                parsed += '          </option>\n'
                         parsed += '        </options>\n'
                     parsed += '      </annotation>\n'
                 parsed += '    </annotations>\n'
@@ -155,20 +160,25 @@ class TestCommentBlock(unittest.TestCase):
                     param = docblock.params.get(param_name)
                     parsed += '    <parameter>\n'
                     parsed += '      <name>%s</name>\n' % (param_name, )
-                    if param.annotations.values:
+                    if param.annotations:
                         parsed += '      <annotations>\n'
-                        for key, value in param.annotations.values:
+                        for ann_name, ann_options in param.annotations.items():
                             parsed += '        <annotation>\n'
-                            parsed += '          <name>%s</name>\n' % (key, )
-                            if value is not None:
-                                options = value.all()
+                            parsed += '          <name>%s</name>\n' % (ann_name, )
+                            if ann_options:
                                 parsed += '          <options>\n'
-                                for option in options:
-                                    parsed += '            <option>\n'
-                                    parsed += '              <name>%s</name>\n' % (option, )
-                                    if options[option] is not None:
-                                        parsed += '              <value>%s</value>\n' % (options[option], )
-                                    parsed += '            </option>\n'
+                                if isinstance(ann_options, list):
+                                    for option in ann_options:
+                                        parsed += '            <option>\n'
+                                        parsed += '              <name>%s</name>\n' % (option, )
+                                        parsed += '            </option>\n'
+                                else:
+                                    for (option, value) in ann_options.items():
+                                        parsed += '            <option>\n'
+                                        parsed += '              <name>%s</name>\n' % (option, )
+                                        if value:
+                                            parsed += '              <value>%s</value>\n' % (value, )
+                                        parsed += '            </option>\n'
                                 parsed += '          </options>\n'
                             parsed += '        </annotation>\n'
                         parsed += '      </annotations>\n'
@@ -186,20 +196,25 @@ class TestCommentBlock(unittest.TestCase):
                     tag = docblock.tags.get(tag_name)
                     parsed += '    <tag>\n'
                     parsed += '      <name>%s</name>\n' % (tag_name, )
-                    if tag.annotations.values:
+                    if tag.annotations:
                         parsed += '      <annotations>\n'
-                        for key, value in tag.annotations.values:
+                        for ann_name, ann_options in tag.annotations.items():
                             parsed += '        <annotation>\n'
-                            parsed += '          <name>%s</name>\n' % (key, )
-                            if value is not None:
-                                options = value.all()
+                            parsed += '          <name>%s</name>\n' % (ann_name, )
+                            if ann_options:
                                 parsed += '          <options>\n'
-                                for option in options:
-                                    parsed += '            <option>\n'
-                                    parsed += '              <name>%s</name>\n' % (option, )
-                                    if options[option] is not None:
-                                        parsed += '              <value>%s</value>\n' % (options[option], )
-                                    parsed += '            </option>\n'
+                                if isinstance(ann_options, list):
+                                    for option in ann_options:
+                                        parsed += '            <option>\n'
+                                        parsed += '              <name>%s</name>\n' % (option, )
+                                        parsed += '            </option>\n'
+                                else:
+                                    for (option, value) in ann_options.items():
+                                        parsed += '            <option>\n'
+                                        parsed += '              <name>%s</name>\n' % (option, )
+                                        if value:
+                                            parsed += '              <value>%s</value>\n' % (value, )
+                                        parsed += '            </option>\n'
                                 parsed += '          </options>\n'
                             parsed += '        </annotation>\n'
                         parsed += '      </annotations>\n'
@@ -235,8 +250,9 @@ class TestCommentBlock(unittest.TestCase):
                             expected += '        <options>\n'
                             for option in annotation.findall(ns('{}options/{}option')):
                                 expected += '          <option>\n'
-                                expected += '            <name>%s</name>\n' % (option.find(ns('{}name')).text, )
-                                if option.find('value') is not None:
+                                if option.find(ns('{}name')) is not None:
+                                    expected += '            <name>%s</name>\n' % (option.find(ns('{}name')).text, )
+                                if option.find(ns('{}value')) is not None:
                                     expected += '            <value>%s</value>\n' % (option.find(ns('{}value')).text, )
                                 expected += '          </option>\n'
                             expected += '        </options>\n'
@@ -260,7 +276,8 @@ class TestCommentBlock(unittest.TestCase):
                                 expected += '          <options>\n'
                                 for option in annotation.findall(ns('{}options/{}option')):
                                     expected += '            <option>\n'
-                                    expected += '              <name>%s</name>\n' % (option.find(ns('{}name')).text, )
+                                    if option.find(ns('{}name')) is not None:
+                                        expected += '              <name>%s</name>\n' % (option.find(ns('{}name')).text, )
                                     if option.find(ns('{}value')) is not None:
                                         expected += '              <value>%s</value>\n' % (option.find(ns('{}value')).text, )
                                     expected += '            </option>\n'
@@ -292,7 +309,8 @@ class TestCommentBlock(unittest.TestCase):
                                 expected += '          <options>\n'
                                 for option in annotation.findall(ns('{}options/{}option')):
                                     expected += '            <option>\n'
-                                    expected += '              <name>%s</name>\n' % (option.find(ns('{}name')).text, )
+                                    if option.find(ns('{}name')) is not None:
+                                        expected += '              <name>%s</name>\n' % (option.find(ns('{}name')).text, )
                                     if option.find(ns('{}value')) is not None:
                                         expected += '              <value>%s</value>\n' % (option.find(ns('{}value')).text, )
                                     expected += '            </option>\n'

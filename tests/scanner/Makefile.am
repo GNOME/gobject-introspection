@@ -202,6 +202,7 @@ EXTRA_DIST += \
 	annotationparser/tests.xsd				\
 	annotationparser/gi/annotation_allow_none.xml		\
 	annotationparser/gi/annotation_array.xml		\
+	annotationparser/gi/annotation_attributes.xml		\
 	annotationparser/gi/annotation_closure.xml		\
 	annotationparser/gi/annotation_constructor.xml		\
 	annotationparser/gi/annotation_destroy.xml		\

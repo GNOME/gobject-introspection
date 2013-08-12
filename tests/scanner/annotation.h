@@ -37,11 +37,9 @@ typedef GList* (*RegressAnnotationListCallback) (GList *in);
 typedef void (*RegressAnnotationNotifyFunc) (gpointer data);
 
 /**
- * RegressAnnotationObject:
+ * RegressAnnotationObject: (attributes org.example.Test=cows)
  *
  * This is an object used to test annotations.
- *
- * Attributes: (org.example.Test cows)
  */
 typedef struct _RegressAnnotationObject          RegressAnnotationObject;
 typedef struct _RegressAnnotationObjectClass     RegressAnnotationObjectClass;

@@ -36,7 +36,7 @@
           <name>inoutarg2</name>
           <annotations>
             <annotation>
-              <name>in-out</name>
+              <name>inout</name>
             </annotation>
           </annotations>
           <description>This is an argument test</description>
@@ -50,6 +50,11 @@
         </tag>
       </tags>
     </docblock>
+    <messages>
+      <message>5: Warning: Test: "in-out" annotation has been deprecated, please use "inout" instead:
+ * @inoutarg2: (in-out): This is an argument test
+               ^</message>
+    </messages>
   </parser>
 </test>
 

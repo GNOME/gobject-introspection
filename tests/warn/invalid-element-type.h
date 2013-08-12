@@ -74,16 +74,16 @@ GList* test_unresolved_element_type(void);
 GPtrArray* test_unresolved_value_element_type(void);
 
 
-// EXPECT:5: Warning: Test: element-type annotation takes at least one option, none given
+// EXPECT:5: Warning: Test: element-type annotation for a list must have exactly one option, not 0 options
 // EXPECT:6: Warning: Test: element-type annotation for a list must have exactly one option, not 2 options
-// EXPECT:16: Warning: Test: element-type annotation takes at least one option, none given
 // EXPECT:20: Warning: Test: Unknown container Type(target_fundamental=utf8, ctype=char*) for element-type annotation
-// EXPECT:27: Warning: Test: element-type annotation takes at least one option, none given
+// EXPECT:20: Warning: Test: Unknown container Type(target_fundamental=utf8, ctype=char*) for element-type annotation
+// EXPECT:27: Warning: Test: element-type annotation for a hash table must have exactly two options, not 0 option(s)
 // EXPECT:28: Warning: Test: element-type annotation for a hash table must have exactly two options, not 1 option(s)
 // EXPECT:29: Warning: Test: element-type annotation for a hash table must have exactly two options, not 3 option(s)
-// EXPECT:40: Warning: Test: element-type annotation takes at least one option, none given
+// EXPECT:40: Warning: Test: element-type annotation for an array must have exactly one option, not 0 options
 // EXPECT:41: Warning: Test: invalid (element-type) for a GByteArray, must be one of guint8, gint8 or gchar
-// EXPECT:51: Warning: Test: element-type annotation takes at least one option, none given
+// EXPECT:51: Warning: Test: element-type annotation for an array must have exactly one option, not 0 options
 // EXPECT:52: Warning: Test: invalid (element-type) for a GPtrArray, must be a pointer
 // EXPECT:63: Warning: Test: test_unresolved_element_type: Unknown type: 'Unresolved'
 // EXPECT:71: Warning: Test: test_unresolved_value_element_type: Unknown type: 'GLib.Value'

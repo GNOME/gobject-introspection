@@ -67,7 +67,7 @@
       </tags>
     </docblock>
     <messages>
-      <message>6: Warning: Test: annotations not supported for tag 'Deprecated:'.</message>
+      <message>6: Error: Test: annotations not supported for tag "Deprecated:".</message>
     </messages>
   </parser>
 </test>

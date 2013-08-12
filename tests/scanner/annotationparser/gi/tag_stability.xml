@@ -108,7 +108,7 @@
       </tags>
     </docblock>
     <messages>
-      <message>6: Warning: Test: annotations not supported for tag 'Stability:'.</message>
+      <message>6: Error: Test: annotations not supported for tag "Stability:".</message>
     </messages>
   </parser>
 </test>

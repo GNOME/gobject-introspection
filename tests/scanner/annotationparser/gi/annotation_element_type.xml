@@ -110,7 +110,7 @@ element-type annotation.</description>
                   <name>utf8</name>
                 </option>
                 <option>
-                  <name><![CDATA[GLib.HashTable<utf8,utf8>]]></name>
+                  <name>GLib.HashTable(utf8,utf8)</name>
                 </option>
               </options>
             </annotation>

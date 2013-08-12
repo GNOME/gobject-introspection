@@ -66,7 +66,7 @@
       </tags>
     </docblock>
     <messages>
-      <message>6: Warning: Test: annotations not supported for tag 'Since:'.</message>
+      <message>6: Error: Test: annotations not supported for tag "Since:".</message>
     </messages>
   </parser>
 </test>

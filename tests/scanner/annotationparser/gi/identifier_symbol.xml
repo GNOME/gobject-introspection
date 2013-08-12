@@ -74,7 +74,7 @@
       <description>Missing colon will result in a warning.</description>
     </docblock>
     <messages>
-      <message>2: Warning: Test: missing ':' at column 30:
+      <message>2: Warning: Test: missing ":" at column 30:
  * test_symbol_missing_colon (skip)
                              ^</message>
     </messages>
@@ -153,7 +153,7 @@
       <description>Missing colon will result in a warning.</description>
     </docblock>
     <messages>
-      <message>2: Warning: Test: missing ':' at column 42:
+      <message>2: Warning: Test: missing ":" at column 42:
  * GtkWidget:test_property_missing_colon (skip)
                                          ^</message>
     </messages>
@@ -232,7 +232,7 @@
       <description>Missing colon will result in a warning.</description>
     </docblock>
     <messages>
-      <message>2: Warning: Test: missing ':' at column 41:
+      <message>2: Warning: Test: missing ":" at column 41:
  * GtkWidget::test_signal_missing_colon (skip)
                                         ^</message>
     </messages>

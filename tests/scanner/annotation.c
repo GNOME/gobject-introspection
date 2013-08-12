@@ -128,12 +128,12 @@ regress_annotation_object_class_init (RegressAnnotationObjectClass *klass)
   /**
    * RegressAnnotationObject::attribute-signal:
    * @regress_annotation: the regress_annotation object
-   * @arg1: (attribute some.annotation.foo1 val1): a value
-   * @arg2: (attribute some.annotation.foo2 val2): another value
+   * @arg1: (attributes some.annotation.foo1=val1): a value
+   * @arg2: (attributes some.annotation.foo2=val2): another value
    *
    * This signal tests a signal with attributes.
    *
-   * Returns: (attribute some.annotation.foo3 val3): the return value
+   * Returns: (attributes some.annotation.foo3=val3): the return value
    */
   regress_annotation_object_signals[ATTRIBUTE_SIGNAL] =
     g_signal_new ("attribute-signal",
@@ -707,9 +707,7 @@ regress_annotation_string_array_length (guint n_properties, const gchar * const 
 }
 
 /**
- * regress_annotation_object_extra_annos:
- *
- * Attributes: (org.foobar testvalue)
+ * regress_annotation_object_extra_annos: (attributes org.foobar=testvalue)
  */
 void
 regress_annotation_object_extra_annos (RegressAnnotationObject *object)
@@ -763,9 +761,9 @@ regress_annotation_ptr_array (GPtrArray *array)
 /**
  * regress_annotation_attribute_func:
  * @object: A #RegressAnnotationObject.
- * @data: (attribute some.annotation value) (attribute another.annotation blahvalue): Some data.
+ * @data: (attributes some.annotation=value another.annotation=blahvalue): Some data.
  *
- * Returns: (attribute some.other.annotation value2) (attribute yet.another.annotation another_value): The return value.
+ * Returns: (attributes some.other.annotation=value2 yet.another.annotation=another_value): The return value.
  */
 gint
 regress_annotation_attribute_func (RegressAnnotationObject *object,
