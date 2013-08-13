@@ -1119,9 +1119,9 @@ class GtkDocCommentBlockParser(object):
             try:
                 comment_block = self.parse_comment_block(comment, filename, lineno)
             except Exception:
-                warn('unrecoverable parse error, please file a GObject-Introspection '
-                     'bug report including the complete comment block at the '
-                     'indicated location.', Position(filename, lineno))
+                error('unrecoverable parse error, please file a GObject-Introspection bug'
+                      'report including the complete comment block at the indicated location.',
+                      Position(filename, lineno))
                 continue
 
             if comment_block is not None:
@@ -1325,9 +1325,9 @@ class GtkDocCommentBlockParser(object):
                     if not identifier_warned:
                         identifier_warned = True
                         marker = ' ' * column_offset + '^'
-                        warn('identifier not found on the first line:\n%s\n%s' %
-                             (original_line, marker),
-                             position)
+                        error('identifier not found on the first line:\n%s\n%s' %
+                              (original_line, marker),
+                              position)
                 continue
 
             ####################################################################
@@ -1356,9 +1356,9 @@ class GtkDocCommentBlockParser(object):
                     if not returns_seen:
                         returns_seen = True
                     else:
-                        warn("encountered multiple 'Returns' parameters or tags for "
-                             "'%s'." % (comment_block.name, ),
-                             position)
+                        error('encountered multiple "Returns" parameters or tags for "%s".' %
+                              (comment_block.name, ),
+                              position)
 
                     tag = GtkDocTag(TAG_RETURNS, position)
 
@@ -1379,11 +1379,11 @@ class GtkDocCommentBlockParser(object):
                          (param_name, original_line, marker),
                          position)
                     param_name = '...'
-                elif param_name in comment_block.params.keys():
-                    column = result.start('parameter_name') + column_offset
-                    warn("multiple '@%s' parameters for identifier '%s':\n%s\n%s" %
-                         (param_name, comment_block.name, original_line, marker),
-                         position)
+
+                if param_name in comment_block.params.keys():
+                    error('multiple "@%s" parameters for identifier "%s":\n%s\n%s' %
+                          (param_name, comment_block.name, original_line, marker),
+                          position)
 
                 parameter = GtkDocParameter(param_name, position)
 
@@ -1518,9 +1518,9 @@ class GtkDocCommentBlockParser(object):
                     if not returns_seen:
                         returns_seen = True
                     else:
-                        warn("encountered multiple 'Returns' parameters or tags for "
-                             "'%s'." % (comment_block.name, ),
-                             position)
+                        error('encountered multiple return value parameters or tags for "%s".' %
+                              (comment_block.name, ),
+                              position)
 
                     tag = GtkDocTag(TAG_RETURNS, position)
 
@@ -1537,9 +1537,9 @@ class GtkDocCommentBlockParser(object):
                     continue
                 else:
                     if tag_name_lower in comment_block.tags.keys():
-                        warn("multiple '%s:' tags for identifier '%s':\n%s\n%s" %
-                             (tag_name, comment_block.name, original_line, marker),
-                             position)
+                        error('multiple "%s:" tags for identifier "%s":\n%s\n%s' %
+                              (tag_name, comment_block.name, original_line, marker),
+                              position)
 
                     tag = GtkDocTag(tag_name_lower, position)
 
@@ -1654,9 +1654,9 @@ class GtkDocCommentBlockParser(object):
                                                                            False)
         if success and annotations:
             marker = ' ' * (start_pos + column_offset) + '^'
-            warn('ignoring invalid multiline annotation continuation:\n%s\n%s' %
-                 (original_line, marker),
-                 position)
+            error('ignoring invalid multiline annotation continuation:\n%s\n%s' %
+                  (original_line, marker),
+                  position)
 
     def _parse_annotation_options_list(self, position, column, line, options):
         '''

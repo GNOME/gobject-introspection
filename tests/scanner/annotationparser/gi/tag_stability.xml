@@ -136,7 +136,7 @@
       </tags>
     </docblock>
     <messages>
-      <message>5: Warning: Test: multiple 'Stability:' tags for identifier 'test_multiple_tags':
+      <message>5: Error: Test: multiple "Stability:" tags for identifier "test_multiple_tags":
  * Stability: Private
    ^</message>
     </messages>

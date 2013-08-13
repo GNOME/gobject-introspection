@@ -156,7 +156,7 @@ parameter is encountered.</description>
       <message>8: Warning: Test: "@returns" parameter unexpected at this location:
  * @returns: something else
     ^</message>
-      <message>8: Warning: Test: encountered multiple 'Returns' parameters or tags for 'test_multiple_returns_tag_and_parameter'.</message>
+      <message>8: Error: Test: encountered multiple "Returns" parameters or tags for "test_multiple_returns_tag_and_parameter".</message>
     </messages>
   </parser>
 </test>
@@ -189,7 +189,7 @@ parameter is encountered.</description>
       </tags>
     </docblock>
     <messages>
-      <message>8: Warning: Test: encountered multiple 'Returns' parameters or tags for 'test_multiple_returns_tag_and_parameter'.</message>
+      <message>8: Error: Test: encountered multiple return value parameters or tags for "test_multiple_returns_tag_and_parameter".</message>
     </messages>
   </parser>
 </test>
@@ -222,7 +222,7 @@ parameter is encountered.</description>
       </tags>
     </docblock>
     <messages>
-      <message>8: Warning: Test: encountered multiple 'Returns' parameters or tags for 'test_multiple_returns_tag_and_parameter'.</message>
+      <message>8: Error: Test: encountered multiple return value parameters or tags for "test_multiple_returns_tag_and_parameter".</message>
     </messages>
   </parser>
 </test>

@@ -31,7 +31,7 @@
       </tags>
     </docblock>
     <messages>
-      <message>7: Warning: Test: ignoring invalid multiline annotation continuation:
+      <message>7: Error: Test: ignoring invalid multiline annotation continuation:
  * (transfer full): something
    ^</message>
     </messages>

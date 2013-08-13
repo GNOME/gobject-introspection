@@ -95,7 +95,7 @@
       </tags>
     </docblock>
     <messages>
-      <message>5: Warning: Test: multiple 'Deprecated:' tags for identifier 'test_multiple_tags':
+      <message>5: Error: Test: multiple "Deprecated:" tags for identifier "test_multiple_tags":
  * Deprecated: 2.0
    ^</message>
     </messages>

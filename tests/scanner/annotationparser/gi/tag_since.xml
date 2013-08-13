@@ -97,7 +97,7 @@ tags is wrong...</description>
       </tags>
     </docblock>
     <messages>
-      <message>5: Warning: Test: multiple 'Since:' tags for identifier 'test_multiple_tags':
+      <message>5: Error: Test: multiple "Since:" tags for identifier "test_multiple_tags":
  * Since: 2.0: one of these "Since:"
    ^</message>
     </messages>

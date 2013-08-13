@@ -60,7 +60,7 @@
       </parameters>
     </docblock>
     <messages>
-      <message>4: Warning: Test: multiple '@param1' parameters for identifier 'test_multiple_parameters':
+      <message>4: Error: Test: multiple "@param1" parameters for identifier "test_multiple_parameters":
  * @param1: first parameter again
     ^</message>
     </messages>
@@ -95,7 +95,7 @@
       <description>Annotations spanning multiple lines are not valid</description>
     </docblock>
     <messages>
-      <message>4: Warning: Test: ignoring invalid multiline annotation continuation:
+      <message>4: Error: Test: ignoring invalid multiline annotation continuation:
  * (transfer full): first parameter
    ^</message>
     </messages>
