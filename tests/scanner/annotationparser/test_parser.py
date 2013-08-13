@@ -37,196 +37,6 @@ from giscanner.ast import Namespace
 from giscanner.message import MessageLogger
 
 
-def parsed2tree(docblock):
-    parsed = ''
-
-    if docblock is not None:
-        parsed += '<docblock>\n'
-
-        parsed += '  <identifier>\n'
-        # An identifier name is always required, but we can't trust our
-        # own parser to ensure this when testing so fall back to an empty
-        # string when no name has been parsed...
-        parsed += '    <name>%s</name>\n' % (docblock.name or '', )
-        if docblock.options.values:
-            parsed += '    <annotations>\n'
-            for key, value in docblock.options.values:
-                parsed += '      <annotation>\n'
-                parsed += '        <name>%s</name>\n' % (key, )
-                if value is not None:
-                    options = value.all()
-                    parsed += '        <options>\n'
-                    for option in options:
-                        parsed += '          <option>\n'
-                        parsed += '            <name>%s</name>\n' % (option, )
-                        if options[option] is not None:
-                            parsed += '            <value>%s</value>\n' % (options[option], )
-                        parsed += '          </option>\n'
-                    parsed += '        </options>\n'
-                parsed += '      </annotation>\n'
-            parsed += '    </annotations>\n'
-        parsed += '  </identifier>\n'
-
-        if docblock.params:
-            parsed += '  <parameters>\n'
-            for param_name in docblock.params:
-                param = docblock.params.get(param_name)
-                parsed += '    <parameter>\n'
-                parsed += '      <name>%s</name>\n' % (param_name, )
-                if param.options.values:
-                    parsed += '      <annotations>\n'
-                    for key, value in param.options.values:
-                        parsed += '        <annotation>\n'
-                        parsed += '          <name>%s</name>\n' % (key, )
-                        if value is not None:
-                            options = value.all()
-                            parsed += '          <options>\n'
-                            for option in options:
-                                parsed += '            <option>\n'
-                                parsed += '              <name>%s</name>\n' % (option, )
-                                if options[option] is not None:
-                                    parsed += '              <value>%s</value>\n' % (options[option], )
-                                parsed += '            </option>\n'
-                            parsed += '          </options>\n'
-                        parsed += '        </annotation>\n'
-                    parsed += '      </annotations>\n'
-                if param.comment or param.value:
-                    parsed += '      <description>%s</description>\n' % (param.comment or param.value, )
-                parsed += '    </parameter>\n'
-            parsed += '  </parameters>\n'
-
-        if docblock.comment or docblock.value:
-            parsed += '  <description>%s</description>\n' % (docblock.comment or docblock.value, )
-
-        if docblock.tags:
-            parsed += '  <tags>\n'
-            for tag_name in docblock.tags:
-                tag = docblock.tags.get(tag_name)
-                parsed += '    <tag>\n'
-                parsed += '      <name>%s</name>\n' % (tag_name, )
-                if tag.options.values:
-                    parsed += '      <annotations>\n'
-                    for key, value in tag.options.values:
-                        parsed += '        <annotation>\n'
-                        parsed += '          <name>%s</name>\n' % (key, )
-                        if value is not None:
-                            options = value.all()
-                            parsed += '          <options>\n'
-                            for option in options:
-                                parsed += '            <option>\n'
-                                parsed += '              <name>%s</name>\n' % (option, )
-                                if options[option] is not None:
-                                    parsed += '              <value>%s</value>\n' % (options[option], )
-                                parsed += '            </option>\n'
-                            parsed += '          </options>\n'
-                        parsed += '        </annotation>\n'
-                    parsed += '      </annotations>\n'
-                if tag.comment or tag.value:
-                    parsed += '      <description>%s</description>\n' % (tag.comment or tag.value, )
-                parsed += '    </tag>\n'
-            parsed += '  </tags>\n'
-
-        parsed += '<docblock>'
-
-    return parsed
-
-
-def expected2tree(docblock):
-    # Note: this sucks, but we can't rely on etree.tostring() to generate useable output :(
-
-    expected = ''
-
-    if docblock is not None:
-        expected += '<docblock>\n'
-
-        if docblock.find('identifier') is not None:
-            expected += '  <identifier>\n'
-            # Expecting an identifier name is required, don't bother checking if it's there or not
-            expected += '    <name>%s</name>\n' % (docblock.find('identifier/name').text, )
-            annotations = docblock.find('identifier/annotations')
-            if annotations is not None:
-                expected += '    <annotations>\n'
-                for annotation in annotations.findall('annotation'):
-                    expected += '      <annotation>\n'
-                    expected += '        <name>%s</name>\n' % (annotation.find('name').text, )
-                    if annotation.find('options') is not None:
-                        expected += '        <options>\n'
-                        for option in annotation.findall('options/option'):
-                            expected += '          <option>\n'
-                            expected += '            <name>%s</name>\n' % (option.find('name').text, )
-                            if option.find('value') is not None:
-                                expected += '            <value>%s</value>\n' % (option.find('value').text, )
-                            expected += '          </option>\n'
-                        expected += '        </options>\n'
-                    expected += '      </annotation>\n'
-                expected += '    </annotations>\n'
-            expected += '  </identifier>\n'
-
-        parameters = docblock.find('parameters')
-        if parameters is not None:
-            expected += '  <parameters>\n'
-            for parameter in parameters.findall('parameter'):
-                expected += '    <parameter>\n'
-                expected += '      <name>%s</name>\n' % (parameter.find('name').text, )
-                annotations = parameter.find('annotations')
-                if annotations is not None:
-                    expected += '      <annotations>\n'
-                    for annotation in parameter.findall('annotations/annotation'):
-                        expected += '        <annotation>\n'
-                        expected += '          <name>%s</name>\n' % (annotation.find('name').text, )
-                        if annotation.find('options') is not None:
-                            expected += '          <options>\n'
-                            for option in annotation.findall('options/option'):
-                                expected += '            <option>\n'
-                                expected += '              <name>%s</name>\n' % (option.find('name').text, )
-                                if option.find('value') is not None:
-                                    expected += '              <value>%s</value>\n' % (option.find('value').text, )
-                                expected += '            </option>\n'
-                            expected += '          </options>\n'
-                        expected += '        </annotation>\n'
-                    expected += '      </annotations>\n'
-                if parameter.find('description') is not None:
-                    expected += '      <description>%s</description>\n' % (parameter.find('description').text, )
-                expected += '    </parameter>\n'
-            expected += '  </parameters>\n'
-
-        description = docblock.find('description')
-        if description is not None:
-            expected += '  <description>%s</description>\n' % (description.text, )
-
-        tags = docblock.find('tags')
-        if tags is not None:
-            expected += '  <tags>\n'
-            for tag in tags.findall('tag'):
-                expected += '    <tag>\n'
-                expected += '      <name>%s</name>\n' % (tag.find('name').text, )
-                annotations = tag.find('annotations')
-                if annotations is not None:
-                    expected += '      <annotations>\n'
-                    for annotation in tag.findall('annotations/annotation'):
-                        expected += '        <annotation>\n'
-                        expected += '          <name>%s</name>\n' % (annotation.find('name').text, )
-                        if annotation.find('options') is not None:
-                            expected += '          <options>\n'
-                            for option in annotation.findall('options/option'):
-                                expected += '            <option>\n'
-                                expected += '              <name>%s</name>\n' % (option.find('name').text, )
-                                if option.find('value') is not None:
-                                    expected += '              <value>%s</value>\n' % (option.find('value').text, )
-                                expected += '            </option>\n'
-                            expected += '          </options>\n'
-                        expected += '        </annotation>\n'
-                    expected += '      </annotations>\n'
-                if tag.find('description') is not None:
-                    expected += '      <description>%s</description>\n' % (tag.find('description').text, )
-                expected += '    </tag>\n'
-            expected += '  </tags>\n'
-
-        expected += '<docblock>'
-
-    return expected
-
-
 def create_tests(tests_dir, tests_file):
     tests_name = os.path.relpath(tests_file[:-4], tests_dir)
     tests_name = tests_name.replace('/', '.').replace('\\', '.')
@@ -254,11 +64,11 @@ class TestCommentBlock(unittest.TestCase):
             # Parse GTK-Doc comment block
             commentblock = testcase.find('commentblock').text
             parsed_docblock = AnnotationParser().parse_comment_block((commentblock, 'test.c', 1))
-            parsed_tree = parsed2tree(parsed_docblock).split('\n')
+            parsed_tree = self.parsed2tree(parsed_docblock).split('\n')
 
             # Get expected output
             expected_docblock = testcase.find('docblock')
-            expected_tree = expected2tree(expected_docblock).split('\n')
+            expected_tree = self.expected2tree(expected_docblock).split('\n')
 
             # Construct a meaningful message
             msg = 'Parsed DocBlock object tree does not match expected output:\n\n'
@@ -275,6 +85,194 @@ class TestCommentBlock(unittest.TestCase):
             self.assertEqual(parsed_tree, expected_tree, msg)
 
         return do_test
+
+    def parsed2tree(self, docblock):
+        parsed = ''
+
+        if docblock is not None:
+            parsed += '<docblock>\n'
+
+            parsed += '  <identifier>\n'
+            # An identifier name is always required, but we can't trust our
+            # own parser to ensure this when testing so fall back to an empty
+            # string when no name has been parsed...
+            parsed += '    <name>%s</name>\n' % (docblock.name or '', )
+            if docblock.options.values:
+                parsed += '    <annotations>\n'
+                for key, value in docblock.options.values:
+                    parsed += '      <annotation>\n'
+                    parsed += '        <name>%s</name>\n' % (key, )
+                    if value is not None:
+                        options = value.all()
+                        parsed += '        <options>\n'
+                        for option in options:
+                            parsed += '          <option>\n'
+                            parsed += '            <name>%s</name>\n' % (option, )
+                            if options[option] is not None:
+                                parsed += '            <value>%s</value>\n' % (options[option], )
+                            parsed += '          </option>\n'
+                        parsed += '        </options>\n'
+                    parsed += '      </annotation>\n'
+                parsed += '    </annotations>\n'
+            parsed += '  </identifier>\n'
+
+            if docblock.params:
+                parsed += '  <parameters>\n'
+                for param_name in docblock.params:
+                    param = docblock.params.get(param_name)
+                    parsed += '    <parameter>\n'
+                    parsed += '      <name>%s</name>\n' % (param_name, )
+                    if param.options.values:
+                        parsed += '      <annotations>\n'
+                        for key, value in param.options.values:
+                            parsed += '        <annotation>\n'
+                            parsed += '          <name>%s</name>\n' % (key, )
+                            if value is not None:
+                                options = value.all()
+                                parsed += '          <options>\n'
+                                for option in options:
+                                    parsed += '            <option>\n'
+                                    parsed += '              <name>%s</name>\n' % (option, )
+                                    if options[option] is not None:
+                                        parsed += '              <value>%s</value>\n' % (options[option], )
+                                    parsed += '            </option>\n'
+                                parsed += '          </options>\n'
+                            parsed += '        </annotation>\n'
+                        parsed += '      </annotations>\n'
+                    if param.comment or param.value:
+                        parsed += '      <description>%s</description>\n' % (param.comment or param.value, )
+                    parsed += '    </parameter>\n'
+                parsed += '  </parameters>\n'
+
+            if docblock.comment or docblock.value:
+                parsed += '  <description>%s</description>\n' % (docblock.comment or docblock.value, )
+
+            if docblock.tags:
+                parsed += '  <tags>\n'
+                for tag_name in docblock.tags:
+                    tag = docblock.tags.get(tag_name)
+                    parsed += '    <tag>\n'
+                    parsed += '      <name>%s</name>\n' % (tag_name, )
+                    if tag.options.values:
+                        parsed += '      <annotations>\n'
+                        for key, value in tag.options.values:
+                            parsed += '        <annotation>\n'
+                            parsed += '          <name>%s</name>\n' % (key, )
+                            if value is not None:
+                                options = value.all()
+                                parsed += '          <options>\n'
+                                for option in options:
+                                    parsed += '            <option>\n'
+                                    parsed += '              <name>%s</name>\n' % (option, )
+                                    if options[option] is not None:
+                                        parsed += '              <value>%s</value>\n' % (options[option], )
+                                    parsed += '            </option>\n'
+                                parsed += '          </options>\n'
+                            parsed += '        </annotation>\n'
+                        parsed += '      </annotations>\n'
+                    if tag.comment or tag.value:
+                        parsed += '      <description>%s</description>\n' % (tag.comment or tag.value, )
+                    parsed += '    </tag>\n'
+                parsed += '  </tags>\n'
+
+            parsed += '</docblock>'
+
+        return parsed
+
+    def expected2tree(self, docblock):
+        # Note: this sucks, but we can't rely on etree.tostring() to generate useable output :(
+
+        expected = ''
+
+        if docblock is not None:
+            expected += '<docblock>\n'
+
+            if docblock.find('identifier') is not None:
+                expected += '  <identifier>\n'
+                # Expecting an identifier name is required, don't bother checking if it's there or not
+                expected += '    <name>%s</name>\n' % (docblock.find('identifier/name').text, )
+                annotations = docblock.find('identifier/annotations')
+                if annotations is not None:
+                    expected += '    <annotations>\n'
+                    for annotation in annotations.findall('annotation'):
+                        expected += '      <annotation>\n'
+                        expected += '        <name>%s</name>\n' % (annotation.find('name').text, )
+                        if annotation.find('options') is not None:
+                            expected += '        <options>\n'
+                            for option in annotation.findall('options/option'):
+                                expected += '          <option>\n'
+                                expected += '            <name>%s</name>\n' % (option.find('name').text, )
+                                if option.find('value') is not None:
+                                    expected += '            <value>%s</value>\n' % (option.find('value').text, )
+                                expected += '          </option>\n'
+                            expected += '        </options>\n'
+                        expected += '      </annotation>\n'
+                    expected += '    </annotations>\n'
+                expected += '  </identifier>\n'
+
+            parameters = docblock.find('parameters')
+            if parameters is not None:
+                expected += '  <parameters>\n'
+                for parameter in parameters.findall('parameter'):
+                    expected += '    <parameter>\n'
+                    expected += '      <name>%s</name>\n' % (parameter.find('name').text, )
+                    annotations = parameter.find('annotations')
+                    if annotations is not None:
+                        expected += '      <annotations>\n'
+                        for annotation in parameter.findall('annotations/annotation'):
+                            expected += '        <annotation>\n'
+                            expected += '          <name>%s</name>\n' % (annotation.find('name').text, )
+                            if annotation.find('options') is not None:
+                                expected += '          <options>\n'
+                                for option in annotation.findall('options/option'):
+                                    expected += '            <option>\n'
+                                    expected += '              <name>%s</name>\n' % (option.find('name').text, )
+                                    if option.find('value') is not None:
+                                        expected += '              <value>%s</value>\n' % (option.find('value').text, )
+                                    expected += '            </option>\n'
+                                expected += '          </options>\n'
+                            expected += '        </annotation>\n'
+                        expected += '      </annotations>\n'
+                    if parameter.find('description') is not None:
+                        expected += '      <description>%s</description>\n' % (parameter.find('description').text, )
+                    expected += '    </parameter>\n'
+                expected += '  </parameters>\n'
+
+            description = docblock.find('description')
+            if description is not None:
+                expected += '  <description>%s</description>\n' % (description.text, )
+
+            tags = docblock.find('tags')
+            if tags is not None:
+                expected += '  <tags>\n'
+                for tag in tags.findall('tag'):
+                    expected += '    <tag>\n'
+                    expected += '      <name>%s</name>\n' % (tag.find('name').text, )
+                    annotations = tag.find('annotations')
+                    if annotations is not None:
+                        expected += '      <annotations>\n'
+                        for annotation in tag.findall('annotations/annotation'):
+                            expected += '        <annotation>\n'
+                            expected += '          <name>%s</name>\n' % (annotation.find('name').text, )
+                            if annotation.find('options') is not None:
+                                expected += '          <options>\n'
+                                for option in annotation.findall('options/option'):
+                                    expected += '            <option>\n'
+                                    expected += '              <name>%s</name>\n' % (option.find('name').text, )
+                                    if option.find('value') is not None:
+                                        expected += '              <value>%s</value>\n' % (option.find('value').text, )
+                                    expected += '            </option>\n'
+                                expected += '          </options>\n'
+                            expected += '        </annotation>\n'
+                        expected += '      </annotations>\n'
+                    if tag.find('description') is not None:
+                        expected += '      <description>%s</description>\n' % (tag.find('description').text, )
+                    expected += '    </tag>\n'
+                expected += '  </tags>\n'
+
+            expected += '</docblock>'
+
+        return expected
 
 
 if __name__ == '__main__':
