@@ -143,4 +143,31 @@
   </parser>
 </test>
 
+<test>
+  <!--
+  "Stability:" description
+  -->
+  <input>/**
+ * test_stability_description:
+ *
+ * Stability: Unstable: maybe one day this will work
+ *                      correctly...
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test_stability_description</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>stability</name>
+          <value>Unstable</value>
+          <description>maybe one day this will work
+                     correctly...</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+</test>
+
 </tests>

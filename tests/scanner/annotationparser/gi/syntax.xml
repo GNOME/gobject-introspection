@@ -227,4 +227,162 @@ something */ code goes here
   </parser>
 </test>
 
+<test>
+  <!--
+  identifier not on the first line.
+  -->
+  <input>/**
+
+ *
+
+ * regress_test_invalid_comment:
+ * @foo: a param
+
+ * comment having lines without ' * '
+ * https://bugzilla.gnome.org/show_bug.cgi?id=673806
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_test_invalid_comment</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>foo</name>
+          <description>a param</description>
+        </parameter>
+      </parameters>
+      <description>comment having lines without ' * '
+https://bugzilla.gnome.org/show_bug.cgi?id=673806</description>
+    </docblock>
+    <messages>
+      <message>2: Error: Test: identifier not found on the first line:
+
+^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <!-- Confusing but well formed mixing of lines starting with and without * -->
+  <input>/**
+ * atk_hyperlink_is_inline:
+ * @link_: an #AtkHyperlink
+ *
+ * Indicates whether the link currently displays some or all of its
+ *           content inline.  Ordinary HTML links will usually return
+ *           %FALSE, but an inline &lt;src&gt; HTML element will return
+ *           %TRUE.
+a *
+ * Returns: whether or not this link displays its content inline.
+ *
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>atk_hyperlink_is_inline</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>link_</name>
+          <description>an #AtkHyperlink</description>
+        </parameter>
+      </parameters>
+      <description>Indicates whether the link currently displays some or all of its
+          content inline.  Ordinary HTML links will usually return
+          %FALSE, but an inline &lt;src&gt; HTML element will return
+          %TRUE.
+a *</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>whether or not this link displays its content inline.</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * gtk_tooltip_set_custom:
+ *
+ * Replaces the widget packed into the tooltip with
+ * @custom_widget. @custom_widget does not get destroyed when the tooltip goes
+ * away.
+ * By default a box with a #GtkImage and #GtkLabel is embedded in
+ * the tooltip, which can be configured using gtk_tooltip_set_markup()
+ * and gtk_tooltip_set_icon().
+
+ *
+ * Since: 2.12
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>gtk_tooltip_set_custom</name>
+      </identifier>
+      <description>Replaces the widget packed into the tooltip with
+@custom_widget. @custom_widget does not get destroyed when the tooltip goes
+away.
+By default a box with a #GtkImage and #GtkLabel is embedded in
+the tooltip, which can be configured using gtk_tooltip_set_markup()
+and gtk_tooltip_set_icon().</description>
+      <tags>
+        <tag>
+          <name>since</name>
+          <value>2.12</value>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * clutter_text_coords_to_position:
+ * @self: a #ClutterText
+ * Return: the position of the character
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>clutter_text_coords_to_position</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>a #ClutterText</description>
+        </parameter>
+      </parameters>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>the position of the character</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * clutter_text_coords_to_position:
+ * Return: the position of the character
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>clutter_text_coords_to_position</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>the position of the character</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+</test>
+
 </tests>

@@ -75,4 +75,52 @@ detection, and fixing it via annotations.</description>
   </parser>
 </test>
 
+<test>
+  <input>/**
+ * annotation_custom_destroy:
+ * @callback: (destroy destroy) (closure data=invalid): Destroy notification
+ *
+ * Test messing up the heuristic of closure/destroy-notification
+ * detection, and fixing it via annotations.
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_custom_destroy</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>callback</name>
+          <annotations>
+            <annotation>
+              <name>destroy</name>
+              <options>
+                <option>
+                  <name>destroy</name>
+                </option>
+              </options>
+            </annotation>
+            <annotation>
+              <name>closure</name>
+              <options>
+                <option>
+                  <name>data=invalid</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>Destroy notification</description>
+        </parameter>
+      </parameters>
+      <description>Test messing up the heuristic of closure/destroy-notification
+detection, and fixing it via annotations.</description>
+    </docblock>
+    <messages>
+      <message>3: Warning: Test: invalid annotation options: expected a "list" but received "key=value pairs":
+ * @callback: (destroy destroy) (closure data=invalid): Destroy notification
+                                             ^</message>
+    </messages>
+  </parser>
+</test>
+
 </tests>

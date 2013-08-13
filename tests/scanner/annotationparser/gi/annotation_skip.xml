@@ -42,4 +42,35 @@ annotation_object_watch_full().</description>
   </parser>
 </test>
 
+<test>
+  <input>/**
+ * annotation_object_watch: (skip yes)
+ *
+ * This is here just for the sake of being overriden by its
+ * annotation_object_watch_full().
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_object_watch</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+            <options>
+              <option>
+                <name>yes</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+      </identifier>
+      <description>This is here just for the sake of being overriden by its
+annotation_object_watch_full().</description>
+    </docblock>
+    <messages>
+      <message>2: Warning: Test: "skip" annotation needs no options, 1 given</message>
+    </messages>
+  </parser>
+</test>
+
 </tests>

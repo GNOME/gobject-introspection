@@ -5,6 +5,8 @@
 <test>
   <input>/**
  * foo_test_array:
+ * @a: (element-type):
+ * @b: (element-type x y z):
  *
  * Returns: (element-type utf8) (transfer container): returns %NULL.
  */</input>
@@ -13,6 +15,35 @@
       <identifier>
         <name>foo_test_array</name>
       </identifier>
+      <parameters>
+        <parameter>
+          <name>a</name>
+          <annotations>
+            <annotation>
+              <name>element-type</name>
+            </annotation>
+          </annotations>
+        </parameter>
+        <parameter>
+          <name>b</name>
+          <annotations>
+            <annotation>
+              <name>element-type</name>
+              <options>
+                <option>
+                  <name>x</name>
+                </option>
+                <option>
+                  <name>y</name>
+                </option>
+                <option>
+                  <name>z</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+        </parameter>
+      </parameters>
       <tags>
         <tag>
           <name>returns</name>
@@ -38,6 +69,10 @@
         </tag>
       </tags>
     </docblock>
+    <messages>
+      <message>3: Warning: Test: "element-type" annotation takes at least one option, none given</message>
+      <message>4: Warning: Test: "element-type" annotation takes at most 2 options, 3 given</message>
+    </messages>
   </parser>
 </test>
 
@@ -126,6 +161,78 @@ element-type annotation.</description>
         </tag>
       </tags>
     </docblock>
+  </parser>
+</test>
+
+<test>
+  <input> /**
+  * foo_test_array:
+  *
+  * Returns: (element-type invalid utf8=invalid GLib.HashTable(utf8,utf8)): returns %NULL.
+  */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>foo_test_array</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>element-type</name>
+              <options>
+                <option>
+                  <name>invalid utf8=invalid GLib.HashTable(utf8,utf8)</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>returns %NULL.</description>
+        </tag>
+      </tags>
+    </docblock>
+      <messages>
+        <message>4: Warning: Test: invalid annotation options: expected a "list" but received "key=value pairs":
+  * Returns: (element-type invalid utf8=invalid GLib.HashTable(utf8,utf8)): returns %NULL.
+                                       ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input> /**
+  * foo_test_array:
+  *
+  * Returns: (element-type utf8=invalid GLib.HashTable(utf8,utf8) invalid): returns %NULL.
+  */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>foo_test_array</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>element-type</name>
+              <options>
+                <option>
+                  <name>utf8=invalid GLib.HashTable(utf8,utf8) invalid</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>returns %NULL.</description>
+        </tag>
+      </tags>
+    </docblock>
+      <messages>
+        <message>4: Warning: Test: invalid annotation options: expected a "list" but received "key=value pairs":
+  * Returns: (element-type utf8=invalid GLib.HashTable(utf8,utf8) invalid): returns %NULL.
+                               ^</message>
+    </messages>
   </parser>
 </test>
 

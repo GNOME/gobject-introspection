@@ -289,6 +289,10 @@ identifier_symbol_tests = [
          {'delimiter': ':',
           'symbol_name': 'gtk_widget_show',
           'fields': ''}),
+    (SYMBOL_RE, 'gtk_widget_show:(skip):',
+         {'delimiter': ':',
+          'symbol_name': 'gtk_widget_show',
+          'fields': '(skip)'}),
     (SYMBOL_RE, 'gtk_widget_show (skip)',
          {'delimiter': '',
           'symbol_name': 'gtk_widget_show',
@@ -419,7 +423,28 @@ identifier_symbol_tests = [
     (SYMBOL_RE, 'Something:',
          {'delimiter': ':',
           'symbol_name': 'Something',
-          'fields': ''})]
+          'fields': ''}),
+    # annotations with multiple closing parentheses
+    (SYMBOL_RE, 'FooWidget: (transfer full) (type GLib.List(utf8))',
+         {'delimiter': ':',
+          'symbol_name': 'FooWidget',
+          'fields': '(transfer full) (type GLib.List(utf8))'}),
+    (SYMBOL_RE, 'FooWidget: (transfer full) (type GLib.List((utf8)))',
+         {'delimiter': ':',
+          'symbol_name': 'FooWidget',
+          'fields': '(transfer full) (type GLib.List((utf8)))'}),
+    (SYMBOL_RE, 'FooWidget: (transfer full) (type GLib.List(GLib.List(utf8)))',
+         {'delimiter': ':',
+          'symbol_name': 'FooWidget',
+          'fields': '(transfer full) (type GLib.List(GLib.List(utf8)))'}),
+    (SYMBOL_RE, 'FooWidget: (type GLib.List(GLib.List(utf8))) (transfer full)',
+         {'delimiter': ':',
+          'symbol_name': 'FooWidget',
+          'fields': '(type GLib.List(GLib.List(utf8))) (transfer full)'}),
+    (SYMBOL_RE, 'FooWidget: (type GLib.List(GLib.List(utf8)))(transfer full)(type GLib.List(GLib.List(utf8)))',
+         {'delimiter': ':',
+          'symbol_name': 'FooWidget',
+          'fields': '(type GLib.List(GLib.List(utf8)))(transfer full)(type GLib.List(GLib.List(utf8)))'})]
 
 identifier_property_tests = [
     # simple property name
@@ -487,7 +512,7 @@ identifier_property_tests = [
           'property_name': 'handle',
           'delimiter': ':',
           'fields': ''}),
-    # property name that contains a dash
+    # properties: property name that contains a dash
     (PROPERTY_RE, 'GtkWidget:double-buffered (skip)',
          {'class_name': 'GtkWidget',
           'property_name': 'double-buffered',
@@ -551,10 +576,31 @@ identifier_property_tests = [
          {'class_name': 'GMemoryOutputStream',
           'property_name': 'realloc-function',
           'delimiter': ':',
-          'fields': '(skip)'})]
+          'fields': '(skip)'}),
+    # properties: data with multiple closing parentheses
+    (PROPERTY_RE, 'GMemoryOutputStream:realloc-function: (transfer full) (type GLib.List(utf8))',
+         {'class_name': 'GMemoryOutputStream',
+          'property_name': 'realloc-function',
+          'delimiter': ':',
+          'fields': '(transfer full) (type GLib.List(utf8))'}),
+    (PROPERTY_RE, 'GMemoryOutputStream:realloc-function: (transfer full) (type GLib.List((utf8)))',
+         {'class_name': 'GMemoryOutputStream',
+          'property_name': 'realloc-function',
+          'delimiter': ':',
+          'fields': '(transfer full) (type GLib.List((utf8)))'}),
+    (PROPERTY_RE, 'GMemoryOutputStream:realloc-function: (transfer full) (type GLib.List(GLib.List(utf8)))',
+         {'class_name': 'GMemoryOutputStream',
+          'property_name': 'realloc-function',
+          'delimiter': ':',
+          'fields': '(transfer full) (type GLib.List(GLib.List(utf8)))'}),
+    (PROPERTY_RE, 'GMemoryOutputStream:realloc-function: (type GLib.List(GLib.List(utf8))) (transfer full)',
+         {'class_name': 'GMemoryOutputStream',
+          'property_name': 'realloc-function',
+          'delimiter': ':',
+          'fields': '(type GLib.List(GLib.List(utf8))) (transfer full)'})]
 
 identifier_signal_tests = [
-    # simple property name
+    # simple signal name
     (SIGNAL_RE, 'GtkWidget::changed: (skip)',
          {'class_name': 'GtkWidget',
           'signal_name': 'changed',
@@ -574,7 +620,7 @@ identifier_signal_tests = [
          None),
     (SIGNAL_RE, 'really-weird_thing::changed:',
          None),
-    # signal name that contains a dash
+    # signals: signal name that contains a dash
     (SIGNAL_RE, 'GtkWidget::hierarchy-changed: (skip)',
          {'class_name': 'GtkWidget',
           'signal_name': 'hierarchy-changed',
@@ -593,7 +639,28 @@ identifier_signal_tests = [
     (SIGNAL_RE, 'Weird-thing::hierarchy-changed:',
          None),
     (SIGNAL_RE, 'really-weird_thing::hierarchy-changed:',
-         None)]
+         None),
+    # signals: data with multiple closing parentheses
+    (SIGNAL_RE, 'GtkWidget::hierarchy-changed: (transfer full) (type GLib.List(utf8))',
+         {'class_name': 'GtkWidget',
+          'signal_name': 'hierarchy-changed',
+          'delimiter': ':',
+          'fields': '(transfer full) (type GLib.List(utf8))'}),
+    (SIGNAL_RE, 'GtkWidget::hierarchy-changed: (transfer full) (type GLib.List((utf8)))',
+         {'class_name': 'GtkWidget',
+          'signal_name': 'hierarchy-changed',
+          'delimiter': ':',
+          'fields': '(transfer full) (type GLib.List((utf8)))'}),
+    (SIGNAL_RE, 'GtkWidget::hierarchy-changed: (transfer full) (type GLib.List(GLib.List(utf8)))',
+         {'class_name': 'GtkWidget',
+          'signal_name': 'hierarchy-changed',
+          'delimiter': ':',
+          'fields': '(transfer full) (type GLib.List(GLib.List(utf8)))'}),
+    (SIGNAL_RE, 'GtkWidget::hierarchy-changed: (type GLib.List(GLib.List(utf8))) (transfer full)',
+         {'class_name': 'GtkWidget',
+          'signal_name': 'hierarchy-changed',
+          'delimiter': ':',
+          'fields': '(type GLib.List(GLib.List(utf8))) (transfer full)'})]
 
 parameter_tests = [
     (PARAMETER_RE, '@Short_description: Base class for all widgets  ',
@@ -602,6 +669,9 @@ parameter_tests = [
     (PARAMETER_RE, '@...: the value of the first property, followed optionally by more',
          {'parameter_name': '...',
           'fields': 'the value of the first property, followed optionally by more'}),
+    (PARAMETER_RE, '@args...: list of arguments',
+         {'parameter_name': 'args...',
+          'fields': 'list of arguments'}),
     (PARAMETER_RE, '@widget: a #GtkWidget',
          {'parameter_name': 'widget',
           'fields': 'a #GtkWidget'}),
@@ -625,7 +695,33 @@ parameter_tests = [
           'fields': 'a #GSequenceIter'}),
     (PARAMETER_RE, '@keys: (array length=n_keys) (element-type GQuark) (allow-none):',
          {'parameter_name': 'keys',
-          'fields': '(array length=n_keys) (element-type GQuark) (allow-none):'})]
+          'fields': '(array length=n_keys) (element-type GQuark) (allow-none):'}),
+    # parentheses in description
+    (PARAMETER_RE, '@foo: This is a foo (be careful using it)',
+         {'parameter_name': 'foo',
+          'fields': 'This is a foo (be careful using it)'}),
+    (PARAMETER_RE, '@foo: This is a foo (be careful using it) and see also: bar',
+         {'parameter_name': 'foo',
+          'fields': 'This is a foo (be careful using it) and see also: bar'}),
+    (PARAMETER_RE, '@foo: This is a foo (be careful using it) and see also: bar and baz',
+         {'parameter_name': 'foo',
+          'fields': 'This is a foo (be careful using it) and see also: bar and baz'}),
+    # annotations with multiple closing parentheses, combined with parentheses in description
+    (PARAMETER_RE, '@foo: (transfer full) (element-type guint8): This is a foo (be careful using it) and see also: bar and baz',
+         {'parameter_name': 'foo',
+          'fields': '(transfer full) (element-type guint8): This is a foo (be careful using it) and see also: bar and baz'}),
+    (PARAMETER_RE, '@foo: (transfer full) (element-type GLib.List(utf8)): This is a foo (be careful using it) and see also: bar and baz',
+         {'parameter_name': 'foo',
+          'fields': '(transfer full) (element-type GLib.List(utf8)): This is a foo (be careful using it) and see also: bar and baz'}),
+    (PARAMETER_RE, '@foo: (transfer full) (element-type GLib.List((utf8))): This is a foo (be careful using it) and see also: bar and baz',
+         {'parameter_name': 'foo',
+          'fields': '(transfer full) (element-type GLib.List((utf8))): This is a foo (be careful using it) and see also: bar and baz'}),
+    (PARAMETER_RE, '@foo: (transfer full) (element-type GLib.List(GLib.List(utf8))): This is a foo (be careful using it) and see also: bar and baz',
+         {'parameter_name': 'foo',
+          'fields': '(transfer full) (element-type GLib.List(GLib.List(utf8))): This is a foo (be careful using it) and see also: bar and baz'}),
+    (PARAMETER_RE, '@foo: (element-type GLib.List(GLib.List(utf8))) (transfer full): This is a foo (be careful using it) and see also: bar and baz',
+         {'parameter_name': 'foo',
+          'fields': '(element-type GLib.List(GLib.List(utf8))) (transfer full): This is a foo (be careful using it) and see also: bar and baz'})]
 
 tag_tests = [
     (TAG_RE, 'Since 3.0',
@@ -662,7 +758,37 @@ tag_tests = [
     (TAG_RE, 'Return value: (type GLib.HashTable<utf8,GLib.HashTable<utf8,utf8>>) '
              '(transfer full):',
          {'tag_name': 'Return value',
-          'fields': '(type GLib.HashTable<utf8,GLib.HashTable<utf8,utf8>>) (transfer full):'})]
+          'fields': '(type GLib.HashTable<utf8,GLib.HashTable<utf8,utf8>>) (transfer full):'}),
+    # parentheses in description
+    (TAG_RE, 'Returns: Returns a foo (be careful using it)',
+         {'tag_name': 'Returns',
+          'fields': 'Returns a foo (be careful using it)'}),
+    (TAG_RE, 'Returns: Returns a foo (be careful using it) and see also: bar',
+         {'tag_name': 'Returns',
+          'fields': 'Returns a foo (be careful using it) and see also: bar'}),
+    (TAG_RE, 'Returns: Returns a foo (be careful using it) and see also: bar and baz',
+         {'tag_name': 'Returns',
+          'fields': 'Returns a foo (be careful using it) and see also: bar and baz'}),
+    # annotations with multiple closing parentheses, combined with parentheses in description
+    (TAG_RE, 'Returns: (transfer full) (element-type guint8): Returns a foo (be careful using it) and see also: bar and baz',
+         {'tag_name': 'Returns',
+          'fields': '(transfer full) (element-type guint8): Returns a foo (be careful using it) and see also: bar and baz'}),
+    (TAG_RE, 'Returns: (transfer full) (element-type GLib.List(utf8)): Returns a foo (be careful using it) and see also: bar and baz',
+         {'tag_name': 'Returns',
+          'fields': '(transfer full) (element-type GLib.List(utf8)): Returns a foo (be careful using it) and see also: bar and baz'}),
+    (TAG_RE, 'Returns: (transfer full) (element-type GLib.List((utf8))): Returns a foo (be careful using it) and see also: bar and baz',
+         {'tag_name': 'Returns',
+          'fields': '(transfer full) (element-type GLib.List((utf8))): Returns a foo (be careful using it) and see also: bar and baz'}),
+    (TAG_RE, 'Returns: (transfer full) (element-type GLib.List(GLib.List(utf8))): Returns a foo (be careful using it) and see also: bar and baz',
+         {'tag_name': 'Returns',
+          'fields': '(transfer full) (element-type GLib.List(GLib.List(utf8))): Returns a foo (be careful using it) and see also: bar and baz'}),
+    (TAG_RE, 'Returns: (element-type GLib.List(GLib.List(utf8))) (transfer full): Returns a foo (be careful using it) and see also: bar and baz',
+         {'tag_name': 'Returns',
+          'fields': '(element-type GLib.List(GLib.List(utf8))) (transfer full): Returns a foo (be careful using it) and see also: bar and baz'}),
+    (TAG_RE, 'Returns: (element-type utf8=invalid GLib.HashTable(utf8,utf8) invalid): returns %NULL.',
+         {'tag_name': 'Returns',
+          'fields': '(element-type utf8=invalid GLib.HashTable(utf8,utf8) invalid): returns %NULL.'})]
+
 
 tag_value_version_tests = [
     (TAG_VALUE_VERSION_RE, ' abc',

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests xmlns="http://schemas.gnome.org/gobject-introspection/2013/test">
+
+<test>
+  <input>/**
+ * regress_forced_method: (skip)
+ * (method)
+ * @obj: A #RegressTestObj
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_forced_method</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>obj</name>
+          <description>A #RegressTestObj</description>
+        </parameter>
+      </parameters>
+      <description>(method)</description>
+    </docblock>
+    <messages>
+      <message>3: Error: Test: ignoring invalid multiline annotation continuation:
+ * (method)
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+ * regress_forced_method: (skip)
+ *     (method)
+ * @obj: A #RegressTestObj
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_forced_method</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>obj</name>
+          <description>A #RegressTestObj</description>
+        </parameter>
+      </parameters>
+      <description>(method)</description>
+    </docblock>
+    <messages>
+      <message>3: Error: Test: ignoring invalid multiline annotation continuation:
+ *     (method)
+       ^</message>
+    </messages>
+  </parser>
+</test>
+
+</tests>

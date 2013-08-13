@@ -223,12 +223,15 @@ EXTRA_DIST += \
 	annotationparser/gi/annotation_unref_func.xml		\
 	annotationparser/gi/annotation_value.xml		\
 	annotationparser/gi/annotation_virtual.xml		\
+	annotationparser/gi/annotations.xml			\
 	annotationparser/gi/identifier.xml			\
 	annotationparser/gi/identifier_section.xml		\
 	annotationparser/gi/identifier_symbol.xml		\
 	annotationparser/gi/parameter.xml			\
 	annotationparser/gi/parameter_varargs.xml		\
 	annotationparser/gi/syntax.xml				\
+	annotationparser/gi/syntax_indentation.xml		\
+	annotationparser/gi/syntax_multiline_annotations.xml	\
 	annotationparser/gi/syntax_nested_tags.xml		\
 	annotationparser/gi/syntax_paragraph_breaks.xml		\
 	annotationparser/gi/syntax_whitespace.xml		\

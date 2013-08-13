@@ -82,6 +82,40 @@
 
 <test>
   <!--
+  Variation of "Attributes:" tag
+  -->
+  <input>/**
+ * AnnotationObject:
+ *
+ * This is an object used to test annotations.
+ *
+ * Attributes: (org.example.test1 horses))
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>AnnotationObject</name>
+      </identifier>
+      <description>This is an object used to test annotations.</description>
+    </docblock>
+    <messages>
+      <message>6: Warning: Test: GObject-Introspection specific GTK-Doc tag "Attributes" has been deprecated, please use annotations on the identifier instead:
+ * Attributes: (org.example.test1 horses))
+   ^</message>
+      <message>6: Error: Test: unbalanced parentheses, annotations will be ignored:
+Attributes: (org.example.test1 horses))
+                             ^</message>
+    </messages>
+  </parser>
+  <output>/**
+ * AnnotationObject:
+ *
+ * This is an object used to test annotations.
+ */</output>
+</test>
+
+<test>
+  <!--
   (attributes) annotation on the identifier together with a
   deprecated "Attributes:" tag.
   -->

@@ -113,4 +113,56 @@
   </parser>
 </test>
 
+<test>
+  <input>/**
+ * regress_test_struct_a_clone:
+ * @a: (out invalid): the structure
+ * @a_out: (out callee-allocates=invalid): the cloned structure
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_test_struct_a_clone</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>a</name>
+          <annotations>
+            <annotation>
+              <name>out</name>
+              <options>
+                <option>
+                  <name>invalid</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>the structure</description>
+        </parameter>
+        <parameter>
+          <name>a_out</name>
+          <annotations>
+            <annotation>
+              <name>out</name>
+              <options>
+                <option>
+                  <name>callee-allocates=invalid</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>the cloned structure</description>
+        </parameter>
+      </parameters>
+    </docblock>
+    <messages>
+      <message>4: Warning: Test: invalid annotation options: expected a "list" but received "key=value pairs":
+ * @a_out: (out callee-allocates=invalid): the cloned structure
+                                ^</message>
+      <message>3: Warning: Test: invalid "out" annotation option: "invalid"</message>
+      <message>4: Warning: Test: invalid "out" annotation option: "callee-allocates=invalid"</message>
+    </messages>
+  </parser>
+</test>
+
 </tests>
