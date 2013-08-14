@@ -32,6 +32,7 @@ against the expected output.
 
 
 from giscanner.annotationparser import (COMMENT_BLOCK_START_RE, COMMENT_BLOCK_END_RE,
+                                        COMMENT_ASTERISK_RE,
                                         SECTION_RE, SYMBOL_RE, PROPERTY_RE,
                                         SIGNAL_RE, PARAMETER_RE, TAG_RE,
                                         TAG_VALUE_VERSION_RE, TAG_VALUE_STABILITY_RE)
@@ -155,6 +156,23 @@ comment_end_tests = [
          {'comment': 'test',
           'token': '*****/',
           'code': ''})]
+
+
+comment_asterisk_tests = [
+    (COMMENT_ASTERISK_RE, '*',
+         {}),
+    (COMMENT_ASTERISK_RE, '* ',
+         {}),
+    (COMMENT_ASTERISK_RE, ' *',
+         {}),
+    (COMMENT_ASTERISK_RE, ' * ',
+         {}),
+    (COMMENT_ASTERISK_RE, '    *    ',
+         {}),
+    (COMMENT_ASTERISK_RE, '    *    test',
+         {}),
+    (COMMENT_ASTERISK_RE, 'test    *    ',
+         None)]
 
 
 identifier_section_tests = [
@@ -733,6 +751,7 @@ class TestProgram(TestCase):
 if __name__ == '__main__':
     create_tests('test_comment_start', comment_start_tests)
     create_tests('test_comment_end', comment_end_tests)
+    create_tests('test_comment_asterisk', comment_asterisk_tests)
     create_tests('test_identifier_section', identifier_section_tests)
     create_tests('test_identifier_symbol', identifier_symbol_tests)
     create_tests('test_identifier_property', identifier_property_tests)

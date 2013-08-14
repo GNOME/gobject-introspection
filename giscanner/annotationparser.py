@@ -111,7 +111,7 @@ import re
 
 from operator import ne, gt, lt
 
-from .collections import OrderedDict
+from .collections import Counter, OrderedDict
 from .message import Position, warn, error
 
 
@@ -329,12 +329,9 @@ COMMENT_ASTERISK_RE = re.compile(
     ''',
     re.UNICODE | re.VERBOSE)
 
-# Program matching the indentation at the beginning of every
-# line (stripped from the ' * ') inside a comment block.
-#
-# Results in 1 symbolic group:
-#   - group 1 = indentation
-COMMENT_INDENTATION_RE = re.compile(
+# Pattern matching the indentation level of a line (used
+# to get the indentation before and after the ' * ').
+INDENTATION_RE = re.compile(
     r'''
     ^
     (?P<indentation>\s*)                                 # 0 or more whitespace characters
@@ -973,7 +970,8 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
     Represents a GTK-Doc comment block.
     '''
 
-    __slots__ = ('code_before', 'code_after', 'name', 'params', 'description', 'tags')
+    __slots__ = ('code_before', 'code_after', 'indentation',
+                 'name', 'params', 'description', 'tags')
 
     #: Valid annotation names for the GTK-Doc comment block identifier part.
     valid_annotations = (ANN_ATTRIBUTES, ANN_CONSTRUCTOR, ANN_FOREIGN, ANN_GET_VALUE_FUNC,
@@ -988,6 +986,10 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
 
         #: Code following the GTK-Doc comment block end token ("``*/``"), if any.
         self.code_after = None
+
+        #: List of indentation levels (preceding the "``*``") for all lines in the comment
+        #: block's source text.
+        self.indentation = []
 
         #: Identifier name.
         self.name = name
@@ -1220,8 +1222,9 @@ class GtkDocCommentBlockParser(object):
         # that looks like a GTK-Doc comment block.
         comment_block = None
         identifier_warned = False
-        part_indent = None
+        block_indent = []
         line_indent = None
+        part_indent = None
         in_part = None
         current_part = None
         returns_seen = False
@@ -1234,14 +1237,18 @@ class GtkDocCommentBlockParser(object):
             original_line = line
             column_offset = 0
 
+            # Store indentation level of the comment (before the ' * ')
+            result = INDENTATION_RE.match(line)
+            block_indent.append(result.group('indentation'))
+
             # Get rid of the ' * ' at the start of the line.
             result = COMMENT_ASTERISK_RE.match(line)
             if result:
                 column_offset = result.end(0)
                 line = line[result.end(0):]
 
-            # Store indentation level of the line.
-            result = COMMENT_INDENTATION_RE.match(line)
+            # Store indentation level of the line (after the ' * ').
+            result = INDENTATION_RE.match(line)
             line_indent = len(result.group('indentation').replace('\t', '  '))
 
             ####################################################################
@@ -1326,6 +1333,7 @@ class GtkDocCommentBlockParser(object):
             ####################################################################
             result = PARAMETER_RE.match(line)
             if result:
+                part_indent = line_indent
                 param_name = result.group('parameter_name')
                 param_name_lower = param_name.lower()
                 param_fields = result.group('fields')
@@ -1334,8 +1342,6 @@ class GtkDocCommentBlockParser(object):
 
                 if in_part == PART_IDENTIFIER:
                     in_part = PART_PARAMETERS
-
-                part_indent = line_indent
 
                 if in_part != PART_PARAMETERS:
                     column = result.start('parameter_name') + column_offset
@@ -1597,7 +1603,7 @@ class GtkDocCommentBlockParser(object):
             for param in comment_block.params.values():
                 self._clean_comment_block_part(param)
 
-            # Validate and store block.
+            comment_block.indentation = block_indent
             comment_block.validate()
             return comment_block
         else:

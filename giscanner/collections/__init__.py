@@ -19,4 +19,5 @@
 #
 
 
+from .counter import Counter
 from .ordereddict import OrderedDict
