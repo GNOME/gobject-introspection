@@ -615,20 +615,6 @@ raise ValueError."""
 
         return canonical
 
-    def parse_ctype(self, ctype, is_member=False):
-        canonical = self._canonicalize_ctype(ctype)
-
-        # Remove all pointers - we require standard calling
-        # conventions.  For example, an 'int' is always passed by
-        # value (unless it's out or inout).
-        derefed_typename = canonical.replace('*', '')
-
-        # Preserve "pointerness" of struct/union members
-        if (is_member and canonical.endswith('*') and derefed_typename in ast.basic_type_names):
-            return 'gpointer'
-        else:
-            return derefed_typename
-
     def _create_type_from_base(self, source_type, is_parameter=False, is_return=False):
         ctype = self._create_source_type(source_type)
         complete_ctype = self._create_complete_source_type(source_type)
@@ -951,29 +937,6 @@ Note that type resolution may not succeed."""
             typeval.target_giname = None
 
         return typeval.resolved
-
-    def _typepair_to_str(self, item):
-        nsname, item = item
-        if nsname is None:
-            return item.name
-        return '%s.%s' % (nsname, item.name)
-
-    def gtypename_to_giname(self, gtname, names):
-        resolved = names.type_names.get(gtname)
-        if resolved:
-            return self._typepair_to_str(resolved)
-        resolved = self._names.type_names.get(gtname)
-        if resolved:
-            return self._typepair_to_str(resolved)
-        raise KeyError("Failed to resolve GType name: %r" % (gtname, ))
-
-    def ctype_of(self, obj):
-        if hasattr(obj, 'ctype'):
-            return obj.ctype
-        elif hasattr(obj, 'symbol'):
-            return obj.symbol
-        else:
-            return None
 
     def resolve_aliases(self, typenode):
         """Removes all aliases from typenode, returns first non-alias

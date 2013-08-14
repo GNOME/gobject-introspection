@@ -523,14 +523,6 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         else:
             return False
 
-    def _strip_class_suffix(self, name):
-        if (name.endswith('Class') or name.endswith('Iface')):
-            return name[:-5]
-        elif name.endswith('Interface'):
-            return name[:-9]
-        else:
-            return None
-
     def _find_class_record(self, cls):
         pair_record = None
         if isinstance(cls, ast.Class):

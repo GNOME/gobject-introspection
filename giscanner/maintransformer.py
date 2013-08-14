@@ -731,20 +731,6 @@ class MainTransformer(object):
         self._apply_annotations_params(node, node.parameters, block)
         self._apply_annotations_return(node, node.retval, block)
 
-    def _check_arg_annotations(self, parent, params, block):
-        if block is None:
-            return
-        for tag in block.tags.keys():
-            if tag == TAG_RETURNS:
-                continue
-            for param in params:
-                if param.argname == tag:
-                    break
-            else:
-                message.warn(
-                    "Annotation for '%s' refers to unknown argument '%s'"
-                    % (parent.name, tag))
-
     def _apply_annotations_field(self, parent, block, field):
         if not block:
             return

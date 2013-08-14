@@ -69,9 +69,6 @@ class GIRParser(object):
     def get_namespace(self):
         return self._namespace
 
-    def get_c_prefix(self):
-        return self._c_prefix
-
     # Private
 
     def _find_first_child(self, node, name_or_names):
