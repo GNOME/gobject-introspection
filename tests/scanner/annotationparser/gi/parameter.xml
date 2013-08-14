@@ -88,7 +88,8 @@
               <name>allow-none</name>
             </annotation>
           </annotations>
-          <description>(transfer full): first parameter</description>
+          <description>
+(transfer full): first parameter</description>
         </parameter>
       </parameters>
       <description>Annotations spanning multiple lines are not valid</description>
@@ -122,7 +123,8 @@
               <name>allow-none</name>
             </annotation>
           </annotations>
-          <description>first parameter having a second line which looks (like an annotation), but isn't. This should not result in a warning.</description>
+          <description>first parameter having a second line which looks
+(like an annotation), but isn't. This should not result in a warning.</description>
         </parameter>
       </parameters>
       <description>Annotations spanning multiple lines are not valid</description>

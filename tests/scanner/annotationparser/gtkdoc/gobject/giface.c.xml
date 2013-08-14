@@ -100,7 +100,6 @@ or \# or even \@.]]></description>
  * Configure a new instance
  *
  * Returns: %TRUE for sucess or %FALSE in case of an error
- *
  * Since: 0.1
  */</input>
   <parser>

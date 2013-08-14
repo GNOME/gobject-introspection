@@ -91,7 +91,8 @@
         <tag>
           <name>since</name>
           <value>2.0</value>
-          <description>one of these "Since:" tags is wrong...</description>
+          <description>one of these "Since:"
+tags is wrong...</description>
         </tag>
       </tags>
     </docblock>

@@ -207,7 +207,8 @@ All the internal details go here or not:
         </parameter>
         <parameter>
           <name>value</name>
-          <description>the new otest value, whose description extends further than one line will allow</description>
+          <description>the new otest value, whose description extends further than one
+ line will allow</description>
         </parameter>
       </parameters>
       <description>Set the #GtkdocObject:otest property.</description>

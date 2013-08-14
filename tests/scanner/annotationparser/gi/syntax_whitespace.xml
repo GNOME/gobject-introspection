@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests xmlns="http://schemas.gnome.org/gobject-introspection/2013/test">
+
+<test>
+  <input>/**
+ * whitespace_test:
+ * @object: (skip):    
+ *       
+ *       A #AnnotationObject
+ *        
+ *        
+ * @func: The callback
+ *                
+ *
+ * Test overriding via the "Rename To" annotation.
+ *        
+ *
+ * Returns: nothing
+ *        
+ * 
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>whitespace_test</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>object</name>
+          <annotations>
+            <annotation>
+              <name>skip</name>
+            </annotation>
+          </annotations>
+        </parameter>
+        <parameter>
+          <name>func</name>
+          <description>The callback</description>
+        </parameter>
+      </parameters>
+      <description>A #AnnotationObject
+       
+       
+
+Test overriding via the "Rename To" annotation.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>nothing</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>8: Warning: Test: "@func" parameter unexpected at this location:
+ * @func: The callback
+    ^</message>
+    </messages>
+  </parser>
+</test>
+
+</tests>

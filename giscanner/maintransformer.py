@@ -214,8 +214,8 @@ class MainTransformer(object):
             name = self._get_annotation_name(node)
             section_name = 'SECTION:%s' % (name.lower(), )
             block = self._blocks.get(section_name)
-            if block:
-                node.doc = block.description if block.description else ''
+            if block and block.description:
+                node.doc = block.description
         if isinstance(node, (ast.Class, ast.Interface)):
             for prop in node.properties:
                 self._apply_annotations_property(node, prop)
@@ -565,7 +565,7 @@ class MainTransformer(object):
         or node.type.target_giname == 'Gio.Cancellable'):
             node.allow_none = True
 
-        if tag is not None and tag.description is not None:
+        if tag and tag.description:
             node.doc = tag.description
 
         if ANN_SKIP in annotations:
@@ -582,7 +582,8 @@ class MainTransformer(object):
         if block is None:
             return
 
-        node.doc = block.description if block.description else ''
+        if block.description:
+            node.doc = block.description
 
         since_tag = block.tags.get(TAG_SINCE)
         if since_tag is not None:
@@ -794,7 +795,7 @@ class MainTransformer(object):
 
         for m in node.members:
             tag = block.params.get(m.symbol, None)
-            if tag is not None:
+            if tag and tag.description:
                 m.doc = tag.description
 
     def _pass_read_annotations2(self, node, chain):

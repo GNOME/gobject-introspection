@@ -28,7 +28,8 @@
       <parameters>
         <parameter>
           <name>par1</name>
-          <description>description of parameter 1. These can extend over more than one line.</description>
+          <description>description of parameter 1. These can extend over more than
+one line.</description>
         </parameter>
         <parameter>
           <name>par2</name>
@@ -134,7 +135,8 @@ name it is called in.</description>
       <parameters>
         <parameter>
           <name>par1</name>
-          <description>description of parameter 1. These can extend over more than one line.</description>
+          <description>description of parameter 1. These can extend over more than
+one line.</description>
         </parameter>
         <parameter>
           <name>par2</name>
@@ -202,7 +204,8 @@ other declarations (which may be documented elsewhere).</description>
       <parameters>
         <parameter>
           <name>par1</name>
-          <description>description of parameter 1. These can extend over more than one line.</description>
+          <description>description of parameter 1. These can extend over more than
+one line.</description>
         </parameter>
         <parameter>
           <name>par2</name>

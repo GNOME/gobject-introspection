@@ -98,7 +98,8 @@
               <name>allow-none</name>
             </annotation>
           </annotations>
-          <description>an optional string, which is used in ways too complicated to describe in a single line, making it necessary to wrap it</description>
+          <description>an optional string, which is used in ways too
+ complicated to describe in a single line, making it necessary to wrap it</description>
         </parameter>
       </parameters>
       <description>Document optional parameters.</description>
@@ -118,7 +119,8 @@
               <name>allow-none</name>
             </annotation>
           </annotations>
-          <description>Returns stuff which you have to free after use, whose description is also rather long</description>
+          <description>Returns stuff which you have to
+ free after use, whose description is also rather long</description>
         </tag>
       </tags>
     </docblock>

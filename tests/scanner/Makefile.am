@@ -231,6 +231,7 @@ EXTRA_DIST += \
 	annotationparser/gi/syntax.xml				\
 	annotationparser/gi/syntax_nested_tags.xml		\
 	annotationparser/gi/syntax_paragraph_breaks.xml		\
+	annotationparser/gi/syntax_whitespace.xml		\
 	annotationparser/gi/tag.xml				\
 	annotationparser/gi/tag_deprecated.xml			\
 	annotationparser/gi/tag_description.xml			\

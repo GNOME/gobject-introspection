@@ -35,7 +35,8 @@ void regress_test_ghash_gvalue_in (GHashTable* hash);
 <terms>
 <item>
 <title><code>hash</code></title>
-<p>the hash table returned by <link xref="Regress.test_ghash_gvalue_return"/>.</p>
+<p>the hash table returned by
+<link xref="Regress.test_ghash_gvalue_return"/>.</p>
 </item>
 <item>
 <title><code>Returns</code></title>

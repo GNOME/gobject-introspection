@@ -37,7 +37,8 @@ function compute_sum_nz(nums:[Number]):void {
 <terms>
 <item>
 <title><code>nums</code></title>
-<p>Sequence of numbers that are zero-terminated</p>
+<p>Sequence of numbers that
+are zero-terminated</p>
 </item>
 </terms>
 

@@ -37,7 +37,8 @@ function test_ghash_gvalue_in(hash:{String: GObject.Value}):void {
 <terms>
 <item>
 <title><code>hash</code></title>
-<p>the hash table returned by <link xref="Regress.test_ghash_gvalue_return"/>.</p>
+<p>the hash table returned by
+<link xref="Regress.test_ghash_gvalue_return"/>.</p>
 </item>
 </terms>
 

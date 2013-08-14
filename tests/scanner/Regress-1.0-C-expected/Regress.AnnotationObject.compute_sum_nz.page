@@ -49,7 +49,8 @@ void regress_annotation_object_compute_sum_nz (RegressAnnotationObject* object,
 </item>
 <item>
 <title><code>nums</code></title>
-<p>Sequence of numbers that are zero-terminated</p>
+<p>Sequence of numbers that
+are zero-terminated</p>
 </item>
 <item>
 <title><code>n_nums</code></title>

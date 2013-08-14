@@ -53,7 +53,9 @@
       <tags>
         <tag>
           <name>returns</name>
-          <description>something  Tags should go after the comment block description</description>
+          <description>something
+
+Tags should go after the comment block description</description>
         </tag>
       </tags>
     </docblock>

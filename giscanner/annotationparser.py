@@ -1039,7 +1039,8 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
             lines[0] += ' ' + annotations
 
         for param in self.params.values():
-            lines.append(param.to_gtk_doc())
+            for l in param.to_gtk_doc().split('\n'):
+                lines.append(l)
         if self.description:
             lines.append('')
             for l in self.description.split('\n'):
@@ -1047,12 +1048,12 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
         if self.tags:
             lines.append('')
             for tag in self.tags.values():
-                lines.append(tag.to_gtk_doc())
+                for l in tag.to_gtk_doc().split('\n'):
+                    lines.append(l)
 
         comment = ''
         comment += '/**\n'
         for line in lines:
-            line = line.rstrip()
             if line:
                 comment += ' * %s\n' % (line, )
             else:
@@ -1493,10 +1494,10 @@ class GtkDocCommentBlockParser(object):
 
                     in_part = PART_DESCRIPTION
 
-                    if not comment_block.description:
+                    if comment_block.description is None:
                         comment_block.description = tag_fields
                     else:
-                        comment_block.description += '\n' + tag_fields
+                        comment_block.description += '\n%s' % (tag_fields, )
                     continue
 
                 # Now that the deprecated stuff is out of the way, continue parsing real tags
@@ -1568,8 +1569,15 @@ class GtkDocCommentBlockParser(object):
             # If we get here, we must be in the middle of a multiline
             # comment block, parameter or tag description.
             ####################################################################
+            if EMPTY_LINE_RE.match(line) is None:
+                line = line.rstrip()
+
             if in_part in [PART_IDENTIFIER, PART_DESCRIPTION]:
                 if not comment_block.description:
+                    if in_part == PART_IDENTIFIER:
+                        self._validate_multiline_annotation_continuation(line, original_line,
+                                                                         column_offset, position)
+                if comment_block.description is None:
                     comment_block.description = line
                 else:
                     comment_block.description += '\n' + line
@@ -1578,8 +1586,10 @@ class GtkDocCommentBlockParser(object):
                 if not current_part.description:
                     self._validate_multiline_annotation_continuation(line, original_line,
                                                                      column_offset, position)
-                # Append to parameter description.
-                current_part.description += ' ' + line.strip()
+                if current_part.description is None:
+                    current_part.description = line
+                else:
+                    current_part.description += '\n' + line
                 continue
 
         ########################################################################
@@ -1592,10 +1602,10 @@ class GtkDocCommentBlockParser(object):
                 comment_block.description = comment_block.description.strip()
 
             for tag in comment_block.tags.values():
-                self._clean_comment_block_part(tag)
+                self._clean_description_field(tag)
 
             for param in comment_block.params.values():
-                self._clean_comment_block_part(param)
+                self._clean_description_field(param)
 
             comment_block.indentation = block_indent
             comment_block.validate()
@@ -1603,11 +1613,21 @@ class GtkDocCommentBlockParser(object):
         else:
             return None
 
-    def _clean_comment_block_part(self, part):
+    def _clean_description_field(self, part):
+        '''
+        Remove extraneous leading and trailing whitespace from description fields.
+
+        :param part: a GTK-Doc comment block part having a description field
+        '''
+
         if part.description:
-            part.description = part.description.strip()
-        else:
-            part.description = None
+            if part.description.strip() == '':
+                part.description = None
+            else:
+                if EMPTY_LINE_RE.match(part.description.split('\n', 1)[0]):
+                    part.description = part.description.rstrip()
+                else:
+                    part.description = part.description.strip()
 
     def _validate_multiline_annotation_continuation(self, line, original_line,
                                                     column_offset, position):
@@ -1632,7 +1652,7 @@ class GtkDocCommentBlockParser(object):
         success, annotations, start_pos, end_pos = self._parse_annotations(position, column_offset,
                                                                            original_line, line,
                                                                            False)
-        if annotations:
+        if success and annotations:
             marker = ' ' * (start_pos + column_offset) + '^'
             warn('ignoring invalid multiline annotation continuation:\n%s\n%s' %
                  (original_line, marker),

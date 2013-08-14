@@ -25,7 +25,8 @@
               <name>allow-none</name>
             </annotation>
           </annotations>
-          <description>(transfer full): something</description>
+          <description>
+(transfer full): something</description>
         </tag>
       </tags>
     </docblock>
@@ -60,7 +61,8 @@
               <name>allow-none</name>
             </annotation>
           </annotations>
-          <description>Returns tag having a second line which looks (like an annotation), but isn't. This should not result in a warning.</description>
+          <description>Returns tag having a second line which looks
+(like an annotation), but isn't. This should not result in a warning.</description>
         </tag>
       </tags>
     </docblock>

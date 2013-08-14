@@ -28,8 +28,13 @@
 
 /**
  * GModuleFlags:
- * @G_MODULE_BIND_LAZY: specifies that symbols are only resolved when needed. The default action is to bind all symbols when the module is loaded.
- * @G_MODULE_BIND_LOCAL: specifies that symbols in the module should not be added to the global name space. The default action on most platforms is to place symbols in the module in the global name space, which may cause conflicts with existing symbols.
+ * @G_MODULE_BIND_LAZY: specifies that symbols are only resolved when
+ *     needed. The default action is to bind all symbols when the module
+ *     is loaded.
+ * @G_MODULE_BIND_LOCAL: specifies that symbols in the module should
+ *     not be added to the global name space. The default action on most
+ *     platforms is to place symbols in the module in the global name space,
+ *     which may cause conflicts with existing symbols.
  * @G_MODULE_BIND_MASK: mask for all flags.
  *
  * Flags passed to g_module_open().
@@ -159,7 +164,9 @@
 
 /**
  * g_module_build_path:
- * @directory: (allow-none): the directory where the module is. This can be %NULL or the empty string to indicate that the standard platform-specific directories will be used, though that is not recommended
+ * @directory: (allow-none): the directory where the module is. This can be %NULL
+ *     or the empty string to indicate that the standard platform-specific
+ *     directories will be used, though that is not recommended
  * @module_name: the name of the module
  *
  * A portable way to build the filename of a module. The platform-specific
@@ -177,7 +184,8 @@
  * using <filename>\Windows</filename> as the directory it will return
  * <filename>\Windows\mylibrary.dll</filename>.
  *
- * Returns: the complete path of the module, including the standard library prefix and suffix. This should be freed when no longer needed
+ * Returns: the complete path of the module, including the standard library
+ *     prefix and suffix. This should be freed when no longer needed
  */
 
 
@@ -223,8 +231,10 @@
 
 /**
  * g_module_open:
- * @file_name: (allow-none): the name of the file containing the module, or %NULL to obtain a #GModule representing the main program itself
- * @flags: the flags used for opening the module. This can be the logical OR of any of the #GModuleFlags
+ * @file_name: (allow-none): the name of the file containing the module, or %NULL
+ *     to obtain a #GModule representing the main program itself
+ * @flags: the flags used for opening the module. This can be the
+ *     logical OR of any of the #GModuleFlags
  *
  * Opens a module. If the module has already been opened,
  * its reference count is incremented.

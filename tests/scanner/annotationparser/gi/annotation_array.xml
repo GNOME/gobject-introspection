@@ -67,7 +67,8 @@
               </options>
             </annotation>
           </annotations>
-          <description>Sequence of numbers that are zero-terminated</description>
+          <description>Sequence of
+  numbers that are zero-terminated</description>
         </parameter>
         <parameter>
           <name>n_nums</name>
@@ -116,7 +117,8 @@
               </options>
             </annotation>
           </annotations>
-          <description>Sequence of numbers that are zero-terminated</description>
+          <description>Sequence of numbers that
+are zero-terminated</description>
         </parameter>
         <parameter>
           <name>n_nums</name>

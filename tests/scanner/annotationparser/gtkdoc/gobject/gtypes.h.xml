@@ -23,7 +23,8 @@
         </parameter>
         <parameter>
           <name>GTKDOC_ENUM_V2</name>
-          <description>second Since: 0.10</description>
+          <description>second
+   Since: 0.10</description>
         </parameter>
       </parameters>
       <description>Enum values for the #GtkdocEnum type.</description>

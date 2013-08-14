@@ -240,7 +240,8 @@ and/or use gtk-doc annotations.  -->
             <type name="AnnotationObject" c:type="RegressAnnotationObject*"/>
           </instance-parameter>
           <parameter name="nums" transfer-ownership="none">
-            <doc xml:space="preserve">Sequence of numbers that are zero-terminated</doc>
+            <doc xml:space="preserve">Sequence of
+  numbers that are zero-terminated</doc>
             <array length="1" zero-terminated="0" c:type="int*">
               <type name="gint" c:type="int"/>
             </array>
@@ -263,7 +264,8 @@ and/or use gtk-doc annotations.  -->
             <type name="AnnotationObject" c:type="RegressAnnotationObject*"/>
           </instance-parameter>
           <parameter name="nums" transfer-ownership="none">
-            <doc xml:space="preserve">Sequence of numbers that are zero-terminated</doc>
+            <doc xml:space="preserve">Sequence of numbers that
+are zero-terminated</doc>
             <array length="1" zero-terminated="1" c:type="int*">
               <type name="gint" c:type="int"/>
             </array>
@@ -5319,7 +5321,8 @@ call and can be released on return.</doc>
       </return-value>
       <parameters>
         <parameter name="hash" transfer-ownership="none">
-          <doc xml:space="preserve">the hash table returned by regress_test_ghash_gvalue_return().</doc>
+          <doc xml:space="preserve">the hash table returned by
+regress_test_ghash_gvalue_return().</doc>
           <type name="GLib.HashTable" c:type="GHashTable*">
             <type name="utf8"/>
             <type name="GObject.Value"/>
@@ -6420,9 +6423,12 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
               deprecated="1"
               deprecated-version="1.33.3"
               stability="Unstable">
-      <doc-version xml:space="preserve">Actually, this function was introduced earlier than this, but it didn't do anything before this version.</doc-version>
-      <doc-deprecated xml:space="preserve">This function has been deprecated, because it sucks. Use foobar instead.</doc-deprecated>
-      <doc-stability xml:space="preserve">Maybe someday we will find the time to stabilize this function. Who knows?</doc-stability>
+      <doc-version xml:space="preserve">Actually, this function was introduced earlier
+  than this, but it didn't do anything before this version.</doc-version>
+      <doc-deprecated xml:space="preserve">This function has been deprecated,
+  because it sucks. Use foobar instead.</doc-deprecated>
+      <doc-stability xml:space="preserve">Maybe someday we will find the time
+  to stabilize this function. Who knows?</doc-stability>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
