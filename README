@@ -30,8 +30,7 @@ Tools
 
 Three tools are shipped with GObject Introspection:
 - g-ir-compile, a typelib compiler. It converts one or more GIR files
-  into one or more typelib blobs. It can either emit the raw typelib
-  blob or C code (--code).
+  into one or more typelib blobs.
 - g-ir-generate, an GIR generator, using the repository API. It generates
   GIR files from binary typelib which can be in a shared object, or a raw
   typelib blob.
