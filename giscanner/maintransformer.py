@@ -312,14 +312,14 @@ class MainTransformer(object):
         block = self._blocks.get(func.symbol)
         if block:
             if isinstance(param, ast.Parameter):
-                tag = block.params.get(param.argname)
+                part = block.params.get(param.argname)
             elif isinstance(param, ast.Return):
-                tag = block.tags.get(TAG_RETURNS)
+                part = block.tags.get(TAG_RETURNS)
             else:
-                tag = None
+                part = None
 
-            if tag.position:
-                return tag.position
+            if part.position:
+                return part.position
 
         return block.position
 
@@ -392,38 +392,38 @@ class MainTransformer(object):
         node.type = container_type
 
     def _apply_annotations_element_type(self, parent, node, annotations):
-        element_type_opt = annotations.get(ANN_ELEMENT_TYPE)
-        if element_type_opt is None:
+        element_type_options = annotations.get(ANN_ELEMENT_TYPE)
+        if element_type_options is None:
             return
 
         if isinstance(node.type, ast.List):
-            if len(element_type_opt) != 1:
+            if len(element_type_options) != 1:
                 message.warn(
                     '"element-type" annotation for a list must have exactly '
-                    'one option, not %d options' % (len(element_type_opt), ),
+                    'one option, not %d options' % (len(element_type_options), ),
                     annotations.position)
                 return
-            node.type.element_type = self._resolve(element_type_opt[0],
+            node.type.element_type = self._resolve(element_type_options[0],
                                                    node.type, node, parent)
         elif isinstance(node.type, ast.Map):
-            if len(element_type_opt) != 2:
+            if len(element_type_options) != 2:
                 message.warn(
                     '"element-type" annotation for a hash table must have exactly '
-                    'two options, not %d option(s)' % (len(element_type_opt), ),
+                    'two options, not %d option(s)' % (len(element_type_options), ),
                     annotations.position)
                 return
-            node.type.key_type = self._resolve(element_type_opt[0],
+            node.type.key_type = self._resolve(element_type_options[0],
                                                node.type, node, parent)
-            node.type.value_type = self._resolve(element_type_opt[1],
+            node.type.value_type = self._resolve(element_type_options[1],
                                                  node.type, node, parent)
         elif isinstance(node.type, ast.Array):
-            if len(element_type_opt) != 1:
+            if len(element_type_options) != 1:
                 message.warn(
                     '"element-type" annotation for an array must have exactly '
-                    'one option, not %d options' % (len(element_type_opt), ),
+                    'one option, not %d options' % (len(element_type_options), ),
                     annotations.position)
                 return
-            node.type.element_type = self._resolve(element_type_opt[0],
+            node.type.element_type = self._resolve(element_type_options[0],
                                                    node.type, node, parent)
         else:
             message.warn(
@@ -514,9 +514,9 @@ class MainTransformer(object):
     def _apply_annotations_param_ret_common(self, parent, node, tag):
         annotations = tag.annotations if tag else {}
 
-        param_type = annotations.get(ANN_TYPE)
-        if param_type:
-            node.type = self._resolve_toplevel(param_type[0],
+        type_annotation = annotations.get(ANN_TYPE)
+        if type_annotation:
+            node.type = self._resolve_toplevel(type_annotation[0],
                                                node.type, node, parent)
 
         caller_allocates = False
@@ -551,9 +551,9 @@ class MainTransformer(object):
             # Also reset the transfer default if we're toggling direction
             node.transfer = self._get_transfer_default(parent, node)
 
-        transfer_tag = annotations.get(ANN_TRANSFER)
-        if transfer_tag and len(transfer_tag) == 1:
-            transfer = transfer_tag[0]
+        transfer_annotation = annotations.get(ANN_TRANSFER)
+        if transfer_annotation and len(transfer_annotation) == 1:
+            transfer = transfer_annotation[0]
             if transfer == OPT_TRANSFER_FLOATING:
                 transfer = OPT_TRANSFER_NONE
             node.transfer = transfer
@@ -632,15 +632,15 @@ class MainTransformer(object):
         annotations = tag.annotations if tag else {}
 
         if isinstance(parent, (ast.Function, ast.VFunction)):
-            scope = annotations.get(ANN_SCOPE)
-            if scope and len(scope) == 1:
-                param.scope = scope[0]
+            scope_annotation = annotations.get(ANN_SCOPE)
+            if scope_annotation and len(scope_annotation) == 1:
+                param.scope = scope_annotation[0]
                 param.transfer = ast.PARAM_TRANSFER_NONE
 
-            destroy = annotations.get(ANN_DESTROY)
-            if destroy:
+            destroy_annotation = annotations.get(ANN_DESTROY)
+            if destroy_annotation:
                 param.destroy_name = self._get_validate_parameter_name(parent,
-                                                                       destroy[0],
+                                                                       destroy_annotation[0],
                                                                        param)
                 if param.destroy_name is not None:
                     param.scope = ast.PARAM_SCOPE_NOTIFIED
@@ -649,11 +649,12 @@ class MainTransformer(object):
                     # itself.  But this helps avoid tripping a warning from finaltransformer,
                     # since we don't have a way right now to flag this callback a destroy.
                     destroy_param.scope = ast.PARAM_SCOPE_NOTIFIED
-            closure = annotations.get(ANN_CLOSURE)
-            if closure and len(closure) == 1:
+
+            closure_annotation = annotations.get(ANN_CLOSURE)
+            if closure_annotation and len(closure_annotation) == 1:
                 param.closure_name = self._get_validate_parameter_name(parent,
-                                                                       closure[0],
-                                                                       param)
+                                                                   closure_annotation[0],
+                                                                   param)
         elif isinstance(parent, ast.Callback):
             if ANN_CLOSURE in annotations:
                 # For callbacks, (closure) appears without an
@@ -677,10 +678,10 @@ class MainTransformer(object):
             declparams.add(parent.instance_parameter.argname)
         for param in params:
             if block:
-                tag = block.params.get(param.argname)
+                doc_param = block.params.get(param.argname)
             else:
-                tag = None
-            self._apply_annotations_param(parent, param, tag)
+                doc_param = None
+            self._apply_annotations_param(parent, param, doc_param)
             declparams.add(param.argname)
 
         if not block:
@@ -699,10 +700,10 @@ class MainTransformer(object):
             else:
                 text = ', should be one of %s' % (', '.join(repr(p) for p in unused), )
 
-            tag = block.params.get(doc_name)
+            param = block.params.get(doc_name)
             message.warn('%s: unknown parameter %r in documentation '
                          'comment%s' % (block.name, doc_name, text),
-                         tag.position)
+                param.position)
 
     def _apply_annotations_callable(self, node, chain, block):
         self._apply_annotations_annotated(node, block)
@@ -715,9 +716,9 @@ class MainTransformer(object):
         tag = block.params.get(field.name)
         if not tag:
             return
-        t = tag.annotations.get(ANN_TYPE)
-        if t:
-            field.type = self._transformer.create_type_from_user_string(t[0])
+        type_annotation = tag.annotations.get(ANN_TYPE)
+        if type_annotation:
+            field.type = self._transformer.create_type_from_user_string(type_annotation[0])
 
         try:
             self._adjust_container_type(parent, field, tag.annotations)
@@ -768,11 +769,11 @@ class MainTransformer(object):
         for i, param in enumerate(signal.parameters):
             if names:
                 name, tag = names[i + 1]
-                annotations = getattr(tag, 'annotations', {})
-                param_type = annotations.get(ANN_TYPE)
-                if param_type:
-                    param.type = self._resolve_toplevel(param_type[0], param.type,
-                                                        param, parent)
+                if tag:
+                    type_annotation = tag.annotations.get(ANN_TYPE)
+                    if type_annotation:
+                        param.type = self._resolve_toplevel(type_annotation[0], param.type,
+                                                            param, parent)
             else:
                 tag = None
             self._apply_annotations_param(signal, param, tag)
@@ -794,9 +795,9 @@ class MainTransformer(object):
             return
 
         for m in node.members:
-            tag = block.params.get(m.symbol, None)
-            if tag and tag.description:
-                m.doc = tag.description
+            param = block.params.get(m.symbol, None)
+            if param and param.description:
+                m.doc = param.description
 
     def _pass_read_annotations2(self, node, chain):
         if isinstance(node, ast.Function):
