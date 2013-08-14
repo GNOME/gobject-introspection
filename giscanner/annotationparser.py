@@ -1341,18 +1341,15 @@ class GtkDocCommentBlockParser(object):
                 param_fields_start = result.start('fields')
                 marker = ' ' * (result.start('parameter_name') + column_offset) + '^'
 
-                if in_part == PART_IDENTIFIER:
-                    in_part = PART_PARAMETERS
-
-                if in_part != PART_PARAMETERS:
-                    column = result.start('parameter_name') + column_offset
-                    warn("'@%s' parameter unexpected at this location:\n%s\n%s" %
+                if in_part not in [PART_IDENTIFIER, PART_PARAMETERS]:
+                    warn('"@%s" parameter unexpected at this location:\n%s\n%s' %
                          (param_name, original_line, marker),
                          position)
 
-                # Old style GTK-Doc allowed return values to be specified as
-                # parameters instead of tags.
+                in_part = PART_PARAMETERS
+
                 if param_name_lower == TAG_RETURNS:
+                    # Deprecated return value as parameter instead of tag
                     param_name = TAG_RETURNS
 
                     if not returns_seen:
@@ -1503,12 +1500,15 @@ class GtkDocCommentBlockParser(object):
                     continue
 
                 # Now that the deprecated stuff is out of the way, continue parsing real tags
-                if in_part == PART_DESCRIPTION:
+                if (in_part == PART_DESCRIPTION
+                or (in_part == PART_PARAMETERS and not comment_block.description)
+                or (in_part == PART_IDENTIFIER and not comment_block.params and not
+                comment_block.description)):
                     in_part = PART_TAGS
 
                 if in_part != PART_TAGS:
-                    column = result.start('tag_name') + column_offset
-                    warn("'%s:' tag unexpected at this location:\n%s\n%s" %
+                    in_part = PART_TAGS
+                    warn('"%s:" tag unexpected at this location:\n%s\n%s' %
                          (tag_name, original_line, marker),
                          position)
 
@@ -1574,20 +1574,13 @@ class GtkDocCommentBlockParser(object):
                 else:
                     comment_block.description += '\n' + line
                 continue
-            elif in_part == PART_PARAMETERS:
+            elif in_part in [PART_PARAMETERS, PART_TAGS]:
                 if not current_part.description:
                     self._validate_multiline_annotation_continuation(line, original_line,
                                                                      column_offset, position)
                 # Append to parameter description.
                 current_part.description += ' ' + line.strip()
                 continue
-            elif in_part == PART_TAGS:
-                if not current_part.description:
-                    self._validate_multiline_annotation_continuation(line, original_line,
-                                                                     column_offset, position)
-
-                # Append to tag description.
-                current_part.description += ' ' + line.strip()
 
         ########################################################################
         # Finished parsing this comment block.

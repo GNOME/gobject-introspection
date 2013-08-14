@@ -31,9 +31,12 @@
       </tags>
     </docblock>
     <messages>
-      <message>6: Warning: Test: '@param1' parameter unexpected at this location:
+      <message>6: Warning: Test: "@param1" parameter unexpected at this location:
  * @param1: first parameter
     ^</message>
+      <message>7: Warning: Test: "Returns:" tag unexpected at this location:
+ * Returns: something
+   ^</message>
     </messages>
   </parser>
 </test>

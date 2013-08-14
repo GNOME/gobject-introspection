@@ -50,19 +50,13 @@
           <description>first parameter</description>
         </parameter>
       </parameters>
-      <description>Tags should go after the comment block description</description>
       <tags>
         <tag>
           <name>returns</name>
-          <description>something</description>
+          <description>something  Tags should go after the comment block description</description>
         </tag>
       </tags>
     </docblock>
-    <messages>
-      <message>4: Warning: Test: 'Returns:' tag unexpected at this location:
- * Returns: something
-   ^</message>
-    </messages>
   </parser>
 </test>
 
@@ -157,7 +151,7 @@ parameter is encountered.</description>
       </tags>
     </docblock>
     <messages>
-      <message>8: Warning: Test: '@returns' parameter unexpected at this location:
+      <message>8: Warning: Test: "@returns" parameter unexpected at this location:
  * @returns: something else
     ^</message>
       <message>8: Warning: Test: encountered multiple 'Returns' parameters or tags for 'test_multiple_returns_tag_and_parameter'.</message>

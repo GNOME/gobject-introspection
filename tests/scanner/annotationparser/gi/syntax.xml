@@ -220,7 +220,7 @@ something */ code goes here
       <description>The application class handles ...</description>
     </docblock>
     <messages>
-      <message>4: Warning: Test: '@short_description' parameter unexpected at this location:
+      <message>4: Warning: Test: "@short_description" parameter unexpected at this location:
  * @short_description: the application class
     ^</message>
     </messages>
