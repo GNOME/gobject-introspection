@@ -2393,7 +2393,7 @@
 /**
  * GSocket:broadcast:
  *
- * Whether the socket should allow sending to and receiving from broadcast addresses.
+ * Whether the socket should allow sending to broadcast addresses.
  *
  * Since: 2.32
  */
@@ -29685,14 +29685,20 @@
  * In certain situations, you may also want to bind a socket that will be
  * used to initiate connections, though this is not normally required.
  *
- * @allow_reuse should be %TRUE for server sockets (sockets that you will
- * eventually call g_socket_accept() on), and %FALSE for client sockets.
- * (Specifically, if it is %TRUE, then g_socket_bind() will set the
- * %SO_REUSEADDR flag on the socket, allowing it to bind @address even if
- * that address was previously used by another socket that has not yet been
- * fully cleaned-up by the kernel. Failing to set this flag on a server
- * socket may cause the bind call to return %G_IO_ERROR_ADDRESS_IN_USE if
- * the server program is stopped and then immediately restarted.)
+ * If @socket is a TCP socket, then @allow_reuse controls the setting
+ * of the <literal>SO_REUSEADDR</literal> socket option; normally it
+ * should be %TRUE for server sockets (sockets that you will
+ * eventually call g_socket_accept() on), and %FALSE for client
+ * sockets. (Failing to set this flag on a server socket may cause
+ * g_socket_bind() to return %G_IO_ERROR_ADDRESS_IN_USE if the server
+ * program is stopped and then immediately restarted.)
+ *
+ * If @socket is a UDP socket, then @allow_reuse determines whether or
+ * not other UDP sockets can be bound to the same address at the same
+ * time. In particular, you can have several UDP sockets bound to the
+ * same address, and they will all receive all of the multicast and
+ * broadcast packets sent to that address. (The behavior of unicast
+ * UDP packets to an address with multiple listeners is not defined.)
  *
  * Returns: %TRUE on success, %FALSE on error.
  * Since: 2.22
@@ -30729,7 +30735,7 @@
  *
  * Gets the broadcast setting on @socket; if %TRUE,
  * it is possible to send packets to broadcast
- * addresses or receive from broadcast addresses.
+ * addresses.
  *
  * Returns: the broadcast setting on @socket
  * Since: 2.32
@@ -31662,10 +31668,10 @@
 /**
  * g_socket_set_broadcast:
  * @socket: a #GSocket.
- * @broadcast: whether @socket should allow sending to and receiving from broadcast addresses
+ * @broadcast: whether @socket should allow sending to broadcast addresses
  *
- * Sets whether @socket should allow sending to and receiving from
- * broadcast addresses. This is %FALSE by default.
+ * Sets whether @socket should allow sending to broadcast addresses.
+ * This is %FALSE by default.
  *
  * Since: 2.32
  */

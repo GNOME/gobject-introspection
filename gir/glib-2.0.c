@@ -8721,11 +8721,10 @@
  * @cmp: The comparison operator to use. One of ==, !=, &lt;, &gt;, &lt;=, &gt;=.
  * @n2: another floating point number
  *
- * Debugging macro to terminate the application with a warning
- * message if a floating point number comparison fails.
+ * Debugging macro to compare two floating point numbers.
  *
  * The effect of <literal>g_assert_cmpfloat (n1, op, n2)</literal> is
- * the same as <literal>g_assert (n1 op n2)</literal>. The advantage
+ * the same as <literal>g_assert_true (n1 op n2)</literal>. The advantage
  * of this macro is that it can produce a message that includes the
  * actual values of @n1 and @n2.
  *
@@ -8739,8 +8738,7 @@
  * @cmp: The comparison operator to use. One of ==, !=, &lt;, &gt;, &lt;=, &gt;=.
  * @n2: another unsigned integer
  *
- * Debugging macro to terminate the application with a warning
- * message if an unsigned integer comparison fails.
+ * Debugging macro to compare to unsigned integers.
  *
  * This is a variant of g_assert_cmpuint() that displays the numbers
  * in hexadecimal notation in the message.
@@ -8755,11 +8753,10 @@
  * @cmp: The comparison operator to use. One of ==, !=, &lt;, &gt;, &lt;=, &gt;=.
  * @n2: another integer
  *
- * Debugging macro to terminate the application with a warning
- * message if an integer comparison fails.
+ * Debugging macro to compare two integers.
  *
  * The effect of <literal>g_assert_cmpint (n1, op, n2)</literal> is
- * the same as <literal>g_assert (n1 op n2)</literal>. The advantage
+ * the same as <literal>g_assert_true (n1 op n2)</literal>. The advantage
  * of this macro is that it can produce a message that includes the
  * actual values of @n1 and @n2.
  *
@@ -8773,12 +8770,13 @@
  * @cmp: The comparison operator to use. One of ==, !=, &lt;, &gt;, &lt;=, &gt;=.
  * @s2: another string (may be %NULL)
  *
- * Debugging macro to terminate the application with a warning
- * message if a string comparison fails. The strings are compared
- * using g_strcmp0().
+ * Debugging macro to compare two strings. If the comparison fails,
+ * an error message is logged and the application is either terminated
+ * or the testcase marked as failed.
+ * The strings are compared using g_strcmp0().
  *
  * The effect of <literal>g_assert_cmpstr (s1, op, s2)</literal> is
- * the same as <literal>g_assert (g_strcmp0 (s1, s2) op 0)</literal>.
+ * the same as <literal>g_assert_true (g_strcmp0 (s1, s2) op 0)</literal>.
  * The advantage of this macro is that it can produce a message that
  * includes the actual values of @s1 and @s2.
  *
@@ -8796,11 +8794,10 @@
  * @cmp: The comparison operator to use. One of ==, !=, &lt;, &gt;, &lt;=, &gt;=.
  * @n2: another unsigned integer
  *
- * Debugging macro to terminate the application with a warning
- * message if an unsigned integer comparison fails.
+ * Debugging macro to compare two unsigned integers.
  *
  * The effect of <literal>g_assert_cmpuint (n1, op, n2)</literal> is
- * the same as <literal>g_assert (n1 op n2)</literal>. The advantage
+ * the same as <literal>g_assert_true (n1 op n2)</literal>. The advantage
  * of this macro is that it can produce a message that includes the
  * actual values of @n1 and @n2.
  *
@@ -8814,11 +8811,11 @@
  * @dom: the expected error domain (a #GQuark)
  * @c: the expected error code
  *
- * Debugging macro to terminate the application with a warning
- * message if a method has not returned the correct #GError.
+ * Debugging macro to check that a method has returned
+ * the correct #GError.
  *
  * The effect of <literal>g_assert_error (err, dom, c)</literal> is
- * the same as <literal>g_assert (err != NULL &amp;&amp; err->domain
+ * the same as <literal>g_assert_true (err != NULL &amp;&amp; err->domain
  * == dom &amp;&amp; err->code == c)</literal>. The advantage of this
  * macro is that it can produce a message that includes the incorrect
  * error message and code.
@@ -8832,14 +8829,29 @@
 
 
 /**
+ * g_assert_false:
+ * @expr: the expression to check
+ *
+ * Debugging macro to check an expression is false.
+ *
+ * If the assertion fails (i.e. the expression is not false),
+ * an error message is logged and the application is either
+ * terminated or the testcase marked as failed.
+ *
+ * See g_test_set_nonfatal_assertions().
+ *
+ * Since: 2.38
+ */
+
+
+/**
  * g_assert_no_error:
  * @err: a #GError, possibly %NULL
  *
- * Debugging macro to terminate the application with a warning
- * message if a method has returned a #GError.
+ * Debugging macro to check that a #GError is not set.
  *
  * The effect of <literal>g_assert_no_error (err)</literal> is
- * the same as <literal>g_assert (err == NULL)</literal>. The advantage
+ * the same as <literal>g_assert_true (err == NULL)</literal>. The advantage
  * of this macro is that it can produce a message that includes
  * the error message and code.
  *
@@ -8856,6 +8868,38 @@
  *
  * The macro can be turned off in final releases of code by defining
  * <envar>G_DISABLE_ASSERT</envar> when compiling the application.
+ */
+
+
+/**
+ * g_assert_null:
+ * @expr: the expression to check
+ *
+ * Debugging macro to check an expression is %NULL.
+ *
+ * If the assertion fails (i.e. the expression is not %NULL),
+ * an error message is logged and the application is either
+ * terminated or the testcase marked as failed.
+ *
+ * See g_test_set_nonfatal_assertions().
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * g_assert_true:
+ * @expr: the expression to check
+ *
+ * Debugging macro to check that an expression is true.
+ *
+ * If the assertion fails (i.e. the expression is not true),
+ * an error message is logged and the application is either
+ * terminated or the testcase marked as failed.
+ *
+ * See g_test_set_nonfatal_assertions().
+ *
+ * Since: 2.38
  */
 
 
@@ -16369,7 +16413,7 @@
 /**
  * g_io_channel_read_unichar:
  * @channel: a #GIOChannel
- * @thechar: a location to return a character
+ * @thechar: (out): a location to return a character
  * @error: a location to return an error of type #GConvertError or #GIOChannelError
  *
  * Reads a Unicode character from @channel.
@@ -27500,6 +27544,25 @@
 
 
 /**
+ * g_test_failed:
+ *
+ * Returns whether a test has already failed. This will
+ * be the case when g_test_fail(), g_test_incomplete()
+ * or g_test_skip() have been called, but also if an
+ * assertion has failed.
+ *
+ * This can be useful to return early from a test if
+ * continuing after a failed assertion might be harmful.
+ *
+ * The return value of this function is only meaningful
+ * if it is called from inside a test function.
+ *
+ * Returns: %TRUE if the test has failed
+ * Since: 2.38
+ */
+
+
+/**
  * g_test_get_dir:
  * @file_type: the type of file (built vs. distributed)
  *
@@ -27545,6 +27608,25 @@
  *
  * Returns: the toplevel #GTestSuite
  * Since: 2.16
+ */
+
+
+/**
+ * g_test_incomplete:
+ * @msg: (allow-none): explanation
+ *
+ * Indicates that a test failed because of some incomplete
+ * functionality. This function can be called multiple times
+ * from the same test.
+ *
+ * Calling this function will not stop the test from running, you
+ * need to return from the test function yourself. So you can
+ * produce additional diagnostic messages or even continue running
+ * the test.
+ *
+ * If not called from inside a test, this function does nothing.
+ *
+ * Since: 2.38
  */
 
 
@@ -27919,6 +28001,42 @@
 
 
 /**
+ * g_test_set_nonfatal_assertions:
+ *
+ * Changes the behaviour of g_assert_cmpstr(), g_assert_cmpint(),
+ * g_assert_cmpuint(), g_assert_cmphex(), g_assert_cmpfloat(),
+ * g_assert_true(), g_assert_false(), g_assert_null(), g_assert_no_error(),
+ * g_assert_error(), g_test_assert_expected_messages() and the various
+ * g_test_trap_assert_*() macros to not abort to program, but instead
+ * call g_test_fail() and continue.
+ *
+ * Note that the g_assert_not_reached() and g_assert() are not
+ * affected by this.
+ *
+ * This function can only be called after g_test_init().
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * g_test_skip:
+ * @msg: (allow-none): explanation
+ *
+ * Indicates that a test was skipped.
+ *
+ * Calling this function will not stop the test from running, you
+ * need to return from the test function yourself. So you can
+ * produce additional diagnostic messages or even continue running
+ * the test.
+ *
+ * If not called from inside a test, this function does nothing.
+ *
+ * Since: 2.38
+ */
+
+
+/**
  * g_test_slow:
  *
  * Returns %TRUE if tests are run in slow mode.
@@ -28281,7 +28399,7 @@
 
 /**
  * g_thread_new:
- * @name: a name for the new thread
+ * @name: (allow-none): an (optional) name for the new thread
  * @func: a function to execute in the new thread
  * @data: an argument to supply to the new thread
  *
@@ -28292,6 +28410,7 @@
  * with g_thread_join().
  *
  * The @name can be useful for discriminating threads in a debugger.
+ * It is not used for other purposes and does not have to be unique.
  * Some systems restrict the length of @name to 16 bytes.
  *
  * If the thread can not be created the program aborts. See
@@ -28584,7 +28703,7 @@
 
 /**
  * g_thread_try_new:
- * @name: a name for the new thread
+ * @name: (allow-none): an (optional) name for the new thread
  * @func: a function to execute in the new thread
  * @data: an argument to supply to the new thread
  * @error: return location for error, or %NULL
