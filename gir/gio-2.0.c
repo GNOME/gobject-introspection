@@ -28983,6 +28983,7 @@
  * and adding them to the action group.
  *
  * Since: 2.30
+ * Deprecated: 2.38: Use g_action_map_add_action_entries()
  */
 
 
@@ -28999,6 +29000,7 @@
  * The action group takes its own reference on @action.
  *
  * Since: 2.28
+ * Deprecated: 2.38: Use g_action_map_add_action()
  */
 
 
@@ -29013,6 +29015,7 @@
  *
  * Returns: (transfer none): a #GAction, or %NULL
  * Since: 2.28
+ * Deprecated: 2.38: Use g_action_map_lookup_action()
  */
 
 
@@ -29036,6 +29039,7 @@
  * If no action of this name is in the group then nothing happens.
  *
  * Since: 2.28
+ * Deprecated: 2.38: Use g_action_map_remove_action()
  */
 
 
