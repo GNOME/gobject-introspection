@@ -20,6 +20,14 @@
   <!--
   Not GTK-Doc
   -->
+  <input>/**
+//</input>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
   <input>/*Test*/</input>
 </test>
 
@@ -51,37 +59,77 @@ something */</input>
   <!--
   Not GTK-Doc
   -->
-  <input>/**Test*/</input>
-</test>
-
-<test>
-  <!--
-  Not GTK-Doc
-  -->
-  <input>/** Test */</input>
-</test>
-
-<test>
-  <!--
-  Not GTK-Doc
-  -->
-  <input>/** Test
-something */</input>
-</test>
-
-<test>
-  <!--
-  Not GTK-Doc
-  -->
   <input>/**
 */</input>
 </test>
 
 <test>
-  <!--
-  Technically not GTK-Doc, but we need to support this for backwards compatibility
-  with the old annotationparser.
-  -->
+  <input>/** Test **/</input>
+  <parser>
+    <messages>
+      <message>1: Error: Test: Skipping invalid GTK-Doc comment block:
+/** Test **/
+^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**Test
+*/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Test</name>
+      </identifier>
+    </docblock>
+    <messages>
+      <message>1: Warning: Test: GTK-Doc comment block start token "/**" should not be followed by comment text:
+/**Test
+   ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/**
+Test */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Test</name>
+      </identifier>
+    </docblock>
+    <messages>
+      <message>2: Warning: Test: GTK-Doc comment block end token "*/" should not be preceded by comment text:
+Test */
+    ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
+  <input>/** Test
+something */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Test</name>
+      </identifier>
+      <description>something</description>
+    </docblock>
+    <messages>
+      <message>1: Warning: Test: GTK-Doc comment block start token "/**" should not be followed by comment text:
+/** Test
+    ^</message>
+      <message>2: Warning: Test: GTK-Doc comment block end token "*/" should not be preceded by comment text:
+something */
+         ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
   <input>/**
 Test
 something */</input>
@@ -93,7 +141,7 @@ something */</input>
       <description>something</description>
     </docblock>
     <messages>
-      <message>3: Warning: Test: Comments should end with */ on a new line:
+      <message>3: Warning: Test: GTK-Doc comment block end token "*/" should not be preceded by comment text:
 something */
          ^</message>
     </messages>
@@ -101,10 +149,6 @@ something */
 </test>
 
 <test>
-  <!--
-  Technically not GTK-Doc, but we need to support this for backwards compatibility
-  with the old annotationparser.
-  -->
   <input>/**
 Test
 something **/</input>
@@ -116,7 +160,7 @@ something **/</input>
       <description>something</description>
     </docblock>
     <messages>
-      <message>3: Warning: Test: Comments should end with */ on a new line:
+      <message>3: Warning: Test: GTK-Doc comment block end token "*/" should not be preceded by comment text:
 something **/
          ^</message>
     </messages>
@@ -124,8 +168,35 @@ something **/
 </test>
 
 <test>
+  <input>code goes here /** Test
+something */ code goes here</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Test</name>
+      </identifier>
+      <description>something</description>
+    </docblock>
+    <messages>
+      <message>1: Warning: Test: GTK-Doc comment block start token "/**" should not be preceded by code:
+code goes here /** Test
+              ^</message>
+      <message>1: Warning: Test: GTK-Doc comment block start token "/**" should not be followed by comment text:
+code goes here /** Test
+                   ^</message>
+      <message>2: Warning: Test: GTK-Doc comment block end token "*/" should not be followed by code:
+something */ code goes here
+                           ^</message>
+      <message>2: Warning: Test: GTK-Doc comment block end token "*/" should not be preceded by comment text:
+something */ code goes here
+         ^</message>
+    </messages>
+  </parser>
+</test>
+
+<test>
   <!--
-  Broken comment block, signal the start of the comment block description followed
+  Malformed comment block, signal the start of the comment block description followed
   by a parameter instead.
   -->
   <input>/**

@@ -119,8 +119,7 @@ struct _OffsetsArray
   gpointer some_ptrs[5];
 };
 
-/** Test object offsets
- */
+/* Test object offsets */
 
 typedef struct _OffsetsObj OffsetsObj;
 typedef struct _OffsetsObjClass OffsetsObjClass;

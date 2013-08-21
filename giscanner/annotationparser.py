@@ -285,34 +285,31 @@ TRANSFER_OPTIONS = [OPT_TRANSFER_CONTAINER,
 # Pattern used to normalize different types of line endings
 LINE_BREAK_RE = re.compile(r'\r\n|\r|\n', re.UNICODE)
 
-# Program matching the start of a comment block.
-#
-# Results in 0 symbolic groups.
-COMMENT_START_RE = re.compile(
+# Pattern matching the start token of a comment block.
+COMMENT_BLOCK_START_RE = re.compile(
     r'''
     ^                                                    # start
+    (?P<code>.*?)                                        # whitespace, code, ...
     \s*                                                  # 0 or more whitespace characters
-    /                                                    # 1 forward slash character
-    \*{2}                                                # exactly 2 asterisk characters
+    (?P<token>/\*{2}(?!\*))                              # 1 forward slash character followed
+                                                         #   by exactly 2 asterisk characters
+    \s*                                                  # 0 or more whitespace characters
+    (?P<comment>.*?)                                     # GTK-Doc comment text
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
     re.UNICODE | re.VERBOSE)
 
-# Program matching the end of a comment block. We need to take care
-# of comment ends that aren't on their own line for legacy support
-# reasons. See https://bugzilla.gnome.org/show_bug.cgi?id=689354
-#
-# Results in 1 symbolic group:
-#    - group 1 = description
-COMMENT_END_RE = re.compile(
+# Pattern matching the end token of a comment block.
+COMMENT_BLOCK_END_RE = re.compile(
     r'''
     ^                                                    # start
     \s*                                                  # 0 or more whitespace characters
-    (?P<description>.*?)                                 # description text
+    (?P<comment>.*?)                                     # GTK-Doc comment text
     \s*                                                  # 0 or more whitespace characters
-    \*+                                                  # 1 or more asterisk characters
-    /                                                    # 1 forward slash character
+    (?P<token>\*+/)                                      # 1 or more asterisk characters followed
+                                                         #   by exactly 1 forward slash character
+    (?P<code>.*?)                                        # whitespace, code, ...
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
@@ -976,7 +973,7 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
     Represents a GTK-Doc comment block.
     '''
 
-    __slots__ = ('name', 'params', 'description', 'tags')
+    __slots__ = ('code_before', 'code_after', 'name', 'params', 'description', 'tags')
 
     #: Valid annotation names for the GTK-Doc comment block identifier part.
     valid_annotations = (ANN_ATTRIBUTES, ANN_CONSTRUCTOR, ANN_FOREIGN, ANN_GET_VALUE_FUNC,
@@ -985,6 +982,12 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)
+
+        #: Code preceding the GTK-Doc comment block start token ("``/**``"), if any.
+        self.code_before = None
+
+        #: Code following the GTK-Doc comment block end token ("``*/``"), if any.
+        self.code_after = None
 
         #: Identifier name.
         self.name = name
@@ -1146,27 +1149,67 @@ class GtkDocCommentBlockParser(object):
         :returns: a :class:`GtkDocCommentBlock` object or ``None``
         '''
 
+        code_before = ''
+        code_after = ''
         comment_lines = list(enumerate(re.sub(LINE_BREAK_RE, '\n', comment).split('\n')))
+        comment_lines_len = len(comment_lines)
 
-        # Check for the start the comment block.
-        if COMMENT_START_RE.match(comment_lines[0][1]):
-            del comment_lines[0]
+        # Check for the start of the comment block.
+        result = COMMENT_BLOCK_START_RE.match(comment_lines[0][1])
+        if result:
+            # Skip single line comment blocks
+            if comment_lines_len == 1:
+                position = Position(filename, lineno)
+                marker = ' ' * result.end('code') + '^'
+                error('Skipping invalid GTK-Doc comment block:'
+                      '\n%s\n%s' % (comment_lines[0][1], marker),
+                     position)
+                return None
+
+            code_before = result.group('code')
+            comment = result.group('comment')
+
+            if code_before:
+                position = Position(filename, lineno)
+                marker = ' ' * result.end('code') + '^'
+                warn('GTK-Doc comment block start token "/**" should '
+                     'not be preceded by code:\n%s\n%s' % (comment_lines[0][1], marker),
+                     position)
+
+            if comment:
+                position = Position(filename, lineno)
+                marker = ' ' * result.start('comment') + '^'
+                warn('GTK-Doc comment block start token "/**" should '
+                     'not be followed by comment text:\n%s\n%s' % (comment_lines[0][1], marker),
+                     position)
+
+                comment_lines[0] = (comment_lines[0][0], comment)
+            else:
+                del comment_lines[0]
         else:
             # Not a GTK-Doc comment block.
             return None
 
-        # Check for the end the comment block.
-        line_offset, line = comment_lines[-1]
-        result = COMMENT_END_RE.match(line)
+        # Check for the end of the comment block.
+        result = COMMENT_BLOCK_END_RE.match(comment_lines[-1][1])
         if result:
-            description = result.group('description')
-            if description:
-                comment_lines[-1] = (line_offset, description)
-                position = Position(filename, lineno + line_offset)
-                marker = ' ' * result.end('description') + '^'
-                warn("Comments should end with */ on a new line:\n%s\n%s" %
-                     (line, marker),
+            code_after = result.group('code')
+            comment = result.group('comment')
+            if code_after:
+                position = Position(filename, lineno + comment_lines_len - 1)
+                marker = ' ' * result.end('code') + '^'
+                warn('GTK-Doc comment block end token "*/" should '
+                     'not be followed by code:\n%s\n%s' % (comment_lines[-1][1], marker),
                      position)
+
+            if comment:
+                position = Position(filename, lineno + comment_lines_len - 1)
+                marker = ' ' * result.end('comment') + '^'
+                warn('GTK-Doc comment block end token "*/" should '
+                     'not be preceded by comment text:\n%s\n%s' % (comment_lines[-1][1], marker),
+                     position)
+
+                comment_lines[-1] = (comment_lines[-1][0], comment)
             else:
                 del comment_lines[-1]
         else:
@@ -1243,8 +1286,9 @@ class GtkDocCommentBlockParser(object):
                     in_part = PART_IDENTIFIER
                     part_indent = line_indent
 
-                    comment_block = GtkDocCommentBlock(identifier_name)
-                    comment_block.position = position
+                    comment_block = GtkDocCommentBlock(identifier_name, position)
+                    comment_block.code_before = code_before
+                    comment_block.code_after = code_after
 
                     if identifier_fields:
                         (a, d) = self._parse_fields(position,

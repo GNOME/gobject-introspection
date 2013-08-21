@@ -31,11 +31,130 @@ against the expected output.
 '''
 
 
-from giscanner.annotationparser import (SECTION_RE, SYMBOL_RE, PROPERTY_RE,
+from giscanner.annotationparser import (COMMENT_BLOCK_START_RE, COMMENT_BLOCK_END_RE,
+                                        SECTION_RE, SYMBOL_RE, PROPERTY_RE,
                                         SIGNAL_RE, PARAMETER_RE, TAG_RE,
-                                        TAG_VALUE_VERSION_RE, TAG_VALUE_STABILITY_RE,
-                                        COMMENT_END_RE)
+                                        TAG_VALUE_VERSION_RE, TAG_VALUE_STABILITY_RE)
 from unittest import (TestCase, main)
+
+
+comment_start_tests = [
+    (COMMENT_BLOCK_START_RE, '/**',
+         {'code': '',
+          'token': '/**',
+          'comment': ''}),
+    (COMMENT_BLOCK_START_RE, '   /**',
+         {'code': '',
+          'token': '/**',
+          'comment': ''}),
+    (COMMENT_BLOCK_START_RE, ' /** ',
+         {'code': '',
+          'token': '/**',
+          'comment': ''}),
+    (COMMENT_BLOCK_START_RE, 'xyz /** ',
+         {'code': 'xyz',
+          'token': '/**',
+          'comment': ''}),
+    (COMMENT_BLOCK_START_RE, '    xyz    /** ',
+         {'code': '    xyz',
+          'token': '/**',
+          'comment': ''}),
+    (COMMENT_BLOCK_START_RE, '/** xyz',
+         {'code': '',
+          'token': '/**',
+          'comment': 'xyz'}),
+    (COMMENT_BLOCK_START_RE, ' /**xyz',
+         {'code': '',
+          'token': '/**',
+          'comment': 'xyz'}),
+    (COMMENT_BLOCK_START_RE, ' /** xyz',
+         {'code': '',
+          'token': '/**',
+          'comment': 'xyz'}),
+    (COMMENT_BLOCK_START_RE, '/***',
+         None),
+    (COMMENT_BLOCK_START_RE, ' /***',
+         None),
+    (COMMENT_BLOCK_START_RE, ' /*** ',
+         None),
+    (COMMENT_BLOCK_START_RE, '/*** xyz',
+         None),
+    (COMMENT_BLOCK_START_RE, '/***** xyz',
+         None),
+    (COMMENT_BLOCK_START_RE, ' /*****xyz',
+         None),
+]
+
+
+comment_end_tests = [
+    (COMMENT_BLOCK_END_RE, '*/',
+         {'comment': '',
+          'token': '*/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, '   */',
+         {'comment': '',
+          'token': '*/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, ' */ ',
+         {'comment': '',
+          'token': '*/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, '*/xyz',
+         {'comment': '',
+          'token': '*/',
+          'code': 'xyz'}),
+    (COMMENT_BLOCK_END_RE, '   */xyz',
+         {'comment': '',
+          'token': '*/',
+          'code': 'xyz'}),
+    (COMMENT_BLOCK_END_RE, ' */ xyz',
+         {'comment': '',
+          'token': '*/',
+          'code': ' xyz'}),
+    (COMMENT_BLOCK_END_RE, '**/',
+         {'comment': '',
+          'token': '**/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, ' **/',
+         {'comment': '',
+          'token': '**/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, ' **/ ',
+         {'comment': '',
+          'token': '**/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, 'test */',
+         {'comment': 'test',
+          'token': '*/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, ' test*/',
+         {'comment': 'test',
+          'token': '*/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, 'test */ xyz',
+         {'comment': 'test',
+          'token': '*/',
+          'code': ' xyz'}),
+    (COMMENT_BLOCK_END_RE, ' test*/  xyz  ',
+         {'comment': 'test',
+          'token': '*/',
+          'code': '  xyz'}),
+    (COMMENT_BLOCK_END_RE, 'test **/',
+         {'comment': 'test',
+          'token': '**/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, ' test**/',
+         {'comment': 'test',
+          'token': '**/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, 'test *****/',
+         {'comment': 'test',
+          'token': '*****/',
+          'code': ''}),
+    (COMMENT_BLOCK_END_RE, ' test*****/',
+         {'comment': 'test',
+          'token': '*****/',
+          'code': ''})]
 
 
 identifier_section_tests = [
@@ -571,33 +690,6 @@ tag_value_stability_tests = [
           'description': 'xyz: abc'})]
 
 
-comment_end_tests = [
-    (COMMENT_END_RE, '*/',
-         {'description': ''}),
-    (COMMENT_END_RE, '   */',
-         {'description': ''}),
-    (COMMENT_END_RE, ' */ ',
-         {'description': ''}),
-    (COMMENT_END_RE, '**/',
-         {'description': ''}),
-    (COMMENT_END_RE, ' **/',
-         {'description': ''}),
-    (COMMENT_END_RE, ' **/ ',
-         {'description': ''}),
-    (COMMENT_END_RE, 'test */',
-         {'description': 'test'}),
-    (COMMENT_END_RE, ' test*/',
-         {'description': 'test'}),
-    (COMMENT_END_RE, 'test **/',
-         {'description': 'test'}),
-    (COMMENT_END_RE, ' test**/',
-         {'description': 'test'}),
-    (COMMENT_END_RE, 'test *****/',
-         {'description': 'test'}),
-    (COMMENT_END_RE, ' test*****/',
-         {'description': 'test'})]
-
-
 def create_tests(tests_name, testcases):
     for (index, testcase) in enumerate(testcases):
         real_test_name = '%s_%03d' % (tests_name, index)
@@ -639,16 +731,15 @@ class TestProgram(TestCase):
 
 
 if __name__ == '__main__':
-    # Create tests from data
+    create_tests('test_comment_start', comment_start_tests)
+    create_tests('test_comment_end', comment_end_tests)
     create_tests('test_identifier_section', identifier_section_tests)
     create_tests('test_identifier_symbol', identifier_symbol_tests)
     create_tests('test_identifier_property', identifier_property_tests)
     create_tests('test_identifier_signal', identifier_signal_tests)
     create_tests('test_parameter', parameter_tests)
     create_tests('test_tag', tag_tests)
-    create_tests('test_comment_end', comment_end_tests)
     create_tests('test_tag_value_version', tag_value_version_tests)
     create_tests('test_tag_value_stability', tag_value_stability_tests)
 
-    # Run test suite
     main()
