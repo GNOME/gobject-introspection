@@ -28,7 +28,7 @@ IGNORE_HFILES= \
     girwriter.h	    \
     girmodule.h
 
-INCLUDES=$(GIREPO_CFLAGS) -I$(top_srcdir)
+AM_CPPFLAGS=$(GIREPO_CFLAGS) -I$(top_srcdir)
 GTKDOC_LIBS = $(GIREPO_LIBS) $(top_builddir)/libgirepository-1.0.la $(top_builddir)/libgirepository-internals.la
 
 content_files = \
