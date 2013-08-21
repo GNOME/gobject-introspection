@@ -333,4 +333,36 @@ parameter is encountered.</description>
   </parser>
 </test>
 
+<test>
+  <input>/**
+ * annotation_object_string_out:
+ *
+ * Test returning a string as an out parameter
+ *
+ * Returns: (out): some boolean
+ **/</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_object_string_out</name>
+      </identifier>
+      <description>Test returning a string as an out parameter</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>out</name>
+            </annotation>
+          </annotations>
+          <description>some boolean</description>
+        </tag>
+      </tags>
+    </docblock>
+    <messages>
+      <message>6: Warning: Test: unexpected annotation: out</message>
+    </messages>
+  </parser>
+</test>
+
 </tests>

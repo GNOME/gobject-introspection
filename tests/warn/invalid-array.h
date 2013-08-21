@@ -7,7 +7,7 @@
 void
 test_invalid_array (char ***out1);
 
-// EXPECT:5: Warning: Test: invalid array annotation value: 'foobar'
+// EXPECT:5: Warning: Test: invalid "array" annotation option: "foobar"
 
 /**
  * test_invalid_array_zero_terminated:
@@ -18,8 +18,8 @@ void
 test_invalid_array_zero_terminated (char ***out1,
                                     char ***out2);
 
-// EXPECT:14: Warning: Test: array option zero-terminated needs a value
-// EXPECT:15: Warning: Test: invalid array zero-terminated option value 'foobar', must be an integer
+// EXPECT:14: Warning: Test: "array" annotation option "zero-terminated" needs a value
+// EXPECT:15: Warning: Test: invalid "array" annotation option "zero-terminated" value "foobar", must be an integer
 
 /**
  * test_invalid_array_fixed_size:
@@ -30,8 +30,8 @@ void
 test_invalid_array_fixed_size (char ***out1,
                                char ***out2);
 
-// EXPECT:26: Warning: Test: array option fixed-size needs a value
-// EXPECT:27: Warning: Test: invalid array fixed-size option value 'foobar', must be an integer
+// EXPECT:26: Warning: Test: "array" annotation option "fixed-size" needs a value
+// EXPECT:27: Warning: Test: invalid "array" annotation option "fixed-size" value "foobar", must be an integer
 
 /**
  * test_invalid_array_length:
@@ -41,4 +41,4 @@ void
 test_invalid_array_length (char ***out1,
                            char ***out2);
 
-// EXPECT:38: Warning: Test: array option length needs a value
+// EXPECT:38: Warning: Test: "array" annotation option "length" needs a value

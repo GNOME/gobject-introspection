@@ -109,6 +109,8 @@ Refer to the `GTK-Doc manual`_ for more detailed usage information.
 import os
 import re
 
+from operator import ne, gt, lt
+
 from .collections import OrderedDict
 from .message import Position, warn, error
 
@@ -248,20 +250,36 @@ OPT_ARRAY_FIXED_SIZE = 'fixed-size'
 OPT_ARRAY_LENGTH = 'length'
 OPT_ARRAY_ZERO_TERMINATED = 'zero-terminated'
 
+ARRAY_OPTIONS = [OPT_ARRAY_FIXED_SIZE,
+                 OPT_ARRAY_LENGTH,
+                 OPT_ARRAY_ZERO_TERMINATED]
+
 # (out) annotation options
 OPT_OUT_CALLEE_ALLOCATES = 'callee-allocates'
 OPT_OUT_CALLER_ALLOCATES = 'caller-allocates'
+
+OUT_OPTIONS = [OPT_OUT_CALLEE_ALLOCATES,
+               OPT_OUT_CALLER_ALLOCATES]
 
 # (scope) annotation options
 OPT_SCOPE_ASYNC = 'async'
 OPT_SCOPE_CALL = 'call'
 OPT_SCOPE_NOTIFIED = 'notified'
 
+SCOPE_OPTIONS = [OPT_SCOPE_ASYNC,
+                 OPT_SCOPE_CALL,
+                 OPT_SCOPE_NOTIFIED]
+
 # (transfer) annotation options
 OPT_TRANSFER_CONTAINER = 'container'
 OPT_TRANSFER_FLOATING = 'floating'
 OPT_TRANSFER_FULL = 'full'
 OPT_TRANSFER_NONE = 'none'
+
+TRANSFER_OPTIONS = [OPT_TRANSFER_CONTAINER,
+                    OPT_TRANSFER_FLOATING,
+                    OPT_TRANSFER_FULL,
+                    OPT_TRANSFER_NONE]
 
 
 # Program matching the start of a comment block.
@@ -490,53 +508,125 @@ class GtkDocAnnotations(OrderedDict):
         self.position = position
 
 
-class GtkDocParameter(object):
+class GtkDocAnnotatable(object):
     '''
-    Represents a GTK-Doc parameter part.
+    Base class for GTK-Doc comment block parts that can be annotated.
     '''
 
-    __slots__ = ('name', 'annotations', 'description', 'position')
+    __slots__ = ('position', 'annotations')
 
-    def __init__(self, name, position=None):
-        #: Parameter name.
-        self.name = name
+    #: A :class:`tuple` of annotation name constants that are valid for this object. Annotation
+    #: names not in this :class:`tuple` will be reported as *unknown* by :func:`validate`. The
+    #: :attr:`valid_annotations` class attribute should be overridden by subclasses.
+    valid_annotations = ()
 
-        #: Parameter description or :const:`None`.
-        self.description = None
-
-        self.annotations = GtkDocAnnotations()
+    def __init__(self, position=None):
+        #: A :class:`giscanner.message.Position` instance specifying the location of the
+        #: annotatable comment block part in the source file or :const:`None`.
         self.position = position
 
+        #: A :class:`GtkDocAnnotations` instance representing the annotations
+        #: applied to this :class:`GtkDocAnnotatable` instance.
+        self.annotations = GtkDocAnnotations()
+
     def __repr__(self):
-        return '<GtkDocParameter %r %r>' % (self.name, self.annotations)
+        return '<GtkDocAnnotatable %r %r>' % (self.annotations, )
 
-    def _validate_annotation(self, ann_name, options, required=False,
-                             n_params=None, choices=None):
-        if required and len(options) == 0:
-            warn('%s annotation needs a value' % (ann_name, ), self.position)
-            return
+    def validate(self):
+        '''
+        Validate annotations stored by the :class:`GtkDocAnnotatable` instance, if any.
+        '''
 
-        if n_params is not None:
-            if n_params == 0:
-                s = 'no value'
-            elif n_params == 1:
-                s = 'one value'
-            else:
-                s = '%d values' % (n_params, )
-            if len(options) != n_params:
-                length = len(options)
-                warn('%s annotation needs %s, not %d' % (ann_name, s, length),
-                     self.position)
-                return
+        if self.annotations:
+            for ann_name, options in self.annotations.items():
+                if ann_name in self.valid_annotations:
+                    validate = getattr(self, '_do_validate_' + ann_name.replace('-', '_'))
+                    validate(ann_name, options)
+                elif ann_name in ALL_ANNOTATIONS:
+                    # Not error() as ann_name might be valid in some newer
+                    # GObject-Instrospection version.
+                    warn('unexpected annotation: %s' % (ann_name, ), self.position)
+                else:
+                    # Not error() as ann_name might be valid in some newer
+                    # GObject-Instrospection version.
+                    warn('unknown annotation: %s' % (ann_name, ), self.position)
 
-        if choices is not None:
+    def _validate_options(self, ann_name, n_options, expected_n_options, operator, message):
+        '''
+        Validate the number of options held by an annotation according to the test
+        ``operator(n_options, expected_n_options)``.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param n_options: number of options held by the annotation
+        :param expected_n_options: number of expected options
+        :param operator: an operator function from python's :mod:`operator` module, for example
+                         :func:`operator.ne` or :func:`operator.lt`
+        :param message: warning message used when the test
+                        ``operator(n_options, expected_n_options)`` fails.
+        '''
+
+        if n_options == 0:
+            t = 'none'
+        else:
+            t = '%d' % (n_options, )
+
+        if expected_n_options == 0:
+            s = 'no options'
+        elif expected_n_options == 1:
+            s = 'one option'
+        else:
+            s = '%d options' % (expected_n_options, )
+
+        if operator(n_options, expected_n_options):
+            warn('"%s" annotation %s %s, %s given' % (ann_name, message, s, t), self.position)
+
+    def _validate_annotation(self, ann_name, options, choices=None,
+                             exact_n_options=None, min_n_options=None, max_n_options=None):
+        '''
+        Validate an annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to be validated
+        :param choices: an iterable of allowed option names or :const:`None` to skip this test
+        :param exact_n_options: exact number of expected options or :const:`None` to skip this test
+        :param min_n_options: minimum number of expected options or :const:`None` to skip this test
+        :param max_n_options: maximum number of expected options or :const:`None` to skip this test
+        '''
+
+        n_options = len(options)
+
+        if exact_n_options is not None:
+            self._validate_options(ann_name, n_options, exact_n_options, ne, 'needs')
+
+        if min_n_options is not None:
+            self._validate_options(ann_name, n_options, min_n_options, lt, 'takes at least')
+
+        if max_n_options is not None:
+            self._validate_options(ann_name, n_options, max_n_options, gt, 'takes at most')
+
+        if options and choices is not None:
             option = options[0]
             if option not in choices:
-                warn('invalid %s annotation value: %r' % (ann_name, option, ),
-                     self.position)
-                return
+                warn('invalid "%s" annotation option: "%s"' % (ann_name, option), self.position)
 
-    def _validate_array(self, ann_name, options):
+    def _do_validate_allow_none(self, ann_name, options):
+        '''
+        Validate the ``(allow-none)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options held by the annotation
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=0)
+
+    def _do_validate_array(self, ann_name, options):
+        '''
+        Validate the ``(array)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options held by the annotation
+        '''
+
         if len(options) == 0:
             return
 
@@ -546,49 +636,254 @@ class GtkDocParameter(object):
                     int(value)
                 except (TypeError, ValueError):
                     if value is None:
-                        warn('array option %s needs a value' % (option, ),
-                             positions=self.position)
+                        warn('"%s" annotation option "%s" needs a value' % (ann_name, option),
+                             self.position)
                     else:
-                        warn('invalid array %s option value %r, '
-                             'must be an integer' % (option, value, ),
-                             positions=self.position)
+                        warn('invalid "%s" annotation option "%s" value "%s", must be an integer' %
+                             (ann_name, option, value),
+                             self.position)
             elif option == OPT_ARRAY_LENGTH:
                 if value is None:
-                    warn('array option length needs a value',
-                         positions=self.position)
+                    warn('"%s" annotation option "length" needs a value' % (ann_name, ),
+                         self.position)
             else:
-                warn('invalid array annotation value: %r' % (option, ),
+                warn('invalid "%s" annotation option: "%s"' % (ann_name, option),
                      self.position)
 
-    def _validate_closure(self, ann_name, options):
-        if len(options) != 0 and len(options) > 1:
-            warn('closure takes at most 1 value, %d given' % (len(options), ),
-                 self.position)
+    def _do_validate_attributes(self, ann_name, options):
+        '''
+        Validate the ``(attributes)`` annotation.
 
-    def _validate_element_type(self, ann_name, options):
-        self._validate_annotation(ann_name, options, required=True)
-        if len(options) == 0:
-            warn('element-type takes at least one value, none given',
-                 self.position)
-            return
-        if len(options) > 2:
-            warn('element-type takes at most 2 values, %d given' % (len(options), ),
-                 self.position)
-            return
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
 
-    def _validate_out(self, ann_name, options):
-        if len(options) == 0:
-            return
-        if len(options) > 1:
-            warn('out annotation takes at most 1 value, %d given' % (len(options), ),
-                 self.position)
-            return
-        option = options[0]
-        if option not in [OPT_OUT_CALLEE_ALLOCATES,
-                          OPT_OUT_CALLER_ALLOCATES]:
-            warn("out annotation value is invalid: %r" % (option, ),
-                 self.position)
-            return
+        # The 'attributes' annotation allows free form annotations.
+        pass
+
+    def _do_validate_closure(self, ann_name, options):
+        '''
+        Validate the ``(closure)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, max_n_options=1)
+
+    def _do_validate_constructor(self, ann_name, options):
+        '''
+        Validate the ``(constructor)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=0)
+
+    def _do_validate_destroy(self, ann_name, options):
+        '''
+        Validate the ``(destroy)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+    def _do_validate_element_type(self, ann_name, options):
+        '''
+        Validate the ``(element)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, min_n_options=1, max_n_options=2)
+
+    def _do_validate_foreign(self, ann_name, options):
+        '''
+        Validate the ``(foreign)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=0)
+
+    def _do_validate_get_value_func(self, ann_name, options):
+        '''
+        Validate the ``(value-func)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+    def _do_validate_in(self, ann_name, options):
+        '''
+        Validate the ``(in)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=0)
+
+    def _do_validate_inout(self, ann_name, options):
+        '''
+        Validate the ``(in-out)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=0)
+
+    def _do_validate_method(self, ann_name, options):
+        '''
+        Validate the ``(method)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=0)
+
+    def _do_validate_out(self, ann_name, options):
+        '''
+        Validate the ``(out)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, max_n_options=1, choices=OUT_OPTIONS)
+
+    def _do_validate_ref_func(self, ann_name, options):
+        '''
+        Validate the ``(ref-func)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+    def _do_validate_rename_to(self, ann_name, options):
+        '''
+        Validate the ``(rename-to)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+    def _do_validate_scope(self, ann_name, options):
+        '''
+        Validate the ``(scope)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1, choices=SCOPE_OPTIONS)
+
+    def _do_validate_set_value_func(self, ann_name, options):
+        '''
+        Validate the ``(value-func)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+    def _do_validate_skip(self, ann_name, options):
+        '''
+        Validate the ``(skip)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=0)
+
+    def _do_validate_transfer(self, ann_name, options):
+        '''
+        Validate the ``(transfer)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1, choices=TRANSFER_OPTIONS)
+
+    def _do_validate_type(self, ann_name, options):
+        '''
+        Validate the ``(type)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+    def _do_validate_unref_func(self, ann_name, options):
+        '''
+        Validate the ``(unref-func)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+    def _do_validate_value(self, ann_name, options):
+        '''
+        Validate the ``(value)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+    def _do_validate_virtual(self, ann_name, options):
+        '''
+        Validate the ``(virtual)`` annotation.
+
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(ann_name, options, exact_n_options=1)
+
+
+class GtkDocParameter(GtkDocAnnotatable):
+    '''
+    Represents a GTK-Doc parameter part.
+    '''
+
+    __slots__ = ('name', 'description')
+
+    valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CLOSURE, ANN_DESTROY,
+                         ANN_ELEMENT_TYPE, ANN_IN, ANN_INOUT, ANN_OUT, ANN_SCOPE, ANN_SKIP,
+                         ANN_TRANSFER, ANN_TYPE)
+
+    def __init__(self, name, position=None):
+        GtkDocAnnotatable.__init__(self, position)
+
+        #: Parameter name.
+        self.name = name
+
+        #: Parameter description or :const:`None`.
+        self.description = None
+
+    def __repr__(self):
+        return '<GtkDocParameter %r %r>' % (self.name, self.annotations)
 
     def _get_gtk_doc_value(self):
         def serialize_one(option, value, fmt, fmt2):
@@ -615,66 +910,20 @@ class GtkDocParameter(object):
     def to_gtk_doc(self):
         return '@%s: %s%s' % (self.name, self._get_gtk_doc_value(), self.description)
 
-    def validate(self):
-        for ann_name, value in self.annotations.items():
-            if ann_name == ANN_ALLOW_NONE:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_ARRAY:
-                self._validate_array(ann_name, value)
-            elif ann_name == ANN_ATTRIBUTES:
-                # The 'attributes' annotation allows free form annotations.
-                pass
-            elif ann_name == ANN_CLOSURE:
-                self._validate_closure(ann_name, value)
-            elif ann_name == ANN_DESTROY:
-                self._validate_annotation(ann_name, value, n_params=1)
-            elif ann_name == ANN_ELEMENT_TYPE:
-                self._validate_element_type(ann_name, value)
-            elif ann_name == ANN_FOREIGN:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_IN:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name in [ANN_INOUT, ANN_INOUT_ALT]:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_OUT:
-                self._validate_out(ann_name, value)
-            elif ann_name == ANN_SCOPE:
-                self._validate_annotation(
-                    ann_name, value, required=True,
-                    n_params=1,
-                    choices=[OPT_SCOPE_ASYNC,
-                             OPT_SCOPE_CALL,
-                             OPT_SCOPE_NOTIFIED])
-            elif ann_name == ANN_SKIP:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_TRANSFER:
-                self._validate_annotation(
-                    ann_name, value, required=True,
-                    n_params=1,
-                    choices=[OPT_TRANSFER_FULL,
-                             OPT_TRANSFER_CONTAINER,
-                             OPT_TRANSFER_NONE,
-                             OPT_TRANSFER_FLOATING])
-            elif ann_name == ANN_TYPE:
-                self._validate_annotation(ann_name, value, required=True,
-                                          n_params=1)
-            elif ann_name == ANN_CONSTRUCTOR:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_METHOD:
-                self._validate_annotation(ann_name, value, n_params=0)
-            else:
-                warn('unknown annotation: %s' % (ann_name, ),
-                     self.position)
 
-
-class GtkDocTag(object):
+class GtkDocTag(GtkDocAnnotatable):
     '''
     Represents a GTK-Doc tag part.
     '''
 
-    __slots__ = ('name', 'annotations', 'value', 'description', 'position')
+    __slots__ = ('name', 'value', 'description')
+
+    valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_ELEMENT_TYPE, ANN_SKIP,
+                         ANN_TRANSFER, ANN_TYPE)
 
     def __init__(self, name, position=None):
+        GtkDocAnnotatable.__init__(self, position)
+
         #: Tag name.
         self.name = name
 
@@ -684,91 +933,8 @@ class GtkDocTag(object):
         #: Tag description or :const:`None`.
         self.description = None
 
-        self.annotations = GtkDocAnnotations()
-        self.position = position
-
     def __repr__(self):
         return '<GtkDocTag %r %r>' % (self.name, self.annotations)
-
-    def _validate_annotation(self, ann_name, options, required=False,
-                             n_params=None, choices=None):
-        if required and len(options) == 0:
-            warn('%s annotation needs a value' % (ann_name, ), self.position)
-            return
-
-        if n_params is not None:
-            if n_params == 0:
-                s = 'no value'
-            elif n_params == 1:
-                s = 'one value'
-            else:
-                s = '%d values' % (n_params, )
-            if len(options) != n_params:
-                length = len(options)
-                warn('%s annotation needs %s, not %d' % (ann_name, s, length),
-                     self.position)
-                return
-
-        if choices is not None:
-            option = options[0]
-            if option not in choices:
-                warn('invalid %s annotation value: %r' % (ann_name, option, ),
-                     self.position)
-                return
-
-    def _validate_array(self, ann_name, options):
-        if len(options) == 0:
-            return
-
-        for option, value in options.items():
-            if option in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
-                try:
-                    int(value)
-                except (TypeError, ValueError):
-                    if value is None:
-                        warn('array option %s needs a value' % (option, ),
-                             positions=self.position)
-                    else:
-                        warn('invalid array %s option value %r, '
-                             'must be an integer' % (option, value, ),
-                             positions=self.position)
-            elif option == OPT_ARRAY_LENGTH:
-                if value is None:
-                    warn('array option length needs a value',
-                         positions=self.position)
-            else:
-                warn('invalid array annotation value: %r' % (option, ),
-                     self.position)
-
-    def _validate_closure(self, ann_name, options):
-        if len(options) != 0 and len(options) > 1:
-            warn('closure takes at most 1 value, %d given' % (len(options), ),
-                 self.position)
-
-    def _validate_element_type(self, ann_name, options):
-        self._validate_annotation(ann_name, options, required=True)
-        if len(options) == 0:
-            warn('element-type takes at least one value, none given',
-                 self.position)
-            return
-        if len(options) > 2:
-            warn('element-type takes at most 2 values, %d given' % (len(options), ),
-                 self.position)
-            return
-
-    def _validate_out(self, ann_name, options):
-        if len(options) == 0:
-            return
-        if len(options) > 1:
-            warn('out annotation takes at most 1 value, %d given' % (len(options), ),
-                 self.position)
-            return
-        option = options[0]
-        if option not in [OPT_OUT_CALLEE_ALLOCATES,
-                          OPT_OUT_CALLER_ALLOCATES]:
-            warn("out annotation value is invalid: %r" % (option, ),
-                 self.position)
-            return
 
     def _get_gtk_doc_value(self):
         def serialize_one(option, value, fmt, fmt2):
@@ -801,66 +967,22 @@ class GtkDocTag(object):
                              self._get_gtk_doc_value(),
                              self.description or '')
 
-    def validate(self):
-        for ann_name, value in self.annotations.items():
-            if ann_name == ANN_ALLOW_NONE:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_ARRAY:
-                self._validate_array(ann_name, value)
-            elif ann_name == ANN_ATTRIBUTES:
-                # The 'attributes' annotation allows free form annotations.
-                pass
-            elif ann_name == ANN_CLOSURE:
-                self._validate_closure(ann_name, value)
-            elif ann_name == ANN_DESTROY:
-                self._validate_annotation(ann_name, value, n_params=1)
-            elif ann_name == ANN_ELEMENT_TYPE:
-                self._validate_element_type(ann_name, value)
-            elif ann_name == ANN_FOREIGN:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_IN:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name in [ANN_INOUT, ANN_INOUT_ALT]:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_OUT:
-                self._validate_out(ann_name, value)
-            elif ann_name == ANN_SCOPE:
-                self._validate_annotation(
-                    ann_name, value, required=True,
-                    n_params=1,
-                    choices=[OPT_SCOPE_ASYNC,
-                             OPT_SCOPE_CALL,
-                             OPT_SCOPE_NOTIFIED])
-            elif ann_name == ANN_SKIP:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_TRANSFER:
-                self._validate_annotation(
-                    ann_name, value, required=True,
-                    n_params=1,
-                    choices=[OPT_TRANSFER_FULL,
-                             OPT_TRANSFER_CONTAINER,
-                             OPT_TRANSFER_NONE,
-                             OPT_TRANSFER_FLOATING])
-            elif ann_name == ANN_TYPE:
-                self._validate_annotation(ann_name, value, required=True,
-                                          n_params=1)
-            elif ann_name == ANN_CONSTRUCTOR:
-                self._validate_annotation(ann_name, value, n_params=0)
-            elif ann_name == ANN_METHOD:
-                self._validate_annotation(ann_name, value, n_params=0)
-            else:
-                warn('unknown annotation: %s' % (ann_name, ),
-                     self.position)
 
-
-class GtkDocCommentBlock(object):
+class GtkDocCommentBlock(GtkDocAnnotatable):
     '''
     Represents a GTK-Doc comment block.
     '''
 
-    __slots__ = ('name', 'annotations', 'tags', 'description', 'params', 'position')
+    __slots__ = ('name', 'params', 'description', 'tags')
 
-    def __init__(self, name):
+    #: Valid annotation names for the GTK-Doc comment block identifier part.
+    valid_annotations = (ANN_ATTRIBUTES, ANN_CONSTRUCTOR, ANN_FOREIGN, ANN_GET_VALUE_FUNC,
+                         ANN_METHOD, ANN_REF_FUNC, ANN_RENAME_TO, ANN_SET_VALUE_FUNC,
+                         ANN_SKIP, ANN_TRANSFER, ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE, ANN_VFUNC)
+
+    def __init__(self, name, position=None):
+        GtkDocAnnotatable.__init__(self, position)
+
         #: Identifier name.
         self.name = name
 
@@ -874,9 +996,6 @@ class GtkDocCommentBlock(object):
         #: Ordered dictionary mapping tag names to :class:`GtkDocTag` instances
         #: applied to this :class:`GtkDocCommentBlock`.
         self.tags = OrderedDict()
-
-        self.annotations = GtkDocAnnotations()
-        self.position = None
 
     def __cmp__(self, other):
         # Note: This is used by g-ir-annotation-tool, which does a ``sorted(blocks.values())``,
@@ -934,6 +1053,12 @@ class GtkDocCommentBlock(object):
         return comment
 
     def validate(self):
+        '''
+        Validate annotations applied to the :class:`GtkDocCommentBlock` identifier, parameters
+        and tags.
+        '''
+        GtkDocAnnotatable.validate(self)
+
         for param in self.params.values():
             param.validate()
 

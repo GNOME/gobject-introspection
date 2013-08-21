@@ -5,4 +5,4 @@
 
 void test_invalid_out(int *out);
 
-// EXPECT:3: Warning: Test: out annotation value is invalid: 'invalid'
+// EXPECT:3: Warning: Test: invalid "out" annotation option: "invalid"

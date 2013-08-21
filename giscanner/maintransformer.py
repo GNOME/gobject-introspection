@@ -140,7 +140,7 @@ class MainTransformer(object):
         target = self._namespace.get_by_symbol(rename_to)
         if not target:
             message.warn_node(node,
-                "Can't find symbol %r referenced by Rename annotation" % (rename_to, ))
+                "Can't find symbol %r referenced by \"rename-to\" annotation" % (rename_to, ))
         elif target.shadowed_by:
             message.warn_node(node,
                 "Function %r already shadowed by %r, can't overwrite "
@@ -394,16 +394,12 @@ class MainTransformer(object):
     def _apply_annotations_element_type(self, parent, node, annotations):
         element_type_opt = annotations.get(ANN_ELEMENT_TYPE)
         if element_type_opt is None:
-            message.warn(
-                'element-type annotation takes at least one option, '
-                'none given',
-                annotations.position)
             return
 
         if isinstance(node.type, ast.List):
             if len(element_type_opt) != 1:
                 message.warn(
-                    'element-type annotation for a list must have exactly '
+                    '"element-type" annotation for a list must have exactly '
                     'one option, not %d options' % (len(element_type_opt), ),
                     annotations.position)
                 return
@@ -412,7 +408,7 @@ class MainTransformer(object):
         elif isinstance(node.type, ast.Map):
             if len(element_type_opt) != 2:
                 message.warn(
-                    'element-type annotation for a hash table must have exactly '
+                    '"element-type" annotation for a hash table must have exactly '
                     'two options, not %d option(s)' % (len(element_type_opt), ),
                     annotations.position)
                 return
@@ -423,15 +419,16 @@ class MainTransformer(object):
         elif isinstance(node.type, ast.Array):
             if len(element_type_opt) != 1:
                 message.warn(
-                    'element-type annotation for an array must have exactly '
+                    '"element-type" annotation for an array must have exactly '
                     'one option, not %d options' % (len(element_type_opt), ),
                     annotations.position)
                 return
             node.type.element_type = self._resolve(element_type_opt[0],
                                                    node.type, node, parent)
         else:
-            message.warn_node(parent,
-                "Unknown container %r for element-type annotation" % (node.type, ))
+            message.warn(
+                "Unknown container %r for element-type annotation" % (node.type, ),
+                annotations.position)
 
     def _get_transfer_default_param(self, parent, node):
         if node.direction in [ast.PARAM_DIRECTION_INOUT,
