@@ -89,9 +89,9 @@ class DumpCompiler(object):
         # Enable the --msvc-syntax pkg-config flag when
         # the Microsoft compiler is used
         # (This is the other way to check whether Visual C++ is used subsequently)
-        if 'clang' not in self._compiler_cmd:
-            if 'cl' in self._compiler_cmd:
-                self._pkgconfig_msvc_flags = '--msvc-syntax'
+        args = self._compiler_cmd.split()
+        if 'cl.exe' in args or 'cl' in args:
+            self._pkgconfig_msvc_flags = '--msvc-syntax'
         self._uninst_srcdir = os.environ.get(
             'UNINSTALLED_INTROSPECTION_SRCDIR')
         self._packages = ['gio-2.0 gmodule-2.0']
