@@ -18,7 +18,7 @@ set of languages.
 Typelib
 =======
 
-The typelib is a to disk version of the GIR designed to be fast, memory
+The typelib is an on-disk version of the GIR designed to be fast, memory
 efficient and complete enough so that language bindings can be written
 on top of it without other sources of information.
 It is normally compiled from a GIR when a library/program is installed and
