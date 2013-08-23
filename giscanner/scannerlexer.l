@@ -150,8 +150,8 @@ stringtext				([^\\\"])|(\\.)
 "__signed__"				{ return SIGNED; }
 "__restrict"				{ return RESTRICT; }
 "__typeof"				{ if (!parse_ignored_macro()) REJECT; }
-"__volatile"	        	        { if (!parse_ignored_macro()) REJECT; }
-"__volatile__"	        	        { if (!parse_ignored_macro()) REJECT; }
+"__volatile"	        	        { return VOLATILE; }
+"__volatile__"	        	        { return VOLATILE; }
 "_Bool"					{ return BOOL; }
 
 "G_GINT64_CONSTANT"			{ return INTL_CONST; }
