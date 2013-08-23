@@ -324,6 +324,8 @@ COMMENT_ASTERISK_RE = re.compile(
     r'''
     ^                                                    # start
     \s*                                                  # 0 or more whitespace characters
+    (?P<comment>.*?)                                     # invalid comment text
+    \s*                                                  # 0 or more whitespace characters
     \*                                                   # 1 asterisk character
     \s?                                                  # 0 or 1 whitespace characters
                                                          #   WARNING: removing more than 1
@@ -1213,6 +1215,13 @@ class GtkDocCommentBlockParser(object):
             # Get rid of the ' * ' at the start of the line.
             result = COMMENT_ASTERISK_RE.match(line)
             if result:
+                comment = result.group('comment')
+                if comment:
+                    marker = ' ' * result.start('comment') + '^'
+                    error('invalid comment text:\n%s\n%s' %
+                          (original_line, marker),
+                          position)
+
                 column_offset = result.end(0)
                 line = line[result.end(0):]
 

@@ -160,19 +160,19 @@ comment_end_tests = [
 
 comment_asterisk_tests = [
     (COMMENT_ASTERISK_RE, '*',
-         {}),
+         {'comment': ''}),
     (COMMENT_ASTERISK_RE, '* ',
-         {}),
+         {'comment': ''}),
     (COMMENT_ASTERISK_RE, ' *',
-         {}),
+         {'comment': ''}),
     (COMMENT_ASTERISK_RE, ' * ',
-         {}),
+         {'comment': ''}),
     (COMMENT_ASTERISK_RE, '    *    ',
-         {}),
+         {'comment': ''}),
     (COMMENT_ASTERISK_RE, '    *    test',
-         {}),
+         {'comment': ''}),
     (COMMENT_ASTERISK_RE, 'test    *    ',
-         None)]
+         {'comment': 'test'})]
 
 
 indentaton_tests = [

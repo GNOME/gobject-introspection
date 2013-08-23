@@ -314,7 +314,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=673806</description>
  *           content inline.  Ordinary HTML links will usually return
  *           %FALSE, but an inline &lt;src&gt; HTML element will return
  *           %TRUE.
-a *
+ a *
  * Returns: whether or not this link displays its content inline.
  *
  **/</input>
@@ -332,8 +332,7 @@ a *
       <description>Indicates whether the link currently displays some or all of its
           content inline.  Ordinary HTML links will usually return
           %FALSE, but an inline &lt;src&gt; HTML element will return
-          %TRUE.
-a *</description>
+          %TRUE.</description>
       <tags>
         <tag>
           <name>returns</name>
@@ -341,6 +340,11 @@ a *</description>
         </tag>
       </tags>
     </docblock>
+    <messages>
+      <message>9: Error: Test: invalid comment text:
+ a *
+ ^</message>
+    </messages>
   </parser>
   <output>/**
  * atk_hyperlink_is_inline:
@@ -350,7 +354,6 @@ a *</description>
  *           content inline.  Ordinary HTML links will usually return
  *           %FALSE, but an inline &lt;src&gt; HTML element will return
  *           %TRUE.
- * a *
  *
  * Returns: whether or not this link displays its content inline.
  */</output>
