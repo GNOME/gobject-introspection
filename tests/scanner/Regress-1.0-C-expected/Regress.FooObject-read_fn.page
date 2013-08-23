@@ -27,7 +27,7 @@ void read_fn (RegressFooObject* object,
 <terms>
 <item>
 <title><code>object</code></title>
-
+<p>obj</p>
 </item>
 <item>
 <title><code>offset</code></title>

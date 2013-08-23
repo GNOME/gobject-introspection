@@ -27,9 +27,12 @@ struct _WarnLibWhateverIface
 
   /* explicitly test un-named parameters */
   void (*do_moo) (WarnLibWhatever *self, int, gpointer);
+
+  void (*do_boo) (WarnLibWhatever *self, int x, gpointer y);
 };
 
 void warnlib_whatever_do_moo (WarnLibWhatever *self, int, gpointer);
+void warnlib_whatever_do_boo (WarnLibWhatever *self, int, gpointer);
 
 GType warnlib_whatever_get_type (void) G_GNUC_CONST;
 

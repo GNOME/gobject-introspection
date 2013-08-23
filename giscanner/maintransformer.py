@@ -675,7 +675,13 @@ class MainTransformer(object):
     def _apply_annotations_params(self, parent, params, block):
         declparams = set([])
         if parent.instance_parameter:
+            if block:
+                doc_param = block.params.get(parent.instance_parameter.argname)
+            else:
+                doc_param = None
+            self._apply_annotations_param(parent, parent.instance_parameter, doc_param)
             declparams.add(parent.instance_parameter.argname)
+
         for param in params:
             if block:
                 doc_param = block.params.get(param.argname)

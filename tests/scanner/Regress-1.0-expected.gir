@@ -1311,6 +1311,7 @@ uses a C sugar return type.</doc>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:space="preserve">obj</doc>
             <type name="FooObject" c:type="RegressFooObject*"/>
           </instance-parameter>
           <parameter name="offset" transfer-ownership="none">
@@ -1572,6 +1573,7 @@ uses a C sugar return type.</doc>
           </return-value>
           <parameters>
             <parameter name="object" transfer-ownership="none">
+              <doc xml:space="preserve">obj</doc>
               <type name="FooObject" c:type="RegressFooObject*"/>
             </parameter>
             <parameter name="offset" transfer-ownership="none">
@@ -2825,6 +2827,7 @@ case.</doc>
         </return-value>
         <parameters>
           <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:space="preserve">A #RegressTestObj</doc>
             <type name="TestObj" c:type="RegressTestObj*"/>
           </instance-parameter>
           <parameter name="somestr" transfer-ownership="none">
@@ -3514,6 +3517,7 @@ the introspection client langage.</doc>
           </return-value>
           <parameters>
             <parameter name="obj" transfer-ownership="none">
+              <doc xml:space="preserve">A #RegressTestObj</doc>
               <type name="TestObj" c:type="RegressTestObj*"/>
             </parameter>
             <parameter name="somestr" transfer-ownership="none">

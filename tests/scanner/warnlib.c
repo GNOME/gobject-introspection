@@ -31,3 +31,17 @@ warnlib_whatever_do_moo (WarnLibWhatever *self, int x, gpointer y)
 {
   WARNLIB_WHATEVER_GET_IFACE(self)->do_moo (self, x, y);
 }
+
+/**
+ * warnlib_whatever_do_boo:
+ * @self: a WarnLibWhatever
+ * @x: x parameter
+ * @y: y parameter
+ *
+ * Does boo.
+ */
+void
+warnlib_whatever_do_boo (WarnLibWhatever *self, int x, gpointer y)
+{
+  WARNLIB_WHATEVER_GET_IFACE(self)->do_boo (self, x, y);
+}

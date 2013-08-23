@@ -29,7 +29,7 @@ case.</p>
 <terms>
 <item>
 <title><code>obj</code></title>
-
+<p>A <link xref="Regress.TestObj"/></p>
 </item>
 <item>
 <title><code>somestr</code></title>

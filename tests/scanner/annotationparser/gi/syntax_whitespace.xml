@@ -72,4 +72,53 @@ Test overriding via the "Rename To" annotation.</description>
  */</output>
 </test>
 
+<test>
+  <input>/**
+ *atk_text_get_default_attributes:
+ *@text: an #AtkText
+ *
+ *Creates ...
+ *
+ *Returns: (transfer full): an ...
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>atk_text_get_default_attributes</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>text</name>
+          <description>an #AtkText</description>
+        </parameter>
+      </parameters>
+      <description>Creates ...</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>transfer</name>
+              <options>
+                <option>
+                  <name>full</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>an ...</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+  <output>/**
+ * atk_text_get_default_attributes:
+ * @text: an #AtkText
+ *
+ * Creates ...
+ *
+ * Returns: (transfer full): an ...
+ */</output>
+</test>
+
 </tests>
