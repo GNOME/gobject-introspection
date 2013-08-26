@@ -1549,6 +1549,7 @@ regress_test_enum_get_type (void)
             { REGRESS_TEST_VALUE2, "REGRESS_TEST_VALUE2", "value2" },
             { REGRESS_TEST_VALUE3, "REGRESS_TEST_VALUE3", "value3" },
             { REGRESS_TEST_VALUE4, "REGRESS_TEST_VALUE4", "value4" },
+            { REGRESS_TEST_VALUE5, "REGRESS_TEST_VALUE5", "value5" },
             { 0, NULL, NULL }
         };
         etype = g_enum_register_static (g_intern_static_string ("RegressTestEnum"), values);

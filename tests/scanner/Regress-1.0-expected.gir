@@ -2519,6 +2519,11 @@ use it should be.</doc>
               c:identifier="REGRESS_TEST_VALUE4"
               glib:nick="value4">
       </member>
+      <member name="value5"
+              value="49"
+              c:identifier="REGRESS_TEST_VALUE5"
+              glib:nick="value5">
+      </member>
       <function name="param" c:identifier="regress_test_enum_param">
         <return-value transfer-ownership="none">
           <type name="utf8" c:type="const gchar*"/>
