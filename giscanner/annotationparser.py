@@ -294,8 +294,9 @@ COMMENT_BLOCK_START_RE = re.compile(
     ^                                                    # start
     (?P<code>.*?)                                        # whitespace, code, ...
     \s*                                                  # 0 or more whitespace characters
-    (?P<token>/\*{2}(?!\*))                              # 1 forward slash character followed
+    (?P<token>/\*{2}(?![\*/]))                           # 1 forward slash character followed
                                                          #   by exactly 2 asterisk characters
+                                                         #   and not followed by a slash character
     \s*                                                  # 0 or more whitespace characters
     (?P<comment>.*?)                                     # GTK-Doc comment text
     \s*                                                  # 0 or more whitespace characters

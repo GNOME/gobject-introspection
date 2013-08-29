@@ -84,6 +84,8 @@ comment_start_tests = [
          None),
     (COMMENT_BLOCK_START_RE, ' /*****xyz',
          None),
+    (COMMENT_BLOCK_START_RE, ' /**/',
+         None),
 ]
 
 
