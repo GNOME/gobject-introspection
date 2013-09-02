@@ -3551,7 +3551,7 @@
 
 
 /**
- * g_signal_chain_from_overridden_handler:
+ * g_signal_chain_from_overridden_handler: (skip)
  * @instance: the instance the signal is being emitted on.
  * @...: parameters to be passed to the parent class closure, followed by a location for the return value. If the return type of the signal is #G_TYPE_NONE, the return value location can be omitted.
  *
@@ -3566,7 +3566,7 @@
 
 /**
  * g_signal_connect_closure:
- * @instance: the instance to connect to.
+ * @instance: (type GObject.Object): the instance to connect to.
  * @detailed_signal: a string of the form "signal-name::detail".
  * @closure: the closure to connect.
  * @after: whether the handler should be called before or after the default handler of the signal.
@@ -3579,7 +3579,7 @@
 
 /**
  * g_signal_connect_closure_by_id:
- * @instance: the instance to connect to.
+ * @instance: (type GObject.Object): the instance to connect to.
  * @signal_id: the id of the signal.
  * @detail: the detail.
  * @closure: the closure to connect.
@@ -3593,7 +3593,7 @@
 
 /**
  * g_signal_connect_data:
- * @instance: the instance to connect to.
+ * @instance: (type GObject.Object): the instance to connect to.
  * @detailed_signal: a string of the form "signal-name::detail".
  * @c_handler: the #GCallback to connect.
  * @data: data to pass to @c_handler calls.
@@ -3633,7 +3633,7 @@
 
 /**
  * g_signal_emit:
- * @instance: the instance the signal is being emitted on.
+ * @instance: (type GObject.Object): the instance the signal is being emitted on.
  * @signal_id: the signal id
  * @detail: the detail
  * @...: parameters to be passed to the signal, followed by a location for the return value. If the return type of the signal is #G_TYPE_NONE, the return value location can be omitted.
@@ -3647,7 +3647,7 @@
 
 /**
  * g_signal_emit_by_name:
- * @instance: the instance the signal is being emitted on.
+ * @instance: (type GObject.Object): the instance the signal is being emitted on.
  * @detailed_signal: a string of the form "signal-name::detail".
  * @...: parameters to be passed to the signal, followed by a location for the return value. If the return type of the signal is #G_TYPE_NONE, the return value location can be omitted.
  *
@@ -3659,7 +3659,7 @@
 
 
 /**
- * g_signal_emit_valist:
+ * g_signal_emit_valist: (skip)
  * @instance: the instance the signal is being emitted on.
  * @signal_id: the signal id
  * @detail: the detail
@@ -3688,7 +3688,7 @@
 
 /**
  * g_signal_get_invocation_hint:
- * @instance: the instance to query
+ * @instance: (type GObject.Object): the instance to query
  *
  * Returns the invocation hint of the innermost signal emission of instance.
  *
@@ -3698,7 +3698,7 @@
 
 /**
  * g_signal_handler_block:
- * @instance: The instance to block the signal handler of.
+ * @instance: (type GObject.Object): The instance to block the signal handler of.
  * @handler_id: Handler id of the handler to be blocked.
  *
  * Blocks a handler of an instance so it will not be called during any
@@ -3714,7 +3714,7 @@
 
 /**
  * g_signal_handler_disconnect:
- * @instance: The instance to remove the signal handler from.
+ * @instance: (type GObject.Object): The instance to remove the signal handler from.
  * @handler_id: Handler id of the handler to be disconnected.
  *
  * Disconnects a handler from an instance so it will not be called during
@@ -3728,7 +3728,7 @@
 
 /**
  * g_signal_handler_find:
- * @instance: The instance owning the signal handler to be found.
+ * @instance: (type GObject.Object): The instance owning the signal handler to be found.
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handler has to match.
  * @signal_id: Signal the handler has to be connected to.
  * @detail: Signal detail the handler has to be connected to.
@@ -3748,7 +3748,7 @@
 
 /**
  * g_signal_handler_is_connected:
- * @instance: The instance where a signal handler is sought.
+ * @instance: (type GObject.Object): The instance where a signal handler is sought.
  * @handler_id: the handler id.
  *
  * Returns whether @handler_id is the id of a handler connected to @instance.
@@ -3759,7 +3759,7 @@
 
 /**
  * g_signal_handler_unblock:
- * @instance: The instance to unblock the signal handler of.
+ * @instance: (type GObject.Object): The instance to unblock the signal handler of.
  * @handler_id: Handler id of the handler to be unblocked.
  *
  * Undoes the effect of a previous g_signal_handler_block() call.  A
@@ -3780,7 +3780,7 @@
 
 /**
  * g_signal_handlers_block_matched:
- * @instance: The instance to block handlers from.
+ * @instance: (type GObject.Object): The instance to block handlers from.
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
@@ -3802,7 +3802,7 @@
 
 /**
  * g_signal_handlers_disconnect_matched:
- * @instance: The instance to remove handlers from.
+ * @instance: (type GObject.Object): The instance to remove handlers from.
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
@@ -3825,7 +3825,7 @@
 
 /**
  * g_signal_handlers_unblock_matched:
- * @instance: The instance to unblock handlers from.
+ * @instance: (type GObject.Object): The instance to unblock handlers from.
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
@@ -3848,7 +3848,7 @@
 
 /**
  * g_signal_has_handler_pending:
- * @instance: the object whose signal handlers are sought.
+ * @instance: (type GObject.Object): the object whose signal handlers are sought.
  * @signal_id: the signal id.
  * @detail: the detail.
  * @may_be_blocked: whether blocked handlers should count as match.
@@ -4100,7 +4100,7 @@
 
 /**
  * g_signal_stop_emission:
- * @instance: the object whose signal handlers you wish to stop.
+ * @instance: (type GObject.Object): the object whose signal handlers you wish to stop.
  * @signal_id: the signal identifier, as returned by g_signal_lookup().
  * @detail: the detail which the signal was emitted with.
  *
@@ -4116,7 +4116,7 @@
 
 /**
  * g_signal_stop_emission_by_name:
- * @instance: the object whose signal handlers you wish to stop.
+ * @instance: (type GObject.Object): the object whose signal handlers you wish to stop.
  * @detailed_signal: a string of the form "signal-name::detail".
  *
  * Stops a signal's current emission.

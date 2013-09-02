@@ -11312,6 +11312,8 @@
  * function over the call provided by the system; on Unix, it will
  * attempt to correctly handle %EINTR, which has platform-specific
  * semantics.
+ *
+ * Since: 2.36
  */
 
 
@@ -12908,7 +12910,23 @@
  *  <varlistentry><term>
  *    <literal>\%z</literal>:
  *   </term><listitem><simpara>
- *    the time-zone as hour offset from UTC
+ *    the time zone as an offset from UTC (+hhmm)
+ *  </simpara></listitem></varlistentry>
+ *  <varlistentry><term>
+ *    <literal>\%:z</literal>:
+ *   </term><listitem><simpara>
+ *    the time zone as an offset from UTC (+hh:mm). This is a gnulib strftime extension. Since: 2.38
+ *  </simpara></listitem></varlistentry>
+ *  <varlistentry><term>
+ *    <literal>\%::z</literal>:
+ *   </term><listitem><simpara>
+ *    the time zone as an offset from UTC (+hh:mm:ss). This is a gnulib strftime extension. Since: 2.38
+ *  </simpara></listitem></varlistentry>
+ *  <varlistentry><term>
+ *    <literal>\%:::z</literal>:
+ *   </term><listitem><simpara>
+ *    the time zone as an offset from UTC, with : to necessary precision
+ *    (e.g., -04, +05:30). This is a gnulib strftime extension. Since: 2.38
  *  </simpara></listitem></varlistentry>
  *  <varlistentry><term>
  *    <literal>\%Z</literal>:
@@ -27485,7 +27503,7 @@
 
 /**
  * g_test_expect_message:
- * @log_domain: the log domain of the message
+ * @log_domain: (allow-none): the log domain of the message
  * @log_level: the log level of the message
  * @pattern: a glob-style <link linkend="glib-Glob-style-pattern-matching">pattern</link>
  *
