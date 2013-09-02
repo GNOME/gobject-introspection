@@ -3801,6 +3801,12 @@
 
 
 /**
+ * g_signal_handlers_destroy:
+ * @instance: (type GObject.Object): The instance where a signal handler is sought.
+ */
+
+
+/**
  * g_signal_handlers_disconnect_matched:
  * @instance: (type GObject.Object): The instance to remove handlers from.
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handlers have to match.
