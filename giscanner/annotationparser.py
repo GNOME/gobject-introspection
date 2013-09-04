@@ -387,7 +387,7 @@ PARAMETER_RE = re.compile(
     ^                                                    # start
     \s*                                                  # 0 or more whitespace characters
     @                                                    # @ character
-    (?P<parameter_name>[\w-]*\w|\.\.\.)                  # parameter name
+    (?P<parameter_name>[\w-]*\w|.*?\.\.\.)               # parameter name
     \s*                                                  # 0 or more whitespace characters
     :{1}                                                 # required colon
     \s*                                                  # 0 or more whitespace characters
@@ -1043,6 +1043,7 @@ class GtkDocCommentBlockParser(object):
             ####################################################################
             result = PARAMETER_RE.match(line)
             if result:
+                marker = ' ' * (result.start('parameter_name') + column_offset) + '^'
                 param_name = result.group('parameter_name')
                 param_annotations = result.group('annotations')
                 param_description = result.group('description')
@@ -1054,7 +1055,6 @@ class GtkDocCommentBlockParser(object):
 
                 if in_part != PART_PARAMETERS:
                     column = result.start('parameter_name') + column_offset
-                    marker = ' ' * column + '^'
                     message.warn("'@%s' parameter unexpected at this location:\n%s\n%s" %
                                  (param_name, original_line, marker),
                                  position)
@@ -1070,9 +1070,15 @@ class GtkDocCommentBlockParser(object):
                         message.warn("encountered multiple 'Returns' parameters or tags for "
                                      "'%s'." % (comment_block.name, ),
                                      position)
+                elif (param_name == 'Varargs'
+                or (param_name.endswith('...') and param_name != '...')):
+                    # Deprecated @Varargs notation or named __VA_ARGS__ instead of @...
+                    message.warn('"@%s" parameter is deprecated, please use "@..." instead:\n'
+                                 '%s\n%s' % (param_name, original_line, marker),
+                                 position)
+                    param_name = '...'
                 elif param_name in comment_block.params.keys():
                     column = result.start('parameter_name') + column_offset
-                    marker = ' ' * column + '^'
                     message.warn("multiple '@%s' parameters for identifier '%s':\n%s\n%s" %
                                  (param_name, comment_block.name, original_line, marker),
                                  position)

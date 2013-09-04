@@ -705,9 +705,6 @@ class MainTransformer(object):
         unused = declparams - docparams
 
         for doc_name in unknown:
-            # Skip varargs, see #629759
-            if doc_name.lower() in ['...', 'varargs']:
-                continue
             if len(unused) == 0:
                 text = ''
             elif len(unused) == 1:

@@ -226,6 +226,7 @@ EXTRA_DIST += \
 	annotationparser/gi/identifier_section.xml		\
 	annotationparser/gi/identifier_symbol.xml		\
 	annotationparser/gi/parameter.xml			\
+	annotationparser/gi/parameter_varargs.xml		\
 	annotationparser/gi/syntax.xml				\
 	annotationparser/gi/syntax_nested_tags.xml		\
 	annotationparser/gi/syntax_paragraph_breaks.xml		\
