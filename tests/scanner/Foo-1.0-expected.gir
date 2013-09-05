@@ -621,8 +621,7 @@ uses a C sugar return type.</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter transfer-ownership="none">
-            <varargs>
-            </varargs>
+            <varargs/>
           </parameter>
         </parameters>
       </method>
@@ -1096,8 +1095,7 @@ exposed to language bindings.</doc>
           <type name="utf8" c:type="const char*"/>
         </parameter>
         <parameter transfer-ownership="none">
-          <varargs>
-          </varargs>
+          <varargs/>
         </parameter>
       </parameters>
     </callback>

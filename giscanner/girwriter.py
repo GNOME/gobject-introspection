@@ -294,8 +294,7 @@ class GIRWriter(XMLWriter):
         elif ntype.ctype:
             attrs.append(('c:type', ntype.ctype))
         if isinstance(ntype, ast.Varargs):
-            with self.tagcontext('varargs', []):
-                pass
+            self.write_tag('varargs', [])
         elif isinstance(ntype, ast.Array):
             if ntype.array_type != ast.Array.C:
                 attrs.insert(0, ('name', ntype.array_type))
