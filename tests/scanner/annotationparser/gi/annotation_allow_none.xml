@@ -10,7 +10,7 @@
  *
  * This is a test for out arguments
  *
- * Return value: (allow-none): an int
+ * Return value: an int
  */</input>
   <parser>
     <docblock>
@@ -39,11 +39,6 @@
       <tags>
         <tag>
           <name>returns</name>
-          <annotations>
-            <annotation>
-              <name>allow-none</name>
-            </annotation>
-          </annotations>
           <description>an int</description>
         </tag>
       </tags>
@@ -56,7 +51,7 @@
  *
  * This is a test for out arguments
  *
- * Returns: (allow-none): an int
+ * Returns: an int
  */</output>
 </test>
 

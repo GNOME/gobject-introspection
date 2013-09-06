@@ -138,6 +138,9 @@
         </tag>
       </tags>
     </docblock>
+    <messages>
+      <message>9: Warning: Test: unexpected annotation: allow-none</message>
+    </messages>
   </parser>
   <output>/**
  * annotation_nullable:

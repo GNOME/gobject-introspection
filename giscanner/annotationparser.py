@@ -955,7 +955,7 @@ class GtkDocTag(GtkDocAnnotatable):
 
     __slots__ = ('name', 'value', 'description')
 
-    valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_ELEMENT_TYPE, ANN_SKIP,
+    valid_annotations = (ANN_ARRAY, ANN_ATTRIBUTES, ANN_ELEMENT_TYPE, ANN_SKIP,
                          ANN_TRANSFER, ANN_TYPE)
 
     def __init__(self, name, position=None):

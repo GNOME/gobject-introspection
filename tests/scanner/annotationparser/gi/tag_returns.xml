@@ -8,7 +8,7 @@
  *
  * Test returning a string as an out parameter
  *
- * Returns: (allow-none): some boolean
+ * Returns: (skip): some boolean
  **/</input>
   <parser>
     <docblock>
@@ -21,7 +21,7 @@
           <name>returns</name>
           <annotations>
             <annotation>
-              <name>allow-none</name>
+              <name>skip</name>
             </annotation>
           </annotations>
           <description>some boolean</description>
@@ -34,7 +34,7 @@
  *
  * Test returning a string as an out parameter
  *
- * Returns: (allow-none): some boolean
+ * Returns: (skip): some boolean
  */</output>
 </test>
 
@@ -44,7 +44,7 @@
  *
  * Test returning a string as an out parameter
  *
- * Returns: (allow-none)): some boolean
+ * Returns: (skip)): some boolean
  **/</input>
   <parser>
     <docblock>
@@ -60,8 +60,8 @@
     </docblock>
     <messages>
       <message>6: Error: Test: unbalanced parentheses, annotations will be ignored:
- * Returns: (allow-none)): some boolean
-                        ^</message>
+ * Returns: (skip)): some boolean
+                  ^</message>
     </messages>
   </parser>
   <output>/**
@@ -121,7 +121,7 @@ Tags should go after the comment block description</description>
  *
  * Test returning a string as an out parameter
  *
- * Return value: (allow-none): some boolean
+ * Return value: (skip): some boolean
  **/</input>
   <parser>
     <docblock>
@@ -134,7 +134,7 @@ Tags should go after the comment block description</description>
           <name>returns</name>
           <annotations>
             <annotation>
-              <name>allow-none</name>
+              <name>skip</name>
             </annotation>
           </annotations>
           <description>some boolean</description>
@@ -147,7 +147,7 @@ Tags should go after the comment block description</description>
  *
  * Test returning a string as an out parameter
  *
- * Returns: (allow-none): some boolean
+ * Returns: (skip): some boolean
  */</output>
 </test>
 
@@ -157,7 +157,7 @@ Tags should go after the comment block description</description>
   -->
   <input>/**
  * annotation_object_string_out:
- * @returns: (allow-none): some boolean
+ * @returns: (skip): some boolean
  *
  * Test returning a string as an out parameter
  **/</input>
@@ -172,7 +172,7 @@ Tags should go after the comment block description</description>
           <name>returns</name>
           <annotations>
             <annotation>
-              <name>allow-none</name>
+              <name>skip</name>
             </annotation>
           </annotations>
           <description>some boolean</description>
@@ -185,7 +185,7 @@ Tags should go after the comment block description</description>
  *
  * Test returning a string as an out parameter
  *
- * Returns: (allow-none): some boolean
+ * Returns: (skip): some boolean
  */</output>
 </test>
 
@@ -195,7 +195,7 @@ Tags should go after the comment block description</description>
   -->
   <input>/**
  * annotation_object_string_out:
- * @returns: (allow-none)): some boolean
+ * @returns: (skip)): some boolean
  *
  * Test returning a string as an out parameter
  **/</input>
@@ -213,8 +213,8 @@ Tags should go after the comment block description</description>
     </docblock>
     <messages>
       <message>3: Error: Test: unbalanced parentheses, annotations will be ignored:
- * @returns: (allow-none)): some boolean
-                         ^</message>
+ * @returns: (skip)): some boolean
+                   ^</message>
     </messages>
   </parser>
   <output>/**
