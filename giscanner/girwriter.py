@@ -436,9 +436,8 @@ class GIRWriter(XMLWriter):
             if isinstance(node, ast.Class):
                 for method in sorted(node.constructors):
                     self._write_constructor(method)
-            if isinstance(node, (ast.Class, ast.Interface)):
-                for method in sorted(node.static_methods):
-                    self._write_static_method(method)
+            for method in sorted(node.static_methods):
+                self._write_static_method(method)
             for vfunc in sorted(node.virtual_methods):
                 self._write_vfunc(vfunc)
             for method in sorted(node.methods):
