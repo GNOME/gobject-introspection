@@ -28,7 +28,7 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 SUBDIRS = . docs tests build
 
-DIST_SUBDIRS = m4 $(SUBDIRS)
+DIST_SUBDIRS = $(SUBDIRS)
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-doctool
 
 man_MANS += 			\

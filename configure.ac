@@ -312,7 +312,6 @@ AC_SUBST(EXTRA_LINK_FLAGS)
 
 AC_CONFIG_FILES([
 Makefile
-m4/Makefile
 tests/Makefile
 tests/offsets/Makefile
 tests/scanner/Makefile
