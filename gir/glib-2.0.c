@@ -26662,7 +26662,7 @@
  * Compares two strings for equality, returning %TRUE if they are equal.
  * For use with #GHashTable.
  *
- * Returns: %TRUE if they strings are the same length and contain the same bytes
+ * Returns: %TRUE if the strings are the same length and contain the same bytes
  */
 
 

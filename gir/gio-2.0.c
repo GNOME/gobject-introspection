@@ -20680,6 +20680,80 @@
 
 
 /**
+ * g_file_measure_disk_usage:
+ * @file: a #GFile
+ * @flags: #GFileMeasureFlags
+ * @cancellable: (allow-none): optional #GCancellable
+ * @progress_callback: (allow-none): a #GFileMeasureProgressCallback
+ * @progress_data: user_data for @progress_callback
+ * @disk_usage: (allow-none) (out): the number of bytes of disk space used
+ * @num_dirs: (allow-none) (out): the number of directories encountered
+ * @num_files: (allow-none) (out): the number of non-directories encountered
+ * @error: (allow-none): %NULL, or a pointer to a %NULL #GError pointer
+ *
+ * Recursively measures the disk usage of @file.
+ *
+ * This is essentially an analog of the '<literal>du</literal>' command,
+ * but it also reports the number of directories and non-directory files
+ * encountered (including things like symbolic links).
+ *
+ * By default, errors are only reported against the toplevel file
+ * itself.  Errors found while recursing are silently ignored, unless
+ * %G_FILE_DISK_USAGE_REPORT_ALL_ERRORS is given in @flags.
+ *
+ * The returned size, @disk_usage, is in bytes and should be formatted
+ * with g_format_size() in order to get something reasonable for showing
+ * in a user interface.
+ *
+ * @progress_callback and @progress_data can be given to request
+ * periodic progress updates while scanning.  See the documentation for
+ * #GFileMeasureProgressCallback for information about when and how the
+ * callback will be invoked.
+ *
+ * Returns: %TRUE if successful, with the out parameters set. %FALSE otherwise, with @error set.
+ * Since: 2.38
+ */
+
+
+/**
+ * g_file_measure_disk_usage_async:
+ * @file: a #GFile
+ * @flags: #GFileMeasureFlags
+ * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
+ * @cancellable: (allow-none): optional #GCancellable
+ * @progress_callback: (allow-none): a #GFileMeasureProgressCallback
+ * @progress_data: user_data for @progress_callback
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when complete
+ * @user_data: the data to pass to callback function
+ *
+ * Recursively measures the disk usage of @file.
+ *
+ * This is the asynchronous version of g_file_measure_disk_usage().  See
+ * there for more information.
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * g_file_measure_disk_usage_finish:
+ * @file: a #GFile
+ * @result: the #GAsyncResult passed to your #GAsyncReadyCallback
+ * @disk_usage: (allow-none) (out): the number of bytes of disk space used
+ * @num_dirs: (allow-none) (out): the number of directories encountered
+ * @num_files: (allow-none) (out): the number of non-directories encountered
+ * @error: (allow-none): %NULL, or a pointer to a %NULL #GError pointer
+ *
+ * Collects the results from an earlier call to
+ * g_file_measure_disk_usage_async().  See g_file_measure_disk_usage() for
+ * more information.
+ *
+ * Returns: %TRUE if successful, with the out parameters set. %FALSE otherwise, with @error set.
+ * Since: 2.38
+ */
+
+
+/**
  * g_file_monitor:
  * @file: input #GFile
  * @flags: a set of #GFileMonitorFlags
