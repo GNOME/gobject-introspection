@@ -24,48 +24,16 @@ import os
 
 from contextlib import contextmanager
 from cStringIO import StringIO
-from xml.sax.saxutils import escape, quoteattr
+from xml.sax.saxutils import escape
 
 from .libtoolimporter import LibtoolImporter
 
 
-def _calc_attrs_length(attributes, indent, self_indent):
-    if indent == -1:
-        return -1
-    attr_length = 0
-    for attr, value in attributes:
-        # FIXME: actually, if we have attributes with None as value this
-        # should be considered a bug and raise an error. We are just
-        # ignoring them here while we fix GIRParser to create the right
-        # ast with the correct attributes.
-        if value is None:
-            continue
-        attr_length += 2 + len(attr) + len(quoteattr(value))
-    return attr_length + indent + self_indent
-
-
-def collect_attributes(tag_name, attributes, self_indent, self_indent_char, indent=-1):
-    if not attributes:
-        return ''
-    if _calc_attrs_length(attributes, indent, self_indent) > 79:
-        indent_len = self_indent + len(tag_name) + 1
+with LibtoolImporter(None, None):
+    if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+        from _giscanner import collect_attributes
     else:
-        indent_len = 0
-    first = True
-    attr_value = ''
-    for attr, value in attributes:
-        # FIXME: actually, if we have attributes with None as value this
-        # should be considered a bug and raise an error. We are just
-        # ignoring them here while we fix GIRParser to create the right
-        # ast with the correct attributes.
-        if value is None:
-            continue
-        if indent_len and not first:
-            attr_value += '\n%s' % (self_indent_char * indent_len)
-        attr_value += ' %s=%s' % (attr, quoteattr(value))
-        if first:
-            first = False
-    return attr_value
+        from giscanner._giscanner import collect_attributes
 
 
 def build_xml_tag(tag_name, attributes=None, data=None, self_indent=0,
@@ -85,13 +53,6 @@ def build_xml_tag(tag_name, attributes=None, data=None, self_indent=0,
         self_indent_char,
         len(prefix) + len(suffix))
     return prefix + attrs + suffix
-
-
-with LibtoolImporter(None, None):
-    if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
-        from _giscanner import collect_attributes
-    else:
-        from giscanner._giscanner import collect_attributes
 
 
 class XMLWriter(object):
