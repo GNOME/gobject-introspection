@@ -72,6 +72,11 @@ if __name__ == '__main__':
                 'includes':     ['glib', 'gmodule'],
                 'defines':      ['-DGLIB_COMPILATION']},
 
+               {'name':         'gmodule',
+                'srcname':      '../gir/gmodule-2.0.c',
+                'includes':     ['glib', 'gmodule'],
+                'defines':      ['-DGLIB_COMPILATION']},
+
                {'name':         'gobject',
                 'srcname':      '../gir/gobject-2.0.c',
                 'includes':     ['glib', 'gobject', 'gmodule'],

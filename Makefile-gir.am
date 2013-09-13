@@ -152,7 +152,8 @@ GModule_2_0_gir_INCLUDES = GLib-2.0
 GModule_2_0_gir_CFLAGS = \
             -I$(GMODULE_INCLUDEDIR) \
             -I$(GMODULE_LIBDIR)/glib-2.0/include
-GModule_2_0_gir_FILES = $(GLIB_INCLUDEDIR)/gmodule.h
+GModule_2_0_gir_FILES = $(GLIB_INCLUDEDIR)/gmodule.h \
+            gir/gmodule-2.0.c
 
 BUILT_GIRSOURCES += GModule-2.0.gir
 
@@ -199,7 +200,7 @@ Gio_2_0_gir_FILES = \
             gir/gio-2.0.c
 
 BUILT_GIRSOURCES += Gio-2.0.gir
-EXTRA_DIST += gir/glib-2.0.c gir/gobject-2.0.c gir/gio-2.0.c
+EXTRA_DIST += gir/glib-2.0.c gir/gmodule-2.0.c gir/gobject-2.0.c gir/gio-2.0.c
 
 # girepository
 GIRepository-2.0.gir: GObject-2.0.gir libgirepository-1.0.la
