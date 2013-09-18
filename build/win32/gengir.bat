@@ -121,7 +121,7 @@ echo --add-include-path=..\..\gir --add-include-path=. --namespace=GModule --nsv
 echo --no-libtool --include=GLib-2.0 --pkg=gmodule-2.0 --library=gmodule-2-vs%VSVER% ^^>> glib_gir.bat
 echo --external-library --reparse-validate --identifier-prefix=G --c-include="gmodule.h" ^^>> glib_gir.bat
 echo -I%BASEDIR%\include\glib-2.0 -I%BASEDIR%\lib\glib-2.0\include -I%BASEDIR%\include ^^>> glib_gir.bat
-echo %BASEDIR%\include\glib-2.0\gmodule.h -o GModule-2.0.gir>> glib_gir.bat
+echo %BASEDIR%\include\glib-2.0\gmodule.h ..\..\gir\gmodule-2.0.c -o GModule-2.0.gir>> glib_gir.bat
 echo.>> glib_gir.bat
 
 echo Completed setup of .bat for generating GModule-2.0.gir.
