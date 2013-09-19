@@ -159,23 +159,19 @@ EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
 CLEANFILES += $(MALLARD_CLEAN)
 
 %-C: %.gir
-	$(AM_V_GEN)
-	$(AM_V_at)-rm -rf $(builddir)/$*-C
+	$(AM_V_GEN)rm -rf $(builddir)/$*-C
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language C $*.gir -o $(builddir)/$*-C/
 
 %-Python: %.gir
-	$(AM_V_GEN)
-	$(AM_V_at)-rm -rf $(builddir)/$*-Python
+	$(AM_V_GEN)rm -rf $(builddir)/$*-Python
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Python $*.gir -o $(builddir)/$*-Python/
 
 %-Gjs: %.gir
-	$(AM_V_GEN)
-	$(AM_V_at)-rm -rf $(builddir)/$*-Gjs
+	$(AM_V_GEN)rm -rf $(builddir)/$*-Gjs
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Gjs $*.gir -o $(builddir)/$*-Gjs/
 
 %-sections.txt: %.gir
-	$(AM_V_GEN)
-	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --write-sections-file $*.gir -o $@
+	$(AM_V_GEN)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --write-sections-file $*.gir -o $@
 
 %-C.page.check: %-C
 	@diff -r -u -w -B -U 10 $(srcdir)/$*-C-expected $(builddir)/$*-C && echo "  TEST  $*-C"
