@@ -21,7 +21,6 @@ CFILE_GLOB=$(top_srcdir)/girepository/*.c
 
 # Headers to ignore
 IGNORE_HFILES= \
-    glib-compat.h   \
     girnode.h	    \
     ginfo.h	    \
     girparser.h	    \
