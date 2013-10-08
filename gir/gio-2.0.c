@@ -3400,6 +3400,15 @@
 
 
 /**
+ * SECTION:_GFreedesktopDBus
+ * @title: _GFreedesktopDBus
+ * @short_description: Generated C code for the org.freedesktop.DBus D-Bus interface
+ *
+ * This section contains code for working with the <link linkend="gdbus-interface-org-freedesktop-DBus.top_of_page">org.freedesktop.DBus</link> D-Bus interface in C.
+ */
+
+
+/**
  * SECTION:extensionpoints
  * @short_description: Extension Points
  * @include: gio.h
@@ -4234,11 +4243,16 @@
  * man page for details. This corresponds to
  * %G_CREDENTIALS_TYPE_LINUX_UCRED.
  *
- * On FreeBSD, the native credential type is a <type>struct cmsgcred</type>.
- * This corresponds to %G_CREDENTIALS_TYPE_FREEBSD_CMSGCRED.
+ * On FreeBSD, Debian GNU/kFreeBSD, and GNU/Hurd, the native
+ * credential type is a <type>struct cmsgcred</type>. This corresponds
+ * to %G_CREDENTIALS_TYPE_FREEBSD_CMSGCRED.
  *
  * On OpenBSD, the native credential type is a <type>struct sockpeercred</type>.
  * This corresponds to %G_CREDENTIALS_TYPE_OPENBSD_SOCKPEERCRED.
+ *
+ * On Solaris (including OpenSolaris and its derivatives), the native
+ * credential type is a <type>ucred_t</type>. This corresponds to
+ * %G_CREDENTIALS_TYPE_SOLARIS_UCRED.
  */
 
 
@@ -6957,7 +6971,7 @@
  *
  * The message can represent some sort of special instruction to or
  * information from the socket or can represent a special kind of
- * transfer to the peer (for example, sending a file description over
+ * transfer to the peer (for example, sending a file descriptor over
  * a UNIX socket).
  *
  * These messages are sent with g_socket_send_message() and received
@@ -8172,6 +8186,1449 @@
  *
  * #GZlibDecompressor is an implementation of #GConverter that
  * decompresses data compressed with zlib.
+ */
+
+
+/**
+ * _GFreedesktopDBus:
+ *
+ * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-DBus.top_of_page">org.freedesktop.DBus</link>.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-add-match:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_rule: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.AddMatch">AddMatch()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_add_match() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-get-connection-selinux-security-context:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionSELinuxSecurityContext">GetConnectionSELinuxSecurityContext()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_get_connection_selinux_security_context() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-get-connection-unix-process-id:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixProcessID">GetConnectionUnixProcessID()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_get_connection_unix_process_id() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-get-connection-unix-user:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixUser">GetConnectionUnixUser()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_get_connection_unix_user() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-get-id:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.GetId">GetId()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_get_id() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-get-name-owner:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.GetNameOwner">GetNameOwner()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_get_name_owner() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-hello:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.Hello">Hello()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_hello() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-list-activatable-names:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.ListActivatableNames">ListActivatableNames()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_list_activatable_names() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-list-names:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.ListNames">ListNames()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_list_names() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-list-queued-owners:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.ListQueuedOwners">ListQueuedOwners()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_list_queued_owners() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-name-has-owner:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.NameHasOwner">NameHasOwner()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_name_has_owner() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-release-name:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.ReleaseName">ReleaseName()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_release_name() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-reload-config:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.ReloadConfig">ReloadConfig()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_reload_config() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-remove-match:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_rule: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.RemoveMatch">RemoveMatch()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_remove_match() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-request-name:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ * @arg_flags: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.RequestName">RequestName()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_request_name() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-start-service-by-name:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_name: Argument passed by remote caller.
+ * @arg_flags: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.StartServiceByName">StartServiceByName()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_start_service_by_name() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::handle-update-activation-environment:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_environment: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-DBus.UpdateActivationEnvironment">UpdateActivationEnvironment()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call _g_freedesktop_dbus_complete_update_activation_environment() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * _GFreedesktopDBus::name-acquired:
+ * @object: A #_GFreedesktopDBus.
+ * @arg_name: Argument.
+ *
+ * On the client-side, this signal is emitted whenever the D-Bus signal <link linkend="gdbus-signal-org-freedesktop-DBus.NameAcquired">"NameAcquired"</link> is received.
+ *
+ * On the service-side, this signal can be used with e.g. g_signal_emit_by_name() to make the object emit the D-Bus signal.
+ */
+
+
+/**
+ * _GFreedesktopDBus::name-lost:
+ * @object: A #_GFreedesktopDBus.
+ * @arg_name: Argument.
+ *
+ * On the client-side, this signal is emitted whenever the D-Bus signal <link linkend="gdbus-signal-org-freedesktop-DBus.NameLost">"NameLost"</link> is received.
+ *
+ * On the service-side, this signal can be used with e.g. g_signal_emit_by_name() to make the object emit the D-Bus signal.
+ */
+
+
+/**
+ * _GFreedesktopDBus::name-owner-changed:
+ * @object: A #_GFreedesktopDBus.
+ * @arg_name: Argument.
+ * @arg_old_owner: Argument.
+ * @arg_new_owner: Argument.
+ *
+ * On the client-side, this signal is emitted whenever the D-Bus signal <link linkend="gdbus-signal-org-freedesktop-DBus.NameOwnerChanged">"NameOwnerChanged"</link> is received.
+ *
+ * On the service-side, this signal can be used with e.g. g_signal_emit_by_name() to make the object emit the D-Bus signal.
+ */
+
+
+/**
+ * _GFreedesktopDBusIface:
+ * @parent_iface: The parent interface.
+ * @handle_add_match: Handler for the #_GFreedesktopDBus::handle-add-match signal.
+ * @handle_get_connection_selinux_security_context: Handler for the #_GFreedesktopDBus::handle-get-connection-selinux-security-context signal.
+ * @handle_get_connection_unix_process_id: Handler for the #_GFreedesktopDBus::handle-get-connection-unix-process-id signal.
+ * @handle_get_connection_unix_user: Handler for the #_GFreedesktopDBus::handle-get-connection-unix-user signal.
+ * @handle_get_id: Handler for the #_GFreedesktopDBus::handle-get-id signal.
+ * @handle_get_name_owner: Handler for the #_GFreedesktopDBus::handle-get-name-owner signal.
+ * @handle_hello: Handler for the #_GFreedesktopDBus::handle-hello signal.
+ * @handle_list_activatable_names: Handler for the #_GFreedesktopDBus::handle-list-activatable-names signal.
+ * @handle_list_names: Handler for the #_GFreedesktopDBus::handle-list-names signal.
+ * @handle_list_queued_owners: Handler for the #_GFreedesktopDBus::handle-list-queued-owners signal.
+ * @handle_name_has_owner: Handler for the #_GFreedesktopDBus::handle-name-has-owner signal.
+ * @handle_release_name: Handler for the #_GFreedesktopDBus::handle-release-name signal.
+ * @handle_reload_config: Handler for the #_GFreedesktopDBus::handle-reload-config signal.
+ * @handle_remove_match: Handler for the #_GFreedesktopDBus::handle-remove-match signal.
+ * @handle_request_name: Handler for the #_GFreedesktopDBus::handle-request-name signal.
+ * @handle_start_service_by_name: Handler for the #_GFreedesktopDBus::handle-start-service-by-name signal.
+ * @handle_update_activation_environment: Handler for the #_GFreedesktopDBus::handle-update-activation-environment signal.
+ * @name_acquired: Handler for the #_GFreedesktopDBus::name-acquired signal.
+ * @name_lost: Handler for the #_GFreedesktopDBus::name-lost signal.
+ * @name_owner_changed: Handler for the #_GFreedesktopDBus::name-owner-changed signal.
+ *
+ * Virtual table for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-DBus.top_of_page">org.freedesktop.DBus</link>.
+ */
+
+
+/**
+ * _GFreedesktopDBusProxy:
+ *
+ * The #_GFreedesktopDBusProxy structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * _GFreedesktopDBusProxyClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #_GFreedesktopDBusProxy.
+ */
+
+
+/**
+ * _GFreedesktopDBusSkeleton:
+ *
+ * The #_GFreedesktopDBusSkeleton structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * _GFreedesktopDBusSkeletonClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #_GFreedesktopDBusSkeleton.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_add_match:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_rule: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.AddMatch">AddMatch()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_add_match_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_add_match_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_add_match_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_add_match().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_add_match().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_add_match_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_rule: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.AddMatch">AddMatch()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_add_match() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_selinux_security_context:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionSELinuxSecurityContext">GetConnectionSELinuxSecurityContext()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_get_connection_selinux_security_context_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_get_connection_selinux_security_context_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_selinux_security_context_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_security_context: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_get_connection_selinux_security_context().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_get_connection_selinux_security_context().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_selinux_security_context_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @out_security_context: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionSELinuxSecurityContext">GetConnectionSELinuxSecurityContext()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_get_connection_selinux_security_context() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_unix_process_id:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixProcessID">GetConnectionUnixProcessID()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_get_connection_unix_process_id_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_get_connection_unix_process_id_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_unix_process_id_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_pid: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_get_connection_unix_process_id().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_get_connection_unix_process_id().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_unix_process_id_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @out_pid: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixProcessID">GetConnectionUnixProcessID()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_get_connection_unix_process_id() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_unix_user:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixUser">GetConnectionUnixUser()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_get_connection_unix_user_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_get_connection_unix_user_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_unix_user_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_uid: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_get_connection_unix_user().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_get_connection_unix_user().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_connection_unix_user_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @out_uid: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixUser">GetConnectionUnixUser()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_get_connection_unix_user() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_id:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetId">GetId()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_get_id_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_get_id_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_id_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_unique_id: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_get_id().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_get_id().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_id_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_unique_id: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetId">GetId()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_get_id() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_name_owner:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetNameOwner">GetNameOwner()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_get_name_owner_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_get_name_owner_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_name_owner_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_unique_name: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_get_name_owner().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_get_name_owner().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_get_name_owner_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @out_unique_name: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetNameOwner">GetNameOwner()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_get_name_owner() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_hello:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.Hello">Hello()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_hello_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_hello_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_hello_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_assigned_name: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_hello().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_hello().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_hello_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_assigned_name: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.Hello">Hello()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_hello() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_activatable_names:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListActivatableNames">ListActivatableNames()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_list_activatable_names_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_list_activatable_names_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_activatable_names_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_activatable_names: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_list_activatable_names().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_list_activatable_names().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_activatable_names_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_activatable_names: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListActivatableNames">ListActivatableNames()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_list_activatable_names() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_names:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListNames">ListNames()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_list_names_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_list_names_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_names_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_names: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_list_names().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_list_names().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_names_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_names: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListNames">ListNames()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_list_names() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_queued_owners:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListQueuedOwners">ListQueuedOwners()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_list_queued_owners_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_list_queued_owners_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_queued_owners_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_queued_owners: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_list_queued_owners().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_list_queued_owners().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_list_queued_owners_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @out_queued_owners: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListQueuedOwners">ListQueuedOwners()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_list_queued_owners() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_name_has_owner:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.NameHasOwner">NameHasOwner()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_name_has_owner_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_name_has_owner_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_name_has_owner_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_has_owner: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_name_has_owner().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_name_has_owner().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_name_has_owner_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @out_has_owner: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.NameHasOwner">NameHasOwner()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_name_has_owner() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_release_name:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ReleaseName">ReleaseName()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_release_name_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_release_name_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_release_name_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_value: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_release_name().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_release_name().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_release_name_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @out_value: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ReleaseName">ReleaseName()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_release_name() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_reload_config:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ReloadConfig">ReloadConfig()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_reload_config_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_reload_config_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_reload_config_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_reload_config().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_reload_config().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_reload_config_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ReloadConfig">ReloadConfig()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_reload_config() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_remove_match:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_rule: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.RemoveMatch">RemoveMatch()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_remove_match_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_remove_match_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_remove_match_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_remove_match().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_remove_match().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_remove_match_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_rule: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.RemoveMatch">RemoveMatch()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_remove_match() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_request_name:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @arg_flags: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.RequestName">RequestName()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_request_name_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_request_name_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_request_name_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_value: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_request_name().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_request_name().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_request_name_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @arg_flags: Argument to pass with the method invocation.
+ * @out_value: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.RequestName">RequestName()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_request_name() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_start_service_by_name:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @arg_flags: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.StartServiceByName">StartServiceByName()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_start_service_by_name_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_start_service_by_name_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_start_service_by_name_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @out_value: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_start_service_by_name().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_start_service_by_name().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_start_service_by_name_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_name: Argument to pass with the method invocation.
+ * @arg_flags: Argument to pass with the method invocation.
+ * @out_value: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.StartServiceByName">StartServiceByName()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_start_service_by_name() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_update_activation_environment:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_environment: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.UpdateActivationEnvironment">UpdateActivationEnvironment()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_call_update_activation_environment_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_call_update_activation_environment_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_update_activation_environment_finish:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_update_activation_environment().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_call_update_activation_environment().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_call_update_activation_environment_sync:
+ * @proxy: A #_GFreedesktopDBusProxy.
+ * @arg_environment: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.UpdateActivationEnvironment">UpdateActivationEnvironment()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_call_update_activation_environment() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_add_match:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.AddMatch">AddMatch()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_get_connection_selinux_security_context:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @security_context: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionSELinuxSecurityContext">GetConnectionSELinuxSecurityContext()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_get_connection_unix_process_id:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @pid: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixProcessID">GetConnectionUnixProcessID()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_get_connection_unix_user:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @uid: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixUser">GetConnectionUnixUser()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_get_id:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @unique_id: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.GetId">GetId()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_get_name_owner:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @unique_name: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.GetNameOwner">GetNameOwner()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_hello:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @assigned_name: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.Hello">Hello()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_list_activatable_names:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @activatable_names: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.ListActivatableNames">ListActivatableNames()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_list_names:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @names: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.ListNames">ListNames()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_list_queued_owners:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @queued_owners: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.ListQueuedOwners">ListQueuedOwners()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_name_has_owner:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @has_owner: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.NameHasOwner">NameHasOwner()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_release_name:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @value: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.ReleaseName">ReleaseName()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_reload_config:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.ReloadConfig">ReloadConfig()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_remove_match:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.RemoveMatch">RemoveMatch()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_request_name:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @value: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.RequestName">RequestName()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_start_service_by_name:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @value: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.StartServiceByName">StartServiceByName()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_complete_update_activation_environment:
+ * @object: A #_GFreedesktopDBus.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-DBus.UpdateActivationEnvironment">UpdateActivationEnvironment()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_emit_name_acquired:
+ * @object: A #_GFreedesktopDBus.
+ * @arg_name: Argument to pass with the signal.
+ *
+ * Emits the <link linkend="gdbus-signal-org-freedesktop-DBus.NameAcquired">"NameAcquired"</link> D-Bus signal.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_emit_name_lost:
+ * @object: A #_GFreedesktopDBus.
+ * @arg_name: Argument to pass with the signal.
+ *
+ * Emits the <link linkend="gdbus-signal-org-freedesktop-DBus.NameLost">"NameLost"</link> D-Bus signal.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_emit_name_owner_changed:
+ * @object: A #_GFreedesktopDBus.
+ * @arg_name: Argument to pass with the signal.
+ * @arg_old_owner: Argument to pass with the signal.
+ * @arg_new_owner: Argument to pass with the signal.
+ *
+ * Emits the <link linkend="gdbus-signal-org-freedesktop-DBus.NameOwnerChanged">"NameOwnerChanged"</link> D-Bus signal.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_interface_info:
+ *
+ * Gets a machine-readable description of the <link linkend="gdbus-interface-org-freedesktop-DBus.top_of_page">org.freedesktop.DBus</link> D-Bus interface.
+ *
+ * Returns: (transfer none): A #GDBusInterfaceInfo. Do not free.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_override_properties:
+ * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @property_id_begin: The property id to assign to the first overridden property.
+ *
+ * Overrides all #GObject properties in the #_GFreedesktopDBus interface for a concrete class.
+ * The properties are overridden in the order they are defined.
+ *
+ * Returns: The last property id.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_proxy_new:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-DBus.top_of_page">org.freedesktop.DBus</link>. See g_dbus_proxy_new() for more details.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_proxy_new_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_proxy_new_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_proxy_new_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_proxy_new().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_proxy_new().
+ *
+ * Returns: (transfer full) (type _GFreedesktopDBusProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_proxy_new_for_bus:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Like _g_freedesktop_dbus_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call _g_freedesktop_dbus_proxy_new_for_bus_finish() to get the result of the operation.
+ *
+ * See _g_freedesktop_dbus_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_proxy_new_for_bus_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_proxy_new_for_bus().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with _g_freedesktop_dbus_proxy_new_for_bus().
+ *
+ * Returns: (transfer full) (type _GFreedesktopDBusProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_proxy_new_for_bus_sync:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Like _g_freedesktop_dbus_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_proxy_new_for_bus() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type _GFreedesktopDBusProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_proxy_new_sync:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-DBus.top_of_page">org.freedesktop.DBus</link>. See g_dbus_proxy_new_sync() for more details.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See _g_freedesktop_dbus_proxy_new() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type _GFreedesktopDBusProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * _g_freedesktop_dbus_skeleton_new:
+ *
+ * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-DBus.top_of_page">org.freedesktop.DBus</link>.
+ *
+ * Returns: (transfer full) (type _GFreedesktopDBusSkeleton): The skeleton object.
  */
 
 
@@ -11546,7 +13003,8 @@
  *
  * This operation can fail if #GCredentials is not supported on the
  * OS or if the native credentials type does not contain information
- * about the UNIX user.
+ * about the UNIX user. It can also fail if the OS does not allow the
+ * use of "spoofed" credentials.
  *
  * Returns: %TRUE if @uid was set, %FALSE if error is set.
  * Since: 2.26
@@ -15918,9 +17376,9 @@
  * to handle signals from the remote object.
  *
  * If @name is a well-known name and the
- * %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START flag isn't set and no name
- * owner currently exists, the message bus will be requested to launch
- * a name owner for the name.
+ * %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START and %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START_AT_CONSTRUCTION
+ * flags aren't set and no name owner currently exists, the message bus
+ * will be requested to launch a name owner for the name.
  *
  * This is a failable asynchronous constructor - when the proxy is
  * ready, @callback will be invoked and you can use
@@ -16019,9 +17477,9 @@
  * to handle signals from the remote object.
  *
  * If @name is a well-known name and the
- * %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START flag isn't set and no name
- * owner currently exists, the message bus will be requested to launch
- * a name owner for the name.
+ * %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START and %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START_AT_CONSTRUCTION
+ * flags aren't set and no name owner currently exists, the message bus
+ * will be requested to launch a name owner for the name.
  *
  * This is a synchronous failable constructor. See g_dbus_proxy_new()
  * and g_dbus_proxy_new_finish() for the asynchronous version.
@@ -21511,6 +22969,16 @@
 
 
 /**
+ * g_input_stream_async_read_is_via_threads:
+ * @stream: input stream
+ *
+ * Checks if an input stream's read_async function uses threads.
+ *
+ * Returns: %TRUE if @stream's read_async function uses threads.
+ */
+
+
+/**
  * g_input_stream_clear_pending:
  * @stream: input stream
  *
@@ -24502,6 +25970,16 @@
 
 
 /**
+ * g_output_stream_async_write_is_via_threads:
+ * @stream: a #GOutputStream.
+ *
+ * Checks if an ouput stream's write_async function uses threads.
+ *
+ * Returns: %TRUE if @stream's write_async function uses threads.
+ */
+
+
+/**
  * g_output_stream_clear_pending:
  * @stream: output stream
  *
@@ -24835,26 +26313,18 @@
  * @cancellable: (allow-none): optional cancellable object
  * @error: location to store the error occurring, or %NULL to ignore
  *
- * Tries to write the data from @bytes into the stream. Will block
- * during the operation.
+ * A wrapper function for g_output_stream_write() which takes a
+ * #GBytes as input.  This can be more convenient for use by language
+ * bindings or in other cases where the refcounted nature of #GBytes
+ * is helpful over a bare pointer interface.
  *
- * If @bytes is 0-length, returns 0 and does nothing. A #GBytes larger
- * than %G_MAXSSIZE will cause a %G_IO_ERROR_INVALID_ARGUMENT error.
- *
- * On success, the number of bytes written to the stream is returned.
- * It is not an error if this is not the same as the requested size, as it
- * can happen e.g. on a partial I/O error, or if there is not enough
- * storage in the stream. All writes block until at least one byte
- * is written or an error occurs; 0 is never returned (unless
- * the size of @bytes is 0).
- *
- * If @cancellable is not %NULL, then the operation can be cancelled by
- * triggering the cancellable object from another thread. If the operation
- * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned. If an
- * operation was partially finished when the operation was cancelled the
- * partial result will be returned, without an error.
- *
- * On error -1 is returned and @error is set accordingly.
+ * However, note that this function <emphasis>may</emphasis> still
+ * perform partial writes, just like g_output_stream_write().  If that
+ * occurs, to continue writing, you will need to create a new #GBytes
+ * containing just the remaining bytes, using
+ * g_bytes_new_from_bytes().  Passing the same #GBytes instance
+ * multiple times potentially can result in duplicated data in the
+ * output stream.
  *
  * Returns: Number of bytes written, or -1 on error
  */
@@ -24869,29 +26339,17 @@
  * @callback: (scope async): callback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
  *
- * Request an asynchronous write of the data in @bytes to the stream.
- * When the operation is finished @callback will be called. You can
- * then call g_output_stream_write_bytes_finish() to get the result of
- * the operation.
+ * This function is similar to g_output_stream_write_async(), but
+ * takes a #GBytes as input.  Due to the refcounted nature of #GBytes,
+ * this allows the stream to avoid taking a copy of the data.
  *
- * During an async request no other sync and async calls are allowed,
- * and will result in %G_IO_ERROR_PENDING errors.
- *
- * A #GBytes larger than %G_MAXSSIZE will cause a
- * %G_IO_ERROR_INVALID_ARGUMENT error.
- *
- * On success, the number of bytes written will be passed to the
- * @callback. It is not an error if this is not the same as the
- * requested size, as it can happen e.g. on a partial I/O error,
- * but generally we try to write as many bytes as requested.
- *
- * You are guaranteed that this method will never fail with
- * %G_IO_ERROR_WOULD_BLOCK - if @stream can't accept more data, the
- * method will just wait until this changes.
- *
- * Any outstanding I/O request with higher priority (lower numerical
- * value) will be executed before an outstanding request with lower
- * priority. Default priority is %G_PRIORITY_DEFAULT.
+ * However, note that this function <emphasis>may</emphasis> still
+ * perform partial writes, just like g_output_stream_write_async().
+ * If that occurs, to continue writing, you will need to create a new
+ * #GBytes containing just the remaining bytes, using
+ * g_bytes_new_from_bytes().  Passing the same #GBytes instance
+ * multiple times potentially can result in duplicated data in the
+ * output stream.
  *
  * For the synchronous, blocking version of this function, see
  * g_output_stream_write_bytes().

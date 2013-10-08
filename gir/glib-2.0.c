@@ -17304,6 +17304,23 @@
 
 
 /**
+ * g_key_file_save_to_file:
+ * @key_file: a #GKeyFile
+ * @filename: the name of the file to write to
+ * @error: a pointer to a %NULL #GError, or %NULL
+ *
+ * Writes the contents of @key_file to @filename using
+ * g_file_set_contents().
+ *
+ * This function can fail for any of the reasons that
+ * g_file_set_contents() may fail.
+ *
+ * Returns: %TRUE if successful, else %FALSE with @error set
+ * Since: 2.40
+ */
+
+
+/**
  * g_key_file_set_boolean:
  * @key_file: a #GKeyFile
  * @group_name: a group name
