@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<refentry id="gi-programming">
+  <refmeta>
+    <refentrytitle>Writing introspected libraries</refentrytitle>
+  </refmeta>
+
+  <refnamediv>
+    <refname>Writing introspected libraries</refname>
+    <refpurpose>General considerations when writing introspected libraries</refpurpose>
+  </refnamediv>
+
+  <refsect1>
+    <title>TODO</title>
+    <para>
+      ...
+    </para>
+  </refsect1>
+
+</refentry>

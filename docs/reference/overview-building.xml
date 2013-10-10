@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<refentry id="gi-building">
+  <refmeta>
+    <refentrytitle>Compiling the GObject Introspection package</refentrytitle>
+  </refmeta>
+
+  <refnamediv>
+    <refname>Compiling the GObject Introspection Package</refname>
+    <refpurpose>How to compile GObject Introspection itself</refpurpose>
+  </refnamediv>
+
+  <refsect1 id="gi-buildtools">
+    <title>Building on UNIX</title>
+    <para>
+      On UNIX, GObject Introspection uses the standard GNU build system,
+      using <application>autoconf</application> for package
+      configuration and resolving portability issues,
+      <application>automake</application> for building makefiles
+      that comply with the GNU Coding Standards, and
+      <application>libtool</application> for building shared
+      libraries on multiple platforms. The normal sequence for
+      compiling and installing the GObject Introspection package is thus:
+
+      <literallayout>
+        <userinput>./configure</userinput>
+        <userinput>make</userinput>
+        <userinput>make install</userinput>
+      </literallayout>
+    </para>
+
+    <para>
+      The standard options provided by <application>GNU
+      autoconf</application> may be passed to the
+      <command>configure</command> script.  Please see the
+      <application>autoconf</application> documentation or run
+      <command>./configure --help</command> for information about
+      the standard options.
+    </para>
+  </refsect1>
+
+  <refsect1 id="dependencies">
+    <title>Dependencies</title>
+    <para>
+      Before you can compile GObject Introspection, you need to have
+      various other tools and libraries installed on your
+      system. The tools needed during the build process (as
+      differentiated from the basic build tools mentioned
+      <link linkend="gi-buildtools">before</link> are:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="http://www.freedesktop.org/software/pkgconfig/">pkg-config</ulink>
+          is a tool for tracking the compilation flags needed for
+          libraries that are used by the GObjecct Introspection. (For each
+          library, a small <literal>.pc</literal> text file is
+          installed in a standard location that contains the compilation
+          flags needed for that library along with version number
+          information.)
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The GObject-Introspection makefiles will mostly work with different
+          versions of <command>make</command>, however, there tends to be a
+          few incompatibilities, so the GObject-Introspection team recommends
+          installing <ulink url="http://www.gnu.org/software/make">GNU
+          make</ulink> if you don't already have it on your system
+          and using it. (It may be called <command>gmake</command>
+          rather than <command>make</command>.)
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      GObject-Introspection depends on a number of libraries and tools
+      maintained under the umbrella of the GNOME project:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The GLib library provides core non-graphical functionality
+          such as high level data types, Unicode manipulation, and
+          an object and type system to C programs. It is available
+          from the <ulink url="ftp.gnome.org/pub/gnome/sources/glib">GNOME
+          FTP site</ulink> or
+          <ulink url="http://download.gnome.org/sources/glib/">here</ulink>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          TODO: GTK-Doc
+        </para>
+      </listitem>
+    </itemizedlist>
+    <itemizedlist>
+      <title>External dependencies</title>
+      <listitem>
+        <para>
+          Python
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          GObject Introspection has an option dependency on the
+          <ulink url="TODO">libffi</ulink> library. When available,
+          ...
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+        <para>
+          <ulink url="http://www.cairographics.org">Cairo</ulink>
+          is a graphics library that supports vector graphics and image
+          compositing. When available, GObject Introspection uses
+          Cairo in its unit tests.
+        </para>
+        </para>
+      </listitem>
+    </itemizedlist>
+  </refsect1>
+
+  <refsect1 id="extra-configuration-options">
+    <title>Extra Configuration Options</title>
+
+    <para>
+      In addition to the normal options, the
+      <command>configure</command> script in the GObject Introspection
+      package supports these additional arguments:
+    </para>
+
+    <formalpara>
+      <title><systemitem>--disable-Bsymbolic</systemitem> and
+        <systemitem>--enable-Bsymbolic</systemitem></title>
+
+      <para>
+        By default, the GObject Introspection package uses the
+        -Bsymbolic-functions linker flag to avoid intra-library
+        PLT jumps. A side-effect of this is that it is no longer
+        possible to override internal uses of GObject Introspection
+        functions with <envar>LD_PRELOAD</envar>. Therefore, it may
+        make sense to turn this feature off in some situations.
+        The <option>--disable-Bsymbolic</option> option allows
+        to do that.
+      </para>
+    </formalpara>
+
+    <formalpara>
+      <title><systemitem>--disable-gtk-doc</systemitem> and
+        <systemitem>--enable-gtk-doc</systemitem></title>
+
+      <para>
+        By default the <command>configure</command> script will try
+        to auto-detect whether the
+        <application>gtk-doc</application> package is installed.
+        If it is, then it will use it to extract and build the
+        documentation for the GObject Introspection package. These options
+        can be used to explicitly control whether
+        <application>gtk-doc</application> should be
+        used or not. If it is not used, the distributed,
+        pre-generated HTML files will be installed instead of
+        building them on your machine.
+      </para>
+    </formalpara>
+
+    <formalpara>
+      <title><systemitem>--disable-doctool</systemitem> and
+        <systemitem>--enable-doctool</systemitem></title>
+
+      <para>
+        TODO
+      </para>
+    </formalpara>
+
+    <formalpara>
+      <title><systemitem>--with-python</systemitem></title>
+
+      <para>
+        Allows specifying the Python interpreter to use, either as an
+        absolute path, or as a program name. GObject Introspection can
+        be built with Python 2 (at least version 2.6) but does not yet
+        support Python 3.
+      </para>
+    </formalpara>
+  </refsect1>
+
+</refentry>

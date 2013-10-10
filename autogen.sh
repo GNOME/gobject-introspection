@@ -16,7 +16,7 @@ EXTRA_DIST =
 CLEANFILES =
 EOF
 else
-        gtkdocize || exit $?
+        gtkdocize --flavour no-tmpl || exit $?
 fi
 
 AUTORECONF=`which autoreconf`

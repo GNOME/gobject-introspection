@@ -1,3 +1,6 @@
+EXTRA_DIST +=						\
+	girepository/docs.c
+
 girepodir = $(includedir)/gobject-introspection-1.0/
 girepo_HEADERS =					\
 	girepository/giarginfo.h			\

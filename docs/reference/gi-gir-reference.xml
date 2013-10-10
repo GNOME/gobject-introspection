@@ -1,114 +1,121 @@
-<chapter id="gi-gir-reference">
-
-  <title>The GIR XML format</title>
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+<!ENTITY version SYSTEM "version.xml">
+]>
+<refentry id="gi-gir-reference">
+	<refmeta>
+	  <refentrytitle role="top_of_page" id="gi-gir-reference.top_of_page">The GIR XML format</refentrytitle>
+	  <manvolnum>3</manvolnum>
+	  <refmiscinfo>The GIR XML format</refmiscinfo>
+	</refmeta>
+	<refnamediv>
+	  <refname>The GIR XML format</refname>
+	  <refpurpose>The GIR XML format</refpurpose>
+	</refnamediv>
 
   <para>
     This chapter describes the GIR XML markup format.
   </para>
 
-   <refsect2 id="gi-gir-api">
-     <title><emphasis>api</emphasis> node</title>
+  <refsect2 id="gi-gir-api-node">
+    <title><emphasis>api</emphasis> node</title>
 
-     The root node of all GIR documents is the api node.
+    The root node of all GIR documents is the api node.
 
-     Possible children: <link linkend="gi-gir-namespace">namespace</link>.
+    Possible children: <link linkend="gi-gir-namespace">namespace</link>.
 
-     <example>
-     <title>A GIR fragment showing an api node</title>
-     <programlisting><![CDATA[
-     <api version="1.0">
-       <namespace/>
-     </api>]]></programlisting>
-     </example>
+    <example>
+    <title>A GIR fragment showing an api node</title>
+    <programlisting><![CDATA[
+    <api version="1.0">
+      <namespace/>
+    </api>]]></programlisting>
+    </example>
+  </refsect2>
 
+  <refsect2 id="gi-gir-namespace">
+    <title><emphasis>namespace</emphasis> node</title>
+
+    Parent node: <link linkend="gi-gir-api">api</link>.
+    Possible children: <link linkend="gi-gir-callback">callback</link>,
+    <link linkend="gi-gir-class">class</link>,
+    <link linkend="gi-gir-function">function</link>.
+    <link linkend="gi-gir-interface">interface</link>.
+
+    <example>
+    <title>A GIR fragment showing an namespace node</title>
+    <programlisting><![CDATA[
+    <api version="1.0">
+      <namespace="Gtk">
+         <class/>
+         <function/>
+      </namespace>
+    </api>]]></programlisting>
+    </example>
+  </refsect2>
+
+  <refsect2 id="gi-gir-class">
+    <title><emphasis>class</emphasis> node</title>
+
+    Parent node: <link linkend="gi-gir-namespace">namespace</link>.
+    Possible children: <link linkend="gi-gir-class">constructor</link>,
+    <link linkend="gi-gir-field">field</link>,
+    <link linkend="gi-gir-method">method</link>,
+    <link linkend="gi-gir-property">property</link>.
+    <example>
+    <title>A GIR fragment showing an class node</title>
+    <programlisting><![CDATA[
+    <api version="1.0">
+      <namespace="Gtk">
+        <class name="Widget">
+           <constructor/>
+           <field/>
+           <method/>
+           <property/>
+        <class>
+      </namespace>
+    </api>]]></programlisting>
+    </example>
+  </refsect2>
+
+  <refsect2 id="gi-gir-interface">
+    <title><emphasis>interface</emphasis> node</title>
+
+    Parent node: <link linkend="gi-gir-namespace">namespace</link>.
+    Possible children: <link linkend="gi-gir-field">field</link>,
+    <link linkend="gi-gir-method">method</link>,
+    <link linkend="gi-gir-property">property</link>.
+    <example>
+    <title>A GIR fragment showing an interface node</title>
+    <programlisting><![CDATA[
+    <api version="1.0">
+      <namespace="Gtk">
+        <interface name="Buildable">
+           <field/>
+           <method/>
+           <property/>
+        <interface>
+      </namespace>
+    </api>]]></programlisting>
+    </example>
+  </refsect2>
+
+  <refsect2 id="gi-gir-function">
+    <title><emphasis>function</emphasis> node</title>
+
+    Parent node: <link linkend="gi-gir-namespace">namespace</link>.
+    <example>
+    <title>A GIR fragment showing an function node</title>
+    <programlisting><![CDATA[
+    <api version="1.0">
+      <namespace="Gtk">
+        <function name="init">
+        </function>
+      </namespace>
+    </api>]]></programlisting>
+    </example>
    </refsect2>
 
-   <refsect2 id="gi-gir-namespace">
-     <title><emphasis>namespace</emphasis> node</title>
-
-     Parent node: <link linkend="gi-gir-api">api</link>.
-     Possible children: <link linkend="gi-gir-callback">callback</link>,
-     <link linkend="gi-gir-class">class</link>,
-     <link linkend="gi-gir-function">function</link>.
-     <link linkend="gi-gir-interface">interface</link>.
-
-     <example>
-     <title>A GIR fragment showing an namespace node</title>
-     <programlisting><![CDATA[
-     <api version="1.0">
-       <namespace="Gtk">
-          <class/>
-          <function/>
-       </namespace>
-     </api>]]></programlisting>
-     </example>
-
-   </refsect2>
-
-   <refsect2 id="gi-gir-class">
-     <title><emphasis>class</emphasis> node</title>
-
-     Parent node: <link linkend="gi-gir-namespace">namespace</link>.
-     Possible children: <link linkend="gi-gir-class">constructor</link>,
-     <link linkend="gi-gir-field">field</link>,
-     <link linkend="gi-gir-method">method</link>,
-     <link linkend="gi-gir-property">property</link>.
-     <example>
-     <title>A GIR fragment showing an class node</title>
-     <programlisting><![CDATA[
-     <api version="1.0">
-       <namespace="Gtk">
-         <class name="Widget">
-            <constructor/>
-            <field/>
-            <method/>
-            <property/>
-         <class>
-       </namespace>
-     </api>]]></programlisting>
-     </example>
-
-   </refsect2>
-
-   <refsect2 id="gi-gir-interface">
-     <title><emphasis>interface</emphasis> node</title>
-
-     Parent node: <link linkend="gi-gir-namespace">namespace</link>.
-     Possible children: <link linkend="gi-gir-field">field</link>,
-     <link linkend="gi-gir-method">method</link>,
-     <link linkend="gi-gir-property">property</link>.
-     <example>
-     <title>A GIR fragment showing an interface node</title>
-     <programlisting><![CDATA[
-     <api version="1.0">
-       <namespace="Gtk">
-         <interface name="Buildable">
-            <field/>
-            <method/>
-            <property/>
-         <interface>
-       </namespace>
-     </api>]]></programlisting>
-     </example>
-
-   </refsect2>
-
-   <refsect2 id="gi-gir-function">
-     <title><emphasis>function</emphasis> node</title>
-
-     Parent node: <link linkend="gi-gir-namespace">namespace</link>.
-     <example>
-     <title>A GIR fragment showing an function node</title>
-     <programlisting><![CDATA[
-     <api version="1.0">
-       <namespace="Gtk">
-         <function name="init">
-         </function>
-       </namespace>
-     </api>]]></programlisting>
-     </example>
-
-   </refsect2>
-
-</chapter>
-
+</refentry>

@@ -32,7 +32,6 @@
     * <link linkend="gi-GIUnionInfo">GIUnionInfo</link>
   * <link linkend="gi-GIArgInfo">GIArgInfo</link>
   * <link linkend="gi-GIConstantInfo">GIConstantInfo</link>
-  * <link linkend="gi-GIErrorDomainInfo">GIErrorDomainInfo</link>
   * <link linkend="gi-GIFieldInfo">GIFieldInfo</link>
   * <link linkend="gi-GIPropertyInfo">GIPropertyInfo</link>
   * <link linkend="gi-GITypeInfo">GITypeInfo</link>

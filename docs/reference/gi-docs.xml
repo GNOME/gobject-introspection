@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+<!ENTITY version SYSTEM "xml/version.xml">
+]>
+<book id="index" lang="en" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <title>GObject Introspection Reference Manual</title>
+  <bookinfo>
+    <title>GObject Introspection Reference Manual</title>
+    <releaseinfo>
+      This document is for GObject Introspection version &version;.
+      The latest version of this documentation can be found on-line at
+      <ulink type="http" url="http://developer.gnome.org/gi/unstable/">http://developer.gnome.org/gi/unstable/</ulink>.
+    </releaseinfo>
+  </bookinfo>
+
+  <part id="overview">
+    <title>GObject-Introspection Overview</title>
+    <para>
+      GObject-Introspection is striving to provide a middleware layer between
+      (GObject based) C libraries and language bindings. The primary goal of
+      this project is to minimize duplicated effort in language binding
+      projects by providing shared metadata files on bound C libraries.
+      Language bindings can read these metadata files at runtime to learn
+      how to interface with a bound C library.
+    </para>
+
+    <xi:include href="xml/overview-building.xml"/>
+    <xi:include href="xml/overview-programming.xml"/>
+    <!-- <chapter>
+      <title>Introduction</title>
+
+      <para>
+        Metadata provided by GObject-Introspection is represented by a
+        number of structures:
+        <synopsis>
+        * <link linkend="gi-GIBaseInfo">GIBaseInfo</link>
+          * <link linkend="gi-GICallableInfo">GICallableInfo</link>
+            * <link linkend="gi-GIFunctionInfo">GIFunctionInfo</link>
+            * <link linkend="gi-GISignalInfo">GISignalInfo</link>
+            * <link linkend="gi-GIVFuncInfo">GIVFuncInfo</link>
+          * <link linkend="gi-GIRegisteredTypeInfo">GIRegisteredTypeInfo</link>
+            * <link linkend="gi-GIEnumInfo">GIEnumInfo</link>
+            * <link linkend="gi-GIInterfaceInfo">GIInterfaceInfo</link>
+            * <link linkend="gi-GIObjectInfo">GIObjectInfo</link>
+            * <link linkend="gi-GIStructInfo">GIStructInfo</link>
+            * <link linkend="gi-GIUnionInfo">GIUnionInfo</link>
+          * <link linkend="gi-GIArgInfo">GIArgInfo</link>
+          * <link linkend="gi-GIConstantInfo">GIConstantInfo</link>
+          * <link linkend="gi-GIFieldInfo">GIFieldInfo</link>
+          * <link linkend="gi-GIPropertyInfo">GIPropertyInfo</link>
+          * <link linkend="gi-GITypeInfo">GITypeInfo</link>
+        </synopsis>
+      </para>
+    </chapter> -->
+
+<!--
+    <chapter id="tools">
+      <title>GObject Introspection Tools</title>
+
+      &g-ir-scanner;
+      &g-ir-compiler;
+      &g-ir-generator;
+    </chapter>
+-->
+
+    <para>
+      The GObject-Introspection package contains of a few different parts:
+      <itemizedlist>
+        <listitem>
+          <para>The GIR XML format - an XML format describing the exported C API including documentation</para>
+        </listitem>
+        <listitem>
+          <para>The GTypelib format - a binary format optimized for fast disk access and low memory usage</para>
+        </listitem>
+        <listitem>
+          <para>g-ir-scanner - parses C source code and gtk-doc comments and generates GIR XML files</para>
+        </listitem>
+        <listitem>
+          <para>g-ir-compiler - compiles GIR XML files into typelibs</para>
+        </listitem>
+        <listitem>
+          <para>libgirepository - library to access typelib from C</para>
+        </listitem>
+      </itemizedlist>
+    </para>
+    <para>The following illustration shows how the different components fit together:</para>
+    <inlinegraphic fileref="overview.png" format="PNG"></inlinegraphic>
+  </part>
+
+  <part id="gi">
+    <title>API Reference</title>
+    <chapter>
+      <title>GIRepository</title>
+      <xi:include href="xml/girepository.xml"/>
+      <xi:include href="xml/gi-struct-hierarchy.xml"/>
+
+      <xi:include href="xml/gicommontypes.xml"/>
+
+      <xi:include href="xml/gibaseinfo.xml"/>
+
+      <xi:include href="xml/gicallableinfo.xml"/>
+        <xi:include href="xml/gifunctioninfo.xml"/>
+        <xi:include href="xml/gicallbackinfo.xml"/>
+        <xi:include href="xml/gisignalinfo.xml"/>
+        <xi:include href="xml/givfuncinfo.xml"/>
+
+      <xi:include href="xml/giregisteredtypeinfo.xml"/>
+        <xi:include href="xml/gienuminfo.xml"/>
+        <xi:include href="xml/gistructinfo.xml"/>
+        <xi:include href="xml/giunioninfo.xml"/>
+        <xi:include href="xml/giobjectinfo.xml"/>
+        <xi:include href="xml/giinterfaceinfo.xml"/>
+
+      <xi:include href="xml/giarginfo.xml"/>
+      <xi:include href="xml/giconstantinfo.xml"/>
+      <xi:include href="xml/gifieldinfo.xml"/>
+      <xi:include href="xml/gipropertyinfo.xml"/>
+      <xi:include href="xml/gitypeinfo.xml"/>
+      <xi:include href="xml/givalueinfo.xml"/>
+    </chapter>
+
+    <chapter id="gi-typelib">
+      <title>GITypelib</title>
+      <xi:include href="xml/gitypelib.xml" />
+      <xi:include href="xml/gitypelib-internal.xml"/>
+    </chapter>
+
+    <chapter>
+      <title>TODO</title>
+      <xi:include href="xml/girffi.xml"/>
+
+      <xi:include href="xml/gi-gir-reference.xml"/>
+      <!--
+      &gi-gir-creating;
+      &gi-gir-parsing;
+      &gi-gir-verifying;
+       -->
+    </chapter>
+
+  </part>
+
+  <index id="api-index-full">
+    <title id="index-all">Index</title>
+    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-deprecated" role="deprecated">
+    <title>Index of deprecated symbols</title>
+    <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-29-0" role="1.29.0">
+    <title>Index of new symbols in 1.29.0</title>
+    <xi:include href="xml/api-index-1.29.0.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-29-17" role="1.29.17">
+    <title>Index of new symbols in 1.29.17</title>
+    <xi:include href="xml/api-index-1.29.17.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-30-1" role="1.30.1">
+    <title>Index of new symbols in 1.30.1</title>
+    <xi:include href="xml/api-index-1.30.1.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-34" role="1.34">
+    <title>Index of new symbols in 1.34</title>
+    <xi:include href="xml/api-index-1.34.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-35-8" role="1.35.8">
+    <title>Index of new symbols in 1.35.8</title>
+    <xi:include href="xml/api-index-1.35.8.xml"><xi:fallback /></xi:include>
+  </index>
+
+  <xi:include href="xml/annotation-glossary.xml" />
+</book>

@@ -22,6 +22,10 @@ AM_MAINTAINER_MODE([enable])
 
 AM_SILENT_RULES([yes])
 
+# Used in docs/reference/version.xml
+GI_VERSION=gi_version
+AC_SUBST(GI_VERSION)
+
 # Check for Win32
 AC_CANONICAL_HOST
 case "$host" in
@@ -229,7 +233,7 @@ GIREPO_CFLAGS="$GIREPO_CFLAGS $GCOV_CFLAGS"
 # gtkdocize greps for ^GTK_DOC_CHECK and parses it, so you need to have
 # it on it's own line.
 m4_ifdef([GTK_DOC_CHECK], [
-GTK_DOC_CHECK([1.15], [--flavour no-tmpl])
+GTK_DOC_CHECK([1.19], [--flavour no-tmpl])
 ],[
 AM_CONDITIONAL([ENABLE_GTK_DOC],[false])
 ])
@@ -319,6 +323,7 @@ tests/repository/Makefile
 tests/warn/Makefile
 docs/Makefile
 docs/reference/Makefile
+docs/reference/version.xml
 gobject-introspection-1.0.pc
 gobject-introspection-no-export-1.0.pc
 config.h.win32
