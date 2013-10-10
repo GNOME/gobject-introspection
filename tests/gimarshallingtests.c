@@ -2014,6 +2014,7 @@ gi_marshalling_tests_garray_utf8_container_inout (GArray **array_)
   g_array_append_val (result, val3);
   g_array_append_val (result, val4);
 
+  g_array_unref (*array_);
   *array_ = result;
 }
 
@@ -2044,6 +2045,7 @@ gi_marshalling_tests_garray_utf8_full_inout (GArray **array_)
   val = g_strdup ("1");
   g_array_append_val (result, val);
 
+  g_array_unref (*array_);
   *array_ = result;
 }
 
@@ -2231,6 +2233,7 @@ gi_marshalling_tests_gptrarray_utf8_container_inout (GPtrArray **parray_)
   g_ptr_array_add (result, (gpointer) val3);
   g_ptr_array_add (result, (gpointer) val4);
 
+  g_ptr_array_unref (*parray_);
   *parray_ = result;
 }
 
@@ -2261,6 +2264,7 @@ gi_marshalling_tests_gptrarray_utf8_full_inout (GPtrArray **parray_)
   val = g_strdup ("1");
   g_ptr_array_add (result, (gpointer) val);
 
+  g_ptr_array_unref (*parray_);
   *parray_ = result;
 }
 
@@ -2607,6 +2611,7 @@ gi_marshalling_tests_glist_utf8_container_inout (GList **list)
   result = g_list_prepend (result, "-1");
   result = g_list_prepend (result, "-2");
 
+  g_list_free (*list);
   *list = result;
 }
 
@@ -2629,6 +2634,7 @@ gi_marshalling_tests_glist_utf8_full_inout (GList **list)
   result = g_list_prepend (result, g_strdup ("-1"));
   result = g_list_prepend (result, g_strdup ("-2"));
 
+  g_list_free_full (*list, g_free);
   *list = result;
 }
 
@@ -2834,6 +2840,7 @@ gi_marshalling_tests_gslist_utf8_container_inout (GSList **list)
   result = g_slist_prepend (result, "-1");
   result = g_slist_prepend (result, "-2");
 
+  g_slist_free (*list);
   *list = result;
 }
 
@@ -2856,6 +2863,7 @@ gi_marshalling_tests_gslist_utf8_full_inout (GSList **list)
   result = g_slist_prepend (result, g_strdup ("-1"));
   result = g_slist_prepend (result, g_strdup ("-2"));
 
+  g_slist_free_full (*list, g_free);
   *list = result;
 }
 
@@ -3060,6 +3068,7 @@ gi_marshalling_tests_ghashtable_utf8_container_inout (GHashTable **hash_table)
   g_hash_table_insert (result, "0", "0");
   g_hash_table_insert (result, "1", "1");
 
+  g_hash_table_unref (*hash_table);
   *hash_table = result;
 }
 
@@ -3082,6 +3091,7 @@ gi_marshalling_tests_ghashtable_utf8_full_inout (GHashTable **hash_table)
   g_hash_table_insert (result, g_strdup ("0"), g_strdup ("0"));
   g_hash_table_insert (result, g_strdup ("1"), g_strdup ("1"));
 
+  g_hash_table_unref (*hash_table);
   *hash_table = result;
 }
 
@@ -3805,6 +3815,7 @@ gi_marshalling_tests_boxed_struct_inout (GIMarshallingTestsBoxedStruct **struct_
 {
   g_assert_cmpint ((*struct_)->long_, ==, 42);
 
+  g_boxed_free (gi_marshalling_tests_boxed_struct_get_type(), *struct_);
   (*struct_) = g_slice_new0 (GIMarshallingTestsBoxedStruct);
   (*struct_)->long_ = 0;
 }
@@ -4233,6 +4244,7 @@ gi_marshalling_tests_object_full_inout (GIMarshallingTestsObject **object)
 {
   g_assert_cmpint ((*object)->int_, ==, 42);
 
+  g_object_unref (*object);
   *object = g_object_new (GI_MARSHALLING_TESTS_TYPE_OBJECT, NULL);
 }
 
