@@ -262,11 +262,9 @@ gi_source_scanner_set_macro_scan (GISourceScanner  *scanner,
   scanner->macro_scan = macro_scan;
 }
 
-void
-gi_source_scanner_add_symbol (GISourceScanner  *scanner,
-			      GISourceSymbol   *symbol)
+static gboolean
+already_has_current_file (GISourceScanner *scanner)
 {
-  gboolean found_filename = FALSE;
   GList *l;
   GFile *current_file;
 
@@ -278,15 +276,24 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
       GFile *file = g_file_new_for_path (l->data);
 
       if (g_file_equal (file, current_file))
-	{
-	  found_filename = TRUE;
+        {
           g_object_unref (file);
-	  break;
-	}
+          return TRUE;
+        }
+
       g_object_unref (file);
     }
 
-  if (found_filename || scanner->macro_scan)
+  g_object_unref (current_file);
+
+  return FALSE;
+}
+
+void
+gi_source_scanner_add_symbol (GISourceScanner  *scanner,
+			      GISourceSymbol   *symbol)
+{
+  if (scanner->macro_scan || already_has_current_file (scanner))
     scanner->symbols = g_slist_prepend (scanner->symbols,
 					gi_source_symbol_ref (symbol));
   g_assert (symbol->source_filename != NULL);
@@ -308,8 +315,6 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
     default:
       break;
     }
-
-    g_object_unref (current_file);
 }
 
 GSList *
