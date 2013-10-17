@@ -269,11 +269,6 @@ already_has_current_file (GISourceScanner *scanner)
   GFile *current_file;
 
   g_assert (scanner->current_filename);
-
-  for (l = scanner->filenames; l != NULL; l = l->next)
-    if (strcmp (scanner->current_filename, l->data) == 0)
-      return TRUE;
-
   current_file = g_file_new_for_path (scanner->current_filename);
 
   for (l = scanner->filenames; l != NULL; l = l->next)
