@@ -316,21 +316,20 @@ check_identifier (GISourceScanner *scanner,
 static void
 process_linemarks (GISourceScanner *scanner)
 {
-        char filename[1025];
-        char *compress;
-        char *real;
+	char escaped_filename[1025];
+	char *filename;
+	char *real;
 
-        sscanf(yytext, "# %d \"%1024[^\"]\"", &lineno, filename);
-
-	compress = g_strcompress (filename);
-        real = g_realpath (filename);
-        if (real) {
-                g_free (scanner->current_filename);
-                scanner->current_filename = real;
-        } else {
-                g_free (real);
-        }
-        g_free (compress);
+	sscanf(yytext, "# %d \"%1024[^\"]\"", &lineno, escaped_filename);
+	filename = g_strcompress (escaped_filename);
+	real = g_realpath (filename);
+	if (real) {
+		g_free (scanner->current_filename);
+		scanner->current_filename = real;
+	} else {
+		g_free (real);
+	}
+	g_free (filename);
 }
 
 /*
