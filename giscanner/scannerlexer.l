@@ -51,6 +51,7 @@ static void parse_trigraph (GISourceScanner *scanner);
 static void process_linemarks (GISourceScanner *scanner);
 static int check_identifier (GISourceScanner *scanner, const char *);
 static int parse_ignored_macro (void);
+static void print_error (GISourceScanner *scanner);
 %}
 
 %option nounput
@@ -211,7 +212,7 @@ stringtext				([^\\\"])|(\\.)
 "\""{stringtext}*"\""			{ return STRING; }
 "L\""{stringtext}*"\""			{ return STRING; }
 
-.					{ if (yytext[0]) fprintf(stderr, "%s:%d: unexpected character `%c'\n", scanner->current_filename, lineno, yytext[0]); }
+.					{ print_error(scanner); }
 
 %%
 
@@ -238,9 +239,7 @@ parse_comment (GISourceScanner *scanner)
      * Store GTK-Doc comment blocks,
      * starts with one '/' followed by exactly two '*' and not followed by a '/'
      */
-    if (!g_list_find_custom (scanner->filenames,
-                             scanner->current_filename,
-                             (GCompareFunc)g_strcmp0)) {
+    if (!g_hash_table_contains (scanner->files, scanner->current_file)) {
         skip = TRUE;
     } else {
         string = g_string_new (yytext);
@@ -269,10 +268,9 @@ parse_comment (GISourceScanner *scanner)
     comment = g_slice_new (GISourceComment);
     comment->comment = g_string_free (string, FALSE);
     comment->line = comment_lineno;
-    comment->filename = g_strdup(scanner->current_filename);
+    comment->filename = g_file_get_parse_name (scanner->current_file);
 
-    scanner->comments = g_slist_prepend (scanner->comments,
-                                         comment);
+    scanner->comments = g_slist_prepend (scanner->comments, comment);
   } else {
     /*
      * Ignore all other comment blocks
@@ -324,8 +322,8 @@ process_linemarks (GISourceScanner *scanner)
 	filename = g_strcompress (escaped_filename);
 	real = g_realpath (filename);
 	if (real) {
-		g_free (scanner->current_filename);
-		scanner->current_filename = real;
+		g_object_unref (scanner->current_file);
+		scanner->current_file = g_file_new_for_path (real);
 	} else {
 		g_free (real);
 	}
@@ -398,4 +396,14 @@ parse_trigraph (GISourceScanner *scanner)
 			scanner->flags = TRUE;
 	}
 	g_strfreev (items);
+}
+
+static void
+print_error (GISourceScanner *scanner)
+{
+  if (yytext[0]) {
+    char *filename = g_file_get_parse_name (scanner->current_file);
+    fprintf(stderr, "%s:%d: unexpected character `%c'\n", filename, lineno, yytext[0]);
+    g_free (filename);
+  }
 }

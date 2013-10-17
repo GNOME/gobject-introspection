@@ -356,12 +356,13 @@ pygi_source_scanner_append_filename (PyGISourceScanner *self,
 				     PyObject          *args)
 {
   char *filename;
+  GFile *file;
 
   if (!PyArg_ParseTuple (args, "s:SourceScanner.append_filename", &filename))
     return NULL;
 
-  self->scanner->filenames = g_list_append (self->scanner->filenames,
-					    g_realpath (filename));
+  file = g_file_new_for_path (g_realpath (filename));
+  g_hash_table_add (self->scanner->files, file);
 
   Py_INCREF (Py_None);
   return Py_None;
@@ -511,18 +512,19 @@ pygi_source_scanner_lex_filename (PyGISourceScanner *self,
 				  PyObject          *args)
 {
   char *filename;
+  GFile *file;
 
   if (!PyArg_ParseTuple (args, "s:SourceScanner.lex_filename", &filename))
     return NULL;
 
-  self->scanner->current_filename = g_realpath (filename);
+  self->scanner->current_file = g_file_new_for_path ( g_realpath (filename));
   if (!gi_source_scanner_lex_filename (self->scanner, filename))
     {
       g_print ("Something went wrong during lexing.\n");
       return NULL;
     }
-  self->scanner->filenames =
-    g_list_append (self->scanner->filenames, g_strdup (filename));
+  file = g_file_new_for_path (filename);
+  g_hash_table_add (self->scanner->files, file);
 
   Py_INCREF (Py_None);
   return Py_None;
