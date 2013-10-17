@@ -28,7 +28,6 @@
 #ifdef G_OS_WIN32
 #define USE_WINDOWS
 #endif
-#include "grealpath.h"
 
 #ifdef _WIN32
 #include <fcntl.h>
@@ -361,7 +360,7 @@ pygi_source_scanner_append_filename (PyGISourceScanner *self,
   if (!PyArg_ParseTuple (args, "s:SourceScanner.append_filename", &filename))
     return NULL;
 
-  file = g_file_new_for_path (g_realpath (filename));
+  file = g_file_new_for_path (filename);
   g_hash_table_add (self->scanner->files, file);
 
   Py_INCREF (Py_None);
@@ -517,7 +516,7 @@ pygi_source_scanner_lex_filename (PyGISourceScanner *self,
   if (!PyArg_ParseTuple (args, "s:SourceScanner.lex_filename", &filename))
     return NULL;
 
-  self->scanner->current_file = g_file_new_for_path ( g_realpath (filename));
+  self->scanner->current_file = g_file_new_for_path (filename);
   if (!gi_source_scanner_lex_filename (self->scanner, filename))
     {
       g_print ("Something went wrong during lexing.\n");

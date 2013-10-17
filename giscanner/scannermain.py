@@ -267,7 +267,7 @@ def extract_filenames(args):
                 _error('%s: no such a file or directory' % (arg, ))
             # Make absolute, because we do comparisons inside scannerparser.c
             # against the absolute path that cpp will give us
-            filenames.append(os.path.abspath(arg))
+            filenames.append(arg)
     return filenames
 
 
@@ -289,7 +289,7 @@ def extract_filelist(options):
                 _error('%s: Invalid filelist entry-no such file or directory' % (line, ))
             # Make absolute, because we do comparisons inside scannerparser.c
             # against the absolute path that cpp will give us
-            filenames.append(os.path.abspath(filename))
+            filenames.append(filename)
     return filenames
 
 

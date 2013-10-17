@@ -35,7 +35,6 @@
 #include <glib.h>
 #include "sourcescanner.h"
 #include "scannerparser.h"
-#include "grealpath.h"
 
 int lineno;
 char linebuf[2000];
@@ -316,17 +315,11 @@ process_linemarks (GISourceScanner *scanner)
 {
 	char escaped_filename[1025];
 	char *filename;
-	char *real;
 
 	sscanf(yytext, "# %d \"%1024[^\"]\"", &lineno, escaped_filename);
 	filename = g_strcompress (escaped_filename);
-	real = g_realpath (filename);
-	if (real) {
-		g_object_unref (scanner->current_file);
-		scanner->current_file = g_file_new_for_path (real);
-	} else {
-		g_free (real);
-	}
+	g_object_unref (scanner->current_file);
+	scanner->current_file = g_file_new_for_path (filename);
 	g_free (filename);
 }
 

@@ -237,14 +237,14 @@ class SourceScanner(object):
 
     def parse_files(self, filenames):
         for filename in filenames:
-            filename = os.path.abspath(filename)
+            # self._scanner expects file names to be canonicalized and symlinks to be resolved
+            filename = os.path.realpath(filename)
             self._scanner.append_filename(filename)
             self._filenames.append(filename)
 
         headers = []
         for filename in filenames:
             if os.path.splitext(filename)[1] in SOURCE_EXTS:
-                filename = os.path.abspath(filename)
                 self._scanner.lex_filename(filename)
             else:
                 headers.append(filename)
@@ -253,7 +253,8 @@ class SourceScanner(object):
 
     def parse_macros(self, filenames):
         self._scanner.set_macro_scan(True)
-        self._scanner.parse_macros(filenames)
+        # self._scanner expects file names to be canonicalized and symlinks to be resolved
+        self._scanner.parse_macros([os.path.realpath(f) for f in filenames])
         self._scanner.set_macro_scan(False)
 
     def get_symbols(self):
@@ -298,7 +299,6 @@ class SourceScanner(object):
         for undef in undefs:
             proc.stdin.write('#undef %s\n' % (undef, ))
         for filename in filenames:
-            filename = os.path.abspath(filename)
             proc.stdin.write('#include <%s>\n' % (filename, ))
         proc.stdin.close()
 
