@@ -90,14 +90,17 @@ and/or use gtk-doc annotations.  -->
     <record name="AnnotationFields" c:type="RegressAnnotationFields">
       <doc xml:space="preserve">This is a struct for testing field documentation and annotations</doc>
       <field name="field1" writable="1">
+        <doc xml:space="preserve">Some documentation</doc>
         <type name="gint" c:type="int"/>
       </field>
       <field name="arr" writable="1">
+        <doc xml:space="preserve">an array of length @len</doc>
         <array length="2" zero-terminated="0" c:type="guchar*">
           <type name="guint8" c:type="guchar"/>
         </array>
       </field>
       <field name="len" writable="1">
+        <doc xml:space="preserve">the length of array</doc>
         <type name="gulong" c:type="gulong"/>
       </field>
     </record>

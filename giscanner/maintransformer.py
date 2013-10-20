@@ -743,7 +743,7 @@ class MainTransformer(object):
         type_annotation = tag.annotations.get(ANN_TYPE)
         if type_annotation:
             field.type = self._transformer.create_type_from_user_string(type_annotation[0])
-
+        field.doc = tag.description
         try:
             self._adjust_container_type(parent, field, tag.annotations)
         except AttributeError, ex:
