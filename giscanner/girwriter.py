@@ -217,7 +217,7 @@ class GIRWriter(XMLWriter):
             attrs.append(('skip', '1'))
         with self.tagcontext('return-value', attrs):
             self._write_generic(return_)
-            self._write_type(return_.type, function=parent)
+            self._write_type(return_.type, parent=parent)
 
     def _write_parameters(self, callable):
         if not callable.parameters and callable.instance_parameter is None:
@@ -253,7 +253,7 @@ class GIRWriter(XMLWriter):
             attrs.append(('skip', '1'))
         with self.tagcontext(nodename, attrs):
             self._write_generic(parameter)
-            self._write_type(parameter.type, function=parent)
+            self._write_type(parameter.type, parent=parent)
 
     def _type_to_name(self, typeval):
         if not typeval.resolved:
@@ -286,7 +286,7 @@ class GIRWriter(XMLWriter):
 
         self.write_tag('type', attrs)
 
-    def _write_type(self, ntype, relation=None, function=None):
+    def _write_type(self, ntype, relation=None, parent=None):
         assert isinstance(ntype, ast.Type), ntype
         attrs = []
         if ntype.complete_ctype:
@@ -309,8 +309,12 @@ class GIRWriter(XMLWriter):
             if ntype.size is not None:
                 attrs.append(('fixed-size', '%d' % (ntype.size, )))
             if ntype.length_param_name is not None:
-                assert function
-                length = function.get_parameter_index(ntype.length_param_name)
+                if isinstance(parent, ast.Callable):
+                    length = parent.get_parameter_index(ntype.length_param_name)
+                elif isinstance(parent, ast.Compound):
+                    length = parent.get_field_index(ntype.length_param_name)
+                else:
+                    assert False, "parent not a callable or compound: %r" % parent
                 attrs.insert(0, ('length', '%d' % (length, )))
 
             with self.tagcontext('array', attrs):
@@ -445,7 +449,7 @@ class GIRWriter(XMLWriter):
             for prop in sorted(node.properties):
                 self._write_property(prop)
             for field in node.fields:
-                self._write_field(field)
+                self._write_field(field, node)
             for signal in sorted(node.signals):
                 self._write_signal(signal)
 
@@ -518,7 +522,7 @@ class GIRWriter(XMLWriter):
             self._write_generic(record)
             if record.fields:
                 for field in record.fields:
-                    self._write_field(field, is_gtype_struct)
+                    self._write_field(field, record, is_gtype_struct)
             for method in sorted(record.constructors):
                 self._write_constructor(method)
             for method in sorted(record.methods):
@@ -541,7 +545,7 @@ class GIRWriter(XMLWriter):
             self._write_generic(union)
             if union.fields:
                 for field in union.fields:
-                    self._write_field(field)
+                    self._write_field(field, union)
             for method in sorted(union.constructors):
                 self._write_constructor(method)
             for method in sorted(union.methods):
@@ -549,7 +553,7 @@ class GIRWriter(XMLWriter):
             for method in sorted(union.static_methods):
                 self._write_static_method(method)
 
-    def _write_field(self, field, is_gtype_struct=False):
+    def _write_field(self, field, parent, is_gtype_struct=False):
         if field.anonymous_node:
             if isinstance(field.anonymous_node, ast.Callback):
                 attrs = [('name', field.name)]
@@ -577,7 +581,7 @@ class GIRWriter(XMLWriter):
                 attrs.append(('private', '1'))
             with self.tagcontext('field', attrs):
                 self._write_generic(field)
-                self._write_type(field.type)
+                self._write_type(field.type, parent=parent)
 
     def _write_signal(self, signal):
         attrs = [('name', signal.name)]

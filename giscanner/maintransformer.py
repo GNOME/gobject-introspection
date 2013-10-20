@@ -130,6 +130,20 @@ class MainTransformer(object):
 
         return param.argname
 
+    def _get_validate_field_name(self, parent, field_name, origin):
+        try:
+            field = parent.get_field(field_name)
+        except ValueError:
+            field = None
+        if field is None:
+            origin_name = 'field %s' % (origin.name, )
+            message.log_node(
+                message.FATAL, parent,
+                "can't find field %s referenced by %s of %r"
+                % (field_name, origin_name, parent.name))
+
+        return field.name
+
     def _apply_annotation_rename_to(self, node, chain, block):
         if not block:
             return
@@ -375,13 +389,17 @@ class MainTransformer(object):
 
         length = array_options.get(OPT_ARRAY_LENGTH)
         if length:
-            paramname = self._get_validate_parameter_name(parent, length, node)
+            if isinstance(parent, ast.Compound):
+                paramname = self._get_validate_field_name(parent, length, node)
+            else:
+                paramname = self._get_validate_parameter_name(parent, length, node)
+                if paramname:
+                    param = parent.get_parameter(paramname)
+                    param.direction = node.direction
+                    if param.direction == ast.PARAM_DIRECTION_OUT:
+                        param.transfer = ast.PARAM_TRANSFER_FULL
             if paramname:
-                param = parent.get_parameter(paramname)
-                param.direction = node.direction
-                if param.direction == ast.PARAM_DIRECTION_OUT:
-                    param.transfer = ast.PARAM_TRANSFER_FULL
-                container_type.length_param_name = param.argname
+                container_type.length_param_name = paramname
         fixed = array_options.get(OPT_ARRAY_FIXED_SIZE)
         if fixed:
             try:
@@ -728,8 +746,8 @@ class MainTransformer(object):
 
         try:
             self._adjust_container_type(parent, field, tag.annotations)
-        except AttributeError:
-            pass
+        except AttributeError, ex:
+            print ex
 
     def _apply_annotations_property(self, parent, prop):
         prefix = self._get_annotation_name(parent)

@@ -159,6 +159,21 @@ struct RegressAnnotationStruct
   RegressAnnotationObject *objects[10];
 };
 
+/**
+ * RegressAnnotationFields:
+ * @field1: Some documentation
+ * @arr: (array length=len): an array of length @len
+ * @len: the length of array
+ *
+ * This is a struct for testing field documentation and annotations
+ */
+struct RegressAnnotationFields
+{
+  int field1;
+  guchar *arr;
+  gulong len;
+};
+
 void    regress_annotation_ptr_array (GPtrArray *array);
 
 GObject  * regress_annotation_test_parsing_bug630862 (void);

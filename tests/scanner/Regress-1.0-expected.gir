@@ -87,6 +87,20 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </callback>
+    <record name="AnnotationFields" c:type="RegressAnnotationFields">
+      <doc xml:space="preserve">This is a struct for testing field documentation and annotations</doc>
+      <field name="field1" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <field name="arr" writable="1">
+        <array length="2" zero-terminated="0" c:type="guchar*">
+          <type name="guint8" c:type="guchar"/>
+        </array>
+      </field>
+      <field name="len" writable="1">
+        <type name="gulong" c:type="gulong"/>
+      </field>
+    </record>
     <callback name="AnnotationForeachFunc"
               c:type="RegressAnnotationForeachFunc">
       <return-value transfer-ownership="none">

@@ -888,6 +888,18 @@ class Compound(Node, Registered):
             if field.anonymous_node is not None:
                 field.anonymous_node.walk(callback, chain)
 
+    def get_field(self, name):
+        for field in self.fields:
+            if field.name == name:
+                return field
+        raise ValueError("Unknown field %s" % (name, ))
+
+    def get_field_index(self, name):
+        for i, field in enumerate(self.fields):
+            if field.name == name:
+                return i
+        raise ValueError("Unknown field %s" % (name, ))
+
 
 class Field(Annotated):
 
