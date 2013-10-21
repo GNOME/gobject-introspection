@@ -1237,6 +1237,12 @@
  * @user_data: user data, set in g_log_set_handler()
  *
  * Specifies the prototype of log handler functions.
+ *
+ * The default log handler, g_log_default_handler(), automatically appends a
+ * new-line character to @message when printing it. It is advised that any
+ * custom log handler functions behave similarly, so that logging calls in user
+ * code do not need modifying to add a new-line character to the message if the
+ * log handler is changed.
  */
 
 
@@ -12035,6 +12041,10 @@
  * You can also make critical warnings fatal at runtime by
  * setting the <envar>G_DEBUG</envar> environment variable (see
  * <ulink url="glib-running.html">Running GLib Applications</ulink>).
+ *
+ * If g_log_default_handler() is used as the log handler function, a new-line
+ * character will automatically be appended to @..., and need not be entered
+ * manually.
  */
 
 
@@ -14094,6 +14104,10 @@
  *
  * A convenience function/macro to log a debug message.
  *
+ * If g_log_default_handler() is used as the log handler function, a new-line
+ * character will automatically be appended to @..., and need not be entered
+ * manually.
+ *
  * Since: 2.6
  */
 
@@ -14385,13 +14399,6 @@
  * Returns the value of the environment variable @variable in the
  * provided list @envp.
  *
- * The name and value are in the GLib file name encoding.
- * On UNIX, this means the actual bytes which might or might not
- * be in some consistent character set and encoding. On Windows,
- * it is in UTF-8. On Windows, in case the environment variable's
- * value contains references to other environment variables, they
- * are expanded.
- *
  * Returns: the value of the environment variable, or %NULL if
  *     the environment variable is not set in @envp. The returned
  *     string is owned by @envp, and will be freed if @variable is
@@ -14402,19 +14409,16 @@
 
 /**
  * g_environ_setenv:
- * @envp: (allow-none) (array zero-terminated=1) (transfer full): an environment
- *     list that can be freed using g_strfreev() (e.g., as returned from g_get_environ()), or %NULL
- *     for an empty environment list
+ * @envp: (allow-none) (array zero-terminated=1) (transfer full): an
+ *     environment list that can be freed using g_strfreev() (e.g., as
+ *     returned from g_get_environ()), or %NULL for an empty
+ *     environment list
  * @variable: the environment variable to set, must not contain '='
  * @value: the value for to set the variable to
  * @overwrite: whether to change the variable if it already exists
  *
  * Sets the environment variable @variable in the provided list
  * @envp to @value.
- *
- * Both the variable's name and value should be in the GLib
- * file name encoding. On UNIX, this means that they can be
- * arbitrary byte strings. On Windows, they should be in UTF-8.
  *
  * Returns: (array zero-terminated=1) (transfer full): the
  *     updated environment list. Free it using g_strfreev().
@@ -14450,6 +14454,10 @@
  * result in a core dump; don't use it for errors you expect.
  * Using this function indicates a bug in your program, i.e.
  * an assertion failure.
+ *
+ * If g_log_default_handler() is used as the log handler function, a new-line
+ * character will automatically be appended to @..., and need not be entered
+ * manually.
  */
 
 
@@ -18740,7 +18748,8 @@
  * system) in the <link linkend="setlocale">current locale</link>. On
  * Windows this means the system codepage.
  *
- * Returns: The converted string, or %NULL on an error.
+ * Returns: A newly-allocated buffer containing the converted string,
+ *               or %NULL on an error, and error will be set.
  */
 
 
@@ -18768,7 +18777,8 @@
  * system) in the <link linkend="setlocale">current locale</link> into a
  * UTF-8 string.
  *
- * Returns: The converted string, or %NULL on an error.
+ * Returns: A newly-allocated buffer containing the converted string,
+ *               or %NULL on an error, and error will be set.
  */
 
 
@@ -18784,6 +18794,10 @@
  *
  * If the log level has been set as fatal, the abort()
  * function is called to terminate the program.
+ *
+ * If g_log_default_handler() is used as the log handler function, a new-line
+ * character will automatically be appended to @..., and need not be entered
+ * manually.
  */
 
 
@@ -18798,7 +18812,9 @@
  * allows to install an alternate default log handler.
  * This is used if no log handler has been set for the particular log
  * domain and log level combination. It outputs the message to stderr
- * or stdout and if the log level is fatal it calls abort().
+ * or stdout and if the log level is fatal it calls abort(). It automatically
+ * prints a new-line character after the message, so one does not need to be
+ * manually included in @message.
  *
  * The behavior of this log handler can be influenced by a number of
  * environment variables:
@@ -18942,6 +18958,10 @@
  *
  * If the log level has been set as fatal, the abort()
  * function is called to terminate the program.
+ *
+ * If g_log_default_handler() is used as the log handler function, a new-line
+ * character will automatically be appended to @..., and need not be entered
+ * manually.
  */
 
 
@@ -20611,6 +20631,10 @@
  *     into the format string (as with printf())
  *
  * A convenience function/macro to log a normal message.
+ *
+ * If g_log_default_handler() is used as the log handler function, a new-line
+ * character will automatically be appended to @..., and need not be entered
+ * manually.
  */
 
 
@@ -22071,7 +22095,9 @@
  * @...: the parameters to insert into the format string
  *
  * Outputs a formatted message via the print handler.
- * The default print handler simply outputs the message to stdout.
+ * The default print handler simply outputs the message to stdout, without
+ * appending a trailing new-line character. Typically, @format should end with
+ * its own new-line character.
  *
  * g_print() should not be used from within libraries for debugging
  * messages, since it may be redirected by applications to special
@@ -22087,7 +22113,9 @@
  * @...: the parameters to insert into the format string
  *
  * Outputs a formatted message via the error message handler.
- * The default handler simply outputs the message to stderr.
+ * The default handler simply outputs the message to stderr, without appending
+ * a trailing new-line character. Typically, @format should end with its own
+ * new-line character.
  *
  * g_printerr() should not be used from within libraries.
  * Instead g_log() should be used, or the convenience functions
@@ -22103,6 +22131,10 @@
  *
  * An implementation of the standard printf() function which supports
  * positional parameters, as specified in the Single Unix Specification.
+ *
+ * As with the standard printf(), this does not automatically append a trailing
+ * new-line character to the message, so typically @format should end with its
+ * own new-line character.
  *
  * Returns: the number of bytes printed.
  * Since: 2.2
@@ -27085,6 +27117,81 @@
  * when using non-%NULL strings as keys in a #GHashTable.
  *
  * Returns: a hash value corresponding to the key
+ */
+
+
+/**
+ * g_str_is_ascii:
+ * @string: a string.
+ *
+ * Determines if a string is pure ASCII.  A string is pure ASCII if it
+ * contains no bytes with the high bit set.
+ *
+ * Returns: %TRUE if @string is ascii
+ * Since: 2.40
+ */
+
+
+/**
+ * g_str_match_string:
+ * @search_term: the search term from the user
+ * @potential_hit: the text that may be a hit
+ * @accept_alternates: %TRUE to accept ASCII alternates
+ *
+ * Checks if a search conducted for @search_term should match
+ * @potential_hit.
+ *
+ * This function calls g_str_tokenize_and_fold() on both
+ * @search_term and @potential_hit.  ASCII alternates are never taken
+ * for @search_term but will be taken for @potential_hit according to
+ * the value of @accept_alternates.
+ *
+ * A hit occurs when each folded token in @search_term is a prefix of a
+ * folded token from @potential_hit.
+ *
+ * Depending on how you're performing the search, it will typically be
+ * faster to call g_str_tokenize_and_fold() on each string in
+ * your corpus and build an index on the returned folded tokens, then
+ * call g_str_tokenize_and_fold() on the search term and
+ * perform lookups into that index.
+ *
+ * As some examples, searching for "fred" would match the potential hit
+ * "Smith, Fred" and also "Frédéric".  Searching for "Fréd" would match
+ * "Frédéric" but not "Frederic" (due to the one-directional nature of
+ * accent matching).  Searching "fo" would match "Foo" and "Bar Foo
+ * Baz", but not "SFO" (because no word as "fo" as a prefix).
+ *
+ * Returns: %TRUE if @potential_hit is a hit
+ * Since: 2.40
+ */
+
+
+/**
+ * g_str_tokenize_and_fold:
+ * @string: a string
+ * @translit_locale: (allow-none): the language code (like 'de' or
+ *   'en_GB') from which @string originates
+ * @ascii_alternates: (out) (transfer full) (array zero-terminated=1): a
+ *   return location for ASCII alternates
+ *
+ * Tokenises @string and performs folding on each token.
+ *
+ * A token is a non-empty sequence of alphanumeric characters in the
+ * source string, separated by non-alphanumeric characters.  An
+ * "alphanumeric" character for this purpose is one that matches
+ * g_unichar_isalnum() or g_unichar_ismark().
+ *
+ * Each token is then (Unicode) normalised and case-folded.  If
+ * @ascii_alternates is non-%NULL and some of the returned tokens
+ * contain non-ASCII characters, ASCII alternatives will be generated.
+ *
+ * The number of ASCII alternatives that are generated and the method
+ * for doing so is unspecified, but @translit_locale (if specified) may
+ * improve the transliteration if the language of the source string is
+ * known.
+ *
+ * Returns: the folded tokens
+ * Since: 2.40
  */
 
 
@@ -35089,6 +35196,10 @@
  * You can make warnings fatal at runtime by setting the
  * <envar>G_DEBUG</envar> environment variable (see
  * <ulink url="glib-running.html">Running GLib Applications</ulink>).
+ *
+ * If g_log_default_handler() is used as the log handler function, a new-line
+ * character will automatically be appended to @..., and need not be entered
+ * manually.
  */
 
 
