@@ -331,7 +331,7 @@ class GIRParser(object):
             for i, paramnode in enumerate(self._find_children(parameters_node,
                                                               _corens('parameter'))):
                 param = parameters[i]
-                self._parse_type_second_pass(func, paramnode, param.type)
+                self._parse_type_array_length(parameters, paramnode, param.type)
                 closure = paramnode.attrib.get('closure')
                 if closure:
                     idx = int(closure)
@@ -343,7 +343,7 @@ class GIRParser(object):
                     assert idx < len(parameters), "%d >= %d" % (idx, len(parameters))
                     param.destroy_name = parameters[idx].argname
 
-        self._parse_type_second_pass(func, returnnode, retval.type)
+        self._parse_type_array_length(parameters, returnnode, retval.type)
 
         self._parse_generic_attribs(node, func)
 
@@ -375,6 +375,9 @@ class GIRParser(object):
                 func = self._parse_function_common(method, ast.Function, compound)
                 func.is_method = True
                 compound.methods.append(func)
+            for i, fieldnode in enumerate(self._find_children(node, _corens('field'))):
+                field = compound.fields[i]
+                self._parse_type_array_length(compound.fields, fieldnode, field.type)
             for func in self._find_children(node, _corens('function')):
                 compound.static_methods.append(
                     self._parse_function_common(func, ast.Function, compound))
@@ -456,8 +459,8 @@ class GIRParser(object):
                 return self._parse_type_simple(typenode)
         assert False, "Failed to parse toplevel type"
 
-    def _parse_type_second_pass(self, parent, node, typeval):
-        """A hack necessary to handle the integer parameter indexes on
+    def _parse_type_array_length(self, siblings, node, typeval):
+        """A hack necessary to handle the integer parameter/field indexes on
            array types."""
         typenode = node.find(_corens('array'))
         if typenode is None:
@@ -465,9 +468,11 @@ class GIRParser(object):
         lenidx = typenode.attrib.get('length')
         if lenidx is not None:
             idx = int(lenidx)
-            assert idx < len(parent.parameters), "%r %d >= %d" % (parent, idx,
-                                                                  len(parent.parameters))
-            typeval.length_param_name = parent.parameters[idx].argname
+            assert idx < len(siblings), "%r %d >= %d" % (parent, idx, len(siblings))
+            if isinstance(siblings[idx], ast.Field):
+                typeval.length_param_name = siblings[idx].name
+            else:
+                typeval.length_param_name = siblings[idx].argname
 
     def _parse_boxed(self, node):
         obj = ast.Boxed(node.attrib[_glibns('name')],

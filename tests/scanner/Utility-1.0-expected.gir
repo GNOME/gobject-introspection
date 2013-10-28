@@ -19,6 +19,7 @@ and/or use gtk-doc annotations.  -->
     </alias>
     <record name="Buffer" c:type="UtilityBuffer">
       <field name="data" writable="1">
+        <doc xml:space="preserve">the data</doc>
         <type name="gpointer"/>
       </field>
       <field name="length" writable="1">
