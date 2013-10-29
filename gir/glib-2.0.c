@@ -7512,10 +7512,22 @@
  * @short_description: pseudo-random number generator
  *
  * The following functions allow you to use a portable, fast and good
- * pseudo-random number generator (PRNG). It uses the Mersenne Twister
- * PRNG, which was originally developed by Makoto Matsumoto and Takuji
- * Nishimura. Further information can be found at
- * <ulink url="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">
+ * pseudo-random number generator (PRNG).
+ *
+ * <warning><para>Do not use this API for cryptographic purposes such as key
+ * generation, nonces, salts or one-time pads.</para></warning>
+ *
+ * This PRNG is suitable for non-cryptographic use such as in games
+ * (shuffling a card deck, generating levels), generating data for a
+ * test suite, etc. If you need random data for cryptographic
+ * purposes, it is recommended to use platform-specific APIs such as
+ * <literal>/dev/random</literal> on Unix, or CryptGenRandom() on
+ * Windows.
+ *
+ * GRand uses the Mersenne Twister PRNG, which was originally
+ * developed by Makoto Matsumoto and Takuji Nishimura. Further
+ * information can be found at <ulink
+ * url="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">
  * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</ulink>.
  *
  * If you just need a random number, you simply call the
@@ -15699,6 +15711,31 @@
 
 
 /**
+ * g_hash_table_get_keys_as_array:
+ * @hash_table: a #GHashTable
+ * @length: (out): the length of the returned array
+ *
+ * Retrieves every key inside @hash_table, as an array.
+ *
+ * The returned array is %NULL-terminated but may contain %NULL as a
+ * key.  Use @length to determine the true length if it's possible that
+ * %NULL was used as the value for a key.
+ *
+ * Note: in the common case of a string-keyed #GHashTable, the return
+ * value of this function can be conveniently cast to (gchar **).
+ *
+ * You should always free the return result with g_free().  In the
+ * above-mentioned case of a string-keyed hash table, it may be
+ * appropriate to use g_strfreev() if you call g_hash_table_steal_all()
+ * first to transfer ownership of the keys.
+ *
+ * Returns: (array length=length) (transfer container): a
+ *   %NULL-terminated array containing each key from the table.
+ * Since: 2.40
+ */
+
+
+/**
  * g_hash_table_get_values:
  * @hash_table: a #GHashTable
  *
@@ -23143,7 +23180,8 @@
  *
  * Creates a new random number generator initialized with a seed taken
  * either from <filename>/dev/urandom</filename> (if existing) or from
- * the current time (as a fallback).
+ * the current time (as a fallback).  On Windows, the seed is taken from
+ * rand_s().
  *
  * Returns: the new #GRand.
  */
@@ -26388,16 +26426,19 @@
  * @tag: the ID of the source to remove.
  *
  * Removes the source with the given id from the default main context.
- * The id of
- * a #GSource is given by g_source_get_id(), or will be returned by the
- * functions g_source_attach(), g_idle_add(), g_idle_add_full(),
- * g_timeout_add(), g_timeout_add_full(), g_child_watch_add(),
- * g_child_watch_add_full(), g_io_add_watch(), and g_io_add_watch_full().
+ *
+ * The id of a #GSource is given by g_source_get_id(), or will be
+ * returned by the functions g_source_attach(), g_idle_add(),
+ * g_idle_add_full(), g_timeout_add(), g_timeout_add_full(),
+ * g_child_watch_add(), g_child_watch_add_full(), g_io_add_watch(), and
+ * g_io_add_watch_full().
  *
  * See also g_source_destroy(). You must use g_source_destroy() for sources
  * added to a non-default main context.
  *
- * Returns: %TRUE if the source was found and removed.
+ * It is a programmer error to attempt to remove a non-existent source.
+ *
+ * Returns: For historical reasons, this function always returns %TRUE
  */
 
 
@@ -28476,6 +28517,9 @@
  * Asserts that all messages previously indicated via
  * g_test_expect_message() have been seen and suppressed.
  *
+ * If messages at %G_LOG_LEVEL_DEBUG are emitted, but not explicitly
+ * expected via g_test_expect_message() then they will be ignored.
+ *
  * Since: 2.34
  */
 
@@ -28622,6 +28666,9 @@
  * Note that you cannot use this to test g_error() messages, since
  * g_error() intentionally never returns even if the program doesn't
  * abort; use g_test_trap_subprocess() in this case.
+ *
+ * If messages at %G_LOG_LEVEL_DEBUG are emitted, but not explicitly
+ * expected via g_test_expect_message() then they will be ignored.
  *
  * Since: 2.34
  */

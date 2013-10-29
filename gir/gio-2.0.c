@@ -5096,8 +5096,9 @@
  * some backend specific data such as a unix UID.</entry></row>
  * <row><entry>"thumbnail"</entry><entry>The "Thumbnail" namespace. Includes
  * information about file thumbnails and their location within the file system. Examples of
- * keys in this namespace include "path" to get the location of a thumbnail, and "failed"
- * to check if thumbnailing of the file failed.</entry></row>
+ * keys in this namespace include "path" to get the location of a thumbnail, "failed"
+ * to check if thumbnailing of the file failed, and "is-valid" to check if the thumbnail is
+ * outdated.</entry></row>
  * <row><entry>"filesystem"</entry><entry>The "Filesystem" namespace. Gets information
  * about the file system where a file is located, such as its type, how much
  * space is left available, and the overall size of the file system.</entry></row>
@@ -5189,6 +5190,7 @@
  * <row><entry>%G_FILE_ATTRIBUTE_OWNER_GROUP</entry><entry>owner::group</entry><entry>string</entry></row>
  * <row><entry>%G_FILE_ATTRIBUTE_THUMBNAIL_PATH</entry><entry>thumbnail::path</entry><entry>bytestring</entry></row>
  * <row><entry>%G_FILE_ATTRIBUTE_THUMBNAILING_FAILED</entry><entry>thumbnail::failed</entry><entry>boolean</entry></row>
+ * <row><entry>%G_FILE_ATTRIBUTE_THUMBNAIL_IS_VALID</entry><entry>thumbnail::is-valid</entry><entry>boolean</entry></row>
  * <row><entry>%G_FILE_ATTRIBUTE_PREVIEW_ICON</entry><entry>preview::icon</entry><entry>object (#GIcon)</entry></row>
  * <row><entry>%G_FILE_ATTRIBUTE_FILESYSTEM_SIZE</entry><entry>filesystem::size</entry><entry>uint64</entry></row>
  * <row><entry>%G_FILE_ATTRIBUTE_FILESYSTEM_FREE</entry><entry>filesystem::free</entry><entry>uint64</entry></row>
@@ -5660,8 +5662,8 @@
  * #GMemoryOutputStream is a class for using arbitrary
  * memory chunks as output for GIO streaming output operations.
  *
- * As of GLib 2.34, #GMemoryOutputStream implements
- * #GPollableOutputStream.
+ * As of GLib 2.34, #GMemoryOutputStream trivially implements
+ * #GPollableOutputStream: it always polls as ready.
  */
 
 
@@ -6305,6 +6307,18 @@
  *
  * #GSeekable is implemented by streams (implementations of
  * #GInputStream or #GOutputStream) that support seeking.
+ *
+ * Seekable streams largely fall into two categories: resizable and
+ * fixed-size.
+ *
+ * #GSeekable on fixed-sized streams is approximately the same as POSIX
+ * lseek() on a block device (for example: attmepting to seek past the
+ * end of the device is an error).  Fixed streams typically cannot be
+ * truncated.
+ *
+ * #GSeekable on resizable streams is approximately the same as POSIX
+ * lseek() on a normal file.  Seeking past the end and writing data will
+ * usually cause the stream to resize by introducing zero bytes.
  */
 
 
@@ -11805,6 +11819,10 @@
  * executions of this application, as long @id is the same as it was for
  * the sent notification.
  *
+ * Note that notifications are dismissed when the user clicks on one
+ * of the buttons in a notification or triggers its default action, so
+ * there is no need to explicitly withdraw the notification in that case.
+ *
  * Since: 2.40
  */
 
@@ -12638,6 +12656,11 @@
  * cancelled.
  *
  * See #GCancellable::cancelled for details on how to use this.
+ *
+ * Since GLib 2.40, the lock protecting @cancellable is not held when
+ * @callback is invoked.  This lifts a restriction in place for
+ * earlier GLib versions which now makes it easier to write cleanup
+ * code that unconditionally invokes e.g. g_cancellable_cancel().
  *
  * Returns: The id of the signal handler or 0 if @cancellable has already
  *          been cancelled.
@@ -20866,7 +20889,7 @@
  * @info: a #GFileInfo.
  * @is_hidden: a #gboolean.
  *
- * Sets the "is_hidden" attribute in a #GFileInfo according to @is_symlink.
+ * Sets the "is_hidden" attribute in a #GFileInfo according to @is_hidden.
  * See %G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN.
  */
 
@@ -24886,9 +24909,8 @@
  * g_memory_output_stream_get_data_size:
  * @ostream: a #GMemoryOutputStream
  *
- * Returns the number of bytes from the start up
- * to including the last byte written in the stream
- * that has not been truncated away.
+ * Returns the number of bytes from the start up to including the last
+ * byte written in the stream that has not been truncated away.
  *
  * Returns: the number of bytes written to the stream
  * Since: 2.18
@@ -24900,16 +24922,20 @@
  * @ostream: a #GMemoryOutputStream
  *
  * Gets the size of the currently allocated data area (available from
- * g_memory_output_stream_get_data()). If the stream isn't
- * growable (no realloc was passed to g_memory_output_stream_new()) then
- * this is the maximum size of the stream and further writes
- * will return %G_IO_ERROR_NO_SPACE.
+ * g_memory_output_stream_get_data()).
  *
- * Note that for growable streams the returned size may become invalid on
- * the next write or truncate operation on the stream.
+ * You probably don't want to use this function on resizable streams.
+ * See g_memory_output_stream_get_data_size() instead.  For resizable
+ * streams the size returned by this function is an implementation
+ * detail and may be change at any time in response to operations on the
+ * stream.
  *
- * If you want the number of bytes currently written to the stream, use
- * g_memory_output_stream_get_data_size().
+ * If the stream is fixed-sized (ie: no realloc was passed to
+ * g_memory_output_stream_new()) then this is the maximum size of the
+ * stream and further writes will return %G_IO_ERROR_NO_SPACE.
+ *
+ * In any case, if you want the number of bytes currently written to the
+ * stream, use g_memory_output_stream_get_data_size().
  *
  * Returns: the number of bytes allocated for the data buffer
  */
@@ -24926,10 +24952,33 @@
  *
  * Creates a new #GMemoryOutputStream.
  *
- * If @data is non-%NULL, the stream  will use that for its internal storage.
+ * In most cases this is not the function you want.  See
+ * g_memory_output_stream_new_resizable() instead.
+ *
+ * If @data is non-%NULL, the stream will use that for its internal storage.
+ *
  * If @realloc_fn is non-%NULL, it will be used for resizing the internal
- * storage when necessary. To construct a fixed-size output stream,
- * pass %NULL as @realloc_fn.
+ * storage when necessary and the stream will be considered resizable.
+ * In that case, the stream will start out being (conceptually) empty.
+ * @size is used only as a hint for how big @data is.  Specifically,
+ * seeking to the end of a newly-created stream will seek to zero, not
+ * @size.  Seeking past the end of the stream and then writing will
+ * introduce a zero-filled gap.
+ *
+ * If @realloc_fn is %NULL then the stream is fixed-sized.  Seeking to
+ * the end will seek to @size exactly.  Writing past the end will give
+ * an 'out of space' error.  Attempting to seek past the end will fail.
+ * Unlike the resizable case, seeking to an offset within the stream and
+ * writing will preserve the bytes passed in as @data before that point
+ * and will return them as part of g_memory_output_stream_steal_data().
+ * If you intend to seek you should probably therefore ensure that @data
+ * is properly initialised.
+ *
+ * It is probably only meaningful to provide @data and @size in the case
+ * that you want a fixed-sized stream.  Put another way: if @realloc_fn
+ * is non-%NULL then it makes most sense to give @data as %NULL and
+ * @size as 0 (allowing #GMemoryOutputStream to do the initial
+ * allocation for itself).
  *
  * |[
  * /&ast; a stream that can grow &ast;/
@@ -28884,6 +28933,15 @@
  *
  * Seeks in the stream by the given @offset, modified by @type.
  *
+ * Attempting to seek past the end of the stream will have different
+ * results depending on if the stream is fixed-sized or resizable.  If
+ * the stream is resizable then seeking past the end and then writing
+ * will result in zeros filling the empty space.  Seeking past the end
+ * of a resizable stream and reading will result in EOF.  Seeking past
+ * the end of a fixed-sized stream will fail.
+ *
+ * Any operation that would result in a negative offset will fail.
+ *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
@@ -29298,6 +29356,38 @@
 
 
 /**
+ * g_settings_get_default_value:
+ * @settings: a #GSettings object
+ * @key: the key to check for being set
+ *
+ * Gets the "default value" of a key.
+ *
+ * This is the value that would be read if g_settings_reset() were to be
+ * called on the key.
+ *
+ * Note that this may be a different value than returned by
+ * g_settings_schema_key_get_default_value() if the system administrator
+ * has provided a default value.
+ *
+ * Comparing the return values of g_settings_get_default_value() and
+ * g_settings_get_value() is not sufficient for determining if a value
+ * has been set because the user may have explicitly set the value to
+ * something that happens to be equal to the default.  The difference
+ * here is that if the default changes in the future, the user's key
+ * will still be set.
+ *
+ * This function may be useful for adding an indication to a UI of what
+ * the default value was before the user set it.
+ *
+ * It is a programmer error to give a @key that isn't contained in the
+ * schema for @settings.
+ *
+ * Returns: (allow none) (transfer full): the default value
+ * Since: 2.40
+ */
+
+
+/**
  * g_settings_get_double:
  * @settings: a #GSettings object
  * @key: the key to get the value for
@@ -29436,49 +29526,8 @@
  *
  * Queries the range of a key.
  *
- * This function will return a #GVariant that fully describes the range
- * of values that are valid for @key.
- *
- * The type of #GVariant returned is <literal>(sv)</literal>.  The
- * string describes the type of range restriction in effect.  The type
- * and meaning of the value contained in the variant depends on the
- * string.
- *
- * If the string is <literal>'type'</literal> then the variant contains
- * an empty array.  The element type of that empty array is the expected
- * type of value and all values of that type are valid.
- *
- * If the string is <literal>'enum'</literal> then the variant contains
- * an array enumerating the possible values.  Each item in the array is
- * a possible valid value and no other values are valid.
- *
- * If the string is <literal>'flags'</literal> then the variant contains
- * an array.  Each item in the array is a value that may appear zero or
- * one times in an array to be used as the value for this key.  For
- * example, if the variant contained the array <literal>['x',
- * 'y']</literal> then the valid values for the key would be
- * <literal>[]</literal>, <literal>['x']</literal>,
- * <literal>['y']</literal>, <literal>['x', 'y']</literal> and
- * <literal>['y', 'x']</literal>.
- *
- * Finally, if the string is <literal>'range'</literal> then the variant
- * contains a pair of like-typed values -- the minimum and maximum
- * permissible values for this key.
- *
- * This information should not be used by normal programs.  It is
- * considered to be a hint for introspection purposes.  Normal programs
- * should already know what is permitted by their own schema.  The
- * format may change in any way in the future -- but particularly, new
- * forms may be added to the possibilities described above.
- *
- * It is a programmer error to give a @key that isn't contained in the
- * schema for @settings.
- *
- * You should free the returned value with g_variant_unref() when it is
- * no longer needed.
- *
- * Returns: a #GVariant describing the range
  * Since: 2.28
+ * Deprecated: 2.40: Use g_settings_schema_key_get_range() instead.
  */
 
 
@@ -29531,6 +29580,35 @@
  *
  * Returns: an unsigned integer
  * Since: 2.30
+ */
+
+
+/**
+ * g_settings_get_user_value:
+ * @settings: a #GSettings object
+ * @key: the key to check for being set
+ *
+ * Checks the "user value" of a key, if there is one.
+ *
+ * The user value of a key is the last value that was set by the user.
+ *
+ * After calling g_settings_reset() this function should always return
+ * %NULL (assuming something is not wrong with the system
+ * configuration).
+ *
+ * It is possible that g_settings_get_value() will return a different
+ * value than this function.  This can happen in the case that the user
+ * set a value for a key that was subsequently locked down by the system
+ * administrator -- this function will return the user's old value.
+ *
+ * This function may be useful for adding a "reset" option to a UI or
+ * for providing indication that a particular value has been changed.
+ *
+ * It is a programmer error to give a @key that isn't contained in the
+ * schema for @settings.
+ *
+ * Returns: (allow none) (transfer full): the user's value, if set
+ * Since: 2.40
  */
 
 
@@ -29609,38 +29687,22 @@
 /**
  * g_settings_list_relocatable_schemas:
  *
- * Gets a list of the relocatable #GSettings schemas installed on the
- * system.  These are schemas that do not provide their own path.  It is
- * usual to instantiate these schemas directly, but if you want to you
- * can use g_settings_new_with_path() to specify the path.
- *
- * The output of this function, taken together with the output of
- * g_settings_list_schemas() represents the complete list of all
- * installed schemas.
- *
  * Returns: (element-type utf8) (transfer none): a list of relocatable
  *   #GSettings schemas that are available.  The list must not be
  *   modified or freed.
  * Since: 2.28
+ * Deprecated: 2.40: Use g_settings_schema_source_list_schemas() instead
  */
 
 
 /**
  * g_settings_list_schemas:
  *
- * Gets a list of the #GSettings schemas installed on the system.  The
- * returned list is exactly the list of schemas for which you may call
- * g_settings_new() without adverse effects.
- *
- * This function does not list the schemas that do not provide their own
- * paths (ie: schemas for which you must use
- * g_settings_new_with_path()).  See
- * g_settings_list_relocatable_schemas() for that.
- *
  * Returns: (element-type utf8) (transfer none): a list of #GSettings
  *   schemas that are available.  The list must not be modified or
  *   freed.
  * Since: 2.26
+ * Deprecated: 2.40: Use g_settings_schema_source_list_schemas() instead
  */
 
 
@@ -29747,6 +29809,10 @@
  * It is a programmer error to call this function for a schema that
  * has an explicitly specified path.
  *
+ * It is a programmer error if @path is not a valid path.  A valid path
+ * begins and ends with '/' and does not contain two consecutive '/'
+ * characters.
+ *
  * Returns: a new #GSettings object
  * Since: 2.26
  */
@@ -29761,15 +29827,9 @@
  * Checks if the given @value is of the correct type and within the
  * permitted range for @key.
  *
- * This API is not intended to be used by normal programs -- they should
- * already know what is permitted by their own schemas.  This API is
- * meant to be used by programs such as editors or commandline tools.
- *
- * It is a programmer error to give a @key that isn't contained in the
- * schema for @settings.
- *
  * Returns: %TRUE if @value is valid for @key
  * Since: 2.28
+ * Deprecated: 2.40: Use g_settings_schema_key_range_check() instead.
  */
 
 
@@ -29810,6 +29870,21 @@
 
 
 /**
+ * g_settings_schema_get_key:
+ * @schema: a #GSettingsSchema
+ * @name: the name of a key
+ *
+ * Gets the key named @name from @schema.
+ *
+ * It is a programmer error to request a key that does not exist.  See
+ * g_settings_schema_list_keys().
+ *
+ * Returns: (transfer full): the #GSettingsSchemaKey for @name
+ * Since: 2.40
+ */
+
+
+/**
  * g_settings_schema_get_path:
  * @schema: a #GSettingsSchema
  *
@@ -29825,6 +29900,176 @@
  *
  * Returns: (transfer none): the path of the schema, or %NULL
  * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_has_key:
+ * @schema: a #GSettingsSchema
+ * @name: the name of a key
+ *
+ * Checks if @schema has a key named @name.
+ *
+ * Returns: %TRUE if such a key exists
+ * Since: 2.40
+ */
+
+
+/**
+ * g_settings_schema_key_get_default_value:
+ * @key: a #GSettingsSchemaKey
+ *
+ * Gets the default value for @key.
+ *
+ * Note that this is the default value according to the schema.  System
+ * administrator defaults and lockdown are not visible via this API.
+ *
+ * Returns: (transfer full): the default value for the key
+ * Since: 2.40
+ */
+
+
+/**
+ * g_settings_schema_key_get_description:
+ * @key: a #GSettingsSchemaKey
+ *
+ * Gets the description for @key.
+ *
+ * If no description has been provided in the schema for @key, returns
+ * %NULL.
+ *
+ * The description can be one sentence to several paragraphs in length.
+ * Paragraphs are delimited with a double newline.  Descriptions can be
+ * translated and the value returned from this function is is the
+ * current locale.
+ *
+ * This function is slow.  The summary and description information for
+ * the schemas is not stored in the compiled schema database so this
+ * function has to parse all of the source XML files in the schema
+ * directory.
+ *
+ * Returns: the description for @key, or %NULL
+ * Since: 2.34
+ */
+
+
+/**
+ * g_settings_schema_key_get_range:
+ * @key: a #GSettingsSchemaKey
+ *
+ * Queries the range of a key.
+ *
+ * This function will return a #GVariant that fully describes the range
+ * of values that are valid for @key.
+ *
+ * The type of #GVariant returned is <literal>(sv)</literal>.  The
+ * string describes the type of range restriction in effect.  The type
+ * and meaning of the value contained in the variant depends on the
+ * string.
+ *
+ * If the string is <literal>'type'</literal> then the variant contains
+ * an empty array.  The element type of that empty array is the expected
+ * type of value and all values of that type are valid.
+ *
+ * If the string is <literal>'enum'</literal> then the variant contains
+ * an array enumerating the possible values.  Each item in the array is
+ * a possible valid value and no other values are valid.
+ *
+ * If the string is <literal>'flags'</literal> then the variant contains
+ * an array.  Each item in the array is a value that may appear zero or
+ * one times in an array to be used as the value for this key.  For
+ * example, if the variant contained the array <literal>['x',
+ * 'y']</literal> then the valid values for the key would be
+ * <literal>[]</literal>, <literal>['x']</literal>,
+ * <literal>['y']</literal>, <literal>['x', 'y']</literal> and
+ * <literal>['y', 'x']</literal>.
+ *
+ * Finally, if the string is <literal>'range'</literal> then the variant
+ * contains a pair of like-typed values -- the minimum and maximum
+ * permissible values for this key.
+ *
+ * This information should not be used by normal programs.  It is
+ * considered to be a hint for introspection purposes.  Normal programs
+ * should already know what is permitted by their own schema.  The
+ * format may change in any way in the future -- but particularly, new
+ * forms may be added to the possibilities described above.
+ *
+ * You should free the returned value with g_variant_unref() when it is
+ * no longer needed.
+ *
+ * Returns: (transfer full): a #GVariant describing the range
+ * Since: 2.40
+ */
+
+
+/**
+ * g_settings_schema_key_get_summary:
+ * @key: a #GSettingsSchemaKey
+ *
+ * Gets the summary for @key.
+ *
+ * If no summary has been provided in the schema for @key, returns
+ * %NULL.
+ *
+ * The summary is a short description of the purpose of the key; usually
+ * one short sentence.  Summaries can be translated and the value
+ * returned from this function is is the current locale.
+ *
+ * This function is slow.  The summary and description information for
+ * the schemas is not stored in the compiled schema database so this
+ * function has to parse all of the source XML files in the schema
+ * directory.
+ *
+ * Returns: the summary for @key, or %NULL
+ * Since: 2.34
+ */
+
+
+/**
+ * g_settings_schema_key_get_value_type:
+ * @key: a #GSettingsSchemaKey
+ *
+ * Gets the #GVariantType of @key.
+ *
+ * Returns: (transfer none): the type of @key
+ * Since: 2.40
+ */
+
+
+/**
+ * g_settings_schema_key_range_check:
+ * @key: a #GSettingsSchemaKey
+ * @value: the value to check
+ *
+ * Checks if the given @value is of the correct type and within the
+ * permitted range for @key.
+ *
+ * It is a programmer error if @value is not of the correct type -- you
+ * must check for this first.
+ *
+ * Returns: %TRUE if @value is valid for @key
+ * Since: 2.40
+ */
+
+
+/**
+ * g_settings_schema_key_ref:
+ * @key: a #GSettingsSchemaKey
+ *
+ * Increase the reference count of @key, returning a new reference.
+ *
+ * Returns: a new reference to @key
+ * Since: 2.40
+ */
+
+
+/**
+ * g_settings_schema_key_unref:
+ * @key: a #GSettingsSchemaKey
+ *
+ * Decrease the reference count of @key, possibly freeing it.
+ *
+ * Since: 2.40
  */
 
 
@@ -29859,6 +30104,31 @@
  *
  * Returns: (transfer none): the default schema source
  * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_source_list_schemas:
+ * @source: a #GSettingsSchemaSource
+ * @recursive: if we should recurse
+ * @non_relocatable: (out) (transfer full): the list of non-relocatable
+ *   schemas
+ * @relocatable: (out) (transfer full): the list of relocatable schemas
+ *
+ * Lists the schemas in a given source.
+ *
+ * If @recursive is %TRUE then include parent sources.  If %FALSE then
+ * only include the schemas from one source (ie: one directory).  You
+ * probably want %TRUE.
+ *
+ * Non-relocatable schemas are those for which you can call
+ * g_settings_new().  Relocatable schemas are those for which you must
+ * use g_settings_new_with_path().
+ *
+ * Do not call this function from normal programs.  This is designed for
+ * use by database editors, commandline tools, etc.
+ *
+ * Since: 2.40
  */
 
 
@@ -33928,7 +34198,11 @@
  * @argv0: first commandline argument to pass to the subprocess,
  *     followed by more arguments, followed by %NULL
  *
- * Create a new process with the given flags and varargs argument list.
+ * Create a new process with the given flags and varargs argument
+ * list.  By default, matching the g_spawn_async() defaults, the
+ * child's stdin will be set to the system null device, and
+ * stdout/stderr will be inherited from the parent.  You can use
+ * @flags to control this behavior.
  *
  * The argument list must be terminated with %NULL.
  *
@@ -35893,6 +36167,114 @@
  *
  * Returns: The status of the ask password interaction.
  * Since: 2.30
+ */
+
+
+/**
+ * g_tls_interaction_invoke_request_certificate:
+ * @interaction: a #GTlsInteraction object
+ * @connection: a #GTlsConnection object
+ * @flags: flags providing more information about the request
+ * @cancellable: an optional #GCancellable cancellation object
+ * @error: an optional location to place an error on failure
+ *
+ * Invoke the interaction to ask the user to choose a certificate to
+ * use with the connection. It invokes this interaction in the main
+ * loop, specifically the #GMainContext returned by
+ * g_main_context_get_thread_default() when the interaction is
+ * created. This is called by called by #GTlsConnection when the peer
+ * requests a certificate during the handshake.
+ *
+ * Derived subclasses usually implement a certificate selector,
+ * although they may also choose to provide a certificate from
+ * elsewhere. Alternatively the user may abort this certificate
+ * request, which may or may not abort the TLS connection.
+ *
+ * The implementation can either be a synchronous (eg: modal dialog) or an
+ * asynchronous one (eg: modeless dialog). This function will take care of
+ * calling which ever one correctly.
+ *
+ * If the interaction is cancelled by the cancellation object, or by the
+ * user then %G_TLS_INTERACTION_FAILED will be returned with an error that
+ * contains a %G_IO_ERROR_CANCELLED error code. Certain implementations may
+ * not support immediate cancellation.
+ *
+ * Returns: The status of the certificate request interaction.
+ * Since: 2.40
+ */
+
+
+/**
+ * g_tls_interaction_request_certificate:
+ * @interaction: a #GTlsInteraction object
+ * @connection: a #GTlsConnection object
+ * @flags: flags providing more information about the request
+ * @cancellable: an optional #GCancellable cancellation object
+ * @error: an optional location to place an error on failure
+ *
+ * Run synchronous interaction to ask the user to choose a certificate to use
+ * with the connection. In general, g_tls_interaction_invoke_request_certificate()
+ * should be used instead of this function.
+ *
+ * Derived subclasses usually implement a certificate selector, although they may
+ * also choose to provide a certificate from elsewhere. Alternatively the user may
+ * abort this certificate request, which will usually abort the TLS connection.
+ *
+ * If %G_TLS_INTERACTION_HANDLED is returned, then the #GTlsConnection
+ * passed to g_tls_interaction_request_certificate() will have had its
+ * #GTlsConnection:certificate filled in.
+ *
+ * If the interaction is cancelled by the cancellation object, or by the
+ * user then %G_TLS_INTERACTION_FAILED will be returned with an error that
+ * contains a %G_IO_ERROR_CANCELLED error code. Certain implementations may
+ * not support immediate cancellation.
+ *
+ * Returns: The status of the request certificate interaction.
+ * Since: 2.40
+ */
+
+
+/**
+ * g_tls_interaction_request_certificate_async:
+ * @interaction: a #GTlsInteraction object
+ * @connection: a #GTlsConnection object
+ * @flags: flags providing more information about the request
+ * @cancellable: an optional #GCancellable cancellation object
+ * @callback: (allow-none): will be called when the interaction completes
+ * @user_data: (allow-none): data to pass to the @callback
+ *
+ * Run asynchronous interaction to ask the user for a certificate to use with
+ * the connection. In general, g_tls_interaction_invoke_request_certificate() should
+ * be used instead of this function.
+ *
+ * Derived subclasses usually implement a certificate selector, although they may
+ * also choose to provide a certificate from elsewhere. @callback will be called
+ * when the operation completes. Alternatively the user may abort this certificate
+ * request, which will usually abort the TLS connection.
+ *
+ * Since: 2.40
+ */
+
+
+/**
+ * g_tls_interaction_request_certificate_finish:
+ * @interaction: a #GTlsInteraction object
+ * @result: the result passed to the callback
+ * @error: an optional location to place an error on failure
+ *
+ * Complete an request certificate user interaction request. This should be once
+ * the g_tls_interaction_request_certificate_async() completion callback is called.
+ *
+ * If %G_TLS_INTERACTION_HANDLED is returned, then the #GTlsConnection
+ * passed to g_tls_interaction_request_certificate_async() will have had its
+ * #GTlsConnection:certificate filled in.
+ *
+ * If the interaction is cancelled by the cancellation object, or by the
+ * user then %G_TLS_INTERACTION_FAILED will be returned with an error that
+ * contains a %G_IO_ERROR_CANCELLED error code.
+ *
+ * Returns: The status of the request certificate interaction.
+ * Since: 2.40
  */
 
 
