@@ -962,4 +962,16 @@ typedef struct {
 #endif
 #endif
 
+/* This struct is one pattern by which padding can be consumed, if
+ * you're willing to take a hard dependency on anonymous unions. */
+typedef struct {
+  int x;
+
+  union {
+    RegressLikeGnomeKeyringPasswordSchema *a[2];
+
+    guint padding[4];
+  };
+} RegressAnAnonymousUnion;
+
 #endif /* __GITESTTYPES_H__ */

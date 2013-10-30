@@ -107,6 +107,7 @@ class MainTransformer(object):
         if isinstance(node, (ast.Class, ast.Interface, ast.Record, ast.Union)):
             for field in node.fields:
                 if (field
+                and field.name is not None
                 and field.name.startswith('_')
                 and field.anonymous_node is not None
                 and isinstance(field.anonymous_node, ast.Callback)):

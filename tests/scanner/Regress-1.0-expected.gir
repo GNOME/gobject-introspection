@@ -68,6 +68,26 @@ and/or use gtk-doc annotations.  -->
       <member name="code2" value="2" c:identifier="REGRESS_ATEST_ERROR_CODE2">
       </member>
     </enumeration>
+    <record name="AnAnonymousUnion" c:type="RegressAnAnonymousUnion">
+      <field name="x" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <union>
+        <field name="a" writable="1">
+          <array zero-terminated="0"
+                 c:type="RegressLikeGnomeKeyringPasswordSchema"
+                 fixed-size="2">
+            <type name="LikeGnomeKeyringPasswordSchema"
+                  c:type="RegressLikeGnomeKeyringPasswordSchema*"/>
+          </array>
+        </field>
+        <field name="padding" writable="1">
+          <array zero-terminated="0" c:type="guint" fixed-size="4">
+            <type name="guint" c:type="guint"/>
+          </array>
+        </field>
+      </union>
+    </record>
     <bitfield name="AnnotationBitfield" c:type="RegressAnnotationBitfield">
       <member name="foo" value="1" c:identifier="ANN_FLAG_FOO">
       </member>
