@@ -18552,6 +18552,23 @@
 
 
 /**
+ * g_desktop_app_info_search:
+ * @search_string: the search string to use
+ *
+ * Searches desktop files for ones that match @search_string.
+ *
+ * The return value is an array of strvs.  Each strv contains a list of
+ * applications that matched @search_string with an equal score.  The
+ * outer list is sorted by score so that the first strv contains the
+ * best-matching applications, and so on.
+ *
+ * Returns: (array zero-terminated=1) (element-type GStrv) (transfer full): a
+ *   list of strvs.  Free each item with g_strfreev() and free the outer
+ *   list with g_free().
+ */
+
+
+/**
  * g_desktop_app_info_set_desktop_env:
  * @desktop_env: a string specifying what desktop this is
  *
@@ -20198,9 +20215,8 @@
  * This call does no blocking I/O.
  *
  * Returns: string with the relative path from @descendant
- *     to @parent, or %NULL if @descendant doesn't have @parent
- *     as prefix. The returned string should be freed with g_free()
- *     when no longer needed.
+ *     to @parent. The returned string should be freed with
+ *     g_free() when no longer needed.
  */
 
 
