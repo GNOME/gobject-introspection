@@ -185,6 +185,16 @@
 
 
 /**
+ * GAppInfoMonitor:
+ *
+ * The only thing you can do with this is to get it via
+ * g_app_info_monitor_get() and connect to the "changed" signal.
+ *
+ * Since: 2.40
+ */
+
+
+/**
  * GApplication::activate:
  * @application: the application
  *
@@ -3663,6 +3673,7 @@
  * SECTION:gappinfo
  * @short_description: Application information and launch contexts
  * @include: gio/gio.h
+ * @see_also: #GAppInfoMonitor
  *
  * #GAppInfo and #GAppLaunchContext are used for describing and launching
  * applications installed on the system.
@@ -3714,6 +3725,32 @@
  * that it's generally not safe for applications to rely on the format
  * of a particular URIs. Different launcher applications (e.g. file
  * managers) may have different ideas of what a given URI means.
+ */
+
+
+/**
+ * SECTION:gappinfomonitor
+ * @short_description: Monitor application information for changes
+ *
+ * #GAppInfoMonitor is a very simple object used for monitoring the app
+ * info database for changes (ie: newly installed or removed
+ * applications).
+ *
+ * Call g_app_info_monitor_get() to get a #GAppInfoMonitor and connect
+ * to the "changed" signal.
+ *
+ * In the usual case, applications should try to make note of the change
+ * (doing things like invalidating caches) but not act on it.  In
+ * particular, applications should avoid making calls to #GAppInfo APIs
+ * in response to the change signal, deferring these until the time that
+ * the data is actually required.  The exception to this case is when
+ * application information is actually being displayed on the screen
+ * (eg: during a search or when the list of all applications is shown).
+ * The reason for this is that changes to the list of installed
+ * applications often come in groups (like during system updates) and
+ * rescanning the list on every change is pointless and expensive.
+ *
+ * Since: 2.40
  */
 
 
@@ -10839,6 +10876,24 @@
  * no way to detect this.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
+ */
+
+
+/**
+ * g_app_info_monitor_get:
+ *
+ * Gets the #GAppInfoMonitor for the current thread-default main
+ * context.
+ *
+ * The #GAppInfoMonitor will emit a "changed" signal in the
+ * thread-default main context whenever the list of installed
+ * applications (as reported by g_app_info_get_all()) may have changed.
+ *
+ * You must only call g_object_unref() on the return value from under
+ * the same main context as you created it.
+ *
+ * Returns: (transfer full): a reference to a #GAppInfoMonitor
+ * Since: 2.40
  */
 
 
