@@ -46,11 +46,17 @@ from . import utils
 def process_cflags_begin(option, opt, value, parser):
     cflags = getattr(parser.values, option.dest)
     while len(parser.rargs) > 0 and parser.rargs[0] != '--cflags-end':
-        cflags.append(parser.rargs.pop(0))
+        arg = parser.rargs.pop(0)
+        cflags.append(utils.cflag_real_include_path(arg))
 
 
 def process_cflags_end(option, opt, value, parser):
     pass
+
+
+def process_cpp_includes(option, opt, value, parser):
+    cpp_includes = getattr(parser.values, option.dest)
+    cpp_includes.append(os.path.realpath(value))
 
 
 def get_preprocessor_option_group(parser):
@@ -63,8 +69,8 @@ def get_preprocessor_option_group(parser):
                      help="End preprocessor/compiler flags",
                      action="callback", callback=process_cflags_end)
     group.add_option("-I", help="Pre-processor include file",
-                     action="append", dest="cpp_includes",
-                     default=[])
+                     dest="cpp_includes", default=[], type="string",
+                     action="callback", callback=process_cpp_includes)
     group.add_option("-D", help="Pre-processor define",
                      action="append", dest="cpp_defines",
                      default=[])
@@ -252,7 +258,7 @@ def process_packages(options, packages):
     filtered_output = list(process_options(output, options_whitelist))
     parser = _get_option_parser()
     pkg_options, unused = parser.parse_args(filtered_output)
-    options.cpp_includes.extend(pkg_options.cpp_includes)
+    options.cpp_includes.extend([os.path.realpath(f) for f in pkg_options.cpp_includes])
     options.cpp_defines.extend(pkg_options.cpp_defines)
     options.cpp_undefines.extend(pkg_options.cpp_undefines)
 

@@ -148,3 +148,10 @@ def files_are_identical(path1, path2):
     f1.close()
     f2.close()
     return buf1 == buf2
+
+
+def cflag_real_include_path(cflag):
+    if not cflag.startswith("-I"):
+        return cflag
+
+    return "-I" + os.path.realpath(cflag[2:])

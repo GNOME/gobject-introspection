@@ -227,7 +227,7 @@ class SourceScanner(object):
 
     def set_cpp_options(self, includes, defines, undefines, cflags=[]):
         self._cpp_options.extend(cflags)
-        for prefix, args in [('-I', includes),
+        for prefix, args in [('-I', [os.path.realpath(f) for f in includes]),
                              ('-D', defines),
                              ('-U', undefines)]:
             for arg in (args or []):
@@ -243,7 +243,7 @@ class SourceScanner(object):
             self._filenames.append(filename)
 
         headers = []
-        for filename in filenames:
+        for filename in self._filenames:
             if os.path.splitext(filename)[1] in SOURCE_EXTS:
                 self._scanner.lex_filename(filename)
             else:
