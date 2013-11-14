@@ -36,6 +36,10 @@
 #include "sourcescanner.h"
 #include "scannerparser.h"
 
+#ifdef USE_WINDOWS
+#include <windows.h>
+#endif
+
 int lineno;
 char linebuf[2000];
 
@@ -313,6 +317,47 @@ check_identifier (GISourceScanner *scanner,
 	return IDENTIFIER;
 }
 
+static inline char *
+_realpath (const char *path)
+{
+#ifndef _WIN32
+  char buffer[1025];
+
+  return realpath (path, buffer) ? g_strdup (buffer) : NULL;
+#else
+  /* We don't want to include <windows.h> as it clashes horribly
+   * with token names from scannerparser.h. So just declare
+   * GetFullPathNameA() here unless we already defined it, like
+   * in giscanner.c.
+   */
+#ifndef USE_WINDOWS
+  extern __stdcall GetFullPathNameA(const char*, int, char*, char**);
+#endif
+  char *buffer;
+  char dummy;
+  int rc, len;
+
+  rc = GetFullPathNameA (path, 1, &dummy, NULL);
+  if (rc == 0)
+    {
+      /* Weird failure, so just return the input path as such */
+      return g_strdup (path);
+    }
+
+  len = rc + 1;
+  buffer = g_malloc (len);
+
+  rc = GetFullPathNameA (path, len, buffer, NULL);
+  if (rc == 0 || rc > len)
+    {
+      /* Weird failure again */
+      g_free (buffer);
+      return g_strdup (path);
+    }
+  return buffer;
+#endif
+}
+
 /*
  * # linenum "filename" flags
  *  See http://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
@@ -323,10 +368,19 @@ process_linemarks (GISourceScanner *scanner)
 {
 	char escaped_filename[1025];
 	char *filename;
+        char *real;
 
 	sscanf(yytext, "# %d \"%1024[^\"]\"", &lineno, escaped_filename);
 	filename = g_strcompress (escaped_filename);
-	g_object_unref (scanner->current_file);
+
+        real = _realpath (filename);
+        if (real)
+          {
+            g_free (filename);
+            filename = real;
+          }
+
+        g_object_unref (scanner->current_file);
 	scanner->current_file = g_file_new_for_path (filename);
 	g_free (filename);
 }
