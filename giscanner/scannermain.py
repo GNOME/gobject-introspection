@@ -47,6 +47,9 @@ def process_cflags_begin(option, opt, value, parser):
     cflags = getattr(parser.values, option.dest)
     while len(parser.rargs) > 0 and parser.rargs[0] != '--cflags-end':
         arg = parser.rargs.pop(0)
+        if arg == "-I" and parser.rargs and parser.rargs[0] != '--cflags-end':
+            # This is a special case where there's a space between -I and the path.
+            arg += parser.rargs.pop(0)
         cflags.append(utils.cflag_real_include_path(arg))
 
 
