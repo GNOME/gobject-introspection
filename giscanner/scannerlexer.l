@@ -31,6 +31,9 @@
 %{
 #include <ctype.h>
 #include <stdio.h>
+#ifndef _WIN32
+#include <limits.h>
+#endif
 
 #include <glib.h>
 #include "sourcescanner.h"
@@ -317,11 +320,22 @@ check_identifier (GISourceScanner *scanner,
 	return IDENTIFIER;
 }
 
+/* taken from glib/gfileutils.c */
+#if defined(MAXPATHLEN)
+#define G_PATH_LENGTH MAXPATHLEN
+#elif defined(PATH_MAX)
+#define G_PATH_LENGTH PATH_MAX
+#elif defined(_PC_PATH_MAX)
+#define G_PATH_LENGTH sysconf(_PC_PATH_MAX)
+#else
+#define G_PATH_LENGTH 2048
+#endif
+
 static inline char *
 _realpath (const char *path)
 {
 #ifndef _WIN32
-  char buffer[1025];
+  char buffer[G_PATH_LENGTH];
 
   return realpath (path, buffer) ? g_strdup (buffer) : NULL;
 #else
