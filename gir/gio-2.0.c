@@ -2540,7 +2540,8 @@
  *       @client is about to make a connection to a remote host;
  *       either a proxy server or the destination server itself.
  *       @connection is the #GSocketConnection, which is not yet
- *       connected.
+ *       connected.  Since GLib 2.40, you can access the remote
+ *       address via g_socket_connection_get_remote_address().
  *     </para></listitem>
  *   </varlistentry>
  *   <varlistentry>
@@ -3495,7 +3496,7 @@
  * organized fashion.
  *
  * An extension point is identified by a name, and it may optionally
- * require that any implementation must by of a certain type (or derived
+ * require that any implementation must be of a certain type (or derived
  * thereof). Use g_io_extension_point_register() to register an
  * extension point, and g_io_extension_point_set_required_type() to
  * set a required type.
@@ -18561,6 +18562,8 @@
  * applications that matched @search_string with an equal score.  The
  * outer list is sorted by score so that the first strv contains the
  * best-matching applications, and so on.
+ * The algorithm for determining matches is undefined and may change at
+ * any time.
  *
  * Returns: (array zero-terminated=1) (element-type GStrv) (transfer full): a
  *   list of strvs.  Free each item with g_strfreev() and free the outer
@@ -20215,8 +20218,9 @@
  * This call does no blocking I/O.
  *
  * Returns: string with the relative path from @descendant
- *     to @parent. The returned string should be freed with
- *     g_free() when no longer needed.
+ *     to @parent, or %NULL if @descendant doesn't have @parent
+ *     as prefix. The returned string should be freed with g_free()
+ *     when no longer needed.
  */
 
 
@@ -27324,6 +27328,34 @@
 
 
 /**
+ * g_output_stream_printf:
+ * @stream: a #GOutputStream.
+ * @bytes_written: (out): location to store the number of bytes that was
+ *     written to the stream
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @error: location to store the error occurring, or %NULL to ignore
+ * @format: the format string. See the printf() documentation
+ * @...: the parameters to insert into the format string
+ *
+ * This is a utility function around g_output_stream_write_all(). It
+ * uses g_strdup_vprintf() to turn @format and @... into a string that
+ * is then written to @stream.
+ *
+ * See the documentation of g_output_stream_write_all() about the
+ * behavior of the actual write operation.
+ *
+ * Note that partial writes cannot be properly checked with this
+ * function due to the variable length of the written string, if you
+ * need precise control over partial write failures, you need to
+ * create you own printf()-like wrapper around g_output_stream_write()
+ * or g_output_stream_write_all().
+ *
+ * Since: 2.40
+ * Returns: %TRUE on success, %FALSE if there was an error
+ */
+
+
+/**
  * g_output_stream_set_pending:
  * @stream: a #GOutputStream.
  * @error: a #GError location to store the error occurring, or %NULL to
@@ -27389,6 +27421,34 @@
  *     number of bytes spliced is greater than %G_MAXSSIZE, then that
  *     will be returned, and there is no way to determine the actual
  *     number of bytes spliced.
+ */
+
+
+/**
+ * g_output_stream_vprintf:
+ * @stream: a #GOutputStream.
+ * @bytes_written: (out): location to store the number of bytes that was
+ *     written to the stream
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @error: location to store the error occurring, or %NULL to ignore
+ * @format: the format string. See the printf() documentation
+ * @args: the parameters to insert into the format string
+ *
+ * This is a utility function around g_output_stream_write_all(). It
+ * uses g_strdup_vprintf() to turn @format and @args into a string that
+ * is then written to @stream.
+ *
+ * See the documentation of g_output_stream_write_all() about the
+ * behavior of the actual write operation.
+ *
+ * Note that partial writes cannot be properly checked with this
+ * function due to the variable length of the written string, if you
+ * need precise control over partial write failures, you need to
+ * create you own printf()-like wrapper around g_output_stream_write()
+ * or g_output_stream_write_all().
+ *
+ * Since: 2.40
+ * Returns: %TRUE on success, %FALSE if there was an error
  */
 
 
@@ -29429,7 +29489,7 @@
 /**
  * g_settings_get_default_value:
  * @settings: a #GSettings object
- * @key: the key to check for being set
+ * @key: the key to get the default value for
  *
  * Gets the "default value" of a key.
  *
@@ -29657,7 +29717,7 @@
 /**
  * g_settings_get_user_value:
  * @settings: a #GSettings object
- * @key: the key to check for being set
+ * @key: the key to get the user value for
  *
  * Checks the "user value" of a key, if there is one.
  *
@@ -29773,7 +29833,10 @@
  *   schemas that are available.  The list must not be modified or
  *   freed.
  * Since: 2.26
- * Deprecated: 2.40: Use g_settings_schema_source_list_schemas() instead
+ * Deprecated: 2.40: Use g_settings_schema_source_list_schemas() instead.
+ * If you used g_settings_list_schemas() to check for the presence of
+ * a particular schema, use g_settings_schema_source_lookup() instead
+ * of your whole loop.
  */
 
 
@@ -32155,6 +32218,13 @@
  *
  * Try to get the remote address of a socket connection.
  *
+ * Since GLib 2.40, when used with g_socket_client_connect() or
+ * g_socket_client_connect_async(), during emission of
+ * %G_SOCKET_CLIENT_CONNECTING, this function will return the remote
+ * address that will be used for the connection.  This allows
+ * applications to print e.g. "Connecting to example.com
+ * (10.42.77.3)...".
+ *
  * Returns: (transfer full): a #GSocketAddress or %NULL on error.
  *     Free the returned object with g_object_unref().
  * Since: 2.22
@@ -33633,7 +33703,7 @@
 /**
  * g_subprocess_communicate:
  * @subprocess: a #GSubprocess
- * @stdin_buf: data to send to the stdin of the subprocess, or %NULL
+ * @stdin_buf: (allow-none): data to send to the stdin of the subprocess, or %NULL
  * @cancellable: a #GCancellable
  * @stdout_buf: (out): data read from the subprocess stdout
  * @stderr_buf: (out): data read from the subprocess stderr
@@ -33642,7 +33712,7 @@
  * Communicate with the subprocess until it terminates, and all input
  * and output has been completed.
  *
- * If @stdin is given, the subprocess must have been created with
+ * If @stdin_buf is given, the subprocess must have been created with
  * %G_SUBPROCESS_FLAGS_STDIN_PIPE.  The given data is fed to the
  * stdin of the subprocess and the pipe is closed (ie: EOF).
  *
@@ -33689,8 +33759,8 @@
 /**
  * g_subprocess_communicate_async:
  * @subprocess: Self
- * @stdin_buf: Input data
- * @cancellable: Cancellable
+ * @stdin_buf: (allow-none): Input data, or %NULL
+ * @cancellable: (allow-none): Cancellable
  * @callback: Callback
  * @user_data: User data
  *
@@ -33714,7 +33784,7 @@
 /**
  * g_subprocess_communicate_utf8:
  * @subprocess: a #GSubprocess
- * @stdin_buf: data to send to the stdin of the subprocess, or %NULL
+ * @stdin_buf: (allow-none): data to send to the stdin of the subprocess, or %NULL
  * @cancellable: a #GCancellable
  * @stdout_buf: (out): data read from the subprocess stdout
  * @stderr_buf: (out): data read from the subprocess stderr
@@ -33728,7 +33798,7 @@
 /**
  * g_subprocess_communicate_utf8_async:
  * @subprocess: Self
- * @stdin_buf: Input data
+ * @stdin_buf: (allow-none): Input data, or %NULL
  * @cancellable: Cancellable
  * @callback: Callback
  * @user_data: User data
@@ -33781,6 +33851,15 @@
  *
  * Returns: the exit status
  * Since: 2.40
+ */
+
+
+/**
+ * g_subprocess_get_identifier:
+ * @subprocess: a #GSubprocess
+ *
+ * On UNIX, returns the process ID as a decimal string.  On Windows,
+ * returns the result of GetProcessId() also as a string.
  */
 
 

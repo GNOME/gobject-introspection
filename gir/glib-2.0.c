@@ -1257,7 +1257,7 @@
  *     and g_return_val_if_fail().
  * @G_LOG_LEVEL_WARNING: log level for warnings, see g_warning()
  * @G_LOG_LEVEL_MESSAGE: log level for messages, see g_message()
- * @G_LOG_LEVEL_INFO: log level for informational messages
+ * @G_LOG_LEVEL_INFO: log level for informational messages, see g_info()
  * @G_LOG_LEVEL_DEBUG: log level for debug messages, see g_debug()
  * @G_LOG_LEVEL_MASK: a mask including all log levels
  *
@@ -4270,14 +4270,6 @@
  * ]|
  *
  * Since: 2.4
- */
-
-
-/**
- * G_OS_BEOS:
- *
- * This macro is defined only on BeOS. So you can bracket
- * BeOS-specific code in "&num;ifdef G_OS_BEOS".
  */
 
 
@@ -8551,7 +8543,7 @@
  * Converts a #gdouble to a string, using the '.' as
  * decimal point.
  *
- * This functions generates enough precision that converting
+ * This function generates enough precision that converting
  * the string back using g_ascii_strtod() gives the same machine-number
  * (on machines with IEEE compatible 64bit doubles). It is
  * guaranteed that the size of the resulting string will never
@@ -8784,6 +8776,8 @@
  * Windows Codepage 932, where the trailing bytes of double-byte
  * characters include all ASCII letters. If you compare two CP932
  * strings using this function, you will get false matches.
+ *
+ * Both @s1 and @s2 must be non-%NULL.
  *
  * Returns: 0 if the strings match, a negative value if @s1 &lt; @s2,
  *   or a positive value if @s1 &gt; @s2.
@@ -9149,6 +9143,22 @@
  * the error message and code.
  *
  * Since: 2.20
+ */
+
+
+/**
+ * g_assert_nonnull:
+ * @expr: the expression to check
+ *
+ * Debugging macro to check an expression is not %NULL.
+ *
+ * If the assertion fails (i.e. the expression is %NULL),
+ * an error message is logged and the application is either
+ * terminated or the testcase marked as failed.
+ *
+ * See g_test_set_nonfatal_assertions().
+ *
+ * Since: 2.40
  */
 
 
@@ -14123,6 +14133,9 @@
  * character will automatically be appended to @..., and need not be entered
  * manually.
  *
+ * Such messages are suppressed by the g_log_default_handler() unless
+ * the G_MESSAGES_DEBUG environment variable is set appropriately.
+ *
  * Since: 2.6
  */
 
@@ -15579,6 +15592,7 @@
  * corresponding value it is able to be stored more efficiently.  See
  * the discussion in the section description.
  *
+ * Returns: %TRUE if the key did not exist yet
  * Since: 2.32
  */
 
@@ -15767,6 +15781,8 @@
  * value is freed using that function. If you supplied a
  * @key_destroy_func when creating the #GHashTable, the passed
  * key is freed using that function.
+ *
+ * Returns: %TRUE if the key did not exist yet
  */
 
 
@@ -16001,6 +16017,8 @@
  * the #GHashTable, the old value is freed using that function.
  * If you supplied a @key_destroy_func when creating the
  * #GHashTable, the old key is freed using that function.
+ *
+ * Returns: %TRUE of the key did not exist yet
  */
 
 
@@ -16676,6 +16694,24 @@
  * have a default priority of %G_PRIORITY_DEFAULT.
  *
  * Returns: the newly-created idle source
+ */
+
+
+/**
+ * g_info:
+ * @...: format string, followed by parameters to insert
+ *     into the format string (as with printf())
+ *
+ * A convenience function/macro to log an informational message. Seldom used.
+ *
+ * If g_log_default_handler() is used as the log handler function, a new-line
+ * character will automatically be appended to @..., and need not be entered
+ * manually.
+ *
+ * Such messages are suppressed by the g_log_default_handler() unless
+ * the G_MESSAGES_DEBUG environment variable is set appropriately.
+ *
+ * Since: 2.40
  */
 
 
@@ -17847,7 +17883,7 @@
  * g_key_file_load_from_data:
  * @key_file: an empty #GKeyFile struct
  * @data: key file loaded in memory
- * @length: the length of @data in bytes (or -1 if data is nul-terminated)
+ * @length: the length of @data in bytes (or (gsize)-1 if data is nul-terminated)
  * @flags: flags from #GKeyFileFlags
  * @error: return location for a #GError, or %NULL
  *
@@ -20658,10 +20694,7 @@
  * Copies a block of memory @len bytes long, from @src to @dest.
  * The source and destination areas may overlap.
  *
- * In order to use this function, you must include
- * <filename>string.h</filename> yourself, because this macro will
- * typically simply resolve to memmove() and GLib does not include
- * <filename>string.h</filename> for you.
+ * Deprecated: 2.40: Just use memmove().
  */
 
 
@@ -22440,15 +22473,16 @@
 
 /**
  * g_ptr_array_remove_range:
- * @array: a @GPtrArray.
- * @index_: the index of the first pointer to remove.
- * @length: the number of pointers to remove.
+ * @array: a @GPtrArray
+ * @index_: the index of the first pointer to remove
+ * @length: the number of pointers to remove
  *
  * Removes the given number of pointers starting at the given index
  * from a #GPtrArray.  The following elements are moved to close the
  * gap. If @array has a non-%NULL #GDestroyNotify function it is called
  * for the removed elements.
  *
+ * Returns: the @array
  * Since: 2.4
  */
 
@@ -28795,7 +28829,9 @@
  *        Changed if any arguments were handled.
  * @argv: Address of the @argv parameter of main().
  *        Any parameters understood by g_test_init() stripped before return.
- * @...: Reserved for future extension. Currently, you must pass %NULL.
+ * @...: %NULL-terminated list of special options. Currently the only
+ *       defined option is <literal>"no_g_set_prgname"</literal>, which
+ *       will cause g_test_init() to not call g_set_prgname().
  *
  * Initialize the GLib testing framework, e.g. by seeding the
  * test random number generator, the name for g_get_prgname()
@@ -29169,7 +29205,9 @@
  * g_assert_true(), g_assert_false(), g_assert_null(), g_assert_no_error(),
  * g_assert_error(), g_test_assert_expected_messages() and the various
  * g_test_trap_assert_*() macros to not abort to program, but instead
- * call g_test_fail() and continue.
+ * call g_test_fail() and continue. (This also changes the behavior of
+ * g_test_fail() so that it will not cause the test program to abort
+ * after completing the failed test.)
  *
  * Note that the g_assert_not_reached() and g_assert() are not
  * affected by this.
@@ -32344,7 +32382,7 @@
 
 
 /**
- * g_variant_builder_add: (skp)
+ * g_variant_builder_add: (skip)
  * @builder: a #GVariantBuilder
  * @format_string: a #GVariant varargs format string
  * @...: arguments, as per @format_string
@@ -32356,25 +32394,25 @@
  *
  * This function might be used as follows:
  *
- * <programlisting>
+ * |[
  * GVariant *
  * make_pointless_dictionary (void)
  * {
- *   GVariantBuilder *builder;
+ *   GVariantBuilder builder;
  *   int i;
  *
- *   builder = g_variant_builder_new (G_VARIANT_TYPE_ARRAY);
+ *   g_variant_builder_init (&builder, G_VARIANT_TYPE_ARRAY);
  *   for (i = 0; i < 16; i++)
  *     {
  *       gchar buf[3];
  *
  *       sprintf (buf, "%d", i);
- *       g_variant_builder_add (builder, "{is}", i, buf);
+ *       g_variant_builder_add (&builder, "{is}", i, buf);
  *     }
  *
- *   return g_variant_builder_end (builder);
+ *   return g_variant_builder_end (&builder);
  * }
- * </programlisting>
+ * ]|
  *
  * Since: 2.24
  */
@@ -32394,20 +32432,20 @@
  *
  * This function might be used as follows:
  *
- * <programlisting>
+ * |[
  * GVariant *
  * make_pointless_dictionary (void)
  * {
- *   GVariantBuilder *builder;
+ *   GVariantBuilder builder;
  *   int i;
  *
- *   builder = g_variant_builder_new (G_VARIANT_TYPE_ARRAY);
- *   g_variant_builder_add_parsed (builder, "{'width', <%i>}", 600);
- *   g_variant_builder_add_parsed (builder, "{'title', <%s>}", "foo");
- *   g_variant_builder_add_parsed (builder, "{'transparency', <0.5>}");
- *   return g_variant_builder_end (builder);
+ *   g_variant_builder_init (&builder, G_VARIANT_TYPE_ARRAY);
+ *   g_variant_builder_add_parsed (&builder, "{'width', <%i>}", 600);
+ *   g_variant_builder_add_parsed (&builder, "{'title', <%s>}", "foo");
+ *   g_variant_builder_add_parsed (&builder, "{'transparency', <0.5>}");
+ *   return g_variant_builder_end (&builder);
  * }
- * </programlisting>
+ * ]|
  *
  * Since: 2.26
  */

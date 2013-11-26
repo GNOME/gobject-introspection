@@ -74,8 +74,8 @@
  * G_MODULE_SUFFIX:
  *
  * Expands to the proper shared library suffix for the current platform
- * without the leading dot. For the most Unices and Linux this is "so",
- * for some HP-UX versions this is "sl" and for Windows this is "dll".
+ * without the leading dot. For most Unices and Linux this is "so", and
+ * for Windows this is "dll".
  */
 
 
@@ -87,7 +87,7 @@
  * These functions provide a portable way to dynamically load object files
  * (commonly known as 'plug-ins'). The current implementation supports all
  * systems that provide an implementation of dlopen() (e.g. Linux/Sun), as
- * well as HP-UX via its shl_load() mechanism, and Windows platforms via DLLs.
+ * well as Windows platforms via DLLs.
  *
  * A program which wants to use these functions must be linked to the
  * libraries output by the command

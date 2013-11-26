@@ -1558,7 +1558,7 @@
 /**
  * g_enum_complete_type_info:
  * @g_enum_type: the type identifier of the type being completed
- * @info: the #GTypeInfo struct to be filled in
+ * @info: (out callee-allocates): the #GTypeInfo struct to be filled in
  * @const_values: An array of #GEnumValue structs for the possible
  *  enumeration values. The array is terminated by a struct with all
  *  members being 0.
@@ -1593,8 +1593,8 @@
  *
  * Returns the #GEnumValue for a value.
  *
- * Returns: the #GEnumValue for @value, or %NULL if @value is not a
- *          member of the enumeration
+ * Returns: (transfer none): the #GEnumValue for @value, or %NULL
+ *          if @value is not a member of the enumeration
  */
 
 
@@ -1605,8 +1605,9 @@
  *
  * Looks up a #GEnumValue by name.
  *
- * Returns: the #GEnumValue with name @name, or %NULL if the
- *          enumeration doesn't have a member with that name
+ * Returns: (transfer none): the #GEnumValue with name @name,
+ *          or %NULL if the enumeration doesn't have a member
+ *          with that name
  */
 
 
@@ -1617,8 +1618,9 @@
  *
  * Looks up a #GEnumValue by nickname.
  *
- * Returns: the #GEnumValue with nickname @nick, or %NULL if the
- *          enumeration doesn't have a member with that nickname
+ * Returns: (transfer none): the #GEnumValue with nickname @nick,
+ *          or %NULL if the enumeration doesn't have a member
+ *          with that nickname
  */
 
 
@@ -1644,7 +1646,7 @@
 /**
  * g_flags_complete_type_info:
  * @g_flags_type: the type identifier of the type being completed
- * @info: the #GTypeInfo struct to be filled in
+ * @info: (out callee-allocates): the #GTypeInfo struct to be filled in
  * @const_values: An array of #GFlagsValue structs for the possible
  *  enumeration values. The array is terminated by a struct with all
  *  members being 0.
@@ -1662,8 +1664,8 @@
  *
  * Returns the first #GFlagsValue which is set in @value.
  *
- * Returns: the first #GFlagsValue which is set in @value, or %NULL if
- *          none is set
+ * Returns: (transfer none): the first #GFlagsValue which is set in
+ *          @value, or %NULL if none is set
  */
 
 
@@ -1674,8 +1676,8 @@
  *
  * Looks up a #GFlagsValue by name.
  *
- * Returns: the #GFlagsValue with name @name, or %NULL if there is no
- *          flag with that name
+ * Returns: (transfer none): the #GFlagsValue with name @name,
+ *          or %NULL if there is no flag with that name
  */
 
 
@@ -1686,8 +1688,8 @@
  *
  * Looks up a #GFlagsValue by nickname.
  *
- * Returns: the #GFlagsValue with nickname @nick, or %NULL if there is
- *          no flag with that nickname
+ * Returns: (transfer none): the #GFlagsValue with nickname @nick,
+ *          or %NULL if there is no flag with that nickname
  */
 
 
@@ -2438,6 +2440,11 @@
  * When possible, eg. when signaling a property change from within the class
  * that registered the property, you should use g_object_notify_by_pspec()
  * instead.
+ *
+ * Note that emission of the notify signal may be blocked with
+ * g_object_freeze_notify(). In this case, the signal emissions are queued
+ * and will be emitted (in reverse order) when g_object_thaw_notify() is
+ * called.
  */
 
 
@@ -2621,6 +2628,10 @@
  *  name/value pairs, followed by %NULL
  *
  * Sets properties on an object.
+ *
+ * Note that the "notify" signals are queued and only emitted (in
+ * reverse order) after all properties have been set. See
+ * g_object_freeze_notify().
  */
 
 
@@ -2773,7 +2784,8 @@
  * and when it reaches zero, queued "notify" signals are emitted.
  *
  * Duplicate notifications for each property are squashed so that at most one
- * #GObject::notify signal is emitted for each property.
+ * #GObject::notify signal is emitted for each property, in the reverse order
+ * in which they have been queued.
  *
  * It is an error to call this function when the freeze count is zero.
  */
