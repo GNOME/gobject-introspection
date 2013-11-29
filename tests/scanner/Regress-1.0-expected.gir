@@ -883,6 +883,9 @@ it says it's pointer but it's actually a string.</doc>
         </array>
       </field>
     </record>
+    <constant name="BOOL_CONSTANT" value="true" c:type="REGRESS_BOOL_CONSTANT">
+      <type name="gboolean" c:type="gboolean"/>
+    </constant>
     <constant name="DOUBLE_CONSTANT"
               value="44.220000"
               c:type="REGRESS_DOUBLE_CONSTANT">

@@ -193,6 +193,19 @@ symbol_get_const_string (PyGISourceSymbol *self,
 }
 
 static PyObject *
+symbol_get_const_boolean (PyGISourceSymbol *self,
+			  void             *context)
+{
+  if (!self->symbol->const_boolean_set)
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
+
+  return PyBool_FromLong (self->symbol->const_boolean);
+}
+
+static PyObject *
 symbol_get_source_filename (PyGISourceSymbol *self,
                             void             *context)
 {
@@ -216,6 +229,8 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   /* gboolean const_double_set; */
   { "const_double", (getter)symbol_get_const_double, NULL, NULL},
   { "const_string", (getter)symbol_get_const_string, NULL, NULL},
+  /* gboolean const_boolean_set; */
+  { "const_boolean", (getter)symbol_get_const_boolean, NULL, NULL},
   { "source_filename", (getter)symbol_get_source_filename, NULL, NULL},
   { "line", (getter)symbol_get_line, NULL, NULL},
   { "private", (getter)symbol_get_private, NULL, NULL},

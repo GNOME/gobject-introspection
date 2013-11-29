@@ -226,7 +226,7 @@ toggle_conditional (GISourceScanner *scanner)
 %token <str> IDENTIFIER "identifier"
 %token <str> TYPEDEF_NAME "typedef-name"
 
-%token INTEGER FLOATING CHARACTER STRING
+%token INTEGER FLOATING BOOLEAN CHARACTER STRING
 
 %token INTL_CONST INTUL_CONST
 %token ELLIPSIS ADDEQ SUBEQ MULEQ DIVEQ MODEQ XOREQ ANDEQ OREQ SL SR
@@ -325,6 +325,12 @@ primary_expression
 		}
 		$$->const_int = value;
 		$$->const_int_is_unsigned = (rest && (rest[0] == 'U'));
+	  }
+	| BOOLEAN
+	  {
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
+		$$->const_boolean_set = TRUE;
+		$$->const_boolean = g_ascii_strcasecmp (yytext, "true") == 0 ? TRUE : FALSE;
 	  }
 	| CHARACTER
 	  {
@@ -1475,7 +1481,7 @@ function_macro_define
 object_macro_define
 	: object_macro constant_expression
 	  {
-		if ($2->const_int_set || $2->const_double_set || $2->const_string != NULL) {
+		if ($2->const_int_set || $2->const_boolean_set || $2->const_double_set || $2->const_string != NULL) {
 			$2->ident = $1;
 			gi_source_scanner_add_symbol (scanner, $2);
 			gi_source_symbol_unref ($2);

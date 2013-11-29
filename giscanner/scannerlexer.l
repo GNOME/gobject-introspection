@@ -169,6 +169,12 @@ stringtext				([^\\\"])|(\\.)
 
 "G_GINT64_CONSTANT"			{ return INTL_CONST; }
 "G_GUINT64_CONSTANT"			{ return INTUL_CONST; }
+
+"TRUE"					{ return BOOLEAN; }
+"FALSE"					{ return BOOLEAN; }
+"true"					{ return BOOLEAN; }
+"false"					{ return BOOLEAN; }
+
 [a-zA-Z_][a-zA-Z_0-9]*			{ if (scanner->macro_scan) return check_identifier(scanner, yytext); else REJECT; }
 
 "asm"           		        { if (!parse_ignored_macro()) REJECT; }

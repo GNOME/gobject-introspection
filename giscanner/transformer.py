@@ -728,6 +728,9 @@ raise ValueError."""
                 value = str(symbol.const_int % 2 ** 16)
             else:
                 value = str(symbol.const_int)
+        elif symbol.const_boolean is not None:
+            typeval = ast.TYPE_BOOLEAN
+            value = "true" if symbol.const_boolean else "false"
         elif symbol.const_double is not None:
             typeval = ast.TYPE_DOUBLE
             value = '%f' % (symbol.const_double, )
