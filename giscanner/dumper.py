@@ -82,7 +82,7 @@ class DumpCompiler(object):
         self._get_type_functions = get_type_functions
         self._error_quark_functions = error_quark_functions
 
-        self._compiler_cmd = os.environ.get('CC', 'gcc')
+        self._compiler_cmd = os.environ.get('CC', 'cc')
         self._linker_cmd = os.environ.get('CC', self._compiler_cmd)
         self._pkgconfig_cmd = os.environ.get('PKG_CONFIG', 'pkg-config')
         self._pkgconfig_msvc_flags = ''
