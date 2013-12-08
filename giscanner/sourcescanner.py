@@ -289,6 +289,7 @@ class SourceScanner(object):
             # Note that the generated dumper program is
             # still built and linked by Visual C++.
             cpp_args = ['gcc']
+        cpp_args += os.environ.get('CFLAGS', '').split()
         cpp_args += ['-E', '-C', '-I.', '-']
         cpp_args += self._cpp_options
 
