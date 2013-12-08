@@ -343,7 +343,7 @@
  * An example of how to us this:
  * |[
  *     /<!-- -->* Make sure we don't do any unnecessary work if already cancelled *<!-- -->/
- *     if (g_cancellable_set_error_if_cancelled (cancellable))
+ *     if (g_cancellable_set_error_if_cancelled (cancellable, error))
  *       return;
  *
  *     /<!-- -->* Set up all the data needed to be able to
@@ -2692,7 +2692,7 @@
 /**
  * GTestDBus:flags:
  *
- * #GTestDBusFlags specifying the behaviour of the dbus session
+ * #GTestDBusFlags specifying the behaviour of the D-Bus session.
  *
  * Since: 2.34
  */
@@ -7509,7 +7509,7 @@
  *       bd->cake = cake;
  *
  *       /&ast; Bail out now if the user has already cancelled &ast;/
- *       if (g_task_return_error_if_cancelled (g_task_get_cancellable (task)))
+ *       if (g_task_return_error_if_cancelled (task))
  *         {
  *           g_object_unref (task);
  *           return;
@@ -7867,6 +7867,12 @@
  * A helper class for testing code which uses D-Bus without touching the user's
  * session bus.
  *
+ * Note that #GTestDBus modifies the user’s environment, calling setenv(). This
+ * is not thread-safe, so all #GTestDBus calls should be completed before
+ * threads are spawned, or should have appropriate locking to ensure no access
+ * conflicts to environment variables shared between #GTestDBus and other
+ * threads.
+ *
  * <refsect2 id="gio-D-Bus-Test-Scaffolding">
  *   <title>Creating unit tests using GTestDBus</title>
  *   <para>
@@ -7879,13 +7885,15 @@
  *   </para>
  *   <para>
  *     The first thing you will need is a separate service description file for the
- *     D-Bus daemon. Typically a 'services' subdirectory of your 'tests' directory
+ *     D-Bus daemon. Typically a <filename>services</filename> subdirectory of
+ *     your <filename>tests</filename> directory
  *     is a good place to put this file.
  *   </para>
  *   <para>
  *     The service file should list your service along with an absolute path to the
  *     uninstalled service executable in your source tree. Using autotools we would
- *     achieve this by adding a file such as 'my-server.service.in' in the services
+ *     achieve this by adding a file such as <filename>my-server.service.in</filename>
+ *     in the services
  *     directory and have it processed by configure.
  *     <informalexample><programlisting>
  *     [D-BUS Service]
@@ -7902,7 +7910,7 @@
  *   </para>
  *   <para>
  *     Once you have a service definition file which is local to your source tree,
- *     you can proceed to setup a GTest fixture using the GTestDBus scaffolding.
+ *     you can proceed to set up a GTest fixture using the #GTestDBus scaffolding.
  *     <example id="gdbus-test-fixture">
  *       <title>Test Fixture for D-Bus services</title>
  *       <programlisting>
@@ -7923,10 +7931,10 @@
  *   </para>
  *   <para>
  *     Most of the time we can work around these obstacles using the environment. Since the
- *     environment is inherited by the D-Bus daemon created by GTestDBus and then in turn
+ *     environment is inherited by the D-Bus daemon created by #GTestDBus and then in turn
  *     inherited by any services the D-Bus daemon activates, using the setup routine for your
  *     fixture is a practical place to help sandbox your runtime environment. For the rather
- *     typical GSettings case we can work around this by setting GSETTINGS_SCHEMA_DIR to the
+ *     typical GSettings case we can work around this by setting <envar>GSETTINGS_SCHEMA_DIR</envar> to the
  *     in tree directory holding your schemas in the above fixture_setup() routine.
  *   </para>
  *   <para>
@@ -22529,6 +22537,35 @@
  *
  * If @make_backup is %TRUE, this function will attempt to
  * make a backup of @file.
+ *
+ * <warning><para>No copy of @content will be made, so it must stay valid until
+ * @callback is called. See g_file_replace_contents_bytes_async() for a #GBytes
+ * version that will automatically hold a reference to the contents (without
+ * copying) for the duration of the call.</para></warning>
+ */
+
+
+/**
+ * g_file_replace_contents_bytes_async:
+ * @file: input #GFile
+ * @contents: a #GBytes
+ * @etag: (allow-none): a new <link linkend="gfile-etag">entity tag</link> for the @file, or %NULL
+ * @make_backup: %TRUE if a backup should be created
+ * @flags: a set of #GFileCreateFlags
+ * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
+ *
+ * Same as g_file_replace_contents_async() but takes a #GBytes input instead.
+ * This function will keep a ref on @contents until the operation is done.
+ * Unlike g_file_replace_contents_async() this allows forgetting about the
+ * content without waiting for the callback.
+ *
+ * When this operation has completed, @callback will be called with
+ * @user_user data, and the operation can be finalized with
+ * g_file_replace_contents_finish().
+ *
+ * Since: 2.40
  */
 
 
@@ -27552,6 +27589,11 @@
  *
  * For the synchronous, blocking version of this function, see
  * g_output_stream_write().
+ *
+ * <warning><para>No copy of @buffer will be made, so it must stay valid until
+ * @callback is called. See g_output_stream_write_bytes_async() for a #GBytes
+ * version that will automatically hold a reference to the contents (without
+ * copying) for the duration of the call.</para></warning>
  */
 
 
@@ -34364,7 +34406,7 @@
 
 /**
  * g_subprocess_newv: (rename-to g_subprocess_new)
- * @argv: commandline arguments for the subprocess
+ * @argv: (array zero-terminated=1) (element-type utf8): commandline arguments for the subprocess
  * @flags: flags that define the behaviour of the subprocess
  * @error: (allow-none): return location for an error, or %NULL
  *
@@ -35078,7 +35120,7 @@
  * @self: a #GTestDBus
  * @path: path to a directory containing .service files
  *
- * Add a path where dbus-daemon will lookup for .services files. This can't be
+ * Add a path where dbus-daemon will look up .service files. This can't be
  * called after g_test_dbus_up().
  */
 
@@ -35099,11 +35141,11 @@
  * g_test_dbus_get_bus_address:
  * @self: a #GTestDBus
  *
- * Get the address on which dbus-daemon is running. if g_test_dbus_up() has not
+ * Get the address on which dbus-daemon is running. If g_test_dbus_up() has not
  * been called yet, %NULL is returned. This can be used with
- * g_dbus_connection_new_for_address()
+ * g_dbus_connection_new_for_address().
  *
- * Returns: the address of the bus, or %NULL.
+ * Returns: (allow-none): the address of the bus, or %NULL.
  */
 
 
@@ -35111,7 +35153,7 @@
  * g_test_dbus_get_flags:
  * @self: a #GTestDBus
  *
- * Gets the flags of the #GTestDBus object.
+ * Get the flags of the #GTestDBus object.
  *
  * Returns: the value of #GTestDBus:flags property
  */

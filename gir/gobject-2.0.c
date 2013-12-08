@@ -3719,7 +3719,7 @@
  *
  * Connects a closure to a signal for a particular object.
  *
- * Returns: the handler id
+ * Returns: the handler id (always greater than 0 for successful connections)
  */
 
 
@@ -3734,7 +3734,7 @@
  *
  * Connects a closure to a signal for a particular object.
  *
- * Returns: the handler id
+ * Returns: the handler id (always greater than 0 for successful connections)
  */
 
 
@@ -3753,7 +3753,7 @@
  * used. Specify @connect_flags if you need <literal>..._after()</literal> or
  * <literal>..._swapped()</literal> variants of this function.
  *
- * Returns: the handler id
+ * Returns: the handler id (always greater than 0 for successful connections)
  */
 
 
