@@ -15112,6 +15112,11 @@
  * The encoding of the returned string is system defined.
  * On Windows, it is always UTF-8.
  *
+ * Since GLib 2.40, this function will return the value of the "PWD"
+ * environment variable if it is set and it happens to be the same as
+ * the current directory.  This can make a difference in the case that
+ * the current directory is the target of a symbolic link.
+ *
  * Returns: the current directory
  */
 
