@@ -400,7 +400,8 @@ process_linemarks (GISourceScanner *scanner)
             filename = real;
           }
 
-        g_object_unref (scanner->current_file);
+        if (scanner->current_file)
+          g_object_unref (scanner->current_file);
 	scanner->current_file = g_file_new_for_path (filename);
 	g_free (filename);
 }
