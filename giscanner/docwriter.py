@@ -33,56 +33,6 @@ from mako.lookup import TemplateLookup
 from . import ast, xmlwriter
 from .utils import to_underscores
 
-
-def make_page_id(node, recursive=False):
-    if isinstance(node, ast.Namespace):
-        if recursive:
-            return node.name
-        else:
-            return 'index'
-
-    if hasattr(node, '_chain') and node._chain:
-        parent = node._chain[-1]
-    else:
-        parent = None
-
-    if parent is None:
-        return '%s.%s' % (node.namespace.name, node.name)
-
-    if isinstance(node, (ast.Property, ast.Signal, ast.VFunction)):
-        return '%s-%s' % (make_page_id(parent, recursive=True), node.name)
-    else:
-        return '%s.%s' % (make_page_id(parent, recursive=True), node.name)
-
-
-def get_node_kind(node):
-    if isinstance(node, ast.Namespace):
-        node_kind = 'namespace'
-    elif isinstance(node, (ast.Class, ast.Interface)):
-        node_kind = 'class'
-    elif isinstance(node, ast.Record):
-        node_kind = 'record'
-    elif isinstance(node, ast.Function):
-        if node.is_method:
-            node_kind = 'method'
-        elif node.is_constructor:
-            node_kind = 'constructor'
-        else:
-            node_kind = 'function'
-    elif isinstance(node, ast.Enum):
-        node_kind = 'enum'
-    elif isinstance(node, ast.Property) and node.parent is not None:
-        node_kind = 'property'
-    elif isinstance(node, ast.Signal) and node.parent is not None:
-        node_kind = 'signal'
-    elif isinstance(node, ast.VFunction) and node.parent is not None:
-        node_kind = 'vfunc'
-    else:
-        node_kind = 'default'
-
-    return node_kind
-
-
 class TemplatedScanner(object):
     def __init__(self, specs):
         self.specs = self.unmangle_specs(specs)
@@ -172,20 +122,10 @@ class DocFormatter(object):
         return saxutils.escape(text)
 
     def should_render_node(self, node):
-        if isinstance(node, ast.Constant):
-            return False
-
         if getattr(node, "private", False):
             return False
 
         return True
-
-    def collect(self, type_name):
-        namespace = self._transformer.namespace
-        type_ = {'constant': ast.Constant}[type_name]
-        for item in namespace.itervalues():
-            if isinstance(item, type_):
-                yield item
 
     def format(self, node, doc):
         if doc is None:
@@ -326,31 +266,6 @@ class DocFormatter(object):
 
     def format_type(self, type_):
         raise NotImplementedError
-
-    def format_page_name(self, node):
-        if isinstance(node, ast.Namespace):
-            return 'Index'
-        elif isinstance(node, ast.Function):
-            return self.format_function_name(node)
-        elif isinstance(node, ast.Property) and node.parent is not None:
-            return '%s:%s' % (self.format_page_name(node.parent), node.name)
-        elif isinstance(node, ast.Signal) and node.parent is not None:
-            return '%s::%s' % (self.format_page_name(node.parent), node.name)
-        elif isinstance(node, ast.VFunction) and node.parent is not None:
-            return '%s::%s' % (self.format_page_name(node.parent), node.name)
-        else:
-            return make_page_id(node)
-
-    def format_xref(self, node, **attrdict):
-        if node is None:
-            attrs = [('xref', 'index')] + attrdict.items()
-            return xmlwriter.build_xml_tag('link', attrs)
-        elif isinstance(node, ast.Member):
-            # Enum/BitField members are linked to the main enum page.
-            return self.format_xref(node.parent, **attrdict) + '.' + node.name
-        else:
-            attrs = [('xref', make_page_id(node))] + attrdict.items()
-            return xmlwriter.build_xml_tag('link', attrs)
 
     def format_property_flags(self, property_, construct_only=False):
         flags = []
@@ -661,47 +576,16 @@ class DocWriter(object):
                               output_encoding='utf-8')
 
     def write(self, output):
-        try:
-            os.makedirs(output)
-        except OSError:
-            # directory already made
-            pass
-
-        self._walk_node(output, self._transformer.namespace, [])
-        self._transformer.namespace.walk(lambda node, chain: self._walk_node(output, node, chain))
-
-    def _walk_node(self, output, node, chain):
-        if isinstance(node, ast.Section):
-            return False
-        if isinstance(node, ast.Function) and node.moved_to is not None:
-            return False
-        if getattr(node, 'disguised', False):
-            return False
-        if self._formatter.should_render_node(node):
-            self._render_node(node, chain, output)
-            return True
-        return False
-
-    def _render_node(self, node, chain, output):
-        namespace = self._transformer.namespace
-
-        # A bit of a hack...maybe this should be an official API
-        node._chain = list(chain)
-
-        page_kind = get_node_kind(node)
-        template_name = '%s/%s.tmpl' % (self._language, page_kind)
-        page_id = make_page_id(node)
-
-        template = self._lookup.get_template(template_name)
-        result = template.render(namespace=namespace,
-                                 language=self._language,
-                                 node=node,
-                                 page_id=page_id,
-                                 page_kind=page_kind,
-                                 formatter=self._formatter)
-
-        output_file_name = os.path.join(os.path.abspath(output),
-                                        page_id + '.page')
-        fp = open(output_file_name, 'w')
+        result = self.render_node(self._transformer.namespace)
+        fp = open(output, 'w')
         fp.write(result)
         fp.close()
+
+    def render_node(self, node):
+        page_kind = get_node_kind(node)
+        template_name = '%s/%s.tmpl' % (self._language, page_kind)
+
+        template = self._lookup.get_template(template_name)
+        return template.render(node=node,
+                               formatter=self._formatter,
+                               writer=self)

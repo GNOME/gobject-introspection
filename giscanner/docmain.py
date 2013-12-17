@@ -31,7 +31,7 @@ def doc_main(args):
 
     parser.add_option("-o", "--output",
                       action="store", dest="output",
-                      help="Directory to write output to")
+                      help="File to write output to")
     parser.add_option("-l", "--language",
                       action="store", dest="language",
                       default="c",

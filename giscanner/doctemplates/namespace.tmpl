@@ -1,27 +1,14 @@
-<%! page_type="guide" %>\
-<%inherit file="/base.tmpl"/>
-<%block name="doc">
-</%block>
-<%block name="info">
-</%block>
-<%block name="links">
-  <links type="topic" ui:expanded="true" groups="class" style="linklist">
-    <title>Classes</title>
-  </links>
-  <links type="topic" ui:expanded="true" groups="function" style="linklist">
-    <title>Functions</title>
-  </links>
-  <links type="topic" ui:expanded="true" groups="#first #default #last" style="linklist">
-    <title>Other</title>
-  </links>
-</%block>
-<%block name="details">
-<terms>
-% for constant in formatter.collect('constant'):
-<%include file="${language}/constant.tmpl" args="constant=constant"/>
-% endfor
-</terms>
-</%block>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+          "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+    <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+    <!ENTITY version SYSTEM "version.xml">
+]>
+<book xml:id="${node.name}" xmlns="http://docbook.org/ns/docbook" version="5.0">
+  <title>%{node.name} Documentation</title>
 
-<%block name="since_version">
-</%block>
+  % for node in formatter.get_children(node):
+    % if formatter.should_render_node(node):
+      ${writer.render_child(child)}
+    % endif
+  % endfor
+</book>
