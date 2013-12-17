@@ -16,6 +16,7 @@ EXTRA_LTLIBRARIES = \
 	libgettype.la \
 	libregress.la \
 	libwarnlib.la \
+	libtypedefs.la \
 	$(NULL)
 CLEANFILES += $(EXTRA_LTLIBRARIES)
 
@@ -51,6 +52,7 @@ libwarnlib_la_SOURCES = $(srcdir)/warnlib.c $(srcdir)/warnlib.h
 libwarnlib_la_LIBADD = $(GIO_LIBS)
 libwarnlib_la_LDFLAGS = -export-symbols-regex '^warnlib_' -no-undefined
 libgettype_la_SOURCES = $(srcdir)/gettype.c $(srcdir)/gettype.h
+libtypedefs_la_SOURCES = $(srcdir)/typedefs.c $(srcdir)/typedefs.h
 
 testsdir = $(datadir)/gobject-introspection-1.0/tests
 tests_DATA = $(libregress_la_SOURCES) $(libwarnlib_la_SOURCES) $(libutility_la_SOURCES)
@@ -130,6 +132,14 @@ GetType_1_0_gir_FILES = $(libgettype_la_SOURCES)
 GetType_1_0_gir_SCANNERFLAGS = --c-include="gettype.h" --identifier-prefix=GetType --symbol-prefix=gettype
 GIRS += GetType-1.0.gir
 
+Typedefs-1.0.gir: libtypedefs.la
+Typedefs_1_0_gir_PACKAGES = gobject-2.0
+Typedefs_1_0_gir_LIBS = libtypedefs.la
+Typedefs_1_0_gir_INCLUDES = GObject-2.0
+Typedefs_1_0_gir_FILES = $(libtypedefs_la_SOURCES)
+Typedefs_1_0_gir_SCANNERFLAGS = --c-include="typedefs.h" --identifier-prefix=Typedefs --symbol-prefix=typedefs
+GIRS += Typedefs-1.0.gir
+
 if !OS_WIN32
 EXTRA_PROGRAMS = barapp
 CLEANFILES += $(EXTRA_PROGRAMS)
@@ -182,6 +192,7 @@ else
 CHECKDOCS =
 endif
 
+XFAIL_TESTS = Typedefs-1.0.gir
 TESTS = Headeronly-1.0.gir $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS)
 TESTS_ENVIRONMENT = srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddir) top_builddir=$(top_builddir) \
 	$(top_srcdir)/tests/gi-tester
