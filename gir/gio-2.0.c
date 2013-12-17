@@ -34254,7 +34254,7 @@
 /**
  * g_subprocess_launcher_spawnv:
  * @self: a #GSubprocessLauncher
- * @argv: Command line arguments
+ * @argv: (array zero-terminated=1) (element-type utf8): Command line arguments
  * @error: Error
  *
  * A convenience helper for creating a #GSubprocess given a provided

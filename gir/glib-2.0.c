@@ -22368,6 +22368,19 @@
 
 
 /**
+ * g_ptr_array_insert:
+ * @array: a #GPtrArray.
+ * @index_: the index to place the new element at, or -1 to append.
+ * @data: the pointer to add.
+ *
+ * Inserts an element into the pointer array at the given index. The
+ * array will grow in size automatically if necessary.
+ *
+ * Since: 2.40
+ */
+
+
+/**
  * g_ptr_array_new:
  *
  * Creates a new #GPtrArray with a reference count of 1.
@@ -29479,13 +29492,19 @@
 
 /**
  * g_test_trap_subprocess:
- * @test_path: Test to run in a subprocess
+ * @test_path: (allow-none): Test to run in a subprocess
  * @usec_timeout: Timeout for the subprocess test in micro seconds.
  * @test_flags: Flags to modify subprocess behaviour.
  *
  * Respawns the test program to run only @test_path in a subprocess.
  * This can be used for a test case that might not return, or that
- * might abort. @test_path will normally be the name of the parent
+ * might abort.
+ *
+ * If @test_path is %NULL then the same test is re-run in a subprocess.
+ * You can use g_test_subprocess() to determine whether the test is in
+ * a subprocess or not.
+ *
+ * @test_path can also be the name of the parent
  * test, followed by "<literal>/subprocess/</literal>" and then a name
  * for the specific subtest (or just ending with
  * "<literal>/subprocess</literal>" if the test only has one child
@@ -29517,13 +29536,14 @@
  *   static void
  *   test_create_large_object_subprocess (void)
  *   {
- *     my_object_new (1000000);
- *   }
+ *     if (g_test_subprocess ())
+ *       {
+ *         my_object_new (1000000);
+ *         return;
+ *       }
  *
- *   static void
- *   test_create_large_object (void)
- *   {
- *     g_test_trap_subprocess ("/myobject/create_large_object/subprocess", 0, 0);
+ *     /&ast; Reruns this same test in a subprocess &ast;/
+ *     g_test_trap_subprocess (NULL, 0, 0);
  *     g_test_trap_assert_failed ();
  *     g_test_trap_assert_stderr ("*ERROR*too large*");
  *   }
@@ -29535,12 +29555,6 @@
  *
  *     g_test_add_func ("/myobject/create_large_object",
  *                      test_create_large_object);
- *     /&ast; Because of the '/subprocess' in the name, this test will
- *      &ast; not be run by the g_test_run () call below.
- *      &ast;/
- *     g_test_add_func ("/myobject/create_large_object/subprocess",
- *                      test_create_large_object_subprocess);
- *
  *     return g_test_run ();
  *   }
  * ]|
