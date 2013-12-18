@@ -309,14 +309,28 @@ gi_source_scanner_take_comment (GISourceScanner *scanner,
                                        comment);
 }
 
+/**
+ * gi_source_scanner_get_symbols:
+ * @scanner: scanner instance
+ *
+ * Returns: (transfer container): List of GISourceSymbol.
+ *   Free resulting list with g_slist_free().
+ */
 GSList *
 gi_source_scanner_get_symbols (GISourceScanner  *scanner)
 {
-  return g_slist_reverse (scanner->symbols);
+  return g_slist_reverse (g_slist_copy (scanner->symbols));
 }
 
+/**
+ * gi_source_scanner_get_comments:
+ * @scanner: scanner instance
+ *
+ * Returns: (transfer container): List of GISourceComment.
+ *   Free resulting list with g_slist_free().
+ */
 GSList *
 gi_source_scanner_get_comments(GISourceScanner  *scanner)
 {
-  return g_slist_reverse (scanner->comments);
+  return g_slist_reverse (g_slist_copy (scanner->comments));
 }

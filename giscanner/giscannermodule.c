@@ -575,6 +575,7 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
       PyList_SetItem (list, i++, item);
     }
 
+  g_slist_free (symbols);
   Py_INCREF (list);
   return list;
 }
@@ -598,6 +599,7 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self)
       PyList_SetItem (list, i++, item);
     }
 
+  g_slist_free (comments);
   Py_INCREF (list);
   return list;
 }
