@@ -38,9 +38,11 @@ case $targetname in
         PYTHONPATH=${top_builddir}:${top_srcdir} ${PYTHON} ${targetname}
         exit $?
     else
-        # Run as Python unittest module with TESTARGS concatenated to the basename of target
-        targetbasename=`basename "${targetname}" .py`
-        PYTHONPATH=${top_builddir}:${top_srcdir} ${PYTHON} -m unittest -v "${targetbasename}.${TESTARGS}"
+        # Run as Python unittest module with TESTARGS concatenated to the basename of target.
+        # Ensure we are in the directory containing the python module first.
+        export PYTHONPATH=$(readlink -f ${top_builddir}):$(readlink -f ${top_srcdir})
+        modulename=$(basename "${targetbase}" .py)
+        (cd $(dirname ${targetname}) &&  ${PYTHON} -m unittest -v "${modulename}.${TESTARGS}")
         exit $?
     fi
     ;;
