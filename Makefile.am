@@ -66,10 +66,6 @@ check-local:
 		$(PYTHON) $(top_srcdir)/misc/pep8.py --max-line-length=99 --ignore=E128 $(PEP8_EXCLUDES)
 	@find $(top_srcdir)/tests -name \*.py | sort | uniq | xargs \
 		$(PYTHON) $(top_srcdir)/misc/pep8.py --ignore=E127,E501 $(PEP8_EXCLUDES)
-	@echo "TEST: Annotation pattern programs"
-	PYTHONPATH="$(top_builddir):$(top_srcdir)" $(PYTHON) $(top_srcdir)/tests/scanner/annotationparser/test_patterns.py
-	@echo "TEST: GTK-Doc Annotation Parser"
-	PYTHONPATH="$(top_builddir):$(top_srcdir)" $(PYTHON) $(top_srcdir)/tests/scanner/annotationparser/test_parser.py
 
 check-pyflakes:
 	@echo "  CHECK Pyflakes"

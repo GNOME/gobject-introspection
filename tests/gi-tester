@@ -32,8 +32,20 @@ case $targetname in
     diff -u -w -B -U 10 ${srcdir}/${targetname::-4}-expected.txt ${builddir}/${targetname}
     exit $?
     ;;
+*.py)
+    if [[ -z "${TESTARGS}" ]]; then
+        # Run as regular Python file if TESTARGS is empty
+        PYTHONPATH=${top_builddir}:${top_srcdir} ${PYTHON} ${targetname}
+        exit $?
+    else
+        # Run as Python unittest module with TESTARGS concatenated to the basename of target
+        targetbasename=`basename "${targetname}" .py`
+        PYTHONPATH=${top_builddir}:${top_srcdir} ${PYTHON} -m unittest -v "${targetbasename}.${TESTARGS}"
+        exit $?
+    fi
+    ;;
 *)
-    echo $"Usage: gi-tester <targetname>"
+    echo $"Usage: [TESTARGS=<args>] gi-tester <targetname>"
     exit 1
     ;;
 esac

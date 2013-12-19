@@ -3,6 +3,8 @@ NULL ?=
 include $(top_srcdir)/common.mk
 include $(top_srcdir)/Makefile.introspection
 
+SUBDIRS = . annotationparser
+
 INTROSPECTION_SCANNER_ARGS += --warn-all
 
 CLEANFILES =
@@ -185,64 +187,6 @@ TESTS_ENVIRONMENT = srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddi
 	$(top_srcdir)/tests/gi-tester
 
 EXTRA_DIST += \
-	annotationparser/README					\
-	annotationparser/test_parser.py				\
-	annotationparser/test_patterns.py			\
-	annotationparser/tests.xsd				\
-	annotationparser/gi/annotation_allow_none.xml		\
-	annotationparser/gi/annotation_array.xml		\
-	annotationparser/gi/annotation_attributes.xml		\
-	annotationparser/gi/annotation_closure.xml		\
-	annotationparser/gi/annotation_constructor.xml		\
-	annotationparser/gi/annotation_destroy.xml		\
-	annotationparser/gi/annotation_element_type.xml		\
-	annotationparser/gi/annotation_foreign.xml		\
-	annotationparser/gi/annotation_get_value_func.xml	\
-	annotationparser/gi/annotation_in.xml			\
-	annotationparser/gi/annotation_in_out.xml		\
-	annotationparser/gi/annotation_method.xml		\
-	annotationparser/gi/annotation_out.xml			\
-	annotationparser/gi/annotation_ref_func.xml		\
-	annotationparser/gi/annotation_rename_to.xml		\
-	annotationparser/gi/annotation_scope.xml		\
-	annotationparser/gi/annotation_set_value_func.xml	\
-	annotationparser/gi/annotation_skip.xml			\
-	annotationparser/gi/annotation_transfer.xml		\
-	annotationparser/gi/annotation_type.xml			\
-	annotationparser/gi/annotation_unref_func.xml		\
-	annotationparser/gi/annotation_value.xml		\
-	annotationparser/gi/annotation_virtual.xml		\
-	annotationparser/gi/annotations.xml			\
-	annotationparser/gi/identifier.xml			\
-	annotationparser/gi/identifier_section.xml		\
-	annotationparser/gi/identifier_symbol.xml		\
-	annotationparser/gi/parameter.xml			\
-	annotationparser/gi/parameter_varargs.xml		\
-	annotationparser/gi/syntax.xml				\
-	annotationparser/gi/syntax_indentation.xml		\
-	annotationparser/gi/syntax_multiline_annotations.xml	\
-	annotationparser/gi/syntax_nested_tags.xml		\
-	annotationparser/gi/syntax_paragraph_breaks.xml		\
-	annotationparser/gi/syntax_whitespace.xml		\
-	annotationparser/gi/tag.xml				\
-	annotationparser/gi/tag_deprecated.xml			\
-	annotationparser/gi/tag_description.xml			\
-	annotationparser/gi/tag_returns.xml			\
-	annotationparser/gi/tag_since.xml			\
-	annotationparser/gi/tag_stability.xml			\
-	annotationparser/gtkdoc/gobject/gtypes.h.xml		\
-	annotationparser/gtkdoc/gobject/gtypes.c.xml		\
-	annotationparser/gtkdoc/gobject/giface.h.xml		\
-	annotationparser/gtkdoc/gobject/giface.c.xml		\
-	annotationparser/gtkdoc/fail/tester.h.xml		\
-	annotationparser/gtkdoc/fail/tester.c.xml		\
-	annotationparser/gtkdoc/empty/tester.c.xml		\
-	annotationparser/gtkdoc/bugs/tester.h.xml		\
-	annotationparser/gtkdoc/bugs/tester.c.xml		\
-	annotationparser/gtkdoc/annotations/tester.h.xml	\
-	annotationparser/gtkdoc/annotations/tester.c.xml	\
-	annotationparser/gtkdoc/gobject/gobject.h.xml		\
-	annotationparser/gtkdoc/gobject/gobject.c.xml		\
 	Regress-1.0-C-expected					\
 	Regress-1.0-Gjs-expected				\
 	Regress-1.0-Python-expected				\

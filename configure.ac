@@ -319,6 +319,7 @@ Makefile
 tests/Makefile
 tests/offsets/Makefile
 tests/scanner/Makefile
+tests/scanner/annotationparser/Makefile
 tests/repository/Makefile
 tests/warn/Makefile
 docs/Makefile
