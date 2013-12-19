@@ -36,7 +36,7 @@ from giscanner.annotationparser import (COMMENT_BLOCK_START_RE, COMMENT_BLOCK_EN
                                         SECTION_RE, SYMBOL_RE, PROPERTY_RE,
                                         SIGNAL_RE, PARAMETER_RE, TAG_RE,
                                         TAG_VALUE_VERSION_RE, TAG_VALUE_STABILITY_RE)
-from unittest import (TestCase, main)
+import unittest
 
 
 comment_start_tests = [
@@ -858,59 +858,86 @@ tag_value_stability_tests = [
           'description': 'xyz: abc'})]
 
 
-def create_tests(tests_name, testcases):
+def create_test_method(testcase):
+    def do_test(self):
+        (program, text, expected) = testcase
+
+        match = program.match(text)
+
+        if match is not None:
+            msg = 'Test matched pattern but specifies no expected named groups.'
+            self.assertTrue(isinstance(expected, dict), msg)
+
+            for group in match.groupdict().keys():
+                msg = 'Test case is missing expected results for named group "%s".' % (group)
+                self.assertTrue(group in expected.keys(), msg)
+
+        if expected is None:
+            msg = 'Program matched text but shouldn\'t:\n"%s"'
+            self.assertTrue(match is None, msg % (text, ))
+        else:
+            msg = 'Program should match text but didn\'t:\n"%s"'
+            self.assertTrue(match is not None, msg % (text, ))
+
+            for key, value in expected.items():
+                msg = 'expected "%s" for "%s" but match returned "%s"'
+                msg = msg % (value, key, match.group(key))
+                self.assertEqual(match.group(key), value, msg)
+
+    return do_test
+
+
+def create_test_case(tests_class_name, testcases):
+    test_methods = {}
     for (index, testcase) in enumerate(testcases):
-        real_test_name = '%s_%03d' % (tests_name, index)
+        test_method_name = 'test_%03d' % index
 
-        test_method = TestProgram.__create_test__(testcase)
-        test_method.__name__ = real_test_name
-        setattr(TestProgram, real_test_name, test_method)
+        test_method = create_test_method(testcase)
+        test_method.__name__ = test_method_name
+        test_methods[test_method_name] = test_method
+
+    return type(tests_class_name, (unittest.TestCase,), test_methods)
 
 
-class TestProgram(TestCase):
-    @classmethod
-    def __create_test__(cls, testcase):
-        def do_test(self):
-            (program, text, expected) = testcase
+def create_test_cases():
+    test_cases = {}
+    for name, test_data in (('TestCommentStart', comment_start_tests),
+                            ('TestCommentEnd', comment_end_tests),
+                            ('TestCommentAsterisk', comment_asterisk_tests),
+                            ('TestIndentaton', indentaton_tests),
+                            ('TestEmptyLine', empty_line_tests),
+                            ('TestIdentifierSection', identifier_section_tests),
+                            ('TestIdentifierSymbol', identifier_symbol_tests),
+                            ('TestIdentifierProperty', identifier_property_tests),
+                            ('TestIdentifierSignal', identifier_signal_tests),
+                            ('TestParameter', parameter_tests),
+                            ('TestTag', tag_tests),
+                            ('TestTagValueVersion', tag_value_version_tests),
+                            ('TestTagValueStability', tag_value_stability_tests)):
+        test_cases[name] = create_test_case(name, test_data)
 
-            match = program.match(text)
+    return test_cases
 
-            if match is not None:
-                msg = 'Test matched pattern but specifies no expected named groups.'
-                self.assertTrue(isinstance(expected, dict), msg)
 
-                for group in match.groupdict().keys():
-                    msg = 'Test case is missing expected results for named group "%s".' % (group)
-                    self.assertTrue(group in expected.keys(), msg)
+# We currently need to push all the new test cases into the modules globals
+# in order for parameterized tests to work. Ideally all that should be needed
+# is the "load_tests" hook, but this does not work in the case were the tests
+# are run in parameterized mode, e.g: python -m unittest test_parser.Test...
+_all_tests = create_test_cases()
+globals().update(_all_tests)
 
-            if expected is None:
-                msg = 'Program matched text but shouldn\'t:\n"%s"'
-                self.assertTrue(match is None, msg % (text, ))
-            else:
-                msg = 'Program should match text but didn\'t:\n"%s"'
-                self.assertTrue(match is not None, msg % (text, ))
 
-                for key, value in expected.items():
-                    msg = 'expected "%s" for "%s" but match returned "%s"'
-                    msg = msg % (value, key, match.group(key))
-                    self.assertEqual(match.group(key), value, msg)
+# Hook function for Python test loader.
+def load_tests(loader, tests, pattern):
+    suite = unittest.TestSuite()
+    # add standard tests from module
+    suite.addTests(tests)
 
-        return do_test
+    for name, test_case in _all_tests.iteritems():
+        tests = loader.loadTestsFromTestCase(test_case)
+        suite.addTests(tests)
+    return suite
 
 
 if __name__ == '__main__':
-    create_tests('test_comment_start', comment_start_tests)
-    create_tests('test_comment_end', comment_end_tests)
-    create_tests('test_comment_asterisk', comment_asterisk_tests)
-    create_tests('test_indentaton', indentaton_tests)
-    create_tests('test_empty_line', empty_line_tests)
-    create_tests('test_identifier_section', identifier_section_tests)
-    create_tests('test_identifier_symbol', identifier_symbol_tests)
-    create_tests('test_identifier_property', identifier_property_tests)
-    create_tests('test_identifier_signal', identifier_signal_tests)
-    create_tests('test_parameter', parameter_tests)
-    create_tests('test_tag', tag_tests)
-    create_tests('test_tag_value_version', tag_value_version_tests)
-    create_tests('test_tag_value_stability', tag_value_stability_tests)
-
-    main()
+    unittest.main()

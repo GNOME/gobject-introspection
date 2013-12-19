@@ -380,8 +380,7 @@ class TestCommentBlock(unittest.TestCase):
         return retval
 
 
-def create_tests(logger, tests_dir, tests_file):
-    tests_name = os.path.relpath(tests_file[:-4], tests_dir).replace('/', '.').replace('\\', '.')
+def create_test_case(logger, tests_dir, tests_file):
     tests_tree = etree.parse(tests_file).getroot()
 
     fix_cdata_elements = tests_tree.findall(ns('{}test/{}input'))
@@ -393,17 +392,27 @@ def create_tests(logger, tests_dir, tests_file):
             element.text = element.text.replace('{{?', '<!')
             element.text = element.text.replace('}}', '>')
 
+    test_methods = {}
     for counter, test in enumerate(tests_tree.findall(ns('{}test'))):
-        test_name = 'test_%s.%03d' % (tests_name, counter + 1)
+        test_name = 'test_%03d' % (counter + 1)
         test_method = TestCommentBlock.__create_test__(logger, test)
-        setattr(TestCommentBlock, test_name, test_method)
+        test_method.__name__ = test_name
+        test_methods[test_name] = test_method
+
+    # Dynamically generate a new subclass of TestCommentBlock in TitleCase
+    # with generated test methods.
+    test_class_name = os.path.relpath(tests_file[:-4], tests_dir)
+    test_class_name = test_class_name.replace('/', ' ').replace('\\', ' ').replace('.', ' ')
+    test_class_name = 'Test' + test_class_name.title().replace(' ', '')
+    return type(test_class_name, (TestCommentBlock,), test_methods)
 
 
-if __name__ == '__main__':
+def create_test_cases():
     # Initialize message logger
     namespace = Namespace('Test', '1.0')
     logger = MessageLogger.get(namespace=namespace)
     logger.enable_warnings((WARNING, ERROR, FATAL))
+    test_cases = {}
 
     # Load test cases from disc
     tests_dir = os.path.dirname(os.path.abspath(__file__))
@@ -413,7 +422,40 @@ if __name__ == '__main__':
             tests_file = os.path.join(dirpath, filename)
             if os.path.basename(tests_file).endswith('.xml'):
                 validate(tests_file)
-                create_tests(logger, tests_dir, tests_file)
+                test_case = create_test_case(logger, tests_dir, tests_file)
+                test_cases[test_case.__name__] = test_case
 
+    return test_cases
+
+
+# We currently need to push all the new test cases into the modules globals
+# in order for parameterized tests to work. Ideally all that should be needed
+# is the "load_tests" hook, but this does not work in the case were the tests
+# are run in parameterized mode, e.g: python -m unittest test_parser.Test...
+_all_tests = create_test_cases()
+globals().update(_all_tests)
+
+
+# Hook function for Python test loader.
+def load_tests(loader, tests, pattern):
+    suite = unittest.TestSuite()
+    # add standard tests from module
+    suite.addTests(tests)
+
+    # Initialize message logger
+    namespace = Namespace('Test', '1.0')
+    logger = MessageLogger.get(namespace=namespace)
+    logger.enable_warnings((WARNING, ERROR, FATAL))
+
+    # Load test cases from disc
+    tests_dir = os.path.dirname(os.path.abspath(__file__))
+
+    for name, test_case in _all_tests.iteritems():
+        tests = loader.loadTestsFromTestCase(test_case)
+        suite.addTests(tests)
+    return suite
+
+
+if __name__ == '__main__':
     # Run test suite
     unittest.main()
