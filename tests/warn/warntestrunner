@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -e
-
-for testname in ${alltests}; do
-    echo "Running warning test:" $testname
-    $PYTHON $srcdir/warningtester.py "$srcdir/$testname"
-done
