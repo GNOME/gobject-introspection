@@ -21,7 +21,9 @@ check_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
 libeverything_1_0_la_SOURCES = everything.c
 libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
 
-EXTRA_DIST += gimarshallingtests.h
+EXTRA_DIST += \
+	gimarshallingtests.h \
+	gi-tester
 
 BUILT_SOURCES += everything.c everything.h
 

@@ -67,7 +67,7 @@ endif
 # .gir --[scanner]-> .typelib
 GIRS =
 TYPELIBS = $(GIRS:.gir=.typelib)
-CHECKGIRS = $(GIRS:.gir=.gir.check)
+CHECKGIRS = $(GIRS)
 EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
 INTROSPECTION_GIRS = $(GIRS)
 CLEANFILES = $(TYPELIBS) $(GIRS)
@@ -141,20 +141,19 @@ Bar_1_0_gir_SCANNERFLAGS = --accept-unprefixed
 GIRS += Bar-1.0.gir
 endif
 
-EXTRA_DIST += headeronly.h
+EXTRA_DIST += \
+	headeronly.h \
+	Headeronly-1.0-expected.gir
 CLEANFILES += Headeronly-1.0.gir
 
 Headeronly-1.0.gir: headeronly.h
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate --namespace=Headeronly --nsversion=1.0 --header-only --output=$@ $<
 
-%.gir.check: %.gir
-	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
-
 if BUILD_DOCTOOL
 DOCGIRS = Regress-1.0.gir
-CHECKDOCS = $(DOCGIRS:.gir=-C.page.check) $(DOCGIRS:.gir=-Python.page.check) $(DOCGIRS:.gir=-Gjs.page.check) $(DOCGIRS:.gir=-sections.txt.page.check)
+CHECKDOCS = $(DOCGIRS:.gir=-C) $(DOCGIRS:.gir=-Python) $(DOCGIRS:.gir=-Gjs) $(DOCGIRS:.gir=-sections.txt)
 MALLARD_DIRS = $(DOCGIRS:.gir=-C) $(DOCGIRS:.gir=-Python) $(DOCGIRS:.gir=-Gjs)
-MALLARD_CLEAN = $(DOCGIRS:.gir=-C)/* $(DOCGIRS:.gir=-Python)/* $(DOCGIRS:.gir=-Gjs)/*
+MALLARD_CLEAN = $(DOCGIRS:.gir=-C)/* $(DOCGIRS:.gir=-Python)/* $(DOCGIRS:.gir=-Gjs)/* $(DOCGIRS:.gir=-sections.txt)
 EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
 CLEANFILES += $(MALLARD_CLEAN)
 
@@ -173,23 +172,13 @@ CLEANFILES += $(MALLARD_CLEAN)
 %-sections.txt: %.gir
 	$(AM_V_GEN)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --write-sections-file $*.gir -o $@
 
-%-C.page.check: %-C
-	@diff -r -u -w -B -U 10 $(srcdir)/$*-C-expected $(builddir)/$*-C && echo "  TEST  $*-C"
-
-%-Python.page.check: %-Python
-	@diff -r -u -w -B -U 10 $(srcdir)/$*-Python-expected $(builddir)/$*-Python && echo "  TEST  $*-Python"
-
-%-Gjs.page.check: %-Gjs
-	@diff -r -u -w -B -U 10 $(srcdir)/$*-Gjs-expected $(builddir)/$*-Gjs && echo "  TEST  $*-Gjs"
-
-%-sections.txt.page.check: %-sections.txt
-	@diff -u -w -B -U 10 $(srcdir)/$*-sections-expected.txt $*-sections.txt && echo "  TEST  $*-C"
-
 else
 CHECKDOCS =
 endif
 
-check-local: Headeronly-1.0.gir $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS)
+TESTS = Headeronly-1.0.gir $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS)
+TESTS_ENVIRONMENT = srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddir) top_builddir=$(top_builddir) \
+	$(top_srcdir)/tests/gi-tester
 
 EXTRA_DIST += \
 	annotationparser/README					\

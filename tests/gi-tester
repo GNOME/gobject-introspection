@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+targetname=$1
+
+# Note the target name for the documentation targets (-C, -Python, -Gjs)
+# incorrectly include a relative path to the srcdir, strip that off for usage
+# in directory diffs.
+targetbase=${targetname##*/}
+
+case $targetname in
+*.gir)
+    diff -u -U 10 ${srcdir}/${targetname::-4}-expected.gir ${builddir}/${targetname}
+    exit $?
+    ;;
+*.typelib)
+    # Do nothing for typelibs, this just ensures they build as part of the tests
+    exit 0
+    ;;
+*-C)
+    diff -r -u -w -B -U 10 ${srcdir}/${targetbase}-expected ${builddir}/${targetbase}
+    exit $?
+    ;;
+*-Python)
+    diff -r -u -w -B -U 10 ${srcdir}/${targetbase}-expected ${builddir}/${targetbase}
+    exit $?
+    ;;
+*-Gjs)
+    diff -r -u -w -B -U 10 ${srcdir}/${targetbase}-expected ${builddir}/${targetbase}
+    exit $?
+    ;;
+*-sections.txt)
+    diff -u -w -B -U 10 ${srcdir}/${targetname::-4}-expected.txt ${builddir}/${targetname}
+    exit $?
+    ;;
+*)
+    echo $"Usage: gi-tester <targetname>"
+    exit 1
+    ;;
+esac
