@@ -1,4 +1,4 @@
-noinst_LTLIBRARIES += libcmph.la
+EXTRA_LTLIBRARIES += libcmph.la
 
 libcmph_la_CPPFLAGS = -Icmph $(GLIB_CFLAGS)
 libcmph_la_LIBADD = -lm $(GLIB_LIBS)
@@ -66,9 +66,12 @@ libcmph_la_SOURCES = \
 	girepository/cmph/vstack.c \
 	girepository/cmph/vstack.h
 
-GTESTER_PROGS += cmph-bdz-test
+
+TESTS += cmph-bdz-test
+EXTRA_PROGRAMS += cmph-bdz-test
 
 cmph_bdz_test_SOURCES = girepository/cmph-bdz-test.c
 cmph_bdz_test_CFLAGS = -I$(top_srcdir)/girepository/cmph $(GOBJECT_CFLAGS)
 cmph_bdz_test_LDADD = libcmph.la $(GOBJECT_LIBS)
 
+CLEANFILES += cmph-bdz-test libcmph.la

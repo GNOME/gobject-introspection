@@ -90,7 +90,9 @@ gi_dump_types_CFLAGS = $(GIO_UNIX_CFLAGS) $(GMODULE_CFLAGS)
 gi_dump_types_LDADD = $(GIO_UNIX_LIBS) $(GMODULE_LIBS)
 endif
 
-GTESTER_PROGS += gthash-test
+EXTRA_PROGRAMS += gthash-test
+CLEANFILES += gthash-test
+TESTS += gthash-test
 
 gthash_test_SOURCES = girepository/gthash.c girepository/gthash-test.c
 gthash_test_CFLAGS = -I$(top_srcdir)/girepository $(GOBJECT_CFLAGS)

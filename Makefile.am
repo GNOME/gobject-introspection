@@ -9,8 +9,10 @@ check_LTLIBRARIES =
 check_PROGRAMS =
 bin_PROGRAMS =
 bin_SCRIPTS =
-GTESTER_PROGS =
-noinst_PROGRAMS = $(GTESTER_PROGS)
+noinst_PROGRAMS =
+EXTRA_LTLIBRARIES =
+EXTRA_PROGRAMS =
+TESTS =
 
 include common.mk
 include Makefile.introspection
@@ -59,7 +61,6 @@ EXTRA_DIST += 			\
 PEP8_EXCLUDES=--exclude='.svn,CVS,.bzr,.hg,.git,__pycache__,.\#*'
 
 check-local:
-	gtester --verbose $(GTESTER_PROGS)
 	@echo "TEST: PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs \
 		$(PYTHON) $(top_srcdir)/misc/pep8.py --max-line-length=99 --ignore=E128 $(PEP8_EXCLUDES)
