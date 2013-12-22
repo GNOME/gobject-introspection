@@ -5,7 +5,9 @@ include $(top_srcdir)/Makefile.introspection
 
 INTROSPECTION_SCANNER_ARGS += --warn-all
 
-check_LTLIBRARIES = \
+CLEANFILES =
+
+EXTRA_LTLIBRARIES = \
 	libsletter.la \
 	libutility.la \
 	libgtkfrob.la \
@@ -13,6 +15,7 @@ check_LTLIBRARIES = \
 	libregress.la \
 	libwarnlib.la \
 	$(NULL)
+CLEANFILES += $(EXTRA_LTLIBRARIES)
 
 AM_CPPFLAGS = -I$(top_srcdir)/girepository
 AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS)
@@ -70,7 +73,7 @@ TYPELIBS = $(GIRS:.gir=.typelib)
 CHECKGIRS = $(GIRS)
 EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
 INTROSPECTION_GIRS = $(GIRS)
-CLEANFILES = $(TYPELIBS) $(GIRS)
+CLEANFILES += $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS)
 
 SLetter-1.0.gir: $(top_builddir)/Gio-2.0.gir libsletter.la
@@ -126,7 +129,8 @@ GetType_1_0_gir_SCANNERFLAGS = --c-include="gettype.h" --identifier-prefix=GetTy
 GIRS += GetType-1.0.gir
 
 if !OS_WIN32
-check_PROGRAMS = barapp
+EXTRA_PROGRAMS = barapp
+CLEANFILES += $(EXTRA_PROGRAMS)
 
 barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
 barapp_LDADD = $(top_builddir)/libgirepository-1.0.la

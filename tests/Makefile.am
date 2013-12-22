@@ -16,7 +16,7 @@ tests_DATA =		    \
     gimarshallingtests.c    \
     gimarshallingtests.h
 
-check_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
+EXTRA_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
 
 libeverything_1_0_la_SOURCES = everything.c
 libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
@@ -29,6 +29,7 @@ BUILT_SOURCES += everything.c everything.h
 
 CLEANFILES += \
     $(BUILT_SOURCES) \
+    $(EXTRA_LTLIBRARIES) \
     everything-stamp.h \
     Everything-1.0.gir \
     Everything-1.0.typelib \
@@ -65,5 +66,6 @@ GIMarshallingTests-1.0.gir: libgimarshallingtests-1.0.la Makefile
 %.typelib: %.gir
 	$(AM_V_GEN) $(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) $< -o $@
 
-check: Everything-1.0.typelib GIMarshallingTests-1.0.typelib
+TESTS=Everything-1.0.typelib GIMarshallingTests-1.0.typelib
+TESTS_ENVIRONMENT=$(srcdir)/gi-tester
 
