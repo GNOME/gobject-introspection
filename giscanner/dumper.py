@@ -215,6 +215,9 @@ class DumpCompiler(object):
             args.append("-Wno-deprecated-declarations")
         pkgconfig_flags = self._run_pkgconfig('--cflags')
         args.extend([utils.cflag_real_include_path(f) for f in pkgconfig_flags])
+        cppflags = os.environ.get('CPPFLAGS', '')
+        for cppflag in cppflags.split():
+            args.append(cppflag)
         cflags = os.environ.get('CFLAGS', '')
         for cflag in cflags.split():
             args.append(cflag)
@@ -263,6 +266,9 @@ class DumpCompiler(object):
             else:
                 args.append('-export-dynamic')
 
+        cppflags = os.environ.get('CPPFLAGS', '')
+        for cppflag in cppflags.split():
+            args.append(cppflag)
         cflags = os.environ.get('CFLAGS', '')
         for cflag in cflags.split():
             args.append(cflag)
