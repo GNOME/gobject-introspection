@@ -6,12 +6,12 @@ CLEANFILES =
 EXTRA_DIST =
 INTROSPECTION_GIRS =
 
-check_LTLIBRARIES =
-check_PROGRAMS =
+EXTRA_LTLIBRARIES =
+EXTRA_PROGRAMS =
 
 ############################################################
 
-check_LTLIBRARIES += liboffsets.la
+EXTRA_LTLIBRARIES += liboffsets.la
 
 liboffsets_la_SOURCES = \
 	offsets.h	\
@@ -28,27 +28,30 @@ Offsets_1_0_gir_FILES = $(srcdir)/offsets.h $(srcdir)/offsets.c
 Offsets_1_0_gir_SCANNERFLAGS = --warn-all --warn-error
 INTROSPECTION_GIRS += Offsets-1.0.gir
 
-CLEANFILES += Offsets-1.0.gir Offsets-1.0.typelib
+CLEANFILES += Offsets-1.0.gir Offsets-1.0.typelib liboffsets.la
 
 ############################################################
 
-check_PROGRAMS += gitestoffsets
+EXTRA_PROGRAMS += gitestoffsets
 
 nodist_gitestoffsets_SOURCES = gitestoffsets.c
 gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 gitestoffsets_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
-gitestoffsets.c: gen-gitestoffsets offsets.h
+gitestoffsets.c: gen-gitestoffsets offsets.h Offsets-1.0.typelib
 	$(AM_V_GEN) $(PYTHON) $(srcdir)/gen-gitestoffsets $(srcdir)/offsets.h > $@ || ( rm -f $@ && false )
 
 EXTRA_DIST += gen-gitestoffsets
 BUILT_SOURCES += gitestoffsets.c
-CLEANFILES += gitestoffsets.c
+CLEANFILES += gitestoffsets.c $(EXTRA_PROGRAMS)
 
 ############################################################
 
-check-local: Offsets-1.0.typelib
-	GI_TYPELIB_PATH=:$(top_builddir) ./gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected
-	diff -u offsets.compiled offsets.introspected
+# The trailing "echo" in TESTS_ENVIRONMENT is used to ignore automake passing
+# gitestoffsets as we already run this in the same command line.
+TESTS = gitestoffsets
+TESTS_ENVIRONMENT = \
+	GI_TYPELIB_PATH=:$(top_builddir) ./gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected && \
+	diff -u offsets.compiled offsets.introspected && echo
 
 CLEANFILES += offsets.compiled offsets.introspected
