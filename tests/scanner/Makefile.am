@@ -192,7 +192,9 @@ else
 CHECKDOCS =
 endif
 
-PYTESTS = test_sourcescanner.py
+PYTESTS = \
+	test_sourcescanner.py \
+	test_transformer.py
 
 XFAIL_TESTS = Typedefs-1.0.gir
 TESTS = Headeronly-1.0.gir $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS) $(PYTESTS)
