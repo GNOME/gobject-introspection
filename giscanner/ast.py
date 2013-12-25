@@ -859,7 +859,8 @@ class Compound(Node, Registered):
                  gtype_name=None,
                  get_type=None,
                  c_symbol_prefix=None,
-                 disguised=False):
+                 disguised=False,
+                 tag_name=None):
         Node.__init__(self, name)
         Registered.__init__(self, gtype_name, get_type)
         self.ctype = ctype
@@ -871,6 +872,7 @@ class Compound(Node, Registered):
         self.gtype_name = gtype_name
         self.get_type = get_type
         self.c_symbol_prefix = c_symbol_prefix
+        self.tag_name = tag_name
 
     def add_gtype(self, gtype_name, get_type):
         self.gtype_name = gtype_name
@@ -930,13 +932,15 @@ class Record(Compound):
                  gtype_name=None,
                  get_type=None,
                  c_symbol_prefix=None,
-                 disguised=False):
+                 disguised=False,
+                 tag_name=None):
         Compound.__init__(self, name,
                           ctype=ctype,
                           gtype_name=gtype_name,
                           get_type=get_type,
                           c_symbol_prefix=c_symbol_prefix,
-                          disguised=disguised)
+                          disguised=disguised,
+                          tag_name=tag_name)
         # If non-None, this record defines the FooClass C structure
         # for some Foo GObject (or similar for GInterface)
         self.is_gtype_struct_for = None
@@ -949,13 +953,15 @@ class Union(Compound):
                  gtype_name=None,
                  get_type=None,
                  c_symbol_prefix=None,
-                 disguised=False):
+                 disguised=False,
+                 tag_name=None):
         Compound.__init__(self, name,
                           ctype=ctype,
                           gtype_name=gtype_name,
                           get_type=get_type,
                           c_symbol_prefix=c_symbol_prefix,
-                          disguised=disguised)
+                          disguised=disguised,
+                          tag_name=tag_name)
 
 
 class Boxed(Node, Registered):

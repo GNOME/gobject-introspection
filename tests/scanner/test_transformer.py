@@ -70,7 +70,6 @@ class TestStructTypedefs(unittest.TestCase):
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
 
-    @unittest.expectedFailure
     def test_typedef_after(self):
         load_namespace_from_source_string(self.namespace, """
             struct _TestStruct {
@@ -85,7 +84,6 @@ class TestStructTypedefs(unittest.TestCase):
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
 
-    @unittest.expectedFailure
     def test_tag_and_typedef(self):
         load_namespace_from_source_string(self.namespace, """
             typedef struct _TestStruct {
@@ -163,7 +161,6 @@ class TestStructTypedefs(unittest.TestCase):
         self.assertEqual(len(shared.fields), 0)
         self.assertEqual(shared.ctype, 'TestStructAlias')
 
-    @unittest.expectedFailure
     def test_struct_tag_aliases_after(self):
         load_namespace_from_source_string(self.namespace, """
             struct _TestStruct {

@@ -59,6 +59,11 @@ class Transformer(object):
         self._includepaths = []
         self._passthrough_mode = False
 
+        # Cache a list of struct/unions in C's "tag namespace". This helps
+        # manage various orderings of typedefs and structs. See:
+        # https://bugzilla.gnome.org/show_bug.cgi?id=581525
+        self._tag_ns = {}
+
     def get_pkgconfig_packages(self):
         return self._pkg_config_packages
 
@@ -76,6 +81,12 @@ class Transformer(object):
         # modules will just depend on that.
         if isinstance(original, ast.Constant) and isinstance(node, ast.Constant):
             pass
+        elif original is node:
+            # Ignore attempts to add the same node to the namespace. This can
+            # happen when parsing typedefs and structs in particular orderings:
+            #   typedef struct _Foo Foo;
+            #   struct _Foo {...};
+            pass
         elif original:
             positions = set()
             positions.update(original.file_positions)
@@ -92,8 +103,11 @@ class Transformer(object):
             if symbol.ident in ['gst_g_error_get_type']:
                 continue
             node = self._traverse_one(symbol)
-            if node:
+            if node and node.name:
                 self._append_new_node(node)
+            if isinstance(node, ast.Compound) and node.tag_name and \
+                    node.tag_name not in self._tag_ns:
+                self._tag_ns[node.tag_name] = node
 
         # Now look through the namespace for things like
         # typedef struct _Foo Foo;
@@ -113,6 +127,18 @@ class Transformer(object):
             elif isinstance(ns_compound, (ast.Record, ast.Union)) and len(ns_compound.fields) == 0:
                 ns_compound.fields = compound.fields
         self._typedefs_ns = None
+
+        # Run through the tag namespace looking for structs that have not been
+        # promoted into the main namespace. In this case we simply promote them
+        # with their struct tag.
+        for tag_name, struct in self._tag_ns.iteritems():
+            if not struct.name:
+                try:
+                    name = self.strip_identifier(tag_name)
+                    struct.name = name
+                    self._append_new_node(struct)
+                except TransformerException as e:
+                    message.warn_node(node, e)
 
     def set_include_paths(self, paths):
         self._includepaths = list(paths)
@@ -323,7 +349,7 @@ raise ValueError."""
         elif stype == CSYMBOL_TYPE_TYPEDEF:
             return self._create_typedef(symbol)
         elif stype == CSYMBOL_TYPE_STRUCT:
-            return self._create_struct(symbol)
+            return self._create_tag_ns_struct(symbol)
         elif stype == CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
         elif stype == CSYMBOL_TYPE_MEMBER:
@@ -748,11 +774,75 @@ raise ValueError."""
         except TransformerException as e:
             message.warn_symbol(symbol, e)
             return None
-        struct = ast.Record(name, symbol.ident, disguised=disguised)
+
+        assert symbol.base_type
+        if symbol.base_type.name:
+            tag_name = symbol.base_type.name
+        else:
+            tag_name = None
+
+        # If the struct already exists in the tag namespace, use it.
+        if tag_name in self._tag_ns:
+            struct = self._tag_ns[tag_name]
+            if struct.name:
+                # If the struct name is set it means the struct has already been
+                # promoted from the tag namespace to the main namespace by a
+                # prior typedef struct. If we get here it means this is another
+                # typedef of that struct. Instead of creating an alias to the
+                # primary typedef that has been promoted, we create a new Record
+                # which is forced as a disguised struct. This handles the case
+                # where we want to give GInitiallyUnowned its own Record:
+                #    typedef struct _GObject GObject;
+                #    typedef struct _GObject GInitiallyUnowned;
+                # GInitiallyUnowned is also special cased in gdumpparser.py to
+                # copy fields which may eventually be avoided by doing it here
+                # generically.
+                struct = ast.Record(name, symbol.ident, disguised=True, tag_name=tag_name)
+            else:
+                # If the struct does not have its name set, it exists only in
+                # the tag namespace. Set it here and return it which will
+                # promote it to the main namespace. Essentially the first
+                # typedef for a struct clobbers its name and ctype which is what
+                # will be visible to GI.
+                struct.name = name
+                struct.ctype = symbol.ident
+        else:
+            # Create a new struct with a typedef name and tag name when available.
+            # Structs with a typedef name are promoted into the main namespace
+            # by it being returned to the "parse" function and are also added to
+            # the tag namespace if it has a tag_name set.
+            struct = ast.Record(name, symbol.ident, disguised=disguised, tag_name=tag_name)
+            if tag_name:
+                # Force the struct as disguised for now since we do not yet know
+                # if it has fields that will be parsed. Note that this is using
+                # an erroneous definition of disguised and we should eventually
+                # only look at the field count when needed.
+                struct.disguised = True
+            else:
+                # Case where we have an anonymous struct which is typedef'd:
+                #   typedef struct {...} Struct;
+                # we need to parse the fields because we never get a struct
+                # in the tag namespace which is normally where fields are parsed.
+                self._parse_fields(symbol, struct)
+
+        struct.add_symbol_reference(symbol)
+        return struct
+
+    def _create_tag_ns_struct(self, symbol):
+        # Get or create a struct from C's tag namespace
+        if symbol.ident in self._tag_ns:
+            struct = self._tag_ns[symbol.ident]
+        else:
+            struct = ast.Record(None, symbol.ident, tag_name=symbol.ident)
+
+        # Make sure disguised is False as we are now about to parse the
+        # fields of the real struct.
+        struct.disguised = False
+        # Fields may need to be parsed in either of the above cases because the
+        # Record can be created with a typedef prior to the struct definition.
         self._parse_fields(symbol, struct)
         struct.add_symbol_reference(symbol)
-        self._typedefs_ns[symbol.ident] = struct
-        return None
+        return struct
 
     def _create_typedef_union(self, symbol):
         try:
