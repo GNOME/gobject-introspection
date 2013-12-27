@@ -236,5 +236,112 @@ class TestStructTypedefs(unittest.TestCase):
         self.assertEqual(ptr.ctype, 'TestStructPtr')
 
 
+class TestNestedStructs(unittest.TestCase):
+    def setUp(self):
+        # Hack to set logging singleton
+        self.namespace = ast.Namespace('Test', '1.0')
+        logger = MessageLogger.get(namespace=self.namespace)
+        logger.enable_warnings((WARNING, ERROR, FATAL))
+
+    def test_nested_named(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+                int value;
+            } TestSimpleStruct;
+
+            typedef struct {
+                TestSimpleStruct nested_struct;
+            } TestStructWithNested;
+            """)
+        self.assertEqual(len(self.namespace.names), 2)
+        node = self.namespace.get('StructWithNested')
+        self.assertEqual(len(node.fields), 1)
+
+        simple = self.namespace.get('SimpleStruct')
+        self.assertTrue(node is not None)
+
+        field = node.fields[0]
+        self.assertTrue(field is not None)
+        self.assertTrue(isinstance(field, ast.Field))
+        self.assertEqual(field.type, simple)
+        self.assertEqual(field.name, 'nested_struct')
+
+    def test_nested_anonymous(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+                struct {
+                    int value;
+                };
+            } TestStructWithNestedAnon;
+            """)
+        self.assertEqual(len(self.namespace.names), 1)
+        node = self.namespace.get('StructWithNestedAnon')
+        self.assertEqual(len(node.fields), 1)
+
+        field = node.fields[0]
+        self.assertTrue(field is not None)
+        self.assertTrue(isinstance(field, ast.Field))
+        self.assertEqual(field.name, None)
+
+        anon = field.anonymous_node
+        self.assertTrue(isinstance(anon, ast.Record))
+        self.assertEqual(len(anon.fields), 1)
+
+        anon_field = anon.fields[0]
+        self.assertTrue(anon_field is not None)
+        self.assertTrue(isinstance(anon_field, ast.Field))
+        self.assertEqual(anon_field.name, 'value')
+
+    def test_nested(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+                struct {
+                    int value;
+                } nested;
+            } TestStructWithNested;
+            """)
+        self.assertEqual(len(self.namespace.names), 1)
+        node = self.namespace.get('StructWithNested')
+        self.assertEqual(len(node.fields), 1)
+
+        field = node.fields[0]
+        self.assertTrue(field is not None)
+        self.assertTrue(isinstance(field, ast.Field))
+        self.assertEqual(field.name, 'nested')
+
+        nested = field.anonymous_node
+        self.assertTrue(isinstance(nested, ast.Record))
+        self.assertEqual(len(nested.fields), 1)
+        self.assertEqual(nested.name, 'nested')
+
+        nested_field = nested.fields[0]
+        self.assertTrue(nested_field is not None)
+        self.assertTrue(isinstance(nested_field, ast.Field))
+        self.assertEqual(nested_field.name, 'value')
+
+    def test_struct_ptr(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+                int value;
+            } TestSimpleStruct;
+
+            typedef struct {
+                TestSimpleStruct *struct_ptr;
+            } TestStructWithNestedPtr;
+            """)
+        self.assertEqual(len(self.namespace.names), 2)
+        node = self.namespace.get('StructWithNestedPtr')
+        self.assertEqual(len(node.fields), 1)
+
+        simple = self.namespace.get('SimpleStruct')
+        self.assertTrue(node is not None)
+
+        field = node.fields[0]
+        self.assertTrue(field is not None)
+        self.assertTrue(isinstance(field, ast.Field))
+        self.assertEqual(field.type.ctype, 'TestSimpleStruct*')
+        self.assertEqual(field.name, 'struct_ptr')
+
+
 if __name__ == '__main__':
     unittest.main()
