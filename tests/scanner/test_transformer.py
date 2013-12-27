@@ -343,5 +343,90 @@ class TestNestedStructs(unittest.TestCase):
         self.assertEqual(field.name, 'struct_ptr')
 
 
+class TestUnions(unittest.TestCase):
+    def setUp(self):
+        # Hack to set logging singleton
+        self.namespace = ast.Namespace('Test', '1.0')
+        logger = MessageLogger.get(namespace=self.namespace)
+        logger.enable_warnings((WARNING, ERROR, FATAL))
+
+    def test_union_with_struct(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+                int value;
+            } TestSimpleStruct;
+
+            typedef union {
+                TestSimpleStruct nested_struct;
+                int value;
+            } TestUnionWithNested;
+            """)
+        self.assertEqual(len(self.namespace.names), 2)
+        node = self.namespace.get('UnionWithNested')
+        self.assertEqual(len(node.fields), 2)
+
+        simple = self.namespace.get('SimpleStruct')
+        self.assertTrue(node is not None)
+
+        field = node.fields[0]
+        self.assertEqual(field.type, simple)
+        self.assertEqual(field.name, 'nested_struct')
+
+        field = node.fields[1]
+        self.assertEqual(field.type.ctype, 'int')
+        self.assertEqual(field.name, 'value')
+
+    def test_nested(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+                union {
+                    int ival;
+                    float fval;
+                } nested;
+            } TestNestedUnion;
+            """)
+        self.assertEqual(len(self.namespace.names), 1)
+        node = self.namespace.get('NestedUnion')
+        self.assertEqual(len(node.fields), 1)
+
+        field = node.fields[0]
+        self.assertEqual(field.name, 'nested')
+
+        nested = field.anonymous_node
+        self.assertTrue(isinstance(nested, ast.Union))
+        self.assertEqual(nested.name, 'nested')
+        self.assertEqual(len(nested.fields), 2)
+
+        self.assertEqual(nested.fields[0].name, 'ival')
+        self.assertEqual(nested.fields[1].name, 'fval')
+
+    def test_nested_anonymous(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+                union {
+                    int ival;
+                    float fval;
+                };
+            } TestStructWithNestedUnion;
+            """)
+        self.assertEqual(len(self.namespace.names), 1)
+        node = self.namespace.get('StructWithNestedUnion')
+        self.assertEqual(len(node.fields), 1)
+
+        field = node.fields[0]
+        self.assertEqual(field.name, None)
+
+        nested = field.anonymous_node
+        self.assertTrue(isinstance(nested, ast.Union))
+        self.assertEqual(nested.name, None)
+        self.assertEqual(len(nested.fields), 2)
+
+        self.assertEqual(nested.fields[0].name, 'ival')
+        self.assertEqual(nested.fields[0].type.ctype, 'int')
+
+        self.assertEqual(nested.fields[1].name, 'fval')
+        self.assertEqual(nested.fields[1].type.ctype, 'float')
+
+
 if __name__ == '__main__':
     unittest.main()
