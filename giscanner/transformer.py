@@ -109,25 +109,6 @@ class Transformer(object):
                     node.tag_name not in self._tag_ns:
                 self._tag_ns[node.tag_name] = node
 
-        # Now look through the namespace for things like
-        # typedef struct _Foo Foo;
-        # where we've never seen the struct _Foo.  Just create
-        # an empty structure for these as "disguised"
-        # If we do have a class/interface, merge fields
-        for typedef, compound in self._typedefs_ns.iteritems():
-            ns_compound = self._namespace.get(compound.name)
-            if not ns_compound:
-                ns_compound = self._namespace.get('_' + compound.name)
-            if (not ns_compound and isinstance(compound, (ast.Record, ast.Union))
-            and len(compound.fields) == 0):
-                disguised = ast.Record(compound.name, typedef, disguised=True)
-                self._namespace.append(disguised)
-            elif not ns_compound:
-                self._namespace.append(compound)
-            elif isinstance(ns_compound, (ast.Record, ast.Union)) and len(ns_compound.fields) == 0:
-                ns_compound.fields = compound.fields
-        self._typedefs_ns = None
-
         # Run through the tag namespace looking for structs that have not been
         # promoted into the main namespace. In this case we simply promote them
         # with their struct tag.
@@ -854,7 +835,6 @@ raise ValueError."""
         callback = self._create_callback(symbol)
         if not callback:
             return None
-        self._typedefs_ns[callback.name] = callback
         return callback
 
     def _parse_fields(self, symbol, compound):
