@@ -428,5 +428,21 @@ class TestUnions(unittest.TestCase):
         self.assertEqual(nested.fields[1].type.ctype, 'float')
 
 
+class TestCallbacks(unittest.TestCase):
+    def setUp(self):
+        # Hack to set logging singleton
+        self.namespace = ast.Namespace('Test', '1.0')
+        logger = MessageLogger.get(namespace=self.namespace)
+        logger.enable_warnings((WARNING, ERROR, FATAL))
+
+    def test_union_with_struct(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef void (*TestCallback)(int value);
+            """)
+        self.assertEqual(len(self.namespace.names), 1)
+        node = self.namespace.get('Callback')
+        self.assertTrue(isinstance(node, ast.Callback))
+
+
 if __name__ == '__main__':
     unittest.main()
