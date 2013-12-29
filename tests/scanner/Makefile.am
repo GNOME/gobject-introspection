@@ -161,9 +161,23 @@ EXTRA_DIST += \
 	headeronly.h \
 	Headeronly-1.0-expected.gir
 CLEANFILES += Headeronly-1.0.gir
+CHECKGIRS += Headeronly-1.0.gir
 
 Headeronly-1.0.gir: headeronly.h
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate --namespace=Headeronly --nsversion=1.0 --header-only --output=$@ $<
+
+EXTRA_DIST += \
+	identfilter.h \
+	Identifilter-1.0-expected.gir
+CLEANFILES += Identfilter-1.0.gir
+CHECKGIRS += Identfilter-1.0.gir
+
+Identfilter-1.0.gir: identfilter.h
+	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
+		--warn-all --reparse-validate \
+		--namespace=Identfilter --accept-unprefixed --nsversion=1.0 --header-only \
+		--identifier-filter-cmd="$(PYTHON) $(srcdir)/identfilter.py" \
+		--output=$@ $<
 
 if BUILD_DOCTOOL
 DOCGIRS = Regress-1.0.gir
@@ -196,7 +210,7 @@ PYTESTS = \
 	test_sourcescanner.py \
 	test_transformer.py
 
-TESTS = Headeronly-1.0.gir $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS) $(PYTESTS)
+TESTS = $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS) $(PYTESTS)
 TESTS_ENVIRONMENT = srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddir) top_builddir=$(top_builddir) \
 	PYTHON=$(PYTHON) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir)
 LOG_COMPILER = $(top_srcdir)/tests/gi-tester

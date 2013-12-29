@@ -20,6 +20,7 @@
 
 import os
 import sys
+import subprocess
 
 from . import ast
 from . import message
@@ -49,7 +50,7 @@ if os.name != 'nt':
 class Transformer(object):
     namespace = property(lambda self: self._namespace)
 
-    def __init__(self, namespace, accept_unprefixed=False):
+    def __init__(self, namespace, accept_unprefixed=False, identifier_filter_cmd=''):
         self._cachestore = CacheStore()
         self._accept_unprefixed = accept_unprefixed
         self._namespace = namespace
@@ -58,6 +59,7 @@ class Transformer(object):
         self._parsed_includes = {}  # <string namespace -> Namespace>
         self._includepaths = []
         self._passthrough_mode = False
+        self._identifier_filter_cmd = identifier_filter_cmd
 
         # Cache a list of struct/unions in C's "tag namespace". This helps
         # manage various orderings of typedefs and structs. See:
@@ -293,6 +295,17 @@ raise ValueError."""
         return matches[-1]
 
     def strip_identifier(self, ident):
+        if self._identifier_filter_cmd:
+            proc = subprocess.Popen(self._identifier_filter_cmd,
+                                    stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                    shell=True)
+            ident, err = proc.communicate(ident)
+            if proc.returncode:
+                raise ValueError('filter: "%s" exited: %d with error: %s' %
+                                 (self._identifier_filter_cmd, proc.returncode, err))
+
         hidden = ident.startswith('_')
         if hidden:
             ident = ident[1:]

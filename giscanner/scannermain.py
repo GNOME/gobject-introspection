@@ -156,6 +156,11 @@ and --symbol-prefix.""")
                       help="""Remove this prefix from C identifiers (structure typedefs, etc.).
 May be specified multiple times.  This is also used as the default for --symbol-prefix if
 the latter is not specified.""")
+    parser.add_option("", "--identifier-filter-cmd",
+                      action="store", dest="identifier_filter_cmd", default='',
+                      help='Filter identifiers (struct and union typedefs) through the given '
+                           'shell command which will receive the identifier name as input '
+                           'to stdin and is expected to output the filtered results to stdout.')
     parser.add_option("", "--symbol-prefix",
                       action="append", dest="symbol_prefixes", default=[],
                       help="Remove this prefix from C symbols (function names)")
@@ -334,7 +339,8 @@ see --identifier-prefix and --symbol-prefix."""
 
 def create_transformer(namespace, options):
     transformer = Transformer(namespace,
-                              accept_unprefixed=options.accept_unprefixed)
+                              accept_unprefixed=options.accept_unprefixed,
+                              identifier_filter_cmd=options.identifier_filter_cmd)
     transformer.set_include_paths(options.include_paths)
     if options.passthrough_gir:
         transformer.disable_cache()

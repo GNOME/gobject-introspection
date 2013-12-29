@@ -36,6 +36,36 @@ def load_namespace_from_source_string(namespace, source):
     xformer.parse(ss.get_symbols())
 
 
+class TestIdentifierFilter(unittest.TestCase):
+    def test_underscore_t_sed_filter(self):
+        cmd = r"sed " \
+              r"-e 's/^test_t$/TestContext/' " \
+              r"-e 's/\(.*\)_t$/\1/' " \
+              r"-e 's/^test_/Test_/' " \
+              r"-e 's/_\([a-z]\)/\u\1/g'"
+
+        namespace = ast.Namespace('Test', '1.0')
+        xformer = Transformer(namespace, identifier_filter_cmd=cmd)
+
+        self.assertEqual(xformer.strip_identifier('test_t'), 'Context')
+        self.assertEqual(xformer.strip_identifier('test_foo_t'), 'Foo')
+        self.assertEqual(xformer.strip_identifier('test_foot'), 'Foot')
+        self.assertEqual(xformer.strip_identifier('test_foo_bart'), 'FooBart')
+        self.assertEqual(xformer.strip_identifier('test_foo_tart'), 'FooTart')
+
+    def test_invalid_command(self):
+        cmd = r'this-is-not-a-real-command'
+        namespace = ast.Namespace('Test', '1.0')
+        xformer = Transformer(namespace, identifier_filter_cmd=cmd)
+        self.assertRaises(ValueError, xformer.strip_identifier, 'test_t')
+
+    def test_invalid_argument(self):
+        cmd = r'sed --not-a-valid-argument'
+        namespace = ast.Namespace('Test', '1.0')
+        xformer = Transformer(namespace, identifier_filter_cmd=cmd)
+        self.assertRaises(ValueError, xformer.strip_identifier, 'test_t')
+
+
 class TestStructTypedefs(unittest.TestCase):
     def setUp(self):
         # Hack to set logging singleton
