@@ -102,7 +102,13 @@ class Transformer(object):
             # https://bugzilla.gnome.org/show_bug.cgi?id=550616
             if symbol.ident in ['gst_g_error_get_type']:
                 continue
-            node = self._traverse_one(symbol)
+
+            try:
+                node = self._traverse_one(symbol)
+            except TransformerException as e:
+                message.warn_symbol(symbol, e)
+                continue
+
             if node and node.name:
                 self._append_new_node(node)
             if isinstance(node, ast.Compound) and node.tag_name and \
@@ -383,21 +389,13 @@ raise ValueError."""
                 # Ok, the enum members don't have a consistent prefix
                 # among them, so let's just remove the global namespace
                 # prefix.
-                try:
-                    name = self._strip_symbol(child)
-                except TransformerException as e:
-                    message.warn_symbol(symbol, e)
-                    return None
+                name = self._strip_symbol(child)
             members.append(ast.Member(name.lower(),
                                       child.const_int,
                                       child.ident,
                                       None))
 
-        try:
-            enum_name = self.strip_identifier(symbol.ident)
-        except TransformerException as e:
-            message.warn_symbol(symbol, e)
-            return None
+        enum_name = self.strip_identifier(symbol.ident)
         if symbol.base_type.is_bitfield:
             klass = ast.Bitfield
         else:
@@ -412,11 +410,7 @@ raise ValueError."""
             return None
         parameters = list(self._create_parameters(symbol, symbol.base_type))
         return_ = self._create_return(symbol.base_type.base_type)
-        try:
-            name = self._strip_symbol(symbol)
-        except TransformerException as e:
-            message.warn_symbol(symbol, e)
-            return None
+        name = self._strip_symbol(symbol)
         func = ast.Function(name, return_, parameters, False, symbol.ident)
         func.add_symbol_reference(symbol)
         return func
@@ -578,11 +572,7 @@ raise ValueError."""
                        CTYPE_POINTER,
                        CTYPE_BASIC_TYPE,
                        CTYPE_VOID):
-            try:
-                name = self.strip_identifier(symbol.ident)
-            except TransformerException as e:
-                message.warn(e)
-                return None
+            name = self.strip_identifier(symbol.ident)
             if symbol.base_type.name:
                 complete_ctype = self._create_complete_source_type(symbol.base_type)
                 target = self.create_type_from_ctype_string(symbol.base_type.name,
@@ -705,11 +695,7 @@ raise ValueError."""
         # http://bugzilla.gnome.org/show_bug.cgi?id=572790
         if (symbol.source_filename is None or not symbol.source_filename.endswith('.h')):
             return None
-        try:
-            name = self._strip_symbol(symbol)
-        except TransformerException as e:
-            message.warn_symbol(symbol, e)
-            return None
+        name = self._strip_symbol(symbol)
         if symbol.const_string is not None:
             typeval = ast.TYPE_STRING
             value = unicode(symbol.const_string, 'utf-8')
@@ -750,12 +736,7 @@ raise ValueError."""
         return const
 
     def _create_typedef_compound(self, compound_class, symbol, disguised=False):
-        try:
-            name = self.strip_identifier(symbol.ident)
-        except TransformerException as e:
-            message.warn_symbol(symbol, e)
-            return None
-
+        name = self.strip_identifier(symbol.ident)
         assert symbol.base_type
         if symbol.base_type.name:
             tag_name = symbol.base_type.name
@@ -861,17 +842,9 @@ raise ValueError."""
         if member:
             name = symbol.ident
         elif symbol.ident.find('_') > 0:
-            try:
-                name = self._strip_symbol(symbol)
-            except TransformerException as e:
-                message.warn_symbol(symbol, e)
-                return None
+            name = self._strip_symbol(symbol)
         else:
-            try:
-                name = self.strip_identifier(symbol.ident)
-            except TransformerException as e:
-                message.warn(e)
-                return None
+            name = self.strip_identifier(symbol.ident)
         callback = ast.Callback(name, retval, parameters, False,
                                 ctype=symbol.ident)
         callback.add_symbol_reference(symbol)
