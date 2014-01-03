@@ -349,13 +349,13 @@ raise ValueError."""
         elif stype == CSYMBOL_TYPE_TYPEDEF:
             return self._create_typedef(symbol)
         elif stype == CSYMBOL_TYPE_STRUCT:
-            return self._create_tag_ns_struct(symbol)
+            return self._create_tag_ns_compound(ast.Record, symbol)
         elif stype == CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
         elif stype == CSYMBOL_TYPE_MEMBER:
             return self._create_member(symbol, parent_symbol)
         elif stype == CSYMBOL_TYPE_UNION:
-            return self._create_union(symbol)
+            return self._create_tag_ns_compound(ast.Union, symbol)
         elif stype == CSYMBOL_TYPE_CONST:
             return self._create_const(symbol)
         # Ignore variable declarations in the header
@@ -531,9 +531,9 @@ raise ValueError."""
         and symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol, member=True)
         elif source_type.type == CTYPE_STRUCT and source_type.name is None:
-            node = self._create_member_struct(symbol)
+            node = self._create_member_compound(ast.Record, symbol)
         elif source_type.type == CTYPE_UNION and source_type.name is None:
-            node = self._create_union(symbol, anonymous=True)
+            node = self._create_member_compound(ast.Union, symbol)
         else:
             # Special handling for fields; we don't have annotations on them
             # to apply later, yet.
@@ -586,11 +586,11 @@ raise ValueError."""
         if (ctype == CTYPE_POINTER and symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_typedef_callback(symbol)
         elif (ctype == CTYPE_POINTER and symbol.base_type.base_type.type == CTYPE_STRUCT):
-            node = self._create_typedef_struct(symbol, disguised=True)
+            node = self._create_typedef_compound(ast.Record, symbol, disguised=True)
         elif ctype == CTYPE_STRUCT:
-            node = self._create_typedef_struct(symbol)
+            node = self._create_typedef_compound(ast.Record, symbol)
         elif ctype == CTYPE_UNION:
-            node = self._create_typedef_union(symbol)
+            node = self._create_typedef_compound(ast.Union, symbol)
         elif ctype == CTYPE_ENUM:
             return self._create_enum(symbol)
         elif ctype in (CTYPE_TYPEDEF,
@@ -768,7 +768,7 @@ raise ValueError."""
         const.add_symbol_reference(symbol)
         return const
 
-    def _create_typedef_struct(self, symbol, disguised=False):
+    def _create_typedef_compound(self, compound_class, symbol, disguised=False):
         try:
             name = self.strip_identifier(symbol.ident)
         except TransformerException as e:
@@ -783,8 +783,8 @@ raise ValueError."""
 
         # If the struct already exists in the tag namespace, use it.
         if tag_name in self._tag_ns:
-            struct = self._tag_ns[tag_name]
-            if struct.name:
+            compound = self._tag_ns[tag_name]
+            if compound.name:
                 # If the struct name is set it means the struct has already been
                 # promoted from the tag namespace to the main namespace by a
                 # prior typedef struct. If we get here it means this is another
@@ -797,70 +797,58 @@ raise ValueError."""
                 # GInitiallyUnowned is also special cased in gdumpparser.py to
                 # copy fields which may eventually be avoided by doing it here
                 # generically.
-                struct = ast.Record(name, symbol.ident, disguised=True, tag_name=tag_name)
+                compound = compound_class(name, symbol.ident, disguised=True, tag_name=tag_name)
             else:
                 # If the struct does not have its name set, it exists only in
                 # the tag namespace. Set it here and return it which will
                 # promote it to the main namespace. Essentially the first
                 # typedef for a struct clobbers its name and ctype which is what
                 # will be visible to GI.
-                struct.name = name
-                struct.ctype = symbol.ident
+                compound.name = name
+                compound.ctype = symbol.ident
         else:
             # Create a new struct with a typedef name and tag name when available.
             # Structs with a typedef name are promoted into the main namespace
             # by it being returned to the "parse" function and are also added to
             # the tag namespace if it has a tag_name set.
-            struct = ast.Record(name, symbol.ident, disguised=disguised, tag_name=tag_name)
+            compound = compound_class(name, symbol.ident, disguised=disguised, tag_name=tag_name)
             if tag_name:
                 # Force the struct as disguised for now since we do not yet know
                 # if it has fields that will be parsed. Note that this is using
                 # an erroneous definition of disguised and we should eventually
                 # only look at the field count when needed.
-                struct.disguised = True
+                compound.disguised = True
             else:
                 # Case where we have an anonymous struct which is typedef'd:
                 #   typedef struct {...} Struct;
                 # we need to parse the fields because we never get a struct
                 # in the tag namespace which is normally where fields are parsed.
-                self._parse_fields(symbol, struct)
+                self._parse_fields(symbol, compound)
 
-        struct.add_symbol_reference(symbol)
-        return struct
+        compound.add_symbol_reference(symbol)
+        return compound
 
-    def _create_tag_ns_struct(self, symbol):
+    def _create_tag_ns_compound(self, compound_class, symbol):
         # Get or create a struct from C's tag namespace
         if symbol.ident in self._tag_ns:
-            struct = self._tag_ns[symbol.ident]
+            compound = self._tag_ns[symbol.ident]
         else:
-            struct = ast.Record(None, symbol.ident, tag_name=symbol.ident)
+            compound = compound_class(None, symbol.ident, tag_name=symbol.ident)
 
         # Make sure disguised is False as we are now about to parse the
         # fields of the real struct.
-        struct.disguised = False
+        compound.disguised = False
         # Fields may need to be parsed in either of the above cases because the
         # Record can be created with a typedef prior to the struct definition.
-        self._parse_fields(symbol, struct)
-        struct.add_symbol_reference(symbol)
-        return struct
+        self._parse_fields(symbol, compound)
+        compound.add_symbol_reference(symbol)
+        return compound
 
-    def _create_member_struct(self, symbol):
-        struct = ast.Record(symbol.ident, symbol.ident)
-        self._parse_fields(symbol, struct)
-        struct.add_symbol_reference(symbol)
-        return struct
-
-    def _create_typedef_union(self, symbol):
-        try:
-            name = self.strip_identifier(symbol.ident)
-        except TransformerException as e:
-            message.warn(e)
-            return None
-        union = ast.Union(name, symbol.ident)
-        self._parse_fields(symbol, union)
-        union.add_symbol_reference(symbol)
-        self._typedefs_ns[symbol.ident] = union
-        return None
+    def _create_member_compound(self, compound_class, symbol):
+        compound = compound_class(symbol.ident, symbol.ident)
+        self._parse_fields(symbol, compound)
+        compound.add_symbol_reference(symbol)
+        return compound
 
     def _create_typedef_callback(self, symbol):
         callback = self._create_callback(symbol)
@@ -880,38 +868,6 @@ raise ValueError."""
                 field = ast.Field(child.ident, None, True, False,
                               anonymous_node=child_node)
             compound.fields.append(field)
-
-    def _create_compound(self, klass, symbol, anonymous):
-        if symbol.ident is None:
-            # the compound is an anonymous member of another union or a struct
-            assert anonymous
-            compound = klass(None, None)
-        else:
-            compound = self._typedefs_ns.get(symbol.ident, None)
-
-        if compound is None:
-            # This is a bit of a hack; really we should try
-            # to resolve through the typedefs to find the real
-            # name
-            if symbol.ident.startswith('_'):
-                compound = self._typedefs_ns.get(symbol.ident[1:], None)
-            if compound is None:
-                if anonymous:
-                    name = symbol.ident
-                else:
-                    try:
-                        name = self.strip_identifier(symbol.ident)
-                    except TransformerException as e:
-                        message.warn(e)
-                        return None
-                compound = klass(name, symbol.ident)
-
-        self._parse_fields(symbol, compound)
-        compound.add_symbol_reference(symbol)
-        return compound
-
-    def _create_union(self, symbol, anonymous=False):
-        return self._create_compound(ast.Union, symbol, anonymous)
 
     def _create_callback(self, symbol, member=False):
         parameters = list(self._create_parameters(symbol, symbol.base_type.base_type))
