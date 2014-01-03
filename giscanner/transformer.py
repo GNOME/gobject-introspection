@@ -531,7 +531,7 @@ raise ValueError."""
         and symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol, member=True)
         elif source_type.type == CTYPE_STRUCT and source_type.name is None:
-            node = self._create_struct(symbol, anonymous=True)
+            node = self._create_member_struct(symbol)
         elif source_type.type == CTYPE_UNION and source_type.name is None:
             node = self._create_union(symbol, anonymous=True)
         else:
@@ -844,6 +844,12 @@ raise ValueError."""
         struct.add_symbol_reference(symbol)
         return struct
 
+    def _create_member_struct(self, symbol):
+        struct = ast.Record(symbol.ident, symbol.ident)
+        self._parse_fields(symbol, struct)
+        struct.add_symbol_reference(symbol)
+        return struct
+
     def _create_typedef_union(self, symbol):
         try:
             name = self.strip_identifier(symbol.ident)
@@ -903,9 +909,6 @@ raise ValueError."""
         self._parse_fields(symbol, compound)
         compound.add_symbol_reference(symbol)
         return compound
-
-    def _create_struct(self, symbol, anonymous=False):
-        return self._create_compound(ast.Record, symbol, anonymous)
 
     def _create_union(self, symbol, anonymous=False):
         return self._create_compound(ast.Union, symbol, anonymous)
