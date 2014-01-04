@@ -199,8 +199,8 @@ PYTESTS = \
 XFAIL_TESTS = Typedefs-1.0.gir
 TESTS = Headeronly-1.0.gir $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS) $(PYTESTS)
 TESTS_ENVIRONMENT = srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddir) top_builddir=$(top_builddir) \
-	PYTHON=$(PYTHON) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
-	$(top_srcdir)/tests/gi-tester
+	PYTHON=$(PYTHON) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir)
+LOG_COMPILER = $(top_srcdir)/tests/gi-tester
 
 EXTRA_DIST += \
 	$(PYTESTS) \

@@ -47,7 +47,7 @@ case $targetname in
     fi
     ;;
 *)
-    echo $"Usage: [TESTARGS=<args>] gi-tester <targetname>"
+    echo $"Usage: [TESTARGS=<args>] gi-tester <targetname>" $1
     exit 1
     ;;
 esac

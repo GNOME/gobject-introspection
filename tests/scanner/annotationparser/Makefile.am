@@ -5,8 +5,8 @@ TESTS = \
 	test_patterns.py
 
 TESTS_ENVIRONMENT = builddir=$(builddir) top_builddir=$(top_builddir) srcdir=$(srcdir) top_srcdir=$(top_srcdir) \
-	PYTHON=$(PYTHON) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
-	$(top_srcdir)/tests/gi-tester
+	PYTHON=$(PYTHON) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir)
+LOG_COMPILER = $(top_srcdir)/tests/gi-tester
 
 EXTRA_DIST = \
 	$(TESTS)				\
