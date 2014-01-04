@@ -326,17 +326,6 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         self._introspect_signals(node, xmlnode)
         self._introspect_implemented_interfaces(node, xmlnode)
         self._add_record_fields(node)
-
-        if node.name == 'InitiallyUnowned':
-            # http://bugzilla.gnome.org/show_bug.cgi?id=569408
-            # GInitiallyUnowned is actually a typedef for GObject, but
-            # that's not reflected in the GIR, where it appears as a
-            # subclass (as it appears in the GType hierarchy).  So
-            # what we do here is copy all of the GObject fields into
-            # GInitiallyUnowned so that struct offset computation
-            # works correctly.
-            node.fields = self._namespace.get('Object').fields
-
         self._namespace.append(node, replace=True)
 
     def _introspect_interface(self, xmlnode):

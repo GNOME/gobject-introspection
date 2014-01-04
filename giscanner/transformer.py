@@ -752,14 +752,15 @@ raise ValueError."""
                 # prior typedef struct. If we get here it means this is another
                 # typedef of that struct. Instead of creating an alias to the
                 # primary typedef that has been promoted, we create a new Record
-                # which is forced as a disguised struct. This handles the case
-                # where we want to give GInitiallyUnowned its own Record:
+                # with shared fields. This handles the case where we want to
+                # give structs like GInitiallyUnowned its own Record:
                 #    typedef struct _GObject GObject;
                 #    typedef struct _GObject GInitiallyUnowned;
-                # GInitiallyUnowned is also special cased in gdumpparser.py to
-                # copy fields which may eventually be avoided by doing it here
-                # generically.
-                compound = compound_class(name, symbol.ident, disguised=True, tag_name=tag_name)
+                # See: http://bugzilla.gnome.org/show_bug.cgi?id=569408
+                new_compound = compound_class(name, symbol.ident, tag_name=tag_name)
+                new_compound.fields = compound.fields
+                new_compound.add_symbol_reference(symbol)
+                return new_compound
             else:
                 # If the struct does not have its name set, it exists only in
                 # the tag namespace. Set it here and return it which will

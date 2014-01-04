@@ -157,8 +157,8 @@ class TestStructTypedefs(unittest.TestCase):
         shared = self.namespace.get('StructAlias')
         self.assertTrue(shared is not None)
         self.assertTrue(isinstance(shared, ast.Record))
-        self.assertTrue(shared.disguised)
-        self.assertEqual(len(shared.fields), 0)
+        self.assertFalse(shared.disguised)
+        self.assertEqual(len(shared.fields), 1)
         self.assertEqual(shared.ctype, 'TestStructAlias')
 
     def test_struct_tag_aliases_after(self):
@@ -181,8 +181,8 @@ class TestStructTypedefs(unittest.TestCase):
         shared = self.namespace.get('StructAlias')
         self.assertTrue(shared is not None)
         self.assertTrue(isinstance(shared, ast.Record))
-        self.assertTrue(shared.disguised)
-        self.assertEqual(len(shared.fields), 0)
+        self.assertFalse(shared.disguised)
+        self.assertEqual(len(shared.fields), 1)
         self.assertEqual(shared.ctype, 'TestStructAlias')
 
     def test_struct_pointer(self):
