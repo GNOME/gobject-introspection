@@ -34111,7 +34111,7 @@
 /**
  * g_subprocess_launcher_set_environ:
  * @self: a #GSubprocess
- * @environ: the replacement environment
+ * @env: the replacement environment
  *
  * Replace the entire environment of processes launched from this
  * launcher with the given 'environ' variable.

@@ -29203,7 +29203,8 @@
  * g_test_run_suite() or g_test_run() may only be called once
  * in a program.
  *
- * Returns: 0 on success
+ * Returns: 0 on success, 1 on failure (assuming it returns at all),
+ *   77 if all tests were skipped with g_test_skip().
  * Since: 2.16
  */
 
@@ -34491,6 +34492,46 @@
  * produced by g_variant_print()".
  *
  * Returns: a reference to a #GVariant, or %NULL
+ */
+
+
+/**
+ * g_variant_parse_error_print_context:
+ * @error: a #GError from the #GVariantParseError domain
+ * @source_str: the string that was given to the parser
+ *
+ * Pretty-prints a message showing the context of a #GVariant parse
+ * error within the string for which parsing was attempted.
+ *
+ * The resulting string is suitable for output to the console or other
+ * monospace media where newlines are treated in the usual way.
+ *
+ * The message will typically look something like one of the following:
+ *
+ * |[
+ * unterminated string constant:
+ *   (1, 2, 3, 'abc
+ *             ^^^^
+ * ]|
+ *
+ * or
+ *
+ * |[
+ * unable to find a common type:
+ *   [1, 2, 3, 'str']
+ *    ^        ^^^^^
+ * ]|
+ *
+ * The format of the message may change in a future version.
+ *
+ * @error must have come from a failed attempt to g_variant_parse() and
+ * @source_str must be exactly the same string that caused the error.
+ * If @source_str was not nul-terminated when you passed it to
+ * g_variant_parse() then you must add nul termination before using this
+ * function.
+ *
+ * Returns: (transfer full): the printed message
+ * Since: 2.40
  */
 
 
