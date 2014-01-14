@@ -3834,6 +3834,7 @@ regress_test_torture_signature_2 (int                   x,
   *y = x;
   *z = x * 2;
   *q = g_utf8_strlen (foo, -1) + m;
+  callback(user_data);
   notify (user_data);
 }
 
