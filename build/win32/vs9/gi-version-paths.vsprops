@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="giversionpaths"
+	>
+	<UserMacro
+		Name="VSVER"
+		Value="9"
+	/>
+	<UserMacro
+		Name="GlibEtcInstallRoot"
+		Value="$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(PlatformName)"
+	/>
+	<UserMacro
+		Name="BASE_GI_DIR"
+		Value="$(SolutionDir)\..\..\.."
+	/>
+	<UserMacro
+		Name="CopyDir"
+		Value="$(GlibEtcInstallRoot)"
+	/>
+	<UserMacro
+		Name="ApiVersion"
+		Value="1.0"
+	/>
+	<UserMacro
+		Name="DefDir"
+		Value="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj\$(ProjectName)"
+	/>
+	<UserMacro
+		Name="LibGILibtoolCompatibleDllPrefix"
+		Value="lib"
+	/>
+	<UserMacro
+		Name="LibGILibtoolCompatibleDllSuffix"
+		Value="-$(ApiVersion)-0"
+	/>
+	<UserMacro
+		Name="LibGISeparateVSDllPrefix"
+		Value=""
+	/>
+	<UserMacro
+		Name="LibGISeparateVSDllSuffix"
+		Value="-1-vs$(VSVer)"
+	/>
+	<!-- Change these two to LibGILibtoolCompatibleDllPrefix and
+	LibGILibtoolCompatibleDllSuffix if that is what you want -->
+	<UserMacro
+		Name="LibGIDllPrefix"
+		Value="$(LibGISeparateVSDllPrefix)"
+	/>
+	<UserMacro
+		Name="LibGIDllSuffix"
+		Value="$(LibGISeparateVSDllSuffix)"
+	/>
+</VisualStudioPropertySheet>

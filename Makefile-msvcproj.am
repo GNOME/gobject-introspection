@@ -110,11 +110,11 @@
 # and Python scripts to install
 #--------------------------------
 ./build/win32/vs9/gir.vs9.install:
-	echo 'mkdir $$(CopyDir)\include\gobject-introspection-$$(GIApiVersion)\girepository&#x0D;&#x0A;' >./build/win32/vs9/gir.vs9.install
+	echo 'mkdir $$(CopyDir)\include\gobject-introspection-$$(ApiVersion)\girepository&#x0D;&#x0A;' >./build/win32/vs9/gir.vs9.install
 	echo '' >>./build/win32/vs9/gir.vs9.install
 	for F in `echo $(girepo_HEADERS) | tr '/' '\\\\'`; do \
 		case $$F in \
-		*.h) echo 'copy ..\..\..\'$$F' $$(CopyDir)\include\gobject-introspection-$$(GIApiVersion)\girepository&#x0D;&#x0A;' \
+		*.h) echo 'copy ..\..\..\'$$F' $$(CopyDir)\include\gobject-introspection-$$(ApiVersion)\girepository&#x0D;&#x0A;' \
 			;; \
 		esac; \
 	done >>./build/win32/vs9/gir.vs9.install
@@ -144,11 +144,11 @@
 	done >>./build/win32/vs9/gir.vs9.install
 
 ./build/win32/vs10/gir.vs10.install:
-	echo 'mkdir $$(CopyDir)\include\gobject-introspection-$$(GIApiVersion)\girepository' >./build/win32/vs10/gir.vs10.install
+	echo 'mkdir $$(CopyDir)\include\gobject-introspection-$$(ApiVersion)\girepository' >./build/win32/vs10/gir.vs10.install
 	echo '' >>./build/win32/vs10/gir.vs10.install
 	for F in `echo $(girepo_HEADERS) | tr '/' '\\\\'`; do \
 		case $$F in \
-		*.h) echo 'copy ..\..\..\'$$F' $$(CopyDir)\include\gobject-introspection-$$(GIApiVersion)\girepository' && \
+		*.h) echo 'copy ..\..\..\'$$F' $$(CopyDir)\include\gobject-introspection-$$(ApiVersion)\girepository' && \
 			echo '' \
 			;; \
 		esac; \
@@ -178,8 +178,8 @@
 		esac; \
 	done >>./build/win32/vs10/gir.vs10.install
 
-./build/win32/vs9/gir.vsprops: ./build/win32/vs9/gir.vs9.install $(top_srcdir)/build/win32/vs9/gir.vspropsin
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gir.vspropsin >$@
+./build/win32/vs9/gi-install.vsprops: ./build/win32/vs9/gir.vs9.install $(top_srcdir)/build/win32/vs9/gi-install.vspropsin
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gi-install.vspropsin >$@
 	rm ./build/win32/vs9/gir.vs9.install
 
 ./build/win32/vs10/gir.props: ./build/win32/vs10/gir.vs10.install $(top_srcdir)/build/win32/vs10/gir.propsin

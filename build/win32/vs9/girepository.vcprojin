@@ -22,17 +22,14 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets=".\gir.vsprops"
+			InheritedPropertySheets=".\gi-gen-srcs.vsprops"
 			CharacterSet="2"
 			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\girepository"
-				PreprocessorDefinitions="_DEBUG;G_IREPOSITORY_COMPILATION;FFI_BUILDING;DLL_EXPORT"
+				PreprocessorDefinitions="_DEBUG;$(GIRepositoryBuildDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -41,16 +38,6 @@
 				DebugInformationFormat="4"
 			/>
 			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				CommandLine="$(GenerateGIRDef)"
-			/>
-			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="libffi.lib"
 				OutputFile="$(OutDir)\$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll"
@@ -58,41 +45,28 @@
 				ModuleDefinitionFile="$(IntDir)\girepository.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-$(GIApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
 				TargetMachine="1"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets=".\gir.vsprops"
+			InheritedPropertySheets=".\gi-gen-srcs.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="..\..\..\girepository"
-				PreprocessorDefinitions="G_IREPOSITORY_COMPILATION;FFI_BUILDING;DLL_EXPORT"
+				PreprocessorDefinitions="$(GIRepositoryBuildDefines)"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				CommandLine="$(GenerateGIRDef)"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -104,19 +78,16 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-$(GIApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
 				TargetMachine="1"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets=".\gir.vsprops"
+			InheritedPropertySheets=".\gi-gen-srcs.vsprops"
 			CharacterSet="2"
 			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
 			<Tool
 				Name="VCMIDLTool"
 				TargetEnvironment="3"
@@ -125,23 +96,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\girepository"
-				PreprocessorDefinitions="_DEBUG;G_IREPOSITORY_COMPILATION;FFI_BUILDING;DLL_EXPORT"
+				PreprocessorDefinitions="_DEBUG;$(GIRepositoryBuildDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				CommandLine="$(GenerateGIRDef)"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -151,20 +112,17 @@
 				ModuleDefinitionFile="$(IntDir)\girepository.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-$(GIApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
 				TargetMachine="17"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets=".\gir.vsprops"
+			InheritedPropertySheets=".\gi-gen-srcs.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
 			<Tool
 				Name="VCMIDLTool"
 				TargetEnvironment="3"
@@ -174,22 +132,12 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="..\..\..\girepository"
-				PreprocessorDefinitions="G_IREPOSITORY_COMPILATION;FFI_BUILDING;DLL_EXPORT"
+				PreprocessorDefinitions="$(GIRepositoryBuildDefines)"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				CommandLine="$(GenerateGIRDef)"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -201,7 +149,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-$(GIApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
 				TargetMachine="17"
 			/>
 		</Configuration>
@@ -226,7 +174,40 @@
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
+			>			<File RelativePath="..\..\..\girepository\girepository.symbols">
+				<FileConfiguration Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating $(DefDir)\girepository.def..."
+						CommandLine="$(GenerateGIRDef)"
+						Outputs="$(DefDir)\girepository.def"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating $(DefDir)\girepository.def..."
+						CommandLine="$(GenerateGIRDef)"
+						Outputs="$(DefDir)\girepository.def"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug|x64">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating $(DefDir)\girepository.def..."
+						CommandLine="$(GenerateGIRDef)"
+						Outputs="$(DefDir)\girepository.def"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|x64">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating $(DefDir)\girepository.def..."
+						CommandLine="$(GenerateGIRDef)"
+						Outputs="$(DefDir)\girepository.def"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

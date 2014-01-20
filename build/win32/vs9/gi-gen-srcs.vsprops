@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gigensrcsprops"
+	InheritedPropertySheets=".\gi-extra-paths.vsprops"
+	>
+	<UserMacro
+		Name="CopyConfigH"
+		Value="
+copy ..\..\..\config.h.win32 ..\..\..\config.h
+			  "
+	/>
+	<UserMacro
+		Name="CopyGIRScanner"
+		Value="
+copy ..\..\..\tools\g-ir-scanner.in ..\..\..\tools\g-ir-scanner
+			  "
+	/>
+	<UserMacro
+		Name="CopyGIRDocTool"
+		Value="
+copy ..\..\..\tools\g-ir-doc-tool.in ..\..\..\tools\g-ir-doc-tool
+			  "
+	/>
+	<UserMacro
+		Name="CopyGIRAnnotationTool"
+		Value="
+copy ..\..\..\tools\g-ir-annotation-tool.in ..\..\..\tools\g-ir-annotation-tool
+		      "
+	/>
+	<UserMacro
+		Name="GenerateGIRDef"
+		Value="
+echo EXPORTS &gt; $(DefDir)\girepository.def&#x0D;&#x0A;
+cl -EP ..\..\..\girepository\girepository.symbols &gt;&gt; $(DefDir)\girepository.def&#x0D;&#x0A;
+			  "
+	/>
+</VisualStudioPropertySheet>

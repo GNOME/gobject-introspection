@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="giinstallprops"
+	InheritedPropertySheets=".\gi-build-defines.vsprops"
+	>
+	<UserMacro
+		Name="GIDoInstall"
+		Value="
+mkdir $(CopyDir)&#x0D;&#x0A;
+mkdir $(CopyDir)\bin&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\$(LibGIDllPrefix)girepository$(LibGIDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\g-ir-compiler.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\g-ir-generate.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy ..\..\..\tools\g-ir-annotation-tool $(CopyDir)\bin&#x0D;&#x0A;
+copy ..\..\..\tools\g-ir-doc-tool $(CopyDir)\bin&#x0D;&#x0A;
+copy ..\..\..\tools\g-ir-scanner $(CopyDir)\bin&#x0D;&#x0A;
+
+#include "gir.vs9.install"
+
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\gobject-introspection-$(ApiVersion)&#x0D;&#x0A;
+
+copy ..\..\..\girepository\gdump.c $(CopyDir)\share\gobject-introspection-$(ApiVersion)&#x0D;&#x0A;
+
+mkdir $(CopyDir)\lib&#x0D;&#x0A;
+
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\girepository-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+
+echo Please note that building GObject-Introspection with Visual Studio is now a 2-step process&#x0D;&#x0A;
+echo Please open the appropriate Visual Studio (or Windows SDK) command prompt and use the NMake Makefile&#x0D;&#x0A;
+echo in SRC_ROOT\build\gi-introspection-msvc.mak to build the introspection files&#x0D;&#x0A;
+		"
+	/>
+</VisualStudioPropertySheet>

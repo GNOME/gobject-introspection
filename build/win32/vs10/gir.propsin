@@ -5,7 +5,7 @@
     <VSVER>10</VSVER>
     <BASE_GI_DIR>$(SolutionDir)\..\..\..</BASE_GI_DIR>
     <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
-    <GIApiVersion>1.0</GIApiVersion>
+    <ApiVersion>1.0</ApiVersion>
     <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
     <GenerateGIRDef>
         echo EXPORTS &gt; $(DefDir)\girepository.def
@@ -103,7 +103,7 @@ goto DONE
 
      </GenerateGIR>
     <LibGILibtoolCompatibleDllPrefix>lib</LibGILibtoolCompatibleDllPrefix>
-    <LibGILibtoolCompatibleDllSuffix>-$(GIApiVersion)-0</LibGILibtoolCompatibleDllSuffix>
+    <LibGILibtoolCompatibleDllSuffix>-$(ApiVersion)-0</LibGILibtoolCompatibleDllSuffix>
     <LibGISeparateVS10DllPrefix />
     <LibGISeparateVS10DllSuffix>-1-vs10</LibGISeparateVS10DllSuffix>
     <LibGIDllPrefix>$(LibGISeparateVS10DllPrefix)</LibGIDllPrefix>
@@ -131,20 +131,20 @@ copy ..\..\..\tools\g-ir-scanner $(CopyDir)\bin
 copy $(SolutionDir)$(Configuration)\$(Platform)\bin\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner
 
 
-mkdir $(CopyDir)\share\gir-$(GIApiVersion)
+mkdir $(CopyDir)\share\gir-$(ApiVersion)
 
-copy $(SolutionDir)$(Configuration)\$(Platform)\share\gir-$(GIApiVersion)\*.gir $(CopyDir)\share\gir-$(GIApiVersion)
+copy $(SolutionDir)$(Configuration)\$(Platform)\share\gir-$(ApiVersion)\*.gir $(CopyDir)\share\gir-$(ApiVersion)
 
-mkdir $(CopyDir)\share\gobject-introspection-$(GIApiVersion)
+mkdir $(CopyDir)\share\gobject-introspection-$(ApiVersion)
 
-copy ..\..\..\girepository\gdump.c $(CopyDir)\share\gobject-introspection-$(GIApiVersion)
+copy ..\..\..\girepository\gdump.c $(CopyDir)\share\gobject-introspection-$(ApiVersion)
 
 
-mkdir $(CopyDir)\lib\girepository-$(GIApiVersion)
+mkdir $(CopyDir)\lib\girepository-$(ApiVersion)
 
-copy $(SolutionDir)$(Configuration)\$(Platform)\bin\girepository-$(GIApiVersion).lib $(CopyDir)\lib
+copy $(SolutionDir)$(Configuration)\$(Platform)\bin\girepository-$(ApiVersion).lib $(CopyDir)\lib
 
-copy $(SolutionDir)$(Configuration)\$(Platform)\lib\girepository-$(GIApiVersion)\*.typelib $(CopyDir)\lib\girepository-$(GIApiVersion)
+copy $(SolutionDir)$(Configuration)\$(Platform)\lib\girepository-$(ApiVersion)\*.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
 
 </GIDoInstall>
   </PropertyGroup>
@@ -188,8 +188,8 @@ if not exist ..\..\..\tools\g-ir-annotation-tool copy ..\..\..\tools\g-ir-annota
     <BuildMacro Include="CopyDir">
       <Value>$(CopyDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="GIApiVersion">
-      <Value>$(GIApiVersion)</Value>
+    <BuildMacro Include="ApiVersion">
+      <Value>$(ApiVersion)</Value>
     </BuildMacro>
     <BuildMacro Include="DefDir">
       <Value>$(DefDir)</Value>

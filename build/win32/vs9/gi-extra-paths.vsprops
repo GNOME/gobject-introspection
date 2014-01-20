@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="giextrapaths"
+	InheritedPropertySheets=".\gi-build-defines.vsprops"
+	>
+	<!-- PythonDir currently needs to point to a 32-bit/x86 Python 2.6/2.7 installation -->
+	<UserMacro
+		Name="PythonDir"
+		Value="c:\\python27"
+	/>
+	<!-- PythonDirX64 currently needs to point to a x86-64/x64 Python 2.6/2.7 installation -->
+	<UserMacro
+		Name="PythonDirX64"
+		Value="c:\\python27.x64"
+	/>
+</VisualStudioPropertySheet>

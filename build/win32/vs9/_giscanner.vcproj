@@ -22,16 +22,13 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets=".\gir.vsprops"
+			InheritedPropertySheets=".\gi-extra-paths.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\giscanner;;$(PYTHONDIR)\include;$(PYTHONDIR)\PC"
+				AdditionalIncludeDirectories="..\..\..\giscanner;;$(PythonDir)\include;$(PythonDir)\PC"
 				ForcedIncludeFiles="msvc_recommended_pragmas.h;io.h"
 				PreprocessorDefinitions="_DEBUG;YY_NO_UNISTD_H"
 				MinimalRebuild="true"
@@ -45,7 +42,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName).pyd"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(PYTHONDIR)\libs"
+				AdditionalLibraryDirectories="$(PythonDir)\libs"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -54,18 +51,15 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets=".\gir.vsprops"
+			InheritedPropertySheets=".\gi-extra-paths.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\giscanner;;$(PYTHONDIR)\include;$(PYTHONDIR)\PC"
+				AdditionalIncludeDirectories="..\..\..\giscanner;;$(PythonDir)\include;$(PythonDir)\PC"
 				ForcedIncludeFiles="msvc_recommended_pragmas.h;io.h"
 				PreprocessorDefinitions="YY_NO_UNISTD_H"
 				RuntimeLibrary="2"
@@ -78,7 +72,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName).pyd"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(PYTHONDIR)\libs"
+				AdditionalLibraryDirectories="$(PythonDir)\libs"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -89,12 +83,9 @@
 		<Configuration
 			Name="Debug|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets=".\gir.vsprops"
+			InheritedPropertySheets=".\gi-extra-paths.vsprops"
 			CharacterSet="2"
 			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
 			<Tool
 				Name="VCMIDLTool"
 				TargetEnvironment="3"
@@ -102,7 +93,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\giscanner;;$(PYTHONDIR)\include;$(PYTHONDIR)\PC"
+				AdditionalIncludeDirectories="..\..\..\giscanner;;$(PythonDirX64)\include;$(PythonDirX64)\PC"
 				ForcedIncludeFiles="msvc_recommended_pragmas.h;io.h"
 				PreprocessorDefinitions="_DEBUG;YY_NO_UNISTD_H"
 				MinimalRebuild="true"
@@ -116,7 +107,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName).pyd"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(PYTHONDIR)\libs"
+				AdditionalLibraryDirectories="$(PythonDirX64)\libs"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="17"
@@ -125,13 +116,10 @@
 		<Configuration
 			Name="Release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets=".\gir.vsprops"
+			InheritedPropertySheets=".\gi-extra-paths.vsprops"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
 			<Tool
 				Name="VCMIDLTool"
 				TargetEnvironment="3"
@@ -140,7 +128,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\giscanner;;$(PYTHONDIR)\include;$(PYTHONDIR)\PC"
+				AdditionalIncludeDirectories="..\..\..\giscanner;;$(PythonDirX64)\include;$(PythonDirX64)\PC"
 				ForcedIncludeFiles="msvc_recommended_pragmas.h;io.h"
 				PreprocessorDefinitions="YY_NO_UNISTD_H"
 				RuntimeLibrary="2"
@@ -153,7 +141,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName).pyd"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(PYTHONDIR)\libs"
+				AdditionalLibraryDirectories="$(PythonDirX64)\libs"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
