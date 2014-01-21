@@ -74,12 +74,12 @@ should be done after successfully building the Project Files):
 
 PYTHON2: Full path to your Python 2.6.x/2.7.x interpretor (python.exe) if it is
          not in your PATH.  Please note that only 2.6.x and 2.7.x works at this time.
-         You need to use a x64/amd64 version of Python for x64 builds, and a Win32/x86
+         You need to use an x64/amd64 version of Python for x64 builds, and a Win32/x86
          version of Python for Win32/x86 builds
 PKG_CONFIG_PATH: Location of the .pc (pkg-config) files, especially for the GLib .pc files.
 MINGWDIR: Root installation folder for your Windows GCC (such as MinGW).  For example,
           if your gcc executable (gcc.exe) is in c:\mingw\bin, use "set MINGWDIR=c:\mingw"
-          You need to use a x64/amd64 version of gcc for x64 builds, and a Win32/x86
+          You need to use an x64/amd64 version of gcc for x64 builds, and a Win32/x86
           version of gcc for Win32/x86 builds
 
 GCC is currently needed to as the GCC preprocessor is used to create the introspection dump source

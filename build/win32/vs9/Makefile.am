@@ -30,4 +30,4 @@ gi-install.vsprops: $(top_srcdir)/build/win32/vs9/gi-install.vspropsin gir.vs9.i
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gi-install.vspropsin >$@
 	rm gir.vs9.install
 
-CLEANFILES = gir-install.vsprops
+CLEANFILES = gi-install.vsprops
