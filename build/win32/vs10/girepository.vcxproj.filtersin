@@ -17,4 +17,7 @@
   <ItemGroup>
 #include "girepository.vs10.sourcefiles.filters"
   </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\girepository\girepository.symbols"><Filter>Resource Files</Filter></CustomBuild>
+  </ItemGroup>
 </Project>

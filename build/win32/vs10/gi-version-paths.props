@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <VSVER>10</VSVER>
+    <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs$(VSVER)\$(Platform)</GlibEtcInstallRoot>
+    <BASE_GI_DIR>$(SolutionDir)\..\..\..</BASE_GI_DIR>
+    <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
+    <ApiVersion>1.0</ApiVersion>
+    <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
+    <LibGILibtoolCompatibleDllPrefix>lib</LibGILibtoolCompatibleDllPrefix>
+    <LibGILibtoolCompatibleDllSuffix>-$(ApiVersion)-0</LibGILibtoolCompatibleDllSuffix>
+    <LibGISeparateVSDllPrefix />
+    <LibGISeparateVSDllSuffix>-1-vs$(VSVER)</LibGISeparateVSDllSuffix>
+    <LibGIDllPrefix>$(LibGISeparateVSDllPrefix)</LibGIDllPrefix>
+    <LibGIDllSuffix>$(LibGISeparateVSDllSuffix)</LibGIDllSuffix>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>giversionpathsprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="VSVER">
+      <Value>$(VSVER)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GlibEtcInstallRoot">
+      <Value>$(GlibEtcInstallRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BASE_GI_DIR">
+      <Value>$(BASE_GI_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CopyDir">
+      <Value>$(CopyDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ApiVersion">
+      <Value>$(ApiVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DefDir">
+      <Value>$(DefDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGILibtoolCompatibleDllPrefix">
+      <Value>$(LibGILibtoolCompatibleDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGILibtoolCompatibleDllSuffix">
+      <Value>$(LibGILibtoolCompatibleDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGISeparateVSDllPrefix">
+      <Value>$(LibGISeparateVSDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGISeparateVSDllSuffix">
+      <Value>$(LibGISeparateVSDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGIDllPrefix">
+      <Value>$(LibGIDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGIDllSuffix">
+      <Value>$(LibGIDllSuffix)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

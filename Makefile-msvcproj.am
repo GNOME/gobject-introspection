@@ -182,8 +182,8 @@
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gi-install.vspropsin >$@
 	rm ./build/win32/vs9/gir.vs9.install
 
-./build/win32/vs10/gir.props: ./build/win32/vs10/gir.vs10.install $(top_srcdir)/build/win32/vs10/gir.propsin
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gir.propsin >$@
+./build/win32/vs10/gi-install.props: ./build/win32/vs10/gir.vs10.install $(top_srcdir)/build/win32/vs10/gi-install.propsin
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gi-install.propsin >$@
 	rm ./build/win32/vs10/gir.vs10.install
 
 GENERATED_MSVC_FILES =	\

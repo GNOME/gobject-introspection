@@ -4,8 +4,6 @@ EXTRA_DIST = \
 	annotation.def	\
 	everything.def	\
 	foo.def	\
-	gengir.bat	\
-	create_nonglib_gir.py	\
 	gettype.def	\
 	gimarshallingtests.def	\
 	gtkfrob.def	\

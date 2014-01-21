@@ -59,16 +59,38 @@ http://www.gtk.org/download/win32.php [32-bit]
 http://www.gtk.org/download/win64.php [64-bit]
 
 *** Note! ***
-Please note that due to numerous possible configurations on Python, some environmental
-variables need to be set before launching the gobject-introsection.sln solution file.
+Please note that due to numerous possible configurations on Python, PKG_CONFIG_PATH and
+MinGW, the build of G-I is now a 2-step process: one with the Visual Studio Projects that
+will build the libraries, tools, Python Module and test DLLs (except for the everything
+test), and the other one with NMake Makefiles for building the introspection files.
+Please note that if one needs to change the installation location
+of Python, one needs to change the values of PythonDir (for x86/Win32 builds) and/or
+PythonDirX64 (for x64 builds) in gi-extra-paths.props
 
-These variables are namely:
-PYTHONDIR: Root installation folder of your Python interpretor, where python.exe is
-           located.  Currently only Python 2.6.x and 2.7.x is supported.
-           It must match your build configuration (Win32 or x64/amd64)
+The use of Visual Studio Projects will no longer require the setting of environmental
+variables, but the following environmental variables are needed (either by using "set xxx=yyy"
+or by nmake -f gi-introspection-msvc.mak xxx=yyy) for building the introspection files (which
+should be done after successfully building the Project Files):
+
+PYTHON2: Full path to your Python 2.6.x/2.7.x interpretor (python.exe) if it is
+         not in your PATH.  Please note that only 2.6.x and 2.7.x works at this time.
+         You need to use an x64/amd64 version of Python for x64 builds, and a Win32/x86
+         version of Python for Win32/x86 builds
 PKG_CONFIG_PATH: Location of the .pc (pkg-config) files, especially for the GLib .pc files.
 MINGWDIR: Root installation folder for your Windows GCC (such as MinGW).  For example,
           if your gcc executable (gcc.exe) is in c:\mingw\bin, use "set MINGWDIR=c:\mingw"
+          You need to use an x64/amd64 version of gcc for x64 builds, and a Win32/x86
+          version of gcc for Win32/x86 builds
+
+GCC is currently needed to as the GCC preprocessor is used to create the introspection dump source
+file, which is then compiled with the Visual C++ compiler to produce the .gir files.
+
+Please see $(srcroot)\build\gi-introspection-msvc.mak for more details.  Doing
+"nmake -f gi-introspection-msvc.mak (options omitted)" will build the various introspection files,
+and "nmake -f gi-introspection-msvc.mak (options omitted) install-introspection" will copy the introspection
+files to <root>\vs10\<PlatformName>\share\gir-1.0 (.gir files) and
+<root>\vs10\<PlatformName>\lib\girepository-1.0 (.typelib files)
+
 *** End of Note! ***
 
 The "install" project will copy build results and headers into their
@@ -76,9 +98,6 @@ appropriate location under <root>\vs10\<PlatformName>. For instance,
 built DLLs go into <root>\vs10\<PlatformName>\bin, built LIBs into
 <root>\vs10\<PlatformName>\lib and gobject-introspection headers into
 <root>\vs10\<PlatformName>\include\gobject-introsection-1.0.
-
-The generated .gir files will end up in <root>\vs10\<PlatformName>\share\gir-1.0
-and .typelib files will end up in <root>\vs10\<PlatformName>\lib\girepository-1.0
 
 This is then from where
 project files higher in the stack are supposed to look for them, not
