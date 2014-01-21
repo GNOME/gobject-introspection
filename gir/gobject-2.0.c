@@ -2531,7 +2531,8 @@
  * @notify: a function to call when this reference is the
  *  last reference to the object, or is no longer
  *  the last reference.
- * @data: data to pass to @notify
+ * @data: (allow-none): data to pass to @notify, or %NULL to
+ *  match any toggle refs with the @notify argument.
  *
  * Removes a reference added with g_object_add_toggle_ref(). The
  * reference count of the object is decreased by one.
@@ -6215,7 +6216,9 @@
  * @dest_type: Target type.
  *
  * Check whether g_value_transform() is able to transform values
- * of type @src_type into values of type @dest_type.
+ * of type @src_type into values of type @dest_type. Note that for
+ * the types to be transformable, they must be compatible and a
+ * transform function must be registered.
  *
  * Returns: %TRUE if the transformation is possible, %FALSE otherwise.
  */

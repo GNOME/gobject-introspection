@@ -131,9 +131,9 @@
 
 /**
  * GCompareDataFunc:
- * @a: a value.
- * @b: a value to compare with.
- * @user_data: user data to pass to comparison function.
+ * @a: a value
+ * @b: a value to compare with
+ * @user_data: user data
  *
  * Specifies the type of a comparison function used to compare two
  * values.  The function should return a negative integer if the first
@@ -141,14 +141,14 @@
  * integer if the first value comes after the second.
  *
  * Returns: negative value if @a &lt; @b; zero if @a = @b; positive
- *          value if @a > @b.
+ *          value if @a > @b
  */
 
 
 /**
  * GCompareFunc:
- * @a: a value.
- * @b: a value to compare with.
+ * @a: a value
+ * @b: a value to compare with
  *
  * Specifies the type of a comparison function used to compare two
  * values.  The function should return a negative integer if the first
@@ -156,7 +156,7 @@
  * integer if the first value comes after the second.
  *
  * Returns: negative value if @a &lt; @b; zero if @a = @b; positive
- *          value if @a > @b.
+ *          value if @a > @b
  */
 
 
@@ -543,9 +543,8 @@
 
 /**
  * GFunc:
- * @data: the element's data.
- * @user_data: user data passed to g_list_foreach() or
- *             g_slist_foreach().
+ * @data: the element's data
+ * @user_data: user data passed to g_list_foreach() or g_slist_foreach()
  *
  * Specifies the type of functions passed to g_list_foreach() and
  * g_slist_foreach().
@@ -1221,8 +1220,8 @@
  *        of data, or any integer value using the <link
  *        linkend="glib-Type-Conversion-Macros">Type Conversion
  *        Macros</link>.
- * @next: contains the link to the next element in the list.
- * @prev: contains the link to the previous element in the list.
+ * @next: contains the link to the next element in the list
+ * @prev: contains the link to the previous element in the list
  *
  * The #GList struct is used for each element in a doubly-linked list.
  */
@@ -2232,16 +2231,16 @@
 
 /**
  * GTraverseFunc:
- * @key: a key of a #GTree node.
- * @value: the value corresponding to the key.
- * @data: user data passed to g_tree_traverse().
+ * @key: a key of a #GTree node
+ * @value: the value corresponding to the key
+ * @data: user data passed to g_tree_traverse()
  *
  * Specifies the type of function passed to g_tree_traverse(). It is
  * passed the key and value of each node, together with the @user_data
  * parameter passed to g_tree_traverse(). If the function returns
  * %TRUE, the traversal is stopped.
  *
- * Returns: %TRUE to stop the traversal.
+ * Returns: %TRUE to stop the traversal
  */
 
 
@@ -2251,8 +2250,32 @@
  *              then its right child. This is the one to use if you
  *              want the output sorted according to the compare
  *              function.
+ *              <informalfigure>
+ *                <mediaobject>
+ *                  <imageobject>
+ *                    <imagedata align="right" fileref="Sorted_binary_tree_inorder.svg" format="SVG"/>
+ *                  </imageobject>
+ *                  <caption>In order: A, B, C, D, E, F, G, H, I</caption>
+ *                </mediaobject>
+ *              </informalfigure>
  * @G_PRE_ORDER: visits a node, then its children.
+ *              <informalfigure>
+ *                <mediaobject>
+ *                  <imageobject>
+ *                    <imagedata align="right" fileref="Sorted_binary_tree_preorder.svg" format="SVG"/>
+ *                  </imageobject>
+ *                  <caption>Pre order: F, B, A, D, C, E, G, I, H</caption>
+ *                </mediaobject>
+ *              </informalfigure>
  * @G_POST_ORDER: visits the node's children, then the node itself.
+ *              <informalfigure>
+ *                <mediaobject>
+ *                  <imageobject>
+ *                    <imagedata align="right" fileref="Sorted_binary_tree_postorder.svg" format="SVG"/>
+ *                  </imageobject>
+ *                  <caption>Post order: A, C, E, D, B, H, I, G, F</caption>
+ *                </mediaobject>
+ *              </informalfigure>
  * @G_LEVEL_ORDER: is not implemented for <link
  *                 linkend="glib-Balanced-Binary-Trees">Balanced Binary
  *                 Trees</link>.  For <link
@@ -2260,6 +2283,14 @@
  *                 vists the root node first, then its children, then
  *                 its grandchildren, and so on. Note that this is less
  *                 efficient than the other orders.
+ *              <informalfigure>
+ *                <mediaobject>
+ *                  <imageobject>
+ *                    <imagedata align="right" fileref="Sorted_binary_tree_breadth-first_traversal.svg" format="SVG"/>
+ *                  </imageobject>
+ *                  <caption>Level order: F, B, G, A, D, I, C, E, H</caption>
+ *                </mediaobject>
+ *              </informalfigure>
  *
  * Specifies the type of traveral performed by g_tree_traverse(),
  * g_node_traverse() and g_node_find().
@@ -6922,9 +6953,15 @@
  * Each element in the list contains a piece of data, together with
  * pointers which link to the previous and next elements in the list.
  * Using these pointers it is possible to move through the list in both
- * directions (unlike the <link
- * linkend="glib-Singly-Linked-Lists">Singly-Linked Lists</link> which
+ * directions (unlike the singly-linked <link
+ * linkend="glib-Singly-Linked-Lists">#GSList</link> which
  * only allows movement through the list in the forward direction).
+ *
+ * The double linked list does not keep track of the number of items
+ * and does not keep track of both the start and end of the list. If
+ * you want fast access to both the start and the end of the list,
+ * and/or the number of items in the list, use a
+ * <link linkend="glib-Double-ended-Queues">GQueue</link> instead.
  *
  * The data contained in each element can be either integer values, by
  * using one of the <link linkend="glib-Type-Conversion-Macros">Type
@@ -6939,23 +6976,51 @@
  * elements return the new start of the list, which may have changed.
  *
  * There is no function to create a #GList. %NULL is considered to be
- * the empty list so you simply set a #GList* to %NULL.
+ * a valid, empty list so you simply set a #GList* to %NULL to initialize
+ * it.
  *
  * To add elements, use g_list_append(), g_list_prepend(),
  * g_list_insert() and g_list_insert_sorted().
  *
+ * To visit all elements in the list, use a loop over the list:
+ * |[
+ * GList *l;
+ * for (l = list; l != NULL; l = l->next)
+ *   {
+ *     /&ast; do something with l->data &ast;/
+ *   }
+ * ]|
+ *
+ * To call a function for each element in the list, use g_list_foreach().
+ *
+ * To loop over the list and modify it (e.g. remove a certain element)
+ * a while loop is more appropriate, for example:
+ * |[
+ * GList *l = list;
+ * while (l != NULL)
+ *   {
+ *     GList *next = l->next;
+ *     if (should_be_removed (l))
+ *       {
+ *         /&ast; possibly free l->data &ast;/
+ *         list = g_list_delete_link (list, l);
+ *       }
+ *     l = next;
+ *   }
+ * ]|
+ *
  * To remove elements, use g_list_remove().
  *
- * To find elements in the list use g_list_first(), g_list_last(),
- * g_list_next(), g_list_previous(), g_list_nth(), g_list_nth_data(),
+ * To navigate in a list, use g_list_first(), g_list_last(),
+ * g_list_next(), g_list_previous().
+ *
+ * To find elements in the list use g_list_nth(), g_list_nth_data(),
  * g_list_find() and g_list_find_custom().
  *
  * To find the index of an element use g_list_position() and
  * g_list_index().
  *
- * To call a function for each element in the list use g_list_foreach().
- *
- * To free the entire list, use g_list_free().
+ * To free the entire list, use g_list_free() or g_list_free_full().
  */
 
 
@@ -7380,7 +7445,7 @@
  * static gint max_size = 8;
  * static gboolean verbose = FALSE;
  * static gboolean beep = FALSE;
- * static gboolean rand = FALSE;
+ * static gboolean randomize = FALSE;
  *
  * static GOptionEntry entries[] =
  * {
@@ -7388,7 +7453,7 @@
  *   { "max-size", 'm', 0, G_OPTION_ARG_INT, &max_size, "Test up to 2^M items", "M" },
  *   { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Be verbose", NULL },
  *   { "beep", 'b', 0, G_OPTION_ARG_NONE, &beep, "Beep when done", NULL },
- *   { "rand", 0, 0, G_OPTION_ARG_NONE, &rand, "Randomize the data", NULL },
+ *   { "rand", 0, 0, G_OPTION_ARG_NONE, &randomize, "Randomize the data", NULL },
  *   { NULL }
  * };
  *
@@ -7411,6 +7476,57 @@
  *
  * }
  * </programlisting></informalexample>
+ *
+ * On UNIX systems, the argv that is passed to main() has no particular
+ * encoding, even to the extent that different parts of it may have
+ * different encodings.  In general, normal arguments and flags will be
+ * in the current locale and filenames should be considered to be opaque
+ * byte strings.  Proper use of %G_OPTION_ARG_FILENAME vs
+ * %G_OPTION_ARG_STRING is therefore important.
+ *
+ * Note that on Windows, filenames do have an encoding, but using
+ * #GOptionContext with the argv as passed to main() will result in a
+ * program that can only accept commandline arguments with characters
+ * from the system codepage.  This can cause problems when attempting to
+ * deal with filenames containing Unicode characters that fall outside
+ * of the codepage.
+ *
+ * A solution to this is to use g_win32_get_command_line() and
+ * g_option_context_parse_strv() which will properly handle full Unicode
+ * filenames.  If you are using #GApplication, this is done
+ * automatically for you.
+ *
+ * The following example shows how you can use #GOptionContext directly
+ * in order to correctly deal with Unicode filenames on Windows:
+ *
+ * |[
+ * int
+ * main (int argc, char **argv)
+ * {
+ *   GError *error = NULL;
+ *   GOptionContext *context;
+ *   gchar **args;
+ *
+ * #ifdef G_OS_WIN32
+ *   args = g_win32_get_command_line ();
+ * #else
+ *   args = g_strdupv (argv);
+ * #endif
+ *
+ *   /&ast; ... setup context ... &ast;/
+ *
+ *   if (!g_option_context_parse_strv (context, &args, &error))
+ *     {
+ *       /&ast; ... error ... &ast;/
+ *     }
+ *
+ *   /&ast; ... &ast;/
+ *
+ *   g_strfreev (args);
+ *
+ *   /&ast; ... &ast;/
+ * }
+ * ]|
  */
 
 
@@ -18318,7 +18434,7 @@
  * g_list_append(), g_list_prepend(), g_list_insert() and
  * g_list_insert_sorted() and so is rarely used on its own.
  *
- * Returns: a pointer to the newly-allocated #GList element.
+ * Returns: a pointer to the newly-allocated #GList element
  */
 
 
@@ -18329,51 +18445,55 @@
  *
  * Adds a new element on to the end of the list.
  *
- * <note><para>
- * The return value is the new start of the list, which
- * may have changed, so make sure you store the new value.
- * </para></note>
+ * Note that the return value is the new start of the list,
+ * if @list was empty; make sure you store the new value.
  *
- * <note><para>
- * Note that g_list_append() has to traverse the entire list
- * to find the end, which is inefficient when adding multiple
- * elements. A common idiom to avoid the inefficiency is to prepend
- * the elements and reverse the list when all elements have been added.
- * </para></note>
+ * g_list_append() has to traverse the entire list to find the end,
+ * which is inefficient when adding multiple elements. A common idiom
+ * to avoid the inefficiency is to use g_list_prepend() and reverse
+ * the list with g_list_reverse() when all elements have been added.
  *
  * |[
  * /&ast; Notice that these are initialized to the empty list. &ast;/
- * GList *list = NULL, *number_list = NULL;
+ * GList *string_list = NULL, *number_list = NULL;
  *
  * /&ast; This is a list of strings. &ast;/
- * list = g_list_append (list, "first");
- * list = g_list_append (list, "second");
+ * string_list = g_list_append (string_list, "first");
+ * string_list = g_list_append (string_list, "second");
  *
  * /&ast; This is a list of integers. &ast;/
  * number_list = g_list_append (number_list, GINT_TO_POINTER (27));
  * number_list = g_list_append (number_list, GINT_TO_POINTER (14));
  * ]|
  *
- * Returns: the new start of the #GList
+ * Returns: either @list or the new start of the #GList if @list was %NULL
  */
 
 
 /**
  * g_list_concat:
- * @list1: a #GList
- * @list2: the #GList to add to the end of the first #GList
+ * @list1: a #GList, this must point to the top of the list
+ * @list2: the #GList to add to the end of the first #GList,
+ *     this must point  to the top of the list
  *
  * Adds the second #GList onto the end of the first #GList.
  * Note that the elements of the second #GList are not copied.
  * They are used directly.
  *
- * Returns: the start of the new #GList
+ * This function is for example used to move an element in the list.
+ * The following example moves an element to the top of the list:
+ * |[
+ * list = g_list_remove_link (list, llink);
+ * list = g_list_concat (llink, list);
+ * ]|
+ *
+ * Returns: the start of the new #GList, which equals @list1 if not %NULL
  */
 
 
 /**
  * g_list_copy:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  *
  * Copies a #GList.
  *
@@ -18384,24 +18504,25 @@
  * to copy the data as well.
  * </para></note>
  *
- * Returns: a copy of @list
+ * Returns: the start of the new list that holds the same data as @list
  */
 
 
 /**
  * g_list_copy_deep:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @func: a copy function used to copy every element in the list
- * @user_data: user data passed to the copy function @func, or #NULL
+ * @user_data: user data passed to the copy function @func, or %NULL
  *
  * Makes a full (deep) copy of a #GList.
  *
- * In contrast with g_list_copy(), this function uses @func to make a copy of
- * each list element, in addition to copying the list container itself.
+ * In contrast with g_list_copy(), this function uses @func to make
+ * a copy of each list element, in addition to copying the list
+ * container itself.
  *
- * @func, as a #GCopyFunc, takes two arguments, the data to be copied and a user
- * pointer. It's safe to pass #NULL as user_data, if the copy function takes only
- * one argument.
+ * @func, as a #GCopyFunc, takes two arguments, the data to be copied
+ * and a @user_data pointer. It's safe to pass %NULL as user_data,
+ * if the copy function takes only one argument.
  *
  * For instance, if @list holds a list of GObjects, you can do:
  * |[
@@ -18413,40 +18534,39 @@
  * g_list_free_full (another_list, g_object_unref);
  * ]|
  *
- * Returns: a full copy of @list, use #g_list_free_full to free it
+ * Returns: the start of the new list that holds a full copy of @list,
+ *     use g_list_free_full() to free it
  * Since: 2.34
  */
 
 
 /**
  * g_list_delete_link:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @link_: node to delete from @list
  *
  * Removes the node link_ from the list and frees it.
  * Compare this to g_list_remove_link() which removes the node
  * without freeing it.
  *
- * Returns: the new head of @list
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
 /**
  * g_list_find:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @data: the element data to find
  *
- * Finds the element in a #GList which
- * contains the given data.
+ * Finds the element in a #GList which contains the given data.
  *
- * Returns: the found #GList element,
- *     or %NULL if it is not found
+ * Returns: the found #GList element, or %NULL if it is not found
  */
 
 
 /**
  * g_list_find_custom:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @data: user data passed to the function
  * @func: the function to call for each element.
  *     It should return 0 when the desired element is found
@@ -18464,7 +18584,7 @@
 
 /**
  * g_list_first:
- * @list: a #GList
+ * @list: any #GList element
  *
  * Gets the first element in a #GList.
  *
@@ -18475,7 +18595,7 @@
 
 /**
  * g_list_foreach:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @func: the function to call with each element's data
  * @user_data: user data to pass to the function
  *
@@ -18488,7 +18608,7 @@
  * @list: a #GList
  *
  * Frees all of the memory used by a #GList.
- * The freed elements are returned to the slice allocator.
+ * The freed elements are returned to the slice allocator
  *
  * <note><para>
  * If list elements contain dynamically-allocated memory,
@@ -18519,8 +18639,8 @@
  * @list: a pointer to a #GList
  * @free_func: the function to be called to free each element's data
  *
- * Convenience method, which frees all the memory used by a #GList, and
- * calls the specified destroy function on every element's data.
+ * Convenience method, which frees all the memory used by a #GList,
+ * and calls @free_func on every element's data.
  *
  * Since: 2.28
  */
@@ -18528,7 +18648,7 @@
 
 /**
  * g_list_index:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @data: the data to find
  *
  * Gets the position of the element containing
@@ -18541,7 +18661,7 @@
 
 /**
  * g_list_insert:
- * @list: a pointer to a #GList
+ * @list: a pointer to a #GList, this must point to the top of the list
  * @data: the data for the new element
  * @position: the position to insert the element. If this is
  *     negative, or is larger than the number of elements in the
@@ -18549,26 +18669,27 @@
  *
  * Inserts a new element into the list at the given position.
  *
- * Returns: the new start of the #GList
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
 /**
  * g_list_insert_before:
- * @list: a pointer to a #GList
+ * @list: a pointer to a #GList, this must point to the top of the list
  * @sibling: the list element before which the new element
  *     is inserted or %NULL to insert at the end of the list
  * @data: the data for the new element
  *
  * Inserts a new element into the list before the given position.
  *
- * Returns: the new start of the #GList
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
 /**
  * g_list_insert_sorted:
- * @list: a pointer to a #GList
+ * @list: a pointer to a #GList, this must point to the top of the
+ *     already sorted list
  * @data: the data for the new element
  * @func: the function to compare elements in the list. It should
  *     return a number > 0 if the first parameter comes after the
@@ -18577,30 +18698,45 @@
  * Inserts a new element into the list, using the given comparison
  * function to determine its position.
  *
- * Returns: the new start of the #GList
+ * <note><para>
+ * If you are adding many new elements to a list, and the number of
+ * new elements is much larger than the length of the list, use
+ * g_list_prepend() to add the new items and sort the list afterwards
+ * with g_list_sort()
+ * </para></note>
+ *
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
 /**
  * g_list_insert_sorted_with_data:
- * @list: a pointer to a #GList
+ * @list: a pointer to a #GList, this must point to the top of the
+ *     already sorted list
  * @data: the data for the new element
- * @func: the function to compare elements in the list.
- *     It should return a number > 0 if the first parameter
- *     comes after the second parameter in the sort order.
- * @user_data: user data to pass to comparison function.
+ * @func: the function to compare elements in the list. It should
+ *     return a number > 0 if the first parameter  comes after the
+ *     second parameter in the sort order.
+ * @user_data: user data to pass to comparison function
  *
  * Inserts a new element into the list, using the given comparison
  * function to determine its position.
  *
- * Returns: the new start of the #GList
+ * <note><para>
+ * If you are adding many new elements to a list, and the number of
+ * new elements is much larger than the length of the list, use
+ * g_list_prepend() to add the new items and sort the list afterwards
+ * with g_list_sort()
+ * </para></note>
+ *
+ * Returns: the (possibly changed) start of the #GList
  * Since: 2.10
  */
 
 
 /**
  * g_list_last:
- * @list: a #GList
+ * @list: any #GList element
  *
  * Gets the last element in a #GList.
  *
@@ -18611,13 +18747,14 @@
 
 /**
  * g_list_length:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  *
  * Gets the number of elements in a #GList.
  *
  * <note><para>
- * This function iterates over the whole list to
- * count its elements.
+ * This function iterates over the whole list to count its elements.
+ * Use a <link linkend="glib-Double-ended-Queues">GQueue</link> instead
+ * of a GList if you regularly need the number of items.
  * </para></note>
  *
  * Returns: the number of elements in the #GList
@@ -18626,17 +18763,19 @@
 
 /**
  * g_list_next:
- * @list: an element in a #GList.
+ * @list: an element in a #GList
  *
  * A convenience macro to get the next element in a #GList.
+ * Note that it is considered perfectly acceptable to access
+ * @list->next directly.
  *
- * Returns: the next element, or %NULL if there are no more elements.
+ * Returns: the next element, or %NULL if there are no more elements
  */
 
 
 /**
  * g_list_nth:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @n: the position of the element, counting from 0
  *
  * Gets the element at the given position in a #GList.
@@ -18648,7 +18787,7 @@
 
 /**
  * g_list_nth_data:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @n: the position of the element
  *
  * Gets the data of the element at the given position.
@@ -18672,7 +18811,7 @@
 
 /**
  * g_list_position:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @llink: an element in the #GList
  *
  * Gets the position of the given element
@@ -18685,54 +18824,61 @@
 
 /**
  * g_list_prepend:
- * @list: a pointer to a #GList
+ * @list: a pointer to a #GList, this must point to the top of the list
  * @data: the data for the new element
  *
- * Adds a new element on to the start of the list.
+ * Prepends a new element on to the start of the list.
  *
- * <note><para>
- * The return value is the new start of the list, which
- * may have changed, so make sure you store the new value.
- * </para></note>
+ * Note that the return value is the new start of the list,
+ * which will have changed, so make sure you store the new value.
  *
  * |[
  * /&ast; Notice that it is initialized to the empty list. &ast;/
  * GList *list = NULL;
+ *
  * list = g_list_prepend (list, "last");
  * list = g_list_prepend (list, "first");
  * ]|
  *
- * Returns: the new start of the #GList
+ * <note><para>
+ * Do not use this function to prepend a new element to a different element
+ * than the start of the list. Use g_list_insert_before() instead.
+ * </para></note>
+ *
+ * Returns: a pointer to the newly prepended element, which is the new
+ *     start of the #GList
  */
 
 
 /**
  * g_list_previous:
- * @list: an element in a #GList.
+ * @list: an element in a #GList
  *
  * A convenience macro to get the previous element in a #GList.
+ * Note that it is considered perfectly acceptable to access
+ * @list->previous directly.
  *
  * Returns: the previous element, or %NULL if there are no previous
- *          elements.
+ *          elements
  */
 
 
 /**
  * g_list_remove:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @data: the data of the element to remove
  *
  * Removes an element from a #GList.
  * If two elements contain the same data, only the first is removed.
  * If none of the elements contain the data, the #GList is unchanged.
  *
- * Returns: the new start of the #GList
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
 /**
  * g_list_remove_all:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @data: data to remove
  *
  * Removes all list nodes with data equal to @data.
@@ -18740,26 +18886,35 @@
  * g_list_remove() which removes only the first node
  * matching the given data.
  *
- * Returns: new head of @list
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
 /**
  * g_list_remove_link:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @llink: an element in the #GList
  *
  * Removes an element from a #GList, without freeing the element.
  * The removed element's prev and next links are set to %NULL, so
  * that it becomes a self-contained list with one element.
  *
- * Returns: the new start of the #GList, without the element
+ * This function is for example used to move an element in the list
+ * (see the example for g_list_concat()) or to remove an element in
+ * the list before freeing its data:
+ * |[
+ * list = g_list_remove_link (list, llink);
+ * free_some_data_that_may_access_the_list_again (llink->data);
+ * g_list_free (llink);
+ * ]|
+ *
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
 /**
  * g_list_reverse:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  *
  * Reverses a #GList.
  * It simply switches the next and prev pointers of each element.
@@ -18770,7 +18925,7 @@
 
 /**
  * g_list_sort:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @compare_func: the comparison function used to sort the #GList.
  *     This function is passed the data from 2 elements of the #GList
  *     and should return 0 if they are equal, a negative value if the
@@ -18780,20 +18935,20 @@
  * Sorts a #GList using the given comparison function. The algorithm
  * used is a stable sort.
  *
- * Returns: the start of the sorted #GList
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
 /**
  * g_list_sort_with_data:
- * @list: a #GList
+ * @list: a #GList, this must point to the top of the list
  * @compare_func: comparison function
  * @user_data: user data to pass to comparison function
  *
  * Like g_list_sort(), but the comparison function accepts
  * a user data argument.
  *
- * Returns: the new head of @list
+ * Returns: the (possibly changed) start of the #GList
  */
 
 
@@ -21666,6 +21821,36 @@
 
 
 /**
+ * g_option_context_parse_strv:
+ * @context: a #GOptionContext
+ * @arguments: (inout) (array null-terminated=1): a pointer to the
+ *    command line arguments (which must be in UTF-8 on Windows)
+ * @error: a return location for errors
+ *
+ * Parses the command line arguments.
+ *
+ * This function is similar to g_option_context_parse() except that it
+ * respects the normal memory rules when dealing with a strv instead of
+ * assuming that the passed-in array is the argv of the main function.
+ *
+ * In particular, strings that are removed from the arguments list will
+ * be freed using g_free().
+ *
+ * On Windows, the strings are expected to be in UTF-8.  This is in
+ * contrast to g_option_context_parse() which expects them to be in the
+ * system codepage, which is how they are passed as @argv to main().
+ * See g_win32_get_command_line() for a solution.
+ *
+ * This function is useful if you are trying to use #GOptionContext with
+ * #GApplication.
+ *
+ * Returns: %TRUE if the parsing was successful,
+ *          %FALSE if an error occurred
+ * Since: 2.40
+ */
+
+
+/**
  * g_option_context_set_description:
  * @context: a #GOptionContext
  * @description: (allow-none): a string to be shown in <option>--help</option> output
@@ -22694,7 +22879,7 @@
  * queue consist of pointers to data, the pointers are copied, but the
  * actual data is not.
  *
- * Returns: A copy of @queue
+ * Returns: a copy of @queue
  * Since: 2.4
  */
 
@@ -22719,7 +22904,7 @@
  *
  * Finds the first link in @queue which contains @data.
  *
- * Returns: The first link in @queue which contains @data.
+ * Returns: the first link in @queue which contains @data
  * Since: 2.4
  */
 
@@ -22729,7 +22914,7 @@
  * @queue: a #GQueue
  * @data: user data passed to @func
  * @func: a #GCompareFunc to call for each element. It should return 0
- * when the desired element is found
+ *     when the desired element is found
  *
  * Finds an element in a #GQueue, using a supplied function to find the
  * desired element. It iterates over the queue, calling the given function
@@ -22737,7 +22922,7 @@
  * takes two gconstpointer arguments, the #GQueue element's data as the
  * first argument and the given user data as the second argument.
  *
- * Returns: The found link, or %NULL if it wasn't found
+ * Returns: the found link, or %NULL if it wasn't found
  * Since: 2.4
  */
 
@@ -22757,10 +22942,10 @@
 
 /**
  * g_queue_free:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  *
- * Frees the memory allocated for the #GQueue. Only call this function if
- * @queue was created with g_queue_new(). If queue elements contain
+ * Frees the memory allocated for the #GQueue. Only call this function
+ * if @queue was created with g_queue_new(). If queue elements contain
  * dynamically-allocated memory, they should be freed first.
  *
  * <note><para>
@@ -22776,8 +22961,8 @@
  * @queue: a pointer to a #GQueue
  * @free_func: the function to be called to free each element's data
  *
- * Convenience method, which frees all the memory used by a #GQueue, and
- * calls the specified destroy function on every element's data.
+ * Convenience method, which frees all the memory used by a #GQueue,
+ * and calls the specified destroy function on every element's data.
  *
  * Since: 2.32
  */
@@ -22789,7 +22974,7 @@
  *
  * Returns the number of items in @queue.
  *
- * Returns: The number of items in @queue.
+ * Returns: the number of items in @queue
  * Since: 2.4
  */
 
@@ -22797,11 +22982,12 @@
 /**
  * g_queue_index:
  * @queue: a #GQueue
- * @data: the data to find.
+ * @data: the data to find
  *
  * Returns the position of the first element in @queue which contains @data.
  *
- * Returns: The position of the first element in @queue which contains @data, or -1 if no element in @queue contains @data.
+ * Returns: the position of the first element in @queue which
+ *     contains @data, or -1 if no element in @queue contains @data
  * Since: 2.4
  */
 
@@ -22856,7 +23042,7 @@
  *     return 0 if the elements are equal, a negative value if the first
  *     element comes before the second, and a positive value if the second
  *     element comes before the first.
- * @user_data: user data passed to @func.
+ * @user_data: user data passed to @func
  *
  * Inserts @data into @queue using @func to determine the new position.
  *
@@ -22870,19 +23056,19 @@
  *
  * Returns %TRUE if the queue is empty.
  *
- * Returns: %TRUE if the queue is empty.
+ * Returns: %TRUE if the queue is empty
  */
 
 
 /**
  * g_queue_link_index:
  * @queue: a #GQueue
- * @link_: A #GList link
+ * @link_: a #GList link
  *
  * Returns the position of @link_ in @queue.
  *
- * Returns: The position of @link_, or -1 if the link is
- * not part of @queue
+ * Returns: the position of @link_, or -1 if the link is
+ *     not part of @queue
  * Since: 2.4
  */
 
@@ -22892,18 +23078,18 @@
  *
  * Creates a new #GQueue.
  *
- * Returns: a new #GQueue.
+ * Returns: a newly allocated #GQueue
  */
 
 
 /**
  * g_queue_peek_head:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  *
  * Returns the first element of the queue.
  *
- * Returns: the data of the first element in the queue, or %NULL if the queue
- *   is empty.
+ * Returns: the data of the first element in the queue, or %NULL
+ *     if the queue is empty
  */
 
 
@@ -22911,7 +23097,7 @@
  * g_queue_peek_head_link:
  * @queue: a #GQueue
  *
- * Returns the first link in @queue
+ * Returns the first link in @queue.
  *
  * Returns: the first link in @queue, or %NULL if @queue is empty
  * Since: 2.4
@@ -22921,12 +23107,12 @@
 /**
  * g_queue_peek_nth:
  * @queue: a #GQueue
- * @n: the position of the element.
+ * @n: the position of the element
  *
  * Returns the @n'th element of @queue.
  *
- * Returns: The data for the @n'th element of @queue, or %NULL if @n is
- *   off the end of @queue.
+ * Returns: the data for the @n'th element of @queue,
+ *     or %NULL if @n is off the end of @queue
  * Since: 2.4
  */
 
@@ -22938,20 +23124,20 @@
  *
  * Returns the link at the given position
  *
- * Returns: The link at the @n'th position, or %NULL if @n is off the
- * end of the list
+ * Returns: the link at the @n'th position, or %NULL
+ *     if @n is off the end of the list
  * Since: 2.4
  */
 
 
 /**
  * g_queue_peek_tail:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  *
  * Returns the last element of the queue.
  *
- * Returns: the data of the last element in the queue, or %NULL if the queue
- *   is empty.
+ * Returns: the data of the last element in the queue, or %NULL
+ *     if the queue is empty
  */
 
 
@@ -22959,7 +23145,7 @@
  * g_queue_peek_tail_link:
  * @queue: a #GQueue
  *
- * Returns the last link @queue.
+ * Returns the last link in @queue.
  *
  * Returns: the last link in @queue, or %NULL if @queue is empty
  * Since: 2.4
@@ -22968,34 +23154,34 @@
 
 /**
  * g_queue_pop_head:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  *
- * Removes the first element of the queue.
+ * Removes the first element of the queue and returns its data.
  *
- * Returns: the data of the first element in the queue, or %NULL if the queue
- *   is empty.
+ * Returns: the data of the first element in the queue, or %NULL
+ *     if the queue is empty
  */
 
 
 /**
  * g_queue_pop_head_link:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  *
- * Removes the first element of the queue.
+ * Removes and returns the first element of the queue.
  *
- * Returns: the #GList element at the head of the queue, or %NULL if the queue
- *   is empty.
+ * Returns: the #GList element at the head of the queue, or %NULL
+ *     if the queue is empty
  */
 
 
 /**
  * g_queue_pop_nth:
  * @queue: a #GQueue
- * @n: the position of the element.
+ * @n: the position of the element
  *
- * Removes the @n'th element of @queue.
+ * Removes the @n'th element of @queue and returns its data.
  *
- * Returns: the element's data, or %NULL if @n is off the end of @queue.
+ * Returns: the element's data, or %NULL if @n is off the end of @queue
  * Since: 2.4
  */
 
@@ -23007,30 +23193,30 @@
  *
  * Removes and returns the link at the given position.
  *
- * Returns: The @n'th link, or %NULL if @n is off the end of @queue.
+ * Returns: the @n'th link, or %NULL if @n is off the end of @queue
  * Since: 2.4
  */
 
 
 /**
  * g_queue_pop_tail:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  *
- * Removes the last element of the queue.
+ * Removes the last element of the queue and returns its data.
  *
- * Returns: the data of the last element in the queue, or %NULL if the queue
- *   is empty.
+ * Returns: the data of the last element in the queue, or %NULL
+ *     if the queue is empty
  */
 
 
 /**
  * g_queue_pop_tail_link:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  *
- * Removes the last element of the queue.
+ * Removes and returns the last element of the queue.
  *
- * Returns: the #GList element at the tail of the queue, or %NULL if the queue
- *   is empty.
+ * Returns: the #GList element at the tail of the queue, or %NULL
+ *     if the queue is empty
  */
 
 
@@ -23045,9 +23231,9 @@
 
 /**
  * g_queue_push_head_link:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  * @link_: a single #GList element, <emphasis>not</emphasis> a list with
- *     more than one element.
+ *     more than one element
  *
  * Adds a new element at the head of the queue.
  */
@@ -23061,7 +23247,7 @@
  *     larger than the number of elements in the @queue, the element is
  *     added to the end of the queue.
  *
- * Inserts a new element into @queue at the given position
+ * Inserts a new element into @queue at the given position.
  *
  * Since: 2.4
  */
@@ -23083,8 +23269,8 @@
 
 /**
  * g_queue_push_tail:
- * @queue: a #GQueue.
- * @data: the data for the new element.
+ * @queue: a #GQueue
+ * @data: the data for the new element
  *
  * Adds a new element at the tail of the queue.
  */
@@ -23092,9 +23278,9 @@
 
 /**
  * g_queue_push_tail_link:
- * @queue: a #GQueue.
+ * @queue: a #GQueue
  * @link_: a single #GList element, <emphasis>not</emphasis> a list with
- *   more than one element.
+ *   more than one element
  *
  * Adds a new element at the tail of the queue.
  */
@@ -23103,7 +23289,7 @@
 /**
  * g_queue_remove:
  * @queue: a #GQueue
- * @data: data to remove.
+ * @data: the data to remove
  *
  * Removes the first element in @queue that contains @data.
  *
@@ -23115,7 +23301,7 @@
 /**
  * g_queue_remove_all:
  * @queue: a #GQueue
- * @data: data to remove
+ * @data: the data to remove
  *
  * Remove all elements whose data equals @data from @queue.
  *
@@ -23157,7 +23343,7 @@
  * Unlinks @link_ so that it will no longer be part of @queue. The link is
  * not freed.
  *
- * @link_ must be part of @queue,
+ * @link_ must be part of @queue.
  *
  * Since: 2.4
  */
@@ -27299,7 +27485,7 @@
  * improve the transliteration if the language of the source string is
  * known.
  *
- * Returns: the folded tokens
+ * Returns: (transfer full) (array zero-terminated=1): the folded tokens
  * Since: 2.40
  */
 
@@ -27344,12 +27530,14 @@
  * Removes trailing whitespace from a string.
  *
  * This function doesn't allocate or reallocate any memory;
- * it modifies @string in place. The pointer to @string is
- * returned to allow the nesting of functions.
+ * it modifies @string in place. Therefore, it cannot be used
+ * on statically allocated strings.
+ *
+ * The pointer to @string is returned to allow the nesting of functions.
  *
  * Also see g_strchug() and g_strstrip().
  *
- * Returns: @string.
+ * Returns: @string
  */
 
 
@@ -27361,8 +27549,10 @@
  * of the characters forward.
  *
  * This function doesn't allocate or reallocate any memory;
- * it modifies @string in place. The pointer to @string is
- * returned to allow the nesting of functions.
+ * it modifies @string in place. Therefore, it cannot be used on
+ * statically allocated strings.
+ *
+ * The pointer to @string is returned to allow the nesting of functions.
  *
  * Also see g_strchomp() and g_strstrip().
  *
@@ -28643,7 +28833,7 @@
  *
  * In order for this function to work in srcdir != builddir situations,
  * the G_TEST_SRCDIR and G_TEST_BUILDDIR environment variables need to
- * have been defined.  As of 2.38, this is done by the Makefile.decl
+ * have been defined.  As of 2.38, this is done by the glib.mk
  * included in GLib.  Please ensure that your copy is up to date before
  * using this function.
  *
@@ -29203,6 +29393,28 @@
  * g_test_run_suite() or g_test_run() may only be called once
  * in a program.
  *
+ * In general, the tests and sub-suites within each suite are run in
+ * the order in which they are defined. However, note that prior to
+ * GLib 2.36, there was a bug in the <literal>g_test_add_*</literal>
+ * functions which caused them to create multiple suites with the same
+ * name, meaning that if you created tests "/foo/simple",
+ * "/bar/simple", and "/foo/using-bar" in that order, they would get
+ * run in that order (since g_test_run() would run the first "/foo"
+ * suite, then the "/bar" suite, then the second "/foo" suite). As of
+ * 2.36, this bug is fixed, and adding the tests in that order would
+ * result in a running order of "/foo/simple", "/foo/using-bar",
+ * "/bar/simple". If this new ordering is sub-optimal (because it puts
+ * more-complicated tests before simpler ones, making it harder to
+ * figure out exactly what has failed), you can fix it by changing the
+ * test paths to group tests by suite in a way that will result in the
+ * desired running order. Eg, "/simple/foo", "/simple/bar",
+ * "/complex/foo-using-bar".
+ *
+ * However, you should never make the actual result of a test depend
+ * on the order that tests are run in. If you need to ensure that some
+ * particular code runs before or after a given test case, use
+ * g_test_add(), which lets you specify setup and teardown functions.
+ *
  * Returns: 0 on success, 1 on failure (assuming it returns at all),
  *   77 if all tests were skipped with g_test_skip().
  * Since: 2.16
@@ -29216,7 +29428,9 @@
  * Execute the tests within @suite and all nested #GTestSuites.
  * The test suites to be executed are filtered according to
  * test path arguments (-p <replaceable>testpath</replaceable>)
- * as parsed by g_test_init().
+ * as parsed by g_test_init(). See the g_test_run() documentation
+ * for more information on the order that tests are run in.
+ *
  * g_test_run_suite() or g_test_run() may only be called once
  * in a program.
  *
@@ -30592,12 +30806,12 @@
 
 /**
  * g_tree_destroy:
- * @tree: a #GTree.
+ * @tree: a #GTree
  *
  * Removes all keys and values from the #GTree and decreases its
  * reference count by one. If keys and/or values are dynamically
  * allocated, you should either free them first or create the #GTree
- * using g_tree_new_full().  In the latter case the destroy functions
+ * using g_tree_new_full(). In the latter case the destroy functions
  * you supplied will be called on all keys and values before destroying
  * the #GTree.
  */
@@ -30605,10 +30819,10 @@
 
 /**
  * g_tree_foreach:
- * @tree: a #GTree.
+ * @tree: a #GTree
  * @func: the function to call for each node visited.
  *     If this function returns %TRUE, the traversal is stopped.
- * @user_data: user data to pass to the function.
+ * @user_data: user data to pass to the function
  *
  * Calls the given function for each of the key/value pairs in the #GTree.
  * The function is passed the key and value of each pair, and the given
@@ -30623,7 +30837,7 @@
 
 /**
  * g_tree_height:
- * @tree: a #GTree.
+ * @tree: a #GTree
  *
  * Gets the height of a #GTree.
  *
@@ -30631,21 +30845,23 @@
  * If the #GTree contains only one root node the height is 1.
  * If the root node has children the height is 2, etc.
  *
- * Returns: the height of the #GTree.
+ * Returns: the height of @tree
  */
 
 
 /**
  * g_tree_insert:
- * @tree: a #GTree.
- * @key: the key to insert.
- * @value: the value corresponding to the key.
+ * @tree: a #GTree
+ * @key: the key to insert
+ * @value: the value corresponding to the key
  *
- * Inserts a key/value pair into a #GTree. If the given key already exists
- * in the #GTree its corresponding value is set to the new value. If you
- * supplied a value_destroy_func when creating the #GTree, the old value is
- * freed using that function. If you supplied a @key_destroy_func when
- * creating the #GTree, the passed key is freed using that function.
+ * Inserts a key/value pair into a #GTree.
+ *
+ * If the given key already exists in the #GTree its corresponding value
+ * is set to the new value. If you supplied a @value_destroy_func when
+ * creating the #GTree, the old value is freed using that function. If
+ * you supplied a @key_destroy_func when creating the #GTree, the passed
+ * key is freed using that function.
  *
  * The tree is automatically 'balanced' as new key/value pairs are added,
  * so that the distance from the root to every leaf is as small as possible.
@@ -30654,31 +30870,31 @@
 
 /**
  * g_tree_lookup:
- * @tree: a #GTree.
- * @key: the key to look up.
+ * @tree: a #GTree
+ * @key: the key to look up
  *
  * Gets the value corresponding to the given key. Since a #GTree is
- * automatically balanced as key/value pairs are added, key lookup is very
- * fast.
+ * automatically balanced as key/value pairs are added, key lookup
+ * is O(log n) (where n is the number of key/value pairs in the tree).
  *
- * Returns: the value corresponding to the key, or %NULL if the key was
- * not found.
+ * Returns: the value corresponding to the key, or %NULL
+ *     if the key was not found.
  */
 
 
 /**
  * g_tree_lookup_extended:
- * @tree: a #GTree.
- * @lookup_key: the key to look up.
- * @orig_key: returns the original key.
- * @value: returns the value associated with the key.
+ * @tree: a #GTree
+ * @lookup_key: the key to look up
+ * @orig_key: returns the original key
+ * @value: returns the value associated with the key
  *
  * Looks up a key in the #GTree, returning the original key and the
- * associated value and a #gboolean which is %TRUE if the key was found. This
- * is useful if you need to free the memory allocated for the original key,
- * for example before calling g_tree_remove().
+ * associated value. This is useful if you need to free the memory
+ * allocated for the original key, for example before calling
+ * g_tree_remove().
  *
- * Returns: %TRUE if the key was found in the #GTree.
+ * Returns: %TRUE if the key was found in the #GTree
  */
 
 
@@ -30692,67 +30908,68 @@
  *
  * Creates a new #GTree.
  *
- * Returns: a new #GTree.
+ * Returns: a newly allocated #GTree
  */
 
 
 /**
  * g_tree_new_full:
- * @key_compare_func: qsort()-style comparison function.
- * @key_compare_data: data to pass to comparison function.
+ * @key_compare_func: qsort()-style comparison function
+ * @key_compare_data: data to pass to comparison function
  * @key_destroy_func: a function to free the memory allocated for the key
  *   used when removing the entry from the #GTree or %NULL if you don't
- *   want to supply such a function.
+ *   want to supply such a function
  * @value_destroy_func: a function to free the memory allocated for the
  *   value used when removing the entry from the #GTree or %NULL if you
- *   don't want to supply such a function.
+ *   don't want to supply such a function
  *
  * Creates a new #GTree like g_tree_new() and allows to specify functions
  * to free the memory allocated for the key and value that get called when
  * removing the entry from the #GTree.
  *
- * Returns: a new #GTree.
+ * Returns: a newly allocated #GTree
  */
 
 
 /**
  * g_tree_new_with_data:
- * @key_compare_func: qsort()-style comparison function.
- * @key_compare_data: data to pass to comparison function.
+ * @key_compare_func: qsort()-style comparison function
+ * @key_compare_data: data to pass to comparison function
  *
  * Creates a new #GTree with a comparison function that accepts user data.
  * See g_tree_new() for more details.
  *
- * Returns: a new #GTree.
+ * Returns: a newly allocated #GTree
  */
 
 
 /**
  * g_tree_nnodes:
- * @tree: a #GTree.
+ * @tree: a #GTree
  *
  * Gets the number of nodes in a #GTree.
  *
- * Returns: the number of nodes in the #GTree.
+ * Returns: the number of nodes in @tree
  */
 
 
 /**
  * g_tree_ref:
- * @tree: a #GTree.
+ * @tree: a #GTree
  *
- * Increments the reference count of @tree by one.  It is safe to call
- * this function from any thread.
+ * Increments the reference count of @tree by one.
  *
- * Returns: the passed in #GTree.
+ * It is safe to call this function from any thread.
+ *
+ * Returns: the passed in #GTree
  * Since: 2.22
  */
 
 
 /**
  * g_tree_remove:
- * @tree: a #GTree.
- * @key: the key to remove.
+ * @tree: a #GTree
+ * @key: the key to remove
  *
  * Removes a key/value pair from a #GTree.
  *
@@ -30761,16 +30978,16 @@
  * make sure that any dynamically allocated values are freed yourself.
  * If the key does not exist in the #GTree, the function does nothing.
  *
- * Returns: %TRUE if the key was found (prior to 2.8, this function returned
- *   nothing)
+ * Returns: %TRUE if the key was found (prior to 2.8, this function
+ *     returned nothing)
  */
 
 
 /**
  * g_tree_replace:
- * @tree: a #GTree.
- * @key: the key to insert.
- * @value: the value corresponding to the key.
+ * @tree: a #GTree
+ * @key: the key to insert
+ * @value: the value corresponding to the key
  *
  * Inserts a new key and value into a #GTree similar to g_tree_insert().
  * The difference is that if the key already exists in the #GTree, it gets
@@ -30800,52 +31017,53 @@
  * @search_func returns 1, searching will proceed among the key/value
  * pairs that have a larger key.
  *
- * Returns: the value corresponding to the found key, or %NULL if
- * the key was not found.
+ * Returns: the value corresponding to the found key, or %NULL
+ *     if the key was not found.
  */
 
 
 /**
  * g_tree_steal:
- * @tree: a #GTree.
- * @key: the key to remove.
+ * @tree: a #GTree
+ * @key: the key to remove
  *
  * Removes a key and its associated value from a #GTree without calling
  * the key and value destroy functions.
  *
  * If the key does not exist in the #GTree, the function does nothing.
  *
- * Returns: %TRUE if the key was found (prior to 2.8, this function returned
- *    nothing)
+ * Returns: %TRUE if the key was found (prior to 2.8, this function
+ *     returned nothing)
  */
 
 
 /**
  * g_tree_traverse:
- * @tree: a #GTree.
+ * @tree: a #GTree
  * @traverse_func: the function to call for each node visited. If this
  *   function returns %TRUE, the traversal is stopped.
  * @traverse_type: the order in which nodes are visited, one of %G_IN_ORDER,
- *   %G_PRE_ORDER and %G_POST_ORDER.
- * @user_data: user data to pass to the function.
+ *   %G_PRE_ORDER and %G_POST_ORDER
+ * @user_data: user data to pass to the function
  *
  * Calls the given function for each node in the #GTree.
  *
- * Deprecated: 2.2: The order of a balanced tree is somewhat arbitrary. If you
- * just want to visit all nodes in sorted order, use g_tree_foreach()
- * instead. If you really need to visit nodes in a different order, consider
- * using an <link linkend="glib-N-ary-Trees">N-ary Tree</link>.
+ * Deprecated: 2.2: The order of a balanced tree is somewhat arbitrary.
+ *     If you just want to visit all nodes in sorted order, use
+ *     g_tree_foreach() instead. If you really need to visit nodes in
+ *     a different order, consider using an
+ *     <link linkend="glib-N-ary-Trees">N-ary Tree</link>.
  */
 
 
 /**
  * g_tree_unref:
- * @tree: a #GTree.
+ * @tree: a #GTree
  *
- * Decrements the reference count of @tree by one.  If the reference count
- * drops to 0, all keys and values will be destroyed (if destroy
- * functions were specified) and all memory allocated by @tree will be
- * released.
+ * Decrements the reference count of @tree by one.
+ * If the reference count drops to 0, all keys and values will
+ * be destroyed (if destroy functions were specified) and all
+ * memory allocated by @tree will be released.
  *
  * It is safe to call this function from any thread.
  *
@@ -35376,6 +35594,45 @@
  * g_free().
  *
  * Returns: newly-allocated error message
+ */
+
+
+/**
+ * g_win32_get_command_line:
+ *
+ * Gets the command line arguments, on Windows, in the GLib filename
+ * encoding (ie: UTF-8).
+ *
+ * Normally, on Windows, the command line arguments are passed to main()
+ * in the system codepage encoding.  This prevents passing filenames as
+ * arguments if the filenames contain characters that fall outside of
+ * this codepage.  If such filenames are passed, then substitutions
+ * will occur (such as replacing some characters with '?').
+ *
+ * GLib's policy of using UTF-8 as a filename encoding on Windows was
+ * designed to localise the pain of dealing with filenames outside of
+ * the system codepage to one area: dealing with commandline arguments
+ * in main().
+ *
+ * As such, most GLib programs should ignore the value of argv passed to
+ * their main() function and call g_win32_get_command_line() instead.
+ * This will get the "full Unicode" commandline arguments using
+ * GetCommandLineW() and convert it to the GLib filename encoding (which
+ * is UTF-8 on Windows).
+ *
+ * The strings returned by this function are suitable for use with
+ * functions such as g_open() and g_file_new_for_commandline_arg() but
+ * are not suitable for use with g_option_context_parse(), which assumes
+ * that its input will be in the system codepage.  The return value is
+ * suitable for use with g_option_context_parse_strv(), however, which
+ * is a better match anyway because it won't leak memory.
+ *
+ * Unlike argv, the returned value is a normal strv and can (and should)
+ * be freed with g_strfreev() when no longer needed.
+ *
+ * Returns: (transfer full): the commandline arguments in the GLib
+ *   filename encoding (ie: UTF-8)
+ * Since: 2.40
  */
 
 

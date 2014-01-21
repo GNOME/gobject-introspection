@@ -2279,6 +2279,14 @@
  * @parameter will always be of the expected type.  In the event that
  * an incorrect type was given, no signal will be emitted.
  *
+ * Since GLib 2.40, if no handler is connected to this signal then the
+ * default behaviour for boolean-stated actions with a %NULL parameter
+ * type is to toggle them via the #GSimpleAction::change-state signal.
+ * For stateful actions where the state type is equal to the parameter
+ * type, the default is to forward them directly to
+ * #GSimpleAction::change-state.  This should allow almost all users
+ * of #GSimpleAction to connect only one handler or the other.
+ *
  * Since: 2.28
  */
 
@@ -3549,6 +3557,7 @@
  * SECTION:gaction
  * @title: GAction
  * @short_description: An action interface
+ * @include: gio/gio.h
  *
  * #GAction represents a single named action.
  *
@@ -3568,7 +3577,7 @@
  *
  * #GAction is merely the interface to the concept of an action, as
  * described above.  Various implementations of actions exist, including
- * #GSimpleAction and #GtkAction.
+ * #GSimpleAction.
  *
  * In all cases, the implementing class is responsible for storing the
  * name of the action, the parameter type, the enabled state, the
@@ -3586,6 +3595,7 @@
  * SECTION:gactiongroup
  * @title: GActionGroup
  * @short_description: A group of actions
+ * @include: gio/gio.h
  * @see_also: #GAction
  *
  * #GActionGroup represents a group of actions. Actions can be used to
@@ -3639,6 +3649,7 @@
 /**
  * SECTION:gactiongroupexporter
  * @title: GActionGroup exporter
+ * @include: gio/gio.h
  * @short_description: Export GActionGroups on D-Bus
  * @see_also: #GActionGroup, #GDBusActionGroup
  *
@@ -3654,6 +3665,7 @@
 /**
  * SECTION:gactionmap
  * @title: GActionMap
+ * @include: gio/gio.h
  * @short_description: Interface for action containers
  *
  * The GActionMap interface is implemented by #GActionGroup
@@ -3759,6 +3771,7 @@
  * SECTION:gapplication
  * @title: GApplication
  * @short_description: Core application class
+ * @include: gio/gio.h
  *
  * A #GApplication is the foundation of an application.  It wraps some
  * low-level platform-specific services and is intended to act as the
@@ -3901,6 +3914,7 @@
  * SECTION:gapplicationcommandline
  * @title: GApplicationCommandLine
  * @short_description: A command-line invocation of an application
+ * @include: gio/gio.h
  * @see_also: #GApplication
  *
  * #GApplicationCommandLine represents a command-line invocation of
@@ -4386,6 +4400,7 @@
  * SECTION:gdbusactiongroup
  * @title: GDBusActionGroup
  * @short_description: A D-Bus GActionGroup implementation
+ * @include: gio/gio.h
  * @see_also: <link linkend="gio-GActionGroup-exporter">GActionGroup exporter</link>
  *
  * #GDBusActionGroup is an implementation of the #GActionGroup
@@ -4610,6 +4625,7 @@
  * SECTION:gdbusmenumodel
  * @title: GDBusMenuModel
  * @short_description: A D-Bus GMenuModel implementation
+ * @include: gio/gio.h
  * @see_also: <link linkend="gio-GMenuModel-exporter">GMenuModel Exporter</link>
  *
  * #GDBusMenuModel is an implementation of #GMenuModel that can be used
@@ -5513,6 +5529,7 @@
 /**
  * SECTION:ginetaddress
  * @short_description: An IPv4/IPv6 address
+ * @include: gio/gio.h
  *
  * #GInetAddress represents an IPv4 or IPv6 internet address. Use
  * g_resolver_lookup_by_name() or g_resolver_lookup_by_name_async() to
@@ -5530,6 +5547,7 @@
 /**
  * SECTION:ginetaddressmask
  * @short_description: An IPv4/IPv6 address mask
+ * @include: gio/gio.h
  *
  * #GInetAddressMask represents a range of IPv4 or IPv6 addresses
  * described by a base address and a length indicating how many bits
@@ -5541,6 +5559,7 @@
 /**
  * SECTION:ginetsocketaddress
  * @short_description: Internet GSocketAddress
+ * @include: gio/gio.h
  *
  * An IPv4 or IPv6 socket address; that is, the combination of a
  * #GInetAddress and a port number.
@@ -5709,6 +5728,7 @@
  * SECTION:gmenu
  * @title: GMenu
  * @short_description: A simple implementation of GMenuModel
+ * @include: gio/gio.h
  *
  * #GMenu is a simple implementation of #GMenuModel.
  * You populate a #GMenu by adding #GMenuItem instances to it.
@@ -5725,6 +5745,7 @@
  * SECTION:gmenuexporter
  * @title: GMenuModel exporter
  * @short_description: Export GMenuModels on D-Bus
+ * @include: gio/gio.h
  * @see_also: #GMenuModel, #GDBusMenuModel
  *
  * These functions support exporting a #GMenuModel on D-Bus.
@@ -5740,6 +5761,7 @@
  * SECTION:gmenumodel
  * @title: GMenuModel
  * @short_description: An abstract class representing the contents of a menu
+ * @include: gio/gio.h
  * @see_also: #GActionGroup
  *
  * #GMenuModel represents the contents of a menu -- an ordered list of
@@ -5999,6 +6021,7 @@
 /**
  * SECTION:gnotification
  * @short_description: User Notifications (pop up messages)
+ * @include: gio/gio.h
  *
  * #GNotification is a mechanism for creating a notification to be shown
  * to the user -- typically as a pop-up notification presented by the
@@ -6045,8 +6068,9 @@
 /**
  * SECTION:gpermission
  * @title: GPermission
- * @short_description: An object representing the permission to perform
- *                     a certain action
+ * @short_description: An object representing the permission
+ *     to perform a certain action
+ * @include: gio/gio.h
  *
  * A #GPermission represents the status of the caller's permission to
  * perform a certain action.
@@ -6110,6 +6134,7 @@
  * SECTION:gpropertyaction
  * @title: GPropertyAction
  * @short_description: A GAction reflecting a GObject property
+ * @include: gio/gio.h
  *
  * A #GPropertyAction is a way to get a #GAction with a state value
  * reflecting and controlling the value of a #GObject property.
@@ -6171,6 +6196,7 @@
 /**
  * SECTION:gproxy
  * @short_description: Interface for proxy handling
+ * @include: gio/gio.h
  *
  * A #GProxy handles connecting to a remote host via a given type of
  * proxy server. It is implemented by the 'gio-proxy' extension point.
@@ -6186,6 +6212,7 @@
 /**
  * SECTION:gproxyaddress
  * @short_description: An internet address with proxy information
+ * @include: gio/gio.h
  *
  * Support for proxied #GInetSocketAddress.
  */
@@ -6206,6 +6233,7 @@
  * SECTION:gremoteactiongroup
  * @title: GRemoteActionGroup
  * @short_description: A GActionGroup that interacts with other processes
+ * @include: gio/gio.h
  *
  * The GRemoteActionGroup interface is implemented by #GActionGroup
  * instances that either transmit action invocations to other processes
@@ -6363,6 +6391,7 @@
 /**
  * SECTION:gsettings
  * @short_description: High-level API for application settings
+ * @include: gio/gio.h
  *
  * The #GSettings class provides a convenient API for storing and retrieving
  * application settings.
@@ -6595,8 +6624,9 @@
 
 /**
  * SECTION:gsettingsschema
- * @short_description: Introspecting and controlling the loading of
- *                     GSettings schemas
+ * @short_description: Introspecting and controlling the loading
+ *     of GSettings schemas
+ * @include: gio/gio.h
  *
  * The #GSettingsSchemaSource and #GSettingsSchema APIs provide a
  * mechanism for advanced control over the loading of schemas and a
@@ -6697,6 +6727,7 @@
  * SECTION:gsimpleaction
  * @title: GSimpleAction
  * @short_description: A simple GAction implementation
+ * @include: gio/gio.h
  *
  * A #GSimpleAction is the obvious simple implementation of the #GAction
  * interface. This is the easiest way to create an action for purposes of
@@ -6710,6 +6741,7 @@
  * SECTION:gsimpleactiongroup
  * @title: GSimpleActionGroup
  * @short_description: A simple GActionGroup implementation
+ * @include: gio/gio.h
  *
  * #GSimpleActionGroup is a hash table filled with #GAction objects,
  * implementing the #GActionGroup and #GActionMap interfaces.
@@ -6898,6 +6930,7 @@
  * SECTION:gsimplepermission
  * @title: GSimplePermission
  * @short_description: A GPermission that doesn't change value
+ * @include: gio/gio.h
  *
  * #GSimplePermission is a trivial implementation of #GPermission that
  * represents a permission that is either always or never allowed.  The
@@ -6985,8 +7018,9 @@
 
 /**
  * SECTION:gsocketaddress
- * @short_description: Abstract base class representing endpoints for
- * socket communication
+ * @short_description: Abstract base class representing endpoints
+ *     for socket communication
+ * @include: gio/gio.h
  *
  * #GSocketAddress is the equivalent of <type>struct sockaddr</type>
  * in the BSD sockets API. This is an abstract class; use
@@ -7022,6 +7056,7 @@
 /**
  * SECTION:gsocketconnectable
  * @short_description: Interface for potential socket endpoints
+ * @include: gio/gio.h
  *
  * Objects that describe one or more potential socket endpoints
  * implement #GSocketConnectable. Callers can then use
@@ -7114,6 +7149,7 @@
  * SECTION:gsocketcontrolmessage
  * @title: GSocketControlMessage
  * @short_description: A GSocket control message
+ * @include: gio/gio.h
  * @see_also: #GSocket.
  *
  * A #GSocketControlMessage is a special-purpose utility message that
@@ -7145,6 +7181,7 @@
  * SECTION:gsocketlistener
  * @title: GSocketListener
  * @short_description: Helper for accepting network client connections
+ * @include: gio/gio.h
  * @see_also: #GThreadedSocketService, #GSocketService.
  *
  * A #GSocketListener is an object that keeps track of a set
@@ -7163,6 +7200,7 @@
  * SECTION:gsocketservice
  * @title: GSocketService
  * @short_description: Make it easy to implement a network service
+ * @include: gio/gio.h
  * @see_also: #GThreadedSocketService, #GSocketListener.
  *
  * A #GSocketService is an object that represents a service that
@@ -7222,6 +7260,7 @@
  * SECTION:gsubprocess
  * @title: GSubprocess
  * @short_description: Child processes
+ * @include: gio/gio.h
  * @see_also: #GSubprocessLauncher
  *
  * #GSubprocess allows the creation of and interaction with child
@@ -7288,6 +7327,7 @@
  * SECTION:gsubprocesslauncher
  * @title: GSubprocess Launcher
  * @short_description: Environment options for launching a child process
+ * @include: gio/gio.h
  *
  * This class contains a set of options for launching child processes,
  * such as where its standard input and output will be directed, the
@@ -7304,7 +7344,8 @@
 
 /**
  * SECTION:gtask
- * @short_description: Cancellable synchronous or asynchronous task and result
+ * @short_description: Cancellable synchronous or asynchronous task
+ *     and result
  * @include: gio/gio.h
  * @see_also: #GAsyncResult
  *
@@ -7834,6 +7875,7 @@
  * SECTION:gtcpconnection
  * @title: GTcpConnection
  * @short_description: A TCP GSocketConnection
+ * @include: gio/gio.h
  * @see_also: #GSocketConnection.
  *
  * This is the subclass of #GSocketConnection that is created
@@ -7846,7 +7888,9 @@
 /**
  * SECTION:gtcpwrapperconnection
  * @title: GTcpWrapperConnection
- * @short_description: Wrapper for non-GSocketConnection-based, GSocket-based GIOStreams
+ * @short_description: Wrapper for non-GSocketConnection-based,
+ *     GSocket-based GIOStreams
+ * @include: gio/gio.h
  * @see_also: #GSocketConnection.
  *
  * A #GTcpWrapperConnection can be used to wrap a #GIOStream that is
@@ -7972,6 +8016,7 @@
  * SECTION:gthreadedsocketservice
  * @title: GThreadedSocketService
  * @short_description: A threaded GSocketService
+ * @include: gio/gio.h
  * @see_also: #GSocketService.
  *
  * A #GThreadedSocketService is a simple subclass of #GSocketService
@@ -8036,6 +8081,7 @@
  * SECTION:gtlscertificate
  * @title: GTlsCertificate
  * @short_description: TLS certificate
+ * @include: gio/gio.h
  * @see_also: #GTlsConnection
  *
  * A certificate used for TLS authentication and encryption.
@@ -11134,7 +11180,12 @@
  *
  * Gets the list of arguments that was passed on the command line.
  *
- * The strings in the array may contain non-utf8 data.
+ * The strings in the array may contain non-UTF-8 data on UNIX (such as
+ * filenames or arguments given in the system locale) but are always in
+ * UTF-8 on Windows.
+ *
+ * If you wish to use the return value with #GOptionContext, you must
+ * use g_option_context_parse_strv().
  *
  * The return value is %NULL-terminated and should be freed using
  * g_strfreev().
@@ -11656,15 +11707,18 @@
  * is intended to be returned by main(). Although you are expected to pass
  * the @argc, @argv parameters from main() to this function, it is possible
  * to pass %NULL if @argv is not available or commandline handling is not
- * required.
+ * required.  Note that on Windows, @argc and @argv are ignored, and
+ * g_win32_get_command_line() is called internally (for proper support
+ * of Unicode commandline arguments).
  *
  * First, the local_command_line() virtual function is invoked.
  * This function always runs on the local instance. It gets passed a pointer
- * to a %NULL-terminated copy of @argv and is expected to remove the arguments
- * that it handled (shifting up remaining arguments). See
- * <xref linkend="gapplication-example-cmdline2"/> for an example of
- * parsing @argv manually. Alternatively, you may use the #GOptionContext API,
- * after setting <literal>argc = g_strv_length (argv);</literal>.
+ * to a %NULL-terminated copy of the command line and is expected to
+ * remove the arguments that it handled (shifting up remaining
+ * arguments). See <xref linkend="gapplication-example-cmdline2"/> for
+ * an example of parsing @argv manually. Alternatively, you may use the
+ * #GOptionContext API, but you must use g_option_context_parse_strv()
+ * in order to avoid memory leaks and encoding mismatches.
  *
  * The last argument to local_command_line() is a pointer to the @status
  * variable which can used to set the exit status that is returned from
@@ -11726,6 +11780,23 @@
  * impact of this is is that the wmclass of windows created by Gtk+ will
  * be set accordingly, which helps the window manager determine which
  * application is showing the window.
+ *
+ * Since 2.40, applications that are not explicitly flagged as services
+ * or launchers (ie: neither %G_APPLICATION_IS_SERVICE or
+ * %G_APPLICATION_IS_LAUNCHER are given as flags) will check (from the
+ * default handler for local_command_line) if "--gapplication-service"
+ * was given in the command line.  If this flag is present then normal
+ * commandline processing is interrupted and the
+ * %G_APPLICATION_IS_SERVICE flag is set.  This provides a "compromise"
+ * solution whereby running an application directly from the commandline
+ * will invoke it in the normal way (which can be useful for debugging)
+ * while still allowing applications to be D-Bus activated in service
+ * mode.  The D-Bus service file should invoke the executable with
+ * "--gapplication-service" as the sole commandline argument.  This
+ * approach is suitable for use by most graphical applications but
+ * should not be used from applications like editors that need precise
+ * control over when processes invoked via the commandline will exit and
+ * what their exit status will be.
  *
  * Returns: the exit status
  * Since: 2.28
@@ -18422,7 +18493,7 @@
  * of the keyfile backing @info.
  *
  * Returns: %TRUE if the @key exists
- * Since: 2.26
+ * Since: 2.36
  */
 
 
@@ -20226,9 +20297,8 @@
  * This call does no blocking I/O.
  *
  * Returns: string with the relative path from @descendant
- *     to @parent, or %NULL if @descendant doesn't have @parent
- *     as prefix. The returned string should be freed with g_free()
- *     when no longer needed.
+ *     to @parent. The returned string should be freed with
+ *     g_free() when no longer needed.
  */
 
 
@@ -21777,6 +21847,15 @@
  * relative path resolved relative to the current working directory.
  * This operation never fails, but the returned object might not
  * support any I/O operation if @arg points to a malformed path.
+ *
+ * Note that on Windows, this function expects its argument to be in
+ * UTF-8 -- not the system code page.  This means that you
+ * should not use this function with string from argv as it is passed
+ * to main().  g_win32_get_command_line() will return a UTF-8 version of
+ * the commandline.  #GApplication also uses UTF-8 but
+ * g_application_command_line_create_file_for_arg() may be more useful
+ * for you there.  It is also always possible to use this function with
+ * #GOptionContext arguments of type %G_OPTION_ARG_FILENAME.
  *
  * Returns: (transfer full): a new #GFile.
  *    Free the returned object with g_object_unref().
@@ -29555,7 +29634,7 @@
  * It is a programmer error to give a @key that isn't contained in the
  * schema for @settings.
  *
- * Returns: (allow none) (transfer full): the default value
+ * Returns: (allow-none) (transfer full): the default value
  * Since: 2.40
  */
 
@@ -29780,7 +29859,7 @@
  * It is a programmer error to give a @key that isn't contained in the
  * schema for @settings.
  *
- * Returns: (allow none) (transfer full): the user's value, if set
+ * Returns: (allow-none) (transfer full): the user's value, if set
  * Since: 2.40
  */
 
