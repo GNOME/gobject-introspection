@@ -159,7 +159,7 @@ GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir win3
 	--add-include-path=..\gir --add-include-path=. --namespace=GIRepository --nsversion=$(GLIB_APIVERSION)	\
 	--identifier-prefix=GI --symbol-prefix=g --c-include="girepository.h" --add-include-path=.	\
 	--no-libtool --pkg=gobject-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
-	--library=girepository-1-vs%VSVER% -I..\girepository -I.. -I%BASEDIR%\include 	\
+	--library=$(GI_DLLNAME) -I..\girepository -I.. -I%BASEDIR%\include 	\
 	-I%BASEDIR%\include\glib-2.0 -I%BASEDIR%\lib\glib-2.0\include --filelist=gi_list	\
 	-DGI_COMPILATION -o $@
 
