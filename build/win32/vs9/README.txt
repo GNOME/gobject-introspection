@@ -87,7 +87,6 @@ file, which is then compiled with the Visual C++ compiler to produce the .gir fi
 
 Please see $(srcroot)\build\gi-introspection-msvc.mak for more details.  Doing
 "nmake -f gi-introspection-msvc.mak (options omitted)" will build the various introspection files,
-"nmake -f gi-introspection-msvc.mak tests-introspection" will build the introspection files for the tests,
 and "nmake -f gi-introspection-msvc.mak (options omitted) install-introspection" will copy the introspection
 files to <root>\vs9\<PlatformName>\share\gir-1.0 (.gir files) and <root>\vs9\<PlatformName>\lib\girepository-1.0
 (.typelib files)
