@@ -92,7 +92,6 @@ and "nmake -f gi-introspection-msvc.mak (options omitted) install-introspection"
 files to <root>\vs9\<PlatformName>\share\gir-1.0 (.gir files) and <root>\vs9\<PlatformName>\lib\girepository-1.0
 (.typelib files)
 
-
 *** End of Note! ***
 
 The "install" project will copy build results and headers into their
