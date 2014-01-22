@@ -2531,8 +2531,7 @@
  * @notify: a function to call when this reference is the
  *  last reference to the object, or is no longer
  *  the last reference.
- * @data: (allow-none): data to pass to @notify, or %NULL to
- *  match any toggle refs with the @notify argument.
+ * @data: data to pass to @notify
  *
  * Removes a reference added with g_object_add_toggle_ref(). The
  * reference count of the object is decreased by one.

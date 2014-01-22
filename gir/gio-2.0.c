@@ -20297,8 +20297,9 @@
  * This call does no blocking I/O.
  *
  * Returns: string with the relative path from @descendant
- *     to @parent. The returned string should be freed with
- *     g_free() when no longer needed.
+ *     to @parent, or %NULL if @descendant doesn't have @parent
+ *     as prefix. The returned string should be freed with g_free()
+ *     when no longer needed.
  */
 
 
@@ -34048,7 +34049,7 @@
  * The process must have been created with
  * %G_SUBPROCESS_FLAGS_STDERR_PIPE.
  *
- * Returns: the stderr pipe
+ * Returns: (transfer none): the stderr pipe
  * Since: 2.40
  */
 
@@ -34063,7 +34064,7 @@
  * The process must have been created with
  * %G_SUBPROCESS_FLAGS_STDIN_PIPE.
  *
- * Returns: the stdout pipe
+ * Returns: (transfer none): the stdout pipe
  * Since: 2.40
  */
 
@@ -34078,7 +34079,7 @@
  * The process must have been created with
  * %G_SUBPROCESS_FLAGS_STDOUT_PIPE.
  *
- * Returns: the stdout pipe
+ * Returns: (transfer none): the stdout pipe
  * Since: 2.40
  */
 
