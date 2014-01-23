@@ -15142,7 +15142,7 @@
 
 /**
  * g_free:
- * @mem: the memory to free
+ * @mem: (allow-none): the memory to free
  *
  * Frees the memory pointed to by @mem.
  * If @mem is %NULL it simply returns.
@@ -23550,7 +23550,7 @@
 
 /**
  * g_realloc:
- * @mem: the memory to reallocate
+ * @mem: (allow-none): the memory to reallocate
  * @n_bytes: new size of the memory in bytes
  *
  * Reallocates the memory pointed to by @mem, so that it now has space for
@@ -23565,7 +23565,7 @@
 
 /**
  * g_realloc_n:
- * @mem: the memory to reallocate
+ * @mem: (allow-none): the memory to reallocate
  * @n_blocks: the number of blocks to allocate
  * @n_block_bytes: the size of each block in bytes
  *

@@ -31229,7 +31229,7 @@
  * #GSimpleProxyResolver:ignore-hosts for more details on how the
  * arguments are interpreted.
  *
- * Returns: a new #GSimpleProxyResolver
+ * Returns: (transfer full): a new #GSimpleProxyResolver
  * Since: 2.36
  */
 
