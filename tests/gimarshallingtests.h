@@ -618,6 +618,16 @@ glong gi_marshalling_tests_callback_return_value_and_multiple_out_parameters (GI
                                                                               glong                                                         *a,
                                                                               glong                                                         *b);
 
+/**
+ * GIMarshallingTestsCallbackOwnedBoxed
+* @box: (transfer none): the boxed structure.
+ */
+typedef void (* GIMarshallingTestsCallbackOwnedBoxed) (GIMarshallingTestsBoxedStruct *box,
+						       void                      *user_data);
+
+glong gi_marshalling_tests_callback_owned_boxed (GIMarshallingTestsCallbackOwnedBoxed  callback,
+                                                 void *callback_data);
+
 /* Pointer */
 
 gpointer gi_marshalling_tests_pointer_in_return (gpointer pointer);

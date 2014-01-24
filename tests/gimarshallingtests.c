@@ -4363,6 +4363,26 @@ glong
   return return_value;
 }
 
+/**
+ * gi_marshalling_tests_callback_owned_boxed:
+ * @callback: (scope call) (closure callback_data):
+ * @callback_data: (allow-none):
+ */
+glong
+gi_marshalling_tests_callback_owned_boxed (GIMarshallingTestsCallbackOwnedBoxed callback,
+                                           void *callback_data)
+{
+  static GIMarshallingTestsBoxedStruct *box = NULL;
+  glong ret;
+
+  if (!box)
+    box = gi_marshalling_tests_boxed_struct_new ();
+  box->long_++;
+  callback (box, callback_data);
+  ret = box->long_;
+  return ret;
+}
+
 gboolean
 gi_marshalling_tests_object_vfunc_meth_with_error (GIMarshallingTestsObject *self, gint x, GError **error)
 {
