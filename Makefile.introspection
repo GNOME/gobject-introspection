@@ -84,6 +84,8 @@ _gir_silent_compiler = $(_gir_silent_compiler_$(V))
 _gir_silent_compiler_ = $(_gir_silent_compiler_$(_gir_verbosity))
 _gir_silent_compiler_0 = @echo "  GICOMP   $(1)";
 
+_gir_default_scanner_env = CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)"
+
 #
 # Creates a GIR by scanning C headers/sources
 # $(1) - Name of the gir file (output)
@@ -131,7 +133,7 @@ $(if $(or $(findstring --header-only,$($(_gir_name)_SCANNERFLAGS)),
 # needs to be added manually.
 $(1): $$($(_gir_name)_FILES)
 	@ $(MKDIR_P) $(dir $(1))
-	$(_gir_silent_scanner_prefix) $(INTROSPECTION_SCANNER_ENV) $(INTROSPECTION_SCANNER) $(_gir_silent_scanner_opts) \
+	$(_gir_silent_scanner_prefix) $(_gir_default_scanner_env) $(INTROSPECTION_SCANNER_ENV) $(INTROSPECTION_SCANNER) $(_gir_silent_scanner_opts) \
 	$(INTROSPECTION_SCANNER_ARGS) \
 	  --namespace=$(_gir_namespace) \
 	  --nsversion=$(_gir_version) \
