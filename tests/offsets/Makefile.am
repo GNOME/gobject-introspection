@@ -50,8 +50,7 @@ CLEANFILES += gitestoffsets.c $(EXTRA_PROGRAMS)
 # The trailing "echo" in TESTS_ENVIRONMENT is used to ignore automake passing
 # gitestoffsets as we already run this in the same command line.
 TESTS = gitestoffsets
-TESTS_ENVIRONMENT = \
-	GI_TYPELIB_PATH=:$(top_builddir) ./gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected && \
+LOG_COMPILER = env GI_TYPELIB_PATH=:$(top_builddir) ./gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected && \
 	diff -u offsets.compiled offsets.introspected && echo
 
 CLEANFILES += offsets.compiled offsets.introspected
