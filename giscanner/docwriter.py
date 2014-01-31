@@ -173,6 +173,9 @@ class DocFormatter(object):
         if isinstance(node, ast.Constant):
             return False
 
+        if getattr(node, "private", False):
+            return False
+
         return True
 
     def format(self, node, doc):
