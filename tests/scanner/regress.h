@@ -487,6 +487,8 @@ struct _RegressTestObj
   GType gtype;
 };
 
+typedef void (*RegressTestExternallyDefinedCallback) (RegressTestObj *obj, int someint);
+
 struct _RegressTestObjClass
 {
   GObjectClass parent_class;
@@ -501,6 +503,8 @@ struct _RegressTestObjClass
 
   guint test_signal;
   guint test_signal_with_static_scope_arg;
+
+  RegressTestExternallyDefinedCallback complex_vfunc;
 
   /* Should be replaced with simple "gpointer" and not be callback */
   void (*_regress_reserved1) (void);

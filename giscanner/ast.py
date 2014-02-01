@@ -681,8 +681,8 @@ class VFunction(Callable):
         self.invoker = None
 
     @classmethod
-    def from_callback(cls, cb):
-        obj = cls(cb.name, cb.retval, cb.parameters[1:],
+    def from_callback(cls, name, cb):
+        obj = cls(name, cb.retval, cb.parameters[1:],
                   cb.throws)
         return obj
 

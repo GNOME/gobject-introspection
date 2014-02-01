@@ -1225,16 +1225,24 @@ method or constructor of some type."""
                 field.writable = False
 
         for field in class_struct.fields:
-            if not isinstance(field.anonymous_node, ast.Callback):
+            callback = None
+
+            if isinstance(field.anonymous_node, ast.Callback):
+                callback = field.anonymous_node
+            elif field.type is not None:
+                callback = self._transformer.lookup_typenode(field.type)
+                if not isinstance(callback, ast.Callback):
+                    continue
+            else:
                 continue
-            callback = field.anonymous_node
+
             # Check the first parameter is the object
             if len(callback.parameters) == 0:
                 continue
             firstparam_type = callback.parameters[0].type
             if firstparam_type != node_type:
                 continue
-            vfunc = ast.VFunction.from_callback(callback)
+            vfunc = ast.VFunction.from_callback(field.name, callback)
             vfunc.instance_parameter = callback.parameters[0]
             vfunc.inherit_file_positions(callback)
 

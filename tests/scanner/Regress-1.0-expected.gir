@@ -2466,6 +2466,20 @@ use it should be.</doc>
         </return-value>
       </function>
     </enumeration>
+    <callback name="TestExternallyDefinedCallback"
+              c:type="RegressTestExternallyDefinedCallback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="none">
+          <type name="TestObj" c:type="RegressTestObj*"/>
+        </parameter>
+        <parameter name="someint" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </callback>
     <bitfield name="TestFlags"
               glib:type-name="RegressTestFlags"
               glib:get-type="regress_test_flags_get_type"
@@ -2523,6 +2537,29 @@ use it should be.</doc>
            glib:unref-func="regress_test_fundamental_object_unref"
            glib:set-value-func="regress_test_value_set_fundamental_object"
            glib:get-value-func="regress_test_value_get_fundamental_object">
+      <virtual-method name="copy">
+        <return-value transfer-ownership="full">
+          <type name="TestFundamentalObject"
+                c:type="RegressTestFundamentalObject*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestFundamentalObject"
+                  c:type="const RegressTestFundamentalObject*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="finalize">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestFundamentalObject"
+                  c:type="RegressTestFundamentalObject*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
       <method name="ref" c:identifier="regress_test_fundamental_object_ref">
         <return-value transfer-ownership="full">
           <doc xml:space="preserve">A new #RegressTestFundamentalObject</doc>
@@ -2863,6 +2900,19 @@ use it should be.</doc>
           <parameter name="two" transfer-ownership="none" allow-none="1">
             <doc xml:space="preserve">Another object</doc>
             <type name="TestObj" c:type="RegressTestObj*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="complex_vfunc">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+          <parameter name="someint" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
       </virtual-method>
@@ -3596,6 +3646,10 @@ the introspection client langage.</doc>
       </field>
       <field name="test_signal_with_static_scope_arg">
         <type name="guint" c:type="guint"/>
+      </field>
+      <field name="complex_vfunc">
+        <type name="TestExternallyDefinedCallback"
+              c:type="RegressTestExternallyDefinedCallback"/>
       </field>
       <field name="_regress_reserved1" introspectable="0">
         <callback name="_regress_reserved1">
