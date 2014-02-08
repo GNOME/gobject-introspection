@@ -16,7 +16,6 @@
  * @module: the #GModule corresponding to the module which has just been loaded
  *
  * Specifies the type of the module initialization function.
- * <indexterm zone="g-module-check-init"><primary>g_module_check_init</primary></indexterm>
  * If a module contains a function named g_module_check_init() it is called
  * automatically when the module is loaded. It is passed the #GModule structure
  * and should return %NULL on success or a string describing the initialization
@@ -46,7 +45,6 @@
  * GModuleUnload:
  * @module: the #GModule about to be unloaded
  *
- * <indexterm zone="g-module-unload"><primary>g_module_unload</primary></indexterm>
  * Specifies the type of the module function called when it is unloaded.
  * If a module contains a function named g_module_unload() it is called
  * automatically when the module is unloaded.
@@ -90,8 +88,7 @@
  * well as Windows platforms via DLLs.
  *
  * A program which wants to use these functions must be linked to the
- * libraries output by the command
- * <command>pkg-config --libs gmodule-2.0</command>.
+ * libraries output by the command `pkg-config --libs gmodule-2.0`.
  *
  * To use them you must first determine whether dynamic loading
  * is supported on the platform by calling g_module_supported().
@@ -109,12 +106,11 @@
  *
  * If your module introduces static data to common subsystems in the running
  * program, e.g. through calling
- * <literal>g_quark_from_static_string ("my-module-stuff")</literal>,
+ * `g_quark_from_static_string ("my-module-stuff")`,
  * it must ensure that it is never unloaded, by calling g_module_make_resident().
  *
- * <example>
- * <title>Calling a function defined in a <structname>GModule</structname></title>
- * <programlisting>
+ * Example: Calling a function defined in a GModule
+ * |[<!-- language="C" -->
  * /&ast; the function signature for 'say_hello' &ast;/
  * typedef void (* SayHelloFunc) (const char *message);
  *
@@ -128,16 +124,16 @@
  *   if (!module)
  *     {
  *       g_set_error (error, FOO_ERROR, FOO_ERROR_BLAH,
- *                    "&percnt;s", g_module_error ());
+ *                    "%s", g_module_error ());
  *       return FALSE;
  *     }
  *
- *   if (!g_module_symbol (module, "say_hello", (gpointer *)&amp;say_hello))
+ *   if (!g_module_symbol (module, "say_hello", (gpointer *)&say_hello))
  *     {
  *       g_set_error (error, SAY_ERROR, SAY_ERROR_OPEN,
- *                    "&percnt;s: &percnt;s", filename, g_module_error ());
+ *                    "%s: %s", filename, g_module_error ());
  *       if (!g_module_close (module))
- *         g_warning ("&percnt;s: &percnt;s", filename, g_module_error ());
+ *         g_warning ("%s: %s", filename, g_module_error ());
  *       return FALSE;
  *     }
  *
@@ -146,7 +142,7 @@
  *       g_set_error (error, SAY_ERROR, SAY_ERROR_OPEN,
  *                    "symbol say_hello is NULL");
  *       if (!g_module_close (module))
- *         g_warning ("&percnt;s: &percnt;s", filename, g_module_error ());
+ *         g_warning ("%s: %s", filename, g_module_error ());
  *       return FALSE;
  *     }
  *
@@ -154,18 +150,17 @@
  *   say_hello ("Hello world!");
  *
  *   if (!g_module_close (module))
- *     g_warning ("&percnt;s: &percnt;s", filename, g_module_error ());
+ *     g_warning ("%s: %s", filename, g_module_error ());
  *   return TRUE;
  *  }
- * </programlisting>
- * </example>
+ * ]|
  */
 
 
 /**
  * g_module_build_path:
- * @directory: (allow-none): the directory where the module is. This can be %NULL
- *     or the empty string to indicate that the standard platform-specific
+ * @directory: (allow-none): the directory where the module is. This can be
+ *     %NULL or the empty string to indicate that the standard platform-specific
  *     directories will be used, though that is not recommended
  * @module_name: the name of the module
  *
@@ -179,10 +174,9 @@
  * since the wrong module may be found.
  *
  * For example, calling g_module_build_path() on a Linux system with a
- * @directory of <filename>/lib</filename> and a @module_name of "mylibrary"
- * will return <filename>/lib/libmylibrary.so</filename>. On a Windows system,
- * using <filename>\Windows</filename> as the directory it will return
- * <filename>\Windows\mylibrary.dll</filename>.
+ * @directory of `/lib` and a @module_name of "mylibrary" will return
+ * `/lib/libmylibrary.so`. On a Windows system, using `\Windows` as the
+ * directory it will return `\Windows\mylibrary.dll`.
  *
  * Returns: the complete path of the module, including the standard library
  *     prefix and suffix. This should be freed when no longer needed

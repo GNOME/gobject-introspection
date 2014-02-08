@@ -219,6 +219,62 @@
 
 
 /**
+ * GApplication::handle-local-options:
+ * @application: the application
+ * @options: the options dictionary
+ *
+ * The ::handle-local-options signal is emitted on the local instance
+ * after the parsing of the commandline options has occurred.
+ *
+ * You can add options to be recognised during commandline option
+ * parsing using g_application_add_main_option_entries() and
+ * g_application_add_option_group().
+ *
+ * Signal handlers can inspect @options (along with values pointed to
+ * from the @arg_data of an installed #GOptionEntrys) in order to
+ * decide to perform certain actions, including direct local handling
+ * (which may be useful for options like --version).
+ *
+ * If the options have been "handled" then a non-negative value should
+ * be returned.   In this case, the return value is the exit status: 0
+ * for success and a positive value for failure.  -1 means to continue
+ * normal processing.
+ *
+ * In the event that the application is marked
+ * %G_APPLICATION_HANDLES_COMMAND_LINE the "normal processing" will
+ * send the @option dictionary to the primary instance where it can be
+ * read with g_application_command_line_get_options().  The signal
+ * handler can modify the dictionary before returning, and the
+ * modified dictionary will be sent.
+ *
+ * In the event that %G_APPLICATION_HANDLES_COMMAND_LINE is not set,
+ * "normal processing" will treat the remaining uncollected command
+ * line arguments as filenames or URIs.  If there are no arguments,
+ * the application is activated by g_application_activate().  One or
+ * more arguments results in a call to g_application_open().
+ *
+ * If you want to handle the local commandline arguments for yourself
+ * by converting them to calls to g_application_open() or
+ * g_action_group_activate_action() then you must be sure to register
+ * the application first.  You should probably not call
+ * g_application_activate() for yourself, however: just return -1 and
+ * allow the default handler to do it for you.  This will ensure that
+ * the <literal>--gapplication-service</literal> switch works properly
+ * (ie: no activation in that case).
+ *
+ * Note that this signal is emitted from the default implementation of
+ * local_command_line().  If you override that function and don't
+ * chain up then this signal will never be emitted.
+ *
+ * You can override local_command_line() if you need more powerful
+ * capabilities than what is provided here, but this should not
+ * normally be required.
+ *
+ * Since: 2.40
+ */
+
+
+/**
  * GApplication::open:
  * @application: the application
  * @files: (array length=n_files) (element-type GFile): an array of #GFiles
@@ -297,8 +353,8 @@
 /**
  * GApplicationCommandLineClass:
  *
- * The <structname>GApplicationCommandLineClass</structname> structure
- * contains private data only
+ * The #GApplicationCommandLineClass-struct
+ * contains private data only.
  *
  * Since: 2.28
  */
@@ -324,16 +380,14 @@
  *
  * Note that disconnecting from this signal (or any signal) in a
  * multi-threaded program is prone to race conditions. For instance
- * it is possible that a signal handler may be invoked even
- * <emphasis>after</emphasis> a call to
- * g_signal_handler_disconnect() for that handler has already
- * returned.
+ * it is possible that a signal handler may be invoked even after
+ * a call to g_signal_handler_disconnect() for that handler has
+ * already returned.
  *
- * There is also a problem when cancellation happen
- * right before connecting to the signal. If this happens the
- * signal will unexpectedly not be emitted, and checking before
- * connecting to the signal leaves a race condition where this is
- * still happening.
+ * There is also a problem when cancellation happens right before
+ * connecting to the signal. If this happens the signal will
+ * unexpectedly not be emitted, and checking before connecting to
+ * the signal leaves a race condition where this is still happening.
  *
  * In order to make it safe and easy to connect handlers there
  * are two helper functions: g_cancellable_connect() and
@@ -341,13 +395,14 @@
  * like this.
  *
  * An example of how to us this:
- * |[
- *     /<!-- -->* Make sure we don't do any unnecessary work if already cancelled *<!-- -->/
+ * |[<!-- language="C" -->
+ *     /&ast; Make sure we don't do unnecessary work if already cancelled &ast;/
  *     if (g_cancellable_set_error_if_cancelled (cancellable, error))
  *       return;
  *
- *     /<!-- -->* Set up all the data needed to be able to
- *      * handle cancellation of the operation *<!-- -->/
+ *     /&ast; Set up all the data needed to be able to
+ *      &ast; handle cancellation of the operation
+ *      &ast;/
  *     my_data = my_data_new (...);
  *
  *     id = 0;
@@ -356,12 +411,13 @@
  *     			      G_CALLBACK (cancelled_handler)
  *     			      data, NULL);
  *
- *     /<!-- -->* cancellable operation here... *<!-- -->/
+ *     /&ast; cancellable operation here... &ast;/
  *
  *     g_cancellable_disconnect (cancellable, id);
  *
- *     /<!-- -->* cancelled_handler is never called after this, it
- *      * is now safe to free the data *<!-- -->/
+ *     /&ast; cancelled_handler is never called after this,
+ *      &ast; it is now safe to free the data
+ *      &ast;/
  *     my_data_free (my_data);
  * ]|
  *
@@ -421,7 +477,7 @@
 /**
  * GDBusAuthObserver::allow-mechanism:
  * @observer: The #GDBusAuthObserver emitting the signal.
- * @mechanism: The name of the mechanism, e.g. <literal>DBUS_COOKIE_SHA1</literal>.
+ * @mechanism: The name of the mechanism, e.g. `DBUS_COOKIE_SHA1`.
  *
  * Emitted to check if @mechanism is allowed to be used.
  *
@@ -466,29 +522,23 @@
 
 /**
  * GDBusConnection::closed:
- * @connection: The #GDBusConnection emitting the signal.
+ * @connection: the #GDBusConnection emitting the signal
  * @remote_peer_vanished: %TRUE if @connection is closed because the
- * remote peer closed its end of the connection.
- * @error: (allow-none): A #GError with more details about the event or %NULL.
+ *     remote peer closed its end of the connection
+ * @error: (allow-none): a #GError with more details about the event or %NULL
  *
  * Emitted when the connection is closed.
  *
  * The cause of this event can be
- * <itemizedlist>
- * <listitem><para>
- *    If g_dbus_connection_close() is called. In this case
- *    @remote_peer_vanished is set to %FALSE and @error is %NULL.
- * </para></listitem>
- * <listitem><para>
- *    If the remote peer closes the connection. In this case
- *    @remote_peer_vanished is set to %TRUE and @error is set.
- * </para></listitem>
- * <listitem><para>
- *    If the remote peer sends invalid or malformed data. In this
- *    case @remote_peer_vanished is set to %FALSE and @error
- *    is set.
- * </para></listitem>
- * </itemizedlist>
+ *
+ * - If g_dbus_connection_close() is called. In this case
+ *   @remote_peer_vanished is set to %FALSE and @error is %NULL.
+ *
+ * - If the remote peer closes the connection. In this case
+ *   @remote_peer_vanished is set to %TRUE and @error is set.
+ *
+ * - If the remote peer sends invalid or malformed data. In this
+ *   case @remote_peer_vanished is set to %FALSE and @error is set.
  *
  * Upon receiving this signal, you should give up your reference to
  * @connection. You are guaranteed that this signal is emitted only
@@ -540,11 +590,11 @@
  * GDBusConnection:exit-on-close:
  *
  * A boolean specifying whether the process will be terminated (by
- * calling <literal>raise(SIGTERM)</literal>) if the connection
- * is closed by the remote peer.
+ * calling `raise(SIGTERM)`) if the connection is closed by the
+ * remote peer.
  *
- * Note that #GDBusConnection objects returned by g_bus_get_finish() and
- * g_bus_get_sync() will (usually) have this property set to %TRUE.
+ * Note that #GDBusConnection objects returned by g_bus_get_finish()
+ * and g_bus_get_sync() will (usually) have this property set to %TRUE.
  *
  * Since: 2.26
  */
@@ -635,11 +685,11 @@
  *
  * Note that this signal is emitted in a thread dedicated to
  * handling the method call so handlers are allowed to perform
- * blocking IO. This means that it is appropriate to call
- * e.g. <ulink
- * url="http://hal.freedesktop.org/docs/polkit/PolkitAuthority.html#polkit-authority-check-authorization-sync">polkit_authority_check_authorization_sync()</ulink>
- * with the <ulink
- * url="http://hal.freedesktop.org/docs/polkit/PolkitAuthority.html#POLKIT-CHECK-AUTHORIZATION-FLAGS-ALLOW-USER-INTERACTION:CAPS">POLKIT_CHECK_AUTHORIZATION_FLAGS_ALLOW_USER_INTERACTION</ulink> flag set.
+ * blocking IO. This means that it is appropriate to call e.g.
+ * [polkit_authority_check_authorization_sync()](http://hal.freedesktop.org/docs/polkit/PolkitAuthority.html#polkit-authority-check-authorization-sync)
+ * with the
+ * [POLKIT_CHECK_AUTHORIZATION_FLAGS_ALLOW_USER_INTERACTION](http://hal.freedesktop.org/docs/polkit/PolkitAuthority.html#POLKIT-CHECK-AUTHORIZATION-FLAGS-ALLOW-USER-INTERACTION:CAPS)
+ * flag set.
  *
  * If %FALSE is returned then no further handlers are run and the
  * signal handler must take a reference to @invocation and finish
@@ -968,9 +1018,9 @@
  * Emitted when a method is invoked by a remote caller and used to
  * determine if the method call is authorized.
  *
- * This signal is like #GDBusInterfaceSkeleton<!-- -->'s
- * #GDBusInterfaceSkeleton::g-authorize-method signal, except that it is
- * for the enclosing object.
+ * This signal is like #GDBusInterfaceSkeleton's
+ * #GDBusInterfaceSkeleton::g-authorize-method signal,
+ * except that it is for the enclosing object.
  *
  * The default class handler just returns %TRUE.
  *
@@ -1004,8 +1054,8 @@
  * @invalidated_properties will always be empty.
  *
  * This signal corresponds to the
- * <literal>PropertiesChanged</literal> D-Bus signal on the
- * <literal>org.freedesktop.DBus.Properties</literal> interface.
+ * `PropertiesChanged` D-Bus signal on the
+ * `org.freedesktop.DBus.Properties` interface.
  *
  * Since: 2.26
  */
@@ -1076,27 +1126,23 @@
  * Ensure that interactions with this proxy conform to the given
  * interface. This is mainly to ensure that malformed data received
  * from the other peer is ignored. The given #GDBusInterfaceInfo is
- * said to be the <emphasis>expected interface</emphasis>.
+ * said to be the "expected interface".
  *
  * The checks performed are:
- * <itemizedlist>
- *   <listitem><para>
- *     When completing a method call, if the type signature of
- *     the reply message isn't what's expected, the reply is
- *     discarded and the #GError is set to %G_IO_ERROR_INVALID_ARGUMENT.
- *   </para></listitem>
- *   <listitem><para>
- *     Received signals that have a type signature mismatch are dropped and
- *     a warning is logged via g_warning().
- *   </para></listitem>
- *   <listitem><para>
- *     Properties received via the initial <literal>GetAll()</literal> call
- *     or via the <literal>::PropertiesChanged</literal> signal (on the
- *     <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">org.freedesktop.DBus.Properties</ulink> interface) or
- *     set using g_dbus_proxy_set_cached_property() with a type signature
- *     mismatch are ignored and a warning is logged via g_warning().
- *   </para></listitem>
- * </itemizedlist>
+ * - When completing a method call, if the type signature of
+ *   the reply message isn't what's expected, the reply is
+ *   discarded and the #GError is set to %G_IO_ERROR_INVALID_ARGUMENT.
+ *
+ * - Received signals that have a type signature mismatch are dropped and
+ *   a warning is logged via g_warning().
+ *
+ * - Properties received via the initial `GetAll()` call or via the
+ *   `::PropertiesChanged` signal (on the
+ *   [org.freedesktop.DBus.Properties](http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties)
+ *   interface) or set using g_dbus_proxy_set_cached_property()
+ *   with a type signature mismatch are ignored and a warning is
+ *   logged via g_warning().
+ *
  * Note that these checks are never done on methods, signals and
  * properties that are not referenced in the given
  * #GDBusInterfaceInfo, since extending a D-Bus interface on the
@@ -1493,15 +1539,15 @@
 /**
  * GInetSocketAddress:
  *
- * An IPv4 or IPv6 socket address, corresponding to a <type>struct
- * sockaddr_in</type> or <type>struct sockaddr_in6</type>.
+ * An IPv4 or IPv6 socket address, corresponding to a struct
+ * sockaddr_in or struct sockaddr_in6.
  */
 
 
 /**
  * GInetSocketAddress:flowinfo:
  *
- * The <literal>sin6_flowinfo</literal> field, for IPv6 addresses.
+ * The `sin6_flowinfo` field, for IPv6 addresses.
  *
  * Since: 2.32
  */
@@ -1510,7 +1556,7 @@
 /**
  * GInetSocketAddress:scope_id:
  *
- * The <literal>sin6_scope_id</literal> field, for IPv6 addresses.
+ * The `sin6_scope_id` field, for IPv6 addresses.
  *
  * Since: 2.32
  */
@@ -1870,10 +1916,9 @@
  * connected to a functioning router that has lost its own upstream
  * connectivity. Some hosts might only be accessible when a VPN is
  * active. Other hosts might only be accessible when the VPN is
- * <emphasis>not</emphasis> active. Thus, it is best to use
- * g_network_monitor_can_reach() or
- * g_network_monitor_can_reach_async() to test for reachability on a
- * host-by-host basis. (On the other hand, when the property is
+ * not active. Thus, it is best to use g_network_monitor_can_reach()
+ * or g_network_monitor_can_reach_async() to test for reachability
+ * on a host-by-host basis. (On the other hand, when the property is
  * %FALSE, the application can reasonably expect that no remote
  * hosts at all are reachable, and should indicate this to the user
  * in its UI.)
@@ -2097,7 +2142,7 @@
  * GSettings::change-event:
  * @settings: the object on which the signal was emitted
  * @keys: (array length=n_keys) (element-type GQuark) (allow-none):
- *        an array of #GQuark<!-- -->s for the changed keys, or %NULL
+ *        an array of #GQuarks for the changed keys, or %NULL
  * @n_keys: the length of the @keys array, or 0
  *
  * The "change-event" signal is emitted once per change event that
@@ -2304,13 +2349,12 @@
  *
  * If no handler is connected to this signal then the default
  * behaviour is to call g_simple_action_set_state() to set the state
- * to the requested value.  If you connect a signal handler then no
- * default action is taken.  If the state should change then you must
+ * to the requested value. If you connect a signal handler then no
+ * default action is taken. If the state should change then you must
  * call g_simple_action_set_state() from the handler.
  *
- * <example>
- * <title>Example 'change-state' handler</title>
- * <programlisting>
+ * An example of a 'change-state' handler:
+ * |[<!-- language="C" -->
  * static void
  * change_volume_state (GSimpleAction *action,
  *                      GVariant      *value,
@@ -2320,15 +2364,14 @@
  *
  *   requested = g_variant_get_int32 (value);
  *
- *   // Volume only goes from 0 to 10
+ *   /&ast; Volume only goes from 0 to 10 &ast;/
  *   if (0 <= requested && requested <= 10)
  *     g_simple_action_set_state (action, value);
  * }
- * </programlisting>
- * </example>
+ * ]|
  *
- * The handler need not set the state to the requested value.  It
- * could set it to any value at all, or take some other action.
+ * The handler need not set the state to the requested value.
+ * It could set it to any value at all, or take some other action.
  *
  * Since: 2.30
  */
@@ -2349,7 +2392,7 @@
 /**
  * GSimpleAction:name:
  *
- * The name of the action.  This is mostly meaningful for identifying
+ * The name of the action. This is mostly meaningful for identifying
  * the action once it has been added to a #GSimpleActionGroup.
  *
  * Since: 2.28
@@ -2401,10 +2444,8 @@
  * of the schemes set with g_simple_proxy_resolver_set_uri_proxy().
  *
  * Note that as a special case, if this URI starts with
- * "<literal>socks://</literal>", #GSimpleProxyResolver will treat
- * it as referring to all three of the <literal>socks5</literal>,
- * <literal>socks4a</literal>, and <literal>socks4</literal> proxy
- * types.
+ * "socks://", #GSimpleProxyResolver will treat it as referring
+ * to all three of the socks5, socks4a, and socks4 proxy types.
  */
 
 
@@ -2416,32 +2457,21 @@
  *
  * Entries can be in one of 4 formats:
  *
- * <itemizedlist>
- *   <listitem>
- *     A hostname, such as "<literal>example.com</literal>",
- *     "<literal>.example.com</literal>", or
- *     "<literal>*.example.com</literal>", any of which match
- *     "<literal>example.com</literal>" or any subdomain of it.
- *   </listitem>
- *   <listitem>
- *     An IPv4 or IPv6 address, such as
- *     "<literal>192.168.1.1</literal>", which matches only
- *     that address.
- *   </listitem>
- *   <listitem>
- *     A hostname or IP address followed by a port, such as
- *     "<literal>example.com:80</literal>", which matches whatever
- *     the hostname or IP address would match, but only for URLs
- *     with the (explicitly) indicated port. In the case of an IPv6
- *     address, the address part must appear in brackets:
- *     "<literal>[::1]:443</literal>"
- *   </listitem>
- *   <listitem>
- *     An IP address range, given by a base address and prefix length,
- *     such as "<literal>fe80::/10</literal>", which matches any
- *     address in that range.
- *   </listitem>
- * </itemizedlist>
+ * - A hostname, such as "example.com", ".example.com", or
+ *   "*.example.com", any of which match "example.com" or
+ *   any subdomain of it.
+ *
+ * - An IPv4 or IPv6 address, such as "192.168.1.1",
+ *   which matches only that address.
+ *
+ * - A hostname or IP address followed by a port, such as
+ *   "example.com:80", which matches whatever the hostname or IP
+ *   address would match, but only for URLs with the (explicitly)
+ *   indicated port. In the case of an IPv6 address, the address
+ *   part must appear in brackets: "[::1]:443"
+ *
+ * - An IP address range, given by a base address and prefix length,
+ *   such as "fe80::/10", which matches any address in that range.
  *
  * Note that when dealing with Unicode hostnames, the matching is
  * done against the ASCII form of the name.
@@ -2449,13 +2479,10 @@
  * Also note that hostname exclusions apply only to connections made
  * to hosts identified by name, and IP address exclusions apply only
  * to connections made to hosts identified by address. That is, if
- * <literal>example.com</literal> has an address of
- * <literal>192.168.1.1</literal>, and the :ignore-hosts list
- * contains only "<literal>192.168.1.1</literal>", then a connection
- * to "<literal>example.com</literal>" (eg, via a #GNetworkAddress)
- * will use the proxy, and a connection to
- * "<literal>192.168.1.1</literal>" (eg, via a #GInetSocketAddress)
- * will not.
+ * example.com has an address of 192.168.1.1, and the :ignore-hosts list
+ * contains only "192.168.1.1", then a connection to "example.com"
+ * (eg, via a #GNetworkAddress) will use the proxy, and a connection to
+ * "192.168.1.1" (eg, via a #GInetSocketAddress) will not.
  *
  * These rules match the "ignore-hosts"/"noproxy" rules most
  * commonly used by other applications.
@@ -2510,7 +2537,7 @@
 /**
  * GSocketAddress:
  *
- * A socket endpoint address, corresponding to <type>struct sockaddr</type>
+ * A socket endpoint address, corresponding to struct sockaddr
  * or one of its subtypes.
  */
 
@@ -2527,80 +2554,40 @@
  * information about a network connection in the UI. The meanings of
  * the different @event values are as follows:
  *
- * <variablelist>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_RESOLVING:</term>
- *     <listitem><para>
- *       @client is about to look up @connectable in DNS.
- *       @connection will be %NULL.
- *     </para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_RESOLVED:</term>
- *     <listitem><para>
- *       @client has successfully resolved @connectable in DNS.
- *       @connection will be %NULL.
- *     </para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_CONNECTING:</term>
- *     <listitem><para>
- *       @client is about to make a connection to a remote host;
- *       either a proxy server or the destination server itself.
- *       @connection is the #GSocketConnection, which is not yet
- *       connected.  Since GLib 2.40, you can access the remote
- *       address via g_socket_connection_get_remote_address().
- *     </para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_CONNECTED:</term>
- *     <listitem><para>
- *       @client has successfully connected to a remote host.
- *       @connection is the connected #GSocketConnection.
- *     </para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_PROXY_NEGOTIATING:</term>
- *     <listitem><para>
- *       @client is about to negotiate with a proxy to get it to
- *       connect to @connectable. @connection is the
- *       #GSocketConnection to the proxy server.
- *     </para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_PROXY_NEGOTIATED:</term>
- *     <listitem><para>
- *       @client has negotiated a connection to @connectable through
- *       a proxy server. @connection is the stream returned from
- *       g_proxy_connect(), which may or may not be a
- *       #GSocketConnection.
- *     </para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_TLS_HANDSHAKING:</term>
- *     <listitem><para>
- *       @client is about to begin a TLS handshake. @connection is a
- *       #GTlsClientConnection.
- *     </para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_TLS_HANDSHAKED:</term>
- *     <listitem><para>
- *       @client has successfully completed the TLS handshake.
- *       @connection is a #GTlsClientConnection.
- *     </para></listitem>
- *   </varlistentry>
- *   <varlistentry>
- *     <term>%G_SOCKET_CLIENT_COMPLETE:</term>
- *     <listitem><para>
- *       @client has either successfully connected to @connectable
- *       (in which case @connection is the #GSocketConnection that
- *       it will be returning to the caller) or has failed (in which
- *       case @connection is %NULL and the client is about to return
- *       an error).
- *     </para></listitem>
- *   </varlistentry>
- * </variablelist>
+ * - %G_SOCKET_CLIENT_RESOLVING: @client is about to look up @connectable
+ *   in DNS. @connection will be %NULL.
+ *
+ * - %G_SOCKET_CLIENT_RESOLVED:  @client has successfully resolved
+ *   @connectable in DNS. @connection will be %NULL.
+ *
+ * - %G_SOCKET_CLIENT_CONNECTING: @client is about to make a connection
+ *   to a remote host; either a proxy server or the destination server
+ *   itself. @connection is the #GSocketConnection, which is not yet
+ *   connected.  Since GLib 2.40, you can access the remote
+ *   address via g_socket_connection_get_remote_address().
+ *
+ * - %G_SOCKET_CLIENT_CONNECTED: @client has successfully connected
+ *   to a remote host. @connection is the connected #GSocketConnection.
+ *
+ * - %G_SOCKET_CLIENT_PROXY_NEGOTIATING: @client is about to negotiate
+ *   with a proxy to get it to connect to @connectable. @connection is
+ *   the #GSocketConnection to the proxy server.
+ *
+ * - %G_SOCKET_CLIENT_PROXY_NEGOTIATED: @client has negotiated a
+ *   connection to @connectable through a proxy server. @connection is
+ *   the stream returned from g_proxy_connect(), which may or may not
+ *   be a #GSocketConnection.
+ *
+ * - %G_SOCKET_CLIENT_TLS_HANDSHAKING: @client is about to begin a TLS
+ *   handshake. @connection is a #GTlsClientConnection.
+ *
+ * - %G_SOCKET_CLIENT_TLS_HANDSHAKED: @client has successfully completed
+ *   the TLS handshake. @connection is a #GTlsClientConnection.
+ *
+ * - %G_SOCKET_CLIENT_COMPLETE: @client has either successfully connected
+ *   to @connectable (in which case @connection is the #GSocketConnection
+ *   that it will be returning to the caller) or has failed (in which
+ *   case @connection is %NULL and the client is about to return an error).
  *
  * Each event except %G_SOCKET_CLIENT_COMPLETE may be emitted
  * multiple times (or not at all) for a given connectable (in
@@ -2680,8 +2667,8 @@
  * g_task_set_return_on_cancel() for more details.
  *
  * Other than in that case, @task will be completed when the
- * #GTaskThreadFunc returns, <emphasis>not</emphasis> when it calls
- * a <literal>g_task_return_</literal> function.
+ * #GTaskThreadFunc returns, not when it calls a
+ * `g_task_return_` function.
  *
  * Since: 2.36
  */
@@ -2729,7 +2716,7 @@
  *
  * For example, if the icon name was "gnome-dev-cdrom-audio", the array
  * would become
- * |[
+ * |[<!-- language="C" -->
  * {
  *   "gnome-dev-cdrom-audio",
  *   "gnome-dev-cdrom",
@@ -2820,7 +2807,7 @@
  * but cannot be read.
  *
  * PKCS#8 format is supported since 2.32; earlier releases only
- * support PKCS#1. You can use the <literal>openssl rsa</literal>
+ * support PKCS#1. You can use the `openssl rsa`
  * tool to convert PKCS#8 keys to PKCS#1.
  *
  * Since: 2.28
@@ -2831,14 +2818,14 @@
  * GTlsCertificate:private-key-pem:
  *
  * The PEM (ASCII) encoded representation of the certificate's
- * private key in either PKCS#1 format ("<literal>BEGIN RSA PRIVATE
- * KEY</literal>") or unencrypted PKCS#8 format ("<literal>BEGIN
- * PRIVATE KEY</literal>"). This property (or the
+ * private key in either PKCS#1 format ("`BEGIN RSA PRIVATE
+ * KEY`") or unencrypted PKCS#8 format ("`BEGIN
+ * PRIVATE KEY`"). This property (or the
  * #GTlsCertificate:private-key property) can be set when
  * constructing a key (eg, from a file), but cannot be read.
  *
  * PKCS#8 format is supported since 2.32; earlier releases only
- * support PKCS#1. You can use the <literal>openssl rsa</literal>
+ * support PKCS#1. You can use the `openssl rsa`
  * tool to convert PKCS#8 keys to PKCS#1.
  *
  * Since: 2.28
@@ -3234,7 +3221,7 @@
  * GUnixSocketAddress:
  *
  * A UNIX-domain (local) socket address, corresponding to a
- * <type>struct sockaddr_un</type>.
+ * struct sockaddr_un.
  */
 
 
@@ -3514,7 +3501,7 @@
  * of an extension point has a name, and a priority. Use
  * g_io_extension_point_implement() to implement an extension point.
  *
- *  |[
+ *  |[<!-- language="C" -->
  *  GIOExtensionPoint *ep;
  *
  *  /&ast; Register an extension point &ast;/
@@ -3522,7 +3509,7 @@
  *  g_io_extension_point_set_required_type (ep, MY_TYPE_EXAMPLE);
  *  ]|
  *
- *  |[
+ *  |[<!-- language="C" -->
  *  /&ast; Implement an extension point &ast;/
  *  G_DEFINE_TYPE (MyExampleImpl, my_example_impl, MY_TYPE_EXAMPLE);
  *  g_io_extension_point_implement ("my-extension-point",
@@ -3543,10 +3530,10 @@
  *  You are expected to run this command after installing a
  *  GIO module.
  *
- *  The <envar>GIO_EXTRA_MODULES</envar> environment variable can be
- *  used to specify additional directories to automatically load modules
+ *  The `GIO_EXTRA_MODULES` environment variable can be used to
+ *  specify additional directories to automatically load modules
  *  from. This environment variable has the same syntax as the
- *  <envar>PATH</envar>. If two modules have the same base name in different
+ *  `PATH`. If two modules have the same base name in different
  *  directories, then the latter one will be ignored. If additional
  *  directories are specified GIO will load modules from the built-in
  *  directory last.
@@ -3633,7 +3620,7 @@
  * with actions.  'Internal' APIs (ie: ones meant only to be accessed by
  * the action group implementation) are found on subclasses.  This is
  * why you will find - for example - g_action_group_get_action_enabled()
- * but not an equivalent <function>set()</function> call.
+ * but not an equivalent set() call.
  *
  * Signals are emitted on the action group in response to state changes
  * on individual actions.
@@ -3694,15 +3681,13 @@
  * As of GLib 2.20, URIs will always be converted to POSIX paths
  * (using g_file_get_path()) when using g_app_info_launch() even if
  * the application requested an URI and not a POSIX path. For example
- * for an desktop-file based application with Exec key <literal>totem
- * &percnt;U</literal> and a single URI,
- * <literal>sftp://foo/file.avi</literal>, then
- * <literal>/home/user/.gvfs/sftp on foo/file.avi</literal> will be
- * passed. This will only work if a set of suitable GIO extensions
- * (such as gvfs 2.26 compiled with FUSE support), is available and
- * operational; if this is not the case, the URI will be passed
- * unmodified to the application. Some URIs, such as
- * <literal>mailto:</literal>, of course cannot be mapped to a POSIX
+ * for an desktop-file based application with Exec key `totem
+ * &percnt;U` and a single URI, `sftp://foo/file.avi`, then
+ * `/home/user/.gvfs/sftp on foo/file.avi` will be passed. This will
+ * only work if a set of suitable GIO extensions (such as gvfs 2.26
+ * compiled with FUSE support), is available and operational; if this
+ * is not the case, the URI will be passed unmodified to the application.
+ * Some URIs, such as `mailto:`, of course cannot be mapped to a POSIX
  * path (in gvfs there's no FUSE mount for it); such URIs will be
  * passed unmodified to the application.
  *
@@ -3715,29 +3700,29 @@
  * equal to the result of g_file_get_uri(). The following snippet
  * illustrates this:
  *
- * <programlisting>
+ * |[
  * GFile *f;
  * char *uri;
  *
  * file = g_file_new_for_commandline_arg (uri_from_commandline);
  *
  * uri = g_file_get_uri (file);
- * strcmp (uri, uri_from_commandline) == 0; // FALSE
+ * strcmp (uri, uri_from_commandline) == 0;
  * g_free (uri);
  *
  * if (g_file_has_uri_scheme (file, "cdda"))
  *   {
- *     // do something special with uri
+ *     /&ast; do something special with uri &ast;/
  *   }
  * g_object_unref (file);
- * </programlisting>
+ * ]|
  *
- * This code will work when both <literal>cdda://sr0/Track
- * 1.wav</literal> and <literal>/home/user/.gvfs/cdda on sr0/Track
- * 1.wav</literal> is passed to the application. It should be noted
- * that it's generally not safe for applications to rely on the format
- * of a particular URIs. Different launcher applications (e.g. file
- * managers) may have different ideas of what a given URI means.
+ * This code will work when both `cdda://sr0/Track 1.wav` and
+ * `/home/user/.gvfs/cdda on sr0/Track 1.wav` is passed to the
+ * application. It should be noted that it's generally not safe
+ * for applications to rely on the format of a particular URIs.
+ * Different launcher applications (e.g. file managers) may have
+ * different ideas of what a given URI means.
  */
 
 
@@ -3780,41 +3765,40 @@
  * this class outside of a higher level framework.
  *
  * GApplication provides convenient life cycle management by maintaining
- * a <firstterm>use count</firstterm> for the primary application instance.
- * The use count can be changed using g_application_hold() and
- * g_application_release(). If it drops to zero, the application exits.
- * Higher-level classes such as #GtkApplication employ the use count to
- * ensure that the application stays alive as long as it has any opened
- * windows.
+ * a "use count" for the primary application instance. The use count can
+ * be changed using g_application_hold() and g_application_release(). If
+ * it drops to zero, the application exits. Higher-level classes such as
+ * #GtkApplication employ the use count to ensure that the application
+ * stays alive as long as it has any opened windows.
  *
  * Another feature that GApplication (optionally) provides is process
- * uniqueness.  Applications can make use of this functionality by
- * providing a unique application ID.  If given, only one application
- * with this ID can be running at a time per session.  The session
+ * uniqueness. Applications can make use of this functionality by
+ * providing a unique application ID. If given, only one application
+ * with this ID can be running at a time per session. The session
  * concept is platform-dependent, but corresponds roughly to a graphical
- * desktop login.  When your application is launched again, its
+ * desktop login. When your application is launched again, its
  * arguments are passed through platform communication to the already
- * running program.  The already running instance of the program is
- * called the <firstterm>primary instance</firstterm>; for non-unique
- * applications this is the always the current instance.
- * On Linux, the D-Bus session bus is used for communication.
+ * running program. The already running instance of the program is
+ * called the "primary instance"; for non-unique applications this is
+ * the always the current instance. On Linux, the D-Bus session bus
+ * is used for communication.
  *
  * The use of #GApplication differs from some other commonly-used
- * uniqueness libraries (such as libunique) in important ways.  The
- * application is not expected to manually register itself and check if
- * it is the primary instance.  Instead, the <code>main()</code>
- * function of a #GApplication should do very little more than
- * instantiating the application instance, possibly connecting signal
- * handlers, then calling g_application_run().  All checks for
- * uniqueness are done internally.  If the application is the primary
- * instance then the startup signal is emitted and the mainloop runs.
- * If the application is not the primary instance then a signal is sent
- * to the primary instance and g_application_run() promptly returns.
- * See the code examples below.
+ * uniqueness libraries (such as libunique) in important ways. The
+ * application is not expected to manually register itself and check
+ * if it is the primary instance. Instead, the main() function of a
+ * #GApplication should do very little more than instantiating the
+ * application instance, possibly connecting signal handlers, then
+ * calling g_application_run(). All checks for uniqueness are done
+ * internally. If the application is the primary instance then the
+ * startup signal is emitted and the mainloop runs. If the application
+ * is not the primary instance then a signal is sent to the primary
+ * instance and g_application_run() promptly returns. See the code
+ * examples below.
  *
  * If used, the expected form of an application identifier is very close
  * to that of of a
- * <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names-interface">DBus bus name</ulink>.
+ * [DBus bus name](http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names-interface).
  * Examples include: "com.example.MyApp", "org.example.internal-apps.Calculator".
  * For details on valid application identifiers, see g_application_id_is_valid().
  *
@@ -3841,23 +3825,26 @@
  * for remote access to exported #GMenuModels.
  *
  * There is a number of different entry points into a GApplication:
- * <itemizedlist>
- * <listitem>via 'Activate' (i.e. just starting the application)</listitem>
- * <listitem>via 'Open' (i.e. opening some files)</listitem>
- * <listitem>by handling a command-line</listitem>
- * <listitem>via activating an action</listitem>
- * </itemizedlist>
+ *
+ * - via 'Activate' (i.e. just starting the application)
+ *
+ * - via 'Open' (i.e. opening some files)
+ *
+ * - by handling a command-line
+ *
+ * - via activating an action
+ *
  * The #GApplication::startup signal lets you handle the application
  * initialization for all of these in a single place.
  *
- * Regardless of which of these entry points is used to start the application,
- * GApplication passes some <firstterm id="platform-data">platform
- * data</firstterm> from the launching instance to the primary instance,
- * in the form of a #GVariant dictionary mapping strings to variants.
- * To use platform data, override the @before_emit or @after_emit virtual
- * functions in your #GApplication subclass. When dealing with
- * #GApplicationCommandLine objects, the platform data is directly
- * available via g_application_command_line_get_cwd(),
+ * Regardless of which of these entry points is used to start the
+ * application, GApplication passes some "platform data from the
+ * launching instance to the primary instance, in the form of a
+ * #GVariant dictionary mapping strings to variants. To use platform
+ * data, override the @before_emit or @after_emit virtual functions
+ * in your #GApplication subclass. When dealing with
+ * #GApplicationCommandLine objects, the platform data is
+ * directly available via g_application_command_line_get_cwd(),
  * g_application_command_line_get_environ() and
  * g_application_command_line_get_platform_data().
  *
@@ -3887,14 +3874,6 @@
  * <example id="gapplication-example-actions"><title>A GApplication with actions</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-actions.c">
- *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * </programlisting>
- * </example>
- *
- * <example id="gapplication-example-menu"><title>A GApplication with menus</title>
- * <programlisting>
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-menu.c">
  *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
@@ -3940,64 +3919,136 @@
  *
  * The main use for #GApplicationCommandLine (and the
  * #GApplication::command-line signal) is 'Emacs server' like use cases:
- * You can set the <envar>EDITOR</envar> environment variable to have
- * e.g. git use your favourite editor to edit commit messages, and if you
- * already have an instance of the editor running, the editing will happen
+ * You can set the `EDITOR` environment variable to have e.g. git use
+ * your favourite editor to edit commit messages, and if you already
+ * have an instance of the editor running, the editing will happen
  * in the running instance, instead of opening a new one. An important
  * aspect of this use case is that the process that gets started by git
  * does not return until the editing is done.
  *
- * <example id="gapplication-example-cmdline"><title>Handling commandline arguments with GApplication</title>
- * <para>
- * A simple example where the commandline is completely handled
- * in the #GApplication::command-line handler. The launching instance exits
- * once the signal handler in the primary instance has returned, and the
- * return value of the signal handler becomes the exit status of the launching
- * instance.
- * </para>
- * <programlisting>
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline.c">
- *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * </programlisting>
- * </example>
+ * Normally, the commandline is completely handled in the
+ * #GApplication::command-line handler. The launching instance exits
+ * once the signal handler in the primary instance has returned, and
+ * the return value of the signal handler becomes the exit status
+ * of the launching instance.
+ * |[<!-- language="C" -->
+ * static int
+ * command_line (GApplication            *application,
+ *               GApplicationCommandLine *cmdline)
+ * {
+ *   gchar **argv;
+ *   gint argc;
+ *   gint i;
  *
- * <example id="gapplication-example-cmdline2"><title>Split commandline handling</title>
- * <para>
- * An example of split commandline handling. Options that start with
- * <literal>--local-</literal> are handled locally, all other options are
- * passed to the #GApplication::command-line handler which runs in the primary
- * instance.
- * </para>
- * <programlisting>
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline2.c">
- *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * </programlisting>
- * </example>
+ *   argv = g_application_command_line_get_arguments (cmdline, &argc);
  *
- * <example id="gapplication-example-cmdline3"><title>Deferred commandline handling</title>
- * <para>
- * An example of deferred commandline handling. Here, the commandline is
- * not completely handled before the #GApplication::command-line handler
- * returns. Instead, we keep a reference to the GApplicationCommandLine
- * object and handle it later(in this example, in an idle). Note that it
- * is necessary to hold the application until you are done with the
- * commandline.
- * </para>
- * <para>
- * This example also shows how to use #GOptionContext for parsing the
- * commandline arguments. Note that it is necessary to disable the
- * built-in help-handling of #GOptionContext, since it calls exit()
- * after printing help, which is not what you want to happen in
- * the primary instance.
- * </para>
- * <programlisting>
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline3.c">
- *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * </programlisting>
- * </example>
+ *   g_application_command_line_print (cmdline,
+ *                                     "This text is written back\n"
+ *                                     "to stdout of the caller\n");
+ *
+ *   for (i = 0; i < argc; i++)
+ *     g_print ("argument %d: %s\n", i, argv[i]);
+ *
+ *   g_strfreev (argv);
+ *
+ *   return 0;
+ * }
+ * ]|
+ * The complete example can be found here:
+ * [gapplication-example-cmdline.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-cmdline.c)
+ *
+ * In more complicated cases, the handling of the comandline can be
+ * split between the launcher and the primary instance.
+ * |[<!-- language="C" -->
+ * static gboolean
+ *  test_local_cmdline (GApplication   *application,
+ *                      gchar        ***arguments,
+ *                      gint           *exit_status)
+ * {
+ *   gint i, j;
+ *   gchar **argv;
+ *
+ *   argv = *arguments;
+ *
+ *   i = 1;
+ *   while (argv[i])
+ *     {
+ *       if (g_str_has_prefix (argv[i], "--local-"))
+ *         {
+ *           g_print ("handling argument %s locally\n", argv[i]);
+ *           g_free (argv[i]);
+ *           for (j = i; argv[j]; j++)
+ *             argv[j] = argv[j + 1];
+ *         }
+ *       else
+ *         {
+ *           g_print ("not handling argument %s locally\n", argv[i]);
+ *           i++;
+ *         }
+ *     }
+ *
+ *   *exit_status = 0;
+ *
+ *   return FALSE;
+ * }
+ *
+ * static void
+ * test_application_class_init (TestApplicationClass *class)
+ * {
+ *   G_APPLICATION_CLASS (class)->local_command_line = test_local_cmdline;
+ *
+ *   ...
+ * }
+ * ]|
+ * In this example of split commandline handling, options that start
+ * with `--local-` are handled locally, all other options are passed
+ * to the #GApplication::command-line handler which runs in the primary
+ * instance.
+ *
+ * The complete example can be found here:
+ * [gapplication-example-cmdline2.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-cmdline2.c)
+ *
+ * If handling the commandline requires a lot of work, it may
+ * be better to defer it.
+ * |[<!-- language="C" -->
+ * static gboolean
+ * my_cmdline_handler (gpointer data)
+ * {
+ *   GApplicationCommandLine *cmdline = data;
+ *
+ *   /&ast; do the heavy lifting in an idle &ast;/
+ *
+ *   g_application_command_line_set_exit_status (cmdline, 0);
+ *   g_object_unref (cmdline); /&ast; this releases the application &ast;/
+ *
+ *   return G_SOURCE_REMOVE;
+ * }
+ *
+ * static int
+ * command_line (GApplication            *application,
+ *               GApplicationCommandLine *cmdline)
+ * {
+ *   /&ast; keep the application running until we are done with this commandline &ast;/
+ *   g_application_hold (application);
+ *
+ *   g_object_set_data_full (G_OBJECT (cmdline),
+ *                           "application", application,
+ *                           (GDestroyNotify)g_application_release);
+ *
+ *   g_object_ref (cmdline);
+ *   g_idle_add (my_cmdline_handler, cmdline);
+ *
+ *   return 0;
+ * }
+ * ]|
+ * In this example the commandline is not completely handled before
+ * the #GApplication::command-line handler returns. Instead, we keep
+ * a reference to the #GApplicationCommandLine object and handle it
+ * later (in this example, in an idle). Note that it is necessary to
+ * hold the application until you are done with the commandline.
+ *
+ * The complete example can be found here:
+ * [gapplication-example-cmdline3.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-cmdline3.c)
  */
 
 
@@ -4022,7 +4073,7 @@
  *
  * A typical implementation might look something like this:
  *
- * |[
+ * |[<!-- language="C" -->
  * enum {
  *    NOT_INITIALIZED,
  *    INITIALIZING,
@@ -4141,7 +4192,7 @@
  * however, the "_finish()" function may be called at most once.
  *
  * Example of a typical asynchronous operation flow:
- * |[
+ * |[<!-- language="C" -->
  * void _theoretical_frobnitz_async (Theoretical         *t,
  *                                   GCancellable        *c,
  *                                   GAsyncReadyCallback  cb,
@@ -4165,20 +4216,20 @@
  *   else
  *     g_printf ("Uh oh!\n");
  *
- *   /<!-- -->* ... *<!-- -->/
+ *   ...
  *
  * }
  *
  * int main (int argc, void *argv[])
  * {
- *    /<!-- -->* ... *<!-- -->/
+ *    ...
  *
  *    _theoretical_frobnitz_async (theoretical_data,
  *                                 NULL,
  *                                 frobnitz_result_func,
  *                                 NULL);
  *
- *    /<!-- -->* ... *<!-- -->/
+ *    ...
  * }
  * ]|
  *
@@ -4186,15 +4237,15 @@
  * always called, even in the case of a cancelled operation. On cancellation
  * the result is a %G_IO_ERROR_CANCELLED error.
  *
- * <para id="io-priority"><indexterm><primary>I/O
- * priority</primary></indexterm> Many I/O-related asynchronous
- * operations have a priority parameter, which is used in certain
- * cases to determine the order in which operations are executed. They
- * are <emphasis>not</emphasis> used to determine system-wide I/O
- * scheduling. Priorities are integers, with lower numbers indicating
+ * ## I/O Priority # {#io-priority}
+ *
+ * Many I/O-related asynchronous operations have a priority parameter,
+ * which is used in certain cases to determine the order in which
+ * operations are executed. They are not used to determine system-wide
+ * I/O scheduling. Priorities are integers, with lower numbers indicating
  * higher priority. It is recommended to choose priorities between
- * %G_PRIORITY_LOW and %G_PRIORITY_HIGH, with %G_PRIORITY_DEFAULT as a
- * default. </para>
+ * %G_PRIORITY_LOW and %G_PRIORITY_HIGH, with %G_PRIORITY_DEFAULT
+ * as a default.
  */
 
 
@@ -4284,7 +4335,9 @@
  * @include: gio/gio.h
  *
  * A content type is a platform specific string that defines the type
- * of a file. On UNIX it is a <ulink url="http://www.wikipedia.org/wiki/Internet_media_type">mime type</ulink> like "text/plain" or "image/png".
+ * of a file. On UNIX it is a
+ * [mime type](http://www.wikipedia.org/wiki/Internet_media_type)
+ * like "text/plain" or "image/png".
  * On Win32 it is an extension string like ".doc", ".txt" or a perceived
  * string like "audio". Such strings can be looked up in the registry at
  * HKEY_CLASSES_ROOT.
@@ -4355,21 +4408,19 @@
  * #GUnixCredentialsMessage, g_unix_connection_send_credentials() and
  * g_unix_connection_receive_credentials() for details.
  *
- * On Linux, the native credential type is a <type>struct ucred</type>
- * - see the
- * <citerefentry><refentrytitle>unix</refentrytitle><manvolnum>7</manvolnum></citerefentry>
- * man page for details. This corresponds to
+ * On Linux, the native credential type is a struct ucred - see the
+ * unix(7) man page for details. This corresponds to
  * %G_CREDENTIALS_TYPE_LINUX_UCRED.
  *
  * On FreeBSD, Debian GNU/kFreeBSD, and GNU/Hurd, the native
- * credential type is a <type>struct cmsgcred</type>. This corresponds
+ * credential type is a struct cmsgcred. This corresponds
  * to %G_CREDENTIALS_TYPE_FREEBSD_CMSGCRED.
  *
- * On OpenBSD, the native credential type is a <type>struct sockpeercred</type>.
+ * On OpenBSD, the native credential type is a struct sockpeercred.
  * This corresponds to %G_CREDENTIALS_TYPE_OPENBSD_SOCKPEERCRED.
  *
  * On Solaris (including OpenSolaris and its derivatives), the native
- * credential type is a <type>ucred_t</type>. This corresponds to
+ * credential type is a ucred_t. This corresponds to
  * %G_CREDENTIALS_TYPE_SOLARIS_UCRED.
  */
 
@@ -4474,14 +4525,10 @@
  * an D-Bus client, it is often easier to use the g_bus_own_name(),
  * g_bus_watch_name() or g_dbus_proxy_new_for_bus() APIs.
  *
- * As an exception to the usual GLib rule that a particular object must not be
- * used by two threads at the same time, #GDBusConnection's methods may be
- * called from any thread<footnote>
- * <para>
- *   This is so that g_bus_get() and g_bus_get_sync() can safely return the
- *   same #GDBusConnection when called from any thread.
- * </para>
- * </footnote>.
+ * As an exception to the usual GLib rule that a particular object must not
+ * be used by two threads at the same time, #GDBusConnection's methods may be
+ * called from any thread. This is so that g_bus_get() and g_bus_get_sync()
+ * can safely return the same #GDBusConnection when called from any thread.
  *
  * Most of the ways to obtain a #GDBusConnection automatically initialize it
  * (i.e. connect to D-Bus): for instance, g_dbus_connection_new() and
@@ -4533,8 +4580,8 @@
  * automatically map from D-Bus errors to #GError and back. This
  * is typically done in the function returning the #GQuark for the
  * error domain:
- * <example id="error-registration"><title>Error Registration</title><programlisting>
- * /<!-- -->* foo-bar-error.h: *<!-- -->/
+ * |[<!-- language="C" -->
+ * /&ast; foo-bar-error.h: &ast;/
  *
  * #define FOO_BAR_ERROR (foo_bar_error_quark ())
  * GQuark foo_bar_error_quark (void);
@@ -4544,10 +4591,10 @@
  *   FOO_BAR_ERROR_FAILED,
  *   FOO_BAR_ERROR_ANOTHER_ERROR,
  *   FOO_BAR_ERROR_SOME_THIRD_ERROR,
- *   FOO_BAR_N_ERRORS /<!-- -->*< skip >*<!-- -->/
+ *   FOO_BAR_N_ERRORS /&ast;< skip >&ast;/
  * } FooBarError;
  *
- * /<!-- -->* foo-bar-error.c: *<!-- -->/
+ * /&ast; foo-bar-error.c: &ast;/
  *
  * static const GDBusErrorEntry foo_bar_error_entries[] =
  * {
@@ -4556,7 +4603,7 @@
  *   {FOO_BAR_ERROR_SOME_THIRD_ERROR, "org.project.Foo.Bar.Error.SomeThirdError"},
  * };
  *
- * /<!-- -->* Ensure that every error code has an associated D-Bus error name *<!-- -->/
+ * /&ast; Ensure that every error code has an associated D-Bus error name &ast;/
  * G_STATIC_ASSERT (G_N_ELEMENTS (foo_bar_error_entries) == FOO_BAR_N_ERRORS);
  *
  * GQuark
@@ -4569,15 +4616,15 @@
  *                                       G_N_ELEMENTS (foo_bar_error_entries));
  *   return (GQuark) quark_volatile;
  * }
- * </programlisting></example>
+ * ]|
  * With this setup, a D-Bus peer can transparently pass e.g. %FOO_BAR_ERROR_ANOTHER_ERROR and
- * other peers will see the D-Bus error name <literal>org.project.Foo.Bar.Error.AnotherError</literal>.
+ * other peers will see the D-Bus error name org.project.Foo.Bar.Error.AnotherError.
  *
  * If the other peer is using GDBus, and has registered the association with
  * g_dbus_error_register_error_domain() in advance (e.g. by invoking the %FOO_BAR_ERROR quark
  * generation itself in the previous example) the peer will see also %FOO_BAR_ERROR_ANOTHER_ERROR instead
  * of %G_IO_ERROR_DBUS_ERROR. Note that GDBus clients can still recover
- * <literal>org.project.Foo.Bar.Error.AnotherError</literal> using g_dbus_error_get_remote_error().
+ * org.project.Foo.Bar.Error.AnotherError using g_dbus_error_get_remote_error().
  *
  * Note that errors in the %G_DBUS_ERROR error domain is intended only
  * for returning errors from a remote message bus process. Errors
@@ -4617,7 +4664,7 @@
  * used when registering objects with g_dbus_connection_register_object().
  *
  * The format of D-Bus introspection XML is specified in the
- * <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format">D-Bus specification</ulink>.
+ * [D-Bus specification](http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format)
  */
 
 
@@ -4701,8 +4748,8 @@
  * @include: gio/gio.h
  *
  * The #GDBusObjectManager type is the base type for service- and
- * client-side implementations of the standardized <ulink
- * url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager">org.freedesktop.DBus.ObjectManager</ulink>
+ * client-side implementations of the standardized
+ * [org.freedesktop.DBus.ObjectManager](http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager)
  * interface.
  *
  * See #GDBusObjectManagerClient for the client-side implementation
@@ -4717,8 +4764,8 @@
  *
  * #GDBusObjectManagerClient is used to create, monitor and delete object
  * proxies for remote objects exported by a #GDBusObjectManagerServer (or any
- * code implementing the <ulink
- * url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager">org.freedesktop.DBus.ObjectManager</ulink>
+ * code implementing the
+ * [org.freedesktop.DBus.ObjectManager](http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager)
  * interface).
  *
  * Once an instance of this type has been created, you can connect to
@@ -4758,18 +4805,17 @@
  * is set to the new name owner (this includes emission of the
  * #GObject::notify signal).  Furthermore, you are guaranteed that
  * #GDBusObjectManagerClient:name-owner will alternate between a name owner
- * (e.g. <literal>:1.42</literal>) and %NULL even in the case where
+ * (e.g. `:1.42`) and %NULL even in the case where
  * the name of interest is atomically replaced
  *
  * Ultimately, #GDBusObjectManagerClient is used to obtain #GDBusProxy
  * instances. All signals (including the
- * <literal>org.freedesktop.DBus.Properties::PropertiesChanged</literal>
- * signal) delivered to #GDBusProxy instances are guaranteed to
- * originate from the name owner. This guarantee along with the
- * behavior described above, means that certain race conditions
- * including the <emphasis><quote>half the proxy is from the old owner
- * and the other half is from the new owner</quote></emphasis> problem
- * cannot happen.
+ * org.freedesktop.DBus.Properties::PropertiesChanged signal)
+ * delivered to #GDBusProxy instances are guaranteed to originate
+ * from the name owner. This guarantee along with the behavior
+ * described above, means that certain race conditions including the
+ * "half the proxy is from the old owner and the other half is from
+ * the new owner" problem cannot happen.
  *
  * To avoid having the application connect to signals on the returned
  * #GDBusObjectProxy and #GDBusProxy objects, the
@@ -4800,8 +4846,8 @@
  * @include: gio/gio.h
  *
  * #GDBusObjectManagerServer is used to export #GDBusObject instances using
- * the standardized <ulink
- * url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager">org.freedesktop.DBus.ObjectManager</ulink>
+ * the standardized
+ * [org.freedesktop.DBus.ObjectManager](http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-objectmanager)
  * interface. For example, remote D-Bus clients can get all objects
  * and properties in a single call. Additionally, any change in the
  * object hierarchy is broadcast using signals. This means that D-Bus
@@ -4876,8 +4922,7 @@
  * subclass #GDBusProxy, and have more natural properties and signals
  * in your derived class. See <xref linkend="gdbus-example-gdbus-codegen"/>
  * for how this can easily be done using the
- * <command><link linkend="gdbus-codegen">gdbus-codegen</link></command>
- * tool.
+ * <link linkend="gdbus-codegen">gdbus-codegen</link> tool.
  *
  * A #GDBusProxy instance can be used from multiple threads but note
  * that all signals (e.g. #GDBusProxy::g-signal, #GDBusProxy::g-properties-changed
@@ -4926,9 +4971,9 @@
  * #GDesktopAppInfo is an implementation of #GAppInfo based on
  * desktop files.
  *
- * Note that <filename>&lt;gio/gdesktopappinfo.h&gt;</filename> belongs to
- * the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gdesktopappinfo.h&gt;` belongs to the UNIX-specific
+ * GIO interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
+ * file when using it.
  */
 
 
@@ -5071,14 +5116,15 @@
  * <member>g_file_eject_mountable_with_operation() to eject a mountable file.</member>
  * </simplelist>
  *
- * <para id="gfile-etag"><indexterm><primary>entity tag</primary></indexterm>
+ * ## Entity Tags # {#gfile-etag}
+ *
  * One notable feature of #GFiles are entity tags, or "etags" for
  * short. Entity tags are somewhat like a more abstract version of the
- * traditional mtime, and can be used to quickly determine if the file has
- * been modified from the version on the file system. See the HTTP 1.1
- * <ulink url="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html">specification</ulink>
+ * traditional mtime, and can be used to quickly determine if the file
+ * has been modified from the version on the file system. See the
+ * HTTP 1.1
+ * [specification](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)
  * for HTTP Etag headers, which are a very similar concept.
- * </para>
  */
 
 
@@ -5261,8 +5307,8 @@
  * "xattr::". Keys for the "xattr-sys" namespace are constructed by
  * concatenating "xattr-sys::" with the extended attribute name. All extended
  * attribute values are returned as hex-encoded strings in which bytes outside
- * the ASCII range are encoded as hexadecimal escape sequences of the form
- * \x<replaceable>nn</replaceable>.
+ * the ASCII range are encoded as escape sequences of the form \x`nn`
+ * where `nn` is a 2-digit hexadecimal number.
  */
 
 
@@ -5275,9 +5321,9 @@
  * #GFileDescriptorBased is implemented by streams (implementations of
  * #GInputStream or #GOutputStream) that are based on file descriptors.
  *
- * Note that <filename>&lt;gio/gfiledescriptorbased.h&gt;</filename> belongs to
- * the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gfiledescriptorbased.h&gt;` belongs to the UNIX-specific
+ * GIO interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
+ * file when using it.
  *
  * Since: 2.24
  */
@@ -5288,7 +5334,7 @@
  * @short_description: Enumerated Files Routines
  * @include: gio/gio.h
  *
- * #GFileEnumerator allows you to operate on a set of #GFile<!-- -->s,
+ * #GFileEnumerator allows you to operate on a set of #GFiles,
  * returning a #GFileInfo structure for each file enumerated (e.g.
  * g_file_enumerate_children() will return a #GFileEnumerator for each
  * of the children within a directory).
@@ -5296,7 +5342,7 @@
  * To get the next file's information from a #GFileEnumerator, use
  * g_file_enumerator_next_file() or its asynchronous version,
  * g_file_enumerator_next_files_async(). Note that the asynchronous
- * version will return a list of #GFileInfo<!---->s, whereas the
+ * version will return a list of #GFileInfos, whereas the
  * synchronous will only return the next file in the enumerator.
  *
  * The ordering of returned files is unspecified for non-Unix
@@ -5640,10 +5686,8 @@
  * @short_description: I/O Scheduler
  * @include: gio/gio.h
  *
- * <note><para>
- *   As of GLib 2.36, the <literal>g_io_scheduler</literal> methods
- *   are deprecated in favor of #GThreadPool and #GTask.
- * </para></note>
+ * As of GLib 2.36, #GIOScheduler is deprecated in favor of
+ * #GThreadPool and #GTask.
  *
  * Schedules asynchronous I/O operations. #GIOScheduler integrates
  * into the main event loop (#GMainLoop) and uses threads.
@@ -5782,33 +5826,30 @@
  * As an example, consider the visible portions of the menu in
  * <xref linkend="menu-example"/>.
  *
- * <figure id="menu-example">
- *   <title>An example menu</title>
- *   <graphic fileref="menu-example.png" format="PNG"></graphic>
- * </figure>
+ * ## An example menu # {#menu-example}
+ *
+ * ![](menu-example.png)
  *
  * There are 8 "menus" visible in the screenshot: one menubar, two
  * submenus and 5 sections:
- * <itemizedlist>
- * <listitem>the toplevel menubar (containing 4 items)</listitem>
- * <listitem>the View submenu (containing 3 sections)</listitem>
- * <listitem>the first section of the View submenu (containing 2 items)</listitem>
- * <listitem>the second section of the View submenu (containing 1 item)</listitem>
- * <listitem>the final section of the View submenu (containing 1 item)</listitem>
- * <listitem>the Highlight Mode submenu (containing 2 sections)</listitem>
- * <listitem>the Sources section (containing 2 items)</listitem>
- * <listitem>the Markup section (containing 2 items)</listitem>
- * </itemizedlist>
+ *
+ * - the toplevel menubar (containing 4 items)
+ * - the View submenu (containing 3 sections)
+ * - the first section of the View submenu (containing 2 items)
+ * - the second section of the View submenu (containing 1 item)
+ * - the final section of the View submenu (containing 1 item)
+ * - the Highlight Mode submenu (containing 2 sections)
+ * - the Sources section (containing 2 items)
+ * - the Markup section (containing 2 items)
  *
  * <xref linkend="menu-model"/> illustrates the conceptual connection between
  * these 8 menus. Each large block in the figure represents a menu and the
  * smaller blocks within the large block represent items in that menu. Some
  * items contain references to other menus.
  *
- * <figure id="menu-model">
- *   <title>A menu model</title>
- *   <graphic fileref="menu-model.png" format="PNG"></graphic>
- * </figure>
+ * ## A menu example # {#menu-model}
+ *
+ * ![](menu-model.png)
  *
  * Notice that the separators visible in <xref linkend="menu-example"/>
  * appear nowhere in <xref linkend="menu-model"/>. This is because
@@ -5852,48 +5893,37 @@
  * While a wide variety of stateful actions is possible, the following
  * is the minimum that is expected to be supported by all users of exported
  * menu information:
- * <itemizedlist>
- * <listitem>an action with no parameter type and no state</listitem>
- * <listitem>an action with no parameter type and boolean state</listitem>
- * <listitem>an action with string parameter type and string state</listitem>
- * </itemizedlist>
+ * - an action with no parameter type and no state
+ * - an action with no parameter type and boolean state
+ * - an action with string parameter type and string state
  *
- * <formalpara><title>Stateless</title>
- * <para>
+ * ## Stateless
+ *
  * A stateless action typically corresponds to an ordinary menu item.
- * </para>
- * <para>
- * Selecting such a menu item will activate the action (with no parameter).
- * </para>
- * </formalpara>
  *
- * <formalpara><title>Boolean State</title>
- * <para>
+ * Selecting such a menu item will activate the action (with no parameter).
+ *
+ * ## Boolean State
+ *
  * An action with a boolean state will most typically be used with a "toggle"
  * or "switch" menu item. The state can be set directly, but activating the
  * action (with no parameter) results in the state being toggled.
- * </para>
- * <para>
+ *
  * Selecting a toggle menu item will activate the action. The menu item should
  * be rendered as "checked" when the state is true.
- * </para>
- * </formalpara>
  *
- * <formalpara><title>String Parameter and State</title>
- * <para>
+ * ## String Parameter and State
+ *
  * Actions with string parameters and state will most typically be used to
  * represent an enumerated choice over the items available for a group of
  * radio menu items. Activating the action with a string parameter is
  * equivalent to setting that parameter as the state.
- * </para>
- * <para>
+ *
  * Radio menu items, in addition to being associated with the action, will
  * have a target value. Selecting that menu item will result in activation
  * of the action with the target value as the parameter. The menu item should
  * be rendered as "selected" when the state of the action is equal to the
  * target value of the menu item.
- * </para>
- * </formalpara>
  */
 
 
@@ -5968,7 +5998,7 @@
  * @short_description: System networking includes
  * @include: gio/gnetworking.h
  *
- * The <literal>gnetworking.h</literal> header can be included to get
+ * The `&lt;gio/gnetworking.h&gt;` header can be included to get
  * various low-level networking-related system headers, automatically
  * taking care of certain portability issues for you.
  *
@@ -5981,11 +6011,10 @@
  * want your code to work under both UNIX and Windows, you will need
  * to take these differences into account.
  *
- * Also, under glibc, certain non-portable functions are only visible
- * in the headers if you define <literal>_GNU_SOURCE</literal> before
- * including them. Note that this symbol must be defined before
- * including <emphasis>any</emphasis> headers, or it may not take
- * effect.
+ * Also, under GNU libc, certain non-portable functions are only visible
+ * in the headers if you define %_GNU_SOURCE before including them. Note
+ * that this symbol must be defined before including any headers, or it
+ * may not take effect.
  */
 
 
@@ -6240,10 +6269,10 @@
  * or receive action invocations in the local process from other
  * processes.
  *
- * The interface has <literal>_full</literal> variants of the two
+ * The interface has `_full` variants of the two
  * methods on #GActionGroup used to activate actions:
  * g_action_group_activate_action() and
- * g_action_group_change_action_state().  These variants allow a
+ * g_action_group_change_action_state(). These variants allow a
  * "platform data" #GVariant to be specified: a dictionary providing
  * context for the action invocation (for example: timestamps, startup
  * notification IDs, etc).
@@ -6253,7 +6282,7 @@
  *
  * Additionally, g_dbus_connection_export_action_group() will check if
  * the exported #GActionGroup implements #GRemoteActionGroup and use the
- * <literal>_full</literal> variants of the calls if available.  This
+ * `_full` variants of the calls if available.  This
  * provides a mechanism by which to receive platform data for action
  * invocations that arrive by way of D-Bus.
  *
@@ -6282,9 +6311,10 @@
  * @short_description: Resource framework
  * @include: gio/gio.h
  *
- * Applications and libraries often contain binary or textual data that is really part of the
- * application, rather than user data. For instance #GtkBuilder .ui files, splashscreen images,
- * GMenu markup xml, CSS files, icons, etc. These are often shipped as files in <filename>$datadir/appname</filename>, or
+ * Applications and libraries often contain binary or textual data that is
+ * really part of the application, rather than user data. For instance
+ * #GtkBuilder .ui files, splashscreen images, GMenu markup xml, CSS files,
+ * icons, etc. These are often shipped as files in `$datadir/appname`, or
  * manually included as literal strings in the code.
  *
  * The #GResource API and the <link linkend="glib-compile-resources">glib-compile-resources</link> program
@@ -6300,18 +6330,19 @@
  * is very useful e.g. for larger text files that are parsed once (or rarely) and then thrown away.
  *
  * Resource files can also be marked to be preprocessed, by setting the value of the
- * <literal>preprocess</literal> attribute to a comma-separated list of preprocessing options.
+ * `preprocess` attribute to a comma-separated list of preprocessing options.
  * The only options currently supported are:
  *
- * <literal>xml-stripblanks</literal> which will use <command>xmllint</command> to strip
- * ignorable whitespace from the xml file. For this to work, the <envar>XMLLINT</envar>
- * environment variable must be set to the full path to the xmllint executable, or xmllint
- * must be in the PATH; otherwise the preprocessing step is skipped.
+ * `xml-stripblanks` which will use the xmllint command
+ * to strip ignorable whitespace from the xml file. For this to work,
+ * the `XMLLINT` environment variable must be set to the full path to
+ * the xmllint executable, or xmllint must be in the `PATH`; otherwise
+ * the preprocessing step is skipped.
  *
- * <literal>to-pixdata</literal> which will use <command>gdk-pixbuf-pixdata</command> to convert
+ * `to-pixdata` which will use the gdk-pixbuf-pixdata command to convert
  * images to the GdkPixdata format, which allows you to create pixbufs directly using the data inside
  * the resource file, rather than an (uncompressed) copy if it. For this, the gdk-pixbuf-pixdata
- * program must be in the PATH, or the <envar>GDK_PIXBUF_PIXDATA</envar> environment variable must be
+ * program must be in the PATH, or the `GDK_PIXBUF_PIXDATA` environment variable must be
  * set to the full path to the gdk-pixbuf-pixdata executable; otherwise the resource compiler will
  * abort.
  *
@@ -6319,8 +6350,8 @@
  * which takes an xml file that describes the bundle, and a set of files that the xml references. These
  * are combined into a binary resource bundle.
  *
- * <example id="resource-example"><title>Example resource description</title>
- * <programlisting><![CDATA[
+ * An example resource description:
+ * |[
  * <?xml version="1.0" encoding="UTF-8"?>
  * <gresources>
  *   <gresource prefix="/org/gtk/Example">
@@ -6329,14 +6360,14 @@
  *     <file preprocess="xml-stripblanks">menumarkup.xml</file>
  *   </gresource>
  * </gresources>
- * ]]></programlisting></example>
+ * ]|
  *
  * This will create a resource bundle with the following files:
- * <programlisting><![CDATA[
+ * |[
  * /org/gtk/Example/data/splashscreen.png
  * /org/gtk/Example/dialog.ui
  * /org/gtk/Example/menumarkup.xml
- * ]]></programlisting>
+ * ]|
  *
  * Note that all resources in the process share the same namespace, so use java-style
  * path prefixes (like in the above example) to avoid conflicts.
@@ -6441,40 +6472,40 @@
  * Similar to GConf, the default values in GSettings schemas can be
  * localized, but the localized values are stored in gettext catalogs
  * and looked up with the domain that is specified in the
- * <tag class="attribute">gettext-domain</tag> attribute of the
- * <tag class="starttag">schemalist</tag> or <tag class="starttag">schema</tag>
- * elements and the category that is specified in the l10n attribute of the
- * <tag class="starttag">key</tag> element.
+ * gettext-domain attribute of the &lt;schemalist&gt; or &lt;schema&gt;
+ * elements and the category that is specified in the l10n attribute of
+ * the &lt;key&gt; element.
  *
  * GSettings uses schemas in a compact binary form that is created
  * by the <link linkend="glib-compile-schemas">glib-compile-schemas</link>
- * utility. The input is a schema description in an XML format that can be
- * described by the following DTD:
- * |[<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/gschema.dtd"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>]|
+ * utility. The input is a schema description in an XML format.
  *
- * glib-compile-schemas expects schema files to have the extension <filename>.gschema.xml</filename>
+ * A DTD for the gschema XML format can be found here:
+ * [gschema.dtd](https://git.gnome.org/browse/glib/tree/gio/gschema.dtd)
  *
- * At runtime, schemas are identified by their id (as specified
- * in the <tag class="attribute">id</tag> attribute of the
- * <tag class="starttag">schema</tag> element). The
- * convention for schema ids is to use a dotted name, similar in
- * style to a D-Bus bus name, e.g. "org.gnome.SessionManager". In particular,
- * if the settings are for a specific service that owns a D-Bus bus name,
- * the D-Bus bus name and schema id should match. For schemas which deal
- * with settings not associated with one named application, the id should
- * not use StudlyCaps, e.g. "org.gnome.font-rendering".
+ * The <link linkend="glib-compile-schemas">glib-compile-schemas</link>
+ * tool expects schema files to have the extension `.gschema.xml`.
  *
- * In addition to #GVariant types, keys can have types that have enumerated
- * types. These can be described by a <tag class="starttag">choice</tag>,
- * <tag class="starttag">enum</tag> or <tag class="starttag">flags</tag> element, see
+ * At runtime, schemas are identified by their id (as specified in the
+ * id attribute of the &lt;schema&gt; element). The convention for schema
+ * ids is to use a dotted name, similar in style to a D-Bus bus name,
+ * e.g. "org.gnome.SessionManager". In particular, if the settings are
+ * for a specific service that owns a D-Bus bus name, the D-Bus bus name
+ * and schema id should match. For schemas which deal with settings not
+ * associated with one named application, the id should not use
+ * StudlyCaps, e.g. "org.gnome.font-rendering".
+ *
+ * In addition to #GVariant types, keys can have types that have
+ * enumerated types. These can be described by a &lt;choice&gt;,
+ * &lt;enum&gt; or &lt;flags&gt; element, see
  * <xref linkend="schema-enumerated"/>. The underlying type of
  * such a key is string, but you can use g_settings_get_enum(),
  * g_settings_set_enum(), g_settings_get_flags(), g_settings_set_flags()
  * access the numeric values corresponding to the string value of enum
  * and flags keys.
  *
- * <example id="schema-default-values"><title>Default values</title>
- * <programlisting><![CDATA[
+ * An example for default value:
+ * |[
  * <schemalist>
  *   <schema id="org.gtk.Test" path="/org/gtk/Test/" gettext-domain="test">
  *
@@ -6492,10 +6523,10 @@
  *
  *   </schema>
  * </schemalist>
- * ]]></programlisting></example>
+ * ]|
  *
- * <example id="schema-enumerated"><title>Ranges, choices and enumerated types</title>
- * <programlisting><![CDATA[
+ * An example for ranges, choices and enumerated types:
+ * |[
  * <schemalist>
  *
  *   <enum id="org.gtk.Test.myenum">
@@ -6538,51 +6569,42 @@
  *     </key>
  *   </schema>
  * </schemalist>
- * ]]></programlisting></example>
+ * ]|
  *
- * <refsect2>
- *   <title>Vendor overrides</title>
- *   <para>
- *     Default values are defined in the schemas that get installed by
- *     an application. Sometimes, it is necessary for a vendor or distributor
- *     to adjust these defaults. Since patching the XML source for the schema
- *     is inconvenient and error-prone,
- *     <link linkend="glib-compile-schemas">glib-compile-schemas</link> reads
- *     so-called 'vendor override' files. These are keyfiles in the same
- *     directory as the XML schema sources which can override default values.
- *     The schema id serves as the group name in the key file, and the values
- *     are expected in serialized GVariant form, as in the following example:
- *     <informalexample><programlisting>
+ * ## Vendor overrides
+ *
+ * Default values are defined in the schemas that get installed by
+ * an application. Sometimes, it is necessary for a vendor or distributor
+ * to adjust these defaults. Since patching the XML source for the schema
+ * is inconvenient and error-prone,
+ * <link linkend="glib-compile-schemas">glib-compile-schemas</link> reads
+ * so-called 'vendor override' files. These are keyfiles in the same
+ * directory as the XML schema sources which can override default values.
+ * The schema id serves as the group name in the key file, and the values
+ * are expected in serialized GVariant form, as in the following example:
+ * |[
  *     [org.gtk.Example]
  *     key1='string'
  *     key2=1.5
- *     </programlisting></informalexample>
- *   </para>
- *   <para>
- *     glib-compile-schemas expects schema files to have the extension
- *     <filename>.gschema.override</filename>
- *   </para>
- * </refsect2>
+ * ]|
  *
- * <refsect2>
- *   <title>Binding</title>
- *   <para>
- *     A very convenient feature of GSettings lets you bind #GObject properties
- *     directly to settings, using g_settings_bind(). Once a GObject property
- *     has been bound to a setting, changes on either side are automatically
- *     propagated to the other side. GSettings handles details like
- *     mapping between GObject and GVariant types, and preventing infinite
- *     cycles.
- *   </para>
- *   <para>
- *     This makes it very easy to hook up a preferences dialog to the
- *     underlying settings. To make this even more convenient, GSettings
- *     looks for a boolean property with the name "sensitivity" and
- *     automatically binds it to the writability of the bound setting.
- *     If this 'magic' gets in the way, it can be suppressed with the
- *     #G_SETTINGS_BIND_NO_SENSITIVITY flag.
- *   </para>
- * </refsect2>
+ * glib-compile-schemas expects schema files to have the extension
+ * `.gschema.override`.
+ *
+ * ## Binding
+ *
+ * A very convenient feature of GSettings lets you bind #GObject properties
+ * directly to settings, using g_settings_bind(). Once a GObject property
+ * has been bound to a setting, changes on either side are automatically
+ * propagated to the other side. GSettings handles details like mapping
+ * between GObject and GVariant types, and preventing infinite cycles.
+ *
+ * This makes it very easy to hook up a preferences dialog to the
+ * underlying settings. To make this even more convenient, GSettings
+ * looks for a boolean property with the name "sensitivity" and
+ * automatically binds it to the writability of the bound setting.
+ * If this 'magic' gets in the way, it can be suppressed with the
+ * #G_SETTINGS_BIND_NO_SENSITIVITY flag.
  */
 
 
@@ -6612,13 +6634,11 @@
  * g_settings_backend_create_tree() is a convenience function to create
  * suitable trees.
  *
- * <note><para>
- * The #GSettingsBackend API is exported to allow third-party
+ * The GSettingsBackend API is exported to allow third-party
  * implementations, but does not carry the same stability guarantees
  * as the public GIO API. For this reason, you have to define the
- * C preprocessor symbol #G_SETTINGS_ENABLE_BACKEND before including
- * <filename>gio/gsettingsbackend.h</filename>
- * </para></note>
+ * C preprocessor symbol %G_SETTINGS_ENABLE_BACKEND before including
+ * `gio/gsettingsbackend.h`.
  */
 
 
@@ -6646,7 +6666,7 @@
  *
  * Consider the following example:
  *
- * |[
+ * |[<!-- language="C" -->
  * typedef struct
  * {
  *    ...
@@ -6703,7 +6723,7 @@
  * ships a gschemas.compiled file as part of itself, and then simply do
  * the following:
  *
- * |[
+ * |[<!-- language="C" -->
  * {
  *   GSettings *settings;
  *   gint some_value;
@@ -6752,16 +6772,14 @@
  * SECTION:gsimpleasyncresult
  * @short_description: Simple asynchronous results implementation
  * @include: gio/gio.h
- * @see_also: #GAsyncResult
+ * @see_also: #GAsyncResult, #GTask
  *
- * <note><para>
- *   As of GLib 2.36, #GSimpleAsyncResult is deprecated in favor of
- *   #GTask, which provides a simpler API.
- * </para></note>
+ * As of GLib 2.36, #GSimpleAsyncResult is deprecated in favor of
+ * #GTask, which provides a simpler API.
  *
  * #GSimpleAsyncResult implements #GAsyncResult.
  *
- * GSimpleAsyncResult handles #GAsyncReadyCallback<!-- -->s, error
+ * GSimpleAsyncResult handles #GAsyncReadyCallbacks, error
  * reporting, operation cancellation and the final state of an operation,
  * completely transparent to the application. Results can be returned
  * as a pointer e.g. for functions that return data that is collected
@@ -6799,7 +6817,7 @@
  * cause a leak if cancelled before being run).
  *
  * GSimpleAsyncResult can integrate into GLib's event loop, #GMainLoop,
- * or it can use #GThread<!-- -->s.
+ * or it can use #GThreads.
  * g_simple_async_result_complete() will finish an I/O task directly
  * from the point where it is called. g_simple_async_result_complete_in_idle()
  * will finish it from an idle handler in the <link
@@ -6826,7 +6844,7 @@
  * #GAsyncResult.  A typical implementation of an asynchronous operation
  * using GSimpleAsyncResult looks something like this:
  *
- * |[
+ * |[<!-- language="C" -->
  * static void
  * baked_cb (Cake    *cake,
  *           gpointer user_data)
@@ -6998,7 +7016,7 @@
  * reasons. For instance, on Windows a socket is always seen as writable
  * until a write returns %G_IO_ERROR_WOULD_BLOCK.
  *
- * #GSocket<!-- -->s can be either connection oriented or datagram based.
+ * #GSockets can be either connection oriented or datagram based.
  * For connection oriented types you must first establish a connection by
  * either connecting to an address or accepting a connection from another
  * address. For connectionless socket types the target/source address is
@@ -7022,10 +7040,9 @@
  *     for socket communication
  * @include: gio/gio.h
  *
- * #GSocketAddress is the equivalent of <type>struct sockaddr</type>
- * in the BSD sockets API. This is an abstract class; use
- * #GInetSocketAddress for internet sockets, or #GUnixSocketAddress
- * for UNIX domain sockets.
+ * #GSocketAddress is the equivalent of struct sockaddr in the BSD
+ * sockets API. This is an abstract class; use #GInetSocketAddress
+ * for internet sockets, or #GUnixSocketAddress for UNIX domain sockets.
  */
 
 
@@ -7064,7 +7081,7 @@
  * to try out each socket address in turn until one succeeds, as shown
  * in the sample code below.
  *
- * |[
+ * |[<!-- language="C" -->
  * MyConnectionType *
  * connect_to_host (const char    *hostname,
  *                  guint16        port,
@@ -7081,10 +7098,10 @@
  *   enumerator = g_socket_connectable_enumerate (addr);
  *   g_object_unref (addr);
  *
- *   /<!-- -->* Try each sockaddr until we succeed. Record the first
- *    * connection error, but not any further ones (since they'll probably
- *    * be basically the same as the first).
- *    *<!-- -->/
+ *   /&ast; Try each sockaddr until we succeed. Record the first
+ *    &ast; connection error, but not any further ones (since they'll probably
+ *    &ast; be basically the same as the first).
+ *    &ast;/
  *   while (!conn && (sockaddr = g_socket_address_enumerator_next (enumerator, cancellable, error))
  *     {
  *       conn = connect_to_sockaddr (sockaddr, conn_error ? NULL : &conn_error);
@@ -7096,18 +7113,18 @@
  *     {
  *       if (conn_error)
  *         {
- *           /<!-- -->* We couldn't connect to the first address, but we succeeded
- *            * in connecting to a later address.
- *            *<!-- -->/
+ *           /&ast; We couldn't connect to the first address, but we succeeded
+ *            &ast; in connecting to a later address.
+ *            &ast;/
  *           g_error_free (conn_error);
  *         }
  *       return conn;
  *     }
  *   else if (error)
  *     {
- *       /<!-- -->* Either the initial lookup failed, or else the caller
- *        * cancelled us.
- *        *<!-- -->/
+ *       /&ast; Either the initial lookup failed, or else the caller
+ *        &ast; cancelled us.
+ *        &ast;/
  *       if (conn_error)
  *         g_error_free (conn_error);
  *       return NULL;
@@ -7248,7 +7265,7 @@
  * then connect to whatever host was pointed to by that record.
  *
  * You can use g_resolver_lookup_service() or
- * g_resolver_lookup_service_async() to find the #GSrvTarget<!-- -->s
+ * g_resolver_lookup_service_async() to find the #GSrvTargets
  * for a given service. However, if you are simply planning to connect
  * to the remote service, you can use #GNetworkService's
  * #GSocketConnectable interface and not need to worry about
@@ -7278,16 +7295,15 @@
  * comprehensive API for asynchronous I/O, such
  * g_output_stream_splice_async().  This makes GSubprocess
  * significantly more powerful and flexible than equivalent APIs in
- * some other languages such as the <literal>subprocess.py</literal>
+ * some other languages such as the `subprocess.py`
  * included with Python.  For example, using #GSubprocess one could
  * create two child processes, reading standard output from the first,
  * processing it, and writing to the input stream of the second, all
  * without blocking the main loop.
  *
  * A powerful g_subprocess_communicate() API is provided similar to the
- * <literal>communicate()</literal> method of
- * <literal>subprocess.py</literal>.  This enables very easy interaction
- * with a subprocess that has been opened with pipes.
+ * `communicate()` method of `subprocess.py`. This enables very easy
+ * interaction with a subprocess that has been opened with pipes.
  *
  * #GSubprocess defaults to tight control over the file descriptors open
  * in the child process, avoiding dangling-fd issues that are caused by
@@ -7349,29 +7365,27 @@
  * @include: gio/gio.h
  * @see_also: #GAsyncResult
  *
- * <para>
- *   A #GTask represents and manages a cancellable "task".
- * </para>
- * <refsect2>
- *   <title>Asynchronous operations</title>
- *   <para>
- *     The most common usage of #GTask is as a #GAsyncResult, to
- *     manage data during an asynchronous operation. You call
- *     g_task_new() in the "start" method, followed by
- *     g_task_set_task_data() and the like if you need to keep some
- *     additional data associated with the task, and then pass the
- *     task object around through your asynchronous operation.
- *     Eventually, you will call a method such as
- *     g_task_return_pointer() or g_task_return_error(), which will
- *     save the value you give it and then invoke the task's callback
- *     function (waiting until the next iteration of the main
- *     loop first, if necessary). The caller will pass the #GTask back
- *     to the operation's finish function (as a #GAsyncResult), and
- *     you can use g_task_propagate_pointer() or the like to extract
- *     the return value.
- *   </para>
- *   <example id="gtask-async"><title>GTask as a GAsyncResult</title>
- *   <programlisting>
+ * A #GTask represents and manages a cancellable "task".
+ *
+ * ## Asynchronous operations
+ *
+ * The most common usage of #GTask is as a #GAsyncResult, to
+ * manage data during an asynchronous operation. You call
+ * g_task_new() in the "start" method, followed by
+ * g_task_set_task_data() and the like if you need to keep some
+ * additional data associated with the task, and then pass the
+ * task object around through your asynchronous operation.
+ * Eventually, you will call a method such as
+ * g_task_return_pointer() or g_task_return_error(), which will
+ * save the value you give it and then invoke the task's callback
+ * function (waiting until the next iteration of the main
+ * loop first, if necessary). The caller will pass the #GTask back
+ * to the operation's finish function (as a #GAsyncResult), and
+ * you can use g_task_propagate_pointer() or the like to extract
+ * the return value.
+ *
+ * Here is an example for using GTask as a GAsyncResult:
+ * |[<!-- language="C" -->
  *     typedef struct {
  *       CakeFrostingType frosting;
  *       char *message;
@@ -7463,25 +7477,23 @@
  *
  *       return g_task_propagate_pointer (G_TASK (result), error);
  *     }
- *   </programlisting>
- *   </example>
- * </refsect2>
- * <refsect2>
- *   <title>Chained asynchronous operations</title>
- *   <para>
- *     #GTask also tries to simplify asynchronous operations that
- *     internally chain together several smaller asynchronous
- *     operations. g_task_get_cancellable(), g_task_get_context(), and
- *     g_task_get_priority() allow you to get back the task's
- *     #GCancellable, #GMainContext, and <link
- *     linkend="io-priority">I/O priority</link> when starting a new
- *     subtask, so you don't have to keep track of them yourself.
- *     g_task_attach_source() simplifies the case of waiting for a
- *     source to fire (automatically using the correct #GMainContext
- *     and priority).
- *   </para>
- *   <example id="gtask-chained"><title>Chained asynchronous operations</title>
- *   <programlisting>
+ * ]|
+ *
+ * ## Chained asynchronous operations
+ *
+ * #GTask also tries to simplify asynchronous operations that
+ * internally chain together several smaller asynchronous
+ * operations. g_task_get_cancellable(), g_task_get_context(), and
+ * g_task_get_priority() allow you to get back the task's
+ * #GCancellable, #GMainContext, and <link
+ * linkend="io-priority">I/O priority</link> when starting a new
+ * subtask, so you don't have to keep track of them yourself.
+ * g_task_attach_source() simplifies the case of waiting for a
+ * source to fire (automatically using the correct #GMainContext
+ * and priority).
+ *
+ * Here is an example for chained asynchronous operations:
+ *   |[<!-- language="C" -->
  *     typedef struct {
  *       Cake *cake;
  *       CakeFrostingType frosting;
@@ -7606,19 +7618,17 @@
  *
  *       return g_task_propagate_pointer (G_TASK (result), error);
  *     }
- *   </programlisting>
- *   </example>
- * </refsect2>
- * <refsect2>
- *   <title>Asynchronous operations from synchronous ones</title>
- *   <para>
- *     You can use g_task_run_in_thread() to turn a synchronous
- *     operation into an asynchronous one, by running it in a thread
- *     which will then dispatch the result back to the caller's
- *     #GMainContext when it completes.
- *   </para>
- *   <example id="gtask-run-in-thread"><title>g_task_run_in_thread()</title>
- *   <programlisting>
+ * ]|
+ *
+ * ## Asynchronous operations from synchronous ones
+ *
+ * You can use g_task_run_in_thread() to turn a synchronous
+ * operation into an asynchronous one, by running it in a thread
+ * which will then dispatch the result back to the caller's
+ * #GMainContext when it completes.
+ *
+ * Running a task in a thread:
+ *   |[<!-- language="C" -->
  *     typedef struct {
  *       guint radius;
  *       CakeFlavor flavor;
@@ -7685,26 +7695,24 @@
  *
  *       return g_task_propagate_pointer (G_TASK (result), error);
  *     }
- *   </programlisting>
- *   </example>
- * </refsect2>
- * <refsect2>
- *   <title>Adding cancellability to uncancellable tasks</title>
- *   <para>
- *     Finally, g_task_run_in_thread() and g_task_run_in_thread_sync()
- *     can be used to turn an uncancellable operation into a
- *     cancellable one. If you call g_task_set_return_on_cancel(),
- *     passing %TRUE, then if the task's #GCancellable is cancelled,
- *     it will return control back to the caller immediately, while
- *     allowing the task thread to continue running in the background
- *     (and simply discarding its result when it finally does finish).
- *     Provided that the task thread is careful about how it uses
- *     locks and other externally-visible resources, this allows you
- *     to make "GLib-friendly" asynchronous and cancellable
- *     synchronous variants of blocking APIs.
- *   </para>
- *   <example id="gtask-cancellable"><title>g_task_set_return_on_cancel()</title>
- *   <programlisting>
+ * ]|
+ *
+ * ## Adding cancellability to uncancellable tasks
+ *
+ * Finally, g_task_run_in_thread() and g_task_run_in_thread_sync()
+ * can be used to turn an uncancellable operation into a
+ * cancellable one. If you call g_task_set_return_on_cancel(),
+ * passing %TRUE, then if the task's #GCancellable is cancelled,
+ * it will return control back to the caller immediately, while
+ * allowing the task thread to continue running in the background
+ * (and simply discarding its result when it finally does finish).
+ * Provided that the task thread is careful about how it uses
+ * locks and other externally-visible resources, this allows you
+ * to make "GLib-friendly" asynchronous and cancellable
+ * synchronous variants of blocking APIs.
+ *
+ * Cancelling a task:
+ *   |[<!-- language="C" -->
  *     static void
  *     bake_cake_thread (GTask         *task,
  *                       gpointer       source_object,
@@ -7793,81 +7801,63 @@
  *       g_object_unref (task);
  *       return cake;
  *     }
- *   </programlisting>
- *   </example>
- * </refsect2>
- * <refsect2>
- *   <title>Porting from <literal>GSimpleAsyncResult</literal></title>
- *   <para>
- *     #GTask's API attempts to be simpler than #GSimpleAsyncResult's
- *     in several ways:
- *   </para>
- *   <itemizedlist>
- *     <listitem><para>
- *       You can save task-specific data with g_task_set_task_data(), and
- *       retrieve it later with g_task_get_task_data(). This replaces the
- *       abuse of g_simple_async_result_set_op_res_gpointer() for the same
- *       purpose with #GSimpleAsyncResult.
- *     </para></listitem>
- *     <listitem><para>
- *       In addition to the task data, #GTask also keeps track of the
- *       <link linkend="io-priority">priority</link>, #GCancellable, and
- *       #GMainContext associated with the task, so tasks that consist of
- *       a chain of simpler asynchronous operations will have easy access
- *       to those values when starting each sub-task.
- *     </para></listitem>
- *     <listitem><para>
- *       g_task_return_error_if_cancelled() provides simplified
- *       handling for cancellation. In addition, cancellation
- *       overrides any other #GTask return value by default, like
- *       #GSimpleAsyncResult does when
- *       g_simple_async_result_set_check_cancellable() is called.
- *       (You can use g_task_set_check_cancellable() to turn off that
- *       behavior.) On the other hand, g_task_run_in_thread()
- *       guarantees that it will always run your
- *       <literal>task_func</literal>, even if the task's #GCancellable
- *       is already cancelled before the task gets a chance to run;
- *       you can start your <literal>task_func</literal> with a
- *       g_task_return_error_if_cancelled() check if you need the
- *       old behavior.
- *     </para></listitem>
- *     <listitem><para>
- *       The "return" methods (eg, g_task_return_pointer())
- *       automatically cause the task to be "completed" as well, and
- *       there is no need to worry about the "complete" vs "complete
- *       in idle" distinction. (#GTask automatically figures out
- *       whether the task's callback can be invoked directly, or
- *       if it needs to be sent to another #GMainContext, or delayed
- *       until the next iteration of the current #GMainContext.)
- *     </para></listitem>
- *     <listitem><para>
- *       The "finish" functions for #GTask-based operations are generally
- *       much simpler than #GSimpleAsyncResult ones, normally consisting
- *       of only a single call to g_task_propagate_pointer() or the like.
- *       Since g_task_propagate_pointer() "steals" the return value from
- *       the #GTask, it is not necessary to juggle pointers around to
- *       prevent it from being freed twice.
- *     </para></listitem>
- *     <listitem><para>
- *       With #GSimpleAsyncResult, it was common to call
- *       g_simple_async_result_propagate_error() from the
- *       <literal>_finish()</literal> wrapper function, and have
- *       virtual method implementations only deal with successful
- *       returns. This behavior is deprecated, because it makes it
- *       difficult for a subclass to chain to a parent class's async
- *       methods. Instead, the wrapper function should just be a
- *       simple wrapper, and the virtual method should call an
- *       appropriate <literal>g_task_propagate_</literal> function.
- *       Note that wrapper methods can now use
- *       g_async_result_legacy_propagate_error() to do old-style
- *       #GSimpleAsyncResult error-returning behavior, and
- *       g_async_result_is_tagged() to check if a result is tagged as
- *       having come from the <literal>_async()</literal> wrapper
- *       function (for "short-circuit" results, such as when passing
- *       0 to g_input_stream_read_async()).
- *     </para></listitem>
- *   </itemizedlist>
- * </refsect2>
+ * ]|
+ *
+ * ## Porting from GSimpleAsyncResult
+ *
+ * #GTask's API attempts to be simpler than #GSimpleAsyncResult's
+ * in several ways:
+ * - You can save task-specific data with g_task_set_task_data(), and
+ *   retrieve it later with g_task_get_task_data(). This replaces the
+ *   abuse of g_simple_async_result_set_op_res_gpointer() for the same
+ *   purpose with #GSimpleAsyncResult.
+ * - In addition to the task data, #GTask also keeps track of the
+ *   <link linkend="io-priority">priority</link>, #GCancellable, and
+ *   #GMainContext associated with the task, so tasks that consist of
+ *   a chain of simpler asynchronous operations will have easy access
+ *   to those values when starting each sub-task.
+ * - g_task_return_error_if_cancelled() provides simplified
+ *   handling for cancellation. In addition, cancellation
+ *   overrides any other #GTask return value by default, like
+ *   #GSimpleAsyncResult does when
+ *   g_simple_async_result_set_check_cancellable() is called.
+ *   (You can use g_task_set_check_cancellable() to turn off that
+ *   behavior.) On the other hand, g_task_run_in_thread()
+ *   guarantees that it will always run your
+ *   `task_func`, even if the task's #GCancellable
+ *   is already cancelled before the task gets a chance to run;
+ *   you can start your `task_func` with a
+ *   g_task_return_error_if_cancelled() check if you need the
+ *   old behavior.
+ * - The "return" methods (eg, g_task_return_pointer())
+ *   automatically cause the task to be "completed" as well, and
+ *   there is no need to worry about the "complete" vs "complete
+ *   in idle" distinction. (#GTask automatically figures out
+ *   whether the task's callback can be invoked directly, or
+ *   if it needs to be sent to another #GMainContext, or delayed
+ *   until the next iteration of the current #GMainContext.)
+ * - The "finish" functions for #GTask-based operations are generally
+ *   much simpler than #GSimpleAsyncResult ones, normally consisting
+ *   of only a single call to g_task_propagate_pointer() or the like.
+ *   Since g_task_propagate_pointer() "steals" the return value from
+ *   the #GTask, it is not necessary to juggle pointers around to
+ *   prevent it from being freed twice.
+ * - With #GSimpleAsyncResult, it was common to call
+ *   g_simple_async_result_propagate_error() from the
+ *   `_finish()` wrapper function, and have
+ *   virtual method implementations only deal with successful
+ *   returns. This behavior is deprecated, because it makes it
+ *   difficult for a subclass to chain to a parent class's async
+ *   methods. Instead, the wrapper function should just be a
+ *   simple wrapper, and the virtual method should call an
+ *   appropriate `g_task_propagate_` function.
+ *   Note that wrapper methods can now use
+ *   g_async_result_legacy_propagate_error() to do old-style
+ *   #GSimpleAsyncResult error-returning behavior, and
+ *   g_async_result_is_tagged() to check if a result is tagged as
+ *   having come from the `_async()` wrapper
+ *   function (for "short-circuit" results, such as when passing
+ *   0 to g_input_stream_read_async()).
  */
 
 
@@ -7911,88 +7901,75 @@
  * A helper class for testing code which uses D-Bus without touching the user's
  * session bus.
  *
- * Note that #GTestDBus modifies the user’s environment, calling setenv(). This
- * is not thread-safe, so all #GTestDBus calls should be completed before
+ * Note that #GTestDBus modifies the user’s environment, calling setenv().
+ * This is not thread-safe, so all #GTestDBus calls should be completed before
  * threads are spawned, or should have appropriate locking to ensure no access
  * conflicts to environment variables shared between #GTestDBus and other
  * threads.
  *
- * <refsect2 id="gio-D-Bus-Test-Scaffolding">
- *   <title>Creating unit tests using GTestDBus</title>
- *   <para>
- *     Testing of D-Bus services can be tricky because normally we only ever run
- *     D-Bus services over an existing instance of the D-Bus daemon thus we
- *     usually don't activate D-Bus services that are not yet installed into the
- *     target system. The #GTestDBus object makes this easier for us by taking care
- *     of the lower level tasks such as running a private D-Bus daemon and looking
- *     up uninstalled services in customizable locations, typically in your source code tree.
- *   </para>
- *   <para>
- *     The first thing you will need is a separate service description file for the
- *     D-Bus daemon. Typically a <filename>services</filename> subdirectory of
- *     your <filename>tests</filename> directory
- *     is a good place to put this file.
- *   </para>
- *   <para>
- *     The service file should list your service along with an absolute path to the
- *     uninstalled service executable in your source tree. Using autotools we would
- *     achieve this by adding a file such as <filename>my-server.service.in</filename>
- *     in the services
- *     directory and have it processed by configure.
- *     <informalexample><programlisting>
+ * ## Creating unit tests using GTestDBus
+ *
+ * Testing of D-Bus services can be tricky because normally we only ever run
+ * D-Bus services over an existing instance of the D-Bus daemon thus we
+ * usually don't activate D-Bus services that are not yet installed into the
+ * target system. The #GTestDBus object makes this easier for us by taking care
+ * of the lower level tasks such as running a private D-Bus daemon and looking
+ * up uninstalled services in customizable locations, typically in your source
+ * code tree.
+ *
+ * The first thing you will need is a separate service description file for the
+ * D-Bus daemon. Typically a `services` subdirectory of your `tests` directory
+ * is a good place to put this file.
+ *
+ * The service file should list your service along with an absolute path to the
+ * uninstalled service executable in your source tree. Using autotools we would
+ * achieve this by adding a file such as `my-server.service.in` in the services
+ * directory and have it processed by configure.
+ * |[
  *     [D-BUS Service]
  *     Name=org.gtk.GDBus.Examples.ObjectManager
  *     Exec=@abs_top_builddir@/gio/tests/gdbus-example-objectmanager-server
- *     </programlisting></informalexample>
- *     You will also need to indicate this service directory in your test
- *     fixtures, so you will need to pass the path while compiling your
- *     test cases. Typically this is done with autotools with an added
- *     preprocessor flag specified to compile your tests such as:
- *     <informalexample><programlisting>
+ * ]|
+ * You will also need to indicate this service directory in your test
+ * fixtures, so you will need to pass the path while compiling your
+ * test cases. Typically this is done with autotools with an added
+ * preprocessor flag specified to compile your tests such as:
+ * |[
  *     -DTEST_SERVICES=\""$(abs_top_builddir)/tests/services"\"
- *     </programlisting></informalexample>
- *   </para>
- *   <para>
+ * ]|
  *     Once you have a service definition file which is local to your source tree,
- *     you can proceed to set up a GTest fixture using the #GTestDBus scaffolding.
- *     <example id="gdbus-test-fixture">
- *       <title>Test Fixture for D-Bus services</title>
- *       <programlisting>
- *         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-test-fixture.c">
- *           <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- *         </xi:include>
- *       </programlisting>
- *     </example>
- *   </para>
- *   <para>
- *     Note that these examples only deal with isolating the D-Bus aspect of your
- *     service. To successfully run isolated unit tests on your service you may need
- *     some additional modifications to your test case fixture. For example; if your
- *     service uses GSettings and installs a schema then it is important that your test service
- *     not load the schema in the ordinary installed location (chances are that your service
- *     and schema files are not yet installed, or worse; there is an older version of the
- *     schema file sitting in the install location).
- *   </para>
- *   <para>
- *     Most of the time we can work around these obstacles using the environment. Since the
- *     environment is inherited by the D-Bus daemon created by #GTestDBus and then in turn
- *     inherited by any services the D-Bus daemon activates, using the setup routine for your
- *     fixture is a practical place to help sandbox your runtime environment. For the rather
- *     typical GSettings case we can work around this by setting <envar>GSETTINGS_SCHEMA_DIR</envar> to the
- *     in tree directory holding your schemas in the above fixture_setup() routine.
- *   </para>
- *   <para>
- *     The GSettings schemas need to be locally pre-compiled for this to work. This can be achieved
- *     by compiling the schemas locally as a step before running test cases, an autotools setup might
- *     do the following in the directory holding schemas:
- *     <informalexample><programlisting>
+ * you can proceed to set up a GTest fixture using the #GTestDBus scaffolding.
+ *
+ * An example of a test fixture for D-Bus services can be found
+ * here:
+ * [gdbus-test-fixture.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-test-fixture.c)
+ *
+ * Note that these examples only deal with isolating the D-Bus aspect of your
+ * service. To successfully run isolated unit tests on your service you may need
+ * some additional modifications to your test case fixture. For example; if your
+ * service uses GSettings and installs a schema then it is important that your test service
+ * not load the schema in the ordinary installed location (chances are that your service
+ * and schema files are not yet installed, or worse; there is an older version of the
+ * schema file sitting in the install location).
+ *
+ * Most of the time we can work around these obstacles using the
+ * environment. Since the environment is inherited by the D-Bus daemon
+ * created by #GTestDBus and then in turn inherited by any services the
+ * D-Bus daemon activates, using the setup routine for your fixture is
+ * a practical place to help sandbox your runtime environment. For the
+ * rather typical GSettings case we can work around this by setting
+ * `GSETTINGS_SCHEMA_DIR` to the in tree directory holding your schemas
+ * in the above fixture_setup() routine.
+ *
+ * The GSettings schemas need to be locally pre-compiled for this to work. This can be achieved
+ * by compiling the schemas locally as a step before running test cases, an autotools setup might
+ * do the following in the directory holding schemas:
+ * |[
  *     all-am:
  *             $(GLIB_COMPILE_SCHEMAS) .
  *
  *     CLEANFILES += gschemas.compiled
- *     </programlisting></informalexample>
- *   </para>
- * </refsect2>
+ * ]|
  */
 
 
@@ -8210,9 +8187,9 @@
  * It contains functions to do some of the UNIX socket specific
  * functionality like passing file descriptors.
  *
- * Note that <filename>&lt;gio/gunixconnection.h&gt;</filename> belongs to
- * the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gunixconnection.h&gt;` belongs to the UNIX-specific
+ * GIO interfaces, thus you have to use the `gio-unix-2.0.pc`
+ * pkg-config file when using it.
  *
  * Since: 2.22
  */
@@ -8253,9 +8230,9 @@
  * the %G_SOCKET_ADDRESS_UNIX family by using g_socket_send_message()
  * and received using g_socket_receive_message().
  *
- * Note that <filename>&lt;gio/gunixfdlist.h&gt;</filename> belongs to
- * the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gunixfdlist.h&gt;` belongs to the UNIX-specific GIO
+ * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
+ * file when using it.
  */
 
 
@@ -8276,9 +8253,9 @@
  * stream-oriented UNIX sockets, see g_unix_connection_send_fd() and
  * g_unix_connection_receive_fd().
  *
- * Note that <filename>&lt;gio/gunixfdmessage.h&gt;</filename> belongs to
- * the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gunixfdmessage.h&gt;` belongs to the UNIX-specific GIO
+ * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
+ * file when using it.
  */
 
 
@@ -8294,9 +8271,9 @@
  * asynchronous I/O. If it refers to a regular file, it will fall back
  * to doing asynchronous I/O in another thread.)
  *
- * Note that <filename>&lt;gio/gunixinputstream.h&gt;</filename> belongs
- * to the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gunixinputstream.h&gt;` belongs to the UNIX-specific GIO
+ * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
+ * file when using it.
  */
 
 
@@ -8307,9 +8284,9 @@
  *
  * Routines for managing mounted UNIX mount points and paths.
  *
- * Note that <filename>&lt;gio/gunixmounts.h&gt;</filename> belongs to the
- * UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gunixmounts.h&gt;` belongs to the UNIX-specific GIO
+ * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
+ * file when using it.
  */
 
 
@@ -8325,9 +8302,9 @@
  * asynchronous I/O. If it refers to a regular file, it will fall back
  * to doing asynchronous I/O in another thread.)
  *
- * Note that <filename>&lt;gio/gunixoutputstream.h&gt;</filename> belongs
- * to the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gunixoutputstream.h&gt;` belongs to the UNIX-specific GIO
+ * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config file
+ * when using it.
  */
 
 
@@ -8347,9 +8324,9 @@
  * errors. You can use g_unix_socket_address_abstract_names_supported()
  * to see if abstract names are supported.
  *
- * Note that <filename>&lt;gio/gunixsocketaddress.h&gt;</filename> belongs to
- * the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gunixsocketaddress.h&gt;` belongs to the UNIX-specific GIO
+ * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config file
+ * when using it.
  */
 
 
@@ -8390,18 +8367,18 @@
  * successfully.  If an @error is present when g_volume_mount_finish()
  * is called, then it will be filled with any error information.
  *
- * <para id="volume-identifier">
+ * ## Volume Identifiers # {#volume-identifier}
+ *
  * It is sometimes necessary to directly access the underlying
  * operating system object behind a volume (e.g. for passing a volume
  * to an application via the commandline). For this purpose, GIO
  * allows to obtain an 'identifier' for the volume. There can be
  * different kinds of identifiers, such as Hal UDIs, filesystem labels,
- * traditional Unix devices (e.g. <filename>/dev/sda2</filename>),
- * uuids. GIO uses predefind strings as names for the different kinds
- * of identifiers: #G_VOLUME_IDENTIFIER_KIND_HAL_UDI,
- * #G_VOLUME_IDENTIFIER_KIND_LABEL, etc. Use g_volume_get_identifier()
- * to obtain an identifier for a volume.
- * </para>
+ * traditional Unix devices (e.g. `/dev/sda2`), UUIDs. GIO uses predefined
+ * strings as names for the different kinds of identifiers:
+ * #G_VOLUME_IDENTIFIER_KIND_HAL_UDI, #G_VOLUME_IDENTIFIER_KIND_LABEL, etc.
+ * Use g_volume_get_identifier() to obtain an identifier for a volume.
+ *
  *
  * Note that #G_VOLUME_IDENTIFIER_KIND_HAL_UDI will only be available
  * when the gvfs hal volume monitor is in use. Other volume monitors
@@ -8437,9 +8414,9 @@
  * #GWin32InputStream implements #GInputStream for reading from a
  * Windows file handle.
  *
- * Note that <filename>&lt;gio/gwin32inputstream.h&gt;</filename> belongs
- * to the Windows-specific GIO interfaces, thus you have to use the
- * <filename>gio-windows-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gwin32inputstream.h&gt;` belongs to the Windows-specific GIO
+ * interfaces, thus you have to use the `gio-windows-2.0.pc` pkg-config file
+ * when using it.
  */
 
 
@@ -8452,9 +8429,9 @@
  * #GWin32OutputStream implements #GOutputStream for writing to a
  * Windows file handle.
  *
- * Note that <filename>&lt;gio/gwin32outputstream.h&gt;</filename> belongs
- * to the Windows-specific GIO interfaces, thus you have to use the
- * <filename>gio-windows-2.0.pc</filename> pkg-config file when using it.
+ * Note that `&lt;gio/gwin32outputstream.h&gt;` belongs to the Windows-specific GIO
+ * interfaces, thus you have to use the `gio-windows-2.0.pc` pkg-config file
+ * when using it.
  */
 
 
@@ -10433,9 +10410,7 @@
  *
  * Each action is constructed as per one #GActionEntry.
  *
- * <example>
- * <title>Using g_action_map_add_action_entries()</title>
- * <programlisting>
+ * |[<!-- language="C" -->
  * static void
  * activate_quit (GSimpleAction *simple,
  *                GVariant      *parameter,
@@ -10466,8 +10441,7 @@
  *
  *   return G_ACTION_GROUP (group);
  * }
- * </programlisting>
- * </example>
+ * ]|
  *
  * Since: 2.32
  */
@@ -10622,8 +10596,8 @@
  * Creates a new #GAppInfo from the given information.
  *
  * Note that for @commandline, the quoting rules of the Exec key of the
- * <ulink url="http://freedesktop.org/Standards/desktop-entry-spec">freedesktop.org Desktop
- * Entry Specification</ulink> are applied. For example, if the @commandline contains
+ * [freedesktop.org Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec)
+ * are applied. For example, if the @commandline contains
  * percent-encoded URIs, the percent-character must be doubled in order to prevent it from
  * being swallowed by Exec key unquoting. See the specification for exact quoting rules.
  *
@@ -10638,8 +10612,8 @@
  * Tries to delete a #GAppInfo.
  *
  * On some platforms, there may be a difference between user-defined
- * #GAppInfo<!-- -->s which can be deleted, and system-wide ones which
- * cannot. See g_app_info_can_delete().
+ * #GAppInfos which can be deleted, and system-wide ones which cannot.
+ * See g_app_info_can_delete().
  *
  * Returns: %TRUE if @appinfo has been deleted
  * Since: 2.20
@@ -10661,7 +10635,7 @@
  * @appinfo1: the first #GAppInfo.
  * @appinfo2: the second #GAppInfo.
  *
- * Checks if two #GAppInfo<!-- -->s are equal.
+ * Checks if two #GAppInfos are equal.
  *
  * Returns: %TRUE if @appinfo1 is equal to @appinfo2. %FALSE otherwise.
  */
@@ -10674,13 +10648,12 @@
  * on this system.
  *
  * For desktop files, this includes applications that have
- * <literal>NoDisplay=true</literal> set or are excluded from
- * display by means of <literal>OnlyShowIn</literal> or
- * <literal>NotShowIn</literal>. See g_app_info_should_show().
+ * `NoDisplay=true` set or are excluded from display by means
+ * of `OnlyShowIn` or `NotShowIn`. See g_app_info_should_show().
  * The returned list does not include applications which have
- * the <literal>Hidden</literal> key set.
+ * the `Hidden` key set.
  *
- * Returns: (element-type GAppInfo) (transfer full): a newly allocated #GList of references to #GAppInfo<!---->s.
+ * Returns: (element-type GAppInfo) (transfer full): a newly allocated #GList of references to #GAppInfos.
  */
 
 
@@ -10881,17 +10854,16 @@
  * g_app_info_launch_uris() instead.
  *
  * The launched application inherits the environment of the launching
- * process, but it can be modified with g_app_launch_context_setenv() and
- * g_app_launch_context_unsetenv().
+ * process, but it can be modified with g_app_launch_context_setenv()
+ * and g_app_launch_context_unsetenv().
  *
- * On UNIX, this function sets the <envar>GIO_LAUNCHED_DESKTOP_FILE</envar>
+ * On UNIX, this function sets the `GIO_LAUNCHED_DESKTOP_FILE`
  * environment variable with the path of the launched desktop file and
- * <envar>GIO_LAUNCHED_DESKTOP_FILE_PID</envar> to the process
- * id of the launched process. This can be used to ignore
- * <envar>GIO_LAUNCHED_DESKTOP_FILE</envar>, should it be inherited
- * by further processes. The <envar>DISPLAY</envar> and
- * <envar>DESKTOP_STARTUP_ID</envar> environment variables are also
- * set, based on information provided in @launch_context.
+ * `GIO_LAUNCHED_DESKTOP_FILE_PID` to the process id of the launched
+ * process. This can be used to ignore `GIO_LAUNCHED_DESKTOP_FILE`,
+ * should it be inherited by further processes. The `DISPLAY` and
+ * `DESKTOP_STARTUP_ID` environment variables are also set, based
+ * on information provided in @launch_context.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
  */
@@ -11056,7 +11028,7 @@
  *
  * Gets the display string for the @context. This is used to ensure new
  * applications are started on the same display as the launching
- * application, by setting the <envar>DISPLAY</envar> environment variable.
+ * application, by setting the `DISPLAY` environment variable.
  *
  * Returns: a display string for the display.
  */
@@ -11069,7 +11041,7 @@
  * Gets the complete environment variable list to be passed to
  * the child process when @context is used to launch an application.
  * This is a %NULL-terminated array of strings, where each string has
- * the form <literal>KEY=VALUE</literal>.
+ * the form `KEY=VALUE`.
  *
  * Returns: (array zero-terminated=1) (transfer full): the
  *     child's environment
@@ -11084,12 +11056,10 @@
  * @files: (element-type GFile): a #GList of of #GFile objects
  *
  * Initiates startup notification for the application and returns the
- * <envar>DESKTOP_STARTUP_ID</envar> for the launched operation,
- * if supported.
+ * `DESKTOP_STARTUP_ID` for the launched operation, if supported.
  *
- * Startup notification IDs are defined in the <ulink
- * url="http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">
- * FreeDesktop.Org Startup Notifications standard</ulink>.
+ * Startup notification IDs are defined in the
+ * [FreeDesktop.Org Startup Notifications standard](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt").
  *
  * Returns: a startup notification ID for the application, or %NULL if
  *     not supported.
@@ -11153,6 +11123,95 @@
  * The application must be registered before calling this function.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_add_main_option_entries:
+ * @application: a #GApplication
+ * @entries: a %NULL-terminated list of #GOptionEntrys
+ *
+ * Adds main option entries to be handled by @application.
+ *
+ * This function is comparable to g_option_context_add_main_entries().
+ *
+ * After the commandline arguments are parsed, the
+ * #GApplication::handle-local-options signal will be emitted.  At this
+ * point, the application can inspect the values pointed to by @arg_data
+ * in the given #GOptionEntrys.
+ *
+ * Unlike #GOptionContext, #GApplication supports giving a %NULL
+ * @arg_data for a non-callback #GOptionEntry.  This results in the
+ * argument in question being packed into a #GVariantDict which is also
+ * passed to #GApplication::handle-local-options, where it can be
+ * inspected and modified.  If %G_APPLICATION_HANDLES_COMMAND_LINE is
+ * set, then the resulting dictionary is sent to the primary instance,
+ * where g_application_command_line_get_options_dict() will return it.
+ * This "packing" is done according to the type of the argument --
+ * booleans for normal flags, strings for strings, bytestrings for
+ * filenames, etc.  The packing only occurs if the flag is given (ie: we
+ * do not pack a "false" #GVariant in the case that a flag is missing).
+ *
+ * In general, it is recommended that all commandline arguments are
+ * parsed locally.  The options dictionary should then be used to
+ * transmit the result of the parsing to the primary instance, where
+ * g_variant_dict_lookup() can be used.  For local options, it is
+ * possible to either use @arg_data in the usual way, or to consult (and
+ * potentially remove) the option from the options dictionary.
+ *
+ * This function is new in GLib 2.40.  Before then, the only real choice
+ * was to send all of the commandline arguments (options and all) to the
+ * primary instance for handling.  #GApplication ignored them completely
+ * on the local side.  Calling this function "opts in" to the new
+ * behaviour, and in particular, means that unrecognised options will be
+ * treated as errors.  Unrecognised options have never been ignored when
+ * %G_APPLICATION_HANDLES_COMMAND_LINE is unset.
+ *
+ * If #GApplication::handle-local-options needs to see the list of
+ * filenames, then the use of %G_OPTION_REMAINING is recommended.  If
+ * @arg_data is %NULL then %G_OPTION_REMAINING can be used as a key into
+ * the options dictionary.  If you do use %G_OPTION_REMAINING then you
+ * need to handle these arguments for yourself because once they are
+ * consumed, they will no longer be visible to the default handling
+ * (which treats them as filenames to be opened).
+ *
+ * Since: 2.40
+ */
+
+
+/**
+ * g_application_add_option_group:
+ * @application: the #GApplication
+ * @group: a #GOptionGroup
+ *
+ * Adds a #GOptionGroup to the commandline handling of @application.
+ *
+ * This function is comparable to g_option_context_add_group().
+ *
+ * Unlike g_application_add_main_option_entries(), this function does
+ * not deal with %NULL @arg_data and never transmits options to the
+ * primary instance.
+ *
+ * The reason for that is because, by the time the options arrive at the
+ * primary instance, it is typically too late to do anything with them.
+ * Taking the GTK option group as an example: GTK will already have been
+ * initialised by the time the #GApplication::command-line handler runs.
+ * In the case that this is not the first-running instance of the
+ * application, the existing instance may already have been running for
+ * a very long time.
+ *
+ * This means that the options from #GOptionGroup are only really usable
+ * in the case that the instance of the application being run is the
+ * first instance.  Passing options like <literal>--display=</literal>
+ * or <literal>--gdk-debug=</literal> on future runs will have no effect
+ * on the existing primary instance.
+ *
+ * Calling this function will cause the options in the supplied option
+ * group to be parsed, but it does not cause you to be "opted in" to the
+ * new functionality whereby unrecognised options are rejected even if
+ * %G_APPLICATION_HANDLES_COMMAND_LINE was given.
+ *
+ * Since: 2.40
  */
 
 
@@ -11260,6 +11319,25 @@
  *
  * Returns: %TRUE if the invocation was remote
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_command_line_get_options_dict:
+ * @cmdline: a #GApplicationCommandLine
+ *
+ * Gets the options there were passed to g_application_command_line().
+ *
+ * If you did not override local_command_line() then these are the same
+ * options that were parsed according to the #GOptionEntrys added to the
+ * application with g_application_add_main_option_entries() and possibly
+ * modified from your GApplication::handle-local-options handler.
+ *
+ * If no options were sent then an empty dictionary is returned so that
+ * you don't need to check for %NULL.
+ *
+ * Returns: (transfer none): a #GVariantDict with the options
+ * Since: 2.40
  */
 
 
@@ -11548,13 +11626,20 @@
  *
  * For convenience, the restrictions on application identifiers are
  * reproduced here:
- * <itemizedlist>
- *   <listitem>Application identifiers must contain only the ASCII characters "[A-Z][a-z][0-9]_-." and must not begin with a digit.</listitem>
- *   <listitem>Application identifiers must contain at least one '.' (period) character (and thus at least three elements).</listitem>
- *   <listitem>Application identifiers must not begin or end with a '.' (period) character.</listitem>
- *   <listitem>Application identifiers must not contain consecutive '.' (period) characters.</listitem>
- *   <listitem>Application identifiers must not exceed 255 characters.</listitem>
- * </itemizedlist>
+ *
+ * - Application identifiers must contain only the ASCII characters
+ *   "[A-Z][a-z][0-9]_-." and must not begin with a digit.
+ *
+ * - Application identifiers must contain at least one '.' (period)
+ *   character (and thus at least three elements).
+ *
+ * - Application identifiers must not begin or end with a '.' (period)
+ *   character.
+ *
+ * - Application identifiers must not contain consecutive '.' (period)
+ *   characters.
+ *
+ * - Application identifiers must not exceed 255 characters.
  *
  * Returns: %TRUE if @application_id is valid
  */
@@ -11711,49 +11796,28 @@
  * g_win32_get_command_line() is called internally (for proper support
  * of Unicode commandline arguments).
  *
- * First, the local_command_line() virtual function is invoked.
- * This function always runs on the local instance. It gets passed a pointer
- * to a %NULL-terminated copy of the command line and is expected to
- * remove the arguments that it handled (shifting up remaining
- * arguments). See <xref linkend="gapplication-example-cmdline2"/> for
- * an example of parsing @argv manually. Alternatively, you may use the
- * #GOptionContext API, but you must use g_option_context_parse_strv()
- * in order to avoid memory leaks and encoding mismatches.
+ * #GApplication will attempt to parse the commandline arguments.  You
+ * can add commandline flags to the list of recognised options by way of
+ * g_application_add_main_option_entries().  After this, the
+ * #GApplication::handle-local-options signal is emitted, from which the
+ * application can inspect the values of its #GOptionEntrys.
  *
- * The last argument to local_command_line() is a pointer to the @status
- * variable which can used to set the exit status that is returned from
- * g_application_run().
+ * #GApplication::handle-local-options is a good place to handle options
+ * such as <literal>--version</literal>, where an immediate reply from
+ * the local process is desired (instead of communicating with an
+ * already-running instance).  A #GApplication::handle-local-options
+ * handler can stop further processing by returning a non-negative
+ * value, which then becomes the exit status of the process.
  *
- * If local_command_line() returns %TRUE, the command line is expected
- * to be completely handled, including possibly registering as the primary
- * instance, calling g_application_activate() or g_application_open(), etc.
- *
- * If local_command_line() returns %FALSE then the application is registered
- * and the #GApplication::command-line signal is emitted in the primary
- * instance (which may or may not be this instance). The signal handler
- * gets passed a #GApplicationCommandLine object that (among other things)
- * contains the remaining commandline arguments that have not been handled
- * by local_command_line().
- *
- * If the application has the %G_APPLICATION_HANDLES_COMMAND_LINE
- * flag set then the default implementation of local_command_line()
- * always returns %FALSE immediately, resulting in the commandline
- * always being handled in the primary instance.
- *
- * Otherwise, the default implementation of local_command_line() tries
- * to do a couple of things that are probably reasonable for most
- * applications.  First, g_application_register() is called to attempt
- * to register the application.  If that works, then the command line
- * arguments are inspected.  If no commandline arguments are given, then
- * g_application_activate() is called.  If commandline arguments are
- * given and the %G_APPLICATION_HANDLES_OPEN flag is set then they
- * are assumed to be filenames and g_application_open() is called.
- *
- * If you need to handle commandline arguments that are not filenames,
- * and you don't mind commandline handling to happen in the primary
- * instance, you should set %G_APPLICATION_HANDLES_COMMAND_LINE and
- * process the commandline arguments in your #GApplication::command-line
- * signal handler, either manually or using the #GOptionContext API.
+ * What happens next depends on the flags: if
+ * %G_APPLICATION_HANDLES_COMMAND_LINE was specified then the remaining
+ * commandline arguments are sent to the primary instance, where a
+ * #GApplication::command-line signal is emitted.  Otherwise, the
+ * remaining commandline arguments are assumed to be a list of files.
+ * If there are no files listed, the application is activated via the
+ * #GApplication::activate signal.  If there are one or more files, and
+ * %G_APPLICATION_HANDLES_OPEN was specified then the files are opened
+ * via the #GApplication::open signal.
  *
  * If you are interested in doing more complicated local handling of the
  * commandline then you should implement your own #GApplication subclass
@@ -12157,13 +12221,12 @@
  * g_simple_async_result_propagate_error(). Otherwise it returns
  * %FALSE.
  *
- * This can be used for legacy error handling in async
- * <literal>_finish ()</literal> wrapper functions that traditionally
- * handled #GSimpleAsyncResult error returns themselves rather than
- * calling into the virtual method. This should not be used in new
- * code; #GAsyncResult errors that are set by virtual methods should
- * also be extracted by virtual methods, to enable subclasses to chain
- * up correctly.
+ * This can be used for legacy error handling in async *_finish()
+ * wrapper functions that traditionally handled #GSimpleAsyncResult
+ * error returns themselves rather than calling into the virtual method.
+ * This should not be used in new code; #GAsyncResult errors that are
+ * set by virtual methods should also be extracted by virtual methods,
+ * to enable subclasses to chain up correctly.
  *
  * Returns: %TRUE if @error is has been filled in with an error from
  *   @res, %FALSE if not.
@@ -12411,10 +12474,10 @@
 
 /**
  * g_bus_get:
- * @bus_type: A #GBusType.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
- * @user_data: The data to pass to @callback.
+ * @bus_type: a #GBusType
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to @callback
  *
  * Asynchronously connects to the message bus specified by @bus_type.
  *
@@ -12430,8 +12493,9 @@
 
 /**
  * g_bus_get_finish:
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_bus_get().
- * @error: Return location for error or %NULL.
+ * @res: a #GAsyncResult obtained from the #GAsyncReadyCallback passed
+ *     to g_bus_get()
+ * @error: return location for error or %NULL
  *
  * Finishes an operation started with g_bus_get().
  *
@@ -12444,16 +12508,17 @@
  * Note that the returned #GDBusConnection object will (usually) have
  * the #GDBusConnection:exit-on-close property set to %TRUE.
  *
- * Returns: (transfer full): A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: (transfer full): a #GDBusConnection or %NULL if @error is set.
+ *     Free with g_object_unref().
  * Since: 2.26
  */
 
 
 /**
  * g_bus_get_sync:
- * @bus_type: A #GBusType.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @bus_type: a #GBusType
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Synchronously connects to the message bus specified by @bus_type.
  * Note that the returned object may shared with other callers,
@@ -12472,21 +12537,22 @@
  * Note that the returned #GDBusConnection object will (usually) have
  * the #GDBusConnection:exit-on-close property set to %TRUE.
  *
- * Returns: (transfer full): A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: (transfer full): a #GDBusConnection or %NULL if @error is set.
+ *     Free with g_object_unref().
  * Since: 2.26
  */
 
 
 /**
  * g_bus_own_name:
- * @bus_type: The type of bus to own a name on.
- * @name: The well-known name to own.
- * @flags: A set of flags from the #GBusNameOwnerFlags enumeration.
- * @bus_acquired_handler: (allow-none): Handler to invoke when connected to the bus of type @bus_type or %NULL.
- * @name_acquired_handler: (allow-none): Handler to invoke when @name is acquired or %NULL.
- * @name_lost_handler: (allow-none): Handler to invoke when @name is lost or %NULL.
- * @user_data: User data to pass to handlers.
- * @user_data_free_func: (allow-none): Function for freeing @user_data or %NULL.
+ * @bus_type: the type of bus to own a name on
+ * @name: the well-known name to own
+ * @flags: a set of flags from the #GBusNameOwnerFlags enumeration
+ * @bus_acquired_handler: (allow-none): handler to invoke when connected to the bus of type @bus_type or %NULL
+ * @name_acquired_handler: (allow-none): handler to invoke when @name is acquired or %NULL
+ * @name_lost_handler: (allow-none): handler to invoke when @name is lost or %NULL
+ * @user_data: user data to pass to handlers
+ * @user_data_free_func: (allow-none): function for freeing @user_data or %NULL
  *
  * Starts acquiring @name on the bus specified by @bus_type and calls
  * @name_acquired_handler and @name_lost_handler when the name is
@@ -12497,26 +12563,25 @@
  * You are guaranteed that one of the @name_acquired_handler and @name_lost_handler
  * callbacks will be invoked after calling this function - there are three
  * possible cases:
- * <itemizedlist>
- *   <listitem><para>
- *     @name_lost_handler with a %NULL connection (if a connection to the bus can't be made).
- *   </para></listitem>
- *   <listitem><para>
- *     @bus_acquired_handler then @name_lost_handler (if the name can't be obtained)
- *   </para></listitem>
- *   <listitem><para>
- *     @bus_acquired_handler then @name_acquired_handler (if the name was obtained).
- *   </para></listitem>
- * </itemizedlist>
+ *
+ * - @name_lost_handler with a %NULL connection (if a connection to the bus
+ *   can't be made).
+ *
+ * - @bus_acquired_handler then @name_lost_handler (if the name can't be
+ *   obtained)
+ *
+ * - @bus_acquired_handler then @name_acquired_handler (if the name was
+ *   obtained).
+ *
  * When you are done owning the name, just call g_bus_unown_name()
  * with the owner id this function returns.
  *
  * If the name is acquired or lost (for example another application
  * could acquire the name if you allow replacement or the application
- * currently owning the name exits), the handlers are also invoked. If the
- * #GDBusConnection that is used for attempting to own the name
- * closes, then @name_lost_handler is invoked since it is no
- * longer possible for other processes to access the process.
+ * currently owning the name exits), the handlers are also invoked.
+ * If the #GDBusConnection that is used for attempting to own the name
+ * closes, then @name_lost_handler is invoked since it is no longer
+ * possible for other processes to access the process.
  *
  * You cannot use g_bus_own_name() several times for the same name (unless
  * interleaved with calls to g_bus_unown_name()) - only the first call
@@ -12539,74 +12604,74 @@
  * Simply register objects to be exported in @bus_acquired_handler and
  * unregister the objects (if any) in @name_lost_handler.
  *
- * Returns: An identifier (never 0) that an be used with
- * g_bus_unown_name() to stop owning the name.
+ * Returns: an identifier (never 0) that an be used with
+ *     g_bus_unown_name() to stop owning the name.
  * Since: 2.26
  */
 
 
 /**
  * g_bus_own_name_on_connection:
- * @connection: A #GDBusConnection.
- * @name: The well-known name to own.
- * @flags: A set of flags from the #GBusNameOwnerFlags enumeration.
- * @name_acquired_handler: (allow-none): Handler to invoke when @name is acquired or %NULL.
- * @name_lost_handler: (allow-none): Handler to invoke when @name is lost or %NULL.
- * @user_data: User data to pass to handlers.
- * @user_data_free_func: (allow-none): Function for freeing @user_data or %NULL.
+ * @connection: a #GDBusConnection
+ * @name: the well-known name to own
+ * @flags: a set of flags from the #GBusNameOwnerFlags enumeration
+ * @name_acquired_handler: (allow-none): handler to invoke when @name is acquired or %NULL
+ * @name_lost_handler: (allow-none): handler to invoke when @name is lost or %NULL
+ * @user_data: user data to pass to handlers
+ * @user_data_free_func: (allow-none): function for freeing @user_data or %NULL
  *
  * Like g_bus_own_name() but takes a #GDBusConnection instead of a
  * #GBusType.
  *
- * Returns: An identifier (never 0) that an be used with
- * g_bus_unown_name() to stop owning the name.
+ * Returns: an identifier (never 0) that an be used with
+ *     g_bus_unown_name() to stop owning the name
  * Since: 2.26
  */
 
 
 /**
  * g_bus_own_name_on_connection_with_closures: (rename-to g_bus_own_name_on_connection)
- * @connection: A #GDBusConnection.
- * @name: The well-known name to own.
- * @flags: A set of flags from the #GBusNameOwnerFlags enumeration.
+ * @connection: a #GDBusConnection
+ * @name: the well-known name to own
+ * @flags: a set of flags from the #GBusNameOwnerFlags enumeration
  * @name_acquired_closure: (allow-none): #GClosure to invoke when @name is
- * acquired or %NULL.
- * @name_lost_closure: (allow-none): #GClosure to invoke when @name is lost or
- * %NULL.
+ *     acquired or %NULL
+ * @name_lost_closure: (allow-none): #GClosure to invoke when @name is lost
+ *     or %NULL
  *
- * Version of g_bus_own_name_on_connection() using closures instead of callbacks for
- * easier binding in other languages.
+ * Version of g_bus_own_name_on_connection() using closures instead of
+ * callbacks for easier binding in other languages.
  *
- * Returns: An identifier (never 0) that an be used with
- * g_bus_unown_name() to stop owning the name.
+ * Returns: an identifier (never 0) that an be used with
+ *     g_bus_unown_name() to stop owning the name.
  * Since: 2.26
  */
 
 
 /**
  * g_bus_own_name_with_closures: (rename-to g_bus_own_name)
- * @bus_type: The type of bus to own a name on.
- * @name: The well-known name to own.
- * @flags: A set of flags from the #GBusNameOwnerFlags enumeration.
+ * @bus_type: the type of bus to own a name on
+ * @name: the well-known name to own
+ * @flags: a set of flags from the #GBusNameOwnerFlags enumeration
  * @bus_acquired_closure: (allow-none): #GClosure to invoke when connected to
- * the bus of type @bus_type or %NULL.
+ *     the bus of type @bus_type or %NULL
  * @name_acquired_closure: (allow-none): #GClosure to invoke when @name is
- * acquired or %NULL.
+ *     acquired or %NULL
  * @name_lost_closure: (allow-none): #GClosure to invoke when @name is lost or
- * %NULL.
+ *     %NULL
  *
  * Version of g_bus_own_name() using closures instead of callbacks for
  * easier binding in other languages.
  *
- * Returns: An identifier (never 0) that an be used with
- * g_bus_unown_name() to stop owning the name.
+ * Returns: an identifier (never 0) that an be used with
+ *     g_bus_unown_name() to stop owning the name.
  * Since: 2.26
  */
 
 
 /**
  * g_bus_unown_name:
- * @owner_id: An identifier obtained from g_bus_own_name()
+ * @owner_id: an identifier obtained from g_bus_own_name()
  *
  * Stops owning a name.
  *
@@ -13098,7 +13163,8 @@
  *
  * Gets the generic icon name for a content type.
  *
- * See the <ulink url="http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec">shared-mime-info</ulink>
+ * See the
+ * [shared-mime-info](http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec)
  * specification for more on the generic icon name.
  *
  * Returns: (allow-none): the registered generic icon name for the given @type,
@@ -13169,7 +13235,8 @@
  *
  * The types returned all have the form x-content/foo, e.g.
  * x-content/audio-cdda (for audio CDs) or x-content/image-dcf
- * (for a camera memory card). See the <ulink url="http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec">shared-mime-info</ulink>
+ * (for a camera memory card). See the
+ * [shared-mime-info](http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec)
  * specification for more on x-content types.
  *
  * This function is useful in the implementation of
@@ -13210,11 +13277,10 @@
  *
  * Gets a list of strings containing all the registered content types
  * known to the system. The list and its data should be freed using
- * <programlisting>
- * g_list_free_full (list, g_free);
- * </programlisting>
+ * g_list_free_full (list, g_free).
  *
- * Returns: (element-type utf8) (transfer full): #GList of the registered content types
+ * Returns: (element-type utf8) (transfer full): list of the registered
+ *     content types
  */
 
 
@@ -13859,8 +13925,8 @@
  * occurrence of any of the stop characters.
  *
  * In contrast to g_data_input_stream_read_until(), this function
- * does <emphasis>not</emphasis> consume the stop character. You have
- * to use g_data_input_stream_read_byte() to get it before calling
+ * does not consume the stop character. You have to use
+ * g_data_input_stream_read_byte() to get it before calling
  * g_data_input_stream_read_upto() again.
  *
  * Note that @stop_chars may contain '\0' if @stop_chars_len is
@@ -13890,8 +13956,8 @@
  * It is an error to have two outstanding calls to this function.
  *
  * In contrast to g_data_input_stream_read_until(), this function
- * does <emphasis>not</emphasis> consume the stop character. You have
- * to use g_data_input_stream_read_byte() to get it before calling
+ * does not consume the stop character. You have to use
+ * g_data_input_stream_read_byte() to get it before calling
  * g_data_input_stream_read_upto() again.
  *
  * Note that @stop_chars may contain '\0' if @stop_chars_len is
@@ -13915,9 +13981,9 @@
  * Finish an asynchronous call started by
  * g_data_input_stream_read_upto_async().
  *
- * Note that this function does <emphasis>not</emphasis> consume the
- * stop character. You have to use g_data_input_stream_read_byte() to
- * get it before calling g_data_input_stream_read_upto_async() again.
+ * Note that this function does not consume the stop character. You
+ * have to use g_data_input_stream_read_byte() to get it before calling
+ * g_data_input_stream_read_upto_async() again.
  *
  * Returns: (transfer full): a string with the data that was read
  *     before encountering any of the stop characters. Set @length to
@@ -14111,33 +14177,34 @@
 /**
  * g_dbus_address_escape_value:
  * @string: an unescaped string to be included in a D-Bus address
- *  as the value in a key-value pair
+ *     as the value in a key-value pair
  *
  * Escape @string so it can appear in a D-Bus address as the value
  * part of a key-value pair.
  *
- * For instance, if @string is <code>/run/bus-for-:0</code>,
- * this function would return <code>/run/bus-for-%3A0</code>,
+ * For instance, if @string is "/run/bus-for-:0",
+ * this function would return "/run/bus-for-%3A0",
  * which could be used in a D-Bus address like
- * <code>unix:nonce-tcp:host=127.0.0.1,port=42,noncefile=/run/bus-for-%3A0</code>.
+ * "unix:nonce-tcp:host=127.0.0.1,port=42,noncefile=/run/bus-for-%3A0".
  *
  * Returns: (transfer full): a copy of @string with all
- *  non-optionally-escaped bytes escaped
+ *     non-optionally-escaped bytes escaped
  * Since: 2.36
  */
 
 
 /**
  * g_dbus_address_get_for_bus_sync:
- * @bus_type: A #GBusType.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @bus_type: a #GBusType
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Synchronously looks up the D-Bus address for the well-known message
  * bus instance specified by @bus_type. This may involve using various
  * platform specific mechanisms.
  *
- * Returns: A valid D-Bus address string for @bus_type or %NULL if @error is set.
+ * Returns: a valid D-Bus address string for @bus_type or %NULL if
+ *     @error is set
  * Since: 2.26
  */
 
@@ -14261,7 +14328,7 @@
 /**
  * g_dbus_auth_observer_allow_mechanism:
  * @observer: A #GDBusAuthObserver.
- * @mechanism: The name of the mechanism, e.g. <literal>DBUS_COOKIE_SHA1</literal>.
+ * @mechanism: The name of the mechanism, e.g. `DBUS_COOKIE_SHA1`.
  *
  * Emits the #GDBusAuthObserver::allow-mechanism signal on @observer.
  *
@@ -14295,11 +14362,11 @@
 
 /**
  * g_dbus_connection_add_filter:
- * @connection: A #GDBusConnection.
- * @filter_function: A filter function.
- * @user_data: User data to pass to @filter_function.
- * @user_data_free_func: Function to free @user_data with when filter
- * is removed or %NULL.
+ * @connection: a #GDBusConnection
+ * @filter_function: a filter function
+ * @user_data: user data to pass to @filter_function
+ * @user_data_free_func: function to free @user_data with when filter
+ *     is removed or %NULL
  *
  * Adds a message filter. Filters are handlers that are run on all
  * incoming and outgoing messages, prior to standard dispatch. Filters
@@ -14322,31 +14389,31 @@
  * message. Similary, if a filter consumes an outgoing message, the
  * message will not be sent to the other peer.
  *
- * Returns: A filter identifier that can be used with
- * g_dbus_connection_remove_filter().
+ * Returns: a filter identifier that can be used with
+ *     g_dbus_connection_remove_filter()
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_call:
- * @connection: A #GDBusConnection.
- * @bus_name: (allow-none): A unique or well-known bus name or %NULL if
- *            @connection is not a message bus connection.
- * @object_path: Path of remote object.
- * @interface_name: D-Bus interface to invoke method on.
- * @method_name: The name of the method to invoke.
- * @parameters: (allow-none): A #GVariant tuple with parameters for the method
- *              or %NULL if not passing parameters.
- * @reply_type: (allow-none): The expected type of the reply, or %NULL.
- * @flags: Flags from the #GDBusCallFlags enumeration.
- * @timeout_msec: The timeout in milliseconds, -1 to use the default
- *                timeout or %G_MAXINT for no timeout.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is
- *            satisfied or %NULL if you don't care about the result of the
- *            method invocation.
- * @user_data: The data to pass to @callback.
+ * @connection: a #GDBusConnection
+ * @bus_name: (allow-none): a unique or well-known bus name or %NULL if
+ *     @connection is not a message bus connection
+ * @object_path: path of remote object
+ * @interface_name: D-Bus interface to invoke method on
+ * @method_name: the name of the method to invoke
+ * @parameters: (allow-none): a #GVariant tuple with parameters for the method
+ *     or %NULL if not passing parameters
+ * @reply_type: (allow-none): the expected type of the reply, or %NULL
+ * @flags: flags from the #GDBusCallFlags enumeration
+ * @timeout_msec: the timeout in milliseconds, -1 to use the default
+ *     timeout or %G_MAXINT for no timeout
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the request
+ *     is satisfied or %NULL if you don't care about the result of the
+ *     method invocation
+ * @user_data: the data to pass to @callback
  *
  * Asynchronously invokes the @method_name method on the
  * @interface_name D-Bus interface on the remote object at
@@ -14364,7 +14431,7 @@
  *
  * If the @parameters #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.:
- * |[
+ * |[<!-- language="C" -->
  *  g_dbus_connection_call (connection,
  *                          "org.freedesktop.StringThings",
  *                          "/org/freedesktop/StringThings",
@@ -14397,34 +14464,34 @@
 
 /**
  * g_dbus_connection_call_finish:
- * @connection: A #GDBusConnection.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_call().
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @res: a #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_call()
+ * @error: return location for error or %NULL
  *
  * Finishes an operation started with g_dbus_connection_call().
  *
  * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
- * return values. Free with g_variant_unref().
+ *     return values. Free with g_variant_unref().
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_call_sync:
- * @connection: A #GDBusConnection.
- * @bus_name: (allow-none): A unique or well-known bus name or %NULL if
- *            @connection is not a message bus connection.
- * @object_path: Path of remote object.
- * @interface_name: D-Bus interface to invoke method on.
- * @method_name: The name of the method to invoke.
- * @parameters: (allow-none): A #GVariant tuple with parameters for the method
- *              or %NULL if not passing parameters.
- * @reply_type: (allow-none): The expected type of the reply, or %NULL.
- * @flags: Flags from the #GDBusCallFlags enumeration.
- * @timeout_msec: The timeout in milliseconds, -1 to use the default
- *                timeout or %G_MAXINT for no timeout.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @bus_name: (allow-none): a unique or well-known bus name or %NULL if
+ *     @connection is not a message bus connection
+ * @object_path: path of remote object
+ * @interface_name: D-Bus interface to invoke method on
+ * @method_name: the name of the method to invoke
+ * @parameters: (allow-none): a #GVariant tuple with parameters for the method
+ *     or %NULL if not passing parameters
+ * @reply_type: (allow-none): the expected type of the reply, or %NULL
+ * @flags: flags from the #GDBusCallFlags enumeration
+ * @timeout_msec: the timeout in milliseconds, -1 to use the default
+ *     timeout or %G_MAXINT for no timeout
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Synchronously invokes the @method_name method on the
  * @interface_name D-Bus interface on the remote object at
@@ -14443,7 +14510,7 @@
  *
  * If the @parameters #GVariant is floating, it is consumed.
  * This allows convenient 'inline' use of g_variant_new(), e.g.:
- * |[
+ * |[<!-- language="C" -->
  *  g_dbus_connection_call_sync (connection,
  *                               "org.freedesktop.StringThings",
  *                               "/org/freedesktop/StringThings",
@@ -14456,7 +14523,7 @@
  *                               G_DBUS_CALL_FLAGS_NONE,
  *                               -1,
  *                               NULL,
- *                               &amp;error);
+ *                               &error);
  * ]|
  *
  * The calling thread is blocked until a reply is received. See
@@ -14464,30 +14531,30 @@
  * this method.
  *
  * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
- * return values. Free with g_variant_unref().
+ *     return values. Free with g_variant_unref().
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_call_with_unix_fd_list:
- * @connection: A #GDBusConnection.
- * @bus_name: (allow-none): A unique or well-known bus name or %NULL if
- *            @connection is not a message bus connection.
- * @object_path: Path of remote object.
- * @interface_name: D-Bus interface to invoke method on.
- * @method_name: The name of the method to invoke.
- * @parameters: (allow-none): A #GVariant tuple with parameters for the method
- *              or %NULL if not passing parameters.
- * @reply_type: (allow-none): The expected type of the reply, or %NULL.
- * @flags: Flags from the #GDBusCallFlags enumeration.
- * @timeout_msec: The timeout in milliseconds, -1 to use the default
- *                timeout or %G_MAXINT for no timeout.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is
- *            satisfied or %NULL if you don't * care about the result of the
- *            method invocation.
+ * @connection: a #GDBusConnection
+ * @bus_name: (allow-none): a unique or well-known bus name or %NULL if
+ *     @connection is not a message bus connection
+ * @object_path: path of remote object
+ * @interface_name: D-Bus interface to invoke method on
+ * @method_name: the name of the method to invoke
+ * @parameters: (allow-none): a #GVariant tuple with parameters for the method
+ *     or %NULL if not passing parameters
+ * @reply_type: (allow-none): the expected type of the reply, or %NULL
+ * @flags: flags from the #GDBusCallFlags enumeration
+ * @timeout_msec: the timeout in milliseconds, -1 to use the default
+ *     timeout or %G_MAXINT for no timeout
+ * @fd_list: (allow-none): a #GUnixFDList or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the request is
+ *     satisfied or %NULL if you don't * care about the result of the
+ *     method invocation
  * @user_data: The data to pass to @callback.
  *
  * Like g_dbus_connection_call() but also takes a #GUnixFDList object.
@@ -14500,55 +14567,56 @@
 
 /**
  * g_dbus_connection_call_with_unix_fd_list_finish:
- * @connection: A #GDBusConnection.
- * @out_fd_list: (out) (allow-none): Return location for a #GUnixFDList or %NULL.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_call_with_unix_fd_list().
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @out_fd_list: (out) (allow-none): return location for a #GUnixFDList or %NULL
+ * @res: a #GAsyncResult obtained from the #GAsyncReadyCallback passed to
+ *     g_dbus_connection_call_with_unix_fd_list()
+ * @error: return location for error or %NULL
  *
  * Finishes an operation started with g_dbus_connection_call_with_unix_fd_list().
  *
  * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
- * return values. Free with g_variant_unref().
+ *     return values. Free with g_variant_unref().
  * Since: 2.30
  */
 
 
 /**
  * g_dbus_connection_call_with_unix_fd_list_sync:
- * @connection: A #GDBusConnection.
- * @bus_name: (allow-none): A unique or well-known bus name or %NULL if
- *            @connection is not a message bus connection.
- * @object_path: Path of remote object.
- * @interface_name: D-Bus interface to invoke method on.
- * @method_name: The name of the method to invoke.
- * @parameters: (allow-none): A #GVariant tuple with parameters for the method
- *              or %NULL if not passing parameters.
- * @reply_type: (allow-none): The expected type of the reply, or %NULL.
- * @flags: Flags from the #GDBusCallFlags enumeration.
- * @timeout_msec: The timeout in milliseconds, -1 to use the default
- *                timeout or %G_MAXINT for no timeout.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @out_fd_list: (out) (allow-none): Return location for a #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @bus_name: (allow-none): a unique or well-known bus name or %NULL
+ *     if @connection is not a message bus connection
+ * @object_path: path of remote object
+ * @interface_name: D-Bus interface to invoke method on
+ * @method_name: the name of the method to invoke
+ * @parameters: (allow-none): a #GVariant tuple with parameters for
+ *     the method or %NULL if not passing parameters
+ * @reply_type: (allow-none): the expected type of the reply, or %NULL
+ * @flags: flags from the #GDBusCallFlags enumeration
+ * @timeout_msec: the timeout in milliseconds, -1 to use the default
+ *     timeout or %G_MAXINT for no timeout
+ * @fd_list: (allow-none): a #GUnixFDList or %NULL
+ * @out_fd_list: (out) (allow-none): return location for a #GUnixFDList or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Like g_dbus_connection_call_sync() but also takes and returns #GUnixFDList objects.
  *
  * This method is only available on UNIX.
  *
  * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
- * return values. Free with g_variant_unref().
+ *     return values. Free with g_variant_unref().
  * Since: 2.30
  */
 
 
 /**
  * g_dbus_connection_close:
- * @connection: A #GDBusConnection.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is
- *            satisfied or %NULL if you don't care about the result.
- * @user_data: The data to pass to @callback.
+ * @connection: a #GDBusConnection
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the request is
+ *     satisfied or %NULL if you don't care about the result
+ * @user_data: The data to pass to @callback
  *
  * Closes @connection. Note that this never causes the process to
  * exit (this might only happen if the other end of a shared message
@@ -14572,7 +14640,7 @@
  * linkend="g-main-context-push-thread-default">thread-default main
  * loop</link> of the thread you are calling this method from. You can
  * then call g_dbus_connection_close_finish() to get the result of the
- * operation.  See g_dbus_connection_close_sync() for the synchronous
+ * operation. See g_dbus_connection_close_sync() for the synchronous
  * version.
  *
  * Since: 2.26
@@ -14581,44 +14649,45 @@
 
 /**
  * g_dbus_connection_close_finish:
- * @connection: A #GDBusConnection.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_close().
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @res: a #GAsyncResult obtained from the #GAsyncReadyCallback passed
+ *     to g_dbus_connection_close()
+ * @error: return location for error or %NULL
  *
  * Finishes an operation started with g_dbus_connection_close().
  *
- * Returns: %TRUE if the operation succeeded, %FALSE if @error is set.
+ * Returns: %TRUE if the operation succeeded, %FALSE if @error is set
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_close_sync:
- * @connection: A #GDBusConnection.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Synchronously closees @connection. The calling thread is blocked
  * until this is done. See g_dbus_connection_close() for the
  * asynchronous version of this method and more details about what it
  * does.
  *
- * Returns: %TRUE if the operation succeeded, %FALSE if @error is set.
+ * Returns: %TRUE if the operation succeeded, %FALSE if @error is set
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_emit_signal:
- * @connection: A #GDBusConnection.
- * @destination_bus_name: (allow-none): The unique bus name for the destination
- *                        for the signal or %NULL to emit to all listeners.
- * @object_path: Path of remote object.
- * @interface_name: D-Bus interface to emit a signal on.
- * @signal_name: The name of the signal to emit.
- * @parameters: (allow-none): A #GVariant tuple with parameters for the signal
- *              or %NULL if not passing parameters.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @destination_bus_name: (allow-none): the unique bus name for the destination
+ *     for the signal or %NULL to emit to all listeners
+ * @object_path: path of remote object
+ * @interface_name: D-Bus interface to emit a signal on
+ * @signal_name: the name of the signal to emit
+ * @parameters: (allow-none): a #GVariant tuple with parameters for the signal
+ *              or %NULL if not passing parameters
+ * @error: Return location for error or %NULL
  *
  * Emits a signal.
  *
@@ -14626,7 +14695,7 @@
  *
  * This can only fail if @parameters is not compatible with the D-Bus protocol.
  *
- * Returns: %TRUE unless @error is set.
+ * Returns: %TRUE unless @error is set
  * Since: 2.26
  */
 
@@ -14692,26 +14761,25 @@
 
 /**
  * g_dbus_connection_flush:
- * @connection: A #GDBusConnection.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is
- *            satisfied or %NULL if you don't care about the result.
- * @user_data: The data to pass to @callback.
+ * @connection: a #GDBusConnection
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the
+ *     request is satisfied or %NULL if you don't care about the result
+ * @user_data: The data to pass to @callback
  *
  * Asynchronously flushes @connection, that is, writes all queued
  * outgoing message to the transport and then flushes the transport
  * (using g_output_stream_flush_async()). This is useful in programs
- * that wants to emit a D-Bus signal and then exit
- * immediately. Without flushing the connection, there is no guarantee
- * that the message has been sent to the networking buffers in the OS
- * kernel.
+ * that wants to emit a D-Bus signal and then exit immediately. Without
+ * flushing the connection, there is no guaranteed that the message has
+ * been sent to the networking buffers in the OS kernel.
  *
  * This is an asynchronous method. When the operation is finished,
  * @callback will be invoked in the <link
  * linkend="g-main-context-push-thread-default">thread-default main
  * loop</link> of the thread you are calling this method from. You can
  * then call g_dbus_connection_flush_finish() to get the result of the
- * operation.  See g_dbus_connection_flush_sync() for the synchronous
+ * operation. See g_dbus_connection_flush_sync() for the synchronous
  * version.
  *
  * Since: 2.26
@@ -14720,74 +14788,75 @@
 
 /**
  * g_dbus_connection_flush_finish:
- * @connection: A #GDBusConnection.
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_flush().
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @res: a #GAsyncResult obtained from the #GAsyncReadyCallback passed
+ *     to g_dbus_connection_flush()
+ * @error: return location for error or %NULL
  *
  * Finishes an operation started with g_dbus_connection_flush().
  *
- * Returns: %TRUE if the operation succeeded, %FALSE if @error is set.
+ * Returns: %TRUE if the operation succeeded, %FALSE if @error is set
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_flush_sync:
- * @connection: A #GDBusConnection.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Synchronously flushes @connection. The calling thread is blocked
  * until this is done. See g_dbus_connection_flush() for the
  * asynchronous version of this method and more details about what it
  * does.
  *
- * Returns: %TRUE if the operation succeeded, %FALSE if @error is set.
+ * Returns: %TRUE if the operation succeeded, %FALSE if @error is set
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_get_capabilities:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection
  *
  * Gets the capabilities negotiated with the remote peer
  *
- * Returns: Zero or more flags from the #GDBusCapabilityFlags enumeration.
+ * Returns: zero or more flags from the #GDBusCapabilityFlags enumeration
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_get_exit_on_close:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection
  *
  * Gets whether the process is terminated when @connection is
  * closed by the remote peer. See
  * #GDBusConnection:exit-on-close for more details.
  *
- * Returns: Whether the process is terminated when @connection is
- * closed by the remote peer.
+ * Returns: whether the process is terminated when @connection is
+ *     closed by the remote peer
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_get_guid:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection
  *
  * The GUID of the peer performing the role of server when
  * authenticating. See #GDBusConnection:guid for more details.
  *
  * Returns: The GUID. Do not free this string, it is owned by
- * @connection.
+ *     @connection.
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_get_last_serial:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection
  *
  * Retrieves the last serial number assigned to a #GDBusMessage on
  * the current thread. This includes messages sent via both low-level
@@ -14796,14 +14865,14 @@
  * g_dbus_connection_call() or g_dbus_proxy_call().
  *
  * Returns: the last used serial or zero when no message has been sent
- * within the current thread.
+ *     within the current thread
  * Since: 2.34
  */
 
 
 /**
  * g_dbus_connection_get_peer_credentials:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection
  *
  * Gets the credentials of the authenticated peer. This will always
  * return %NULL unless @connection acted as a server
@@ -14815,8 +14884,8 @@
  * each application is a client. So this method will always return
  * %NULL for message bus clients.
  *
- * Returns: (transfer none): A #GCredentials or %NULL if not available. Do not free
- * this object, it is owned by @connection.
+ * Returns: (transfer none): a #GCredentials or %NULL if not available.
+ *     Do not free this object, it is owned by @connection.
  * Since: 2.26
  */
 
@@ -14838,39 +14907,39 @@
 
 /**
  * g_dbus_connection_get_unique_name:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection
  *
  * Gets the unique name of @connection as assigned by the message
  * bus. This can also be used to figure out if @connection is a
  * message bus connection.
  *
- * Returns: The unique name or %NULL if @connection is not a message
- * bus connection. Do not free this string, it is owned by
- * @connection.
+ * Returns: the unique name or %NULL if @connection is not a message
+ *     bus connection. Do not free this string, it is owned by
+ *     @connection.
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_is_closed:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection
  *
  * Gets whether @connection is closed.
  *
- * Returns: %TRUE if the connection is closed, %FALSE otherwise.
+ * Returns: %TRUE if the connection is closed, %FALSE otherwise
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_new:
- * @stream: A #GIOStream.
- * @guid: (allow-none): The GUID to use if a authenticating as a server or %NULL.
- * @flags: Flags describing how to make the connection.
- * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
- * @user_data: The data to pass to @callback.
+ * @stream: a #GIOStream
+ * @guid: (allow-none): the GUID to use if a authenticating as a server or %NULL
+ * @flags: flags describing how to make the connection
+ * @observer: (allow-none): a #GDBusAuthObserver or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to @callback
  *
  * Asynchronously sets up a D-Bus connection for exchanging D-Bus messages
  * with the end represented by @stream.
@@ -14899,24 +14968,26 @@
 
 /**
  * g_dbus_connection_new_finish:
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_new().
- * @error: Return location for error or %NULL.
+ * @res: a #GAsyncResult obtained from the #GAsyncReadyCallback
+ *     passed to g_dbus_connection_new().
+ * @error: return location for error or %NULL
  *
  * Finishes an operation started with g_dbus_connection_new().
  *
- * Returns: A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: a #GDBusConnection or %NULL if @error is set. Free
+ *     with g_object_unref().
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_new_for_address:
- * @address: A D-Bus address.
- * @flags: Flags describing how to make the connection.
- * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
- * @user_data: The data to pass to @callback.
+ * @address: a D-Bus address
+ * @flags: flags describing how to make the connection
+ * @observer: (allow-none): a #GDBusAuthObserver or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to @callback
  *
  * Asynchronously connects and sets up a D-Bus client connection for
  * exchanging D-Bus messages with an endpoint specified by @address
@@ -14945,23 +15016,25 @@
 
 /**
  * g_dbus_connection_new_for_address_finish:
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_new().
- * @error: Return location for error or %NULL.
+ * @res: a #GAsyncResult obtained from the #GAsyncReadyCallback passed
+ *     to g_dbus_connection_new()
+ * @error: return location for error or %NULL
  *
  * Finishes an operation started with g_dbus_connection_new_for_address().
  *
- * Returns: A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: a #GDBusConnection or %NULL if @error is set. Free with
+ *     g_object_unref().
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_new_for_address_sync:
- * @address: A D-Bus address.
- * @flags: Flags describing how to make the connection.
- * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @address: a D-Bus address
+ * @flags: flags describing how to make the connection
+ * @observer: (allow-none): a #GDBusAuthObserver or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Synchronously connects and sets up a D-Bus client connection for
  * exchanging D-Bus messages with an endpoint specified by @address
@@ -14979,19 +15052,20 @@
  * If @observer is not %NULL it may be used to control the
  * authentication process.
  *
- * Returns: A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: a #GDBusConnection or %NULL if @error is set. Free with
+ *     g_object_unref().
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_new_sync:
- * @stream: A #GIOStream.
- * @guid: (allow-none): The GUID to use if a authenticating as a server or %NULL.
- * @flags: Flags describing how to make the connection.
- * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @stream: a #GIOStream
+ * @guid: (allow-none): the GUID to use if a authenticating as a server or %NULL
+ * @flags: flags describing how to make the connection
+ * @observer: (allow-none): a #GDBusAuthObserver or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Synchronously sets up a D-Bus connection for exchanging D-Bus messages
  * with the end represented by @stream.
@@ -15009,20 +15083,20 @@
  * This is a synchronous failable constructor. See
  * g_dbus_connection_new() for the asynchronous version.
  *
- * Returns: A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: a #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_register_object:
- * @connection: A #GDBusConnection.
- * @object_path: The object path to register at.
- * @interface_info: Introspection data for the interface.
- * @vtable: (allow-none): A #GDBusInterfaceVTable to call into or %NULL.
- * @user_data: (allow-none): Data to pass to functions in @vtable.
- * @user_data_free_func: Function to call when the object path is unregistered.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @object_path: the object path to register at
+ * @interface_info: introspection data for the interface
+ * @vtable: (allow-none): a #GDBusInterfaceVTable to call into or %NULL
+ * @user_data: (allow-none): data to pass to functions in @vtable
+ * @user_data_free_func: function to call when the object path is unregistered
+ * @error: return location for error or %NULL
  *
  * Registers callbacks for exported objects at @object_path with the
  * D-Bus interface that is described in @interface_info.
@@ -15033,13 +15107,13 @@
  *
  * Note that all #GVariant values passed to functions in @vtable will match
  * the signature given in @interface_info - if a remote caller passes
- * incorrect values, the <literal>org.freedesktop.DBus.Error.InvalidArgs</literal>
+ * incorrect values, the `org.freedesktop.DBus.Error.InvalidArgs`
  * is returned to the remote caller.
  *
  * Additionally, if the remote caller attempts to invoke methods or
  * access properties not mentioned in @interface_info the
- * <literal>org.freedesktop.DBus.Error.UnknownMethod</literal> resp.
- * <literal>org.freedesktop.DBus.Error.InvalidArgs</literal> errors
+ * `org.freedesktop.DBus.Error.UnknownMethod` resp.
+ * `org.freedesktop.DBus.Error.InvalidArgs` errors
  * are returned to the caller.
  *
  * It is considered a programming error if the
@@ -15051,10 +15125,9 @@
  *
  * GDBus automatically implements the standard D-Bus interfaces
  * org.freedesktop.DBus.Properties, org.freedesktop.DBus.Introspectable
- * and org.freedesktop.Peer, so you don't have to implement those for
- * the objects you export. You <emphasis>can</emphasis> implement
- * org.freedesktop.DBus.Properties yourself, e.g. to handle getting
- * and setting of properties asynchronously.
+ * and org.freedesktop.Peer, so you don't have to implement those for the
+ * objects you export. You can implement org.freedesktop.DBus.Properties
+ * yourself, e.g. to handle getting and setting of properties asynchronously.
  *
  * Note that the reference count on @interface_info will be
  * incremented by 1 (unless allocated statically, e.g. if the
@@ -15064,22 +15137,23 @@
  * See <xref linkend="gdbus-server"/> for an example of how to use this method.
  *
  * Returns: 0 if @error is set, otherwise a registration id (never 0)
- * that can be used with g_dbus_connection_unregister_object() .
+ *     that can be used with g_dbus_connection_unregister_object()
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_register_subtree:
- * @connection: A #GDBusConnection.
- * @object_path: The object path to register the subtree at.
- * @vtable: A #GDBusSubtreeVTable to enumerate, introspect and dispatch nodes in the subtree.
- * @flags: Flags used to fine tune the behavior of the subtree.
- * @user_data: Data to pass to functions in @vtable.
- * @user_data_free_func: Function to call when the subtree is unregistered.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @object_path: the object path to register the subtree at
+ * @vtable: a #GDBusSubtreeVTable to enumerate, introspect and
+ *     dispatch nodes in the subtree
+ * @flags: flags used to fine tune the behavior of the subtree
+ * @user_data: data to pass to functions in @vtable
+ * @user_data_free_func: function to call when the subtree is unregistered
+ * @error: return location for error or %NULL
  *
- * Registers a whole subtree of <quote>dynamic</quote> objects.
+ * Registers a whole subtree of dynamic objects.
  *
  * The @enumerate and @introspection functions in @vtable are used to
  * convey, to remote callers, what nodes exist in the subtree rooted
@@ -15105,9 +15179,8 @@
  * g_dbus_connection_register_object()) in a subtree registered with
  * g_dbus_connection_register_subtree() - if so, the subtree handler
  * is tried as the last resort. One way to think about a subtree
- * handler is to consider it a <quote>fallback handler</quote>
- * for object paths not registered via g_dbus_connection_register_object()
- * or other bindings.
+ * handler is to consider it a fallback handler for object paths not
+ * registered via g_dbus_connection_register_object() or other bindings.
  *
  * Note that @vtable will be copied so you cannot change it after
  * registration.
@@ -15133,12 +15206,12 @@
 
 /**
  * g_dbus_connection_send_message:
- * @connection: A #GDBusConnection.
- * @message: A #GDBusMessage
- * @flags: Flags affecting how the message is sent.
- * @out_serial: (out) (allow-none): Return location for serial number assigned
- *              to @message when sending it or %NULL.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @message: a #GDBusMessage
+ * @flags: flags affecting how the message is sent
+ * @out_serial: (out) (allow-none): return location for serial number assigned
+ *     to @message when sending it or %NULL
+ * @error: Return location for error or %NULL
  *
  * Asynchronously sends @message to the peer represented by @connection.
  *
@@ -15161,24 +15234,24 @@
  * %G_DBUS_SEND_MESSAGE_FLAGS_PRESERVE_SERIAL flag.
  *
  * Returns: %TRUE if the message was well-formed and queued for
- * transmission, %FALSE if @error is set.
+ *     transmission, %FALSE if @error is set
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_send_message_with_reply:
- * @connection: A #GDBusConnection.
- * @message: A #GDBusMessage.
- * @flags: Flags affecting how the message is sent.
- * @timeout_msec: The timeout in milliseconds, -1 to use the default
- *                timeout or %G_MAXINT for no timeout.
- * @out_serial: (out) (allow-none): Return location for serial number assigned
- *              to @message when sending it or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is
- *            satisfied or %NULL if you don't care about the result.
- * @user_data: The data to pass to @callback.
+ * @connection: a #GDBusConnection
+ * @message: a #GDBusMessage
+ * @flags: flags affecting how the message is sent
+ * @timeout_msec: the timeout in milliseconds, -1 to use the default
+ *     timeout or %G_MAXINT for no timeout
+ * @out_serial: (out) (allow-none): return location for serial number assigned
+ *     to @message when sending it or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the request
+ *     is satisfied or %NULL if you don't care about the result
+ * @user_data: The data to pass to @callback
  *
  * Asynchronously sends @message to the peer represented by @connection.
  *
@@ -15214,8 +15287,9 @@
 /**
  * g_dbus_connection_send_message_with_reply_finish:
  * @connection: a #GDBusConnection
- * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_send_message_with_reply().
- * @error: Return location for error or %NULL.
+ * @res: a #GAsyncResult obtained from the #GAsyncReadyCallback passed to
+ *     g_dbus_connection_send_message_with_reply()
+ * @error: teturn location for error or %NULL
  *
  * Finishes an operation started with g_dbus_connection_send_message_with_reply().
  *
@@ -15228,22 +15302,22 @@
  * linkend="gdbus-unix-fd-client"/> for an example of how to use this
  * low-level API to send and receive UNIX file descriptors.
  *
- * Returns: (transfer full): A locked #GDBusMessage or %NULL if @error is set.
+ * Returns: (transfer full): a locked #GDBusMessage or %NULL if @error is set
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_send_message_with_reply_sync:
- * @connection: A #GDBusConnection.
- * @message: A #GDBusMessage.
- * @flags: Flags affecting how the message is sent.
- * @timeout_msec: The timeout in milliseconds, -1 to use the default
- *                timeout or %G_MAXINT for no timeout.
- * @out_serial: (out) (allow-none): Return location for serial number assigned
- *              to @message when sending it or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
- * @error: Return location for error or %NULL.
+ * @connection: a #GDBusConnection
+ * @message: a #GDBusMessage
+ * @flags: flags affecting how the message is sent.
+ * @timeout_msec: the timeout in milliseconds, -1 to use the default
+ *     timeout or %G_MAXINT for no timeout
+ * @out_serial: (out) (allow-none): return location for serial number
+ *     assigned to @message when sending it or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: return location for error or %NULL
  *
  * Synchronously sends @message to the peer represented by @connection
  * and blocks the calling thread until a reply is received or the
@@ -15274,16 +15348,17 @@
  * Note that @message must be unlocked, unless @flags contain the
  * %G_DBUS_SEND_MESSAGE_FLAGS_PRESERVE_SERIAL flag.
  *
- * Returns: (transfer full): A locked #GDBusMessage that is the reply to @message or %NULL if @error is set.
+ * Returns: (transfer full): a locked #GDBusMessage that is the reply
+ *     to @message or %NULL if @error is set
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_set_exit_on_close:
- * @connection: A #GDBusConnection.
- * @exit_on_close: Whether the process should be terminated
- *     when @connection is closed by the remote peer.
+ * @connection: a #GDBusConnection
+ * @exit_on_close: whether the process should be terminated
+ *     when @connection is closed by the remote peer
  *
  * Sets whether the process should be terminated when @connection is
  * closed by the remote peer. See #GDBusConnection:exit-on-close for
@@ -15302,24 +15377,26 @@
 
 /**
  * g_dbus_connection_signal_subscribe:
- * @connection: A #GDBusConnection.
- * @sender: (allow-none): Sender name to match on (unique or well-known name)
- *                        or %NULL to listen from all senders.
+ * @connection: a #GDBusConnection
+ * @sender: (allow-none): sender name to match on (unique or well-known name)
+ *     or %NULL to listen from all senders
  * @interface_name: (allow-none): D-Bus interface name to match on or %NULL to
- *                                match on all interfaces.
- * @member: (allow-none): D-Bus signal name to match on or %NULL to match on all signals.
- * @object_path: (allow-none): Object path to match on or %NULL to match on all object paths.
- * @arg0: (allow-none): Contents of first string argument to match on or %NULL
- *                      to match on all kinds of arguments.
- * @flags: Flags describing how to subscribe to the signal (currently unused).
- * @callback: Callback to invoke when there is a signal matching the requested data.
- * @user_data: User data to pass to @callback.
- * @user_data_free_func: (allow-none): Function to free @user_data with when
- *                       subscription is removed or %NULL.
+ *     match on all interfaces
+ * @member: (allow-none): D-Bus signal name to match on or %NULL to match on
+ *     all signals
+ * @object_path: (allow-none): object path to match on or %NULL to match on
+ *     all object paths
+ * @arg0: (allow-none): contents of first string argument to match on or %NULL
+ *     to match on all kinds of arguments
+ * @flags: flags describing how to subscribe to the signal (currently unused)
+ * @callback: callback to invoke when there is a signal matching the requested data
+ * @user_data: user data to pass to @callback
+ * @user_data_free_func: (allow-none): function to free @user_data with when
+ *     subscription is removed or %NULL
  *
  * Subscribes to signals on @connection and invokes @callback with a
- * whenever the signal is received. Note that @callback
- * will be invoked in the <link
+ * whenever the signal is received. Note that @callback will be invoked
+ * in the <link
  * linkend="g-main-context-push-thread-default">thread-default main
  * loop</link> of the thread you are calling this method from.
  *
@@ -15338,15 +15415,16 @@
  * interpreted as part of a namespace or path.  The first argument
  * of a signal is matched against that part as specified by D-Bus.
  *
- * Returns: A subscription identifier that can be used with g_dbus_connection_signal_unsubscribe().
+ * Returns: a subscription identifier that can be used with g_dbus_connection_signal_unsubscribe()
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_signal_unsubscribe:
- * @connection: A #GDBusConnection.
- * @subscription_id: A subscription id obtained from g_dbus_connection_signal_subscribe().
+ * @connection: a #GDBusConnection
+ * @subscription_id: a subscription id obtained from
+ *     g_dbus_connection_signal_subscribe()
  *
  * Unsubscribes from signals.
  *
@@ -15356,7 +15434,7 @@
 
 /**
  * g_dbus_connection_start_message_processing:
- * @connection: A #GDBusConnection.
+ * @connection: a #GDBusConnection
  *
  * If @connection was created with
  * %G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING, this method
@@ -15401,24 +15479,26 @@
 
 /**
  * g_dbus_connection_unregister_object:
- * @connection: A #GDBusConnection.
- * @registration_id: A registration id obtained from g_dbus_connection_register_object().
+ * @connection: a #GDBusConnection
+ * @registration_id: a registration id obtained from
+ *     g_dbus_connection_register_object()
  *
  * Unregisters an object.
  *
- * Returns: %TRUE if the object was unregistered, %FALSE otherwise.
+ * Returns: %TRUE if the object was unregistered, %FALSE otherwise
  * Since: 2.26
  */
 
 
 /**
  * g_dbus_connection_unregister_subtree:
- * @connection: A #GDBusConnection.
- * @registration_id: A subtree registration id obtained from g_dbus_connection_register_subtree().
+ * @connection: a #GDBusConnection
+ * @registration_id: a subtree registration id obtained from
+ *     g_dbus_connection_register_subtree()
  *
  * Unregisters a subtree.
  *
- * Returns: %TRUE if the subtree was unregistered, %FALSE otherwise.
+ * Returns: %TRUE if the subtree was unregistered, %FALSE otherwise
  * Since: 2.26
  */
 
@@ -15432,7 +15512,7 @@
  * D-Bus error name will be returned.
  *
  * Otherwise the a name of the form
- * <literal>org.gtk.GDBus.UnmappedGError.Quark._ESCAPED_QUARK_NAME.Code_ERROR_CODE</literal>
+ * `org.gtk.GDBus.UnmappedGError.Quark._ESCAPED_QUARK_NAME.Code_ERROR_CODE`
  * will be used. This allows other GDBus applications to map the error
  * on the wire back to a #GError using g_dbus_error_new_for_dbus_error().
  *
@@ -15446,16 +15526,17 @@
 
 /**
  * g_dbus_error_get_remote_error:
- * @error: A #GError.
+ * @error: a #GError
  *
  * Gets the D-Bus error name used for @error, if any.
  *
  * This function is guaranteed to return a D-Bus error name for all
- * #GError<!-- -->s returned from functions handling remote method
- * calls (e.g. g_dbus_connection_call_finish()) unless
+ * #GErrors returned from functions handling remote method calls
+ * (e.g. g_dbus_connection_call_finish()) unless
  * g_dbus_error_strip_remote_error() has been used on @error.
  *
- * Returns: An allocated string or %NULL if the D-Bus error name could not be found. Free with g_free().
+ * Returns: an allocated string or %NULL if the D-Bus error name
+ *     could not be found. Free with g_free().
  * Since: 2.26
  */
 
@@ -15517,7 +15598,7 @@
  * @dbus_error_name: A D-Bus error name.
  *
  * Creates an association to map between @dbus_error_name and
- * #GError<!-- -->s specified by @error_domain and @error_code.
+ * #GErrors specified by @error_domain and @error_code.
  *
  * This is typically done in the routine that returns the #GQuark for
  * an error domain.
@@ -15681,10 +15762,9 @@
  * #G_TYPE_BOXED derived-types) not in the table above.
  *
  * Note that if @gvalue is of type #G_TYPE_VARIANT and its value is
- * %NULL, the <emphasis>empty</emphasis> #GVariant instance (never
- * %NULL) for @type is returned (e.g. 0 for scalar types, the empty
- * string for string types, <literal>'/'</literal> for object path
- * types, the empty array for any array type and so on).
+ * %NULL, the empty #GVariant instance (never %NULL) for @type is
+ * returned (e.g. 0 for scalar types, the empty string for string types,
+ * '/' for object path types, the empty array for any array type and so on).
  *
  * See the g_dbus_gvariant_to_gvalue() function for how to convert a
  * #GVariant to a #GValue.
@@ -15739,17 +15819,16 @@
 
 /**
  * g_dbus_interface_get_object: (skip)
- * @interface_: An exported D-Bus interface.
+ * @interface_: An exported D-Bus interface
  *
  * Gets the #GDBusObject that @interface_ belongs to, if any.
  *
- * <warning>It is not safe to use the returned object if @interface_
- * or the returned object is being used from other threads. See
- * g_dbus_interface_dup_object() for a thread-safe
- * alternative.</warning>
+ * It is not safe to use the returned object if @interface_ or
+ * the returned object is being used from other threads. See
+ * g_dbus_interface_dup_object() for a thread-safe alternative.
  *
  * Returns: (transfer none): A #GDBusObject or %NULL. The returned
- * reference belongs to @interface_ and should not be freed.
+ *     reference belongs to @interface_ and should not be freed.
  * Since: 2.30
  */
 
@@ -15795,7 +15874,7 @@
  *
  * This function is typically used for generating introspection XML
  * documents at run-time for handling the
- * <literal>org.freedesktop.DBus.Introspectable.Introspect</literal>
+ * `org.freedesktop.DBus.Introspectable.Introspect`
  * method.
  *
  * Since: 2.26
@@ -15914,7 +15993,7 @@
  *
  * For example, an exported D-Bus interface may queue up property
  * changes and emit the
- * <literal>org.freedesktop.DBus.Properties::PropertiesChanged</literal>
+ * `org.freedesktop.DBus.Properties::Propert``
  * signal later (e.g. in an idle handler). This technique is useful
  * for collapsing multiple property changes into one.
  *
@@ -16540,7 +16619,7 @@
 
 
 /**
- * g_dbus_message_print:
+ * g_dbus_message_print: (type method-return)
  * @message: A #GDBusMessage.
  * @indent: Indentation level.
  *
@@ -16549,35 +16628,33 @@
  * The contents of the description has no ABI guarantees, the contents
  * and formatting is subject to change at any time. Typical output
  * looks something like this:
- * <programlisting>
- * Type&colon;    method-call
- * Flags&colon;   none
- * Version&colon; 0
- * Serial&colon;  4
- * Headers&colon;
+ * |[
+ * Flags:   none
+ * Version: 0
+ * Serial:  4
+ * Headers:
  *   path -> objectpath '/org/gtk/GDBus/TestObject'
  *   interface -> 'org.gtk.GDBus.TestInterface'
  *   member -> 'GimmeStdout'
  *   destination -> ':1.146'
- * Body&colon; ()
+ * Body: ()
  * UNIX File Descriptors:
  *   (none)
- * </programlisting>
+ * ]|
  * or
- * <programlisting>
- * Type&colon;    method-return
- * Flags&colon;   no-reply-expected
- * Version&colon; 0
- * Serial&colon;  477
- * Headers&colon;
+ * |[
+ * Flags:   no-reply-expected
+ * Version: 0
+ * Serial:  477
+ * Headers:
  *   reply-serial -> uint32 4
  *   destination -> ':1.159'
  *   sender -> ':1.146'
  *   num-unix-fds -> uint32 1
- * Body&colon; ()
- * UNIX File Descriptors&colon;
+ * Body: ()
+ * UNIX File Descriptors:
  *   fd 12: dev=0:10,mode=020620,ino=5,uid=500,gid=5,rdev=136:2,size=0,atime=1273085037,mtime=1273085851,ctime=1272982635
- * </programlisting>
+ * ]|
  *
  * Returns: A string that should be freed with g_free().
  * Since: 2.26
@@ -16996,12 +17073,11 @@
  * will be returned on the wire. In a nutshell, if the given error is
  * registered using g_dbus_error_register_error() the name given
  * during registration is used. Otherwise, a name of the form
- * <literal>org.gtk.GDBus.UnmappedGError.Quark...</literal> is
- * used. This provides transparent mapping of #GError between
- * applications using GDBus.
+ * `org.gtk.GDBus.UnmappedGError.Quark...` is used. This provides
+ * transparent mapping of #GError between applications using GDBus.
  *
  * If you are writing an application intended to be portable,
- * <emphasis>always</emphasis> register errors with g_dbus_error_register_error()
+ * always register errors with g_dbus_error_register_error()
  * or use g_dbus_method_invocation_return_dbus_error().
  *
  * This method will free @invocation, you cannot use it afterwards.
@@ -17111,7 +17187,7 @@
  * Appends an XML representation of @info (and its children) to @string_builder.
  *
  * This function is typically used for generating introspection XML documents at run-time for
- * handling the <literal>org.freedesktop.DBus.Introspectable.Introspect</literal> method.
+ * handling the `org.freedesktop.DBus.Introspectable.Introspect`  method.
  *
  * Since: 2.26
  */
@@ -17139,7 +17215,7 @@
  * Parses @xml_data and returns a #GDBusNodeInfo representing the data.
  *
  * The introspection XML must contain exactly one top-level
- * <tag class="starttag">node</tag> element.
+ * &lt;node&gt; element.
  *
  * Note that this routine is using a
  * <link linkend="glib-Simple-XML-Subset-Parser.description">GMarkup</link>-based
@@ -17476,10 +17552,9 @@
  * @object: An object.
  *
  * Like g_dbus_object_manager_server_export() but appends a string of
- * the form <literal>_N</literal> (with N being a natural number) to
- * @object<!-- -->'s object path if an object with the given path
- * already exists. As such, the #GDBusObjectProxy:g-object-path property
- * of @object may be modified.
+ * the form _N (with N being a natural number) to @object's object path
+ * if an object with the given path already exists. As such, the
+ * #GDBusObjectProxy:g-object-path property of @object may be modified.
  *
  * Since: 2.30
  */
@@ -17706,7 +17781,7 @@
  *
  * If the @parameters #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.:
- * |[
+ * |[<!-- language="C" -->
  *  g_dbus_proxy_call (proxy,
  *                     "TwoStrings",
  *                     g_variant_new ("(ss)",
@@ -17716,7 +17791,7 @@
  *                     -1,
  *                     NULL,
  *                     (GAsyncReadyCallback) two_strings_done,
- *                     &amp;data);
+ *                     &data);
  * ]|
  *
  * If @proxy has an expected interface (see
@@ -17779,7 +17854,7 @@
  *
  * If the @parameters #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.:
- * |[
+ * |[<!-- language="C" -->
  *  g_dbus_proxy_call_sync (proxy,
  *                          "TwoStrings",
  *                          g_variant_new ("(ss)",
@@ -17788,7 +17863,7 @@
  *                          G_DBUS_CALL_FLAGS_NONE,
  *                          -1,
  *                          NULL,
- *                          &amp;error);
+ *                          &error);
  * ]|
  *
  * The calling thread is blocked until a reply is received. See
@@ -18154,7 +18229,7 @@
  *
  * If the @value #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.
- * |[
+ * |[<!-- language="C" -->
  *  g_dbus_proxy_set_cached_property (proxy,
  *                                    "SomeProperty",
  *                                    g_variant_new ("(si)",
@@ -18162,20 +18237,19 @@
  *                                                  42));
  * ]|
  *
- * Normally you will not need to use this method since @proxy is
- * tracking changes using the
- * <literal>org.freedesktop.DBus.Properties.PropertiesChanged</literal>
- * D-Bus signal. However, for performance reasons an object may decide
- * to not use this signal for some properties and instead use a
- * proprietary out-of-band mechanism to transmit changes.
+ * Normally you will not need to use this method since @proxy
+ * is tracking changes using the
+ * `org.freedesktop.DBus.Properties.PropertiesChanged`
+ * D-Bus signal. However, for performance reasons an object may
+ * decide to not use this signal for some properties and instead
+ * use a proprietary out-of-band mechanism to transmit changes.
  *
  * As a concrete example, consider an object with a property
- * <literal>ChatroomParticipants</literal> which is an array of
- * strings. Instead of transmitting the same (long) array every time
- * the property changes, it is more efficient to only transmit the
- * delta using e.g. signals <literal>ChatroomParticipantJoined(String
- * name)</literal> and <literal>ChatroomParticipantParted(String
- * name)</literal>.
+ * `ChatroomParticipants` which is an array of strings. Instead of
+ * transmitting the same (long) array every time the property changes,
+ * it is more efficient to only transmit the delta using e.g. signals
+ * `ChatroomParticipantJoined(String name)` and
+ * `ChatroomParticipantParted(String name)`.
  *
  * Since: 2.26
  */
@@ -18440,7 +18514,7 @@
  *
  * Checks if the application info should be shown in menus that list available
  * applications for a specific name of the desktop, based on the
- * <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal> keys.
+ * `OnlyShowIn` and `NotShowIn` keys.
  *
  * If @desktop_env is %NULL, then the name of the desktop set with
  * g_desktop_app_info_set_desktop_env() is used.
@@ -18449,7 +18523,7 @@
  * %NULL for @desktop_env) as well as additional checks.
  *
  * Returns: %TRUE if the @info should be shown in @desktop_env according to the
- * <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal> keys, %FALSE
+ * `OnlyShowIn` and `NotShowIn` keys, %FALSE
  * otherwise.
  * Since: 2.30
  */
@@ -18598,13 +18672,13 @@
  *
  * A desktop file id is the basename of the desktop file, including the
  * .desktop extension. GIO is looking for a desktop file with this name
- * in the <filename>applications</filename> subdirectories of the XDG data
- * directories (i.e. the directories specified in the
- * <envar>XDG_DATA_HOME</envar> and <envar>XDG_DATA_DIRS</envar> environment
- * variables). GIO also supports the prefix-to-subdirectory mapping that is
- * described in the <ulink url="http://standards.freedesktop.org/menu-spec/latest/">Menu Spec</ulink>
+ * in the `applications` subdirectories of the XDG
+ * data directories (i.e. the directories specified in the `XDG_DATA_HOME`
+ * and `XDG_DATA_DIRS` environment variables). GIO also supports the
+ * prefix-to-subdirectory mapping that is described in the
+ * [Menu Spec](http://standards.freedesktop.org/menu-spec/latest/)
  * (i.e. a desktop id of kde-foo.desktop will match
- * <filename>/usr/share/applications/kde/foo.desktop</filename>).
+ * `/usr/share/applications/kde/foo.desktop`).
  *
  * Returns: a new #GDesktopAppInfo, or %NULL if no desktop file with that id
  */
@@ -18657,20 +18731,19 @@
  * Sets the name of the desktop that the application is running in.
  * This is used by g_app_info_should_show() and
  * g_desktop_app_info_get_show_in() to evaluate the
- * <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal>
+ * `OnlyShowIn` and `NotShowIn`
  * desktop entry fields.
  *
- * The <ulink url="http://standards.freedesktop.org/menu-spec/latest/">Desktop
- * Menu specification</ulink> recognizes the following:
- * <simplelist>
- *   <member>GNOME</member>
- *   <member>KDE</member>
- *   <member>ROX</member>
- *   <member>XFCE</member>
- *   <member>LXDE</member>
- *   <member>Unity</member>
- *   <member>Old</member>
- * </simplelist>
+ * The
+ * [Desktop Menu specification](http://standards.freedesktop.org/menu-spec/latest/)
+ * recognizes the following:
+ * - GNOME
+ * - KDE
+ * - ROX
+ * - XFCE
+ * - LXDE
+ * - Unity
+ * - Old
  *
  * Should be called only once; subsequent calls are ignored.
  */
@@ -19081,7 +19154,7 @@
  * @emblemed: a #GEmblemedIcon
  * @emblem: a #GEmblem
  *
- * Adds @emblem to the #GList of #GEmblem <!-- -->s.
+ * Adds @emblem to the #GList of #GEmblems.
  *
  * Since: 2.18
  */
@@ -19104,7 +19177,7 @@
  * Gets the list of emblems for the @icon.
  *
  * Returns: (element-type Gio.Emblem) (transfer none): a #GList of
- *          #GEmblem <!-- -->s that is owned by @emblemed
+ *     #GEmblems that is owned by @emblemed
  * Since: 2.18
  */
 
@@ -19321,7 +19394,7 @@
  * @attributes: an attribute string to match.
  *
  * Creates a new file attribute matcher, which matches attributes
- * against a given string. #GFileAttributeMatcher<!-- -->s are reference
+ * against a given string. #GFileAttributeMatchers are reference
  * counted structures, and are created with a reference count of 1. If
  * the number of references falls to 0, the #GFileAttributeMatcher is
  * automatically destroyed.
@@ -19971,7 +20044,7 @@
  * inside loops with g_file_enumerator_next_file().
  *
  * This is a convenience method that's equivalent to:
- * |[
+ * |[<!-- language="C" -->
  *   gchar *name = g_file_info_get_name (info);
  *   GFile *child = g_file_get_child (g_file_enumerator_get_container (enumr),
  *                                    name);
@@ -20323,9 +20396,9 @@
  *
  * Gets the URI scheme for a #GFile.
  * RFC 3986 decodes the scheme as:
- * <programlisting>
+ * |[
  * URI = scheme ":" hier-part [ "?" query ] [ "#" fragment ]
- * </programlisting>
+ * ]|
  * Common schemes include "file", "http", "ftp", etc.
  *
  * This call does no blocking I/O.
@@ -21514,9 +21587,9 @@
  *
  * Recursively measures the disk usage of @file.
  *
- * This is essentially an analog of the '<literal>du</literal>' command,
- * but it also reports the number of directories and non-directory files
- * encountered (including things like symbolic links).
+ * This is essentially an analog of the 'du' command, but it also
+ * reports the number of directories and non-directory files encountered
+ * (including things like symbolic links).
  *
  * By default, errors are only reported against the toplevel file
  * itself.  Errors found while recursing are silently ignored, unless
@@ -22618,10 +22691,10 @@
  * If @make_backup is %TRUE, this function will attempt to
  * make a backup of @file.
  *
- * <warning><para>No copy of @content will be made, so it must stay valid until
- * @callback is called. See g_file_replace_contents_bytes_async() for a #GBytes
- * version that will automatically hold a reference to the contents (without
- * copying) for the duration of the call.</para></warning>
+ * Note that no copy of @content will be made, so it must stay valid
+ * until @callback is called. See g_file_replace_contents_bytes_async()
+ * for a #GBytes version that will automatically hold a reference to the
+ * contents (without copying) for the duration of the call.
  */
 
 
@@ -23472,19 +23545,14 @@
  * The encoding of the returned string is proprietary to #GIcon except
  * in the following two cases
  *
- * <itemizedlist>
- * <listitem><para>
- *     If @icon is a #GFileIcon, the returned string is a native path
- *     (such as <literal>/path/to/my icon.png</literal>) without escaping
- *     if the #GFile for @icon is a native file.  If the file is not
- *     native, the returned string is the result of g_file_get_uri()
- *     (such as <literal>sftp://path/to/my&percnt;20icon.png</literal>).
- * </para></listitem>
- * <listitem><para>
- *    If @icon is a #GThemedIcon with exactly one name, the encoding is
- *    simply the name (such as <literal>network-server</literal>).
- * </para></listitem>
- * </itemizedlist>
+ * - If @icon is a #GFileIcon, the returned string is a native path
+ *   (such as `/path/to/my icon.png`) without escaping
+ *   if the #GFile for @icon is a native file.  If the file is not
+ *   native, the returned string is the result of g_file_get_uri()
+ *   (such as `sftp://path/to/my&percnt;20icon.png`).
+ *
+ * - If @icon is a #GThemedIcon with exactly one name, the encoding is
+ *    simply the name (such as `network-server`).
  *
  * Returns: An allocated NUL-terminated UTF8 string or %NULL if @icon can't
  * be serialized. Use g_free() to free.
@@ -23833,7 +23901,7 @@
  * g_inet_socket_address_get_flowinfo:
  * @address: a %G_SOCKET_FAMILY_IPV6 #GInetSocketAddress
  *
- * Gets the <literal>sin6_flowinfo</literal> field from @address,
+ * Gets the `sin6_flowinfo` field from @address,
  * which must be an IPv6 address.
  *
  * Returns: the flowinfo field
@@ -23856,7 +23924,7 @@
  * g_inet_socket_address_get_scope_id:
  * @address: a %G_SOCKET_FAMILY_IPV6 #GInetAddress
  *
- * Gets the <literal>sin6_scope_id</literal> field from @address,
+ * Gets the `sin6_scope_id` field from @address,
  * which must be an IPv6 address.
  *
  * Returns: the scope id field
@@ -24447,8 +24515,8 @@
  * The list is sorted by priority, beginning with the highest priority.
  *
  * Returns: (element-type GIOExtension) (transfer none): a #GList of
- * #GIOExtension<!-- -->s. The list is owned by GIO and should not be
- * modified.
+ *     #GIOExtensions. The list is owned by GIO and should not be
+ *     modified.
  */
 
 
@@ -25172,7 +25240,7 @@
  * @size as 0 (allowing #GMemoryOutputStream to do the initial
  * allocation for itself).
  *
- * |[
+ * |[<!-- language="C" -->
  * /&ast; a stream that can grow &ast;/
  * stream = g_memory_output_stream_new (NULL, 0, realloc, free);
  *
@@ -25574,8 +25642,7 @@
  * second with the "Cut", "Copy" and "Paste" items.  The first and
  * second menus would then be added as submenus of the third.  In XML
  * format, this would look something like the following:
- *
- * <informalexample><programlisting><![CDATA[
+ * |[
  * <menu id='edit-menu'>
  *   <section>
  *     <item label='Undo'/>
@@ -25587,7 +25654,7 @@
  *     <item label='Paste'/>
  *   </section>
  * </menu>
- * ]]></programlisting></informalexample>
+ * ]|
  *
  * The following example is exactly equivalent.  It is more illustrative
  * of the exact relationship between the menus and items (keeping in
@@ -25595,8 +25662,7 @@
  * containing one).  The style of the second example is more verbose and
  * difficult to read (and therefore not recommended except for the
  * purpose of understanding what is really going on).
- *
- * <informalexample><programlisting><![CDATA[
+ * |[
  * <menu id='edit-menu'>
  *   <item>
  *     <link name='section'>
@@ -25612,7 +25678,7 @@
  *     </link>
  *   </item>
  * </menu>
- * ]]></programlisting></informalexample>
+ * ]|
  *
  * Returns: a new #GMenuItem
  * Since: 2.32
@@ -26418,7 +26484,8 @@
  * Tries to guess the type of content stored on @mount. Returns one or
  * more textual identifiers of well-known content types (typically
  * prefixed with "x-content/"), e.g. x-content/image-dcf for camera
- * memory cards. See the <ulink url="http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec">shared-mime-info</ulink>
+ * memory cards. See the
+ * [shared-mime-info](http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec)
  * specification for more on x-content types.
  *
  * This is an asynchronous operation (see
@@ -26461,7 +26528,8 @@
  * Tries to guess the type of content stored on @mount. Returns one or
  * more textual identifiers of well-known content types (typically
  * prefixed with "x-content/"), e.g. x-content/image-dcf for camera
- * memory cards. See the <ulink url="http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec">shared-mime-info</ulink>
+ * memory cards. See the
+ * [shared-mime-info](http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec)
  * specification for more on x-content types.
  *
  * This is an synchronous operation and as such may block doing IO;
@@ -26489,10 +26557,10 @@
  * situation, a #GVolumeMonitor implementation would create two
  * #GVolume objects (for example, one for the camera functionality of
  * the device and one for a SD card reader on the device) with
- * activation URIs <literal>gphoto2://[usb:001,002]/store1/</literal>
- * and <literal>gphoto2://[usb:001,002]/store2/</literal>. When the
+ * activation URIs `gphoto2://[usb:001,002]/store1/`
+ * and `gphoto2://[usb:001,002]/store2/`. When the
  * underlying mount (with root
- * <literal>gphoto2://[usb:001,002]/</literal>) is mounted, said
+ * `gphoto2://[usb:001,002]/`) is mounted, said
  * #GVolumeMonitor implementation would create two #GMount objects
  * (each with their root matching the corresponding volume activation
  * root) that would shadow the original mount.
@@ -27670,10 +27738,10 @@
  * For the synchronous, blocking version of this function, see
  * g_output_stream_write().
  *
- * <warning><para>No copy of @buffer will be made, so it must stay valid until
- * @callback is called. See g_output_stream_write_bytes_async() for a #GBytes
- * version that will automatically hold a reference to the contents (without
- * copying) for the duration of the call.</para></warning>
+ * Note that no copy of @buffer will be made, so it must stay valid
+ * until @callback is called. See g_output_stream_write_bytes_async()
+ * for a #GBytes version that will automatically hold a reference to
+ * the contents (without copying) for the duration of the call.
  */
 
 
@@ -27689,13 +27757,12 @@
  * bindings or in other cases where the refcounted nature of #GBytes
  * is helpful over a bare pointer interface.
  *
- * However, note that this function <emphasis>may</emphasis> still
- * perform partial writes, just like g_output_stream_write().  If that
- * occurs, to continue writing, you will need to create a new #GBytes
- * containing just the remaining bytes, using
- * g_bytes_new_from_bytes().  Passing the same #GBytes instance
- * multiple times potentially can result in duplicated data in the
- * output stream.
+ * However, note that this function may still perform partial writes,
+ * just like g_output_stream_write().  If that occurs, to continue
+ * writing, you will need to create a new #GBytes containing just the
+ * remaining bytes, using g_bytes_new_from_bytes(). Passing the same
+ * #GBytes instance multiple times potentially can result in duplicated
+ * data in the output stream.
  *
  * Returns: Number of bytes written, or -1 on error
  */
@@ -27714,13 +27781,12 @@
  * takes a #GBytes as input.  Due to the refcounted nature of #GBytes,
  * this allows the stream to avoid taking a copy of the data.
  *
- * However, note that this function <emphasis>may</emphasis> still
- * perform partial writes, just like g_output_stream_write_async().
- * If that occurs, to continue writing, you will need to create a new
- * #GBytes containing just the remaining bytes, using
- * g_bytes_new_from_bytes().  Passing the same #GBytes instance
- * multiple times potentially can result in duplicated data in the
- * output stream.
+ * However, note that this function may still perform partial writes,
+ * just like g_output_stream_write_async(). If that occurs, to continue
+ * writing, you will need to create a new #GBytes containing just the
+ * remaining bytes, using g_bytes_new_from_bytes(). Passing the same
+ * #GBytes instance multiple times potentially can result in duplicated
+ * data in the output stream.
  *
  * For the synchronous, blocking version of this function, see
  * g_output_stream_write_bytes().
@@ -28441,18 +28507,18 @@
  * @error: return location for a #GError, or %NULL
  *
  * Looks into the system proxy configuration to determine what proxy,
- * if any, to use to connect to @uri. The returned proxy URIs are of the
- * form <literal>&lt;protocol&gt;://[user[:password]@]host:port</literal>
- * or <literal>direct://</literal>, where &lt;protocol&gt; could be
- * http, rtsp, socks or other proxying protocol.
+ * if any, to use to connect to @uri. The returned proxy URIs are of
+ * the form `&lt;protocol&gt;://[user[:password]@]host:port` or
+ * `direct://`, where &lt;protocol&gt; could be http, rtsp, socks
+ * or other proxying protocol.
  *
  * If you don't know what network protocol is being used on the
- * socket, you should use <literal>none</literal> as the URI protocol.
+ * socket, you should use `none` as the URI protocol.
  * In this case, the resolver might still return a generic proxy type
  * (such as SOCKS), but would not return protocol-specific proxy types
  * (such as http).
  *
- * <literal>direct://</literal> is used when no proxy is needed.
+ * `direct://` is used when no proxy is needed.
  * Direct connection should not be attempted unless it is part of the
  * returned array of proxies.
  *
@@ -28813,9 +28879,8 @@
  * Synchronously performs a DNS SRV lookup for the given @service and
  * @protocol in the given @domain and returns an array of #GSrvTarget.
  * @domain may be an ASCII-only or UTF-8 hostname. Note also that the
- * @service and @protocol arguments <emphasis>do not</emphasis>
- * include the leading underscore that appears in the actual DNS
- * entry.
+ * @service and @protocol arguments do not include the leading underscore
+ * that appears in the actual DNS entry.
  *
  * On success, g_resolver_lookup_service() will return a #GList of
  * #GSrvTarget, sorted in order of preference. (That is, you should
@@ -29320,8 +29385,8 @@
  * g_settings_backend_get_default:
  *
  * Returns the default #GSettingsBackend. It is possible to override
- * the default by setting the <envar>GSETTINGS_BACKEND</envar>
- * environment variable to the name of a settings backend.
+ * the default by setting the `GSETTINGS_BACKEND` environment variable
+ * to the name of a settings backend.
  *
  * The user gets a reference to the backend.
  *
@@ -29505,8 +29570,7 @@
  *
  * When the @inverted argument is %TRUE, the binding inverts the
  * value as it passes from the setting to the object, i.e. @property
- * will be set to %TRUE if the key is <emphasis>not</emphasis>
- * writable.
+ * will be set to %TRUE if the key is not writable.
  *
  * Note that the lifecycle of the binding is tied to the object,
  * and that you can have only one binding per object property.
@@ -29594,14 +29658,14 @@
 /**
  * g_settings_get_child:
  * @settings: a #GSettings object
- * @name: the name of the 'child' schema
+ * @name: the name of the child schema
  *
- * Creates a 'child' settings object which has a base path of
- * <replaceable>base-path</replaceable>/@name, where
- * <replaceable>base-path</replaceable> is the base path of @settings.
+ * Creates a child settings object which has a base path of
+ * `base-path/@name`, where `base-path` is the base path of
+ * @settings.
  *
  * The schema for the child settings object must have been declared
- * in the schema of @settings using a <tag class="starttag">child</tag> element.
+ * in the schema of @settings using a &lt;child&gt; element.
  *
  * Returns: (transfer full): a 'child' settings object
  * Since: 2.26
@@ -30218,31 +30282,28 @@
  * This function will return a #GVariant that fully describes the range
  * of values that are valid for @key.
  *
- * The type of #GVariant returned is <literal>(sv)</literal>.  The
- * string describes the type of range restriction in effect.  The type
- * and meaning of the value contained in the variant depends on the
- * string.
+ * The type of #GVariant returned is `(sv)`. The string describes
+ * the type of range restriction in effect. The type and meaning of
+ * the value contained in the variant depends on the string.
  *
- * If the string is <literal>'type'</literal> then the variant contains
- * an empty array.  The element type of that empty array is the expected
- * type of value and all values of that type are valid.
+ * If the string is `'type'` then the variant contains an empty array.
+ * The element type of that empty array is the expected type of value
+ * and all values of that type are valid.
  *
- * If the string is <literal>'enum'</literal> then the variant contains
- * an array enumerating the possible values.  Each item in the array is
+ * If the string is `'enum'` then the variant contains an array
+ * enumerating the possible values. Each item in the array is
  * a possible valid value and no other values are valid.
  *
- * If the string is <literal>'flags'</literal> then the variant contains
- * an array.  Each item in the array is a value that may appear zero or
- * one times in an array to be used as the value for this key.  For
- * example, if the variant contained the array <literal>['x',
- * 'y']</literal> then the valid values for the key would be
- * <literal>[]</literal>, <literal>['x']</literal>,
- * <literal>['y']</literal>, <literal>['x', 'y']</literal> and
- * <literal>['y', 'x']</literal>.
+ * If the string is `'flags'` then the variant contains an array. Each
+ * item in the array is a value that may appear zero or one times in an
+ * array to be used as the value for this key. For example, if the
+ * variant contained the array `['x', 'y']` then the valid values for
+ * the key would be `[]`, `['x']`, `['y']`, `['x', 'y']` and
+ * `['y', 'x']`.
  *
- * Finally, if the string is <literal>'range'</literal> then the variant
- * contains a pair of like-typed values -- the minimum and maximum
- * permissible values for this key.
+ * Finally, if the string is `'range'` then the variant contains a pair
+ * of like-typed values -- the minimum and maximum permissible values
+ * for this key.
  *
  * This information should not be used by normal programs.  It is
  * considered to be a hint for introspection purposes.  Normal programs
@@ -30353,9 +30414,8 @@
  *
  * The returned source may actually consist of multiple schema sources
  * from different directories, depending on which directories were given
- * in <envar>XDG_DATA_DIRS</envar> and
- * <envar>GSETTINGS_SCHEMA_DIR</envar>.  For this reason, all lookups
- * performed against the default source should probably be done
+ * in `XDG_DATA_DIRS` and `GSETTINGS_SCHEMA_DIR`. For this reason, all
+ * lookups performed against the default source should probably be done
  * recursively.
  *
  * Returns: (transfer none): the default schema source
@@ -30423,16 +30483,15 @@
  * This function is not required for normal uses of #GSettings but it
  * may be useful to authors of plugin management systems.
  *
- * The directory should contain a file called
- * <filename>gschemas.compiled</filename> as produced by
- * <command>glib-compile-schemas</command>.
+ * The directory should contain a file called `gschemas.compiled` as
+ * produced by the
+ * <link linkend="glib-compile-schemas">glib-compile-schemas</link> tool.
  *
- * If @trusted is %TRUE then <filename>gschemas.compiled</filename> is
- * trusted not to be corrupted.  This assumption has a performance
- * advantage, but can result in crashes or inconsistent behaviour in the
- * case of a corrupted file.  Generally, you should set @trusted to
- * %TRUE for files installed by the system and to %FALSE for files in
- * the home directory.
+ * If @trusted is %TRUE then `gschemas.compiled` is trusted not to be
+ * corrupted. This assumption has a performance advantage, but can result
+ * in crashes or inconsistent behaviour in the case of a corrupted file.
+ * Generally, you should set @trusted to %TRUE for files installed by the
+ * system and to %FALSE for files in the home directory.
  *
  * If @parent is non-%NULL then there are two effects.
  *
@@ -30441,8 +30500,8 @@
  * source, the lookup will recurse to the parent.
  *
  * Second, any references to other schemas specified within this
- * source (ie: <literal>child</literal> or <literal>extends</literal>)
- * references may be resolved from the @parent.
+ * source (ie: `child` or `extends`) references may be resolved
+ * from the @parent.
  *
  * For this second reason, except in very unusual situations, the
  * @parent should probably be given as the default schema source, as
@@ -31220,9 +31279,9 @@
 /**
  * g_simple_proxy_resolver_new:
  * @default_proxy: (allow-none): the default proxy to use, eg
- *   "socks://192.168.1.1"
+ *     "socks://192.168.1.1"
  * @ignore_hosts: (allow-none): an optional list of hosts/IP addresses
- *   to not use a proxy for.
+ *     to not use a proxy for.
  *
  * Creates a new #GSimpleProxyResolver. See
  * #GSimpleProxyResolver:default-proxy and
@@ -31243,10 +31302,9 @@
  * don't match #GSimpleProxyResolver:ignore-hosts or a proxy set
  * via g_simple_proxy_resolver_set_uri_proxy().
  *
- * If @default_proxy starts with "<literal>socks://</literal>",
+ * If @default_proxy starts with "socks://",
  * #GSimpleProxyResolver will treat it as referring to all three of
- * the <literal>socks5</literal>, <literal>socks4a</literal>, and
- * <literal>socks4</literal> proxy types.
+ * the socks5, socks4a, and socks4 proxy types.
  *
  * Since: 2.36
  */
@@ -31278,9 +31336,8 @@
  * #GSimpleProxyResolver:ignore-hosts) will be proxied via @proxy.
  *
  * As with #GSimpleProxyResolver:default-proxy, if @proxy starts with
- * "<literal>socks://</literal>", #GSimpleProxyResolver will treat it
- * as referring to all three of the <literal>socks5</literal>,
- * <literal>socks4a</literal>, and <literal>socks4</literal> proxy
+ * "socks://", #GSimpleProxyResolver will treat it
+ * as referring to all three of the socks5, socks4a, and socks4 proxy
  * types.
  *
  * Since: 2.36
@@ -31373,7 +31430,7 @@
  *
  * Gets the socket family type of @address.
  *
- * Returns: the socket family type of @address.
+ * Returns: the socket family type of @address
  * Since: 2.22
  */
 
@@ -31382,11 +31439,11 @@
  * g_socket_address_get_native_size:
  * @address: a #GSocketAddress
  *
- * Gets the size of @address's native <type>struct sockaddr</type>.
+ * Gets the size of @address's native struct sockaddr.
  * You can use this to allocate memory to pass to
  * g_socket_address_to_native().
  *
- * Returns: the size of the native <type>struct sockaddr</type> that
+ * Returns: the size of the native struct sockaddr that
  *     @address represents
  * Since: 2.22
  */
@@ -31394,14 +31451,14 @@
 
 /**
  * g_socket_address_new_from_native:
- * @native: a pointer to a <type>struct sockaddr</type>
+ * @native: a pointer to a struct sockaddr
  * @len: the size of the memory location pointed to by @native
  *
  * Creates a #GSocketAddress subclass corresponding to the native
- * <type>struct sockaddr</type> @native.
+ * struct sockaddr @native.
  *
- * Returns: a new #GSocketAddress if @native could successfully be converted,
- * otherwise %NULL.
+ * Returns: a new #GSocketAddress if @native could successfully
+ *     be converted, otherwise %NULL
  * Since: 2.22
  */
 
@@ -31410,17 +31467,16 @@
  * g_socket_address_to_native:
  * @address: a #GSocketAddress
  * @dest: a pointer to a memory location that will contain the native
- * <type>struct sockaddr</type>.
+ * struct sockaddr
  * @destlen: the size of @dest. Must be at least as large as
- * g_socket_address_get_native_size().
- * @error: #GError for error reporting, or %NULL to ignore.
+ *     g_socket_address_get_native_size()
+ * @error: #GError for error reporting, or %NULL to ignore
  *
- * Converts a #GSocketAddress to a native <type>struct
- * sockaddr</type>, which can be passed to low-level functions like
- * connect() or bind().
+ * Converts a #GSocketAddress to a native struct sockaddr, which can
+ * be passed to low-level functions like connect() or bind().
  *
- * If not enough space is available, a %G_IO_ERROR_NO_SPACE error is
- * returned. If the address type is not known on the system
+ * If not enough space is available, a %G_IO_ERROR_NO_SPACE error
+ * is returned. If the address type is not known on the system
  * then a %G_IO_ERROR_NOT_SUPPORTED error is returned.
  *
  * Returns: %TRUE if @dest was filled in, %FALSE on error
@@ -31445,12 +31501,12 @@
  * used to initiate connections, though this is not normally required.
  *
  * If @socket is a TCP socket, then @allow_reuse controls the setting
- * of the <literal>SO_REUSEADDR</literal> socket option; normally it
- * should be %TRUE for server sockets (sockets that you will
- * eventually call g_socket_accept() on), and %FALSE for client
- * sockets. (Failing to set this flag on a server socket may cause
- * g_socket_bind() to return %G_IO_ERROR_ADDRESS_IN_USE if the server
- * program is stopped and then immediately restarted.)
+ * of the `SO_REUSEADDR` socket option; normally it should be %TRUE for
+ * server sockets (sockets that you will eventually call
+ * g_socket_accept() on), and %FALSE for client sockets. (Failing to
+ * set this flag on a server socket may cause g_socket_bind() to return
+ * %G_IO_ERROR_ADDRESS_IN_USE if the server program is stopped and then
+ * immediately restarted.)
  *
  * If @socket is a UDP socket, then @allow_reuse determines whether or
  * not other UDP sockets can be bound to the same address at the same
@@ -32218,7 +32274,7 @@
  * @connectable: a #GSocketConnectable
  *
  * Creates a #GSocketAddressEnumerator for @connectable that will
- * return #GProxyAddress<!-- -->es for addresses that you must connect
+ * return #GProxyAddresses for addresses that you must connect
  * to via a proxy.
  *
  * If @connectable does not implement
@@ -32646,17 +32702,16 @@
 /**
  * g_socket_get_option:
  * @socket: a #GSocket
- * @level: the "API level" of the option (eg, <literal>SOL_SOCKET</literal>)
- * @optname: the "name" of the option (eg, <literal>SO_BROADCAST</literal>)
+ * @level: the "API level" of the option (eg, `SOL_SOCKET`)
+ * @optname: the "name" of the option (eg, `SO_BROADCAST`)
  * @value: (out): return location for the option value
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Gets the value of an integer-valued option on @socket, as with
- * <literal>getsockopt ()</literal>. (If you need to fetch a
- * non-integer-valued option, you will need to call
- * <literal>getsockopt ()</literal> directly.)
+ * getsockopt(). (If you need to fetch a  non-integer-valued option,
+ * you will need to call getsockopt() directly.)
  *
- * The <link linkend="gio-gnetworking.h"><literal>&lt;gio/gnetworking.h&gt;</literal></link>
+ * The <link linkend="gio-gnetworking.h">`&lt;gio/gnetworking.h&gt;`</link>
  * header pulls in system headers that will define most of the
  * standard/portable socket options. For unusual socket protocols or
  * platform-dependent options, you may need to include additional
@@ -32667,9 +32722,8 @@
  * g_socket_get_option() will handle the conversion internally.
  *
  * Returns: success or failure. On failure, @error will be set, and
- *   the system error value (<literal>errno</literal> or
- *   <literal>WSAGetLastError ()</literal>) will still be set to the
- *   result of the <literal>getsockopt ()</literal> call.
+ *   the system error value (`errno` or WSAGetLastError()) will still
+ *   be set to the result of the getsockopt() call.
  * Since: 2.36
  */
 
@@ -33336,7 +33390,7 @@
  * then @vectors is assumed to be terminated by a #GOutputVector with a
  * %NULL buffer pointer.) The #GOutputVector structs describe the buffers
  * that the sent data will be gathered from. Using multiple
- * #GOutputVector<!-- -->s is more memory-efficient than manually copying
+ * #GOutputVectors is more memory-efficient than manually copying
  * data from multiple sources into a single buffer, and more
  * network-efficient than making multiple calls to g_socket_send().
  *
@@ -33567,26 +33621,24 @@
 /**
  * g_socket_set_option:
  * @socket: a #GSocket
- * @level: the "API level" of the option (eg, <literal>SOL_SOCKET</literal>)
- * @optname: the "name" of the option (eg, <literal>SO_BROADCAST</literal>)
+ * @level: the "API level" of the option (eg, `SOL_SOCKET`)
+ * @optname: the "name" of the option (eg, `SO_BROADCAST`)
  * @value: the value to set the option to
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Sets the value of an integer-valued option on @socket, as with
- * <literal>setsockopt ()</literal>. (If you need to set a
- * non-integer-valued option, you will need to call
- * <literal>setsockopt ()</literal> directly.)
+ * setsockopt(). (If you need to set a non-integer-valued option,
+ * you will need to call setsockopt() directly.)
  *
- * The <link linkend="gio-gnetworking.h"><literal>&lt;gio/gnetworking.h&gt;</literal></link>
+ * The <link linkend="gio-gnetworking.h">`&lt;gio/gnetworking.h&gt;`</link>
  * header pulls in system headers that will define most of the
  * standard/portable socket options. For unusual socket protocols or
  * platform-dependent options, you may need to include additional
  * headers.
  *
  * Returns: success or failure. On failure, @error will be set, and
- *   the system error value (<literal>errno</literal> or
- *   <literal>WSAGetLastError ()</literal>) will still be set to the
- *   result of the <literal>setsockopt ()</literal> call.
+ *   the system error value (`errno` or WSAGetLastError()) will still
+ *   be set to the result of the setsockopt() call.
  * Since: 2.36
  */
 
@@ -33770,7 +33822,7 @@
  *
  * Creates a new #GSrvTarget with the given parameters.
  *
- * You should not need to use this; normally #GSrvTarget<!-- -->s are
+ * You should not need to use this; normally #GSrvTargets are
  * created by #GResolver.
  *
  * Returns: a new #GSrvTarget.
@@ -34619,8 +34671,7 @@
  * to wait for a #GSource to trigger. Attaches @source to @task's
  * #GMainContext with @task's <link
  * linkend="io-priority">priority</link>, and sets @source's callback
- * to @callback, with @task as the callback's
- * <literal>user_data</literal>.
+ * to @callback, with @task as the callback's `user_data`.
  *
  * This takes a reference on @task until @source is destroyed.
  *
@@ -34716,9 +34767,9 @@
  * g_task_get_task_data:
  * @task: a #GTask
  *
- * Gets @task's <literal>task_data</literal>.
+ * Gets @task's `task_data`.
  *
- * Returns: (transfer none): @task's <literal>task_data</literal>.
+ * Returns: (transfer none): @task's `task_data`.
  * Since: 2.36
  */
 
@@ -35022,7 +35073,7 @@
  * See #GTaskThreadFunc for more details about how @task_func is handled.
  *
  * Normally this is used with tasks created with a %NULL
- * <literal>callback</literal>, but note that even if the task does
+ * `callback`, but note that even if the task does
  * have a callback, it will not be invoked when @task_func returns.
  *
  * Since: 2.36
@@ -35296,10 +35347,8 @@
  *
  * Append a name to the list of icons from within @icon.
  *
- * <note><para>
  * Note that doing so invalidates the hash computed by prior calls
  * to g_icon_hash().
- * </para></note>
  */
 
 
@@ -35343,7 +35392,7 @@
  * that can be created by shortening @iconname at '-' characters.
  *
  * In the following example, @icon1 and @icon2 are equivalent:
- * |[
+ * |[<!-- language="C" -->
  * const char *names[] = {
  *   "gnome-dev-cdrom-audio",
  *   "gnome-dev-cdrom",
@@ -35366,10 +35415,8 @@
  *
  * Prepend a name to the list of icons from within @icon.
  *
- * <note><para>
  * Note that doing so invalidates the hash computed by prior calls
  * to g_icon_hash().
- * </para></note>
  *
  * Since: 2.18
  */
@@ -35503,7 +35550,7 @@
  * @file: file containing PEM-encoded certificates to import
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Creates one or more #GTlsCertificate<!-- -->s from the PEM-encoded
+ * Creates one or more #GTlsCertificates from the PEM-encoded
  * data in @file. If @file cannot be read or parsed, the function will
  * return %NULL and set @error. If @file does not contain any
  * PEM-encoded certificates, this will return an empty list and not
@@ -35970,16 +36017,16 @@
  *
  * %G_TLS_REHANDSHAKE_SAFELY means that the connection will allow a
  * rehandshake only if the other end of the connection supports the
- * TLS <literal>renegotiation_info</literal> extension. This is the
- * default behavior, but means that rehandshaking will not work
- * against older implementations that do not support that extension.
+ * TLS `renegotiation_info` extension. This is the default behavior,
+ * but means that rehandshaking will not work against older
+ * implementations that do not support that extension.
  *
  * %G_TLS_REHANDSHAKE_UNSAFELY means that the connection will allow
- * rehandshaking even without the
- * <literal>renegotiation_info</literal> extension. On the server side
- * in particular, this is not recommended, since it leaves the server
- * open to certain attacks. However, this mode is necessary if you
- * need to allow renegotiation with older client software.
+ * rehandshaking even without the `renegotiation_info` extension. On
+ * the server side in particular, this is not recommended, since it
+ * leaves the server open to certain attacks. However, this mode is
+ * necessary if you need to allow renegotiation with older client
+ * software.
  *
  * Since: 2.28
  */
@@ -37178,8 +37225,7 @@
 
 /**
  * g_unix_is_mount_path_system_internal:
- * @mount_path: a mount path, e.g. <filename>/media/disk</filename>
- *    or <filename>/usr</filename>
+ * @mount_path: a mount path, e.g. `/media/disk` or `/usr`
  *
  * Determines if @mount_path is considered an implementation of the
  * OS. This is primarily used for hiding mountable and mounted volumes
@@ -37697,7 +37743,7 @@
  * zero-padded buffer will be considered the name. (As above, if
  * @path_len is -1, then @path is assumed to be NUL-terminated.) In
  * this case, g_socket_address_get_native_size() will always return
- * the full size of a <literal>struct sockaddr_un</literal>, although
+ * the full size of a `struct sockaddr_un`, although
  * g_unix_socket_address_get_path_len() will still return just the
  * length of @path.
  *
@@ -37797,30 +37843,30 @@
 
 /**
  * g_volume_can_eject:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  *
  * Checks if a volume can be ejected.
  *
- * Returns: %TRUE if the @volume can be ejected. %FALSE otherwise.
+ * Returns: %TRUE if the @volume can be ejected. %FALSE otherwise
  */
 
 
 /**
  * g_volume_can_mount:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  *
  * Checks if a volume can be mounted.
  *
- * Returns: %TRUE if the @volume can be mounted. %FALSE otherwise.
+ * Returns: %TRUE if the @volume can be mounted. %FALSE otherwise
  */
 
 
 /**
  * g_volume_eject:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  * @flags: flags affecting the unmount if required for eject
- * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL
  * @user_data: user data that gets passed to @callback
  *
  * Ejects a volume. This is an asynchronous operation, and is
@@ -37833,27 +37879,27 @@
 
 /**
  * g_volume_eject_finish:
- * @volume: pointer to a #GVolume.
- * @result: a #GAsyncResult.
+ * @volume: pointer to a #GVolume
+ * @result: a #GAsyncResult
  * @error: a #GError location to store an error, or %NULL to ignore
  *
  * Finishes ejecting a volume. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
  *
- * Returns: %TRUE, %FALSE if operation failed.
+ * Returns: %TRUE, %FALSE if operation failed
  * Deprecated: 2.22: Use g_volume_eject_with_operation_finish() instead.
  */
 
 
 /**
  * g_volume_eject_with_operation:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  * @flags: flags affecting the unmount if required for eject
  * @mount_operation: (allow-none): a #GMountOperation or %NULL to
- *     avoid user interaction.
- * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
- * @user_data: user data passed to @callback.
+ *     avoid user interaction
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL
+ * @user_data: user data passed to @callback
  *
  * Ejects a volume. This is an asynchronous operation, and is
  * finished by calling g_volume_eject_with_operation_finish() with the @volume
@@ -37865,15 +37911,14 @@
 
 /**
  * g_volume_eject_with_operation_finish:
- * @volume: a #GVolume.
- * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occurring, or %NULL to
- *     ignore.
+ * @volume: a #GVolume
+ * @result: a #GAsyncResult
+ * @error: a #GError location to store the error occurring, or %NULL
  *
  * Finishes ejecting a volume. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
  *
- * Returns: %TRUE if the volume was successfully ejected. %FALSE otherwise.
+ * Returns: %TRUE if the volume was successfully ejected. %FALSE otherwise
  * Since: 2.22
  */
 
@@ -37902,23 +37947,20 @@
  * either be equal or a prefix of what this function returns. In
  * other words, in code
  *
- * <programlisting>
+ * |[<!-- language="C" -->
  *   GMount *mount;
  *   GFile *mount_root
  *   GFile *volume_activation_root;
  *
  *   mount = g_volume_get_mount (volume); /&ast; mounted, so never NULL &ast;/
  *   mount_root = g_mount_get_root (mount);
- *   volume_activation_root = g_volume_get_activation_root(volume); /&ast; assume not NULL &ast;/
- * </programlisting>
- *
+ *   volume_activation_root = g_volume_get_activation_root (volume); /&ast; assume not NULL &ast;/
+ * ]|
  * then the expression
- *
- * <programlisting>
+ * |[<!-- language="C" -->
  *   (g_file_has_prefix (volume_activation_root, mount_root) ||
  *       g_file_equal (volume_activation_root, mount_root))
- * </programlisting>
- *
+ * ]|
  * will always be %TRUE.
  *
  * Activation roots are typically used in #GVolumeMonitor
@@ -37926,26 +37968,26 @@
  * g_mount_is_shadowed() for more details.
  *
  * Returns: (transfer full): the activation root of @volume or %NULL. Use
- * g_object_unref() to free.
+ *     g_object_unref() to free.
  * Since: 2.18
  */
 
 
 /**
  * g_volume_get_drive:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  *
  * Gets the drive for the @volume.
  *
- * Returns: (transfer full): a #GDrive or %NULL if @volume is not associated with a drive.
- *     The returned object should be unreffed with g_object_unref()
- *     when no longer needed.
+ * Returns: (transfer full): a #GDrive or %NULL if @volume is not
+ *     associated with a drive. The returned object should be unreffed
+ *     with g_object_unref() when no longer needed.
  */
 
 
 /**
  * g_volume_get_icon:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  *
  * Gets the icon for @volume.
  *
@@ -37965,14 +38007,14 @@
  * for more information about volume identifiers.
  *
  * Returns: a newly allocated string containing the
- *   requested identfier, or %NULL if the #GVolume
- *   doesn't have this kind of identifier
+ *     requested identfier, or %NULL if the #GVolume
+ *     doesn't have this kind of identifier
  */
 
 
 /**
  * g_volume_get_mount:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  *
  * Gets the mount for the @volume.
  *
@@ -37984,29 +38026,29 @@
 
 /**
  * g_volume_get_name:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  *
  * Gets the name of @volume.
  *
  * Returns: the name for the given @volume. The returned string should
- * be freed with g_free() when no longer needed.
+ *     be freed with g_free() when no longer needed.
  */
 
 
 /**
  * g_volume_get_sort_key:
- * @volume: A #GVolume.
+ * @volume: a #GVolume
  *
  * Gets the sort key for @volume, if any.
  *
- * Returns: Sorting key for @volume or %NULL if no such key is available.
+ * Returns: Sorting key for @volume or %NULL if no such key is available
  * Since: 2.32
  */
 
 
 /**
  * g_volume_get_symbolic_icon:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  *
  * Gets the symbolic icon for @volume.
  *
@@ -38019,7 +38061,7 @@
 
 /**
  * g_volume_get_uuid:
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  *
  * Gets the UUID for the @volume. The reference is typically based on
  * the file system UUID for the volume in question and should be
@@ -38150,11 +38192,11 @@
 
 /**
  * g_volume_mount: (virtual mount_fn)
- * @volume: a #GVolume.
+ * @volume: a #GVolume
  * @flags: flags affecting the operation
- * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
+ * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL
  * @user_data: user data that gets passed to @callback
  *
  * Mounts a volume. This is an asynchronous operation, and is
@@ -38177,7 +38219,7 @@
  * function; there's no need to listen for the 'mount-added' signal on
  * #GVolumeMonitor.
  *
- * Returns: %TRUE, %FALSE if operation failed.
+ * Returns: %TRUE, %FALSE if operation failed
  */
 
 
@@ -38187,7 +38229,7 @@
  *
  * Returns whether the volume should be automatically mounted.
  *
- * Returns: %TRUE if the volume should be automatically mounted.
+ * Returns: %TRUE if the volume should be automatically mounted
  */
 
 
