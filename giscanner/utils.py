@@ -21,6 +21,7 @@
 import re
 import os
 import subprocess
+import platform
 
 
 _debugflags = None
@@ -88,6 +89,20 @@ def _extract_dlname_field(la_file):
         return None
 
 
+_libtool_libdir_pat = re.compile("libdir='([^']+)'")
+
+
+def _extract_libdir_field(la_file):
+    f = open(la_file)
+    data = f.read()
+    f.close()
+    m = _libtool_libdir_pat.search(data)
+    if m:
+        return m.groups()[0]
+    else:
+        return None
+
+
 # Returns the name that we would pass to dlopen() the library
 # corresponding to this .la file
 def extract_libtool_shlib(la_file):
@@ -95,6 +110,14 @@ def extract_libtool_shlib(la_file):
     if dlname is None:
         return None
 
+    # Darwin uses absolute paths where possible; since the libtool files never
+    # contain absolute paths, use the libdir field
+    if platform.system() == 'Darwin':
+        dlbasename = os.path.basename(dlname)
+        libdir = _extract_libdir_field(la_file)
+        if libdir is None:
+            return dlbasename
+        return libdir + '/' + dlbasename
     # From the comments in extract_libtool(), older libtools had
     # a path rather than the raw dlname
     return os.path.basename(dlname)
@@ -127,14 +150,18 @@ def get_libtool_command(options):
         # we simply split().
         return libtool_path.split(' ')
 
+    libtool_cmd = 'libtool'
+    if platform.system() == 'Darwin':
+        # libtool on OS X is a completely different program written by Apple
+        libtool_cmd = 'glibtool'
     try:
-        subprocess.check_call(['libtool', '--version'],
+        subprocess.check_call([libtool_cmd, '--version'],
                               stdout=open(os.devnull))
     except (subprocess.CalledProcessError, OSError):
         # If libtool's not installed, assume we don't need it
         return None
 
-    return ['libtool']
+    return [libtool_cmd]
 
 
 def files_are_identical(path1, path2):

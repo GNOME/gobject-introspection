@@ -49,9 +49,13 @@ def _resolve_libtool(options, binary, libraries):
 # The negative lookbehind at the start is to avoid problems if someone
 # is crazy enough to name a library liblib<foo> when lib<foo> exists.
 #
+# Match absolute paths on OS X to conform to how libraries are usually
+# referenced on OS X systems.
 def _ldd_library_pattern(library_name):
-    return re.compile("(?<![A-Za-z0-9_-])(lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
-                      % re.escape(library_name))
+    pattern = "(?<![A-Za-z0-9_-])(lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
+    if platform.system() == 'Darwin':
+        pattern = "([^\s]*lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
+    return re.compile(pattern % re.escape(library_name))
 
 
 # This is a what we do for non-la files. We assume that we are on an
