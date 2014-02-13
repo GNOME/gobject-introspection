@@ -27,6 +27,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import platform
 
 from giscanner import message
 from giscanner.annotationparser import GtkDocCommentBlockParser
@@ -382,6 +383,9 @@ def create_source_scanner(options, args):
         filenames = extract_filelist(options)
     else:
         filenames = extract_filenames(args)
+
+    if platform.system() == 'Darwin':
+        options.cpp_undefines.append('__BLOCKS__')
 
     # Run the preprocessor, tokenize and construct simple
     # objects representing the raw C symbols
