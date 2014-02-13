@@ -9,7 +9,9 @@ targetbase=${targetname##*/}
 
 case $targetname in
 *.gir)
-    diff -u -U 10 ${srcdir}/${targetname::-4}-expected.gir ${builddir}/${targetname}
+    len=${#targetname}
+    limit=$(expr $len - 4)
+    diff -u -U 10 ${srcdir}/${targetname:0:${limit}}-expected.gir ${builddir}/${targetname}
     exit $?
     ;;
 *.typelib)
