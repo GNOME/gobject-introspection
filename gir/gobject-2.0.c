@@ -69,7 +69,7 @@
  *                   text_view)
  * ]|
  * It is important to note that you must use
- * <link linkend="canonical-parameter-name">canonical</link> parameter names as
+ * [canonical][canonical-parameter-name] parameter names as
  * detail strings for the notify signal.
  */
 
@@ -128,9 +128,8 @@
  * GLib type system, it can be used as value type for object
  * properties, using g_param_spec_enum() or g_param_spec_flags().
  *
- * GObject ships with a utility called <link
- * linkend="glib-mkenums">glib-mkenums</link> that can construct
- * suitable type registration functions from C enumeration
+ * GObject ships with a utility called [glib-mkenums][glib-mkenums],
+ * that can construct suitable type registration functions from C enumeration
  * definitions.
  */
 
@@ -263,9 +262,8 @@
  * marshaller for any closure which is connected to this
  * signal. GObject provides a number of C marshallers for this
  * purpose, see the g_cclosure_marshal_*() functions. Additional C
- * marshallers can be generated with the <link
- * linkend="glib-genmarshal">glib-genmarshal</link> utility.  Closures
- * can be explicitly connected to signals with
+ * marshallers can be generated with the [glib-genmarshal][glib-genmarshal]
+ * utility.  Closures can be explicitly connected to signals with
  * g_signal_connect_closure(), but it usually more convenient to let
  * GObject create a closure automatically by using one of the
  * g_signal_connect_*() functions which take a callback function/user
@@ -293,9 +291,9 @@
  *     other type
  * @see_also: The fundamental types which all support #GValue
  *     operations and thus can be used as a type initializer for
- *     g_value_init() are defined by a separate interface.  See the <link
- *     linkend="gobject-Standard-Parameter-and-Value-Types">Standard
- *     Values API</link> for details.
+ *     g_value_init() are defined by a separate interface.  See the
+ *     [standard values API][gobject-Standard-Parameter-and-Value-Types]
+ *     for details
  * @title: Generic values
  *
  * The #GValue structure is basically a variable container that consists
@@ -330,37 +328,37 @@
  * main (int   argc,
  *       char *argv[])
  * {
- *   /&ast; GValues must be initialized &ast;/
+ *   // GValues must be initialized
  *   GValue a = G_VALUE_INIT;
  *   GValue b = G_VALUE_INIT;
  *   const gchar *message;
  *
- *   /&ast; The GValue starts empty &ast;/
+ *   // The GValue starts empty
  *   g_assert (!G_VALUE_HOLDS_STRING (&a));
  *
- *   /&ast; Put a string in it &ast;/
+ *   // Put a string in it
  *   g_value_init (&a, G_TYPE_STRING);
  *   g_assert (G_VALUE_HOLDS_STRING (&a));
  *   g_value_set_static_string (&a, "Hello, world!");
  *   g_printf ("%s\n", g_value_get_string (&a));
  *
- *   /&ast; Reset it to its pristine state &ast;/
+ *   // Reset it to its pristine state
  *   g_value_unset (&a);
  *
- *   /&ast; It can then be reused for another type &ast;/
+ *   // It can then be reused for another type
  *   g_value_init (&a, G_TYPE_INT);
  *   g_value_set_int (&a, 42);
  *
- *   /&ast; Attempt to transform it into a GValue of type STRING &ast;/
+ *   // Attempt to transform it into a GValue of type STRING
  *   g_value_init (&b, G_TYPE_STRING);
  *
- *   /&ast; An INT is transformable to a STRING &ast;/
+ *   // An INT is transformable to a STRING
  *   g_assert (g_value_type_transformable (G_TYPE_INT, G_TYPE_STRING));
  *
  *   g_value_transform (&a, &b);
  *   g_printf ("%s\n", g_value_get_string (&b));
  *
- *   /&ast; Attempt to transform it again using a custom transform function &ast;/
+ *   // Attempt to transform it again using a custom transform function
  *   g_value_register_transform_func (G_TYPE_INT, G_TYPE_STRING, int2string);
  *   g_value_transform (&a, &b);
  *   g_printf ("%s\n", g_value_get_string (&b));
@@ -538,8 +536,7 @@
  * methods for all object types in GTK+, Pango and other libraries
  * based on GObject.  The GObject class provides methods for object
  * construction and destruction, property access methods, and signal
- * support.  Signals are described in detail in <xref
- * linkend="gobject-Signals"/>.
+ * support.  Signals are described in detail [here][gobject-Signals].
  *
  * ## Floating references # {#floating-ref}
  *
@@ -580,16 +577,18 @@
  * the following sequence can be used:
  *
  * |[<!-- language="C" -->
- * /&ast; save floating state &ast;/
+ * // save floating state
  * gboolean was_floating = g_object_is_floating (object);
  * g_object_ref_sink (object);
- * /&ast; protected code portion &ast;/
- * ...;
- * /&ast; restore floating state &ast;/
+ * // protected code portion
+ *
+ * ...
+ *
+ * // restore floating state
  * if (was_floating)
  *   g_object_force_floating (object);
  * else
- *   g_object_unref (object); /&ast; release previously acquired reference &ast;/
+ *   g_object_unref (object); // release previously acquired reference
  * ]|
  */
 
@@ -1366,7 +1365,7 @@
  * struct _MyClosure
  * {
  *   GClosure closure;
- *   /&ast; extra data goes here &ast;/
+ *   // extra data goes here
  * };
  *
  * static void
@@ -1375,7 +1374,7 @@
  * {
  *   MyClosure *my_closure = (MyClosure *)closure;
  *
- *   /&ast; free extra data here &ast;/
+ *   // free extra data here
  * }
  *
  * MyClosure *my_closure_new (gpointer data)
@@ -1386,7 +1385,7 @@
  *   closure = g_closure_new_simple (sizeof (MyClosure), data);
  *   my_closure = (MyClosure *) closure;
  *
- *   /&ast; initialize extra data here &ast;/
+ *   // initialize extra data here
  *
  *   g_closure_add_finalize_notifier (closure, notify_data,
  *                                    my_closure_finalize);
@@ -1458,9 +1457,8 @@
  * Sets the meta marshaller of @closure.  A meta marshaller wraps
  * @closure->marshal and modifies the way it is called in some
  * fashion. The most common use of this facility is for C callbacks.
- * The same marshallers (generated by <link
- * linkend="glib-genmarshal">glib-genmarshal</link>) are used
- * everywhere, but the way that we get the callback function
+ * The same marshallers (generated by [glib-genmarshal][glib-genmarshal]),
+ * are used everywhere, but the way that we get the callback function
  * differs. In most cases we want to use @closure->callback, but in
  * other cases we want to use some different technique to retrieve the
  * callback function.
@@ -1489,7 +1487,7 @@
  * |[<!-- language="C" -->
  * closure = g_cclosure_new (cb_func, cb_data);
  * g_source_set_closure (source, closure);
- * g_closure_unref (closure); /&ast; GObject doesn't really need this &ast;/
+ * g_closure_unref (closure); // GObject doesn't really need this
  * ]|
  * Because g_source_set_closure() (and similar functions) take ownership of the
  * initial reference count, if it is unowned, we instead can write:
@@ -1610,10 +1608,9 @@
  *
  * Registers a new static enumeration type with the name @name.
  *
- * It is normally more convenient to let <link
- * linkend="glib-mkenums">glib-mkenums</link> generate a
- * my_enum_get_type() function from a usual C enumeration definition
- * than to write one yourself using g_enum_register_static().
+ * It is normally more convenient to let [glib-mkenums][glib-mkenums],
+ * generate a my_enum_get_type() function from a usual C enumeration
+ * definition  than to write one yourself using g_enum_register_static().
  *
  * Returns: The new type identifier.
  */
@@ -1678,10 +1675,9 @@
  *
  * Registers a new static flags type with the name @name.
  *
- * It is normally more convenient to let <link
- * linkend="glib-mkenums">glib-mkenums</link> generate a
- * my_flags_get_type() function from a usual C enumeration definition
- * than to write one yourself using g_flags_register_static().
+ * It is normally more convenient to let [glib-mkenums][glib-mkenums]
+ * generate a my_flags_get_type() function from a usual C enumeration
+ * definition than to write one yourself using g_flags_register_static().
  *
  * Returns: The new type identifier.
  */
@@ -2109,11 +2105,10 @@
  * g_object_force_floating:
  * @object: a #GObject
  *
- * This function is intended for #GObject implementations to re-enforce a
- * <link linkend="floating-ref">floating</link> object reference.
- * Doing this is seldom required: all
- * #GInitiallyUnowneds are created with a floating reference which
- * usually just needs to be sunken by calling g_object_ref_sink().
+ * This function is intended for #GObject implementations to re-enforce
+ * a [floating][floating-ref] object reference. Doing this is seldom
+ * required: all #GInitiallyUnowneds are created with a floating reference
+ * which usually just needs to be sunken by calling g_object_ref_sink().
  *
  * Since: 2.10
  */
@@ -2161,7 +2156,7 @@
  *                "obj-property", &objval,
  *                NULL);
  *
- *  /&ast; Do something with intval, strval, objval &ast;/
+ *  // Do something with intval, strval, objval
  *
  *  g_free (strval);
  *  g_object_unref (objval);
@@ -2295,8 +2290,7 @@
  * g_object_is_floating:
  * @object: (type GObject.Object): a #GObject
  *
- * Checks whether @object has a <link linkend="floating-ref">floating</link>
- * reference.
+ * Checks whether @object has a [floating][floating-ref] reference.
  *
  * Since: 2.10
  * Returns: %TRUE if @object has a floating reference
@@ -2432,8 +2426,7 @@
  * @object: (type GObject.Object): a #GObject
  *
  * Increase the reference count of @object, and possibly remove the
- * <link linkend="floating-ref">floating</link> reference, if @object
- * has a floating reference.
+ * [floating][floating-ref] reference, if @object has a floating reference.
  *
  * In other words, if the object is floating, then this call "assumes
  * ownership" of the floating reference, converting it to a normal
@@ -5305,7 +5298,7 @@
 /**
  * g_value_array_insert:
  * @value_array: #GValueArray to add an element to
- * @index_: insertion position, must be &lt;= value_array-&gt;n_values
+ * @index_: insertion position, must be <= value_array-&gt;n_values
  * @value: (allow-none): #GValue to copy into #GValueArray, or %NULL
  *
  * Insert a copy of @value at specified position into @value_array. If @value

@@ -259,8 +259,8 @@
  * the application first.  You should probably not call
  * g_application_activate() for yourself, however: just return -1 and
  * allow the default handler to do it for you.  This will ensure that
- * the <literal>--gapplication-service</literal> switch works properly
- * (ie: no activation in that case).
+ * the `--gapplication-service` switch works properly (i.e. no activation
+ * in that case).
  *
  * Note that this signal is emitted from the default implementation of
  * local_command_line().  If you override that function and don't
@@ -396,13 +396,12 @@
  *
  * An example of how to us this:
  * |[<!-- language="C" -->
- *     /&ast; Make sure we don't do unnecessary work if already cancelled &ast;/
+ *     // Make sure we don't do unnecessary work if already cancelled
  *     if (g_cancellable_set_error_if_cancelled (cancellable, error))
  *       return;
  *
- *     /&ast; Set up all the data needed to be able to
- *      &ast; handle cancellation of the operation
- *      &ast;/
+ *     // Set up all the data needed to be able to handle cancellation
+ *     // of the operation
  *     my_data = my_data_new (...);
  *
  *     id = 0;
@@ -411,13 +410,12 @@
  *     			      G_CALLBACK (cancelled_handler)
  *     			      data, NULL);
  *
- *     /&ast; cancellable operation here... &ast;/
+ *     // cancellable operation here...
  *
  *     g_cancellable_disconnect (cancellable, id);
  *
- *     /&ast; cancelled_handler is never called after this,
- *      &ast; it is now safe to free the data
- *      &ast;/
+ *     // cancelled_handler is never called after this, it is now safe
+ *     // to free the data
  *     my_data_free (my_data);
  * ]|
  *
@@ -857,7 +855,7 @@
  * connect signals to all interface proxies managed by @manager.
  *
  * This signal is emitted in the
- * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * [thread-default main context][g-main-context-push-thread-default]
  * that @manager was constructed in.
  *
  * Since: 2.30
@@ -879,7 +877,7 @@
  * connect signals to all interface proxies managed by @manager.
  *
  * This signal is emitted in the
- * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * [thread-default main context][g-main-context-push-thread-default]
  * that @manager was constructed in.
  *
  * Since: 2.30
@@ -1218,9 +1216,9 @@
  *
  * If #GDBusServer:flags contains %G_DBUS_SERVER_FLAGS_RUN_IN_THREAD
  * then the signal is emitted in a new thread dedicated to the
- * connection. Otherwise the signal is emitted in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread that @server was constructed in.
+ * connection. Otherwise the signal is emitted in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread that @server was constructed in.
  *
  * You are guaranteed that signal handlers for this signal runs
  * before incoming messages on @connection are processed. This means
@@ -2364,7 +2362,7 @@
  *
  *   requested = g_variant_get_int32 (value);
  *
- *   /&ast; Volume only goes from 0 to 10 &ast;/
+ *   // Volume only goes from 0 to 10
  *   if (0 <= requested && requested <= 10)
  *     g_simple_action_set_state (action, value);
  * }
@@ -3484,7 +3482,7 @@
  * SECTION:extensionpoints
  * @short_description: Extension Points
  * @include: gio.h
- * @see_also: <link linkend="extending-gio">Extending GIO</link>
+ * @see_also: [Extending GIO][extending-gio]
  *
  * #GIOExtensionPoint provides a mechanism for modules to extend the
  * functionality of the library or application that loaded it in an
@@ -3504,13 +3502,13 @@
  *  |[<!-- language="C" -->
  *  GIOExtensionPoint *ep;
  *
- *  /&ast; Register an extension point &ast;/
+ *  // Register an extension point
  *  ep = g_io_extension_point_register ("my-extension-point");
  *  g_io_extension_point_set_required_type (ep, MY_TYPE_EXAMPLE);
  *  ]|
  *
  *  |[<!-- language="C" -->
- *  /&ast; Implement an extension point &ast;/
+ *  // Implement an extension point
  *  G_DEFINE_TYPE (MyExampleImpl, my_example_impl, MY_TYPE_EXAMPLE);
  *  g_io_extension_point_implement ("my-extension-point",
  *                                  my_example_impl_get_type (),
@@ -3526,7 +3524,7 @@
  *
  *  To avoid opening all modules just to find out what extension
  *  points they implement, GIO makes use of a caching mechanism,
- *  see <link linkend="gio-querymodules">gio-querymodules</link>.
+ *  see [gio-querymodules][gio-querymodules].
  *  You are expected to run this command after installing a
  *  GIO module.
  *
@@ -3682,7 +3680,7 @@
  * (using g_file_get_path()) when using g_app_info_launch() even if
  * the application requested an URI and not a POSIX path. For example
  * for an desktop-file based application with Exec key `totem
- * &percnt;U` and a single URI, `sftp://foo/file.avi`, then
+ * \%U` and a single URI, `sftp://foo/file.avi`, then
  * `/home/user/.gvfs/sftp on foo/file.avi` will be passed. This will
  * only work if a set of suitable GIO extensions (such as gvfs 2.26
  * compiled with FUSE support), is available and operational; if this
@@ -3712,7 +3710,7 @@
  *
  * if (g_file_has_uri_scheme (file, "cdda"))
  *   {
- *     /&ast; do something special with uri &ast;/
+ *     // do something special with uri
  *   }
  * g_object_unref (file);
  * ]|
@@ -3863,29 +3861,14 @@
  * vfunc, to parse them in either the primary instance or the local instance,
  * respectively.
  *
- * <example id="gapplication-example-open"><title>Opening files with a GApplication</title>
- * <programlisting>
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-open.c">
- *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * </programlisting>
- * </example>
+ * For an example of opening files with a GApplication, see
+ * [gapplication-example-open.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-open.c).
  *
- * <example id="gapplication-example-actions"><title>A GApplication with actions</title>
- * <programlisting>
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-actions.c">
- *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * </programlisting>
- * </example>
+ * For an example of using actions with GApplication, see
+ * [gapplication-example-actions.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-actions.c).
  *
- * <example id="gapplication-example-dbushooks"><title>Using extra D-Bus hooks with a GApplication</title>
- * <programlisting>
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-dbushooks.c">
- *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
- * </xi:include>
- * </programlisting>
- * </example>
+ * For an example of using extra D-Bus hooks with GApplication, see
+ * [gapplication-example-dbushooks.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-dbushooks.c).
  */
 
 
@@ -3909,7 +3892,8 @@
  * The GApplicationCommandLine object can provide the @argc and @argv
  * parameters for use with the #GOptionContext command-line parsing API,
  * with the g_application_command_line_get_arguments() function. See
- * <xref linkend="gapplication-example-cmdline3"/> for an example.
+ * [gapplication-example-cmdline3.c][gapplication-example-cmdline3]
+ * for an example.
  *
  * The exit status of the originally-invoked process may be set and
  * messages can be printed to stdout or stderr of that process.  The
@@ -4016,10 +4000,10 @@
  * {
  *   GApplicationCommandLine *cmdline = data;
  *
- *   /&ast; do the heavy lifting in an idle &ast;/
+ *   // do the heavy lifting in an idle
  *
  *   g_application_command_line_set_exit_status (cmdline, 0);
- *   g_object_unref (cmdline); /&ast; this releases the application &ast;/
+ *   g_object_unref (cmdline); // this releases the application
  *
  *   return G_SOURCE_REMOVE;
  * }
@@ -4028,7 +4012,7 @@
  * command_line (GApplication            *application,
  *               GApplicationCommandLine *cmdline)
  * {
- *   /&ast; keep the application running until we are done with this commandline &ast;/
+ *   // keep the application running until we are done with this commandline
  *   g_application_hold (application);
  *
  *   g_object_set_data_full (G_OBJECT (cmdline),
@@ -4452,7 +4436,7 @@
  * @title: GDBusActionGroup
  * @short_description: A D-Bus GActionGroup implementation
  * @include: gio/gio.h
- * @see_also: <link linkend="gio-GActionGroup-exporter">GActionGroup exporter</link>
+ * @see_also: [GActionGroup exporter][gio-GActionGroup-exporter]
  *
  * #GDBusActionGroup is an implementation of the #GActionGroup
  * interface that can be used as a proxy for an action group
@@ -4468,7 +4452,7 @@
  *
  * Routines for working with D-Bus addresses. A D-Bus address is a string
  * like "unix:tmpdir=/tmp/my-app-name". The exact format of addresses
- * is explained in detail in the <link linkend="http://dbus.freedesktop.org/doc/dbus-specification.html&num;addresses">D-Bus specification</link>.
+ * is explained in detail in the [D-Bus specification](http://dbus.freedesktop.org/doc/dbus-specification.html\#addresses).
  */
 
 
@@ -4483,10 +4467,13 @@
  * signals you are interested in. Note that new signals may be added
  * in the future
  *
+ * ## Controlling Authentication # {#auth-observer}
+ *
  * For example, if you only want to allow D-Bus connections from
  * processes owned by the same uid as the server, you would use a
  * signal handler like the following:
- * <example id="auth-observer"><title>Controlling Authentication</title><programlisting>
+ *
+ * |[
  * static gboolean
  * on_authorize_authenticated_peer (GDBusAuthObserver *observer,
  *                                  GIOStream         *stream,
@@ -4507,7 +4494,7 @@
  *
  *   return authorized;
  * }
- * </programlisting></example>
+ * ]|
  */
 
 
@@ -4546,13 +4533,25 @@
  * #GError, the only valid thing you can do with that #GDBusConnection is to
  * free it with g_object_unref().
  *
- * <example id="gdbus-server"><title>D-Bus server example</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-server.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ * ## An example D-Bus server # {#gdbus-server}
  *
- * <example id="gdbus-subtree-server"><title>D-Bus subtree example</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-subtree.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ * Here is an example for a D-Bus server:
+ * [gdbus-example-server.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-server.c)
  *
- * <example id="gdbus-unix-fd-client"><title>D-Bus UNIX File Descriptor example</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-unix-fd-client.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ * ## An example for exporting a subtree # {#gdbus-subtree-server}
  *
- * <example id="gdbus-export"><title>Exporting a GObject</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-export.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ * Here is an example for exporting a subtree:
+ * [gdbus-example-subtree.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-subtree.c)
+ *
+ * ## An example for file descriptor passing # {#gdbus-unix-fd-client}
+ *
+ * Here is an example for passing UNIX file descriptors:
+ * [gdbus-unix-fd-client.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-unix-fd-client.c)
+ *
+ * ## An example for exporting a GObject # {#gdbus-export}
+ *
+ * Here is an example for exporting a #GObject:
+ * [gdbus-example-export.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-export.c)
  */
 
 
@@ -4581,7 +4580,7 @@
  * is typically done in the function returning the #GQuark for the
  * error domain:
  * |[<!-- language="C" -->
- * /&ast; foo-bar-error.h: &ast;/
+ * // foo-bar-error.h:
  *
  * #define FOO_BAR_ERROR (foo_bar_error_quark ())
  * GQuark foo_bar_error_quark (void);
@@ -4591,10 +4590,10 @@
  *   FOO_BAR_ERROR_FAILED,
  *   FOO_BAR_ERROR_ANOTHER_ERROR,
  *   FOO_BAR_ERROR_SOME_THIRD_ERROR,
- *   FOO_BAR_N_ERRORS /&ast;< skip >&ast;/
+ *   FOO_BAR_N_ERRORS / *< skip >* /
  * } FooBarError;
  *
- * /&ast; foo-bar-error.c: &ast;/
+ * // foo-bar-error.c:
  *
  * static const GDBusErrorEntry foo_bar_error_entries[] =
  * {
@@ -4603,7 +4602,7 @@
  *   {FOO_BAR_ERROR_SOME_THIRD_ERROR, "org.project.Foo.Bar.Error.SomeThirdError"},
  * };
  *
- * /&ast; Ensure that every error code has an associated D-Bus error name &ast;/
+ * // Ensure that every error code has an associated D-Bus error name
  * G_STATIC_ASSERT (G_N_ELEMENTS (foo_bar_error_entries) == FOO_BAR_N_ERRORS);
  *
  * GQuark
@@ -4673,7 +4672,7 @@
  * @title: GDBusMenuModel
  * @short_description: A D-Bus GMenuModel implementation
  * @include: gio/gio.h
- * @see_also: <link linkend="gio-GMenuModel-exporter">GMenuModel Exporter</link>
+ * @see_also: [GMenuModel Exporter][gio-GMenuModel-exporter]
  *
  * #GDBusMenuModel is an implementation of #GMenuModel that can be used
  * as a proxy for a menu model that is exported over D-Bus with
@@ -4714,7 +4713,8 @@
  *
  * Convenience API for owning bus names.
  *
- * <example id="gdbus-owning-names"><title>Simple application owning a name</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-own-name.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ * A simple example for owning a name can be found in
+ * [gdbus-example-own-name.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-own-name.c)
  */
 
 
@@ -4726,7 +4726,8 @@
  *
  * Convenience API for watching bus names.
  *
- * <example id="gdbus-watching-names"><title>Simple application watching a name</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-watch-name.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ * A simple example for watching a name can be found in
+ * [gdbus-example-watch-name.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-watch-name.c)
  */
 
 
@@ -4831,7 +4832,7 @@
  * #GDBusObjectManagerClient::interface-proxy-signal.
  *
  * Note that all callbacks and signals are emitted in the
- * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * [thread-default main context][g-main-context-push-thread-default]
  * that the #GDBusObjectManagerClient object was constructed
  * in. Additionally, the #GDBusObjectProxy and #GDBusProxy objects
  * originating from the #GDBusObjectManagerClient object will be created in
@@ -4917,20 +4918,20 @@
  * %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START is set).
  *
  * The generic #GDBusProxy::g-properties-changed and
- * #GDBusProxy::g-signal signals are not very convenient to work
- * with. Therefore, the recommended way of working with proxies is to
- * subclass #GDBusProxy, and have more natural properties and signals
- * in your derived class. See <xref linkend="gdbus-example-gdbus-codegen"/>
- * for how this can easily be done using the
- * <link linkend="gdbus-codegen">gdbus-codegen</link> tool.
+ * #GDBusProxy::g-signal signals are not very convenient to work with.
+ * Therefore, the recommended way of working with proxies is to subclass
+ * #GDBusProxy, and have more natural properties and signals in your derived
+ * class. This [example][gdbus-example-gdbus-codegen] shows how this can
+ * easily be done using the [gdbus-codegen][gdbus-codegen] tool.
  *
  * A #GDBusProxy instance can be used from multiple threads but note
  * that all signals (e.g. #GDBusProxy::g-signal, #GDBusProxy::g-properties-changed
  * and #GObject::notify) are emitted in the
- * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * [thread-default main context][g-main-context-push-thread-default]
  * of the thread where the instance was constructed.
  *
- * <example id="gdbus-wellknown-proxy"><title>GDBusProxy for a well-known-name</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-watch-proxy.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ * An example using a proxy for a well-known name can be found in
+ * [gdbus-example-watch-proxy.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-watch-proxy.c)
  */
 
 
@@ -4948,7 +4949,8 @@
  * To just export an object on a well-known name on a message bus, such as the
  * session or system bus, you should instead use g_bus_own_name().
  *
- * <example id="gdbus-peer-to-peer"><title>D-Bus peer-to-peer example</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-peer.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ * An example of peer-to-peer communication with G-DBus can be found
+ * in [gdbus-example-peer.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-peer.c).
  */
 
 
@@ -4971,7 +4973,7 @@
  * #GDesktopAppInfo is an implementation of #GAppInfo based on
  * desktop files.
  *
- * Note that `&lt;gio/gdesktopappinfo.h&gt;` belongs to the UNIX-specific
+ * Note that `<gio/gdesktopappinfo.h>` belongs to the UNIX-specific
  * GIO interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
  * file when using it.
  */
@@ -5055,13 +5057,11 @@
  * (see #GInputStream and #GOutputStream).
  *
  * To construct a #GFile, you can use:
- * <simplelist>
- * <member>g_file_new_for_path() if you have a path.</member>
- * <member>g_file_new_for_uri() if you have a URI.</member>
- * <member>g_file_new_for_commandline_arg() for a command line argument.</member>
- * <member>g_file_new_tmp() to create a temporary file from a template.</member>
- * <member>g_file_parse_name() from a UTF-8 string gotten from g_file_get_parse_name().</member>
- * </simplelist>
+ * - g_file_new_for_path() if you have a path.
+ * - g_file_new_for_uri() if you have a URI.
+ * - g_file_new_for_commandline_arg() for a command line argument.
+ * - g_file_new_tmp() to create a temporary file from a template.
+ * - g_file_parse_name() from a UTF-8 string gotten from g_file_get_parse_name().
  *
  * One way to think of a #GFile is as an abstraction of a pathname. For
  * normal files the system pathname is what is stored internally, but as
@@ -5110,11 +5110,9 @@
  * Some #GFile operations do not have synchronous analogs, as they may
  * take a very long time to finish, and blocking may leave an application
  * unusable. Notable cases include:
- * <simplelist>
- * <member>g_file_mount_mountable() to mount a mountable file.</member>
- * <member>g_file_unmount_mountable_with_operation() to unmount a mountable file.</member>
- * <member>g_file_eject_mountable_with_operation() to eject a mountable file.</member>
- * </simplelist>
+ * - g_file_mount_mountable() to mount a mountable file.
+ * - g_file_unmount_mountable_with_operation() to unmount a mountable file.
+ * - g_file_eject_mountable_with_operation() to eject a mountable file.
  *
  * ## Entity Tags # {#gfile-etag}
  *
@@ -5156,71 +5154,62 @@
  * and other possible implementation details (e.g., on a UNIX system, a file
  * attribute key will be registered for the user id for a given file).
  *
- * <para>
- * <table>
- * <title>GFileAttributes Default Namespaces</title>
- * <tgroup cols='2' align='left'><thead>
- * <row><entry>Namspace</entry><entry>Description</entry></row>
- * </thead>
- * <tbody>
- * <row><entry>"standard"</entry><entry>The "Standard" namespace. General file
- * information that any application may need should be put in this namespace.
- * Examples include the file's name, type, and size.</entry></row>
- * <row><entry>"etag"</entry><entry>The <link linkend="gfile-etag">"Entity Tag"</link>
- * namespace. Currently, the only key in this namespace is "value", which contains
- * the value of the current entity tag.</entry></row>
- * <row><entry>"id"</entry><entry>The "Identification" namespace. This
- * namespace is used by file managers and applications that list directories
- * to check for loops and to uniquely identify files.</entry></row>
- * <row><entry>"access"</entry><entry>The "Access" namespace. Used to check
- * if a user has the proper privilidges to access files and perform
- * file operations. Keys in this namespace are made to be generic
- * and easily understood, e.g. the "can_read" key is %TRUE if
- * the current user has permission to read the file. UNIX permissions and
- * NTFS ACLs in Windows should be mapped to these values.</entry></row>
- * <row><entry>"mountable"</entry><entry>The "Mountable" namespace. Includes
- * simple boolean keys for checking if a file or path supports mount operations, e.g.
- * mount, unmount, eject. These are used for files of type %G_FILE_TYPE_MOUNTABLE.</entry></row>
- * <row><entry>"time"</entry><entry>The "Time" namespace. Includes file
- * access, changed, created times. </entry></row>
- * <row><entry>"unix"</entry><entry>The "Unix" namespace. Includes UNIX-specific
- * information and may not be available for all files. Examples include
- * the UNIX "UID", "GID", etc.</entry></row>
- * <row><entry>"dos"</entry><entry>The "DOS" namespace. Includes DOS-specific
- * information and may not be available for all files. Examples include
- * "is_system" for checking if a file is marked as a system file, and "is_archive"
- * for checking if a file is marked as an archive file.</entry></row>
- * <row><entry>"owner"</entry><entry>The "Owner" namespace. Includes information
- * about who owns a file. May not be available for all file systems. Examples include
- * "user" for getting the user name of the file owner. This information is often mapped from
- * some backend specific data such as a unix UID.</entry></row>
- * <row><entry>"thumbnail"</entry><entry>The "Thumbnail" namespace. Includes
- * information about file thumbnails and their location within the file system. Examples of
- * keys in this namespace include "path" to get the location of a thumbnail, "failed"
- * to check if thumbnailing of the file failed, and "is-valid" to check if the thumbnail is
- * outdated.</entry></row>
- * <row><entry>"filesystem"</entry><entry>The "Filesystem" namespace. Gets information
- * about the file system where a file is located, such as its type, how much
- * space is left available, and the overall size of the file system.</entry></row>
- * <row><entry>"gvfs"</entry><entry>The "GVFS" namespace. Keys in this namespace
- * contain information about the current GVFS backend in use. </entry></row>
- * <row><entry>"xattr"</entry><entry>The "xattr" namespace. Gets information
- * about extended user attributes. See attr(5). The "user." prefix of the
- * extended user attribute name is stripped away when constructing keys in
- * this namespace, e.g. "xattr::mime_type" for the extended attribute with
- * the name "user.mime_type". Note that this information is only available
- * if GLib has been built with extended attribute support.</entry></row>
- * <row><entry>"xattr-sys"</entry><entry>The "xattr-sys" namespace.
- * Gets information about extended attributes which are not user-specific.
- * See attr(5). Note that this information is only available if GLib
- * has been built with extended attribute support.</entry></row>
- * <row><entry>"selinux"</entry><entry>The "SELinux" namespace. Includes
- * information about the SELinux context of files. Note that this information
- * is only available if GLib has been built with SELinux support.</entry></row>
- * </tbody>
- * </tgroup>
- * </table>
- * </para>
+ * ## Default Namespaces
+ *
+ * - `"standard"`: The "Standard" namespace. General file information that
+ *   any application may need should be put in this namespace. Examples
+ *   include the file's name, type, and size.
+ * - `"etag`: The [Entity Tag][gfile-etag] namespace. Currently, the only key
+ *   in this namespace is "value", which contains the value of the current
+ *   entity tag.
+ * - `"id"`: The "Identification" namespace. This namespace is used by file
+ *   managers and applications that list directories to check for loops and
+ *   to uniquely identify files.
+ * - `"access"`: The "Access" namespace. Used to check if a user has the
+ *   proper privileges to access files and perform file operations. Keys in
+ *   this namespace are made to be generic and easily understood, e.g. the
+ *   "can_read" key is %TRUE if the current user has permission to read the
+ *   file. UNIX permissions and NTFS ACLs in Windows should be mapped to
+ *   these values.
+ * - `"mountable"`: The "Mountable" namespace. Includes simple boolean keys
+ *   for checking if a file or path supports mount operations, e.g. mount,
+ *   unmount, eject. These are used for files of type %G_FILE_TYPE_MOUNTABLE.
+ * - `"time"`: The "Time" namespace. Includes file access, changed, created
+ *   times.
+ * - `"unix"`: The "Unix" namespace. Includes UNIX-specific information and
+ *   may not be available for all files. Examples include the UNIX "UID",
+ *   "GID", etc.
+ * - `"dos"`: The "DOS" namespace. Includes DOS-specific information and may
+ *   not be available for all files. Examples include "is_system" for checking
+ *   if a file is marked as a system file, and "is_archive" for checking if a
+ *   file is marked as an archive file.
+ * - `"owner"`: The "Owner" namespace. Includes information about who owns a
+ *   file. May not be available for all file systems. Examples include "user"
+ *   for getting the user name of the file owner. This information is often
+ *   mapped from some backend specific data such as a UNIX UID.
+ * - `"thumbnail"`: The "Thumbnail" namespace. Includes information about file
+ *   thumbnails and their location within the file system. Examples of keys in
+ *   this namespace include "path" to get the location of a thumbnail, "failed"
+ *   to check if thumbnailing of the file failed, and "is-valid" to check if
+ *   the thumbnail is outdated.
+ * - `"filesystem"`: The "Filesystem" namespace. Gets information about the
+ *   file system where a file is located, such as its type, how much space is
+ *   left available, and the overall size of the file system.
+ * - `"gvfs"`: The "GVFS" namespace. Keys in this namespace contain information
+ *   about the current GVFS backend in use.
+ * - `"xattr"`: The "xattr" namespace. Gets information about extended
+ *   user attributes. See attr(5). The "user." prefix of the extended user
+ *   attribute name is stripped away when constructing keys in this namespace,
+ *   e.g. "xattr::mime_type" for the extended attribute with the name
+ *   "user.mime_type". Note that this information is only available if
+ *   GLib has been built with extended attribute support.
+ * - `"xattr-sys"`: The "xattr-sys" namespace. Gets information about
+ *   extended attributes which are not user-specific. See attr(5). Note
+ *   that this information is only available if GLib has been built with
+ *   extended attribute support.
+ * - `"selinux"`: The "SELinux" namespace. Includes information about the
+ *   SELinux context of files. Note that this information is only available
+ *   if GLib has been built with SELinux support.
  *
  * Please note that these are not all of the possible namespaces.
  * More namespaces can be added from GIO modules or by individual applications.
@@ -5229,77 +5218,10 @@
  * <!-- TODO: Implementation note about using extended attributes on supported
  * file systems -->
  *
- * <para><table>
- * <title>GFileAttributes Built-in Keys and Value Types</title>
- * <tgroup cols='3' align='left'><thead>
- * <row><entry>Enum Value</entry><entry>Namespace::Key</entry><entry>Value Type</entry></row>
- * </thead><tbody>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_TYPE</entry><entry>standard::type</entry><entry>uint32 (#GFileType)</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN</entry><entry>standard::is-hidden</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_IS_BACKUP</entry><entry>standard::is-backup</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK</entry><entry>standard::is-symlink</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_IS_VIRTUAL</entry><entry>standard::is-virtual</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_NAME</entry><entry>standard::name</entry><entry>byte string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME</entry><entry>standard::display-name</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME</entry><entry>standard::edit-name</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_ICON</entry><entry>standard::icon</entry><entry>object (#GIcon)</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE</entry><entry>standard::content-type</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE</entry><entry>standard::fast-content-type</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_SIZE</entry><entry>standard::size</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_ALLOCATED_SIZE</entry><entry>standard::allocated-size</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET</entry><entry>standard::symlink-target</entry><entry>byte string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_TARGET_URI</entry><entry>standard::target-uri</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_SORT_ORDER</entry><entry>standard::sort-order</entry><entry>int32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ETAG_VALUE</entry><entry>etag::value</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ID_FILE</entry><entry>id::file</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ID_FILESYSTEM</entry><entry>id::filesystem</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ACCESS_CAN_READ</entry><entry>access::can-read</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE</entry><entry>access::can-write</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE</entry><entry>access::can-execute</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE</entry><entry>access::can-delete</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH</entry><entry>access::can-trash</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME</entry><entry>access::can-rename</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_MOUNTABLE_CAN_MOUNT</entry><entry>mountable::can-mount</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT</entry><entry>mountable::can-unmount</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT</entry><entry>mountable::can-eject</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE</entry><entry>mountable::unix-device</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE_FILE</entry><entry>mountable::unix-device-file</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_MOUNTABLE_HAL_UDI</entry><entry>mountable::hal-udi</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_TIME_MODIFIED</entry><entry>time::modified</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC</entry><entry>time::modified-usec</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_TIME_ACCESS</entry><entry>time::access</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_TIME_ACCESS_USEC</entry><entry>time::access-usec</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_TIME_CHANGED</entry><entry>time::changed</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_TIME_CHANGED_USEC</entry><entry>time::changed-usec</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_TIME_CREATED</entry><entry>time::created</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_TIME_CREATED_USEC</entry><entry>time::created-usec</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_DEVICE</entry><entry>unix::device</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_INODE</entry><entry>unix::inode</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_MODE</entry><entry>unix::mode</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_NLINK</entry><entry>unix::nlink</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_UID</entry><entry>unix::uid</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_GID</entry><entry>unix::gid</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_RDEV</entry><entry>unix::rdev</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_BLOCK_SIZE</entry><entry>unix::block-size</entry><entry>uint32</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_BLOCKS</entry><entry>unix::blocks</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_UNIX_IS_MOUNTPOINT</entry><entry>unix::is-mountpoint</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_DOS_IS_ARCHIVE</entry><entry>dos::is-archive</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_DOS_IS_SYSTEM</entry><entry>dos::is-system</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_OWNER_USER</entry><entry>owner::user</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_OWNER_USER_REAL</entry><entry>owner::user-real</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_OWNER_GROUP</entry><entry>owner::group</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_THUMBNAIL_PATH</entry><entry>thumbnail::path</entry><entry>bytestring</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_THUMBNAILING_FAILED</entry><entry>thumbnail::failed</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_THUMBNAIL_IS_VALID</entry><entry>thumbnail::is-valid</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_PREVIEW_ICON</entry><entry>preview::icon</entry><entry>object (#GIcon)</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_FILESYSTEM_SIZE</entry><entry>filesystem::size</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_FILESYSTEM_FREE</entry><entry>filesystem::free</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_FILESYSTEM_USED</entry><entry>filesystem::used</entry><entry>uint64</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_FILESYSTEM_TYPE</entry><entry>filesystem::type</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_FILESYSTEM_READONLY</entry><entry>filesystem::readonly</entry><entry>boolean</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_GVFS_BACKEND</entry><entry>gvfs::backend</entry><entry>string</entry></row>
- * <row><entry>%G_FILE_ATTRIBUTE_SELINUX_CONTEXT</entry><entry>selinux::context</entry><entry>string</entry></row>
- * </tbody></tgroup></table></para>
+ * ## Default Keys
+ *
+ * For a list of the built-in keys and their types, see the
+ * [GFileInfo][GFileInfo] documentation.
  *
  * Note that there are no predefined keys in the "xattr" and "xattr-sys"
  * namespaces. Keys for the "xattr" namespace are constructed by stripping
@@ -5321,7 +5243,7 @@
  * #GFileDescriptorBased is implemented by streams (implementations of
  * #GInputStream or #GOutputStream) that are based on file descriptors.
  *
- * Note that `&lt;gio/gfiledescriptorbased.h&gt;` belongs to the UNIX-specific
+ * Note that `<gio/gfiledescriptorbased.h>` belongs to the UNIX-specific
  * GIO interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
  * file when using it.
  *
@@ -5378,14 +5300,14 @@
  * SECTION:gfileinfo
  * @short_description: File Information and Attributes
  * @include: gio/gio.h
- * @see_also: #GFile, <link linkend="gio-GFileAttribute">GFileAttribute</link>
+ * @see_also: #GFile, [GFileAttribute][gio-GFileAttribute]
  *
  * Functionality for manipulating basic metadata for files. #GFileInfo
  * implements methods for getting information that all files should
  * contain, and allows for manipulation of extended attributes.
  *
- * See <link linkend="gio-GFileAttribute">GFileAttribute</link> for more
- * information on how GIO handles file attributes.
+ * See [GFileAttribute][gio-GFileAttribute for more information on how
+ * GIO handles file attributes.
  *
  * To obtain a #GFileInfo for a #GFile, use g_file_query_info() (or its
  * async variant). To obtain a #GFileInfo for a file input or output
@@ -5469,9 +5391,9 @@
  *
  * To get informed about changes to the file or directory you are
  * monitoring, connect to the #GFileMonitor::changed signal. The
- * signal will be emitted in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * context</link> of the thread that the monitor was created in
+ * signal will be emitted in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread that the monitor was created in
  * (though if the global default main context is blocked, this may
  * cause notifications to be blocked even if the thread-default
  * context is still running).
@@ -5721,9 +5643,9 @@
  * To close a stream use g_io_stream_close() which will close the common
  * stream object and also the individual substreams. You can also close
  * the substreams themselves. In most cases this only marks the
- * substream as closed, so further I/O on it fails. However, some streams
- * may support "half-closed" states where one direction of the stream
- * is actually shut down.
+ * substream as closed, so further I/O on it fails but common state in the
+ * #GIOStream may still be open. However, some streams may support
+ * "half-closed" states where one direction of the stream is actually shut down.
  *
  * Since: 2.22
  */
@@ -5823,8 +5745,7 @@
  * it (or, in the case of the 'root' menu, is defined by the context
  * in which it is used).
  *
- * As an example, consider the visible portions of the menu in
- * <xref linkend="menu-example"/>.
+ * As an example, consider the visible portions of this menu:
  *
  * ## An example menu # {#menu-example}
  *
@@ -5842,7 +5763,7 @@
  * - the Sources section (containing 2 items)
  * - the Markup section (containing 2 items)
  *
- * <xref linkend="menu-model"/> illustrates the conceptual connection between
+ * The [example][menu-model] illustrates the conceptual connection between
  * these 8 menus. Each large block in the figure represents a menu and the
  * smaller blocks within the large block represent items in that menu. Some
  * items contain references to other menus.
@@ -5851,8 +5772,8 @@
  *
  * ![](menu-model.png)
  *
- * Notice that the separators visible in <xref linkend="menu-example"/>
- * appear nowhere in <xref linkend="menu-model"/>. This is because
+ * Notice that the separators visible in the [example][menu-example]
+ * appear nowhere in the [menu model][menu-model]. This is because
  * separators are not explicitly represented in the menu model. Instead,
  * a separator is inserted between any two non-empty sections of a menu.
  * Section items can have labels just like any other item. In that case,
@@ -5863,12 +5784,10 @@
  * outside the application. Examples include global menus, jumplists,
  * dash boards, etc. To support such uses, it is necessary to 'export'
  * information about actions and their representation in menus, which
- * is exactly what the
- * <link linkend="gio-GActionGroup-exporter">GActionGroup exporter</link>
- * and the
- * <link linkend="gio-GMenuModel-exporter">GMenuModel exporter</link>
- * do for #GActionGroup and #GMenuModel. The client-side counterparts
- * to make use of the exported information are #GDBusActionGroup and
+ * is exactly what the [GActionGroup exporter][gio-GActionGroup-exporter]
+ * and the [GMenuModel exporter][gio-GMenuModel-exporter] do for
+ * #GActionGroup and #GMenuModel. The client-side counterparts to
+ * make use of the exported information are #GDBusActionGroup and
  * #GDBusMenuModel.
  *
  * The API of #GMenuModel is very generic, with iterators for the
@@ -5998,7 +5917,7 @@
  * @short_description: System networking includes
  * @include: gio/gnetworking.h
  *
- * The `&lt;gio/gnetworking.h&gt;` header can be included to get
+ * The `<gio/gnetworking.h>` header can be included to get
  * various low-level networking-related system headers, automatically
  * taking care of certain portability issues for you.
  *
@@ -6195,10 +6114,9 @@
  * the property.
  *
  * The general idea here is to reduce the number of locations where a
- * particular piece of state is kept (and therefore has to be
- * synchronised between).  #GPropertyAction does not have a separate
- * state that is kept in sync with the property value -- its state
- * <em>is</em> the property value.
+ * particular piece of state is kept (and therefore has to be synchronised
+ * between). #GPropertyAction does not have a separate state that is kept
+ * in sync with the property value -- its state is the property value.
  *
  * For example, it might be useful to create a #GAction corresponding to
  * the "visible-child-name" property of a #GtkStack so that the current
@@ -6317,7 +6235,7 @@
  * icons, etc. These are often shipped as files in `$datadir/appname`, or
  * manually included as literal strings in the code.
  *
- * The #GResource API and the <link linkend="glib-compile-resources">glib-compile-resources</link> program
+ * The #GResource API and the [glib-compile-resources][glib-compile-resources] program
  * provide a convenient and efficient alternative to this which has some nice properties. You
  * maintain the files as normal files, so its easy to edit them, but during the build the files
  * are combined into a binary bundle that is linked into the executable. This means that loading
@@ -6346,7 +6264,7 @@
  * set to the full path to the gdk-pixbuf-pixdata executable; otherwise the resource compiler will
  * abort.
  *
- * Resource bundles are created by the <link linkend="glib-compile-resources">glib-compile-resources</link> program
+ * Resource bundles are created by the [glib-compile-resources][glib-compile-resources] program
  * which takes an xml file that describes the bundle, and a set of files that the xml references. These
  * are combined into a binary resource bundle.
  *
@@ -6372,7 +6290,7 @@
  * Note that all resources in the process share the same namespace, so use java-style
  * path prefixes (like in the above example) to avoid conflicts.
  *
- * You can then use <link linkend="glib-compile-resources">glib-compile-resources</link> to compile the xml to a
+ * You can then use [glib-compile-resources][glib-compile-resources] to compile the xml to a
  * binary bundle that you can load with g_resource_load(). However, its more common to use the --generate-source and
  * --generate-header arguments to create a source file and header to link directly into your application.
  *
@@ -6472,22 +6390,22 @@
  * Similar to GConf, the default values in GSettings schemas can be
  * localized, but the localized values are stored in gettext catalogs
  * and looked up with the domain that is specified in the
- * gettext-domain attribute of the &lt;schemalist&gt; or &lt;schema&gt;
+ * gettext-domain attribute of the <schemalist> or <schema>
  * elements and the category that is specified in the l10n attribute of
- * the &lt;key&gt; element.
+ * the <key> element.
  *
  * GSettings uses schemas in a compact binary form that is created
- * by the <link linkend="glib-compile-schemas">glib-compile-schemas</link>
+ * by the [glib-compile-schemas][glib-compile-schemas]
  * utility. The input is a schema description in an XML format.
  *
  * A DTD for the gschema XML format can be found here:
  * [gschema.dtd](https://git.gnome.org/browse/glib/tree/gio/gschema.dtd)
  *
- * The <link linkend="glib-compile-schemas">glib-compile-schemas</link>
- * tool expects schema files to have the extension `.gschema.xml`.
+ * The [glib-compile-schemas][glib-compile-schemas] tool expects schema
+ * files to have the extension `.gschema.xml`.
  *
  * At runtime, schemas are identified by their id (as specified in the
- * id attribute of the &lt;schema&gt; element). The convention for schema
+ * id attribute of the <schema> element). The convention for schema
  * ids is to use a dotted name, similar in style to a D-Bus bus name,
  * e.g. "org.gnome.SessionManager". In particular, if the settings are
  * for a specific service that owns a D-Bus bus name, the D-Bus bus name
@@ -6496,13 +6414,12 @@
  * StudlyCaps, e.g. "org.gnome.font-rendering".
  *
  * In addition to #GVariant types, keys can have types that have
- * enumerated types. These can be described by a &lt;choice&gt;,
- * &lt;enum&gt; or &lt;flags&gt; element, see
- * <xref linkend="schema-enumerated"/>. The underlying type of
- * such a key is string, but you can use g_settings_get_enum(),
- * g_settings_set_enum(), g_settings_get_flags(), g_settings_set_flags()
- * access the numeric values corresponding to the string value of enum
- * and flags keys.
+ * enumerated types. These can be described by a <choice>,
+ * <enum> or <flags> element, as seen in the
+ * [example][schema-enumerated]. The underlying type of such a key
+ * is string, but you can use g_settings_get_enum(), g_settings_set_enum(),
+ * g_settings_get_flags(), g_settings_set_flags() access the numeric values
+ * corresponding to the string value of enum and flags keys.
  *
  * An example for default value:
  * |[
@@ -6577,11 +6494,11 @@
  * an application. Sometimes, it is necessary for a vendor or distributor
  * to adjust these defaults. Since patching the XML source for the schema
  * is inconvenient and error-prone,
- * <link linkend="glib-compile-schemas">glib-compile-schemas</link> reads
- * so-called 'vendor override' files. These are keyfiles in the same
- * directory as the XML schema sources which can override default values.
- * The schema id serves as the group name in the key file, and the values
- * are expected in serialized GVariant form, as in the following example:
+ * [glib-compile-schemas][glib-compile-schemas] reads so-called vendor
+ * override' files. These are keyfiles in the same directory as the XML
+ * schema sources which can override default values. The schema id serves
+ * as the group name in the key file, and the values are expected in
+ * serialized GVariant form, as in the following example:
  * |[
  *     [org.gtk.Example]
  *     key1='string'
@@ -6820,9 +6737,9 @@
  * or it can use #GThreads.
  * g_simple_async_result_complete() will finish an I/O task directly
  * from the point where it is called. g_simple_async_result_complete_in_idle()
- * will finish it from an idle handler in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * context</link>. g_simple_async_result_run_in_thread() will run the
+ * will finish it from an idle handler in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * . g_simple_async_result_run_in_thread() will run the
  * job in a separate thread and then deliver the result to the
  * thread-default main context.
  *
@@ -6849,9 +6766,8 @@
  * baked_cb (Cake    *cake,
  *           gpointer user_data)
  * {
- *   /&ast; In this example, this callback is not given a reference to the cake, so
- *    &ast; the GSimpleAsyncResult has to take a reference to it.
- *    &ast;/
+ *   // In this example, this callback is not given a reference to the cake,
+ *   // so the GSimpleAsyncResult has to take a reference to it.
  *   GSimpleAsyncResult *result = user_data;
  *
  *   if (cake == NULL)
@@ -6865,12 +6781,11 @@
  *                                                g_object_unref);
  *
  *
- *   /&ast; In this example, we assume that baked_cb is called as a callback from
- *    &ast; the mainloop, so it's safe to complete the operation synchronously here.
- *    &ast; If, however, _baker_prepare_cake () might call its callback without
- *    &ast; first returning to the mainloop — inadvisable, but some APIs do so —
- *    &ast; we would need to use g_simple_async_result_complete_in_idle().
- *    &ast;/
+ *   // In this example, we assume that baked_cb is called as a callback from
+ *   // the mainloop, so it's safe to complete the operation synchronously here.
+ *   // If, however, _baker_prepare_cake () might call its callback without
+ *   // first returning to the mainloop — inadvisable, but some APIs do so —
+ *   // we would need to use g_simple_async_result_complete_in_idle().
  *   g_simple_async_result_complete (result);
  *   g_object_unref (result);
  * }
@@ -6909,9 +6824,8 @@
  *                                                  g_object_unref);
  *       g_simple_async_result_complete_in_idle (simple);
  *       g_object_unref (simple);
- *       /&ast; Drop the reference returned by _baker_get_cached_cake(); the
- *        &ast; GSimpleAsyncResult has taken its own reference.
- *        &ast;/
+ *       // Drop the reference returned by _baker_get_cached_cake();
+ *       // the GSimpleAsyncResult has taken its own reference.
  *       g_object_unref (cake);
  *       return;
  *     }
@@ -6981,7 +6895,7 @@
  * SECTION:gsocket
  * @short_description: Low-level socket object
  * @include: gio/gio.h
- * @see_also: #GInitable, <link linkend="gio-gnetworking.h">gnetworking.h</link>
+ * @see_also: #GInitable, [<gnetworking.h>][gio-gnetworking.h]
  *
  * A #GSocket is a low-level networking primitive. It is a more or less
  * direct mapping of the BSD socket API in a portable GObject based API.
@@ -7098,10 +7012,9 @@
  *   enumerator = g_socket_connectable_enumerate (addr);
  *   g_object_unref (addr);
  *
- *   /&ast; Try each sockaddr until we succeed. Record the first
- *    &ast; connection error, but not any further ones (since they'll probably
- *    &ast; be basically the same as the first).
- *    &ast;/
+ *   // Try each sockaddr until we succeed. Record the first connection error,
+ *   // but not any further ones (since they'll probably be basically the same
+ *   // as the first).
  *   while (!conn && (sockaddr = g_socket_address_enumerator_next (enumerator, cancellable, error))
  *     {
  *       conn = connect_to_sockaddr (sockaddr, conn_error ? NULL : &conn_error);
@@ -7113,18 +7026,15 @@
  *     {
  *       if (conn_error)
  *         {
- *           /&ast; We couldn't connect to the first address, but we succeeded
- *            &ast; in connecting to a later address.
- *            &ast;/
+ *           // We couldn't connect to the first address, but we succeeded
+ *           // in connecting to a later address.
  *           g_error_free (conn_error);
  *         }
  *       return conn;
  *     }
  *   else if (error)
  *     {
- *       /&ast; Either the initial lookup failed, or else the caller
- *        &ast; cancelled us.
- *        &ast;/
+ *       /// Either initial lookup failed, or else the caller cancelled us.
  *       if (conn_error)
  *         g_error_free (conn_error);
  *       return NULL;
@@ -7157,6 +7067,10 @@
  * connection factory, and it is possible for 3rd parties to register
  * custom socket connection types for specific combination of socket
  * family/type/protocol using g_socket_connection_factory_register_type().
+ *
+ * To close a #GSocketConnection, use g_io_stream_close(). Closing both
+ * substreams of the #GIOStream separately will not close the underlying
+ * #GSocket.
  *
  * Since: 2.22
  */
@@ -7240,9 +7154,9 @@
  * If you are interested in writing connection handlers that contain
  * blocking code then see #GThreadedSocketService.
  *
- * The socket service runs on the main loop of the <link
- * linkend="g-main-context-push-thread-default-context">thread-default
- * context</link> of the thread it is created in, and is not
+ * The socket service runs on the main loop of the
+ * [thread-default context][g-main-context-push-thread-default-context]
+ * of the thread it is created in, and is not
  * threadsafe in general. However, the calls to start and stop the
  * service are thread-safe so these can be used from threads that
  * handle incoming clients.
@@ -7330,8 +7244,8 @@
  * change of working directory, child setup functions, etc).
  *
  * A typical use of #GSubprocess will involve calling
- * g_subprocess_new(), followed by g_subprocess_wait() or
- * g_subprocess_wait_sync().  After the process exits, the status can be
+ * g_subprocess_new(), followed by g_subprocess_wait_async() or
+ * g_subprocess_wait().  After the process exits, the status can be
  * checked using functions such as g_subprocess_get_if_exited() (which
  * are similar to the familiar WIFEXITED-style POSIX macros).
  *
@@ -7417,7 +7331,7 @@
  *       if (!cake_decorate (cake, decoration->frosting, decoration->message, &error))
  *         {
  *           g_object_unref (cake);
- *           /&ast; g_task_return_error() takes ownership of error &ast;/
+ *           // g_task_return_error() takes ownership of error
  *           g_task_return_error (task, error);
  *           g_object_unref (task);
  *           return;
@@ -7454,7 +7368,7 @@
  *       cake = _baker_get_cached_cake (self, radius, flavor, frosting, message);
  *       if (cake != NULL)
  *         {
- *           /&ast; _baker_get_cached_cake() returns a reffed cake &ast;/
+ *           // _baker_get_cached_cake() returns a reffed cake
  *           g_task_return_pointer (task, cake, g_object_unref);
  *           g_object_unref (task);
  *           return;
@@ -7483,14 +7397,13 @@
  *
  * #GTask also tries to simplify asynchronous operations that
  * internally chain together several smaller asynchronous
- * operations. g_task_get_cancellable(), g_task_get_context(), and
- * g_task_get_priority() allow you to get back the task's
- * #GCancellable, #GMainContext, and <link
- * linkend="io-priority">I/O priority</link> when starting a new
- * subtask, so you don't have to keep track of them yourself.
- * g_task_attach_source() simplifies the case of waiting for a
- * source to fire (automatically using the correct #GMainContext
- * and priority).
+ * operations. g_task_get_cancellable(), g_task_get_context(),
+ * and g_task_get_priority() allow you to get back the task's
+ * #GCancellable, #GMainContext, and [I/O priority][io-priority]
+ * when starting a new subtask, so you don't have to keep track
+ * of them yourself. g_task_attach_source() simplifies the case
+ * of waiting for a source to fire (automatically using the correct
+ * #GMainContext and priority).
  *
  * Here is an example for chained asynchronous operations:
  *   |[<!-- language="C" -->
@@ -7525,9 +7438,8 @@
  *           return;
  *         }
  *
- *       /&ast; baking_data_free() will drop its ref on the cake, so
- *        &ast; we have to take another here to give to the caller.
- *        &ast;/
+ *       // baking_data_free() will drop its ref on the cake, so we have to
+ *       // take another here to give to the caller.
  *       g_task_return_pointer (result, g_object_ref (cake), g_object_unref);
  *       g_object_unref (task);
  *     }
@@ -7561,7 +7473,7 @@
  *
  *       bd->cake = cake;
  *
- *       /&ast; Bail out now if the user has already cancelled &ast;/
+ *       // Bail out now if the user has already cancelled
  *       if (g_task_return_error_if_cancelled (task))
  *         {
  *           g_object_unref (task);
@@ -7575,9 +7487,8 @@
  *           GSource *source;
  *
  *           source = cake_decorator_wait_source_new (cake);
- *           /&ast; Attach @source to @task's GMainContext and have it call
- *            &ast; decorator_ready() when it is ready.
- *            &ast;/
+ *           // Attach @source to @task's GMainContext and have it call
+ *           // decorator_ready() when it is ready.
  *           g_task_attach_source (task, source,
  *                                 G_CALLBACK (decorator_ready));
  *           g_source_unref (source);
@@ -7733,22 +7644,20 @@
  *           return;
  *         }
  *
- *       /&ast; If the task has already been cancelled, then we don't
- *        &ast; want to add the cake to the cake cache. Likewise, we don't
- *        &ast; want to have the task get cancelled in the middle of
- *        &ast; updating the cache. g_task_set_return_on_cancel() will
- *        &ast; return %TRUE here if it managed to disable return-on-cancel,
- *        &ast; or %FALSE if the task was cancelled before it could.
- *        &ast;/
+ *       // If the task has already been cancelled, then we don't want to add
+ *       // the cake to the cake cache. Likewise, we don't  want to have the
+ *       // task get cancelled in the middle of updating the cache.
+ *       // g_task_set_return_on_cancel() will return %TRUE here if it managed
+ *       // to disable return-on-cancel, or %FALSE if the task was cancelled
+ *       // before it could.
  *       if (g_task_set_return_on_cancel (task, FALSE))
  *         {
- *           /&ast; If the caller cancels at this point, their
- *            &ast; GAsyncReadyCallback won't be invoked until we return,
- *            &ast; so we don't have to worry that this code will run at
- *            &ast; the same time as that code does. But if there were
- *            &ast; other functions that might look at the cake cache,
- *            &ast; then we'd probably need a GMutex here as well.
- *            &ast;/
+ *           // If the caller cancels at this point, their
+ *           // GAsyncReadyCallback won't be invoked until we return,
+ *           // so we don't have to worry that this code will run at
+ *           // the same time as that code does. But if there were
+ *           // other functions that might look at the cake cache,
+ *           // then we'd probably need a GMutex here as well.
  *           baker_add_cake_to_cache (baker, cake);
  *           g_task_return_pointer (task, cake, g_object_unref);
  *         }
@@ -7768,7 +7677,8 @@
  *       GTask *task;
  *
  *       cake_data = g_slice_new (CakeData);
- *       /&ast; ... &ast;/
+ *
+ *       ...
  *
  *       task = g_task_new (self, cancellable, callback, user_data);
  *       g_task_set_task_data (task, cake_data, (GDestroyNotify) cake_data_free);
@@ -7790,7 +7700,8 @@
  *       Cake *cake;
  *
  *       cake_data = g_slice_new (CakeData);
- *       /&ast; ... &ast;/
+ *
+ *       ...
  *
  *       task = g_task_new (self, cancellable, NULL, NULL);
  *       g_task_set_task_data (task, cake_data, (GDestroyNotify) cake_data_free);
@@ -7812,7 +7723,7 @@
  *   abuse of g_simple_async_result_set_op_res_gpointer() for the same
  *   purpose with #GSimpleAsyncResult.
  * - In addition to the task data, #GTask also keeps track of the
- *   <link linkend="io-priority">priority</link>, #GCancellable, and
+ *   [priority][io-priority], #GCancellable, and
  *   #GMainContext associated with the task, so tasks that consist of
  *   a chain of simpler asynchronous operations will have easy access
  *   to those values when starting each sub-task.
@@ -8187,7 +8098,7 @@
  * It contains functions to do some of the UNIX socket specific
  * functionality like passing file descriptors.
  *
- * Note that `&lt;gio/gunixconnection.h&gt;` belongs to the UNIX-specific
+ * Note that `<gio/gunixconnection.h>` belongs to the UNIX-specific
  * GIO interfaces, thus you have to use the `gio-unix-2.0.pc`
  * pkg-config file when using it.
  *
@@ -8230,7 +8141,7 @@
  * the %G_SOCKET_ADDRESS_UNIX family by using g_socket_send_message()
  * and received using g_socket_receive_message().
  *
- * Note that `&lt;gio/gunixfdlist.h&gt;` belongs to the UNIX-specific GIO
+ * Note that `<gio/gunixfdlist.h>` belongs to the UNIX-specific GIO
  * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
  * file when using it.
  */
@@ -8253,7 +8164,7 @@
  * stream-oriented UNIX sockets, see g_unix_connection_send_fd() and
  * g_unix_connection_receive_fd().
  *
- * Note that `&lt;gio/gunixfdmessage.h&gt;` belongs to the UNIX-specific GIO
+ * Note that `<gio/gunixfdmessage.h>` belongs to the UNIX-specific GIO
  * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
  * file when using it.
  */
@@ -8271,7 +8182,7 @@
  * asynchronous I/O. If it refers to a regular file, it will fall back
  * to doing asynchronous I/O in another thread.)
  *
- * Note that `&lt;gio/gunixinputstream.h&gt;` belongs to the UNIX-specific GIO
+ * Note that `<gio/gunixinputstream.h>` belongs to the UNIX-specific GIO
  * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
  * file when using it.
  */
@@ -8284,7 +8195,7 @@
  *
  * Routines for managing mounted UNIX mount points and paths.
  *
- * Note that `&lt;gio/gunixmounts.h&gt;` belongs to the UNIX-specific GIO
+ * Note that `<gio/gunixmounts.h>` belongs to the UNIX-specific GIO
  * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
  * file when using it.
  */
@@ -8302,7 +8213,7 @@
  * asynchronous I/O. If it refers to a regular file, it will fall back
  * to doing asynchronous I/O in another thread.)
  *
- * Note that `&lt;gio/gunixoutputstream.h&gt;` belongs to the UNIX-specific GIO
+ * Note that `<gio/gunixoutputstream.h>` belongs to the UNIX-specific GIO
  * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config file
  * when using it.
  */
@@ -8324,7 +8235,7 @@
  * errors. You can use g_unix_socket_address_abstract_names_supported()
  * to see if abstract names are supported.
  *
- * Note that `&lt;gio/gunixsocketaddress.h&gt;` belongs to the UNIX-specific GIO
+ * Note that `<gio/gunixsocketaddress.h>` belongs to the UNIX-specific GIO
  * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config file
  * when using it.
  */
@@ -8398,10 +8309,10 @@
  * on the computer. In other words, what a file selector or file manager
  * would show in a sidebar.
  *
- * #GVolumeMonitor is not <link
- * linkend="g-main-context-push-thread-default">thread-default-context
- * aware</link>, and so should not be used other than from the main
- * thread, with no thread-default-context active.
+ * #GVolumeMonitor is not
+ * [thread-default-context aware][g-main-context-push-thread-default],
+ * and so should not be used other than from the main thread, with no
+ * thread-default-context active.
  */
 
 
@@ -8414,7 +8325,7 @@
  * #GWin32InputStream implements #GInputStream for reading from a
  * Windows file handle.
  *
- * Note that `&lt;gio/gwin32inputstream.h&gt;` belongs to the Windows-specific GIO
+ * Note that `<gio/gwin32inputstream.h>` belongs to the Windows-specific GIO
  * interfaces, thus you have to use the `gio-windows-2.0.pc` pkg-config file
  * when using it.
  */
@@ -8429,7 +8340,7 @@
  * #GWin32OutputStream implements #GOutputStream for writing to a
  * Windows file handle.
  *
- * Note that `&lt;gio/gwin32outputstream.h&gt;` belongs to the Windows-specific GIO
+ * Note that `<gio/gwin32outputstream.h>` belongs to the Windows-specific GIO
  * interfaces, thus you have to use the `gio-windows-2.0.pc` pkg-config file
  * when using it.
  */
@@ -11202,9 +11113,8 @@
  *
  * This means that the options from #GOptionGroup are only really usable
  * in the case that the instance of the application being run is the
- * first instance.  Passing options like <literal>--display=</literal>
- * or <literal>--gdk-debug=</literal> on future runs will have no effect
- * on the existing primary instance.
+ * first instance.  Passing options like `--display=` or `--gdk-debug=`
+ * on future runs will have no effect on the existing primary instance.
  *
  * Calling this function will cause the options in the supplied option
  * group to be parsed, but it does not cause you to be "opted in" to the
@@ -11803,11 +11713,11 @@
  * application can inspect the values of its #GOptionEntrys.
  *
  * #GApplication::handle-local-options is a good place to handle options
- * such as <literal>--version</literal>, where an immediate reply from
- * the local process is desired (instead of communicating with an
- * already-running instance).  A #GApplication::handle-local-options
- * handler can stop further processing by returning a non-negative
- * value, which then becomes the exit status of the process.
+ * such as `--version`, where an immediate reply from the local process is
+ * desired (instead of communicating with an already-running instance).
+ * A #GApplication::handle-local-options handler can stop further processing
+ * by returning a non-negative value, which then becomes the exit status of
+ * the process.
  *
  * What happens next depends on the flags: if
  * %G_APPLICATION_HANDLES_COMMAND_LINE was specified then the remaining
@@ -11824,7 +11734,8 @@
  * and override local_command_line(). In this case, you most likely want
  * to return %TRUE from your local_command_line() implementation to
  * suppress the default handling. See
- * <xref linkend="gapplication-example-cmdline2"/> for an example.
+ * [gapplication-example-cmdline2.c][gapplication-example-cmdline2]
+ * for an example.
  *
  * If, after the above is done, the use count of the application is zero
  * then the exit status is returned immediately.  If the use count is
@@ -12029,8 +11940,7 @@
 /**
  * g_async_initable_init_async:
  * @initable: a #GAsyncInitable.
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the operation.
+ * @io_priority: the [I/O priority][io-priority] of the operation
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @callback: a #GAsyncReadyCallback to call when the request is satisfied
  * @user_data: the data to pass to callback function
@@ -12092,8 +12002,7 @@
 /**
  * g_async_initable_new_async:
  * @object_type: a #GType supporting #GAsyncInitable.
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the operation.
+ * @io_priority: the [I/O priority][io-priority] of the operation
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @callback: a #GAsyncReadyCallback to call when the initialization is
  *     finished
@@ -12135,8 +12044,7 @@
  * @first_property_name: the name of the first property, followed by
  * the value, and other property value pairs, and ended by %NULL.
  * @var_args: The var args list generated from @first_property_name.
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the operation.
+ * @io_priority: the [I/O priority][io-priority] of the operation
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @callback: a #GAsyncReadyCallback to call when the initialization is
  *     finished
@@ -12159,8 +12067,7 @@
  * @object_type: a #GType supporting #GAsyncInitable.
  * @n_parameters: the number of parameters in @parameters
  * @parameters: the parameters to use to construct the object
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the operation.
+ * @io_priority: the [I/O priority][io-priority] of the operation
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @callback: a #GAsyncReadyCallback to call when the initialization is
  *     finished
@@ -12275,8 +12182,7 @@
  * g_buffered_input_stream_fill_async:
  * @stream: a #GBufferedInputStream
  * @count: the number of bytes that will be read from the stream
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object
  * @callback: (scope async): a #GAsyncReadyCallback
  * @user_data: (closure): a #gpointer
@@ -12556,9 +12462,9 @@
  *
  * Starts acquiring @name on the bus specified by @bus_type and calls
  * @name_acquired_handler and @name_lost_handler when the name is
- * acquired respectively lost. Callbacks will be invoked in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread you are calling this function from.
+ * acquired respectively lost. Callbacks will be invoked in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread you are calling this function from.
  *
  * You are guaranteed that one of the @name_acquired_handler and @name_lost_handler
  * callbacks will be invoked after calling this function - there are three
@@ -12600,7 +12506,7 @@
  * before @name is requested from the bus.
  *
  * This behavior makes it very simple to write applications that wants
- * to own names and export objects, see <xref linkend="gdbus-owning-names"/>.
+ * to [own names][gdbus-owning-names] and export objects.
  * Simply register objects to be exported in @bus_acquired_handler and
  * unregister the objects (if any) in @name_lost_handler.
  *
@@ -12702,9 +12608,9 @@
  * Starts watching @name on the bus specified by @bus_type and calls
  * @name_appeared_handler and @name_vanished_handler when the name is
  * known to have a owner respectively known to lose its
- * owner. Callbacks will be invoked in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread you are calling this function from.
+ * owner. Callbacks will be invoked in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread you are calling this function from.
  *
  * You are guaranteed that one of the handlers will be invoked after
  * calling this function. When you are done watching the name, just
@@ -12723,11 +12629,11 @@
  * guaranteed that the next time one of the handlers is invoked, it
  * will be @name_vanished_handler. The reverse is also true.
  *
- * This behavior makes it very simple to write applications that wants
- * to take action when a certain name exists, see <xref
- * linkend="gdbus-watching-names"/>. Basically, the application
- * should create object proxies in @name_appeared_handler and destroy
- * them again (if any) in @name_vanished_handler.
+ * This behavior makes it very simple to write applications that want
+ * to take action when a certain [name exists][gdbus-watching-names].
+ * Basically, the application should create object proxies in
+ * @name_appeared_handler and destroy them again (if any) in
+ * @name_vanished_handler.
  *
  * Returns: An identifier (never 0) that an be used with
  * g_bus_unwatch_name() to stop watching the name.
@@ -13698,8 +13604,7 @@
 /**
  * g_data_input_stream_read_line_async:
  * @stream: a given #GDataInputStream.
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied.
  * @user_data: (closure): the data to pass to callback function.
@@ -13867,8 +13772,7 @@
  * g_data_input_stream_read_until_async:
  * @stream: a given #GDataInputStream.
  * @stop_chars: characters to terminate the read.
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied.
  * @user_data: (closure): the data to pass to callback function.
@@ -13946,8 +13850,7 @@
  * @stop_chars: characters to terminate the read
  * @stop_chars_len: length of @stop_chars. May be -1 if @stop_chars is
  *     nul-terminated
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @callback: (scope async): callback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
@@ -14448,8 +14351,9 @@
  *                          NULL);
  * ]|
  *
- * This is an asynchronous method. When the operation is finished, @callback will be invoked
- * in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * This is an asynchronous method. When the operation is finished,
+ * @callback will be invoked in the
+ * [thread-default main context][g-main-context-push-thread-default]
  * of the thread you are calling this method from. You can then call
  * g_dbus_connection_call_finish() to get the result of the operation.
  * See g_dbus_connection_call_sync() for the synchronous version of this
@@ -14631,14 +14535,14 @@
  * %G_IO_ERROR_CLOSED.
  *
  * When @connection has been closed, the #GDBusConnection::closed
- * signal is emitted in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread that @connection was constructed in.
+ * signal is emitted in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread that @connection was constructed in.
  *
  * This is an asynchronous method. When the operation is finished,
- * @callback will be invoked in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread you are calling this method from. You can
+ * @callback will be invoked in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread you are calling this method from. You can
  * then call g_dbus_connection_close_finish() to get the result of the
  * operation. See g_dbus_connection_close_sync() for the synchronous
  * version.
@@ -14775,9 +14679,9 @@
  * been sent to the networking buffers in the OS kernel.
  *
  * This is an asynchronous method. When the operation is finished,
- * @callback will be invoked in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread you are calling this method from. You can
+ * @callback will be invoked in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread you are calling this method from. You can
  * then call g_dbus_connection_flush_finish() to get the result of the
  * operation. See g_dbus_connection_flush_sync() for the synchronous
  * version.
@@ -15101,9 +15005,10 @@
  * Registers callbacks for exported objects at @object_path with the
  * D-Bus interface that is described in @interface_info.
  *
- * Calls to functions in @vtable (and @user_data_free_func) will
- * happen in the <link linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread you are calling this method from.
+ * Calls to functions in @vtable (and @user_data_free_func) will happen
+ * in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread you are calling this method from.
  *
  * Note that all #GVariant values passed to functions in @vtable will match
  * the signature given in @interface_info - if a remote caller passes
@@ -15134,7 +15039,7 @@
  * reference count is -1, see g_dbus_interface_info_ref()) for as long
  * as the object is exported. Also note that @vtable will be copied.
  *
- * See <xref linkend="gdbus-server"/> for an example of how to use this method.
+ * See this [server][gdbus-server] for an example of how to use this method.
  *
  * Returns: 0 if @error is set, otherwise a registration id (never 0)
  *     that can be used with g_dbus_connection_unregister_object()
@@ -15168,9 +15073,9 @@
  * #gpointer will be used to call into the interface vtable for processing
  * the request.
  *
- * All calls into user-provided code will be invoked in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread you are calling this method from.
+ * All calls into user-provided code will be invoked in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread you are calling this method from.
  *
  * If an existing subtree is already registered at @object_path or
  * then @error is set to #G_IO_ERROR_EXISTS.
@@ -15185,7 +15090,8 @@
  * Note that @vtable will be copied so you cannot change it after
  * registration.
  *
- * See <xref linkend="gdbus-subtree-server"/> for an example of how to use this method.
+ * See this [server][gdbus-subtree-server] for an example of how to use
+ * this method.
  *
  * Returns: 0 if @error is set, otherwise a subtree registration id (never 0)
  * that can be used with g_dbus_connection_unregister_subtree() .
@@ -15226,9 +15132,9 @@
  * %G_IO_ERROR_CLOSED. If @message is not well-formed,
  * the operation fails with %G_IO_ERROR_INVALID_ARGUMENT.
  *
- * See <xref linkend="gdbus-server"/> and <xref
- * linkend="gdbus-unix-fd-client"/> for an example of how to use this
- * low-level API to send and receive UNIX file descriptors.
+ * See this [server][gdbus-server] and [client][gdbus-unix-fd-client]
+ * for an example of how to use this low-level API to send and receive
+ * UNIX file descriptors.
  *
  * Note that @message must be unlocked, unless @flags contain the
  * %G_DBUS_SEND_MESSAGE_FLAGS_PRESERVE_SERIAL flag.
@@ -15267,8 +15173,9 @@
  * fail with %G_IO_ERROR_CANCELLED. If @message is not well-formed,
  * the operation fails with %G_IO_ERROR_INVALID_ARGUMENT.
  *
- * This is an asynchronous method. When the operation is finished, @callback will be invoked
- * in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * This is an asynchronous method. When the operation is finished, @callback
+ * will be invoked in the
+ * [thread-default main context][g-main-context-push-thread-default]
  * of the thread you are calling this method from. You can then call
  * g_dbus_connection_send_message_with_reply_finish() to get the result of the operation.
  * See g_dbus_connection_send_message_with_reply_sync() for the synchronous version.
@@ -15276,9 +15183,9 @@
  * Note that @message must be unlocked, unless @flags contain the
  * %G_DBUS_SEND_MESSAGE_FLAGS_PRESERVE_SERIAL flag.
  *
- * See <xref linkend="gdbus-server"/> and <xref
- * linkend="gdbus-unix-fd-client"/> for an example of how to use this
- * low-level API to send and receive UNIX file descriptors.
+ * See this [server][gdbus-server] and [client][gdbus-unix-fd-client]
+ * for an example of how to use this low-level API to send and receive
+ * UNIX file descriptors.
  *
  * Since: 2.26
  */
@@ -15298,9 +15205,9 @@
  * be of type %G_DBUS_MESSAGE_TYPE_ERROR. Use
  * g_dbus_message_to_gerror() to transcode this to a #GError.
  *
- * See <xref linkend="gdbus-server"/> and <xref
- * linkend="gdbus-unix-fd-client"/> for an example of how to use this
- * low-level API to send and receive UNIX file descriptors.
+ * See this [server][gdbus-server] and [client][gdbus-unix-fd-client]
+ * for an example of how to use this low-level API to send and receive
+ * UNIX file descriptors.
  *
  * Returns: (transfer full): a locked #GDBusMessage or %NULL if @error is set
  * Since: 2.26
@@ -15341,9 +15248,9 @@
  * be of type %G_DBUS_MESSAGE_TYPE_ERROR. Use
  * g_dbus_message_to_gerror() to transcode this to a #GError.
  *
- * See <xref linkend="gdbus-server"/> and <xref
- * linkend="gdbus-unix-fd-client"/> for an example of how to use this
- * low-level API to send and receive UNIX file descriptors.
+ * See this [server][gdbus-server] and [client][gdbus-unix-fd-client]
+ * for an example of how to use this low-level API to send and receive
+ * UNIX file descriptors.
  *
  * Note that @message must be unlocked, unless @flags contain the
  * %G_DBUS_SEND_MESSAGE_FLAGS_PRESERVE_SERIAL flag.
@@ -15394,11 +15301,10 @@
  * @user_data_free_func: (allow-none): function to free @user_data with when
  *     subscription is removed or %NULL
  *
- * Subscribes to signals on @connection and invokes @callback with a
- * whenever the signal is received. Note that @callback will be invoked
- * in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread you are calling this method from.
+ * Subscribes to signals on @connection and invokes @callback with a whenever
+ * the signal is received. Note that @callback will be invoked in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread you are calling this method from.
  *
  * If @connection is not a message bus connection, @sender must be
  * %NULL.
@@ -15697,69 +15603,29 @@
 
 /**
  * g_dbus_gvalue_to_gvariant:
- * @gvalue: A #GValue to convert to a #GVariant.
- * @type: A #GVariantType.
+ * @gvalue: A #GValue to convert to a #GVariant
+ * @type: A #GVariantType
  *
- * Converts a #GValue to a #GVariant of the type indicated by the @type parameter.
+ * Converts a #GValue to a #GVariant of the type indicated by the @type
+ * parameter.
  *
  * The conversion is using the following rules:
- * <table frame='all'>
- *   <title>#GValue / #GVariant conversion rules</title>
- *   <tgroup cols='2' align='left' colsep='1' rowsep='1'>
- *     <thead>
- *       <row>
- *         <entry>If the #GType for @gvalue is...</entry>
- *         <entry>... then @type must be</entry>
- *       </row>
- *     </thead>
- *     <tbody>
- *       <row>
- *         <entry>#G_TYPE_STRING</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-STRING:CAPS">'s'</link>, <link linkend="G-VARIANT-TYPE-OBJECT-PATH:CAPS">'o'</link>, <link linkend="G-VARIANT-TYPE-SIGNATURE:CAPS">'g'</link> or <link linkend="G-VARIANT-TYPE-BYTESTRING:CAPS">'ay'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_STRV</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-STRING-ARRAY:CAPS">'as'</link>, <link linkend="G-VARIANT-TYPE-OBJECT-PATH-ARRAY:CAPS">'ao'</link> or <link linkend="G-VARIANT-TYPE-BYTESTRING-ARRAY:CAPS">'aay'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_BOOLEAN</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-BOOLEAN:CAPS">'b'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_UCHAR</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-BYTE:CAPS">'y'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_INT</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-INT32:CAPS">'i'</link> or <link linkend="G-VARIANT-TYPE-INT16:CAPS">'n'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_UINT</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-UINT32:CAPS">'u'</link> or <link linkend="G-VARIANT-TYPE-UINT16:CAPS">'q'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_INT64</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-INT64:CAPS">'x'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_UINT64</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-UINT64:CAPS">'t'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_DOUBLE</entry>
- *         <entry><link linkend="G-VARIANT-TYPE-DOUBLE:CAPS">'d'</link></entry>
- *       </row>
- *       <row>
- *         <entry>#G_TYPE_VARIANT</entry>
- *         <entry>Any #GVariantType</entry>
- *       </row>
- *     </tbody>
- *   </tgroup>
- * </table>
+ *
+ * - #G_TYPE_STRING: 's', 'o', 'g' or 'ay'
+ * - #G_TYPE_STRV: 'as', 'ao' or 'aay'
+ * - #G_TYPE_BOOLEAN: 'b'
+ * - #G_TYPE_UCHAR: 'y'
+ * - #G_TYPE_INT: 'i', 'n'
+ * - #G_TYPE_UINT: 'u', 'q'
+ * - #G_TYPE_INT64 'x'
+ * - #G_TYPE_UINT64: 't'
+ * - #G_TYPE_DOUBLE: 'd'
+ * - #G_TYPE_VARIANT: Any #GVariantType
+ *
  * This can fail if e.g. @gvalue is of type #G_TYPE_STRING and @type
- * is <link linkend="G-VARIANT-TYPE-INT32:CAPS">'i'</link>. It will
- * also fail for any #GType (including e.g. #G_TYPE_OBJECT and
- * #G_TYPE_BOXED derived-types) not in the table above.
+ * is ['i'][G-VARIANT-TYPE-INT32:CAPS]. It will also fail for any #GType
+ * (including e.g. #G_TYPE_OBJECT and #G_TYPE_BOXED derived-types) not
+ * in the table above.
  *
  * Note that if @gvalue is of type #G_TYPE_VARIANT and its value is
  * %NULL, the empty #GVariant instance (never %NULL) for @type is
@@ -15769,9 +15635,9 @@
  * See the g_dbus_gvariant_to_gvalue() function for how to convert a
  * #GVariant to a #GValue.
  *
- * Returns: A #GVariant (never floating) of #GVariantType
- * @type holding the data from @gvalue or %NULL in case of
- * failure. Free with g_variant_unref().
+ * Returns: A #GVariant (never floating) of #GVariantType @type holding
+ *     the data from @gvalue or %NULL in case of failure. Free with
+ *     g_variant_unref().
  * Since: 2.30
  */
 
@@ -16069,7 +15935,9 @@
  *
  * Gets all D-Bus properties for @interface_.
  *
- * Returns: (transfer full): A #GVariant of type <link linkend="G-VARIANT-TYPE-VARDICT:CAPS">'a{sv}'</link>. Free with g_variant_unref().
+ * Returns: (transfer full): A #GVariant of type
+ * ['a{sv}'][G-VARIANT-TYPE-VARDICT:CAPS].
+ * Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -16943,9 +16811,9 @@
  * descriptor passing, that cannot be properly expressed in the
  * #GVariant API.
  *
- * See <xref linkend="gdbus-server"/> and <xref
- * linkend="gdbus-unix-fd-client"/> for an example of how to use this
- * low-level API to send and receive UNIX file descriptors.
+ * See this [server][gdbus-server] and [client][gdbus-unix-fd-client]
+ * for an example of how to use this low-level API to send and receive
+ * UNIX file descriptors.
  *
  * Returns: (transfer none): #GDBusMessage. Do not free, it is owned by @invocation.
  * Since: 2.26
@@ -17215,10 +17083,10 @@
  * Parses @xml_data and returns a #GDBusNodeInfo representing the data.
  *
  * The introspection XML must contain exactly one top-level
- * &lt;node&gt; element.
+ * <node> element.
  *
  * Note that this routine is using a
- * <link linkend="glib-Simple-XML-Subset-Parser.description">GMarkup</link>-based
+ * [GMarkup][glib-Simple-XML-Subset-Parser.description]-based
  * parser that only accepts a subset of valid XML documents.
  *
  * Returns: A #GDBusNodeInfo structure or %NULL if @error is set. Free
@@ -17358,7 +17226,7 @@
  *
  * This is an asynchronous failable constructor. When the result is
  * ready, @callback will be invoked in the
- * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * [thread-default main context][g-main-context-push-thread-default]
  * of the thread you are calling this method from. You can
  * then call g_dbus_object_manager_client_new_finish() to get the result. See
  * g_dbus_object_manager_client_new_sync() for the synchronous version.
@@ -17399,7 +17267,7 @@
  *
  * This is an asynchronous failable constructor. When the result is
  * ready, @callback will be invoked in the
- * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * [thread-default main loop][g-main-context-push-thread-default]
  * of the thread you are calling this method from. You can
  * then call g_dbus_object_manager_client_new_for_bus_finish() to get the result. See
  * g_dbus_object_manager_client_new_for_bus_sync() for the synchronous version.
@@ -17800,7 +17668,7 @@
  *
  * This is an asynchronous method. When the operation is finished,
  * @callback will be invoked in the
- * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
+ * [thread-default main context][g-main-context-push-thread-default]
  * of the thread you are calling this method from.
  * You can then call g_dbus_proxy_call_finish() to get the result of
  * the operation. See g_dbus_proxy_call_sync() for the synchronous
@@ -18105,7 +17973,7 @@
  *
  * See g_dbus_proxy_new_sync() and for a synchronous version of this constructor.
  *
- * See <xref linkend="gdbus-wellknown-proxy"/> for an example of how #GDBusProxy can be used.
+ * #GDBusProxy is used in this [example][gdbus-wellknown-proxy].
  *
  * Since: 2.26
  */
@@ -18137,7 +18005,7 @@
  *
  * Like g_dbus_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
  *
- * See <xref linkend="gdbus-wellknown-proxy"/> for an example of how #GDBusProxy can be used.
+ * #GDBusProxy is used in this [example][gdbus-wellknown-proxy].
  *
  * Since: 2.26
  */
@@ -18169,7 +18037,7 @@
  *
  * Like g_dbus_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
  *
- * See <xref linkend="gdbus-wellknown-proxy"/> for an example of how #GDBusProxy can be used.
+ * #GDBusProxy is used in this [example][gdbus-wellknown-proxy].
  *
  * Returns: A #GDBusProxy or %NULL if error is set. Free with g_object_unref().
  * Since: 2.26
@@ -18204,7 +18072,7 @@
  * This is a synchronous failable constructor. See g_dbus_proxy_new()
  * and g_dbus_proxy_new_finish() for the asynchronous version.
  *
- * See <xref linkend="gdbus-wellknown-proxy"/> for an example of how #GDBusProxy can be used.
+ * #GDBusProxy is used in this [example][gdbus-wellknown-proxy].
  *
  * Returns: A #GDBusProxy or %NULL if error is set. Free with g_object_unref().
  * Since: 2.26
@@ -18350,8 +18218,7 @@
  * The returned #GDBusServer isn't active - you have to start it with
  * g_dbus_server_start().
  *
- * See <xref linkend="gdbus-peer-to-peer"/> for how #GDBusServer can
- * be used.
+ * #GDBusServer is used in this [example][gdbus-peer-to-peer].
  *
  * This is a synchronous failable constructor. See
  * g_dbus_server_new() for the asynchronous version.
@@ -19240,8 +19107,7 @@
  * g_file_append_to_async:
  * @file: input #GFile
  * @flags: a set of #GFileCreateFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -19405,20 +19271,15 @@
  * The wildcard "*" may be used to match all keys and namespaces, or
  * "namespace::*" will match all keys in a given namespace.
  *
- * Examples of strings to use:
- * <table>
- * <title>File Attribute Matcher strings and results</title>
- * <tgroup cols='2' align='left'><thead>
- * <row><entry> Matcher String </entry><entry> Matches </entry></row></thead>
- * <tbody>
- * <row><entry>"*"</entry><entry>matches all attributes.</entry></row>
- * <row><entry>"standard::is-hidden"</entry><entry>matches only the key is-hidden in the standard namespace.</entry></row>
- * <row><entry>"standard::type,unix::*"</entry><entry>matches the type key in the standard namespace and
- * all keys in the unix namespace.</entry></row>
- * </tbody></tgroup>
- * </table>
+ * ## Examples of file attribute matcher strings and results
  *
- * Returns: a #GFileAttributeMatcher.
+ * - `"*"`: matches all attributes.
+ * - `"standard::is-hidden"`: matches only the key is-hidden in the
+ *   standard namespace.
+ * - `"standard::type,unix::*"`: matches the type key in the standard
+ *   namespace and all keys in the unix namespace.
+ *
+ * Returns: a #GFileAttributeMatcher
  */
 
 
@@ -19533,8 +19394,7 @@
  * @source: input #GFile
  * @destination: destination #GFile
  * @flags: set of #GFileCopyFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @progress_callback: (allow-none): function to callback with progress
@@ -19628,8 +19488,7 @@
  * g_file_create_async:
  * @file: input #GFile
  * @flags: a set of #GFileCreateFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -19705,8 +19564,7 @@
  * g_file_create_readwrite_async:
  * @file: input #GFile
  * @flags: a set of #GFileCreateFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -19763,8 +19621,7 @@
 /**
  * g_file_delete_async: (virtual delete_file_async)
  * @file: input #GFile
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: a #GAsyncReadyCallback to call
@@ -19940,8 +19797,7 @@
  * @file: input #GFile
  * @attributes: an attribute query string
  * @flags: a set of #GFileQueryInfoFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call when the
@@ -19996,8 +19852,7 @@
 /**
  * g_file_enumerator_close_async:
  * @enumerator: a #GFileEnumerator.
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
@@ -20113,8 +19968,7 @@
  * g_file_enumerator_next_files_async:
  * @enumerator: a #GFileEnumerator.
  * @num_files: the number of file info objects to request
- * @io_priority: the <link linkend="io-priority">io priority</link>
- *     of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
@@ -20209,8 +20063,7 @@
 /**
  * g_file_find_enclosing_mount_async:
  * @file: a #GFile
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -20512,7 +20365,7 @@
  * @src_info: source to copy attributes from.
  * @dest_info: destination to copy attributes to.
  *
- * Copies all of the <link linkend="gio-GFileAttribute">GFileAttribute</link>s
+ * Copies all of the [GFileAttribute][gio-GFileAttribute]
  * from @src_info to @dest_info.
  */
 
@@ -20744,7 +20597,7 @@
  * g_file_info_get_etag:
  * @info: a #GFileInfo.
  *
- * Gets the <link linkend="gfile-etag">entity tag</link> for a given
+ * Gets the [entity tag][gfile-etag] for a given
  * #GFileInfo. See %G_FILE_ATTRIBUTE_ETAG_VALUE.
  *
  * Returns: a string containing the value of the "etag:value" attribute.
@@ -21064,7 +20917,7 @@
 /**
  * g_file_info_set_content_type:
  * @info: a #GFileInfo.
- * @content_type: a content type. See <link linkend="gio-GContentType">GContentType</link>.
+ * @content_type: a content type. See [GContentType][gio-GContentType]
  *
  * Sets the content type attribute for a given #GFileInfo.
  * See %G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE.
@@ -21224,8 +21077,7 @@
  * g_file_input_stream_query_info_async:
  * @stream: a #GFileInputStream.
  * @attributes: a file attribute query string.
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
@@ -21304,8 +21156,7 @@
  * g_file_io_stream_query_info_async:
  * @stream: a #GFileIOStream.
  * @attributes: a file attribute query string.
- * @io_priority: the <link linkend="gio-GIOScheduler">I/O priority</link>
- *     of the request.
+ * @io_priority: the [I/O priority][gio-GIOScheduler] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
@@ -21499,8 +21350,7 @@
 /**
  * g_file_make_directory_async: (virtual make_directory_async)
  * @file: input #GFile
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: a #GAsyncReadyCallback to call
@@ -21614,8 +21464,7 @@
  * g_file_measure_disk_usage_async:
  * @file: a #GFile
  * @flags: #GFileMeasureFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable
  * @progress_callback: (allow-none): a #GFileMeasureProgressCallback
  * @progress_data: user_data for @progress_callback
@@ -21720,9 +21569,8 @@
  * has taken place. Should be called from file monitor
  * implementations only.
  *
- * The signal will be emitted from an idle handler (in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * context</link>).
+ * The signal will be emitted from an idle handler (in the
+ * [thread-default main context][g-main-context-push-thread-default]).
  */
 
 
@@ -22042,8 +21890,7 @@
 /**
  * g_file_open_readwrite_async:
  * @file: input #GFile
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -22123,8 +21970,7 @@
  * g_file_output_stream_query_info_async:
  * @stream: a #GFileOutputStream.
  * @attributes: a file attribute query string.
- * @io_priority: the <link linkend="gio-GIOScheduler">I/O priority</link>
- *     of the request.
+ * @io_priority: the [I/O priority][gio-GIOScheduler] of the request
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @callback: callback to call when the request is satisfied
  * @user_data: the data to pass to callback function
@@ -22318,8 +22164,7 @@
  * g_file_query_filesystem_info_async:
  * @file: input #GFile
  * @attributes: an attribute query string
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -22405,8 +22250,7 @@
  * @file: input #GFile
  * @attributes: an attribute query string
  * @flags: a set of #GFileQueryInfoFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call when the
@@ -22511,8 +22355,7 @@
 /**
  * g_file_read_async:
  * @file: input #GFile
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -22547,7 +22390,7 @@
 /**
  * g_file_replace:
  * @file: input #GFile
- * @etag: (allow-none): an optional <link linkend="gfile-etag">entity tag</link>
+ * @etag: (allow-none): an optional [entity tag][gfile-etag]
  *     for the current #GFile, or #NULL to ignore
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
@@ -22605,12 +22448,11 @@
 /**
  * g_file_replace_async:
  * @file: input #GFile
- * @etag: (allow-none): an <link linkend="gfile-etag">entity tag</link>
- *     for the current #GFile, or NULL to ignore
+ * @etag: (allow-none): an [entity tag][gfile-etag] for the current #GFile,
+ *     or %NULL to ignore
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -22634,11 +22476,11 @@
  * @file: input #GFile
  * @contents: (element-type guint8) (array length=length): a string containing the new contents for @file
  * @length: the length of @contents in bytes
- * @etag: (allow-none): the old <link linkend="gfile-etag">entity tag</link>
- *     for the document, or %NULL
+ * @etag: (allow-none): the old [entity-tag][gfile-etag] for the document,
+ *     or %NULL
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
- * @new_etag: (allow-none) (out): a location to a new <link linkend="gfile-etag">entity tag</link>
+ * @new_etag: (allow-none) (out): a location to a new [entity tag][gfile-etag]
  *      for the document. This should be freed with g_free() when no longer
  *      needed, or %NULL
  * @cancellable: optional #GCancellable object, %NULL to ignore
@@ -22669,7 +22511,7 @@
  * @file: input #GFile
  * @contents: (element-type guint8) (array length=length): string of contents to replace the file with
  * @length: the length of @contents in bytes
- * @etag: (allow-none): a new <link linkend="gfile-etag">entity tag</link> for the @file, or %NULL
+ * @etag: (allow-none): a new [entity tag][gfile-etag] for the @file, or %NULL
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
  * @cancellable: optional #GCancellable object, %NULL to ignore
@@ -22702,7 +22544,7 @@
  * g_file_replace_contents_bytes_async:
  * @file: input #GFile
  * @contents: a #GBytes
- * @etag: (allow-none): a new <link linkend="gfile-etag">entity tag</link> for the @file, or %NULL
+ * @etag: (allow-none): a new [entity tag][gfile-etag] for the @file, or %NULL
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
  * @cancellable: optional #GCancellable object, %NULL to ignore
@@ -22726,7 +22568,7 @@
  * g_file_replace_contents_finish:
  * @file: input #GFile
  * @res: a #GAsyncResult
- * @new_etag: (out) (allow-none): a location of a new <link linkend="gfile-etag">entity tag</link>
+ * @new_etag: (out) (allow-none): a location of a new [entity tag][gfile-etag]
  *     for the document. This should be freed with g_free() when it is no
  *     longer needed, or %NULL
  * @error: a #GError, or %NULL
@@ -22756,7 +22598,7 @@
 /**
  * g_file_replace_readwrite:
  * @file: a #GFile
- * @etag: (allow-none): an optional <link linkend="gfile-etag">entity tag</link>
+ * @etag: (allow-none): an optional [entity tag][gfile-etag]
  *     for the current #GFile, or #NULL to ignore
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
@@ -22784,12 +22626,11 @@
 /**
  * g_file_replace_readwrite_async:
  * @file: input #GFile
- * @etag: (allow-none): an <link linkend="gfile-etag">entity tag</link>
- *     for the current #GFile, or NULL to ignore
+ * @etag: (allow-none): an [entity tag][gfile-etag] for the current #GFile,
+ *     or %NULL to ignore
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -23002,8 +22843,7 @@
  * @file: input #GFile
  * @info: a #GFileInfo
  * @flags: a #GFileQueryInfoFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback
@@ -23093,8 +22933,7 @@
  * g_file_set_display_name_async:
  * @file: input #GFile
  * @display_name: a string
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: (scope async): a #GAsyncReadyCallback to call
@@ -23215,11 +23054,10 @@
  * g_file_supports_thread_contexts:
  * @file: a #GFile
  *
- * Checks if @file supports <link
- * linkend="g-main-context-push-thread-default-context">thread-default
- * contexts</link>. If this returns %FALSE, you cannot perform
- * asynchronous operations on @file in a thread that has a
- * thread-default context.
+ * Checks if @file supports
+ * [thread-default contexts][g-main-context-push-thread-default-context].
+ * If this returns %FALSE, you cannot perform asynchronous operations on
+ * @file in a thread that has a thread-default context.
  *
  * Returns: Whether or not @file supports thread-default contexts.
  * Since: 2.22
@@ -23249,8 +23087,7 @@
 /**
  * g_file_trash_async: (virtual trash_async)
  * @file: input #GFile
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *     of the request
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @callback: a #GAsyncReadyCallback to call
@@ -23549,7 +23386,7 @@
  *   (such as `/path/to/my icon.png`) without escaping
  *   if the #GFile for @icon is a native file.  If the file is not
  *   native, the returned string is the result of g_file_get_uri()
- *   (such as `sftp://path/to/my&percnt;20icon.png`).
+ *   (such as `sftp://path/to/my\%20icon.png`).
  *
  * - If @icon is a #GThemedIcon with exactly one name, the encoding is
  *    simply the name (such as `network-server`).
@@ -23945,6 +23782,22 @@
 
 
 /**
+ * g_inet_socket_address_new_from_string:
+ * @address: the string form of an IP address
+ * @port: a port number
+ *
+ * Creates a new #GInetSocketAddress for @address and @port.
+ *
+ * If @address is an IPv6 address, it can also contain a scope ID
+ * (separated from the address by a "<literal>%</literal>").
+ *
+ * Returns: a new #GInetSocketAddress, or %NULL if @address cannot be
+ * parsed.
+ * Since: 2.40
+ */
+
+
+/**
  * g_initable_init:
  * @initable: a #GInitable.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
@@ -23966,8 +23819,7 @@
  * If the object is not initialized, or initialization returns with an
  * error, then all operations on the object except g_object_ref() and
  * g_object_unref() are considered to be invalid, and have undefined
- * behaviour. See the <xref linkend="ginitable"/> section introduction
- * for more details.
+ * behaviour. See the [introduction][ginitable] for more details.
  *
  * Implementations of this method must be idempotent, i.e. multiple calls
  * to this function with the same argument should return the same results.
@@ -24096,8 +23948,7 @@
 /**
  * g_input_stream_close_async:
  * @stream: A #GInputStream.
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- * of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional cancellable object
  * @callback: (scope async): callback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
@@ -24214,7 +24065,7 @@
  * @buffer: (array length=count) (element-type guint8): a buffer to
  *     read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
+ * @io_priority: the [I/O priority][io-priority]
  * of the request.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied
@@ -24286,8 +24137,7 @@
  * g_input_stream_read_bytes_async:
  * @stream: A #GInputStream.
  * @count: the number of bytes that will be read from the stream
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- *   of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
@@ -24385,8 +24235,7 @@
  * g_input_stream_skip_async:
  * @stream: A #GInputStream.
  * @count: the number of bytes that will be skipped from the stream
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- * of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): callback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
@@ -24779,7 +24628,7 @@
  * @job_func: a #GIOSchedulerJobFunc.
  * @user_data: data to pass to @job_func
  * @notify: (allow-none): a #GDestroyNotify for @user_data, or %NULL
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
+ * @io_priority: the [I/O priority][io-priority]
  * of the request.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  *
@@ -25241,13 +25090,13 @@
  * allocation for itself).
  *
  * |[<!-- language="C" -->
- * /&ast; a stream that can grow &ast;/
+ * // a stream that can grow
  * stream = g_memory_output_stream_new (NULL, 0, realloc, free);
  *
- * /&ast; another stream that can grow &ast;/
+ * // another stream that can grow
  * stream2 = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
  *
- * /&ast; a fixed-size stream &ast;/
+ * // a fixed-size stream
  * data = malloc (200);
  * stream3 = g_memory_output_stream_new (data, 200, NULL, free);
  * ]|
@@ -26042,7 +25891,7 @@
  * g_variant_get(), followed by a g_variant_unref().  As such,
  * @format_string must make a complete copy of the data (since the
  * #GVariant may go away after the call to g_variant_unref()).  In
- * particular, no '&amp;' characters are allowed in @format_string.
+ * particular, no '&' characters are allowed in @format_string.
  *
  * Returns: %TRUE if the named attribute was found with the expected
  *     type
@@ -28508,8 +28357,8 @@
  *
  * Looks into the system proxy configuration to determine what proxy,
  * if any, to use to connect to @uri. The returned proxy URIs are of
- * the form `&lt;protocol&gt;://[user[:password]@]host:port` or
- * `direct://`, where &lt;protocol&gt; could be http, rtsp, socks
+ * the form `<protocol>://[user[:password]@]host:port` or
+ * `direct://`, where <protocol> could be http, rtsp, socks
  * or other proxying protocol.
  *
  * If you don't know what network protocol is being used on the
@@ -29665,7 +29514,7 @@
  * @settings.
  *
  * The schema for the child settings object must have been declared
- * in the schema of @settings using a &lt;child&gt; element.
+ * in the schema of @settings using a <child> element.
  *
  * Returns: (transfer full): a 'child' settings object
  * Since: 2.26
@@ -30484,8 +30333,7 @@
  * may be useful to authors of plugin management systems.
  *
  * The directory should contain a file called `gschemas.compiled` as
- * produced by the
- * <link linkend="glib-compile-schemas">glib-compile-schemas</link> tool.
+ * produced by the [glib-compile-schemas][glib-compile-schemas] tool.
  *
  * If @trusted is %TRUE then `gschemas.compiled` is trusted not to be
  * corrupted. This assumption has a performance advantage, but can result
@@ -30978,9 +30826,9 @@
  * g_simple_async_result_complete_in_idle:
  * @simple: a #GSimpleAsyncResult.
  *
- * Completes an asynchronous function in an idle handler in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread that @simple was initially created in
+ * Completes an asynchronous function in an idle handler in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * of the thread that @simple was initially created in
  * (and re-pushes that context around the invocation of the callback).
  *
  * Calling this function takes a reference to @simple for as long as
@@ -31032,8 +30880,8 @@
 /**
  * g_simple_async_result_is_valid:
  * @result: the #GAsyncResult passed to the _finish function.
- * @source: the #GObject passed to the _finish function.
- * @source_tag: the asynchronous function.
+ * @source: (allow-none): the #GObject passed to the _finish function.
+ * @source_tag: (allow-none): the asynchronous function.
  *
  * Ensures that the data passed to the _finish function of an async
  * operation is consistent.  Three checks are performed.
@@ -31041,12 +30889,12 @@
  * First, @result is checked to ensure that it is really a
  * #GSimpleAsyncResult.  Second, @source is checked to ensure that it
  * matches the source object of @result.  Third, @source_tag is
- * checked to ensure that it is either %NULL (as it is when the result was
- * created by g_simple_async_report_error_in_idle() or
- * g_simple_async_report_gerror_in_idle()) or equal to the
- * @source_tag argument given to g_simple_async_result_new() (which, by
- * convention, is a pointer to the _async function corresponding to the
- * _finish function from which this function is called).
+ * checked to ensure that it is equal to the @source_tag argument given
+ * to g_simple_async_result_new() (which, by convention, is a pointer
+ * to the _async function corresponding to the _finish function from
+ * which this function is called).  (Alternatively, if either
+ * @source_tag or @result's source tag is %NULL, then the source tag
+ * check is skipped.)
  *
  * Returns: #TRUE if all checks passed or #FALSE if any failed.
  * Since: 2.20
@@ -32711,7 +32559,7 @@
  * getsockopt(). (If you need to fetch a  non-integer-valued option,
  * you will need to call getsockopt() directly.)
  *
- * The <link linkend="gio-gnetworking.h">`&lt;gio/gnetworking.h&gt;`</link>
+ * The [<gio/gnetworking.h>][gio-gnetworking.h]
  * header pulls in system headers that will define most of the
  * standard/portable socket options. For unusual socket protocols or
  * platform-dependent options, you may need to include additional
@@ -33514,6 +33362,12 @@
  * This call is thread-safe, so it may be called from a thread
  * handling an incoming client request.
  *
+ * Note that this only stops accepting new connections; it does not
+ * close the listening sockets, and you can call
+ * g_socket_service_start() again later to begin listening again. To
+ * close the listening sockets, call g_socket_listener_close(). (This
+ * will happen automatically when the #GSocketService is finalized.)
+ *
  * Since: 2.22
  */
 
@@ -33630,7 +33484,7 @@
  * setsockopt(). (If you need to set a non-integer-valued option,
  * you will need to call setsockopt() directly.)
  *
- * The <link linkend="gio-gnetworking.h">`&lt;gio/gnetworking.h&gt;`</link>
+ * The [<gio/gnetworking.h>][gio-gnetworking.h]
  * header pulls in system headers that will define most of the
  * standard/portable socket options. For unusual socket protocols or
  * platform-dependent options, you may need to include additional
@@ -33837,7 +33691,7 @@
  * Finalized a GResource initialized by g_static_resource_init().
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * [glib-compile-resources][glib-compile-resources]
  * and is not typically used by other code.
  *
  * Since: 2.32
@@ -33851,7 +33705,7 @@
  * Gets the GResource that was registered by a call to g_static_resource_init().
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * [glib-compile-resources][glib-compile-resources]
  * and is not typically used by other code.
  *
  * Returns: (transfer none): a #GResource
@@ -33867,7 +33721,7 @@
  * GStaticResource.
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * [glib-compile-resources][glib-compile-resources]
  * and is not typically used by other code.
  *
  * Since: 2.32
@@ -34669,9 +34523,8 @@
  *
  * A utility function for dealing with async operations where you need
  * to wait for a #GSource to trigger. Attaches @source to @task's
- * #GMainContext with @task's <link
- * linkend="io-priority">priority</link>, and sets @source's callback
- * to @callback, with @task as the callback's `user_data`.
+ * #GMainContext with @task's [priority][io-priority], and sets @source's
+ * callback to @callback, with @task as the callback's `user_data`.
  *
  * This takes a reference on @task until @source is destroyed.
  *
@@ -34706,9 +34559,9 @@
  * @task: a #GTask
  *
  * Gets the #GMainContext that @task will return its result in (that
- * is, the context that was the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * context</link> at the point when @task was created).
+ * is, the context that was the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * at the point when @task was created).
  *
  * This will always return a non-%NULL value, even if the task's
  * context is the default #GMainContext.
@@ -34810,9 +34663,8 @@
  * @callback_data: (closure): user data passed to @callback.
  *
  * Creates a #GTask acting on @source_object, which will eventually be
- * used to invoke @callback in the current <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * context</link>.
+ * used to invoke @callback in the current
+ * [thread-default main context][g-main-context-push-thread-default].
  *
  * Call this in the "start" method of your asynchronous method, and
  * pass the #GTask around throughout the asynchronous operation. You
@@ -35108,8 +34960,7 @@
 /**
  * g_task_set_priority:
  * @task: the #GTask
- * @priority: the <link linkend="io-priority">priority</link>
- *   of the request.
+ * @priority: the [priority][io-priority] of the request
  *
  * Sets @task's priority. If you do not call this, it will default to
  * %G_PRIORITY_DEFAULT.
@@ -35912,8 +35763,7 @@
 /**
  * g_tls_connection_handshake_async:
  * @conn: a #GTlsConnection
- * @io_priority: the <link linkend="io-priority">I/O priority</link>
- * of the request.
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @callback: callback to call when the handshake is complete
  * @user_data: the data to pass to the callback function
@@ -37927,9 +37777,8 @@
  * g_volume_enumerate_identifiers:
  * @volume: a #GVolume
  *
- * Gets the kinds of <link linkend="volume-identifier">identifiers</link>
- * that @volume has. Use g_volume_get_identifier() to obtain
- * the identifiers themselves.
+ * Gets the kinds of [identifiers][volume-identifier] that @volume has.
+ * Use g_volume_get_identifier() to obtain the identifiers themselves.
  *
  * Returns: (array zero-terminated=1) (transfer full): a %NULL-terminated array
  *   of strings containing kinds of identifiers. Use g_strfreev() to free.
@@ -37952,9 +37801,9 @@
  *   GFile *mount_root
  *   GFile *volume_activation_root;
  *
- *   mount = g_volume_get_mount (volume); /&ast; mounted, so never NULL &ast;/
+ *   mount = g_volume_get_mount (volume); // mounted, so never NULL
  *   mount_root = g_mount_get_root (mount);
- *   volume_activation_root = g_volume_get_activation_root (volume); /&ast; assume not NULL &ast;/
+ *   volume_activation_root = g_volume_get_activation_root (volume); // assume not NULL
  * ]|
  * then the expression
  * |[<!-- language="C" -->
@@ -38003,8 +37852,8 @@
  * @kind: the kind of identifier to return
  *
  * Gets the identifier of the given kind for @volume.
- * See the <link linkend="volume-identifier">introduction</link>
- * for more information about volume identifiers.
+ * See the [introduction][volume-identifier] for more
+ * information about volume identifiers.
  *
  * Returns: a newly allocated string containing the
  *     requested identfier, or %NULL if the #GVolume
