@@ -3,8 +3,7 @@
   <synopsis><code>
 const ${namespace.name} = imports.gi.${namespace.name};
 
-let ${formatter.to_lower_camel_case(node.name)} = new ${namespace.name}.${node.name}(\
-% if isinstance(node, (ast.Class, ast.Interface)):
+let ${formatter.to_underscores(node).lower()} = new ${namespace.name}.${node.name}(\
 % if len(node.properties) > 0:
 {
 % for ix, property_ in enumerate(node.properties):
@@ -13,9 +12,6 @@ let ${formatter.to_lower_camel_case(node.name)} = new ${namespace.name}.${node.n
 % endif
 % endfor
 }\
-% endif
-% else:
-${formatter.format_gboxed_constructor(node)}\
 % endif
 );
   </code></synopsis></%block>

@@ -1,10 +1,11 @@
 <%inherit file="/base.tmpl"/>
 <%block name="synopsis">
-  <synopsis><code mime="text/x-gjs">
-function vfunc_${node.name}(\
-${', '.join('%s: %s' % (arg.argname, formatter.format_type(arg.type, True)) for arg in formatter.get_in_parameters(node))}\
-): ${formatter.format_out_parameters(node)} {
-}
+  <synopsis><code mime="text/x-python">
+% if formatter.get_in_parameters(node):
+@accepts(${', '.join((formatter.format_type(arg.type) for arg in formatter.get_in_parameters(node)))})
+% endif
+@returns(${formatter.format_type(node.retval.type) | x})
+def on_${node.name}(${', '.join((arg.argname for arg in formatter.get_in_parameters(node)))}):
   </code></synopsis></%block>
 <%block name="details">
 % if formatter.get_in_parameters(node) or node.retval:
@@ -24,4 +25,3 @@ ${formatter.format(node, node.retval.doc)}
 </terms>
 % endif
 </%block>
-

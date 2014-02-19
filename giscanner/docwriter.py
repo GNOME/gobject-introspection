@@ -47,7 +47,7 @@ def make_page_id(node, recursive=False):
     if parent is None:
         return '%s.%s' % (node.namespace.name, node.name)
 
-    if isinstance(node, (ast.Property, ast.Signal, ast.VFunction)):
+    if isinstance(node, (ast.Property, ast.Signal, ast.VFunction, ast.Field)):
         return '%s-%s' % (make_page_id(parent, recursive=True), node.name)
     else:
         return '%s.%s' % (make_page_id(parent, recursive=True), node.name)
@@ -56,8 +56,10 @@ def make_page_id(node, recursive=False):
 def get_node_kind(node):
     if isinstance(node, ast.Namespace):
         node_kind = 'namespace'
-    elif isinstance(node, (ast.Class, ast.Interface)):
+    elif isinstance(node, (ast.Class, ast.Boxed, ast.Compound)):
         node_kind = 'class'
+    elif isinstance(node, ast.Interface):
+        node_kind = 'interface'
     elif isinstance(node, ast.Record):
         node_kind = 'record'
     elif isinstance(node, ast.Function):
@@ -75,6 +77,10 @@ def get_node_kind(node):
         node_kind = 'signal'
     elif isinstance(node, ast.VFunction) and node.parent is not None:
         node_kind = 'vfunc'
+    elif isinstance(node, ast.Callable):
+        node_kind = 'callback'
+    elif isinstance(node, ast.Field):
+        node_kind = 'field'
     else:
         node_kind = 'default'
 
@@ -170,9 +176,6 @@ class DocFormatter(object):
         return saxutils.escape(text)
 
     def should_render_node(self, node):
-        if isinstance(node, ast.Constant):
-            return False
-
         if getattr(node, "private", False):
             return False
 
@@ -184,7 +187,7 @@ class DocFormatter(object):
 
         result = ''
         for para in doc.split('\n\n'):
-            result += '<p>'
+            result += '  <p>'
             result += self.format_inline(node, para)
             result += '</p>'
         return result
@@ -295,7 +298,7 @@ class DocFormatter(object):
 
         return dispatch[kind](node, match, props)
 
-    def get_parameters(self, node):
+    def get_in_parameters(self, node):
         raise NotImplementedError
 
     def format_inline(self, node, para):
@@ -312,12 +315,12 @@ class DocFormatter(object):
     def format_function_name(self, func):
         raise NotImplementedError
 
-    def format_type(self, type_):
+    def format_type(self, type_, link=False):
         raise NotImplementedError
 
     def format_page_name(self, node):
         if isinstance(node, ast.Namespace):
-            return 'Index'
+            return node.name
         elif isinstance(node, ast.Function):
             return self.format_function_name(node)
         elif isinstance(node, ast.Property) and node.parent is not None:
@@ -326,6 +329,8 @@ class DocFormatter(object):
             return '%s::%s' % (self.format_page_name(node.parent), node.name)
         elif isinstance(node, ast.VFunction) and node.parent is not None:
             return '%s::%s' % (self.format_page_name(node.parent), node.name)
+        elif isinstance(node, ast.Field) and node.parent is not None:
+            return '%s->%s' % (self.format_page_name(node.parent), node.name)
         else:
             return make_page_id(node)
 
@@ -340,31 +345,88 @@ class DocFormatter(object):
             attrs = [('xref', make_page_id(node))] + attrdict.items()
             return xmlwriter.build_xml_tag('link', attrs)
 
+    def field_is_writable(self, field):
+        return True
+
     def format_property_flags(self, property_, construct_only=False):
         flags = []
+
         if property_.readable and not construct_only:
             flags.append("Read")
-        if property_.writable and not construct_only:
+        if property_.writable and not construct_only and \
+           self.field_is_writable(property_):
             flags.append("Write")
-        if property_.construct:
-            flags.append("Construct")
-        if property_.construct_only:
-            flags.append("Construct Only")
+        if isinstance(property_, ast.Property):
+            if property_.construct:
+                flags.append("Construct")
+            if property_.construct_only:
+                flags.append("Construct Only")
 
         return " / ".join(flags)
 
-    def to_underscores(self, string):
-        return to_underscores(string)
+    def to_underscores(self, node):
+        if isinstance(node, ast.Property):
+            return node.name.replace('-', '_')
+        elif node.name:
+            return to_underscores(node.name)
+        elif isinstance(node, ast.Callback):
+            return 'callback'
+        elif isinstance(node, ast.Union):
+            return 'anonymous_union'
+        elif isinstance(node, ast.Field):
+            return 'anonymous field'
+        else:
+            raise Exception('invalid node')
+
+    def to_lower_camel_case(self, string):
+        return string[0].lower() + string[1:]
 
     def get_class_hierarchy(self, node):
-        parent_chain = [node]
+        assert isinstance(node, ast.Class)
 
+        parent_chain = [node]
         while node.parent_type:
             node = self._transformer.lookup_typenode(node.parent_type)
             parent_chain.append(node)
 
         parent_chain.reverse()
         return parent_chain
+
+    def format_prerequisites(self, node):
+        assert isinstance(node, ast.Interface)
+
+        if len(node.prerequisites) > 0:
+            if len(node.prerequisites) > 1:
+                return ', '.join(node.prerequisites[:-1]) + \
+                    ' and ' + node.prerequisites[-1]
+            else:
+                return node.prerequisites[0]
+        else:
+            return 'GObject.Object'
+
+    def format_known_implementations(self, node):
+        assert isinstance(node, ast.Interface)
+
+        node_name = node.namespace.name + '.' + node.name
+        impl = []
+
+        for c in node.namespace.itervalues():
+            if not isinstance(c, ast.Class):
+                continue
+            for implemented in c.interfaces:
+                if implemented.target_giname == node_name:
+                    impl.append(c)
+                    break
+
+        if len(impl) == 0:
+            return 'None'
+        else:
+            out = '%s is implemented by ' % (node.name,)
+            if len(impl) == 1:
+                return out + impl[0].name
+            else:
+                return out + ', '.join(i.name for i in impl[:-1]) + \
+                    ' and ' + impl[-1].name
 
 
 class DocFormatterC(DocFormatter):
@@ -377,7 +439,7 @@ class DocFormatterC(DocFormatter):
         "NULL": "NULL",
     }
 
-    def format_type(self, type_):
+    def format_type(self, type_, link=False):
         if isinstance(type_, ast.Array):
             return self.format_type(type_.element_type) + '*'
         elif type_.ctype is not None:
@@ -394,7 +456,7 @@ class DocFormatterC(DocFormatter):
         else:
             return func.name
 
-    def get_parameters(self, node):
+    def get_in_parameters(self, node):
         return node.all_parameters
 
 
@@ -466,7 +528,7 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
 
         return fundamental_types.get(name, name)
 
-    def format_type(self, type_):
+    def format_type(self, type_, link=False):
         if isinstance(type_, (ast.List, ast.Array)):
             return '[' + self.format_type(type_.element_type) + ']'
         elif isinstance(type_, ast.Map):
@@ -483,7 +545,7 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
         else:
             return func.name
 
-    def get_parameters(self, node):
+    def get_in_parameters(self, node):
         return node.all_parameters
 
 
@@ -506,61 +568,155 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
 
         return False
 
+    def resolve_gboxed_constructor(self, node):
+        zero_args_constructor = None
+        default_constructor = None
+
+        for c in node.constructors:
+            if zero_args_constructor is None and \
+               len(c.parameters) == 0:
+                zero_args_constructor = c
+            if default_constructor is None and \
+               c.name == 'new':
+                default_constructor = c
+        if default_constructor is None:
+            default_constructor = zero_args_constructor
+        if default_constructor is None and \
+           len(node.constructors) > 0:
+            default_constructor = node.constructors[0]
+
+        node.gjs_default_constructor = default_constructor
+        node.gjs_zero_args_constructor = zero_args_constructor
+
+    def should_render_node(self, node):
+        if isinstance(node, (ast.Compound, ast.Boxed)):
+            self.resolve_gboxed_constructor(node)
+
+        if isinstance(node, ast.ErrorQuarkFunction):
+            return False
+        if isinstance(node, ast.Field):
+            if node.type is None:
+                return False
+            if isinstance(node.parent, ast.Class):
+                return False
+        if isinstance(node, ast.Union) and node.name is None:
+            return False
+        if isinstance(node, ast.Class):
+            is_gobject = False
+            parent = node
+            while parent:
+                if parent.namespace.name == 'GObject' and \
+                   parent.name == 'Object':
+                    is_gobject = True
+                    break
+                if not parent.parent_type:
+                    break
+                parent = self._transformer.lookup_typenode(parent.parent_type)
+            is_gparam = node.namespace.name == 'GObject' and \
+                node.name == 'ParamSpec'
+            if not is_gobject and not is_gparam:
+                return False
+        if isinstance(node, ast.Function) and node.is_constructor:
+            parent = node.parent
+            if isinstance(parent, (ast.Compound, ast.Boxed)):
+                if node == parent.gjs_default_constructor:
+                    return False
+            if isinstance(parent, ast.Class):
+                return False
+
+        return super(DocFormatterGjs, self).should_render_node(node)
+
     def format_fundamental_type(self, name):
         fundamental_types = {
+            "none": "void",
+            "gpointer": "void",
+            "gboolean": "Boolean",
+            "gint8": "Number(gint8)",
+            "guint8": "Number(guint8)",
+            "gint16": "Number(gint16)",
+            "guint16": "Number(guint16)",
+            "gint32": "Number(gint32)",
+            "guint32": "Number(guint32)",
+            "gchar": "Number(gchar)",
+            "guchar": "Number(guchar)",
+            "gshort": "Number(gshort)",
+            "gint": "Number(gint)",
+            "guint": "Number(guint)",
+            "gfloat": "Number(gfloat)",
+            "gdouble": "Number(gdouble)",
             "utf8": "String",
             "gunichar": "String",
-            "gchar": "String",
-            "guchar": "String",
-            "gboolean": "Boolean",
-            "gint": "Number",
-            "guint": "Number",
-            "glong": "Number",
-            "gulong": "Number",
-            "gint64": "Number",
-            "guint64": "Number",
-            "gfloat": "Number",
-            "gdouble": "Number",
-            "gchararray": "String",
-            "GParam": "GLib.Param",
-            "PyObject": "Object",
-            "GStrv": "[String]",
-            "GVariant": "GLib.Variant"}
+            "filename": "String",
+            "GType": "GObject.Type",
+            "GVariant": "GLib.Variant",
+            # These cannot be fully represented in gjs
+            "gsize": "Number(gsize)",
+            "gssize": "Number(gssize)",
+            "gintptr": "Number(gintptr)",
+            "guintptr": "Number(guintptr)",
+            "glong": "Number(glong)",
+            "gulong": "Number(gulong)",
+            "gint64": "Number(gint64)",
+            "guint64": "Number(guint64)",
+            "long double": "Number(long double)",
+            "long long": "Number(long long)",
+            "unsigned long long": "Number(unsigned long long)"}
 
         return fundamental_types.get(name, name)
 
-    def format_type(self, type_):
+    def format_type(self, type_, link=False):
         if isinstance(type_, (ast.List, ast.Array)):
-            return '[' + self.format_type(type_.element_type) + ']'
+            return 'Array(' + self.format_type(type_.element_type, link) + ')'
         elif isinstance(type_, ast.Map):
-            return '{%s: %s}' % (self.format_type(type_.key_type),
-                                 self.format_type(type_.value_type))
-        elif type_.target_fundamental == "none":
+            return '{%s: %s}' % (self.format_type(type_.key_type, link),
+                                 self.format_type(type_.value_type, link))
+        elif not type_ or type_.target_fundamental == "none":
             return "void"
         elif type_.target_giname is not None:
-            return type_.target_giname
+            giname = type_.target_giname
+            if link:
+                nsname = self._transformer.namespace.name
+                if giname.startswith(nsname + '.'):
+                    return '<link xref="%s">%s</link>' % (giname, giname)
+                else:
+                    resolved = self._transformer.lookup_typenode(type_)
+                    if resolved:
+                        ns = resolved.namespace
+                        return '<link href="../%s-%s/%s.page">%s</link>' % \
+                            (ns.name, str(ns.version), giname, giname)
+            return giname
         else:
             return self.format_fundamental_type(type_.target_fundamental)
 
     def format_function_name(self, func):
         if func.is_method:
             return "%s.prototype.%s" % (self.format_page_name(func.parent), func.name)
-        elif func.is_constructor:
+        elif func.parent is not None:
             return "%s.%s" % (self.format_page_name(func.parent), func.name)
         else:
             return func.name
 
-    def get_parameters(self, node):
-        skip = []
+    def format_page_name(self, node):
+        if isinstance(node, (ast.Field, ast.Property)):
+            return '%s.%s' % (self.format_page_name(node.parent), self.to_underscores(node))
+        else:
+            return DocFormatterIntrospectableBase.format_page_name(self, node)
+
+    def has_any_parameters(self, node):
+        return len(node.parameters) > 0 or \
+            node.retval.type.target_fundamental != 'none'
+
+    def get_in_parameters(self, node):
+        skip = set()
         for param in node.parameters:
             if param.direction == ast.PARAM_DIRECTION_OUT:
-                skip.append(param)
+                skip.add(param)
             if param.closure_name is not None:
-                skip.append(node.get_parameter(param.closure_name))
+                skip.add(node.get_parameter(param.closure_name))
             if param.destroy_name is not None:
-                skip.append(node.get_parameter(param.destroy_name))
+                skip.add(node.get_parameter(param.destroy_name))
             if isinstance(param.type, ast.Array) and param.type.length_param_name is not None:
-                skip.append(node.get_parameter(param.type.length_param_name))
+                skip.add(node.get_parameter(param.type.length_param_name))
 
         params = []
         for param in node.parameters:
@@ -568,6 +724,109 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
                 params.append(param)
         return params
 
+    def get_out_parameters(self, node):
+        skip = set()
+        for param in node.parameters:
+            if param.direction == ast.PARAM_DIRECTION_IN:
+                skip.add(param)
+            if param.closure_name is not None:
+                skip.add(node.get_parameter(param.closure_name))
+            if param.destroy_name is not None:
+                skip.add(node.get_parameter(param.destroy_name))
+            if isinstance(param.type, ast.Array) and param.type.length_param_name is not None:
+                skip.add(node.get_parameter(param.type.length_param_name))
+
+        params = []
+        if node.retval.type.target_fundamental != 'none':
+            name = 'return_value'
+            if node.retval.type.target_fundamental == 'gboolean':
+                name = 'ok'
+
+            params.append(ast.Parameter(name, node.retval.type,
+                                        ast.PARAM_DIRECTION_OUT))
+        for param in node.parameters:
+            if param not in skip:
+                params.append(param)
+
+        if len(params) == 1 and params[0].argname == 'return_value':
+            params[0].argname = 'Returns'
+
+        return params
+
+    def format_in_parameters(self, node):
+        in_params = self.get_in_parameters(node)
+        return ', '.join(('%s: %s' % (p.argname, self.format_type(p.type, True)))
+                         for p in in_params)
+
+    def format_out_parameters(self, node):
+        out_params = self.get_out_parameters(node)
+
+        if len(out_params) == 0:
+            return 'void'
+        elif len(out_params) == 1:
+            return self.format_type(out_params[0].type, True)
+        else:
+            return '[' + ', '.join(('%s: %s' % (p.argname, self.format_type(p.type, True)))
+                                   for p in out_params) + ']'
+
+    def field_is_writable(self, node):
+        if isinstance(node, ast.Field):
+            if node.type is None:
+                return False
+            if node.private:
+                return False
+            if node.type.target_fundamental not in \
+               (None, 'none', 'gpointer', 'utf8', 'filename', 'va_list'):
+                return True
+
+            resolved = self._transformer.lookup_typenode(node.type)
+            if resolved:
+                if isinstance(resolved, ast.Compound) and node.type.ctype[-1] != '*':
+                    return self._struct_is_simple(resolved)
+                elif isinstance(resolved, ast.Enum):
+                    return True
+            return False
+        else:
+            return True
+
+    def _struct_is_simple(self, node):
+        for f in node.fields:
+            if not self.field_is_writable(f):
+                return False
+        return True
+
+    def format_gboxed_constructor(self, node):
+        if node.namespace.name == 'GLib' and node.name == 'Variant':
+            return 'signature: String, value: Any'
+
+        zero_args_constructor = node.gjs_default_constructor
+        default_constructor = node.gjs_zero_args_constructor
+
+        can_allocate = zero_args_constructor is not None
+        if not can_allocate and isinstance(node, ast.Record):
+            can_allocate = self._struct_is_simple(node)
+
+        # Small lie: if can_allocate is False, and
+        # default_constructor is None, then you cannot
+        # construct the boxed in any way. But let's
+        # pretend you can with the regular constructor
+        if can_allocate or default_constructor is None:
+            if isinstance(node, ast.Compound):
+                fields = filter(self.field_is_writable, node.fields)
+                out = ''
+                if len(fields) > 0:
+                    out += "{\n"
+                    for f in fields:
+                        out += "    <link xref='%s.%s-%s'>%s</link>: value\n" % \
+                               (node.namespace.name, node.name, f.name, f.name)
+                    out += "}"
+                return out
+            else:
+                return ''
+        else:
+            construct_params = self.get_in_parameters(default_constructor)
+            return ', '.join(('%s: %s' % (p.argname, self.format_type(p.type)))
+                             for p in construct_params)
 
 LANGUAGES = {
     "c": DocFormatterC,
@@ -620,6 +879,14 @@ class DocWriter(object):
             return False
         if self._formatter.should_render_node(node):
             self._render_node(node, chain, output)
+
+            # hack: fields are not Nodes in the ast, so we don't
+            # see them in the visit. Handle them manually here
+            if isinstance(node, (ast.Compound, ast.Class)):
+                chain.append(node)
+                for f in node.fields:
+                    self._walk_node(output, f, chain)
+                chain.pop()
             return True
         return False
 
@@ -638,7 +905,8 @@ class DocWriter(object):
                                  node=node,
                                  page_id=page_id,
                                  page_kind=page_kind,
-                                 formatter=self._formatter)
+                                 formatter=self._formatter,
+                                 ast=ast)
 
         output_file_name = os.path.join(os.path.abspath(output),
                                         page_id + '.page')

@@ -1,6 +1,7 @@
 <%! page_type="guide" %>\
 <%inherit file="/base.tmpl"/>
 <%block name="details">
+% if isinstance(node, ast.Class):
   <synopsis>
     <title>Hierarchy</title>
     <tree>
@@ -13,8 +14,23 @@
 % endfor
     </tree>
   </synopsis>
+% elif isinstance(node, ast.Interface):
+  <synopsis>
+    <title>Prerequisites</title>
+    <p>${node.name} requires ${formatter.format_prerequisites(node)}</p>
+  </synopsis>
+  <synopsis>
+    <title>Known Implementations</title>
+    <p>${formatter.format_known_implementations(node)}</p>
+  </synopsis>
+% endif
 </%block>
-<%block name="links">
+<%block name="links">\
+  <links type="topic" ui:expanded="true"
+         api:type="function" api:mime="${formatter.mime_type}"
+         groups="constructor" style="linklist">
+    <title>Constructors</title>
+  </links>
   <links type="topic" ui:expanded="true"
          api:type="function" api:mime="${formatter.mime_type}"
          groups="method" style="linklist">
@@ -23,8 +39,9 @@
   <links type="topic" ui:expanded="true"
          api:type="function" api:mime="${formatter.mime_type}"
          groups="function" style="linklist">
-    <title>Functions</title>
+    <title>Static Functions</title>
   </links>
+% if isinstance(node, (ast.Class, ast.Interface)):
   <links type="topic" ui:expanded="true" groups="property" style="linklist">
     <title>Properties</title>
   </links>
@@ -34,7 +51,11 @@
   <links type="topic" ui:expanded="true" groups="vfunc" style="linklist">
     <title>Virtual functions</title>
   </links>
+% endif
+  <links type="topic" ui:expanded="true" groups="field" style="linklist">
+    <title>Fields</title>
+  </links>
   <links type="topic" ui:expanded="true" groups="#first #default #last" style="linklist">
     <title>Other</title>
-  </links>
+  </links>\
 </%block>

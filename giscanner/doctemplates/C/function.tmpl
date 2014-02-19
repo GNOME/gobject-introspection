@@ -6,7 +6,7 @@
         <api:type>${formatter.format_type(node.retval.type) | x}</api:type>
       </api:returns>
       <api:name>${formatter.format_function_name(node)}</api:name>
-% for arg in formatter.get_parameters(node):
+% for arg in formatter.get_in_parameters(node):
 % if arg.type.ctype == '<varargs>':
       <api:varargs/>
 % else:
@@ -19,12 +19,12 @@
     </api:function>
 </%block>
 <%block name="synopsis">
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 ${node.retval.type.ctype} ${formatter.format_function_name(node)} (\
-% if not formatter.get_parameters(node):
+% if not formatter.get_in_parameters(node):
 void\
 % else:
-% for ix, arg in enumerate(formatter.get_parameters(node)):
+% for ix, arg in enumerate(formatter.get_in_parameters(node)):
 % if ix != 0:
 ${' ' * (len(formatter.format_type(node.retval.type)) + len(formatter.format_function_name(node)) + 3)}\
 % endif
@@ -33,18 +33,17 @@ ${' ' * (len(formatter.format_type(node.retval.type)) + len(formatter.format_fun
 % else:
 ${formatter.format_type(arg.type) | x} ${arg.argname}\
 % endif
-% if ix != len(formatter.get_parameters(node)) - 1:
+% if ix != len(formatter.get_in_parameters(node)) - 1:
 ,
 % endif
 % endfor
 % endif
 );
-</code></synopsis>
-</%block>
+  </code></synopsis></%block>
 <%block name="details">
-% if formatter.get_parameters(node) or node.retval:
+% if formatter.get_in_parameters(node) or node.retval:
 <terms>
-% for arg in formatter.get_parameters(node):
+% for arg in formatter.get_in_parameters(node):
 <item>
 <title><code>${arg.argname}</code></title>
 ${formatter.format(node, arg.doc)}

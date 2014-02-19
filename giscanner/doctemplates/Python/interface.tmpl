@@ -4,7 +4,6 @@
 from gi.repository import ${namespace.name}
 
 ${formatter.to_underscores(node).lower()} = ${namespace.name}.${node.name}(\
-% if isinstance(node, (ast.Class, ast.Interface)):
 % for ix, property_ in enumerate(node.properties):
 % if property_.construct or property_.construct_only or property_.writable:
 <link xref='${namespace.name}.${node.name}-${property_.name}'>${property_.name.replace('-', '_')}</link>=value\
@@ -13,6 +12,5 @@ ${formatter.to_underscores(node).lower()} = ${namespace.name}.${node.name}(\
 % endif
 % endif
 % endfor
-% endif
-)
+)\
   </code></synopsis></%block>

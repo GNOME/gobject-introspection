@@ -62,33 +62,42 @@ nobase_dist_template_DATA =		\
 	giscanner/doctemplates/base.tmpl	\
 	giscanner/doctemplates/class.tmpl	\
 	giscanner/doctemplates/namespace.tmpl	\
+	giscanner/doctemplates/C/callback.tmpl 	\
 	giscanner/doctemplates/C/class.tmpl	\
 	giscanner/doctemplates/C/constructor.tmpl	\
 	giscanner/doctemplates/C/default.tmpl	\
 	giscanner/doctemplates/C/enum.tmpl	\
 	giscanner/doctemplates/C/function.tmpl	\
+	giscanner/doctemplates/C/field.tmpl 	\
+	giscanner/doctemplates/C/interface.tmpl	\
 	giscanner/doctemplates/C/method.tmpl		\
 	giscanner/doctemplates/C/namespace.tmpl	\
 	giscanner/doctemplates/C/property.tmpl	\
 	giscanner/doctemplates/C/record.tmpl	\
 	giscanner/doctemplates/C/signal.tmpl	\
 	giscanner/doctemplates/C/vfunc.tmpl	\
+	giscanner/doctemplates/Python/callback.tmpl 	\
 	giscanner/doctemplates/Python/class.tmpl	\
 	giscanner/doctemplates/Python/constructor.tmpl	\
 	giscanner/doctemplates/Python/default.tmpl	\
 	giscanner/doctemplates/Python/enum.tmpl	\
 	giscanner/doctemplates/Python/function.tmpl	\
+	giscanner/doctemplates/Python/field.tmpl 	\
+	giscanner/doctemplates/Python/interface.tmpl	\
 	giscanner/doctemplates/Python/method.tmpl	\
 	giscanner/doctemplates/Python/namespace.tmpl	\
 	giscanner/doctemplates/Python/property.tmpl	\
 	giscanner/doctemplates/Python/record.tmpl	\
 	giscanner/doctemplates/Python/signal.tmpl	\
 	giscanner/doctemplates/Python/vfunc.tmpl	\
+	giscanner/doctemplates/Gjs/callback.tmpl 	\
 	giscanner/doctemplates/Gjs/class.tmpl	\
 	giscanner/doctemplates/Gjs/constructor.tmpl	\
 	giscanner/doctemplates/Gjs/default.tmpl	\
 	giscanner/doctemplates/Gjs/enum.tmpl	\
 	giscanner/doctemplates/Gjs/function.tmpl	\
+	giscanner/doctemplates/Gjs/field.tmpl 	\
+	giscanner/doctemplates/Gjs/interface.tmpl	\
 	giscanner/doctemplates/Gjs/method.tmpl	\
 	giscanner/doctemplates/Gjs/namespace.tmpl	\
 	giscanner/doctemplates/Gjs/property.tmpl	\
