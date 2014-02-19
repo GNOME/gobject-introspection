@@ -31,6 +31,7 @@
 %{
 #include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 #ifndef _WIN32
 #include <limits.h>
 #endif
