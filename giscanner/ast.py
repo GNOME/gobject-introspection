@@ -409,12 +409,15 @@ but adds it to things like ctypes, symbols, and type_names.
             self.type_names[node.gtype_name] = node
         elif isinstance(node, Function):
             self.symbols[node.symbol] = node
-        if isinstance(node, (Compound, Class, Interface)):
+        if isinstance(node, (Compound, Class, Interface, Boxed)):
             for fn in chain(node.methods, node.static_methods, node.constructors):
                 if not isinstance(fn, Function):
                     continue
                 fn.namespace = self
                 self.symbols[fn.symbol] = fn
+        if isinstance(node, (Compound, Class, Interface)):
+            for f in node.fields:
+                f.namespace = self
         if isinstance(node, (Class, Interface)):
             for m in chain(node.signals, node.properties):
                 m.namespace = self
@@ -916,6 +919,7 @@ class Field(Annotated):
         self.bits = bits
         self.anonymous_node = anonymous_node
         self.private = False
+        self.namespace = None
         self.parent = None  # a compound
 
     def __cmp__(self, other):
