@@ -6,20 +6,9 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="index" group="default" type="guide"/>
-    
+    <link xref="index" group="default" type="guide"/>
   </info>
   <title>Regress.IntSet</title>
-  
-  
-  
-    <p>Compatibility typedef, like telepathy-glib's TpIntSet</p>
-  
-  
-  
-  
-  
-  
-  
+  <p>Compatibility typedef, like telepathy-glib's TpIntSet</p>
+
 </page>

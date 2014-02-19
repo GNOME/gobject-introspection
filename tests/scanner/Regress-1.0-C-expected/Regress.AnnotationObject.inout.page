@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,36 +21,27 @@
         <api:name>inoutarg</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_object_inout</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 gint regress_annotation_object_inout (RegressAnnotationObject* object,
                                       int* inoutarg);
-</code></synopsis>
+  </code></synopsis>
+  <p>This is a test for out arguments</p>
 
-  
-    <p>This is a test for out arguments</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>object</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>inoutarg</code></title>
-<p>This is an argument test</p>
+  <p>This is an argument test</p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>an int</p>
+  <p>an int</p>
 </item>
 </terms>
 
-  
-  
 </page>

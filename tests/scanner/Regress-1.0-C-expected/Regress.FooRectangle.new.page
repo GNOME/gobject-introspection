@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooRectangle" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -30,24 +29,17 @@
         <api:name>height</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_foo_rectangle_new</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 RegressFooRectangle* regress_foo_rectangle_new (int x,
                                                 int y,
                                                 int width,
                                                 int height);
-</code></synopsis>
-
-  
-    <p>This is a C convenience constructor; we have to (skip)
+  </code></synopsis>
+  <p>This is a C convenience constructor; we have to (skip)
 it because it's not a boxed type.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>x</code></title>
@@ -71,6 +63,4 @@ it because it's not a boxed type.</p>
 </item>
 </terms>
 
-  
-  
 </page>

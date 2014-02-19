@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,38 +25,29 @@
         <api:name>user_data</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.foreach</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, Regress.AnnotationForeachFunc, gpointer)
 @returns(none)
 def foreach(self, func, user_data):
     # Python wrapper for regress_annotation_object_foreach()
-</code></synopsis>
+  </code></synopsis>
+  <p>Test taking a call-scoped callback</p>
 
-  
-    <p>Test taking a call-scoped callback</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="Regress.AnnotationObject"/></p>
+  <p>a <link xref="Regress.AnnotationObject"/></p>
 </item>
 <item>
 <title><code>func</code></title>
-<p>Callback to invoke</p>
+  <p>Callback to invoke</p>
 </item>
 <item>
 <title><code>user_data</code></title>
-<p>Callback user data</p>
+  <p>Callback user data</p>
 </item>
 </terms>
 
-  
-  
 </page>

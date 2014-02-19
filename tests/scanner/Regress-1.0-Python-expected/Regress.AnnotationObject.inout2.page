@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,31 +21,24 @@
         <api:name>inoutarg</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.inout2</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, int)
 @returns(int)
 def inout2(self, inoutarg):
     # Python wrapper for regress_annotation_object_inout2()
-</code></synopsis>
+  </code></synopsis>
+  <p>This is a second test for out arguments</p>
 
-  
-    <p>This is a second test for out arguments</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>inoutarg</code></title>
-<p>This is an argument test</p>
+  <p>This is an argument test</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -54,6 +46,4 @@ def inout2(self, inoutarg):
 </item>
 </terms>
 
-  
-  
 </page>

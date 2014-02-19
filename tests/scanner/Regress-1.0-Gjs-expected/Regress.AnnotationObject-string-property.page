@@ -6,25 +6,13 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="property" type="guide"/>
     <title type="link" role="topic">string-property</title>
-
   </info>
-  <title>Regress.AnnotationObject:string-property</title>
-  
-<synopsis><code mime="text/x-python">
-"string-property"             String                : Read / Write / Construct
-</code></synopsis>
-
-  
-    <p>This is a property which is a string</p>
-  
-  
-    <p>Since 1.0</p>
-  
-  
-  
-  
-  
+  <title>Regress.AnnotationObject.string_property</title>
+  <synopsis><code mime="text/x-gjs">
+AnnotationObject.string_property: String (Read / Write / Construct)
+  </code></synopsis>
+  <p>This is a property which is a string</p>
+  <p>Since 1.0</p>
 </page>

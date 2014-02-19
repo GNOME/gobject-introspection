@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,35 +21,26 @@
         <api:name>attributes</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.has_parameter_named_attrs</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.has_parameter_named_attrs</title>
+  <synopsis><code mime="text/x-python">
 @accepts(int, [guint32])
 @returns(none)
 def has_parameter_named_attrs(foo, attributes):
     # Python wrapper for regress_has_parameter_named_attrs()
-</code></synopsis>
-
-  
-    <p>This test case mirrors GnomeKeyringPasswordSchema from
+  </code></synopsis>
+  <p>This test case mirrors GnomeKeyringPasswordSchema from
 libgnome-keyring.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>foo</code></title>
-<p>some int</p>
+  <p>some int</p>
 </item>
 <item>
 <title><code>attributes</code></title>
-<p>list of attributes</p>
+  <p>list of attributes</p>
 </item>
 </terms>
 
-  
-  
 </page>

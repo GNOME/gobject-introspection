@@ -6,28 +6,20 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="signal" type="guide"/>
     <title type="link" role="topic">list-signal</title>
-
   </info>
   <title>Regress.AnnotationObject::list-signal</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void list-signal (gpointer list);
-</code></synopsis>
-
-  
-    <p>This is a signal which takes a list of strings, but it's not
+  </code></synopsis>
+  <p>This is a signal which takes a list of strings, but it's not
 known by GObject as it's only marked as G_TYPE_POINTER</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>list</code></title>
-<p>a list of strings</p>
+  <p>a list of strings</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -35,6 +27,4 @@ known by GObject as it's only marked as G_TYPE_POINTER</p>
 </item>
 </terms>
 
-  
-  
 </page>

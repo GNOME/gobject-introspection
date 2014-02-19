@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,33 +13,24 @@
       </api:returns>
       <api:name>regress_annotation_object_set_data</api:name>
       <api:arg>
-        <api:type>[guint8]</api:type>
+        <api:type>Array(Number(guint8))</api:type>
         <api:name>data</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.prototype.set_data</title>
-  
-<synopsis><code mime="text/x-gjs">
-function set_data(data:[guint8]):void {
+  <synopsis><code mime="text/x-gjs">
+function set_data(data: Array(Number(guint8))): void {
     // Gjs wrapper for regress_annotation_object_set_data()
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>Test taking a guchar * with a length.</p>
 
-  
-    <p>Test taking a guchar * with a length.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>data</code></title>
-<p>The data</p>
+  <p>The data</p>
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,21 +21,14 @@
         <api:name>target</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_foo_object_new_cookie</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 RegressFooObjectCookie regress_foo_object_new_cookie (RegressFooObject* object,
                                                       const char* target);
-</code></synopsis>
+  </code></synopsis>
+  <p>Not sure why this test is here...</p>
 
-  
-    <p>Not sure why this test is here...</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>object</code></title>
@@ -52,6 +44,4 @@ RegressFooObjectCookie regress_foo_object_new_cookie (RegressFooObject* object,
 </item>
 </terms>
 
-  
-  
 </page>

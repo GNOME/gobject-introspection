@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,41 +25,32 @@
         <api:name>toown2</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_object_calleesowns</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 gint regress_annotation_object_calleesowns (RegressAnnotationObject* object,
                                             GObject** toown1,
                                             GObject** toown2);
-</code></synopsis>
+  </code></synopsis>
+  <p>This is a test for out arguments, one transferred, other not</p>
 
-  
-    <p>This is a test for out arguments, one transferred, other not</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>object</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>toown1</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>toown2</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>an int</p>
+  <p>an int</p>
 </item>
 </terms>
 
-  
-  
 </page>

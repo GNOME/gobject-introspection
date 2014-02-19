@@ -6,34 +6,24 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.FooObject" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.FooObject" group="vfunc" type="guide"/>
   </info>
   <title>Regress.FooObject::read_fn</title>
-  
-<synopsis><code mime="text/x-gjs">
-function vfunc_read_fn(offset:Number, length:Number):void {
+  <synopsis><code mime="text/x-gjs">
+function vfunc_read_fn(offset: Number(gint), length: Number(gint)): void {
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>Read some stuff.</p>
 
-  
-    <p>Read some stuff.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>offset</code></title>
-<p>offset</p>
+  <p>offset</p>
 </item>
 <item>
 <title><code>length</code></title>
-<p>length</p>
+  <p>length</p>
 </item>
 </terms>
 
-  
-  
 </page>

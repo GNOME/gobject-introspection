@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,23 +25,16 @@
         <api:name>destroy</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.foo_destroy_notify_callback</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.foo_destroy_notify_callback</title>
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.FooCallback, gpointer, GLib.DestroyNotify)
 @returns(none)
 def foo_destroy_notify_callback(callback, data, destroy):
     # Python wrapper for regress_foo_destroy_notify_callback()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>callback</code></title>
@@ -58,6 +50,4 @@ def foo_destroy_notify_callback(callback, data, destroy):
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,31 +21,24 @@
         <api:name>somestr</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_obj_do_matrix</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 int regress_test_obj_do_matrix (RegressTestObj* obj,
                                 const char* somestr);
-</code></synopsis>
-
-  
-    <p>This method is virtual.  Notably its name differs from the virtual
+  </code></synopsis>
+  <p>This method is virtual.  Notably its name differs from the virtual
 slot name, which makes it useful for testing bindings handle this
 case.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>obj</code></title>
-<p>A <link xref="Regress.TestObj"/></p>
+  <p>A <link xref="Regress.TestObj"/></p>
 </item>
 <item>
 <title><code>somestr</code></title>
-<p>Meaningless string</p>
+  <p>Meaningless string</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -54,6 +46,4 @@ case.</p>
 </item>
 </terms>
 
-  
-  
 </page>

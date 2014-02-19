@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,29 +17,20 @@
         <api:name>obj</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>func_obj_null_in</title>
-  
-<synopsis><code mime="text/x-gjs">
-function func_obj_null_in(obj:Regress.TestObj):void {
+  <title>Regress.func_obj_null_in</title>
+  <synopsis><code mime="text/x-gjs">
+function func_obj_null_in(obj: <link xref="Regress.TestObj">Regress.TestObj</link>): void {
     // Gjs wrapper for regress_func_obj_null_in()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>obj</code></title>
-<p>A <link xref="Regress.TestObj"/></p>
+  <p>A <link xref="Regress.TestObj"/></p>
 </item>
 </terms>
 
-  
-  
 </page>

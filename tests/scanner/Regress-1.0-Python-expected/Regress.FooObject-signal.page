@@ -6,23 +6,15 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="signal" type="guide"/>
     <title type="link" role="topic">signal</title>
-
   </info>
   <title>Regress.FooObject::signal</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 def callback(foo_object, object, p0, user_param1, ...)
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>foo_object</code></title>
@@ -48,6 +40,4 @@ def callback(foo_object, object, p0, user_param1, ...)
 </item>
 </terms>
 
-  
-  
 </page>

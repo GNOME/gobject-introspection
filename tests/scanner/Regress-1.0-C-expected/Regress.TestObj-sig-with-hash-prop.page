@@ -6,24 +6,16 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="signal" type="guide"/>
     <title type="link" role="topic">sig-with-hash-prop</title>
-
   </info>
   <title>Regress.TestObj::sig-with-hash-prop</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void sig-with-hash-prop (&lt;map&gt; hash);
-</code></synopsis>
-
-  
-    <p>This test signal is like TelepathyGlib's
+  </code></synopsis>
+  <p>This test signal is like TelepathyGlib's
  TpAccount::status-changed</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>hash</code></title>
@@ -35,6 +27,4 @@ void sig-with-hash-prop (&lt;map&gt; hash);
 </item>
 </terms>
 
-  
-  
 </page>

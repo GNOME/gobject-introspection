@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,29 +17,20 @@
         <api:name>func</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.prototype.watch_full</title>
-  
-<synopsis><code mime="text/x-gjs">
-function watch_full(func:Regress.AnnotationForeachFunc):void {
+  <synopsis><code mime="text/x-gjs">
+function watch_full(func: <link xref="Regress.AnnotationForeachFunc">Regress.AnnotationForeachFunc</link>): void {
     // Gjs wrapper for regress_annotation_object_watch_full()
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>Test overriding via the "Rename To" annotation.</p>
 
-  
-    <p>Test overriding via the "Rename To" annotation.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>func</code></title>
-<p>The callback</p>
+  <p>The callback</p>
 </item>
 </terms>
 
-  
-  
 </page>

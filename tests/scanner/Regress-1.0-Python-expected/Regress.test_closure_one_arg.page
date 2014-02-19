@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,23 +21,16 @@
         <api:name>arg</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_closure_one_arg</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_closure_one_arg</title>
+  <synopsis><code mime="text/x-python">
 @accepts(GObject.Closure, int)
 @returns(int)
 def test_closure_one_arg(closure, arg):
     # Python wrapper for regress_test_closure_one_arg()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>closure</code></title>
@@ -54,6 +46,4 @@ def test_closure_one_arg(closure, arg):
 </item>
 </terms>
 
-  
-  
 </page>

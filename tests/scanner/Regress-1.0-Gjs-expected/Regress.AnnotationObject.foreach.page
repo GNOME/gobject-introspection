@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,29 +17,20 @@
         <api:name>func</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.prototype.foreach</title>
-  
-<synopsis><code mime="text/x-gjs">
-function foreach(func:Regress.AnnotationForeachFunc):void {
+  <synopsis><code mime="text/x-gjs">
+function foreach(func: <link xref="Regress.AnnotationForeachFunc">Regress.AnnotationForeachFunc</link>): void {
     // Gjs wrapper for regress_annotation_object_foreach()
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>Test taking a call-scoped callback</p>
 
-  
-    <p>Test taking a call-scoped callback</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>func</code></title>
-<p>Callback to invoke</p>
+  <p>Callback to invoke</p>
 </item>
 </terms>
 
-  
-  
 </page>

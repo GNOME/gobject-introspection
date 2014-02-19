@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,27 +17,20 @@
         <api:name>self</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.create_object</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)
 @returns(GObject.Object)
 def create_object(self):
     # Python wrapper for regress_annotation_object_create_object()
-</code></synopsis>
+  </code></synopsis>
+  <p>Test returning a caller-owned object</p>
 
-  
-    <p>Test returning a caller-owned object</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -46,6 +38,4 @@ def create_object(self):
 </item>
 </terms>
 
-  
-  
 </page>

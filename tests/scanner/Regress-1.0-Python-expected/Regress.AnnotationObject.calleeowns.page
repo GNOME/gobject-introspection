@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,31 +21,24 @@
         <api:name>toown</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.calleeowns</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, GObject.Object)
 @returns(int)
 def calleeowns(self, toown):
     # Python wrapper for regress_annotation_object_calleeowns()
-</code></synopsis>
+  </code></synopsis>
+  <p>This is a test for out arguments; GObject defaults to transfer</p>
 
-  
-    <p>This is a test for out arguments; GObject defaults to transfer</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>toown</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -54,6 +46,4 @@ def calleeowns(self, toown):
 </item>
 </terms>
 
-  
-  
 </page>

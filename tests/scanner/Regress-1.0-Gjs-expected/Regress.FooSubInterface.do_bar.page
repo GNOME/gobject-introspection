@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooSubInterface" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,25 +13,14 @@
       </api:returns>
       <api:name>regress_foo_sub_interface_do_bar</api:name>
     </api:function>
-
   </info>
   <title>Regress.FooSubInterface.prototype.do_bar</title>
-  
-<synopsis><code mime="text/x-gjs">
-function do_bar():void {
+  <synopsis><code mime="text/x-gjs">
+function do_bar(): void {
     // Gjs wrapper for regress_foo_sub_interface_do_bar()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
-<terms>
-</terms>
 
-  
-  
+
 </page>

@@ -5,21 +5,9 @@
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
-  <info>
-    
-
-  </info>
-  <title>Index</title>
-  
-  
-  
-
-  
-
-  
-  
-  
-  <links type="topic" ui:expanded="true" groups="class" style="linklist">
+  <info>  </info>
+  <title>Regress</title>
+  <links type="topic" ui:expanded="true" groups="class interface" style="linklist">
     <title>Classes</title>
   </links>
   <links type="topic" ui:expanded="true" groups="function" style="linklist">

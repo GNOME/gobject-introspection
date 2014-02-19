@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,20 +17,13 @@
         <api:name>in</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_float</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 gfloat regress_test_float (gfloat in);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>in</code></title>
@@ -43,6 +35,4 @@ gfloat regress_test_float (gfloat in);
 </item>
 </terms>
 
-  
-  
 </page>

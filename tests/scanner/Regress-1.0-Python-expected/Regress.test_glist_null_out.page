@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,23 +17,16 @@
         <api:name>out_list</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_glist_null_out</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_glist_null_out</title>
+  <synopsis><code mime="text/x-python">
 @accepts([unicode])
 @returns(none)
 def test_glist_null_out(out_list):
     # Python wrapper for regress_test_glist_null_out()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>out_list</code></title>
@@ -42,6 +34,4 @@ def test_glist_null_out(out_list):
 </item>
 </terms>
 
-  
-  
 </page>

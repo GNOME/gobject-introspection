@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestWi8021x" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,21 +21,14 @@
         <api:name>v</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_wi_802_1x_set_testbool</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_test_wi_802_1x_set_testbool (RegressTestWi8021x* obj,
                                           gboolean v);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>obj</code></title>
@@ -52,6 +44,4 @@ void regress_test_wi_802_1x_set_testbool (RegressTestWi8021x* obj,
 </item>
 </terms>
 
-  
-  
 </page>

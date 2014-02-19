@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,23 +21,16 @@
         <api:name>x</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.FooObject.append_new_stack_layer</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.FooObject, int)
 @returns(Regress.FooOtherObject)
 def append_new_stack_layer(self, x):
     # Python wrapper for regress_foo_object_append_new_stack_layer()
-</code></synopsis>
+  </code></synopsis>
+  <p>This shouldn't be scanned as a constructor.</p>
 
-  
-    <p>This shouldn't be scanned as a constructor.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
@@ -54,6 +46,4 @@ def append_new_stack_layer(self, x):
 </item>
 </terms>
 
-  
-  
 </page>

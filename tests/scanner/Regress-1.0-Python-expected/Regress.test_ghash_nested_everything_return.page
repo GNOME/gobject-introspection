@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,22 +13,15 @@
       </api:returns>
       <api:name>regress_test_ghash_nested_everything_return</api:name>
     </api:function>
-
   </info>
-  <title>Index.test_ghash_nested_everything_return</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_ghash_nested_everything_return</title>
+  <synopsis><code mime="text/x-python">
 @returns({unicode: {unicode: unicode}})
 def test_ghash_nested_everything_return():
     # Python wrapper for regress_test_ghash_nested_everything_return()
-</code></synopsis>
+  </code></synopsis>
+  <p>Specify nested parameterized types directly with the (type ) annotation.</p>
 
-  
-    <p>Specify nested parameterized types directly with the (type ) annotation.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>Returns</code></title>
@@ -37,6 +29,4 @@ def test_ghash_nested_everything_return():
 </item>
 </terms>
 
-  
-  
 </page>

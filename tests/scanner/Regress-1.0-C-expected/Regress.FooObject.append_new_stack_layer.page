@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,21 +21,14 @@
         <api:name>x</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_foo_object_append_new_stack_layer</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 RegressFooOtherObject* regress_foo_object_append_new_stack_layer (RegressFooObject* obj,
                                                                   int x);
-</code></synopsis>
+  </code></synopsis>
+  <p>This shouldn't be scanned as a constructor.</p>
 
-  
-    <p>This shouldn't be scanned as a constructor.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>obj</code></title>
@@ -52,6 +44,4 @@ RegressFooOtherObject* regress_foo_object_append_new_stack_layer (RegressFooObje
 </item>
 </terms>
 
-  
-  
 </page>

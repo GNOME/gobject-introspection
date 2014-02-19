@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,22 +13,15 @@
       </api:returns>
       <api:name>regress_foo_test_const_struct_retval</api:name>
     </api:function>
-
   </info>
-  <title>foo_test_const_struct_retval</title>
-  
-<synopsis><code mime="text/x-gjs">
-function foo_test_const_struct_retval():Regress.FooStruct {
+  <title>Regress.foo_test_const_struct_retval</title>
+  <synopsis><code mime="text/x-gjs">
+function foo_test_const_struct_retval(): <link xref="Regress.FooStruct">Regress.FooStruct</link> {
     // Gjs wrapper for regress_foo_test_const_struct_retval()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
@@ -37,6 +29,4 @@ function foo_test_const_struct_retval():Regress.FooStruct {
 </item>
 </terms>
 
-  
-  
 </page>

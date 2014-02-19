@@ -6,23 +6,15 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.FooObject" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.FooObject" group="vfunc" type="guide"/>
   </info>
   <title>Regress.FooObject::virtual_method</title>
-  
-<synopsis><code mime="text/x-gjs">
-function vfunc_virtual_method(first_param:Number):Boolean {
+  <synopsis><code mime="text/x-gjs">
+function vfunc_virtual_method(first_param: Number(gint)): Boolean {
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>first_param</code></title>
@@ -34,6 +26,4 @@ function vfunc_virtual_method(first_param:Number):Boolean {
 </item>
 </terms>
 
-  
-  
 </page>

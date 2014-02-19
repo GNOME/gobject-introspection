@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,20 +17,13 @@
         <api:name>x</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_foo_enum_type_returnv</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 RegressFooEnumType regress_foo_enum_type_returnv (int x);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>x</code></title>
@@ -43,6 +35,4 @@ RegressFooEnumType regress_foo_enum_type_returnv (int x);
 </item>
 </terms>
 
-  
-  
 </page>

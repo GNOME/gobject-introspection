@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,23 +25,16 @@
         <api:name>notify</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_callback_destroy_notify</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 int regress_test_callback_destroy_notify (RegressTestCallbackUserData callback,
                                           gpointer user_data,
                                           GDestroyNotify notify);
-</code></synopsis>
-
-  
-    <p>Notified - callback persists until a DestroyNotify delegate
+  </code></synopsis>
+  <p>Notified - callback persists until a DestroyNotify delegate
 is invoked.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>callback</code></title>
@@ -62,6 +54,4 @@ is invoked.</p>
 </item>
 </terms>
 
-  
-  
 </page>

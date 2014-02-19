@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestBoxed" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,33 +17,24 @@
         <api:name>other</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.TestBoxed.prototype.equals</title>
-  
-<synopsis><code mime="text/x-gjs">
-function equals(other:Regress.TestBoxed):Boolean {
+  <synopsis><code mime="text/x-gjs">
+function equals(other: <link xref="Regress.TestBoxed">Regress.TestBoxed</link>): Boolean {
     // Gjs wrapper for regress_test_boxed_equals()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>other</code></title>
 
 </item>
 <item>
-<title><code>Returns</code></title>
+<title><code>ok</code></title>
 
 </item>
 </terms>
 
-  
-  
 </page>

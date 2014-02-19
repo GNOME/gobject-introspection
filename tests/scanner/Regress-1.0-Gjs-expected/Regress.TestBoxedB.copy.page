@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestBoxedB" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,22 +13,15 @@
       </api:returns>
       <api:name>regress_test_boxed_b_copy</api:name>
     </api:function>
-
   </info>
   <title>Regress.TestBoxedB.prototype.copy</title>
-  
-<synopsis><code mime="text/x-gjs">
-function copy():Regress.TestBoxedB {
+  <synopsis><code mime="text/x-gjs">
+function copy(): <link xref="Regress.TestBoxedB">Regress.TestBoxedB</link> {
     // Gjs wrapper for regress_test_boxed_b_copy()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
@@ -37,6 +29,4 @@ function copy():Regress.TestBoxedB {
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,23 +6,15 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.FooSubInterface" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.FooSubInterface" group="vfunc" type="guide"/>
   </info>
   <title>Regress.FooSubInterface::do_baz</title>
-  
-<synopsis><code mime="text/x-gjs">
-function vfunc_do_baz(callback:GObject.Callback):void {
+  <synopsis><code mime="text/x-gjs">
+function vfunc_do_baz(callback: <link href="../GObject-2.0/GObject.Callback.page">GObject.Callback</link>): void {
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>callback</code></title>
@@ -30,6 +22,4 @@ function vfunc_do_baz(callback:GObject.Callback):void {
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,35 +25,28 @@
         <api:name>user_data</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_object_watch</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_annotation_object_watch (RegressAnnotationObject* object,
                                       RegressAnnotationForeachFunc func,
                                       gpointer user_data);
-</code></synopsis>
-
-  
-    <p>This is here just for the sake of being overriden by its
+  </code></synopsis>
+  <p>This is here just for the sake of being overriden by its
 <link xref="Regress.watch_full"/>.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
-<p>A <link xref="Regress.AnnotationObject"/></p>
+  <p>A <link xref="Regress.AnnotationObject"/></p>
 </item>
 <item>
 <title><code>func</code></title>
-<p>The callback</p>
+  <p>The callback</p>
 </item>
 <item>
 <title><code>user_data</code></title>
-<p>The callback data</p>
+  <p>The callback data</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -62,6 +54,4 @@ void regress_annotation_object_watch (RegressAnnotationObject* object,
 </item>
 </terms>
 
-  
-  
 </page>

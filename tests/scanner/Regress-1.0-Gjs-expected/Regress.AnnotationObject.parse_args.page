@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,33 +13,28 @@
       </api:returns>
       <api:name>regress_annotation_object_parse_args</api:name>
       <api:arg>
-        <api:type>[String]</api:type>
+        <api:type>Array(String)</api:type>
         <api:name>argv</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.prototype.parse_args</title>
-  
-<synopsis><code mime="text/x-gjs">
-function parse_args(argv:[String]):void {
+  <synopsis><code mime="text/x-gjs">
+function parse_args(argv: Array(String)): Array(String) {
     // Gjs wrapper for regress_annotation_object_parse_args()
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>Test taking a zero-terminated array with length parameter</p>
 
-  
-    <p>Test taking a zero-terminated array with length parameter</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>argv</code></title>
-<p>Argument vector</p>
+  <p>Argument vector</p>
+</item>
+<item>
+<title><code>argv (out)</code></title>
+  <p>Argument vector</p>
 </item>
 </terms>
 
-  
-  
 </page>

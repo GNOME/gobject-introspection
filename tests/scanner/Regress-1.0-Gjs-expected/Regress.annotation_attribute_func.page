@@ -6,11 +6,10 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
       </api:returns>
       <api:name>regress_annotation_attribute_func</api:name>
       <api:arg>
@@ -22,37 +21,28 @@
         <api:name>data</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>annotation_attribute_func</title>
-  
-<synopsis><code mime="text/x-gjs">
-function annotation_attribute_func(object:Regress.AnnotationObject, data:String):Number {
+  <title>Regress.annotation_attribute_func</title>
+  <synopsis><code mime="text/x-gjs">
+function annotation_attribute_func(object: <link xref="Regress.AnnotationObject">Regress.AnnotationObject</link>, data: String): Number(gint) {
     // Gjs wrapper for regress_annotation_attribute_func()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
-<p>A <link xref="Regress.AnnotationObject"/>.</p>
+  <p>A <link xref="Regress.AnnotationObject"/>.</p>
 </item>
 <item>
 <title><code>data</code></title>
-<p>Some data.</p>
+  <p>Some data.</p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>The return value.</p>
+
 </item>
 </terms>
 
-  
-  
 </page>

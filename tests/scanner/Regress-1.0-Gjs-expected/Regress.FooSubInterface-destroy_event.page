@@ -6,26 +6,16 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.FooSubInterface" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.FooSubInterface" group="vfunc" type="guide"/>
   </info>
   <title>Regress.FooSubInterface::destroy_event</title>
-  
-<synopsis><code mime="text/x-gjs">
-function vfunc_destroy_event():void {
+  <synopsis><code mime="text/x-gjs">
+function vfunc_destroy_event(): void {
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 </terms>
 
-  
-  
 </page>

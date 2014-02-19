@@ -6,34 +6,26 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>GType</api:type>
+        <api:type>GObject.Type</api:type>
       </api:returns>
       <api:name>regress_test_gtype</api:name>
       <api:arg>
-        <api:type>GType</api:type>
+        <api:type>GObject.Type</api:type>
         <api:name>in</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>test_gtype</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_gtype(in:GType):GType {
+  <title>Regress.test_gtype</title>
+  <synopsis><code mime="text/x-gjs">
+function test_gtype(in: GObject.Type): GObject.Type {
     // Gjs wrapper for regress_test_gtype()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>in</code></title>
@@ -45,6 +37,4 @@ function test_gtype(in:GType):GType {
 </item>
 </terms>
 
-  
-  
 </page>

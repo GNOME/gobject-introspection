@@ -1,39 +1,34 @@
 <?xml version="1.0"?>
 <page id="Regress.TestInterface"
       type="guide"
-      style="class"
+      style="interface"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="index" group="class" type="guide"/>
-    
+    <link xref="index" group="interface" type="guide"/>
   </info>
   <title>Regress.TestInterface</title>
-  
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
 let test_interface = new Regress.TestInterface();
   </code></synopsis>
 
-  
-    
-  
-  
-  
-  
-  <synopsis>
-    <title>Hierarchy</title>
-    <tree>
-      <item>
-        <code>Regress.TestInterface</code>
-      </item>
-    </tree>
-  </synopsis>
 
-  
+  <synopsis>
+    <title>Prerequisites</title>
+    <p>TestInterface requires GObject.Object</p>
+  </synopsis>
+  <synopsis>
+    <title>Known Implementations</title>
+    <p>None</p>
+  </synopsis>
+  <links type="topic" ui:expanded="true"
+         api:type="function" api:mime="text/x-gjs"
+         groups="constructor" style="linklist">
+    <title>Constructors</title>
+  </links>
   <links type="topic" ui:expanded="true"
          api:type="function" api:mime="text/x-gjs"
          groups="method" style="linklist">
@@ -42,7 +37,7 @@ let test_interface = new Regress.TestInterface();
   <links type="topic" ui:expanded="true"
          api:type="function" api:mime="text/x-gjs"
          groups="function" style="linklist">
-    <title>Functions</title>
+    <title>Static Functions</title>
   </links>
   <links type="topic" ui:expanded="true" groups="property" style="linklist">
     <title>Properties</title>
@@ -53,8 +48,10 @@ let test_interface = new Regress.TestInterface();
   <links type="topic" ui:expanded="true" groups="vfunc" style="linklist">
     <title>Virtual functions</title>
   </links>
+  <links type="topic" ui:expanded="true" groups="field" style="linklist">
+    <title>Fields</title>
+  </links>
   <links type="topic" ui:expanded="true" groups="#first #default #last" style="linklist">
     <title>Other</title>
   </links>
-
 </page>

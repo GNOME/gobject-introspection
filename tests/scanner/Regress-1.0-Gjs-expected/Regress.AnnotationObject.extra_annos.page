@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,25 +13,14 @@
       </api:returns>
       <api:name>regress_annotation_object_extra_annos</api:name>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.prototype.extra_annos</title>
-  
-<synopsis><code mime="text/x-gjs">
-function extra_annos():void {
+  <synopsis><code mime="text/x-gjs">
+function extra_annos(): void {
     // Gjs wrapper for regress_annotation_object_extra_annos()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
-<terms>
-</terms>
 
-  
-  
+
 </page>

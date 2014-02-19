@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,34 +21,25 @@
         <api:name>nums</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.compute_sum</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, [int])
 @returns(none)
 def compute_sum(self, nums):
     # Python wrapper for regress_annotation_object_compute_sum()
-</code></synopsis>
+  </code></synopsis>
+  <p>Test taking a zero-terminated array</p>
 
-  
-    <p>Test taking a zero-terminated array</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>nums</code></title>
-<p>Sequence of numbers</p>
+  <p>Sequence of numbers</p>
 </item>
 </terms>
 
-  
-  
 </page>

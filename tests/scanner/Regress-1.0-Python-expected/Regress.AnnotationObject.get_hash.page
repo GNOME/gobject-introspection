@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,28 +17,21 @@
         <api:name>self</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.get_hash</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)
 @returns({unicode: GObject.Object})
 def get_hash(self):
     # Python wrapper for regress_annotation_object_get_hash()
-</code></synopsis>
-
-  
-    <p>This is a test for returning a hash table mapping strings to
+  </code></synopsis>
+  <p>This is a test for returning a hash table mapping strings to
 objects.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -47,6 +39,4 @@ objects.</p>
 </item>
 </terms>
 
-  
-  
 </page>

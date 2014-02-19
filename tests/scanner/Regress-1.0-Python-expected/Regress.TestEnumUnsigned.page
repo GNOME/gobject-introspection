@@ -6,19 +6,11 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="index" group="enum" type="guide"/>
-    
+    <link xref="index" group="enum" type="guide"/>
   </info>
   <title>Regress.TestEnumUnsigned</title>
-  
-  
-  
-    
-  
-  
-  
-  
+
+
 <terms>
 <item>
 <title><code>TestEnumUnsigned.VALUE1</code></title>
@@ -30,6 +22,4 @@
 </item>
 </terms>
 
-  
-  
 </page>

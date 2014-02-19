@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -42,11 +41,9 @@
         <api:name>m</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_obj_torture_signature_0</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_test_obj_torture_signature_0 (RegressTestObj* obj,
                                            int x,
                                            double* y,
@@ -54,18 +51,13 @@ void regress_test_obj_torture_signature_0 (RegressTestObj* obj,
                                            const char* foo,
                                            int* q,
                                            guint m);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>obj</code></title>
-<p>A <link xref="Regress.TestObj"/></p>
+  <p>A <link xref="Regress.TestObj"/></p>
 </item>
 <item>
 <title><code>x</code></title>
@@ -97,6 +89,4 @@ void regress_test_obj_torture_signature_0 (RegressTestObj* obj,
 </item>
 </terms>
 
-  
-  
 </page>

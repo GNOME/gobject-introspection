@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,42 +13,33 @@
       </api:returns>
       <api:name>regress_has_parameter_named_attrs</api:name>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
         <api:name>foo</api:name>
       </api:arg>
       <api:arg>
-        <api:type>[guint32]</api:type>
+        <api:type>Array(Number(guint32))</api:type>
         <api:name>attributes</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>has_parameter_named_attrs</title>
-  
-<synopsis><code mime="text/x-gjs">
-function has_parameter_named_attrs(foo:Number, attributes:[guint32]):void {
+  <title>Regress.has_parameter_named_attrs</title>
+  <synopsis><code mime="text/x-gjs">
+function has_parameter_named_attrs(foo: Number(gint), attributes: Array(Number(guint32))): void {
     // Gjs wrapper for regress_has_parameter_named_attrs()
 }
-</code></synopsis>
-
-  
-    <p>This test case mirrors GnomeKeyringPasswordSchema from
+  </code></synopsis>
+  <p>This test case mirrors GnomeKeyringPasswordSchema from
 libgnome-keyring.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>foo</code></title>
-<p>some int</p>
+  <p>some int</p>
 </item>
 <item>
 <title><code>attributes</code></title>
-<p>list of attributes</p>
+  <p>list of attributes</p>
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,33 +17,24 @@
         <api:name>object</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_object_get_objects</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 GSList* regress_annotation_object_get_objects (RegressAnnotationObject* object);
-</code></synopsis>
-
-  
-    <p>This is a test for returning a list of objects.
+  </code></synopsis>
+  <p>This is a test for returning a list of objects.
 The list itself should be freed, but not the internal objects,
 intentionally similar example to gtk_container_get_children</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>list of objects</p>
+  <p>list of objects</p>
 </item>
 </terms>
 
-  
-  
 </page>

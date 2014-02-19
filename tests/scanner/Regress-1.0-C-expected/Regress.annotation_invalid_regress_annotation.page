@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,24 +17,17 @@
         <api:name>foo</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_invalid_regress_annotation</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_annotation_invalid_regress_annotation (int foo);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>foo</code></title>
-<p>some text (e.g. example) or else</p>
+  <p>some text (e.g. example) or else</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -43,6 +35,4 @@ void regress_annotation_invalid_regress_annotation (int foo);
 </item>
 </terms>
 
-  
-  
 </page>

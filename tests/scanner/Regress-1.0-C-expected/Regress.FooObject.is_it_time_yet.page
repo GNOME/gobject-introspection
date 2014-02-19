@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,21 +21,14 @@
         <api:name>time</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_foo_object_is_it_time_yet</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_foo_object_is_it_time_yet (RegressFooObject* object,
                                         time_t time);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
@@ -52,6 +44,4 @@ void regress_foo_object_is_it_time_yet (RegressFooObject* object,
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -38,25 +37,18 @@
         <api:name>m</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_torture_signature_1</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 gboolean regress_test_torture_signature_1 (int x,
                                            double* y,
                                            int* z,
                                            const char* foo,
                                            int* q,
                                            guint m);
-</code></synopsis>
+  </code></synopsis>
+  <p>This function throws an error if m is odd.</p>
 
-  
-    <p>This function throws an error if m is odd.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>x</code></title>
@@ -88,6 +80,4 @@ gboolean regress_test_torture_signature_1 (int x,
 </item>
 </terms>
 
-  
-  
 </page>

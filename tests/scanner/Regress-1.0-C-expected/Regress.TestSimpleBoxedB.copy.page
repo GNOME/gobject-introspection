@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestSimpleBoxedB" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,20 +17,13 @@
         <api:name>b</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_simple_boxed_b_copy</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 RegressTestSimpleBoxedB* regress_test_simple_boxed_b_copy (RegressTestSimpleBoxedB* b);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>b</code></title>
@@ -43,6 +35,4 @@ RegressTestSimpleBoxedB* regress_test_simple_boxed_b_copy (RegressTestSimpleBoxe
 </item>
 </terms>
 
-  
-  
 </page>

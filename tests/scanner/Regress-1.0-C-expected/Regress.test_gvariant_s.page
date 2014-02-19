@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,27 +13,18 @@
       </api:returns>
       <api:name>regress_test_gvariant_s</api:name>
     </api:function>
-
   </info>
   <title>regress_test_gvariant_s</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 GVariant* regress_test_gvariant_s (void);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
-<p>New variant</p>
+  <p>New variant</p>
 </item>
 </terms>
 
-  
-  
 </page>

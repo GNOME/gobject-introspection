@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,22 +17,15 @@
         <api:name>data</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>introspectable_via_alias</title>
-  
-<synopsis><code mime="text/x-gjs">
-function introspectable_via_alias(data:Regress.PtrArrayAlias):void {
+  <title>Regress.introspectable_via_alias</title>
+  <synopsis><code mime="text/x-gjs">
+function introspectable_via_alias(data: <link xref="Regress.PtrArrayAlias">Regress.PtrArrayAlias</link>): void {
     // Gjs wrapper for regress_introspectable_via_alias()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>data</code></title>
@@ -41,6 +33,4 @@ function introspectable_via_alias(data:Regress.PtrArrayAlias):void {
 </item>
 </terms>
 
-  
-  
 </page>

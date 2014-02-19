@@ -6,26 +6,14 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="property" type="guide"/>
     <title type="link" role="topic">tab-property</title>
-
   </info>
-  <title>Regress.AnnotationObject:tab-property</title>
-  
-<synopsis><code mime="text/x-python">
-"tab-property"             String                : Read / Write / Construct
-</code></synopsis>
-
-  
-    <p>This is a property annotation intentionally indented with a mix
+  <title>Regress.AnnotationObject.tab_property</title>
+  <synopsis><code mime="text/x-gjs">
+AnnotationObject.tab_property: String (Read / Write / Construct)
+  </code></synopsis>
+  <p>This is a property annotation intentionally indented with a mix
 of tabs and strings to test the tab handling capabilities of the scanner.</p>
-  
-  
-    <p>Since 1.2</p>
-  
-  
-  
-  
-  
+  <p>Since 1.2</p>
 </page>

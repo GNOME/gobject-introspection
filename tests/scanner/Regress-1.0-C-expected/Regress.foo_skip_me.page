@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,25 +17,18 @@
         <api:name>fs</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_foo_skip_me</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_foo_skip_me (RegressFooSkippable fs);
-</code></synopsis>
-
-  
-    <p>Does something that's only interesting from C and should not be
+  </code></synopsis>
+  <p>Does something that's only interesting from C and should not be
 exposed to language bindings.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>fs</code></title>
-<p>a <link xref="Regress.FooSkippable"/></p>
+  <p>a <link xref="Regress.FooSkippable"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -44,6 +36,4 @@ exposed to language bindings.</p>
 </item>
 </terms>
 
-  
-  
 </page>

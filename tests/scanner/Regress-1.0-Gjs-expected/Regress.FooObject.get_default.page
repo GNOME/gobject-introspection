@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,30 +13,21 @@
       </api:returns>
       <api:name>regress_foo_object_get_default</api:name>
     </api:function>
-
   </info>
-  <title>get_default</title>
-  
-<synopsis><code mime="text/x-gjs">
-function get_default():Regress.FooSubobject {
+  <title>Regress.FooObject.get_default</title>
+  <synopsis><code mime="text/x-gjs">
+function get_default(): <link xref="Regress.FooSubobject">Regress.FooSubobject</link> {
     // Gjs wrapper for regress_foo_object_get_default()
 }
-</code></synopsis>
-
-  
-    <p>This function is intended to match clutter_stage_get_default which
+  </code></synopsis>
+  <p>This function is intended to match clutter_stage_get_default which
 uses a C sugar return type.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
-<p>The global <link xref="Regress.FooSubobject"/></p>
+
 </item>
 </terms>
 
-  
-  
 </page>

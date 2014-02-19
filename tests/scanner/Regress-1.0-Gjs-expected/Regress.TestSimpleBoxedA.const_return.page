@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestSimpleBoxedA" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,22 +13,15 @@
       </api:returns>
       <api:name>regress_test_simple_boxed_a_const_return</api:name>
     </api:function>
-
   </info>
-  <title>const_return</title>
-  
-<synopsis><code mime="text/x-gjs">
-function const_return():Regress.TestSimpleBoxedA {
+  <title>Regress.TestSimpleBoxedA.const_return</title>
+  <synopsis><code mime="text/x-gjs">
+function const_return(): <link xref="Regress.TestSimpleBoxedA">Regress.TestSimpleBoxedA</link> {
     // Gjs wrapper for regress_test_simple_boxed_a_const_return()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
@@ -37,6 +29,4 @@ function const_return():Regress.TestSimpleBoxedA {
 </item>
 </terms>
 
-  
-  
 </page>

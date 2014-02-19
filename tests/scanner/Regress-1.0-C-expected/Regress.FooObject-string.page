@@ -6,21 +6,10 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="property" type="guide"/>
     <title type="link" role="topic">string</title>
-
   </info>
   <title>Regress.FooObject:string</title>
-  
-  
-  
-    
-  
-  
-  
-  
-  
-  
-  
+
+
 </page>

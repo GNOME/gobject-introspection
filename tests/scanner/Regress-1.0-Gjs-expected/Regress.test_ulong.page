@@ -6,34 +6,26 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>Number</api:type>
+        <api:type>Number(gulong)</api:type>
       </api:returns>
       <api:name>regress_test_ulong</api:name>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(gulong)</api:type>
         <api:name>in</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>test_ulong</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_ulong(in:Number):Number {
+  <title>Regress.test_ulong</title>
+  <synopsis><code mime="text/x-gjs">
+function test_ulong(in: Number(gulong)): Number(gulong) {
     // Gjs wrapper for regress_test_ulong()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>in</code></title>
@@ -45,6 +37,4 @@ function test_ulong(in:Number):Number {
 </item>
 </terms>
 
-  
-  
 </page>

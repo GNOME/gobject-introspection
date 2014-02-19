@@ -6,24 +6,16 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.FooObject" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.FooObject" group="vfunc" type="guide"/>
   </info>
   <title>Regress.FooObject::virtual_method</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.FooObject, int)
 @returns(bool)
 def do_virtual_method(object, first_param):
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
@@ -39,6 +31,4 @@ def do_virtual_method(object, first_param):
 </item>
 </terms>
 
-  
-  
 </page>

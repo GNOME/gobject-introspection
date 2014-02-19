@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,28 +17,21 @@
         <api:name>self</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.get_strings</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)
 @returns([unicode])
 def get_strings(self):
     # Python wrapper for regress_annotation_object_get_strings()
-</code></synopsis>
-
-  
-    <p>This is a test for returning a list of strings, where
+  </code></synopsis>
+  <p>This is a test for returning a list of strings, where
 each string needs to be freed.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -47,6 +39,4 @@ each string needs to be freed.</p>
 </item>
 </terms>
 
-  
-  
 </page>

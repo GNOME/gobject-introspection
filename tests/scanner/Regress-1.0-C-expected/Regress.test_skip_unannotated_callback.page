@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,25 +17,18 @@
         <api:name>callback</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_skip_unannotated_callback</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_test_skip_unannotated_callback (RegressTestCallback callback);
-</code></synopsis>
-
-  
-    <p>Should not emit a warning:
+  </code></synopsis>
+  <p>Should not emit a warning:
 https://bugzilla.gnome.org/show_bug.cgi?id=685399</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>callback</code></title>
-<p>No annotation here</p>
+  <p>No annotation here</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -44,6 +36,4 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</p>
 </item>
 </terms>
 
-  
-  
 </page>

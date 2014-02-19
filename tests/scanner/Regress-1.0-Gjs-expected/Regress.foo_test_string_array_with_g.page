@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,26 +13,19 @@
       </api:returns>
       <api:name>regress_foo_test_string_array_with_g</api:name>
       <api:arg>
-        <api:type>[String]</api:type>
+        <api:type>Array(String)</api:type>
         <api:name>array</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>foo_test_string_array_with_g</title>
-  
-<synopsis><code mime="text/x-gjs">
-function foo_test_string_array_with_g(array:[String]):void {
+  <title>Regress.foo_test_string_array_with_g</title>
+  <synopsis><code mime="text/x-gjs">
+function foo_test_string_array_with_g(array: Array(String)): void {
     // Gjs wrapper for regress_foo_test_string_array_with_g()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>array</code></title>
@@ -41,6 +33,4 @@ function foo_test_string_array_with_g(array:[String]):void {
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,23 +17,16 @@
         <api:name>self</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.extra_annos</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)
 @returns(none)
 def extra_annos(self):
     # Python wrapper for regress_annotation_object_extra_annos()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
@@ -42,6 +34,4 @@ def extra_annos(self):
 </item>
 </terms>
 
-  
-  
 </page>

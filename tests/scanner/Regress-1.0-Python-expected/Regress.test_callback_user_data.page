@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,24 +21,17 @@
         <api:name>user_data</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_callback_user_data</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_callback_user_data</title>
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.TestCallbackUserData, gpointer)
 @returns(int)
 def test_callback_user_data(callback, user_data):
     # Python wrapper for regress_test_callback_user_data()
-</code></synopsis>
-
-  
-    <p>Call - callback parameter persists for the duration of the method
+  </code></synopsis>
+  <p>Call - callback parameter persists for the duration of the method
 call and can be released on return.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>callback</code></title>
@@ -55,6 +47,4 @@ call and can be released on return.</p>
 </item>
 </terms>
 
-  
-  
 </page>

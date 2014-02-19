@@ -6,24 +6,16 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.FooSubInterface" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.FooSubInterface" group="vfunc" type="guide"/>
   </info>
   <title>Regress.FooSubInterface::destroy_event</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.FooSubInterface)
 @returns(none)
 def do_destroy_event(self):
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
@@ -31,6 +23,4 @@ def do_destroy_event(self):
 </item>
 </terms>
 
-  
-  
 </page>

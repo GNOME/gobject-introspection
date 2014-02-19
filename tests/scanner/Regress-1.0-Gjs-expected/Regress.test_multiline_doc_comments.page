@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,25 +13,14 @@
       </api:returns>
       <api:name>regress_test_multiline_doc_comments</api:name>
     </api:function>
-
   </info>
-  <title>test_multiline_doc_comments</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_multiline_doc_comments():void {
+  <title>Regress.test_multiline_doc_comments</title>
+  <synopsis><code mime="text/x-gjs">
+function test_multiline_doc_comments(): void {
     // Gjs wrapper for regress_test_multiline_doc_comments()
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>This is a function.</p>  <p>It has multiple lines in the documentation.</p>  <p>The sky is blue.</p>  <p>You will give me your credit card number.</p>
 
-  
-    <p>This is a function.</p><p>It has multiple lines in the documentation.</p><p>The sky is blue.</p><p>You will give me your credit card number.</p>
-  
-  
-  
-  
-<terms>
-</terms>
 
-  
-  
 </page>

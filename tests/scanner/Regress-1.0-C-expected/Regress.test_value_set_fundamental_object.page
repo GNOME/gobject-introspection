@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,21 +21,14 @@
         <api:name>fundamental_object</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_value_set_fundamental_object</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_test_value_set_fundamental_object (GValue* value,
                                                 RegressTestFundamentalObject* fundamental_object);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>value</code></title>
@@ -52,6 +44,4 @@ void regress_test_value_set_fundamental_object (GValue* value,
 </item>
 </terms>
 
-  
-  
 </page>

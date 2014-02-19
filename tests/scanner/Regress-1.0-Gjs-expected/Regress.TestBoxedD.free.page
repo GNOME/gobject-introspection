@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestBoxedD" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,25 +13,14 @@
       </api:returns>
       <api:name>regress_test_boxed_d_free</api:name>
     </api:function>
-
   </info>
   <title>Regress.TestBoxedD.prototype.free</title>
-  
-<synopsis><code mime="text/x-gjs">
-function free():void {
+  <synopsis><code mime="text/x-gjs">
+function free(): void {
     // Gjs wrapper for regress_test_boxed_d_free()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
-<terms>
-</terms>
 
-  
-  
+
 </page>

@@ -1,25 +1,29 @@
 <?xml version="1.0"?>
 <page id="Regress.AnnotationListCallback"
       type="topic"
-      style="default"
+      style="callback"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="index" group="default" type="guide"/>
-    
+    <link xref="index" group="callback" type="guide"/>
   </info>
   <title>Regress.AnnotationListCallback</title>
-  
-  
-  
-    <p>This is a callback taking a list.</p>
-  
-  
-  
-  
-  
-  
-  
+  <synopsis><code mime="text/x-gjs">
+function onAnnotationListCallback(in: Array(String)): Array(String) {
+}
+  </code></synopsis>
+  <p>This is a callback taking a list.</p>
+
+<terms>
+<item>
+<title><code>in</code></title>
+  <p>list of strings</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
+
 </page>

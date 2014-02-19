@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,37 +13,28 @@
       </api:returns>
       <api:name>regress_foo_object_virtual_method</api:name>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
         <api:name>first_param</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.FooObject.prototype.virtual_method</title>
-  
-<synopsis><code mime="text/x-gjs">
-function virtual_method(first_param:Number):Boolean {
+  <synopsis><code mime="text/x-gjs">
+function virtual_method(first_param: Number(gint)): Boolean {
     // Gjs wrapper for regress_foo_object_virtual_method()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>first_param</code></title>
 
 </item>
 <item>
-<title><code>Returns</code></title>
+<title><code>ok</code></title>
 
 </item>
 </terms>
 
-  
-  
 </page>

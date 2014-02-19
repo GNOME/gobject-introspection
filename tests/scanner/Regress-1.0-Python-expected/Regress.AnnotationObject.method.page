@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,27 +17,20 @@
         <api:name>self</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.method</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)
 @returns(int)
 def method(self):
     # Python wrapper for regress_annotation_object_method()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -46,6 +38,4 @@ def method(self):
 </item>
 </terms>
 
-  
-  
 </page>

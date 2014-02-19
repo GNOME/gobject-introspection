@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,21 +21,14 @@
         <api:name>ints</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_array_gint8_in</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 int regress_test_array_gint8_in (int n_ints,
                                  gint8* ints);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>n_ints</code></title>
@@ -44,7 +36,7 @@ int regress_test_array_gint8_in (int n_ints,
 </item>
 <item>
 <title><code>ints</code></title>
-<p>List of ints</p>
+  <p>List of ints</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -52,6 +44,4 @@ int regress_test_array_gint8_in (int n_ints,
 </item>
 </terms>
 
-  
-  
 </page>

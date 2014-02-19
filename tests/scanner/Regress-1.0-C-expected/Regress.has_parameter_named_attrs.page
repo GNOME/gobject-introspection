@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,30 +21,23 @@
         <api:name>attributes</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_has_parameter_named_attrs</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_has_parameter_named_attrs (int foo,
                                         gpointer* attributes);
-</code></synopsis>
-
-  
-    <p>This test case mirrors GnomeKeyringPasswordSchema from
+  </code></synopsis>
+  <p>This test case mirrors GnomeKeyringPasswordSchema from
 libgnome-keyring.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>foo</code></title>
-<p>some int</p>
+  <p>some int</p>
 </item>
 <item>
 <title><code>attributes</code></title>
-<p>list of attributes</p>
+  <p>list of attributes</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -53,6 +45,4 @@ libgnome-keyring.</p>
 </item>
 </terms>
 
-  
-  
 </page>

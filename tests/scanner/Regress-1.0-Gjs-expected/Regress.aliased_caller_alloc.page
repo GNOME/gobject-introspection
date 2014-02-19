@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,25 +13,20 @@
       </api:returns>
       <api:name>regress_aliased_caller_alloc</api:name>
     </api:function>
-
   </info>
-  <title>aliased_caller_alloc</title>
-  
-<synopsis><code mime="text/x-gjs">
-function aliased_caller_alloc():void {
+  <title>Regress.aliased_caller_alloc</title>
+  <synopsis><code mime="text/x-gjs">
+function aliased_caller_alloc(): <link xref="Regress.AliasedTestBoxed">Regress.AliasedTestBoxed</link> {
     // Gjs wrapper for regress_aliased_caller_alloc()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
+<item>
+<title><code>boxed</code></title>
+
+</item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,25 +13,14 @@
       </api:returns>
       <api:name>regress_annotation_space_after_comment_bug631690</api:name>
     </api:function>
-
   </info>
-  <title>annotation_space_after_comment_bug631690</title>
-  
-<synopsis><code mime="text/x-gjs">
-function annotation_space_after_comment_bug631690():void {
+  <title>Regress.annotation_space_after_comment_bug631690</title>
+  <synopsis><code mime="text/x-gjs">
+function annotation_space_after_comment_bug631690(): void {
     // Gjs wrapper for regress_annotation_space_after_comment_bug631690()
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>Explicitly test having a space after the ** here.</p>
 
-  
-    <p>Explicitly test having a space after the ** here.</p>
-  
-  
-  
-  
-<terms>
-</terms>
 
-  
-  
 </page>

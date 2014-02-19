@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,21 +13,13 @@
       </api:returns>
       <api:name>regress_annotation_versioned</api:name>
     </api:function>
-
   </info>
   <title>regress_annotation_versioned</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_annotation_versioned (void);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-    <p>Since 0.6</p>
-  
-  
+  <p>Since 0.6</p>
 <terms>
 <item>
 <title><code>Returns</code></title>
@@ -36,6 +27,4 @@ void regress_annotation_versioned (void);
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,22 +17,15 @@
         <api:name>somearg</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.prototype.allow_none</title>
-  
-<synopsis><code mime="text/x-gjs">
-function allow_none(somearg:String):GObject.Object {
+  <synopsis><code mime="text/x-gjs">
+function allow_none(somearg: String): <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link> {
     // Gjs wrapper for regress_annotation_object_allow_none()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>somearg</code></title>
@@ -41,10 +33,8 @@ function allow_none(somearg:String):GObject.Object {
 </item>
 <item>
 <title><code>Returns</code></title>
-<p><code>null</code> always</p>
+
 </item>
 </terms>
 
-  
-  
 </page>

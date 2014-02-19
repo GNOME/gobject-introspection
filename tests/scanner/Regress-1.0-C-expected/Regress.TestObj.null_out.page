@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,24 +17,17 @@
         <api:name>obj</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_obj_null_out</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_test_obj_null_out (RegressTestObj** obj);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>obj</code></title>
-<p>A <link xref="Regress.TestObj"/></p>
+  <p>A <link xref="Regress.TestObj"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -43,6 +35,4 @@ void regress_test_obj_null_out (RegressTestObj** obj);
 </item>
 </terms>
 
-  
-  
 </page>

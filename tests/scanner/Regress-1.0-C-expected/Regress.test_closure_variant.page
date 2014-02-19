@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,36 +21,27 @@
         <api:name>arg</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_closure_variant</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 GVariant* regress_test_closure_variant (GClosure* closure,
                                         GVariant* arg);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>closure</code></title>
-<p>GClosure which takes one GVariant and returns a GVariant</p>
+  <p>GClosure which takes one GVariant and returns a GVariant</p>
 </item>
 <item>
 <title><code>arg</code></title>
-<p>a GVariant passed as argument to <code>closure</code></p>
+  <p>a GVariant passed as argument to <code>closure</code></p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>the return value of <code>closure</code></p>
+  <p>the return value of <code>closure</code></p>
 </item>
 </terms>
 
-  
-  
 </page>

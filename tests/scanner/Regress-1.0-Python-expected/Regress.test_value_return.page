@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,27 +17,20 @@
         <api:name>i</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_value_return</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_value_return</title>
+  <synopsis><code mime="text/x-python">
 @accepts(int)
 @returns(GObject.Value)
 def test_value_return(i):
     # Python wrapper for regress_test_value_return()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>i</code></title>
-<p>an int</p>
+  <p>an int</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -46,6 +38,4 @@ def test_value_return(i):
 </item>
 </terms>
 
-  
-  
 </page>

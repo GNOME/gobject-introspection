@@ -6,21 +6,10 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="index" group="enum" type="guide"/>
-    
+    <link xref="index" group="enum" type="guide"/>
   </info>
   <title>Regress.FooSkippable</title>
-  
-  
-  
-    <p>Some type that is only interesting from C and should not be
+  <p>Some type that is only interesting from C and should not be
 exposed to language bindings.</p>
-  
-  
-  
-  
-  
-  
-  
+
 </page>

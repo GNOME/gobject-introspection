@@ -6,28 +6,20 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="signal" type="guide"/>
     <title type="link" role="topic">sig-with-int64-prop</title>
-
   </info>
   <title>Regress.TestObj::sig-with-int64-prop</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 gint64 sig-with-int64-prop (gint64 i);
-</code></synopsis>
-
-  
-    <p>You can use this with regress_test_obj_emit_sig_with_int64, or raise from
+  </code></synopsis>
+  <p>You can use this with regress_test_obj_emit_sig_with_int64, or raise from
 the introspection client langage.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>i</code></title>
-<p>an integer</p>
+  <p>an integer</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -35,6 +27,4 @@ the introspection client langage.</p>
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,11 +6,10 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
       </api:returns>
       <api:name>regress_test_callback_destroy_notify</api:name>
       <api:arg>
@@ -18,23 +17,16 @@
         <api:name>callback</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>test_callback_destroy_notify</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_callback_destroy_notify(callback:Regress.TestCallbackUserData):Number {
+  <title>Regress.test_callback_destroy_notify</title>
+  <synopsis><code mime="text/x-gjs">
+function test_callback_destroy_notify(callback: <link xref="Regress.TestCallbackUserData">Regress.TestCallbackUserData</link>): Number(gint) {
     // Gjs wrapper for regress_test_callback_destroy_notify()
 }
-</code></synopsis>
-
-  
-    <p>Notified - callback persists until a DestroyNotify delegate
+  </code></synopsis>
+  <p>Notified - callback persists until a DestroyNotify delegate
 is invoked.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>callback</code></title>
@@ -46,6 +38,4 @@ is invoked.</p>
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,29 +21,22 @@
         <api:name>nums</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_object_compute_sum</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_annotation_object_compute_sum (RegressAnnotationObject* object,
                                             int* nums);
-</code></synopsis>
+  </code></synopsis>
+  <p>Test taking a zero-terminated array</p>
 
-  
-    <p>Test taking a zero-terminated array</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>object</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>nums</code></title>
-<p>Sequence of numbers</p>
+  <p>Sequence of numbers</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -52,6 +44,4 @@ void regress_annotation_object_compute_sum (RegressAnnotationObject* object,
 </item>
 </terms>
 
-  
-  
 </page>

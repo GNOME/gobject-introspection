@@ -6,29 +6,21 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.TestObj" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.TestObj" group="vfunc" type="guide"/>
   </info>
   <title>Regress.TestObj::matrix</title>
-  
-<synopsis><code mime="text/x-gjs">
-function vfunc_matrix(somestr:String):Number {
+  <synopsis><code mime="text/x-gjs">
+function vfunc_matrix(somestr: String): Number(gint) {
 }
-</code></synopsis>
-
-  
-    <p>This method is virtual.  Notably its name differs from the virtual
+  </code></synopsis>
+  <p>This method is virtual.  Notably its name differs from the virtual
 slot name, which makes it useful for testing bindings handle this
 case.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>somestr</code></title>
-<p>Meaningless string</p>
+  <p>Meaningless string</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -36,6 +28,4 @@ case.</p>
 </item>
 </terms>
 
-  
-  
 </page>

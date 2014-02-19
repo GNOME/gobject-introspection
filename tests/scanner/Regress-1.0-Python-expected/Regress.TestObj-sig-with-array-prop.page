@@ -6,24 +6,16 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="signal" type="guide"/>
     <title type="link" role="topic">sig-with-array-prop</title>
-
   </info>
   <title>Regress.TestObj::sig-with-array-prop</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 def callback(test_obj, arr, user_param1, ...)
-</code></synopsis>
-
-  
-    <p>This test signal is like TelepathyGlib's
+  </code></synopsis>
+  <p>This test signal is like TelepathyGlib's
  TpChannel:: group-members-changed-detailed:</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>test_obj</code></title>
@@ -31,7 +23,7 @@ def callback(test_obj, arr, user_param1, ...)
 </item>
 <item>
 <title><code>arr</code></title>
-<p>numbers</p>
+  <p>numbers</p>
 </item>
 <title><code>user_param1</code></title>
 <p>first user parameter (if any) specified with the connect() method</p>
@@ -41,6 +33,4 @@ def callback(test_obj, arr, user_param1, ...)
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,23 +17,16 @@
         <api:name>obj</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.FooObject.a_global_method</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Utility.Object)
 @returns(none)
 def a_global_method(obj):
     # Python wrapper for regress_foo_object_a_global_method()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>obj</code></title>
@@ -42,6 +34,4 @@ def a_global_method(obj):
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="constructor" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,20 +17,13 @@
         <api:name>x</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_obj_new_from_file</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 RegressTestObj* regress_test_obj_new_from_file (const char* x);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>x</code></title>
@@ -43,6 +35,4 @@ RegressTestObj* regress_test_obj_new_from_file (const char* x);
 </item>
 </terms>
 
-  
-  
 </page>

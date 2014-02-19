@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,23 +17,16 @@
         <api:name>context</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_cairo_context_none_in</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_cairo_context_none_in</title>
+  <synopsis><code mime="text/x-python">
 @accepts(cairo.Context)
 @returns(none)
 def test_cairo_context_none_in(context):
     # Python wrapper for regress_test_cairo_context_none_in()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>context</code></title>
@@ -42,6 +34,4 @@ def test_cairo_context_none_in(context):
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,25 +21,18 @@
         <api:name>somearg</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_object_allow_none</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 GObject* regress_annotation_object_allow_none (RegressAnnotationObject* object,
                                                const gchar* somearg);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>somearg</code></title>
@@ -48,10 +40,8 @@ GObject* regress_annotation_object_allow_none (RegressAnnotationObject* object,
 </item>
 <item>
 <title><code>Returns</code></title>
-<p><code>NULL</code> always</p>
+  <p><code>NULL</code> always</p>
 </item>
 </terms>
 
-  
-  
 </page>

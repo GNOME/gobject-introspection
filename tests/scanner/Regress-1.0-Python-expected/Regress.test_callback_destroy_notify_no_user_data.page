@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,24 +21,17 @@
         <api:name>notify</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_callback_destroy_notify_no_user_data</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_callback_destroy_notify_no_user_data</title>
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.TestCallbackUserData, GLib.DestroyNotify)
 @returns(int)
 def test_callback_destroy_notify_no_user_data(callback, notify):
     # Python wrapper for regress_test_callback_destroy_notify_no_user_data()
-</code></synopsis>
-
-  
-    <p>Adds a scope notified callback with no user data. This can invoke an error
+  </code></synopsis>
+  <p>Adds a scope notified callback with no user data. This can invoke an error
 condition in bindings which needs to be tested.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>callback</code></title>
@@ -55,6 +47,4 @@ condition in bindings which needs to be tested.</p>
 </item>
 </terms>
 
-  
-  
 </page>

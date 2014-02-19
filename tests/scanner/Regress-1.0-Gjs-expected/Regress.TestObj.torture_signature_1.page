@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,7 +13,7 @@
       </api:returns>
       <api:name>regress_test_obj_torture_signature_1</api:name>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
         <api:name>x</api:name>
       </api:arg>
       <api:arg>
@@ -22,26 +21,19 @@
         <api:name>foo</api:name>
       </api:arg>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(guint)</api:type>
         <api:name>m</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.TestObj.prototype.torture_signature_1</title>
-  
-<synopsis><code mime="text/x-gjs">
-function torture_signature_1(x:Number, foo:String, m:Number):Boolean {
+  <synopsis><code mime="text/x-gjs">
+function torture_signature_1(x: Number(gint), foo: String, m: Number(guint)): [ok: Boolean, y: Number(gdouble), z: Number(gint), q: Number(gint)] {
     // Gjs wrapper for regress_test_obj_torture_signature_1()
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>This function throws an error if m is odd.</p>
 
-  
-    <p>This function throws an error if m is odd.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>x</code></title>
@@ -56,11 +48,21 @@ function torture_signature_1(x:Number, foo:String, m:Number):Boolean {
 
 </item>
 <item>
-<title><code>Returns</code></title>
+<title><code>ok</code></title>
+
+</item>
+<item>
+<title><code>y</code></title>
+
+</item>
+<item>
+<title><code>z</code></title>
+
+</item>
+<item>
+<title><code>q</code></title>
 
 </item>
 </terms>
 
-  
-  
 </page>

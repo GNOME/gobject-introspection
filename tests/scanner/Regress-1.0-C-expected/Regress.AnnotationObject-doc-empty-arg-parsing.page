@@ -6,23 +6,15 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="signal" type="guide"/>
     <title type="link" role="topic">doc-empty-arg-parsing</title>
-
   </info>
   <title>Regress.AnnotationObject::doc-empty-arg-parsing</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void doc-empty-arg-parsing (gpointer arg1);
-</code></synopsis>
+  </code></synopsis>
+  <p>This signal tests an empty document argument (<code>arg1</code>)</p>
 
-  
-    <p>This signal tests an empty document argument (<code>arg1</code>)</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>arg1</code></title>
@@ -34,6 +26,4 @@ void doc-empty-arg-parsing (gpointer arg1);
 </item>
 </terms>
 
-  
-  
 </page>

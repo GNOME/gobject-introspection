@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -50,11 +49,9 @@
         <api:name>m</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_torture_signature_2</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_test_torture_signature_2 (int x,
                                        RegressTestCallbackUserData callback,
                                        gpointer user_data,
@@ -64,14 +61,9 @@ void regress_test_torture_signature_2 (int x,
                                        const char* foo,
                                        int* q,
                                        guint m);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>x</code></title>
@@ -115,6 +107,4 @@ void regress_test_torture_signature_2 (int x,
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -30,42 +29,33 @@
         <api:name>destroy</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.watch_full</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, Regress.AnnotationForeachFunc, gpointer, GLib.DestroyNotify)
 @returns(none)
 def watch_full(self, func, user_data, destroy):
     # Python wrapper for regress_annotation_object_watch_full()
-</code></synopsis>
+  </code></synopsis>
+  <p>Test overriding via the "Rename To" annotation.</p>
 
-  
-    <p>Test overriding via the "Rename To" annotation.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
-<p>A <link xref="Regress.AnnotationObject"/></p>
+  <p>A <link xref="Regress.AnnotationObject"/></p>
 </item>
 <item>
 <title><code>func</code></title>
-<p>The callback</p>
+  <p>The callback</p>
 </item>
 <item>
 <title><code>user_data</code></title>
-<p>The callback data</p>
+  <p>The callback data</p>
 </item>
 <item>
 <title><code>destroy</code></title>
-<p>Destroy notification</p>
+  <p>Destroy notification</p>
 </item>
 </terms>
 
-  
-  
 </page>

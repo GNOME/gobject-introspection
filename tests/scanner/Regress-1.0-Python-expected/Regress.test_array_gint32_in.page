@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,23 +21,16 @@
         <api:name>ints</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_array_gint32_in</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_array_gint32_in</title>
+  <synopsis><code mime="text/x-python">
 @accepts(int, [gint32])
 @returns(gint32)
 def test_array_gint32_in(n_ints, ints):
     # Python wrapper for regress_test_array_gint32_in()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>n_ints</code></title>
@@ -46,7 +38,7 @@ def test_array_gint32_in(n_ints, ints):
 </item>
 <item>
 <title><code>ints</code></title>
-<p>List of ints</p>
+  <p>List of ints</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -54,6 +46,4 @@ def test_array_gint32_in(n_ints, ints):
 </item>
 </terms>
 
-  
-  
 </page>

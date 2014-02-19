@@ -6,19 +6,11 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="index" group="enum" type="guide"/>
-    
+    <link xref="index" group="enum" type="guide"/>
   </info>
   <title>Regress.FooASingle</title>
-  
-  
-  
-    
-  
-  
-  
-  
+
+
 <terms>
 <item>
 <title><code>FooASingle.FOO_SOME_SINGLE_ENUM</code></title>
@@ -26,6 +18,4 @@
 </item>
 </terms>
 
-  
-  
 </page>

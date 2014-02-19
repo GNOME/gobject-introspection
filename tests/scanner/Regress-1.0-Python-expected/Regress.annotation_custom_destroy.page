@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,28 +25,21 @@
         <api:name>data</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.annotation_custom_destroy</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.annotation_custom_destroy</title>
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationCallback, Regress.AnnotationNotifyFunc, gpointer)
 @returns(none)
 def annotation_custom_destroy(callback, destroy, data):
     # Python wrapper for regress_annotation_custom_destroy()
-</code></synopsis>
-
-  
-    <p>Test messing up the heuristic of closure/destroy-notification
+  </code></synopsis>
+  <p>Test messing up the heuristic of closure/destroy-notification
 detection, and fixing it via annotations.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>callback</code></title>
-<p>Destroy notification</p>
+  <p>Destroy notification</p>
 </item>
 <item>
 <title><code>destroy</code></title>
@@ -59,6 +51,4 @@ detection, and fixing it via annotations.</p>
 </item>
 </terms>
 
-  
-  
 </page>

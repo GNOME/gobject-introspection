@@ -6,42 +6,32 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="signal" type="guide"/>
     <title type="link" role="topic">attribute-signal</title>
-
   </info>
   <title>Regress.AnnotationObject::attribute-signal</title>
-  
-<synopsis><code mime="text/x-python">
-function callback(annotation_object, arg1:String, arg2:String, ):String;
-</code></synopsis>
+  <synopsis><code mime="text/x-gjs">
+connect('attribute-signal', function (annotationObject, arg1: String, arg2: String, ): String);
+  </code></synopsis>
+  <p>This signal tests a signal with attributes.</p>
 
-  
-    <p>This signal tests a signal with attributes.</p>
-  
-  
-  
-  
 <terms>
 <item>
-<title><code>annotation_object</code></title>
+<title><code>annotationObject</code></title>
 <p>instance of <link xref="Regress.AnnotationObject"/> that is emitting the signal</p>
 </item>
 <item>
 <title><code>arg1</code></title>
-<p>a value</p>
+  <p>a value</p>
 </item>
 <item>
 <title><code>arg2</code></title>
-<p>another value</p>
+  <p>another value</p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>the return value</p>
+  <p>the return value</p>
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,23 +21,16 @@
         <api:name>types</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_array_gtype_in</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_array_gtype_in</title>
+  <synopsis><code mime="text/x-python">
 @accepts(int, [GType])
 @returns(unicode)
 def test_array_gtype_in(n_types, types):
     # Python wrapper for regress_test_array_gtype_in()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>n_types</code></title>
@@ -46,7 +38,7 @@ def test_array_gtype_in(n_types, types):
 </item>
 <item>
 <title><code>types</code></title>
-<p>List of types</p>
+  <p>List of types</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -54,6 +46,4 @@ def test_array_gtype_in(n_types, types):
 </item>
 </terms>
 
-  
-  
 </page>

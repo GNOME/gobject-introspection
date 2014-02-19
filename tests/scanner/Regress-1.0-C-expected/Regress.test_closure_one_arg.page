@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,21 +21,14 @@
         <api:name>arg</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_closure_one_arg</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 int regress_test_closure_one_arg (GClosure* closure,
                                   int arg);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>closure</code></title>
@@ -52,6 +44,4 @@ int regress_test_closure_one_arg (GClosure* closure,
 </item>
 </terms>
 
-  
-  
 </page>

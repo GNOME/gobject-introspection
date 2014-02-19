@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -30,23 +29,16 @@
         <api:name>s</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.foo_method_external_references</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.foo_method_external_references</title>
+  <synopsis><code mime="text/x-python">
 @accepts(Utility.Object, Utility.EnumType, Utility.FlagType, Utility.Struct)
 @returns(none)
 def foo_method_external_references(object, e, f, s):
     # Python wrapper for regress_foo_method_external_references()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
@@ -66,6 +58,4 @@ def foo_method_external_references(object, e, f, s):
 </item>
 </terms>
 
-  
-  
 </page>

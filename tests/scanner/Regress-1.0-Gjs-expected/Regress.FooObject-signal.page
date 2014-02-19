@@ -6,26 +6,18 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="signal" type="guide"/>
     <title type="link" role="topic">signal</title>
-
   </info>
   <title>Regress.FooObject::signal</title>
-  
-<synopsis><code mime="text/x-python">
-function callback(foo_object, object:GObject.Object, p0:gpointer, ):String;
-</code></synopsis>
+  <synopsis><code mime="text/x-gjs">
+connect('signal', function (fooObject, object: <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link>, p0: void, ): String);
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
-<title><code>foo_object</code></title>
+<title><code>fooObject</code></title>
 <p>instance of <link xref="Regress.FooObject"/> that is emitting the signal</p>
 </item>
 <item>
@@ -42,6 +34,4 @@ function callback(foo_object, object:GObject.Object, p0:gpointer, ):String;
 </item>
 </terms>
 
-  
-  
 </page>

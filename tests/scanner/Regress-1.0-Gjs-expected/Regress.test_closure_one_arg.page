@@ -6,11 +6,10 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
       </api:returns>
       <api:name>regress_test_closure_one_arg</api:name>
       <api:arg>
@@ -18,26 +17,19 @@
         <api:name>closure</api:name>
       </api:arg>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
         <api:name>arg</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>test_closure_one_arg</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_closure_one_arg(closure:GObject.Closure, arg:Number):Number {
+  <title>Regress.test_closure_one_arg</title>
+  <synopsis><code mime="text/x-gjs">
+function test_closure_one_arg(closure: <link href="../GObject-2.0/GObject.Closure.page">GObject.Closure</link>, arg: Number(gint)): Number(gint) {
     // Gjs wrapper for regress_test_closure_one_arg()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>closure</code></title>
@@ -53,6 +45,4 @@ function test_closure_one_arg(closure:GObject.Closure, arg:Number):Number {
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,22 +13,15 @@
       </api:returns>
       <api:name>regress_test_array_fixed_size_int_return</api:name>
     </api:function>
-
   </info>
-  <title>Index.test_array_fixed_size_int_return</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_array_fixed_size_int_return</title>
+  <synopsis><code mime="text/x-python">
 @returns([int])
 def test_array_fixed_size_int_return():
     # Python wrapper for regress_test_array_fixed_size_int_return()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
@@ -37,6 +29,4 @@ def test_array_fixed_size_int_return():
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,29 +6,20 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="signal" type="guide"/>
     <title type="link" role="topic">string-signal</title>
-
   </info>
   <title>Regress.AnnotationObject::string-signal</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void string-signal (gpointer string);
-</code></synopsis>
-
-  
-    <p>This is a signal which has a broken signal handler,
+  </code></synopsis>
+  <p>This is a signal which has a broken signal handler,
 it says it's pointer but it's actually a string.</p>
-  
-  
-    <p>Since 1.0</p>
-  
-  
+  <p>Since 1.0</p>
 <terms>
 <item>
 <title><code>string</code></title>
-<p>a string</p>
+  <p>a string</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -36,6 +27,4 @@ it says it's pointer but it's actually a string.</p>
 </item>
 </terms>
 
-  
-  
 </page>

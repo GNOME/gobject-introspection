@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,35 +25,28 @@
         <api:name>n_nums</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_object_compute_sum_nz</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_annotation_object_compute_sum_nz (RegressAnnotationObject* object,
                                                int* nums,
                                                int n_nums);
-</code></synopsis>
+  </code></synopsis>
+  <p>Test taking a zero-terminated array with length parameter</p>
 
-  
-    <p>Test taking a zero-terminated array with length parameter</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>object</code></title>
-<p>a <link xref="Regress.AnnotationObject"/></p>
+  <p>a <link xref="Regress.AnnotationObject"/></p>
 </item>
 <item>
 <title><code>nums</code></title>
-<p>Sequence of numbers that
+  <p>Sequence of numbers that
 are zero-terminated</p>
 </item>
 <item>
 <title><code>n_nums</code></title>
-<p>Length of number array</p>
+  <p>Length of number array</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -62,6 +54,4 @@ are zero-terminated</p>
 </item>
 </terms>
 
-  
-  
 </page>

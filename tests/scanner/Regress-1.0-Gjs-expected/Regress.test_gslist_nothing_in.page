@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,26 +13,19 @@
       </api:returns>
       <api:name>regress_test_gslist_nothing_in</api:name>
       <api:arg>
-        <api:type>[String]</api:type>
+        <api:type>Array(String)</api:type>
         <api:name>in</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>test_gslist_nothing_in</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_gslist_nothing_in(in:[String]):void {
+  <title>Regress.test_gslist_nothing_in</title>
+  <synopsis><code mime="text/x-gjs">
+function test_gslist_nothing_in(in: Array(String)): void {
     // Gjs wrapper for regress_test_gslist_nothing_in()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>in</code></title>
@@ -41,6 +33,4 @@ function test_gslist_nothing_in(in:[String]):void {
 </item>
 </terms>
 
-  
-  
 </page>

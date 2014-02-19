@@ -6,24 +6,13 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="property" type="guide"/>
     <title type="link" role="topic">int</title>
-
   </info>
-  <title>Regress.TestObj:int</title>
-  
-<synopsis><code mime="text/x-python">
-"int"             Number                : Read / Write
-</code></synopsis>
+  <title>Regress.TestObj.int</title>
+  <synopsis><code mime="text/x-gjs">
+TestObj.int: Number(gint) (Read / Write)
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
-  
-  
-  
+
 </page>

@@ -6,28 +6,20 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="signal" type="guide"/>
     <title type="link" role="topic">sig-with-obj</title>
-
   </info>
   <title>Regress.TestObj::sig-with-obj</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void sig-with-obj (GObject obj);
-</code></synopsis>
-
-  
-    <p>Test transfer none GObject as a param (tests refcounting).
+  </code></synopsis>
+  <p>Test transfer none GObject as a param (tests refcounting).
 Use with regress_test_obj_emit_sig_with_obj</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>obj</code></title>
-<p>A newly created RegressTestObj</p>
+  <p>A newly created RegressTestObj</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -35,6 +27,4 @@ Use with regress_test_obj_emit_sig_with_obj</p>
 </item>
 </terms>
 
-  
-  
 </page>

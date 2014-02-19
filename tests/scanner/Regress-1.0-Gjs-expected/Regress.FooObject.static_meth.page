@@ -6,30 +6,22 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
       </api:returns>
       <api:name>regress_foo_object_static_meth</api:name>
     </api:function>
-
   </info>
-  <title>static_meth</title>
-  
-<synopsis><code mime="text/x-gjs">
-function static_meth():Number {
+  <title>Regress.FooObject.static_meth</title>
+  <synopsis><code mime="text/x-gjs">
+function static_meth(): Number(gint) {
     // Gjs wrapper for regress_foo_object_static_meth()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
@@ -37,6 +29,4 @@ function static_meth():Number {
 </item>
 </terms>
 
-  
-  
 </page>

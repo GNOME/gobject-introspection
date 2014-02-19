@@ -6,24 +6,13 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="property" type="guide"/>
     <title type="link" role="topic">hash-table-old</title>
-
   </info>
-  <title>Regress.TestObj:hash-table-old</title>
-  
-<synopsis><code mime="text/x-python">
-"hash-table-old"             {String: gint8}                : Read / Write
-</code></synopsis>
+  <title>Regress.TestObj.hash_table_old</title>
+  <synopsis><code mime="text/x-gjs">
+TestObj.hash_table_old: {String: Number(gint8)} (Read / Write)
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
-  
-  
-  
+
 </page>

@@ -6,23 +6,16 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="index" group="class" type="guide"/>
-    
+    <link xref="index" group="class" type="guide"/>
   </info>
   <title>Regress.FooSubobject</title>
-  
   <synopsis><code>
 from gi.repository import Regress
 
-foo_subobject = Regress.FooSubobject()  </code></synopsis>
+foo_subobject = Regress.FooSubobject()
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
   <synopsis>
     <title>Hierarchy</title>
     <tree>
@@ -37,8 +30,11 @@ foo_subobject = Regress.FooSubobject()  </code></synopsis>
       </item>
     </tree>
   </synopsis>
-
-  
+  <links type="topic" ui:expanded="true"
+         api:type="function" api:mime="text/python"
+         groups="constructor" style="linklist">
+    <title>Constructors</title>
+  </links>
   <links type="topic" ui:expanded="true"
          api:type="function" api:mime="text/python"
          groups="method" style="linklist">
@@ -47,7 +43,7 @@ foo_subobject = Regress.FooSubobject()  </code></synopsis>
   <links type="topic" ui:expanded="true"
          api:type="function" api:mime="text/python"
          groups="function" style="linklist">
-    <title>Functions</title>
+    <title>Static Functions</title>
   </links>
   <links type="topic" ui:expanded="true" groups="property" style="linklist">
     <title>Properties</title>
@@ -58,8 +54,10 @@ foo_subobject = Regress.FooSubobject()  </code></synopsis>
   <links type="topic" ui:expanded="true" groups="vfunc" style="linklist">
     <title>Virtual functions</title>
   </links>
+  <links type="topic" ui:expanded="true" groups="field" style="linklist">
+    <title>Fields</title>
+  </links>
   <links type="topic" ui:expanded="true" groups="#first #default #last" style="linklist">
     <title>Other</title>
   </links>
-
 </page>

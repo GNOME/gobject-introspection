@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,24 +13,17 @@
       </api:returns>
       <api:name>regress_test_callback_thaw_notifications</api:name>
     </api:function>
-
   </info>
-  <title>Index.test_callback_thaw_notifications</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_callback_thaw_notifications</title>
+  <synopsis><code mime="text/x-python">
 @returns(int)
 def test_callback_thaw_notifications():
     # Python wrapper for regress_test_callback_thaw_notifications()
-</code></synopsis>
-
-  
-    <p>Invokes all callbacks installed by #test_callback_destroy_notify(),
+  </code></synopsis>
+  <p>Invokes all callbacks installed by #test_callback_destroy_notify(),
 adding up their return values, and removes them, invoking the
 corresponding destroy notfications.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
@@ -39,6 +31,4 @@ corresponding destroy notfications.</p>
 </item>
 </terms>
 
-  
-  
 </page>

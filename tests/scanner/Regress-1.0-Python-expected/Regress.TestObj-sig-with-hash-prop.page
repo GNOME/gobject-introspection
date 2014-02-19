@@ -6,24 +6,16 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="signal" type="guide"/>
     <title type="link" role="topic">sig-with-hash-prop</title>
-
   </info>
   <title>Regress.TestObj::sig-with-hash-prop</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 def callback(test_obj, hash, user_param1, ...)
-</code></synopsis>
-
-  
-    <p>This test signal is like TelepathyGlib's
+  </code></synopsis>
+  <p>This test signal is like TelepathyGlib's
  TpAccount::status-changed</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>test_obj</code></title>
@@ -41,6 +33,4 @@ def callback(test_obj, hash, user_param1, ...)
 </item>
 </terms>
 
-  
-  
 </page>

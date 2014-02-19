@@ -6,24 +6,16 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.FooSubInterface" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.FooSubInterface" group="vfunc" type="guide"/>
   </info>
   <title>Regress.FooSubInterface::do_baz</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.FooSubInterface, GObject.Callback, gpointer)
 @returns(none)
 def do_do_baz(self, callback, user_data):
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
@@ -39,6 +31,4 @@ def do_do_baz(self, callback, user_data):
 </item>
 </terms>
 
-  
-  
 </page>

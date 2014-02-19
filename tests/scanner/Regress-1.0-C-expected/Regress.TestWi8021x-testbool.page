@@ -6,21 +6,10 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestWi8021x" group="property" type="guide"/>
     <title type="link" role="topic">testbool</title>
-
   </info>
   <title>Regress.TestWi8021x:testbool</title>
-  
-  
-  
-    
-  
-  
-  
-  
-  
-  
-  
+
+
 </page>

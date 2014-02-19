@@ -6,19 +6,11 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="index" group="enum" type="guide"/>
-    
+    <link xref="index" group="enum" type="guide"/>
   </info>
   <title>Regress.FooEnumNoType</title>
-  
-  
-  
-    
-  
-  
-  
-  
+
+
 <terms>
 <item>
 <title><code>FooEnumNoType.UN</code></title>
@@ -38,6 +30,4 @@
 </item>
 </terms>
 
-  
-  
 </page>

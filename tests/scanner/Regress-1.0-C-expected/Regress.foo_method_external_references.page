@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -30,23 +29,16 @@
         <api:name>s</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_foo_method_external_references</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_foo_method_external_references (UtilityObject* object,
                                              UtilityEnumType e,
                                              UtilityFlagType f,
                                              UtilityStruct s);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
@@ -70,6 +62,4 @@ void regress_foo_method_external_references (UtilityObject* object,
 </item>
 </terms>
 
-  
-  
 </page>

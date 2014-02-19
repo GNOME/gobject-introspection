@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,34 +25,27 @@
         <api:name>argv</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_object_parse_args</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_annotation_object_parse_args (RegressAnnotationObject* object,
                                            int* argc,
                                            char*** argv);
-</code></synopsis>
+  </code></synopsis>
+  <p>Test taking a zero-terminated array with length parameter</p>
 
-  
-    <p>Test taking a zero-terminated array with length parameter</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>object</code></title>
-<p>a <link xref="Regress.AnnotationObject"/></p>
+  <p>a <link xref="Regress.AnnotationObject"/></p>
 </item>
 <item>
 <title><code>argc</code></title>
-<p>Length of the argument vector</p>
+  <p>Length of the argument vector</p>
 </item>
 <item>
 <title><code>argv</code></title>
-<p>Argument vector</p>
+  <p>Argument vector</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -61,6 +53,4 @@ void regress_annotation_object_parse_args (RegressAnnotationObject* object,
 </item>
 </terms>
 
-  
-  
 </page>

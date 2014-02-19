@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestBoxed" group="constructor" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,30 +13,23 @@
       </api:returns>
       <api:name>regress_test_boxed_new_alternative_constructor2</api:name>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
         <api:name>i</api:name>
       </api:arg>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
         <api:name>j</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.TestBoxed.new_alternative_constructor2</title>
-  
-<synopsis><code mime="text/x-gjs">
-function new_alternative_constructor2(i:Number, j:Number):Regress.TestBoxed {
+  <synopsis><code mime="text/x-gjs">
+function new_alternative_constructor2(i: Number(gint), j: Number(gint)): <link xref="Regress.TestBoxed">Regress.TestBoxed</link> {
     // Gjs wrapper for regress_test_boxed_new_alternative_constructor2()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>i</code></title>
@@ -53,6 +45,4 @@ function new_alternative_constructor2(i:Number, j:Number):Regress.TestBoxed {
 </item>
 </terms>
 
-  
-  
 </page>

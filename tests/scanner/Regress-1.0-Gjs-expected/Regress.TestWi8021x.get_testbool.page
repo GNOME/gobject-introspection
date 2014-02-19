@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestWi8021x" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,29 +13,20 @@
       </api:returns>
       <api:name>regress_test_wi_802_1x_get_testbool</api:name>
     </api:function>
-
   </info>
   <title>Regress.TestWi8021x.prototype.get_testbool</title>
-  
-<synopsis><code mime="text/x-gjs">
-function get_testbool():Boolean {
+  <synopsis><code mime="text/x-gjs">
+function get_testbool(): Boolean {
     // Gjs wrapper for regress_test_wi_802_1x_get_testbool()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
-<title><code>Returns</code></title>
+<title><code>ok</code></title>
 
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -38,23 +37,16 @@
         <api:name>m</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.test_torture_signature_1</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.test_torture_signature_1</title>
+  <synopsis><code mime="text/x-python">
 @accepts(int, float, int, unicode, int, int)
 @returns(bool)
 def test_torture_signature_1(x, y, z, foo, q, m):
     # Python wrapper for regress_test_torture_signature_1()
-</code></synopsis>
+  </code></synopsis>
+  <p>This function throws an error if m is odd.</p>
 
-  
-    <p>This function throws an error if m is odd.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>x</code></title>
@@ -86,6 +78,4 @@ def test_torture_signature_1(x, y, z, foo, q, m):
 </item>
 </terms>
 
-  
-  
 </page>

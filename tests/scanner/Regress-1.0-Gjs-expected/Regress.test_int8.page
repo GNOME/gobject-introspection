@@ -6,34 +6,26 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>gint8</api:type>
+        <api:type>Number(gint8)</api:type>
       </api:returns>
       <api:name>regress_test_int8</api:name>
       <api:arg>
-        <api:type>gint8</api:type>
+        <api:type>Number(gint8)</api:type>
         <api:name>in</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>test_int8</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_int8(in:gint8):gint8 {
+  <title>Regress.test_int8</title>
+  <synopsis><code mime="text/x-gjs">
+function test_int8(in: Number(gint8)): Number(gint8) {
     // Gjs wrapper for regress_test_int8()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>in</code></title>
@@ -45,6 +37,4 @@ function test_int8(in:gint8):gint8 {
 </item>
 </terms>
 
-  
-  
 </page>

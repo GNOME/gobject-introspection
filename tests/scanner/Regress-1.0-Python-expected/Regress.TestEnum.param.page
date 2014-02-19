@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,23 +17,16 @@
         <api:name>e</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.param</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.param</title>
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.TestEnum)
 @returns(unicode)
 def param(e):
     # Python wrapper for regress_test_enum_param()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>e</code></title>
@@ -46,6 +38,4 @@ def param(e):
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,25 +13,16 @@
       </api:returns>
       <api:name>regress_annotation_space_after_comment_bug631690</api:name>
     </api:function>
-
   </info>
-  <title>Index.annotation_space_after_comment_bug631690</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.annotation_space_after_comment_bug631690</title>
+  <synopsis><code mime="text/x-python">
 @returns(none)
 def annotation_space_after_comment_bug631690():
     # Python wrapper for regress_annotation_space_after_comment_bug631690()
-</code></synopsis>
+  </code></synopsis>
+  <p>Explicitly test having a space after the ** here.</p>
 
-  
-    <p>Explicitly test having a space after the ** here.</p>
-  
-  
-  
-  
 <terms>
 </terms>
 
-  
-  
 </page>

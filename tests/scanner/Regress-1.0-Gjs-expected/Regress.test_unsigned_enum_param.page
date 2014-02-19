@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,22 +17,15 @@
         <api:name>e</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>test_unsigned_enum_param</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_unsigned_enum_param(e:Regress.TestEnumUnsigned):String {
+  <title>Regress.test_unsigned_enum_param</title>
+  <synopsis><code mime="text/x-gjs">
+function test_unsigned_enum_param(e: <link xref="Regress.TestEnumUnsigned">Regress.TestEnumUnsigned</link>): String {
     // Gjs wrapper for regress_test_unsigned_enum_param()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>e</code></title>
@@ -45,6 +37,4 @@ function test_unsigned_enum_param(e:Regress.TestEnumUnsigned):String {
 </item>
 </terms>
 
-  
-  
 </page>

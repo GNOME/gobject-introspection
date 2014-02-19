@@ -6,30 +6,20 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="signal" type="guide"/>
     <title type="link" role="topic">test</title>
-
   </info>
   <title>Regress.TestObj::test</title>
-  
-<synopsis><code mime="text/x-python">
-function callback(test_obj, ):void;
-</code></synopsis>
+  <synopsis><code mime="text/x-gjs">
+connect('test', function (testObj, ): void);
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
-<title><code>test_obj</code></title>
+<title><code>testObj</code></title>
 <p>instance of <link xref="Regress.TestObj"/> that is emitting the signal</p>
 </item>
 </terms>
 
-  
-  
 </page>

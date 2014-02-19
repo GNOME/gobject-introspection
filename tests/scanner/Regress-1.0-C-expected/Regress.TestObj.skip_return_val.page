@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -46,11 +45,9 @@
         <api:name>num2</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_obj_skip_return_val</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 gboolean regress_test_obj_skip_return_val (RegressTestObj* obj,
                                            gint a,
                                            gint* out_b,
@@ -59,53 +56,46 @@ gboolean regress_test_obj_skip_return_val (RegressTestObj* obj,
                                            gint* out_sum,
                                            gint num1,
                                            gint num2);
-</code></synopsis>
+  </code></synopsis>
+  <p>Check that the return value is skipped</p>
 
-  
-    <p>Check that the return value is skipped</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>obj</code></title>
-<p>a <link xref="Regress.TestObj"/></p>
+  <p>a <link xref="Regress.TestObj"/></p>
 </item>
 <item>
 <title><code>a</code></title>
-<p>Parameter.</p>
+  <p>Parameter.</p>
 </item>
 <item>
 <title><code>out_b</code></title>
-<p>A return value.</p>
+  <p>A return value.</p>
 </item>
 <item>
 <title><code>c</code></title>
-<p>Other parameter.</p>
+  <p>Other parameter.</p>
 </item>
 <item>
 <title><code>inout_d</code></title>
-<p>Will be incremented.</p>
+  <p>Will be incremented.</p>
 </item>
 <item>
 <title><code>out_sum</code></title>
-<p>Return value.</p>
+  <p>Return value.</p>
 </item>
 <item>
 <title><code>num1</code></title>
-<p>Number.</p>
+  <p>Number.</p>
 </item>
 <item>
 <title><code>num2</code></title>
-<p>Number.</p>
+  <p>Number.</p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p><code>TRUE</code> if the call succeeds, <code>FALSE</code> if @error is set.</p>
+  <p><code>TRUE</code> if the call succeeds, <code>FALSE</code> if @error is set.</p>
 </item>
 </terms>
 
-  
-  
 </page>

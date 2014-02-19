@@ -6,34 +6,26 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>gshort</api:type>
+        <api:type>Number(gshort)</api:type>
       </api:returns>
       <api:name>regress_test_short</api:name>
       <api:arg>
-        <api:type>gshort</api:type>
+        <api:type>Number(gshort)</api:type>
         <api:name>in</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>test_short</title>
-  
-<synopsis><code mime="text/x-gjs">
-function test_short(in:gshort):gshort {
+  <title>Regress.test_short</title>
+  <synopsis><code mime="text/x-gjs">
+function test_short(in: Number(gshort)): Number(gshort) {
     // Gjs wrapper for regress_test_short()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>in</code></title>
@@ -45,6 +37,4 @@ function test_short(in:gshort):gshort {
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,26 +6,18 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="signal" type="guide"/>
     <title type="link" role="topic">doc-empty-arg-parsing</title>
-
   </info>
   <title>Regress.AnnotationObject::doc-empty-arg-parsing</title>
-  
-<synopsis><code mime="text/x-python">
-function callback(annotation_object, arg1:gpointer, ):void;
-</code></synopsis>
+  <synopsis><code mime="text/x-gjs">
+connect('doc-empty-arg-parsing', function (annotationObject, arg1: void, ): void);
+  </code></synopsis>
+  <p>This signal tests an empty document argument (<code>arg1</code>)</p>
 
-  
-    <p>This signal tests an empty document argument (<code>arg1</code>)</p>
-  
-  
-  
-  
 <terms>
 <item>
-<title><code>annotation_object</code></title>
+<title><code>annotationObject</code></title>
 <p>instance of <link xref="Regress.AnnotationObject"/> that is emitting the signal</p>
 </item>
 <item>
@@ -34,6 +26,4 @@ function callback(annotation_object, arg1:gpointer, ):void;
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,39 +6,29 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
-      <link xref="Regress.FooObject" group="vfunc" type="guide"/>
-    
+    <link xref="Regress.FooObject" group="vfunc" type="guide"/>
   </info>
   <title>Regress.FooObject::read_fn</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.FooObject, int, int)
 @returns(none)
 def do_read_fn(object, offset, length):
-</code></synopsis>
+  </code></synopsis>
+  <p>Read some stuff.</p>
 
-  
-    <p>Read some stuff.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>object</code></title>
-<p>obj</p>
+  <p>obj</p>
 </item>
 <item>
 <title><code>offset</code></title>
-<p>offset</p>
+  <p>offset</p>
 </item>
 <item>
 <title><code>length</code></title>
-<p>length</p>
+  <p>length</p>
 </item>
 </terms>
 
-  
-  
 </page>

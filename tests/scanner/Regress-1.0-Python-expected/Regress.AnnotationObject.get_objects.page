@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,29 +17,22 @@
         <api:name>self</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.get_objects</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)
 @returns([Regress.AnnotationObject])
 def get_objects(self):
     # Python wrapper for regress_annotation_object_get_objects()
-</code></synopsis>
-
-  
-    <p>This is a test for returning a list of objects.
+  </code></synopsis>
+  <p>This is a test for returning a list of objects.
 The list itself should be freed, but not the internal objects,
 intentionally similar example to gtk_container_get_children</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -48,6 +40,4 @@ intentionally similar example to gtk_container_get_children</p>
 </item>
 </terms>
 
-  
-  
 </page>

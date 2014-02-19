@@ -6,24 +6,13 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="property" type="guide"/>
     <title type="link" role="topic">boxed</title>
-
   </info>
-  <title>Regress.TestObj:boxed</title>
-  
-<synopsis><code mime="text/x-python">
-"boxed"             Regress.TestBoxed                : Read / Write
-</code></synopsis>
+  <title>Regress.TestObj.boxed</title>
+  <synopsis><code mime="text/x-gjs">
+TestObj.boxed: <link xref="Regress.TestBoxed">Regress.TestBoxed</link> (Read / Write)
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
-  
-  
-  
+
 </page>

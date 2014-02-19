@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,23 +21,16 @@
         <api:name>properties</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>Index.annotation_string_array_length</title>
-  
-<synopsis><code mime="text/x-python">
+  <title>Regress.annotation_string_array_length</title>
+  <synopsis><code mime="text/x-python">
 @accepts(int, [unicode])
 @returns(none)
 def annotation_string_array_length(n_properties, properties):
     # Python wrapper for regress_annotation_string_array_length()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>n_properties</code></title>
@@ -50,6 +42,4 @@ def annotation_string_array_length(n_properties, properties):
 </item>
 </terms>
 
-  
-  
 </page>

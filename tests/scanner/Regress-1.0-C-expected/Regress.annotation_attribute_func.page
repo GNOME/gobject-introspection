@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,36 +21,27 @@
         <api:name>data</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_annotation_attribute_func</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 gint regress_annotation_attribute_func (RegressAnnotationObject* object,
                                         const gchar* data);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
-<p>A <link xref="Regress.AnnotationObject"/>.</p>
+  <p>A <link xref="Regress.AnnotationObject"/>.</p>
 </item>
 <item>
 <title><code>data</code></title>
-<p>Some data.</p>
+  <p>Some data.</p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>The return value.</p>
+  <p>The return value.</p>
 </item>
 </terms>
 
-  
-  
 </page>

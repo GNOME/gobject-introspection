@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,32 +21,25 @@
         <api:name>a</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.TestObj.skip_return_val_no_out</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj, int)
 @returns(bool)
 def skip_return_val_no_out(self, a):
     # Python wrapper for regress_test_obj_skip_return_val_no_out()
-</code></synopsis>
-
-  
-    <p>Check that the return value is skipped. Succeed if a is nonzero, otherwise
+  </code></synopsis>
+  <p>Check that the return value is skipped. Succeed if a is nonzero, otherwise
 raise an error.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="Regress.TestObj"/></p>
+  <p>a <link xref="Regress.TestObj"/></p>
 </item>
 <item>
 <title><code>a</code></title>
-<p>Parameter.</p>
+  <p>Parameter.</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -55,6 +47,4 @@ raise an error.</p>
 </item>
 </terms>
 
-  
-  
 </page>

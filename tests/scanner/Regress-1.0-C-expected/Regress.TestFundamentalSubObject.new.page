@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestFundamentalSubObject"
       group="constructor"
       type="guide"/>
@@ -20,20 +19,13 @@
         <api:name>data</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_fundamental_sub_object_new</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 RegressTestFundamentalSubObject* regress_test_fundamental_sub_object_new (const char* data);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>data</code></title>
@@ -45,6 +37,4 @@ RegressTestFundamentalSubObject* regress_test_fundamental_sub_object_new (const 
 </item>
 </terms>
 
-  
-  
 </page>

@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,30 +13,21 @@
       </api:returns>
       <api:name>regress_annotation_object_get_hash</api:name>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.prototype.get_hash</title>
-  
-<synopsis><code mime="text/x-gjs">
-function get_hash():{String: GObject.Object} {
+  <synopsis><code mime="text/x-gjs">
+function get_hash(): {String: <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link>} {
     // Gjs wrapper for regress_annotation_object_get_hash()
 }
-</code></synopsis>
-
-  
-    <p>This is a test for returning a hash table mapping strings to
+  </code></synopsis>
+  <p>This is a test for returning a hash table mapping strings to
 objects.</p>
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>Returns</code></title>
-<p>hash table</p>
+
 </item>
 </terms>
 
-  
-  
 </page>

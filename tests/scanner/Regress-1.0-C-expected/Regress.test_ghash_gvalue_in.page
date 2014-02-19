@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -18,24 +17,17 @@
         <api:name>hash</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>regress_test_ghash_gvalue_in</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 void regress_test_ghash_gvalue_in (GHashTable* hash);
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>hash</code></title>
-<p>the hash table returned by
+  <p>the hash table returned by
 <link xref="Regress.test_ghash_gvalue_return"/>.</p>
 </item>
 <item>
@@ -44,6 +36,4 @@ void regress_test_ghash_gvalue_in (GHashTable* hash);
 </item>
 </terms>
 
-  
-  
 </page>

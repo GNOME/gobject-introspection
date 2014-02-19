@@ -6,39 +6,29 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="signal" type="guide"/>
     <title type="link" role="topic">attribute-signal</title>
-
   </info>
   <title>Regress.AnnotationObject::attribute-signal</title>
-  
-<synopsis><code mime="text/x-csrc">
+  <synopsis><code mime="text/x-csrc">
 gchar* attribute-signal (gchar* arg1,
                          gchar* arg2);
-</code></synopsis>
+  </code></synopsis>
+  <p>This signal tests a signal with attributes.</p>
 
-  
-    <p>This signal tests a signal with attributes.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>arg1</code></title>
-<p>a value</p>
+  <p>a value</p>
 </item>
 <item>
 <title><code>arg2</code></title>
-<p>another value</p>
+  <p>another value</p>
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>the return value</p>
+  <p>the return value</p>
 </item>
 </terms>
 
-  
-  
 </page>

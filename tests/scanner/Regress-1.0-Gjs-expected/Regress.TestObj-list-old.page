@@ -6,24 +6,13 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="property" type="guide"/>
     <title type="link" role="topic">list-old</title>
-
   </info>
-  <title>Regress.TestObj:list-old</title>
-  
-<synopsis><code mime="text/x-python">
-"list-old"             [String]                : Read / Write
-</code></synopsis>
+  <title>Regress.TestObj.list_old</title>
+  <synopsis><code mime="text/x-gjs">
+TestObj.list_old: Array(String) (Read / Write)
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
-  
-  
-  
+
 </page>

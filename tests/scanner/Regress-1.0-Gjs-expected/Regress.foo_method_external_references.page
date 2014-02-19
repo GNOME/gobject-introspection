@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
@@ -30,22 +29,15 @@
         <api:name>s</api:name>
       </api:arg>
     </api:function>
-
   </info>
-  <title>foo_method_external_references</title>
-  
-<synopsis><code mime="text/x-gjs">
-function foo_method_external_references(object:Utility.Object, e:Utility.EnumType, f:Utility.FlagType, s:Utility.Struct):void {
+  <title>Regress.foo_method_external_references</title>
+  <synopsis><code mime="text/x-gjs">
+function foo_method_external_references(object: <link href="../Utility-1.0/Utility.Object.page">Utility.Object</link>, e: <link href="../Utility-1.0/Utility.EnumType.page">Utility.EnumType</link>, f: <link href="../Utility-1.0/Utility.FlagType.page">Utility.FlagType</link>, s: <link href="../Utility-1.0/Utility.Struct.page">Utility.Struct</link>): void {
     // Gjs wrapper for regress_foo_method_external_references()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>object</code></title>
@@ -65,6 +57,4 @@ function foo_method_external_references(object:Utility.Object, e:Utility.EnumTyp
 </item>
 </terms>
 
-  
-  
 </page>

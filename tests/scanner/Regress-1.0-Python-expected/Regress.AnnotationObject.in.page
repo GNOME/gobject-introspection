@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -22,31 +21,24 @@
         <api:name>inarg</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.AnnotationObject.in</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, int)
 @returns(int)
 def in(self, inarg):
     # Python wrapper for regress_annotation_object_in()
-</code></synopsis>
+  </code></synopsis>
+  <p>This is a test for in arguments</p>
 
-  
-    <p>This is a test for in arguments</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
-<p>a <link xref="GObject.Object"/></p>
+  <p>a <link xref="GObject.Object"/></p>
 </item>
 <item>
 <title><code>inarg</code></title>
-<p>This is an argument test</p>
+  <p>This is an argument test</p>
 </item>
 <item>
 <title><code>Returns</code></title>
@@ -54,6 +46,4 @@ def in(self, inarg):
 </item>
 </terms>
 
-  
-  
 </page>

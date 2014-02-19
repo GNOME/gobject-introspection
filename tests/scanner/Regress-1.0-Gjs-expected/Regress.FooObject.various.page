@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,30 +13,23 @@
       </api:returns>
       <api:name>regress_foo_object_various</api:name>
       <api:arg>
-        <api:type>gpointer</api:type>
+        <api:type>void</api:type>
         <api:name>data</api:name>
       </api:arg>
       <api:arg>
-        <api:type>GType</api:type>
+        <api:type>GObject.Type</api:type>
         <api:name>some_type</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.FooObject.prototype.various</title>
-  
-<synopsis><code mime="text/x-gjs">
-function various(data:gpointer, some_type:GType):void {
+  <synopsis><code mime="text/x-gjs">
+function various(data: void, some_type: GObject.Type): void {
     // Gjs wrapper for regress_foo_object_various()
 }
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>data</code></title>
@@ -49,6 +41,4 @@ function various(data:gpointer, some_type:GType):void {
 </item>
 </terms>
 
-  
-  
 </page>

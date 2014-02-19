@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestObj" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -42,27 +41,20 @@
         <api:name>m</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.TestObj.torture_signature_1</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj, int, float, int, unicode, int, int)
 @returns(bool)
 def torture_signature_1(self, x, y, z, foo, q, m):
     # Python wrapper for regress_test_obj_torture_signature_1()
-</code></synopsis>
+  </code></synopsis>
+  <p>This function throws an error if m is odd.</p>
 
-  
-    <p>This function throws an error if m is odd.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>self</code></title>
-<p>A <link xref="Regress.TestObj"/></p>
+  <p>A <link xref="Regress.TestObj"/></p>
 </item>
 <item>
 <title><code>x</code></title>
@@ -94,6 +86,4 @@ def torture_signature_1(self, x, y, z, foo, q, m):
 </item>
 </terms>
 
-  
-  
 </page>

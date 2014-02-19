@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.TestInheritDrawable" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -26,23 +25,16 @@
         <api:name>height</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.TestInheritDrawable.get_size</title>
-  
-<synopsis><code mime="text/x-python">
+  <synopsis><code mime="text/x-python">
 @accepts(Regress.TestInheritDrawable, int, int)
 @returns(none)
 def get_size(self, width, height):
     # Python wrapper for regress_test_inherit_drawable_get_size()
-</code></synopsis>
+  </code></synopsis>
 
-  
-    
-  
-  
-  
-  
+
 <terms>
 <item>
 <title><code>self</code></title>
@@ -58,6 +50,4 @@ def get_size(self, width, height):
 </item>
 </terms>
 
-  
-  
 </page>

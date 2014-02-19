@@ -6,7 +6,6 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    
     <link xref="Regress.FooObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
@@ -14,26 +13,19 @@
       </api:returns>
       <api:name>regress_foo_object_append_new_stack_layer</api:name>
       <api:arg>
-        <api:type>Number</api:type>
+        <api:type>Number(gint)</api:type>
         <api:name>x</api:name>
       </api:arg>
     </api:function>
-
   </info>
   <title>Regress.FooObject.prototype.append_new_stack_layer</title>
-  
-<synopsis><code mime="text/x-gjs">
-function append_new_stack_layer(x:Number):Regress.FooOtherObject {
+  <synopsis><code mime="text/x-gjs">
+function append_new_stack_layer(x: Number(gint)): <link xref="Regress.FooOtherObject">Regress.FooOtherObject</link> {
     // Gjs wrapper for regress_foo_object_append_new_stack_layer()
 }
-</code></synopsis>
+  </code></synopsis>
+  <p>This shouldn't be scanned as a constructor.</p>
 
-  
-    <p>This shouldn't be scanned as a constructor.</p>
-  
-  
-  
-  
 <terms>
 <item>
 <title><code>x</code></title>
@@ -45,6 +37,4 @@ function append_new_stack_layer(x:Number):Regress.FooOtherObject {
 </item>
 </terms>
 
-  
-  
 </page>
