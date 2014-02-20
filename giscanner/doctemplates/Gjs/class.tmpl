@@ -1,6 +1,8 @@
 <%inherit file="/class.tmpl"/>
 <%block name="synopsis">
-  <synopsis><code>
+  <synopsis>\
+% if node.namespace is not None:
+<code>
 const ${namespace.name} = imports.gi.${namespace.name};
 
 let ${formatter.to_lower_camel_case(node.name)} = new ${namespace.name}.${node.name}(\
@@ -18,4 +20,11 @@ let ${formatter.to_lower_camel_case(node.name)} = new ${namespace.name}.${node.n
 ${formatter.format_gboxed_constructor(node)}\
 % endif
 );
-  </code></synopsis></%block>
+  </code>\
+% else:
+  <p>
+    This structure is inside ${node.parent.namespace.name}.${node.parent.name}
+    and can only be used as a field of that.
+  </p>
+% endif
+</synopsis></%block>

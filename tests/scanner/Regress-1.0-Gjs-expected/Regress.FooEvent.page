@@ -12,11 +12,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let fooEvent = new Regress.FooEvent({
-    <link xref='Regress.FooEvent-type'>type</link>: value
-    <link xref='Regress.FooEvent-any'>any</link>: value
-    <link xref='Regress.FooEvent-expose'>expose</link>: value
-});
+let fooEvent = new Regress.FooEvent();
   </code></synopsis>
 
 

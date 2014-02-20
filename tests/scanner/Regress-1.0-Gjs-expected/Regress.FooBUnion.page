@@ -12,10 +12,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let fooBUnion = new Regress.FooBUnion({
-    <link xref='Regress.FooBUnion-type'>type</link>: value
-    <link xref='Regress.FooBUnion-v'>v</link>: value
-});
+let fooBUnion = new Regress.FooBUnion();
   </code></synopsis>
 
 

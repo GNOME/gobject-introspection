@@ -12,16 +12,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let testStructE__some_union__union = new Regress.TestStructE__some_union__union({
-    <link xref='Regress.TestStructE__some_union__union-v_int'>v_int</link>: value
-    <link xref='Regress.TestStructE__some_union__union-v_uint'>v_uint</link>: value
-    <link xref='Regress.TestStructE__some_union__union-v_long'>v_long</link>: value
-    <link xref='Regress.TestStructE__some_union__union-v_ulong'>v_ulong</link>: value
-    <link xref='Regress.TestStructE__some_union__union-v_int64'>v_int64</link>: value
-    <link xref='Regress.TestStructE__some_union__union-v_uint64'>v_uint64</link>: value
-    <link xref='Regress.TestStructE__some_union__union-v_float'>v_float</link>: value
-    <link xref='Regress.TestStructE__some_union__union-v_double'>v_double</link>: value
-});
+let testStructE__some_union__union = new Regress.TestStructE__some_union__union();
   </code></synopsis>
 
 

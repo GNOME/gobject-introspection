@@ -597,7 +597,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         if isinstance(node, ast.Field):
             if node.type is None:
                 return False
-            if isinstance(node.parent, ast.Class):
+            if isinstance(node.parent, (ast.Class, ast.Union)):
                 return False
         if isinstance(node, ast.Union) and node.name is None:
             return False
@@ -774,6 +774,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             if node.type is None:
                 return False
             if node.private:
+                return False
+            if isinstance(node.parent, ast.Union):
                 return False
             if node.type.target_fundamental not in \
                (None, 'none', 'gpointer', 'utf8', 'filename', 'va_list'):
