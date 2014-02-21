@@ -103,6 +103,7 @@ class DumpCompiler(object):
         # We have to use the current directory to work around Unix
         # sysadmins who mount /tmp noexec
         tmpdir = tempfile.mkdtemp('', 'tmp-introspect', dir=os.getcwd())
+        os.mkdir(os.path.join(tmpdir, '.libs'))
 
         tpl_args = {}
         if self._uninst_srcdir is not None:
