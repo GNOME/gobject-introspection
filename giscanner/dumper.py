@@ -159,7 +159,7 @@ class DumpCompiler(object):
             o_path = self._generate_tempfile(tmpdir, '.o')
 
         if os.name == 'nt':
-            ext = 'exe'
+            ext = '.exe'
         else:
             ext = ''
 
