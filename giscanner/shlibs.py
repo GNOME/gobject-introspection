@@ -24,7 +24,7 @@ import platform
 import re
 import subprocess
 
-from .utils import get_libtool_command, extract_libtool_shlib
+from .utils import get_libtool_command, extract_libtool_shlib, which
 
 
 # For .la files, the situation is easy.
@@ -89,10 +89,59 @@ def _resolve_non_libtool(options, binary, libraries):
             binary.args[0] = old_argdir
 
     if os.name == 'nt':
-        shlibs = []
+        args = []
+        libtool = get_libtool_command(options)
+        if libtool:
+            args.append(which(os.environ.get('SHELL', 'sh.exe')))
+            args.extend(libtool)
+            args.append('--mode=execute')
+        # FIXME: it could have prefix (i686-w64-mingw32-dlltool.exe)
+        args.extend(['dlltool.exe', '--identify'])
+        compiler_cmd = os.environ.get('CC', 'cc')
+        # FIXME: what if it's not gcc?
+        proc = subprocess.Popen([compiler_cmd, '-print-search-dirs'],
+                                stdout=subprocess.PIPE)
+        o, e = proc.communicate()
+        libsearch = []
+        for line in o.splitlines():
+            if line.startswith('libraries: '):
+                libsearch = line[len('libraries: '):].split(';')
 
-        for library in libraries:
-            shlibs.append(library + '.dll')
+        shlibs = []
+        not_resolved = []
+        for lib in libraries:
+            found = False
+            candidates = [
+                'lib%s.dll.a' % lib,
+                'lib%s.a' % lib,
+                '%s.dll.a' % lib,
+                '%s.a' % lib,
+                '%s.lib' % lib,
+            ]
+            for l in libsearch:
+                if found:
+                    break
+                if l.startswith('='):
+                    l = l[1:]
+                for c in candidates:
+                    if found:
+                        break
+                    implib = os.path.join(l, c)
+                    if os.path.exists(implib):
+                        proc = subprocess.Popen(args + [implib],
+                                                stdout=subprocess.PIPE)
+                        o, e = proc.communicate()
+                        for dll in o.splitlines():
+                            shlibs.append(dll)
+                            found = True
+                            break
+            if not found:
+                not_resolved.append(lib)
+        if len(not_resolved) > 0:
+            raise SystemExit(
+                "ERROR: can't resolve libraries to shared libraries: " +
+                ", ".join(not_resolved))
+
     else:
         args = []
         libtool = get_libtool_command(options)
