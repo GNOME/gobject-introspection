@@ -7,8 +7,8 @@ datadir=@datadir@
 includedir=@includedir@
 
 g_ir_scanner=${bindir}/g-ir-scanner
-g_ir_compiler=${bindir}/g-ir-compiler
-g_ir_generate=${bindir}/g-ir-generate
+g_ir_compiler=${bindir}/g-ir-compiler@EXEEXT@
+g_ir_generate=${bindir}/g-ir-generate@EXEEXT@
 gidatadir=${datadir}/gobject-introspection-1.0
 girdir=${datadir}/gir-1.0
 typelibdir=${libdir}/girepository-1.0
