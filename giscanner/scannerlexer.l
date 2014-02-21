@@ -153,6 +153,7 @@ stringtext				([^\\\"])|(\\.)
 
 "__asm"[\t\f\v\r ]+"volatile"  	        { if (!parse_ignored_macro()) REJECT; }
 "__asm__"[\t\f\v\r ]+"volatile"	        { if (!parse_ignored_macro()) REJECT; }
+"__asm__"[\t\f\v\r ]+"__volatile__"	{ if (!parse_ignored_macro()) REJECT; }
 "__asm" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "__asm__" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "__attribute__" 		        { if (!parse_ignored_macro()) REJECT; }
