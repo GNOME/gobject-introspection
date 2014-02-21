@@ -132,7 +132,7 @@ def extract_libtool(la_file):
     # FIXME: This hackish, but I'm not sure how to do this
     #        in a way which is compatible with both libtool 2.2
     #        and pre-2.2. Johan 2008-10-21
-    libname = libname.replace('.libs/.libs', '.libs')
+    libname = libname.replace('.libs/.libs', '.libs').replace('.libs\\.libs', '.libs')
     return libname
 
 
