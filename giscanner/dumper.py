@@ -295,10 +295,25 @@ class DumpCompiler(object):
             print "g-ir-scanner: link: %s" % (
                 subprocess.list2cmdline(args), )
             sys.stdout.flush()
+        msys = os.environ.get('MSYSTEM', None)
+        if msys:
+            shell = os.environ.get('SHELL', 'sh.exe')
+            # Create a temporary script file that
+            # runs the command we want
+            tf, tf_name = tempfile.mkstemp()
+            f = os.fdopen(tf, 'wb')
+            fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(' '.join ([x.replace ('\\','/') for x in args]))
+            f.write(fcontents)
+            f.close()
+            shell = utils.which(shell)
+            args = [shell, tf_name.replace('\\','/')]
         try:
             subprocess.check_call(args)
         except subprocess.CalledProcessError as e:
             raise LinkerError(e)
+        finally:
+            if msys:
+                os.remove(tf_name)
 
     def _add_link_internal_args(self, args, libtool):
         # An "internal" link is where the library to be introspected
