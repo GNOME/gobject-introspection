@@ -7,7 +7,7 @@
 #
 
 INTROSPECTION_SCANNER = \
-    env PATH=.libs:$(PATH) \
+    env PATH=".libs:$(PATH)" \
         LPATH=.libs \
         CC="$(CC)" \
         PYTHONPATH=$(top_builddir):$(top_srcdir) \
@@ -24,7 +24,7 @@ INTROSPECTION_SCANNER_ARGS = \
     --add-include-path=$(top_builddir)
 
 INTROSPECTION_COMPILER = \
-    env PATH=.libs:$(PATH) \
+    env PATH=".libs:$(PATH)" \
         $(top_builddir)/g-ir-compiler$(EXEEXT)
 
 INTROSPECTION_COMPILER_ARGS = \
@@ -34,7 +34,7 @@ INTROSPECTION_COMPILER_ARGS = \
     --includedir=$(top_builddir)
 
 INTROSPECTION_DOCTOOL = \
-    env PATH=.libs:$(PATH) \
+    env PATH=".libs:$(PATH)" \
         LPATH=.libs \
         PYTHONPATH=$(top_builddir):$(top_srcdir) \
         UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
