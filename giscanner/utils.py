@@ -183,12 +183,15 @@ def cflag_real_include_path(cflag):
 
     return "-I" + os.path.realpath(cflag[2:])
 
+
 def which(program):
     def is_exe(fpath):
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
     def is_nt_exe(fpath):
-        return not fpath.lower().endswith('.exe') and os.path.isfile(fpath + '.exe') and os.access(fpath + '.exe', os.X_OK)
+        return not fpath.lower().endswith('.exe') and \
+            os.path.isfile(fpath + '.exe') and \
+            os.access(fpath + '.exe', os.X_OK)
 
     fpath, fname = os.path.split(program)
     if fpath:

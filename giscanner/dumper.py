@@ -302,11 +302,12 @@ class DumpCompiler(object):
             # runs the command we want
             tf, tf_name = tempfile.mkstemp()
             f = os.fdopen(tf, 'wb')
-            fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(' '.join ([x.replace ('\\','/') for x in args]))
+            shellcontents = ' '.join([x.replace('\\', '/') for x in args])
+            fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
             f.write(fcontents)
             f.close()
             shell = utils.which(shell)
-            args = [shell, tf_name.replace('\\','/')]
+            args = [shell, tf_name.replace('\\', '/')]
         try:
             subprocess.check_call(args)
         except subprocess.CalledProcessError as e:
