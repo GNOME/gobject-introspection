@@ -90,22 +90,40 @@ def _resolve_non_libtool(options, binary, libraries):
 
     if os.name == 'nt':
         args = []
-        libtool = get_libtool_command(options)
-        if libtool:
-            args.append(which(os.environ.get('SHELL', 'sh.exe')))
-            args.extend(libtool)
-            args.append('--mode=execute')
-        # FIXME: it could have prefix (i686-w64-mingw32-dlltool.exe)
-        args.extend(['dlltool.exe', '--identify'])
         compiler_cmd = os.environ.get('CC', 'cc')
-        # FIXME: what if it's not gcc?
-        proc = subprocess.Popen([compiler_cmd, '-print-search-dirs'],
-                                stdout=subprocess.PIPE)
-        o, e = proc.communicate()
         libsearch = []
-        for line in o.splitlines():
-            if line.startswith('libraries: '):
-                libsearch = line[len('libraries: '):].split(';')
+
+        # When we are using Visual C++...
+        if 'cl.exe' in compiler_cmd or 'cl' in compiler_cmd:
+            # The search path of the .lib's on Visual C++
+            # is dependent on the LIB environmental variable,
+            # so just query for that
+            is_msvc = True
+            libpath = os.environ.get('LIB')
+            libsearch = libpath.split(';')
+
+            # Use the dumpbin utility that's included in
+            # every Visual C++ installation to find out which
+            # DLL the library gets linked to
+            args.append ('dumpbin.exe')
+            args.append ('-symbols')
+
+        # When we are not using Visual C++ (i.e. we are using GCC)...
+        else:
+            is_msvc = False
+            libtool = get_libtool_command(options)
+            if libtool:
+                args.append(which(os.environ.get('SHELL', 'sh.exe')))
+                args.extend(libtool)
+                args.append('--mode=execute')
+            # FIXME: it could have prefix (i686-w64-mingw32-dlltool.exe)
+            args.extend(['dlltool.exe', '--identify'])
+            proc = subprocess.Popen([compiler_cmd, '-print-search-dirs'],
+                                    stdout=subprocess.PIPE)
+            o, e = proc.communicate()
+            for line in o.splitlines():
+                if line.startswith('libraries: '):
+                    libsearch = line[len('libraries: '):].split(';')
 
         shlibs = []
         not_resolved = []
@@ -131,10 +149,26 @@ def _resolve_non_libtool(options, binary, libraries):
                         proc = subprocess.Popen(args + [implib],
                                                 stdout=subprocess.PIPE)
                         o, e = proc.communicate()
-                        for dll in o.splitlines():
-                            shlibs.append(dll)
-                            found = True
-                            break
+                        for line in o.splitlines():
+                            if is_msvc:
+                                # On Visual Studio, dumpbin -symbols something.lib gives the filename of
+                                # DLL without the '.dll' extension that something.lib links to,
+                                # in the line that contains
+                                # __IMPORT_DESCRIPTOR_<dll_filename_that_something.lib_links_to>
+
+                                if '__IMPORT_DESCRIPTOR_' in line:
+                                    line_tokens = line.split()
+                                    for item in line_tokens:
+                                        if item.startswith ('__IMPORT_DESCRIPTOR_'):
+                                            shlibs.append (item[20:] + '.dll')
+                                            found = True
+                                            break
+                                if found:
+                                    break
+                            else:
+                                shlibs.append(line)
+                                found = True
+                                break
             if not found:
                 not_resolved.append(lib)
         if len(not_resolved) > 0:
