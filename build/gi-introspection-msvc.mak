@@ -2,11 +2,6 @@
 
 # Change or pass in as a variable/env var if needed
 # The main DLLs that are used to build introspection files that are "installed"
-GI_DLLNAME = girepository-1-vs$(VSVER)
-GLIB_DLLNAME = glib-2-vs$(VSVER)
-GMODULE_DLLNAME = gmodule-2-vs$(VSVER)
-GOBJECT_DLLNAME = gobject-2-vs$(VSVER)
-GIO_DLLNAME = gio-2-vs$(VSVER)
 CAIROGOBJECT_DLLNAME= cairo-gobject-vs$(VSVER)
 
 # Please do not change anything after this line
@@ -119,7 +114,7 @@ GLib-$(GLIB_APIVERSION).gir: glib_list
 	@-echo Generating $@...
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose -I.. --add-include-path=..	\
 	--add-include-path=..\gir --add-include-path=. --namespace=GLib --nsversion=$(GLIB_APIVERSION)	\
-	--no-libtool --pkg=glib-$(GLIB_APIVERSION) --include=win32-$(GI_APIVERSION) --library=$(GLIB_DLLNAME) --library=$(GOBJECT_DLLNAME)	\
+	--no-libtool --pkg=glib-$(GLIB_APIVERSION) --include=win32-$(GI_APIVERSION) --library=glib-2.0 --library=gobject-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --symbol-prefix=g	\
 	--symbol-prefix=glib --c-include="glib.h" -I$(BASEDIR)\include\glib-$(GLIB_APIVERSION)	\
 	-I$(BASEDIR)\lib\glib-2.0\include -I$(BASEDIR)\include -DGETTEXT_PACKAGE=Dummy	\
@@ -129,7 +124,7 @@ GModule-$(GLIB_APIVERSION).gir: GLib-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose -I.. --add-include-path=..	\
 	--add-include-path=..\gir --add-include-path=. --namespace=GModule --nsversion=2.0	\
-	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gmodule-$(GLIB_APIVERSION) --library=$(GMODULE_DLLNAME)	\
+	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gmodule-$(GLIB_APIVERSION) --library=gmodule-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --c-include="gmodule.h"	\
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include -I$(BASEDIR)\include	\
 	$(BASEDIR)\include\glib-2.0\gmodule.h ..\gir\gmodule-2.0.c -o $@
@@ -138,7 +133,7 @@ GObject-$(GLIB_APIVERSION).gir: gobject_list GModule-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose -I.. --add-include-path=..	\
 	--add-include-path=..\gir --add-include-path=. --namespace=GObject --nsversion=$(GLIB_APIVERSION)	\
-	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gobject-$(GLIB_APIVERSION) --library=$(GOBJECT_DLLNAME)	\
+	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gobject-$(GLIB_APIVERSION) --library=gobject-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --c-include="glib-gobject.h"	\
 	-I$(BASEDIR)/include/glib-2.0 -I$(BASEDIR)/lib/glib-2.0/include -I$(BASEDIR)/include	\
 	-DGOBJECT_COMPILATION --filelist=gobject_list -o $@
@@ -148,7 +143,7 @@ Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose -I.. --add-include-path=..	\
 	--add-include-path=..\gir --add-include-path=. --namespace=Gio --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --pkg=gio-$(GLIB_APIVERSION) --pkg=gio-windows-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
-	--library=$(GIO_DLLNAME) --external-library --reparse-validate --warn-all	\
+	--library=gio-2.0 --external-library --reparse-validate --warn-all	\
 	--identifier-prefix=G --include=GLib-$(GLIB_APIVERSION) --c-include="gio/gio.h" -DGIO_COMPILATION	\
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include	\
 	-I$(BASEDIR)\include --filelist=gio_list -o $@
@@ -159,7 +154,7 @@ GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir win3
 	--add-include-path=..\gir --add-include-path=. --namespace=GIRepository --nsversion=$(GLIB_APIVERSION)	\
 	--identifier-prefix=GI --symbol-prefix=g --c-include="girepository.h" --add-include-path=.	\
 	--no-libtool --pkg=gobject-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
-	--library=$(GI_DLLNAME) -I..\girepository -I.. -I%BASEDIR%\include 	\
+	--library=girepository-1.0 -I..\girepository -I.. -I%BASEDIR%\include 	\
 	-I%BASEDIR%\include\glib-2.0 -I%BASEDIR%\lib\glib-2.0\include --filelist=gi_list	\
 	-DGI_COMPILATION -o $@
 
