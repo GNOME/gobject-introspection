@@ -45,10 +45,15 @@ def make_page_id(node, recursive=False):
         parent = None
 
     if parent is None:
-        return '%s.%s' % (node.namespace.name, node.name)
+        if isinstance(node, ast.Function) and node.shadows:
+            return '%s.%s' % (node.namespace.name, node.shadows)
+        else:
+            return '%s.%s' % (node.namespace.name, node.name)
 
     if isinstance(node, (ast.Property, ast.Signal, ast.VFunction, ast.Field)):
         return '%s-%s' % (make_page_id(parent, recursive=True), node.name)
+    elif isinstance(node, ast.Function) and node.shadows:
+        return '%s.%s' % (make_page_id(parent, recursive=True), node.shadows)
     else:
         return '%s.%s' % (make_page_id(parent, recursive=True), node.name)
 
@@ -468,6 +473,9 @@ class DocFormatterIntrospectableBase(DocFormatter):
         if not getattr(node, "introspectable", True):
             return False
 
+        if isinstance(node, ast.Function) and node.shadowed_by is not None:
+            return False
+
         return super(DocFormatterIntrospectableBase, self).should_render_node(node)
 
 
@@ -702,12 +710,16 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             return self.format_fundamental_type(type_.target_fundamental)
 
     def format_function_name(self, func):
+        name = func.name
+        if func.shadows:
+            name = func.shadows
+
         if func.is_method:
-            return "%s.prototype.%s" % (self.format_page_name(func.parent), func.name)
+            return "%s.prototype.%s" % (self.format_page_name(func.parent), name)
         elif func.parent is not None:
-            return "%s.%s" % (self.format_page_name(func.parent), func.name)
+            return "%s.%s" % (self.format_page_name(func.parent), name)
         else:
-            return func.name
+            return name
 
     def format_page_name(self, node):
         if isinstance(node, (ast.Field, ast.Property)):

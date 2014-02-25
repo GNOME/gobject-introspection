@@ -21,7 +21,7 @@
 <%block name="synopsis">
   <synopsis><code mime="text/x-gjs">
 function \
-${node.name}(\
+${node.name if node.shadows is None else node.shadows}(\
 ${', '.join('%s: %s' % (arg.argname, formatter.format_type(arg.type, True)) for arg in formatter.get_in_parameters(node))}\
 ): ${formatter.format_out_parameters(node)} {
     // Gjs wrapper for ${node.symbol}()
