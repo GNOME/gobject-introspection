@@ -20,7 +20,7 @@
   </info>
   <title>Regress.test_cairo_surface_none_in</title>
   <synopsis><code mime="text/x-gjs">
-function test_cairo_surface_none_in(surface: <link href="../cairo-1.0/cairo.Surface.page">cairo.Surface</link>): void {
+function test_cairo_surface_none_in(surface: <link href="../cairo-1.0/cairo.Surface.html">cairo.Surface</link>): void {
     // Gjs wrapper for regress_test_cairo_surface_none_in()
 }
   </code></synopsis>

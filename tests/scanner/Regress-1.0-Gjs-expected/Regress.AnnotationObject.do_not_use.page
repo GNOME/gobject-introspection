@@ -16,7 +16,7 @@
   </info>
   <title>Regress.AnnotationObject.prototype.do_not_use</title>
   <synopsis><code mime="text/x-gjs">
-function do_not_use(): <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link> {
+function do_not_use(): <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link> {
     // Gjs wrapper for regress_annotation_object_do_not_use()
 }
   </code></synopsis>

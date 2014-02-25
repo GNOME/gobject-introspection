@@ -6,7 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    <link xref="index" group="function" type="guide"/>
+    <link xref="Regress.TestOtherError" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>GLib.Quark</api:type>
@@ -14,9 +14,9 @@
       <api:name>regress_test_unconventional_error_quark</api:name>
     </api:function>
   </info>
-  <title>Regress.quark</title>
+  <title>Regress.TestOtherError.quark</title>
   <synopsis><code mime="text/x-gjs">
-function quark(): <link href="../GLib-2.0/GLib.Quark.page">GLib.Quark</link> {
+function quark(): <link href="../GLib-2.0/GLib.Quark.html">GLib.Quark</link> {
     // Gjs wrapper for regress_test_unconventional_error_quark()
 }
   </code></synopsis>

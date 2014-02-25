@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<page id="Regress.AnnotationObject.watch_full"
+<page id="Regress.AnnotationObject.watch"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
@@ -18,9 +18,9 @@
       </api:arg>
     </api:function>
   </info>
-  <title>Regress.AnnotationObject.prototype.watch_full</title>
+  <title>Regress.AnnotationObject.prototype.watch</title>
   <synopsis><code mime="text/x-gjs">
-function watch_full(func: <link xref="Regress.AnnotationForeachFunc">Regress.AnnotationForeachFunc</link>): void {
+function watch(func: <link xref="Regress.AnnotationForeachFunc">Regress.AnnotationForeachFunc</link>): void {
     // Gjs wrapper for regress_annotation_object_watch_full()
 }
   </code></synopsis>

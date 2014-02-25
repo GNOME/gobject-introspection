@@ -32,7 +32,7 @@ intentionally similar example to gtk_container_get_children</p>
 <terms>
 <item>
 <title><code>self</code></title>
-  <p>a <link xref="GObject.Object"/></p>
+  <p>a <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link></p>
 </item>
 <item>
 <title><code>Returns</code></title>

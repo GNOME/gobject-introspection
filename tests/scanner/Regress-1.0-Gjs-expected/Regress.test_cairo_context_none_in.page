@@ -20,7 +20,7 @@
   </info>
   <title>Regress.test_cairo_context_none_in</title>
   <synopsis><code mime="text/x-gjs">
-function test_cairo_context_none_in(context: <link href="../cairo-1.0/cairo.Context.page">cairo.Context</link>): void {
+function test_cairo_context_none_in(context: <link href="../cairo-1.0/cairo.Context.html">cairo.Context</link>): void {
     // Gjs wrapper for regress_test_cairo_context_none_in()
 }
   </code></synopsis>

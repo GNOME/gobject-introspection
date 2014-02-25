@@ -20,7 +20,7 @@
   </info>
   <title>Regress.FooObject.prototype.handle_glyph</title>
   <synopsis><code mime="text/x-gjs">
-function handle_glyph(glyph: <link href="../Utility-1.0/Utility.Glyph.page">Utility.Glyph</link>): void {
+function handle_glyph(glyph: <link href="../Utility-1.0/Utility.Glyph.html">Utility.Glyph</link>): void {
     // Gjs wrapper for regress_foo_object_handle_glyph()
 }
   </code></synopsis>

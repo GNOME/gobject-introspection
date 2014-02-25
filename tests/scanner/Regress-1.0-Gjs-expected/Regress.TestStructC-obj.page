@@ -11,7 +11,7 @@
   </info>
   <title>Regress.TestStructC.obj</title>
   <synopsis><code mime="text/x-gjs">
-TestStructC.obj: <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link> (Read)
+TestStructC.obj: <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link> (Read)
   </code></synopsis>
 
 

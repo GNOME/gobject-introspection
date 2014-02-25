@@ -20,7 +20,7 @@
   </info>
   <title>Regress.AnnotationObject.prototype.allow_none</title>
   <synopsis><code mime="text/x-gjs">
-function allow_none(somearg: String): <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link> {
+function allow_none(somearg: String): <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link> {
     // Gjs wrapper for regress_annotation_object_allow_none()
 }
   </code></synopsis>

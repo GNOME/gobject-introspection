@@ -16,7 +16,7 @@
   </info>
   <title>Regress.test_gvariant_as</title>
   <synopsis><code mime="text/x-gjs">
-function test_gvariant_as(): <link href="../GLib-2.0/GLib.Variant.page">GLib.Variant</link> {
+function test_gvariant_as(): <link href="../GLib-2.0/GLib.Variant.html">GLib.Variant</link> {
     // Gjs wrapper for regress_test_gvariant_as()
 }
   </code></synopsis>

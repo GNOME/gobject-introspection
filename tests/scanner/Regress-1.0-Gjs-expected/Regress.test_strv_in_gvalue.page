@@ -16,7 +16,7 @@
   </info>
   <title>Regress.test_strv_in_gvalue</title>
   <synopsis><code mime="text/x-gjs">
-function test_strv_in_gvalue(): <link href="../GObject-2.0/GObject.Value.page">GObject.Value</link> {
+function test_strv_in_gvalue(): <link href="../GObject-2.0/GObject.Value.html">GObject.Value</link> {
     // Gjs wrapper for regress_test_strv_in_gvalue()
 }
   </code></synopsis>

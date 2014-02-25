@@ -20,7 +20,7 @@
   </info>
   <title>Regress.FooSubInterface.prototype.do_baz</title>
   <synopsis><code mime="text/x-gjs">
-function do_baz(callback: <link href="../GObject-2.0/GObject.Callback.page">GObject.Callback</link>): void {
+function do_baz(callback: <link href="../GObject-2.0/GObject.Callback.html">GObject.Callback</link>): void {
     // Gjs wrapper for regress_foo_sub_interface_do_baz()
 }
   </code></synopsis>

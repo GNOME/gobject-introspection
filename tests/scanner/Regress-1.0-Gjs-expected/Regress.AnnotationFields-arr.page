@@ -11,7 +11,7 @@
   </info>
   <title>Regress.AnnotationFields.arr</title>
   <synopsis><code mime="text/x-gjs">
-AnnotationFields.arr: Array(Number(guint8)) (Read / Write)
+AnnotationFields.arr: ByteArray (Read / Write)
   </code></synopsis>
   <p>an array of length @len</p>
 

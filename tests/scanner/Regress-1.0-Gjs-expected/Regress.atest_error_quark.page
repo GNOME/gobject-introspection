@@ -16,7 +16,7 @@
   </info>
   <title>Regress.atest_error_quark</title>
   <synopsis><code mime="text/x-gjs">
-function atest_error_quark(): <link href="../GLib-2.0/GLib.Quark.page">GLib.Quark</link> {
+function atest_error_quark(): <link href="../GLib-2.0/GLib.Quark.html">GLib.Quark</link> {
     // Gjs wrapper for regress_atest_error_quark()
 }
   </code></synopsis>

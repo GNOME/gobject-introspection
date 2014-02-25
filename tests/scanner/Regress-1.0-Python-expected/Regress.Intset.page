@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<page id="Regress.AnAnonymousUnion.None"
+<page id="Regress.Intset"
       type="guide"
       style="class"
       xmlns="http://projectmallard.org/1.0/"
@@ -8,13 +8,13 @@
   <info>
     <link xref="index" group="class" type="guide"/>
   </info>
-  <title>Regress.AnAnonymousUnion.None</title>
+  <title>Regress.Intset</title>
   <synopsis><code>
 from gi.repository import Regress
 
-anonymous_union = Regress.None()
+intset = Regress.Intset()
   </code></synopsis>
-
+  <p>Like telepathy-glib's TpIntset.</p>
 
   <links type="topic" ui:expanded="true"
          api:type="function" api:mime="text/python"

@@ -20,7 +20,7 @@
   </info>
   <title>Regress.annotation_ptr_array</title>
   <synopsis><code mime="text/x-gjs">
-function annotation_ptr_array(array: Array(<link href="../GObject-2.0/GObject.Value.page">GObject.Value</link>)): void {
+function annotation_ptr_array(array: Array(<link href="../GObject-2.0/GObject.Value.html">GObject.Value</link>)): void {
     // Gjs wrapper for regress_annotation_ptr_array()
 }
   </code></synopsis>

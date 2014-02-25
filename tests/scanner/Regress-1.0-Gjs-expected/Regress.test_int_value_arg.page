@@ -20,7 +20,7 @@
   </info>
   <title>Regress.test_int_value_arg</title>
   <synopsis><code mime="text/x-gjs">
-function test_int_value_arg(v: <link href="../GObject-2.0/GObject.Value.page">GObject.Value</link>): Number(gint) {
+function test_int_value_arg(v: <link href="../GObject-2.0/GObject.Value.html">GObject.Value</link>): Number(gint) {
     // Gjs wrapper for regress_test_int_value_arg()
 }
   </code></synopsis>

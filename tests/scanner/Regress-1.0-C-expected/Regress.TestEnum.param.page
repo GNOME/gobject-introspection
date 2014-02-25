@@ -6,7 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    <link xref="index" group="function" type="guide"/>
+    <link xref="Regress.TestEnum" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>const gchar*</api:type>

@@ -16,7 +16,7 @@
   </info>
   <title>Regress.test_cairo_context_full_return</title>
   <synopsis><code mime="text/x-gjs">
-function test_cairo_context_full_return(): <link href="../cairo-1.0/cairo.Context.page">cairo.Context</link> {
+function test_cairo_context_full_return(): <link href="../cairo-1.0/cairo.Context.html">cairo.Context</link> {
     // Gjs wrapper for regress_test_cairo_context_full_return()
 }
   </code></synopsis>

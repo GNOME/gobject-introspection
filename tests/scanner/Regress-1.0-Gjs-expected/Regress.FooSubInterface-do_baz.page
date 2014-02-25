@@ -10,7 +10,7 @@
   </info>
   <title>Regress.FooSubInterface::do_baz</title>
   <synopsis><code mime="text/x-gjs">
-function vfunc_do_baz(callback: <link href="../GObject-2.0/GObject.Callback.page">GObject.Callback</link>): void {
+function vfunc_do_baz(callback: <link href="../GObject-2.0/GObject.Callback.html">GObject.Callback</link>): void {
 }
   </code></synopsis>
 

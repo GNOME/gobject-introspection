@@ -38,15 +38,15 @@ def calleesowns(self, toown1, toown2):
 <terms>
 <item>
 <title><code>self</code></title>
-  <p>a <link xref="GObject.Object"/></p>
+  <p>a <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link></p>
 </item>
 <item>
 <title><code>toown1</code></title>
-  <p>a <link xref="GObject.Object"/></p>
+  <p>a <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link></p>
 </item>
 <item>
 <title><code>toown2</code></title>
-  <p>a <link xref="GObject.Object"/></p>
+  <p>a <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link></p>
 </item>
 <item>
 <title><code>Returns</code></title>

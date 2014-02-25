@@ -16,7 +16,7 @@
   </info>
   <title>Regress.FooObject.prototype.external_type</title>
   <synopsis><code mime="text/x-gjs">
-function external_type(): <link href="../Utility-1.0/Utility.Object.page">Utility.Object</link> {
+function external_type(): <link href="../Utility-1.0/Utility.Object.html">Utility.Object</link> {
     // Gjs wrapper for regress_foo_object_external_type()
 }
   </code></synopsis>

@@ -11,7 +11,7 @@
   </info>
   <title>Regress.TestObj::sig-with-obj</title>
   <synopsis><code mime="text/x-gjs">
-connect('sig-with-obj', function (testObj, obj: <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link>, ): void);
+connect('sig-with-obj', function (testObj, obj: <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link>, ): void);
   </code></synopsis>
   <p>Test transfer none GObject as a param (tests refcounting).
 Use with regress_test_obj_emit_sig_with_obj</p>

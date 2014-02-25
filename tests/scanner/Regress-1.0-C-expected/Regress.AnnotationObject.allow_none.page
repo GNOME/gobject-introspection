@@ -32,7 +32,7 @@ GObject* regress_annotation_object_allow_none (RegressAnnotationObject* object,
 <terms>
 <item>
 <title><code>object</code></title>
-  <p>a <link xref="GObject.Object"/></p>
+  <p>a <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link></p>
 </item>
 <item>
 <title><code>somearg</code></title>

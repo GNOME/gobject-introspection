@@ -20,7 +20,7 @@
   </info>
   <title>Regress.test_async_ready_callback</title>
   <synopsis><code mime="text/x-gjs">
-function test_async_ready_callback(callback: <link href="../Gio-2.0/Gio.AsyncReadyCallback.page">Gio.AsyncReadyCallback</link>): void {
+function test_async_ready_callback(callback: <link href="../Gio-2.0/Gio.AsyncReadyCallback.html">Gio.AsyncReadyCallback</link>): void {
     // Gjs wrapper for regress_test_async_ready_callback()
 }
   </code></synopsis>

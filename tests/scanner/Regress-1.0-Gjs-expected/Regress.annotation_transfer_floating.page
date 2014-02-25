@@ -16,7 +16,7 @@
   </info>
   <title>Regress.annotation_transfer_floating</title>
   <synopsis><code mime="text/x-gjs">
-function annotation_transfer_floating(): <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link> {
+function annotation_transfer_floating(): <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link> {
     // Gjs wrapper for regress_annotation_transfer_floating()
 }
   </code></synopsis>

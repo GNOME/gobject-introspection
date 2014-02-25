@@ -16,7 +16,7 @@
   </info>
   <title>Regress.AnnotationObject.prototype.calleeowns</title>
   <synopsis><code mime="text/x-gjs">
-function calleeowns(): [return_value: Number(gint), toown: <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link>] {
+function calleeowns(): [return_value: Number(gint), toown: <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link>] {
     // Gjs wrapper for regress_annotation_object_calleeowns()
 }
   </code></synopsis>
@@ -29,7 +29,7 @@ function calleeowns(): [return_value: Number(gint), toown: <link href="../GObjec
 </item>
 <item>
 <title><code>toown</code></title>
-  <p>a <link xref="GObject.Object"/></p>
+  <p>a <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link></p>
 </item>
 </terms>
 

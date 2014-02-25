@@ -20,7 +20,7 @@
   </info>
   <title>Regress.FooObject.a_global_method</title>
   <synopsis><code mime="text/x-gjs">
-function a_global_method(obj: <link href="../Utility-1.0/Utility.Object.page">Utility.Object</link>): void {
+function a_global_method(obj: <link href="../Utility-1.0/Utility.Object.html">Utility.Object</link>): void {
     // Gjs wrapper for regress_foo_object_a_global_method()
 }
   </code></synopsis>

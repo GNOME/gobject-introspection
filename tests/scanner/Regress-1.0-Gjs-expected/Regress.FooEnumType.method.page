@@ -6,7 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    <link xref="index" group="function" type="guide"/>
+    <link xref="Regress.FooEnumType" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>Number(gint)</api:type>
@@ -18,7 +18,7 @@
       </api:arg>
     </api:function>
   </info>
-  <title>Regress.method</title>
+  <title>Regress.FooEnumType.method</title>
   <synopsis><code mime="text/x-gjs">
 function method(regress_foo_enum: <link xref="Regress.FooEnumType">Regress.FooEnumType</link>): Number(gint) {
     // Gjs wrapper for regress_foo_enum_type_method()

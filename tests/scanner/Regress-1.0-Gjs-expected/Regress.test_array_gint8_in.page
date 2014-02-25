@@ -13,14 +13,14 @@
       </api:returns>
       <api:name>regress_test_array_gint8_in</api:name>
       <api:arg>
-        <api:type>Array(Number(gint8))</api:type>
+        <api:type>ByteArray</api:type>
         <api:name>ints</api:name>
       </api:arg>
     </api:function>
   </info>
   <title>Regress.test_array_gint8_in</title>
   <synopsis><code mime="text/x-gjs">
-function test_array_gint8_in(ints: Array(Number(gint8))): Number(gint) {
+function test_array_gint8_in(ints: ByteArray): Number(gint) {
     // Gjs wrapper for regress_test_array_gint8_in()
 }
   </code></synopsis>

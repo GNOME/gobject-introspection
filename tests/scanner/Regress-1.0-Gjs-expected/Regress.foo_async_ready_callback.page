@@ -24,7 +24,7 @@
   </info>
   <title>Regress.foo_async_ready_callback</title>
   <synopsis><code mime="text/x-gjs">
-function foo_async_ready_callback(cancellable: <link href="../Gio-2.0/Gio.Cancellable.page">Gio.Cancellable</link>, callback: <link href="../Gio-2.0/Gio.AsyncReadyCallback.page">Gio.AsyncReadyCallback</link>): void {
+function foo_async_ready_callback(cancellable: <link href="../Gio-2.0/Gio.Cancellable.html">Gio.Cancellable</link>, callback: <link href="../Gio-2.0/Gio.AsyncReadyCallback.html">Gio.AsyncReadyCallback</link>): void {
     // Gjs wrapper for regress_foo_async_ready_callback()
 }
   </code></synopsis>

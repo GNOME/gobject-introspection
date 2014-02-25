@@ -32,7 +32,7 @@
   </info>
   <title>Regress.foo_method_external_references</title>
   <synopsis><code mime="text/x-gjs">
-function foo_method_external_references(object: <link href="../Utility-1.0/Utility.Object.page">Utility.Object</link>, e: <link href="../Utility-1.0/Utility.EnumType.page">Utility.EnumType</link>, f: <link href="../Utility-1.0/Utility.FlagType.page">Utility.FlagType</link>, s: <link href="../Utility-1.0/Utility.Struct.page">Utility.Struct</link>): void {
+function foo_method_external_references(object: <link href="../Utility-1.0/Utility.Object.html">Utility.Object</link>, e: <link href="../Utility-1.0/Utility.EnumType.html">Utility.EnumType</link>, f: <link href="../Utility-1.0/Utility.FlagType.html">Utility.FlagType</link>, s: <link href="../Utility-1.0/Utility.Struct.html">Utility.Struct</link>): void {
     // Gjs wrapper for regress_foo_method_external_references()
 }
   </code></synopsis>

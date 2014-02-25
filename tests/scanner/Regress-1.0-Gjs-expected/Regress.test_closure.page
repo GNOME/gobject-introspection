@@ -20,7 +20,7 @@
   </info>
   <title>Regress.test_closure</title>
   <synopsis><code mime="text/x-gjs">
-function test_closure(closure: <link href="../GObject-2.0/GObject.Closure.page">GObject.Closure</link>): Number(gint) {
+function test_closure(closure: <link href="../GObject-2.0/GObject.Closure.html">GObject.Closure</link>): Number(gint) {
     // Gjs wrapper for regress_test_closure()
 }
   </code></synopsis>

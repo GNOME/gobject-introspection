@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestCallbackOwnedGError</title>
   <synopsis><code mime="text/x-gjs">
-function onTestCallbackOwnedGError(error: <link href="../GLib-2.0/GLib.Error.page">GLib.Error</link>): void {
+function onTestCallbackOwnedGError(error: <link href="../GLib-2.0/GLib.Error.html">GLib.Error</link>): void {
 }
   </code></synopsis>
 

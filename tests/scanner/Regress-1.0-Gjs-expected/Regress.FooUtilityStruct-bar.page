@@ -11,7 +11,7 @@
   </info>
   <title>Regress.FooUtilityStruct.bar</title>
   <synopsis><code mime="text/x-gjs">
-FooUtilityStruct.bar: <link href="../Utility-1.0/Utility.Struct.page">Utility.Struct</link> (Read / Write)
+FooUtilityStruct.bar: <link href="../Utility-1.0/Utility.Struct.html">Utility.Struct</link> (Read / Write)
   </code></synopsis>
 
 

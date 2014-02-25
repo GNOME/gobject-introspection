@@ -24,7 +24,7 @@
   </info>
   <title>Regress.test_closure_variant</title>
   <synopsis><code mime="text/x-gjs">
-function test_closure_variant(closure: <link href="../GObject-2.0/GObject.Closure.page">GObject.Closure</link>, arg: <link href="../GLib-2.0/GLib.Variant.page">GLib.Variant</link>): <link href="../GLib-2.0/GLib.Variant.page">GLib.Variant</link> {
+function test_closure_variant(closure: <link href="../GObject-2.0/GObject.Closure.html">GObject.Closure</link>, arg: <link href="../GLib-2.0/GLib.Variant.html">GLib.Variant</link>): <link href="../GLib-2.0/GLib.Variant.html">GLib.Variant</link> {
     // Gjs wrapper for regress_test_closure_variant()
 }
   </code></synopsis>

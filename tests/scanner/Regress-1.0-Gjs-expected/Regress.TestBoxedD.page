@@ -12,7 +12,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let testBoxedD = new Regress.TestBoxedD();
+let testBoxedD = new Regress.TestBoxedD(a_string: String, a_int: Number(gint));
   </code></synopsis>
 
 

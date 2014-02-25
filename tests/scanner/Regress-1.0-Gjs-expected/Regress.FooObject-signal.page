@@ -11,7 +11,7 @@
   </info>
   <title>Regress.FooObject::signal</title>
   <synopsis><code mime="text/x-gjs">
-connect('signal', function (fooObject, object: <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link>, p0: void, ): String);
+connect('signal', function (fooObject, object: <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link>, p0: void, ): String);
   </code></synopsis>
 
 

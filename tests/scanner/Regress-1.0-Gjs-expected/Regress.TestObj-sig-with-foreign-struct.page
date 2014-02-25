@@ -11,7 +11,7 @@
   </info>
   <title>Regress.TestObj::sig-with-foreign-struct</title>
   <synopsis><code mime="text/x-gjs">
-connect('sig-with-foreign-struct', function (testObj, cr: <link href="../cairo-1.0/cairo.Context.page">cairo.Context</link>, ): void);
+connect('sig-with-foreign-struct', function (testObj, cr: <link href="../cairo-1.0/cairo.Context.html">cairo.Context</link>, ): void);
   </code></synopsis>
 
 

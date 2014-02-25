@@ -20,7 +20,7 @@
   </info>
   <title>Regress.TestObj.prototype.set_bare</title>
   <synopsis><code mime="text/x-gjs">
-function set_bare(bare: <link href="../GObject-2.0/GObject.Object.page">GObject.Object</link>): void {
+function set_bare(bare: <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link>): void {
     // Gjs wrapper for regress_test_obj_set_bare()
 }
   </code></synopsis>

@@ -13,14 +13,14 @@
       </api:returns>
       <api:name>regress_annotation_object_set_data</api:name>
       <api:arg>
-        <api:type>Array(Number(guint8))</api:type>
+        <api:type>ByteArray</api:type>
         <api:name>data</api:name>
       </api:arg>
     </api:function>
   </info>
   <title>Regress.AnnotationObject.prototype.set_data</title>
   <synopsis><code mime="text/x-gjs">
-function set_data(data: Array(Number(guint8))): void {
+function set_data(data: ByteArray): void {
     // Gjs wrapper for regress_annotation_object_set_data()
 }
   </code></synopsis>

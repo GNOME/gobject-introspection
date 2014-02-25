@@ -11,7 +11,7 @@
       <api:returns>
         <api:type>void</api:type>
       </api:returns>
-      <api:name>regress_annotation_object_watch</api:name>
+      <api:name>regress_annotation_object_watch_full</api:name>
       <api:arg>
         <api:type>RegressAnnotationObject*</api:type>
         <api:name>object</api:name>
@@ -24,16 +24,20 @@
         <api:type>gpointer</api:type>
         <api:name>user_data</api:name>
       </api:arg>
+      <api:arg>
+        <api:type>GDestroyNotify</api:type>
+        <api:name>destroy</api:name>
+      </api:arg>
     </api:function>
   </info>
-  <title>regress_annotation_object_watch</title>
+  <title>regress_annotation_object_watch_full</title>
   <synopsis><code mime="text/x-csrc">
-void regress_annotation_object_watch (RegressAnnotationObject* object,
-                                      RegressAnnotationForeachFunc func,
-                                      gpointer user_data);
+void regress_annotation_object_watch_full (RegressAnnotationObject* object,
+                                           RegressAnnotationForeachFunc func,
+                                           gpointer user_data,
+                                           GDestroyNotify destroy);
   </code></synopsis>
-  <p>This is here just for the sake of being overriden by its
-<link xref="Regress.watch_full"/>.</p>
+  <p>Test overriding via the "Rename To" annotation.</p>
 
 <terms>
 <item>
@@ -47,6 +51,10 @@ void regress_annotation_object_watch (RegressAnnotationObject* object,
 <item>
 <title><code>user_data</code></title>
   <p>The callback data</p>
+</item>
+<item>
+<title><code>destroy</code></title>
+  <p>Destroy notification</p>
 </item>
 <item>
 <title><code>Returns</code></title>

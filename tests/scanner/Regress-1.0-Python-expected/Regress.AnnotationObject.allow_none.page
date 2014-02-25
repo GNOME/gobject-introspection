@@ -34,7 +34,7 @@ def allow_none(self, somearg):
 <terms>
 <item>
 <title><code>self</code></title>
-  <p>a <link xref="GObject.Object"/></p>
+  <p>a <link href="../GObject-2.0/GObject.Object.html">GObject.Object</link></p>
 </item>
 <item>
 <title><code>somearg</code></title>

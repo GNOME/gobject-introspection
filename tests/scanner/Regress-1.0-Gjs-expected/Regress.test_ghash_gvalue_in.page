@@ -20,7 +20,7 @@
   </info>
   <title>Regress.test_ghash_gvalue_in</title>
   <synopsis><code mime="text/x-gjs">
-function test_ghash_gvalue_in(hash: {String: <link href="../GObject-2.0/GObject.Value.page">GObject.Value</link>}): void {
+function test_ghash_gvalue_in(hash: {String: <link href="../GObject-2.0/GObject.Value.html">GObject.Value</link>}): void {
     // Gjs wrapper for regress_test_ghash_gvalue_in()
 }
   </code></synopsis>

@@ -6,7 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    <link xref="index" group="function" type="guide"/>
+    <link xref="Regress.FooError" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>GLib.Quark</api:type>
@@ -14,7 +14,7 @@
       <api:name>regress_foo_error_quark</api:name>
     </api:function>
   </info>
-  <title>Regress.quark</title>
+  <title>Regress.FooError.quark</title>
   <synopsis><code mime="text/x-python">
 @returns(GLib.Quark)
 def quark():

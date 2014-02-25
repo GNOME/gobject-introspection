@@ -16,7 +16,7 @@
   </info>
   <title>Regress.test_ghash_gvalue_return</title>
   <synopsis><code mime="text/x-gjs">
-function test_ghash_gvalue_return(): {String: <link href="../GObject-2.0/GObject.Value.page">GObject.Value</link>} {
+function test_ghash_gvalue_return(): {String: <link href="../GObject-2.0/GObject.Value.html">GObject.Value</link>} {
     // Gjs wrapper for regress_test_ghash_gvalue_return()
 }
   </code></synopsis>
