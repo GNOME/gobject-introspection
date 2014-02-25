@@ -618,19 +618,16 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         if isinstance(node, ast.Union) and node.name is None:
             return False
         if isinstance(node, ast.Class):
-            is_gobject = False
-            parent = node
-            while parent:
-                if parent.namespace.name == 'GObject' and \
-                   parent.name == 'Object':
-                    is_gobject = True
-                    break
-                if not parent.parent_type:
-                    break
-                parent = self._transformer.lookup_typenode(parent.parent_type)
-            is_gparam = node.namespace.name == 'GObject' and \
-                node.name == 'ParamSpec'
-            if not is_gobject and not is_gparam:
+            is_gparam_subclass = False
+            if node.parent_type:
+                parent = self._transformer.lookup_typenode(node.parent_type)
+                while parent:
+                    if parent.namespace.name == 'GObject' and \
+                       parent.name == 'ParamSpec':
+                        is_gparam_subclass = True
+                        break
+                    parent = self._transformer.lookup_typenode(parent.parent_type)
+            if is_gparam_subclass:
                 return False
         if isinstance(node, ast.Function) and node.is_constructor:
             parent = node.parent
