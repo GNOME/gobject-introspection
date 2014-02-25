@@ -592,6 +592,14 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         if isinstance(node, (ast.Compound, ast.Boxed)):
             self.resolve_gboxed_constructor(node)
 
+        # Nodes without namespace are AST bugs really
+        # They are used for structs and unions declared
+        # inline inside other structs, but they are not
+        # even picked up by g-ir-compiler, because they
+        # don't create a <type/> element.
+        # So just ignore them.
+        if isinstance(node, ast.Node) and node.namespace is None:
+            return False
         if isinstance(node, ast.ErrorQuarkFunction):
             return False
         if isinstance(node, ast.Field):
