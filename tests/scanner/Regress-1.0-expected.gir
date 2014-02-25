@@ -2140,6 +2140,18 @@ use it should be.</doc>
           </parameter>
         </parameters>
       </constructor>
+      <method name="_not_a_method"
+              c:identifier="regress_test_boxeds_not_a_method"
+              moved-to="test_boxeds_not_a_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="TestBoxed" c:type="RegressTestBoxed*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="copy" c:identifier="regress_test_boxed_copy">
         <return-value transfer-ownership="full">
           <type name="TestBoxed" c:type="RegressTestBoxed*"/>
@@ -5108,6 +5120,23 @@ libgnome-keyring.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_boxeds_not_a_method"
+              c:identifier="regress_test_boxeds_not_a_method">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="boxed" transfer-ownership="none">
+          <type name="TestBoxed" c:type="RegressTestBoxed*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_boxeds_not_a_static"
+              c:identifier="regress_test_boxeds_not_a_static">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
     </function>
     <function name="test_cairo_context_full_return"
               c:identifier="regress_test_cairo_context_full_return">

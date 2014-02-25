@@ -426,6 +426,9 @@ RegressTestBoxed *regress_test_boxed_copy     (RegressTestBoxed *boxed);
 gboolean   regress_test_boxed_equals   (RegressTestBoxed *boxed,
 					RegressTestBoxed *other);
 
+void       regress_test_boxeds_not_a_method (RegressTestBoxed *boxed);
+void       regress_test_boxeds_not_a_static (void);
+
 typedef struct _RegressTestBoxedB RegressTestBoxedB;
 
 struct _RegressTestBoxedB

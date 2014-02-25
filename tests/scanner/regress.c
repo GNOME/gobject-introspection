@@ -1872,6 +1872,16 @@ regress_test_boxed_equals (RegressTestBoxed *boxed,
 	  regress_test_simple_boxed_a_equals(&other->nested_a, &boxed->nested_a));
 }
 
+void
+regress_test_boxeds_not_a_method (RegressTestBoxed *boxed)
+{
+}
+
+void
+regress_test_boxeds_not_a_static (void)
+{
+}
+
 static void
 regress_test_boxed_free (RegressTestBoxed *boxed)
 {

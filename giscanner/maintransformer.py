@@ -1023,15 +1023,35 @@ method or constructor of some type."""
         uscored_prefix = self._get_uscored_prefix(func, subsymbol)
         target = self._transformer.lookup_typenode(func.parameters[0].type)
 
-        func.instance_parameter = func.parameters.pop(0)
-        self._namespace.float(func)
+        if not func.is_method and not subsymbol.startswith(uscored_prefix + '_'):
+            # Uh oh! This function starts with uscored_prefix, but not
+            # uscored_prefix + '_', so if we split, we're splitting on something
+            # which is not _
+            # Examples of this are g_resources_register() (splits as
+            # g_resource + _register) and gdk_events_get_angle() (splits as
+            # gdk_event + _get_angle).
+            # As the C name suggests, these are not methods, but for backward
+            # compatibility reasons we need to create a method with the old
+            # name, and a moved-to annotation pointing to the new variant.
 
-        if not func.is_method:
+            newfunc = func.clone()
+            newfunc.moved_to = func.name
+            newfunc.instance_parameter = newfunc.parameters.pop(0)
             subsym_idx = func.symbol.find(subsymbol)
-            func.name = func.symbol[(subsym_idx + len(uscored_prefix) + 1):]
-            func.is_method = True
+            newfunc.name = func.symbol[(subsym_idx + len(uscored_prefix) + 1):]
+            newfunc.is_method = True
 
-        target.methods.append(func)
+            target.methods.append(newfunc)
+        else:
+            func.instance_parameter = func.parameters.pop(0)
+            self._namespace.float(func)
+
+            if not func.is_method:
+                subsym_idx = func.symbol.find(subsymbol)
+                func.name = func.symbol[(subsym_idx + len(uscored_prefix) + 1):]
+                func.is_method = True
+
+            target.methods.append(func)
 
     def _get_uscored_prefix(self, func, subsymbol):
         # Here we check both the c_symbol_prefix and (if that fails),
