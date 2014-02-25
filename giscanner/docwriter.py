@@ -42,7 +42,7 @@ def make_page_id(node, recursive=False):
     if hasattr(node, '_chain') and node._chain:
         parent = node._chain[-1]
     else:
-        parent = None
+        parent = getattr(node, 'parent', None)
 
     if parent is None:
         if isinstance(node, ast.Function) and node.shadows:
@@ -348,15 +348,27 @@ class DocFormatter(object):
             return make_page_id(node)
 
     def format_xref(self, node, **attrdict):
-        if node is None:
+        if node is None or not hasattr(node, 'namespace'):
             attrs = [('xref', 'index')] + attrdict.items()
             return xmlwriter.build_xml_tag('link', attrs)
         elif isinstance(node, ast.Member):
             # Enum/BitField members are linked to the main enum page.
             return self.format_xref(node.parent, **attrdict) + '.' + node.name
+        elif node.namespace is self._transformer.namespace:
+            return self.format_internal_xref(node, attrdict)
         else:
-            attrs = [('xref', make_page_id(node))] + attrdict.items()
-            return xmlwriter.build_xml_tag('link', attrs)
+            return self.format_external_xref(node, attrdict)
+
+    def format_internal_xref(self, node, attrdict):
+        attrs = [('xref', make_page_id(node))] + attrdict.items()
+        return xmlwriter.build_xml_tag('link', attrs)
+
+    def format_external_xref(self, node, attrdict):
+        ns = node.namespace
+        attrs = [('href', '../%s-%s/%s.html' % (ns.name, str(ns.version),
+                                                make_page_id(node)))]
+        attrs += attrdict.items()
+        return xmlwriter.build_xml_tag('link', attrs, self.format_page_name(node))
 
     def field_is_writable(self, field):
         return True
@@ -701,9 +713,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
                 else:
                     resolved = self._transformer.lookup_typenode(type_)
                     if resolved:
-                        ns = resolved.namespace
-                        return '<link href="../%s-%s/%s.page">%s</link>' % \
-                            (ns.name, str(ns.version), giname, giname)
+                        return self.format_xref(resolved)
             return giname
         else:
             return self.format_fundamental_type(type_.target_fundamental)
