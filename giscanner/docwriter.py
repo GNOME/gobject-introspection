@@ -603,6 +603,10 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         if isinstance(node, (ast.Compound, ast.Boxed)):
             self.resolve_gboxed_constructor(node)
 
+        if isinstance(node, ast.Compound) and node.disguised and \
+           len(node.methods) == len(node.static_methods) == len(node.constructors) == 0:
+            return False
+
         # Nodes without namespace are AST bugs really
         # They are used for structs and unions declared
         # inline inside other structs, but they are not
@@ -899,8 +903,6 @@ class DocWriter(object):
 
     def _walk_node(self, output, node, chain):
         if isinstance(node, ast.Function) and node.moved_to is not None:
-            return False
-        if getattr(node, 'disguised', False):
             return False
         if self._formatter.should_render_node(node):
             self._render_node(node, chain, output)
