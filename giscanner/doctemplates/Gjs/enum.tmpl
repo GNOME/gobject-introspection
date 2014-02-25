@@ -1,3 +1,4 @@
+<%! page_type="guide" %>
 <%inherit file="/base.tmpl"/>
 <%block name="details">
 % if node.members:
@@ -10,4 +11,11 @@ ${formatter.format(node, member.doc)}
 % endfor
 </terms>
 % endif
+</%block>
+<%block name="links">\
+  <links type="topic" ui:expanded="true"
+         api:type="function" api:mime="${formatter.mime_type}"
+         groups="function" style="linklist">
+    <title>Functions</title>
+  </links>\
 </%block>
