@@ -580,7 +580,10 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         zero_args_constructor = None
         default_constructor = None
 
-        for c in node.constructors:
+        introspectable_constructors = \
+            filter(lambda c: getattr(c, 'introspectable', True),
+                   node.constructors)
+        for c in introspectable_constructors:
             if zero_args_constructor is None and \
                len(c.parameters) == 0:
                 zero_args_constructor = c
@@ -590,8 +593,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         if default_constructor is None:
             default_constructor = zero_args_constructor
         if default_constructor is None and \
-           len(node.constructors) > 0:
-            default_constructor = node.constructors[0]
+           len(introspectable_constructors) > 0:
+            default_constructor = introspectable_constructors[0]
 
         node.gjs_default_constructor = default_constructor
         node.gjs_zero_args_constructor = zero_args_constructor
@@ -626,15 +629,10 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
                        parent.name == 'ParamSpec':
                         is_gparam_subclass = True
                         break
+                    if parent.parent_type is None:
+                        break
                     parent = self._transformer.lookup_typenode(parent.parent_type)
             if is_gparam_subclass:
-                return False
-        if isinstance(node, ast.Function) and node.is_constructor:
-            parent = node.parent
-            if isinstance(parent, (ast.Compound, ast.Boxed)):
-                if node == parent.gjs_default_constructor:
-                    return False
-            if isinstance(parent, ast.Class):
                 return False
 
         return super(DocFormatterGjs, self).should_render_node(node)
@@ -814,6 +812,9 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             return True
 
     def _struct_is_simple(self, node):
+        if node.disguised or len(node.fields) == 0:
+            return False
+
         for f in node.fields:
             if not self.field_is_writable(f):
                 return False
@@ -823,8 +824,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         if node.namespace.name == 'GLib' and node.name == 'Variant':
             return 'signature: String, value: Any'
 
-        zero_args_constructor = node.gjs_default_constructor
-        default_constructor = node.gjs_zero_args_constructor
+        zero_args_constructor = node.gjs_zero_args_constructor
+        default_constructor = node.gjs_default_constructor
 
         can_allocate = zero_args_constructor is not None
         if not can_allocate and isinstance(node, ast.Record):
