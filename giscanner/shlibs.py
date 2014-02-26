@@ -105,8 +105,8 @@ def _resolve_non_libtool(options, binary, libraries):
             # Use the dumpbin utility that's included in
             # every Visual C++ installation to find out which
             # DLL the library gets linked to
-            args.append ('dumpbin.exe')
-            args.append ('-symbols')
+            args.append('dumpbin.exe')
+            args.append('-symbols')
 
         # When we are not using Visual C++ (i.e. we are using GCC)...
         else:
@@ -151,16 +151,16 @@ def _resolve_non_libtool(options, binary, libraries):
                         o, e = proc.communicate()
                         for line in o.splitlines():
                             if is_msvc:
-                                # On Visual Studio, dumpbin -symbols something.lib gives the filename of
-                                # DLL without the '.dll' extension that something.lib links to,
-                                # in the line that contains
+                                # On Visual Studio, dumpbin -symbols something.lib gives the
+                                # filename of DLL without the '.dll' extension that something.lib
+                                # links to, in the line that contains
                                 # __IMPORT_DESCRIPTOR_<dll_filename_that_something.lib_links_to>
 
                                 if '__IMPORT_DESCRIPTOR_' in line:
                                     line_tokens = line.split()
                                     for item in line_tokens:
-                                        if item.startswith ('__IMPORT_DESCRIPTOR_'):
-                                            shlibs.append (item[20:] + '.dll')
+                                        if item.startswith('__IMPORT_DESCRIPTOR_'):
+                                            shlibs.append(item[20:] + '.dll')
                                             found = True
                                             break
                                 if found:
