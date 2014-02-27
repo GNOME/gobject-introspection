@@ -100,9 +100,11 @@ class CacheStore(object):
         if current_hash == cache_hash:
             return
 
+        versiontmp = version + '.tmp'
+
         self._clean()
         try:
-            fp = open(version, 'w')
+            fp = open(versiontmp, 'w')
         except IOError as e:
             # Permission denied
             if e.errno == errno.EACCES:
@@ -111,6 +113,10 @@ class CacheStore(object):
                 raise
 
         fp.write(current_hash)
+        fp.close()
+        # On Unix, this would just be os.rename() but Windows
+        # doesn't allow that.
+        shutil.move(versiontmp, version)
 
     def _get_filename(self, filename):
         # If we couldn't create the directory we're probably
