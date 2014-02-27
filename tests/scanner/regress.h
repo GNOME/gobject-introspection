@@ -488,6 +488,9 @@ struct _RegressTestObj
   double some_double;
   char* string;
   GType gtype;
+
+  /* < private > */
+  void (*function_ptr)();
 };
 
 typedef void (*RegressTestExternallyDefinedCallback) (RegressTestObj *obj, int someint);

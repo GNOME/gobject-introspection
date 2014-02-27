@@ -3450,6 +3450,13 @@ raise an error.</doc>
       <field name="gtype">
         <type name="GType" c:type="GType"/>
       </field>
+      <field name="function_ptr">
+        <callback name="function_ptr">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+        </callback>
+      </field>
       <glib:signal name="all"
                    when="first"
                    no-recurse="1"
