@@ -11631,6 +11631,9 @@
  * character until it knows that the next character is not a mark that
  * could combine with the base character.)
  *
+ * Using extensions such as "//TRANSLIT" may not work (or may not work
+ * well) on many platforms.  Consider using g_str_to_ascii() instead.
+ *
  * Returns: If the conversion was successful, a newly allocated
  *               nul-terminated string, which must be freed with
  *               g_free(). Otherwise %NULL and @error will be set.
@@ -14787,22 +14790,16 @@
 /**
  * g_get_monotonic_time:
  *
- * Queries the system monotonic time, if available.
+ * Queries the system monotonic time.
  *
- * On POSIX systems with clock_gettime() and `CLOCK_MONOTONIC` this call
- * is a very shallow wrapper for that.  Otherwise, we make a best effort
- * that probably involves returning the wall clock time (with at least
- * microsecond accuracy, subject to the limitations of the OS kernel).
+ * The monotonic clock will always increase and doesn't suffer
+ * discontinuities when the user (or NTP) changes the system time.  It
+ * may or may not continue to tick during times where the machine is
+ * suspended.
  *
- * It's important to note that POSIX `CLOCK_MONOTONIC` does
- * not count time spent while the machine is suspended.
- *
- * On Windows, "limitations of the OS kernel" is a rather substantial
- * statement.  Depending on the configuration of the system, the wall
- * clock time is updated as infrequently as 64 times a second (which
- * is approximately every 16ms). Also, on XP (but not on Vista or later)
- * the monotonic clock is locally monotonic, but may differ in exact
- * value between processes due to timer wrap handling.
+ * We try to use the clock that corresponds as closely as possible to
+ * the passage of time as measured by system calls such as poll() but it
+ * may not always be possible to do this.
  *
  * Returns: the monotonic time, in microseconds
  * Since: 2.28
@@ -15366,6 +15363,15 @@
  * the key and value are freed using the supplied destroy functions,
  * otherwise you have to make sure that any dynamically allocated
  * values are freed yourself.
+ *
+ * It is safe to continue iterating the #GHashTable afterward:
+ * |[
+ * while (g_hash_table_iter_next (&iter, &key, &value))
+ *   {
+ *     if (condition)
+ *       g_hash_table_iter_remove (&iter);
+ *   }
+ * ]|
  *
  * Since: 2.16
  */
@@ -18627,6 +18633,9 @@
  *
  * Passes the results of polling back to the main loop.
  *
+ * You must have successfully acquired the context with
+ * g_main_context_acquire() before you may call this function.
+ *
  * Returns: %TRUE if some sources are ready to be dispatched.
  */
 
@@ -18648,6 +18657,9 @@
  * @context: a #GMainContext
  *
  * Dispatches all pending sources.
+ *
+ * You must have successfully acquired the context with
+ * g_main_context_acquire() before you may call this function.
  */
 
 
@@ -18849,6 +18861,9 @@
  * Prepares to poll sources within a main loop. The resulting information
  * for polling is determined by calling g_main_context_query ().
  *
+ * You must have successfully acquired the context with
+ * g_main_context_acquire() before you may call this function.
+ *
  * Returns: %TRUE if some source is ready to be dispatched
  *               prior to polling.
  */
@@ -18900,6 +18915,9 @@
  * @n_fds: length of @fds.
  *
  * Determines information necessary to poll this main loop.
+ *
+ * You must have successfully acquired the context with
+ * g_main_context_acquire() before you may call this function.
  *
  * Returns: the number of records actually stored in @fds,
  *   or, if more than @n_fds records need to be stored, the number
@@ -25646,6 +25664,9 @@
  * @source will hold a reference on @child_source while @child_source
  * is attached to it.
  *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
+ *
  * Since: 2.28
  */
 
@@ -25661,6 +25682,9 @@
  * event source. The event source's check function will typically test
  * the @revents field in the #GPollFD struct and return %TRUE if events need
  * to be processed.
+ *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
  *
  * Using this API forces the linear scanning of event sources on each
  * main loop iteration.  Newly-written event sources should try to use
@@ -25682,6 +25706,9 @@
  *
  * It is not necessary to remove the fd before destroying the source; it
  * will be cleaned up automatically.
+ *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
  *
  * As the name suggests, this function is not available on Windows.
  *
@@ -25906,6 +25933,9 @@
  * If you want to remove a fd, don't set its event mask to zero.
  * Instead, call g_source_remove_unix_fd().
  *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
+ *
  * As the name suggests, this function is not available on Windows.
  *
  * Since: 2.36
@@ -25941,6 +25971,9 @@
  *
  * The return value of this function is only defined when the function
  * is called from the check or dispatch functions for @source.
+ *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
  *
  * As the name suggests, this function is not available on Windows.
  *
@@ -26013,6 +26046,9 @@
  *
  * Detaches @child_source from @source and destroys it.
  *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
+ *
  * Since: 2.28
  */
 
@@ -26024,6 +26060,9 @@
  *
  * Removes a file descriptor from the set of file descriptors polled for
  * this source.
+ *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
  */
 
 
@@ -26037,6 +26076,9 @@
  * You only need to call this if you want to remove an fd from being
  * watched while keeping the same source around.  In the normal case you
  * will just want to destroy the source.
+ *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
  *
  * As the name suggests, this function is not available on Windows.
  *
@@ -26147,6 +26189,10 @@
  * source will be dispatched if it is ready to be dispatched and no
  * sources at a higher (numerically smaller) priority are ready to be
  * dispatched.
+ *
+ * A child source always has the same priority as its parent.  It is not
+ * permitted to change the priority of a source once it has been added
+ * as a child of another source.
  */
 
 
@@ -26172,6 +26218,9 @@
  * other suggests that it would be delivered first, and the ready time
  * for both sources is reached during the same main context iteration
  * then the order of dispatch is undefined.
+ *
+ * This API is only intended to be used by implementations of #GSource.
+ * Do not call this API on a #GSource that you did not create.
  *
  * Since: 2.36
  */
@@ -26728,6 +26777,34 @@
  *
  * Returns: %TRUE if @potential_hit is a hit
  * Since: 2.40
+ */
+
+
+/**
+ * g_str_to_ascii:
+ * @str: a string, in UTF-8
+ * @from_locale: (allow-none): the source locale, if known
+ *
+ * Transliterate @str to plain ASCII.
+ *
+ * For best results, @str should be in composed normalised form.
+ *
+ * This function performs a reasonably good set of character
+ * replacements.  The particular set of replacements that is done may
+ * change by version or even by runtime environment.
+ *
+ * If the source language of @str is known, it can used to improve the
+ * accuracy of the translation by passing it as @from_locale.  It should
+ * be a valid POSIX locale string (of the form
+ * "language[_territory][.codeset][@modifier]").
+ *
+ * If @from_locale is %NULL then the current locale is used.
+ *
+ * If you want to do translation for no specific locale, and you want it
+ * to be done independently of the currently locale, specify "C" for
+ * @from_locale.
+ *
+ * Returns: a string in plain ASCII
  */
 
 

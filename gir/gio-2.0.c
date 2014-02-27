@@ -11040,7 +11040,8 @@
 /**
  * g_application_add_main_option_entries:
  * @application: a #GApplication
- * @entries: a %NULL-terminated list of #GOptionEntrys
+ * @entries: (array zero-terminated=1) (element-type GOptionEntry): a
+ *           %NULL-terminated list of #GOptionEntrys
  *
  * Adds main option entries to be handled by @application.
  *
@@ -32361,7 +32362,7 @@
  * @cancellable: (allow-none): a %GCancellable or %NULL
  *
  * Creates a %GSource that can be attached to a %GMainContext to monitor
- * for the availibility of the specified @condition on the socket.
+ * for the availability of the specified @condition on the socket.
  *
  * The callback on the source is of the #GSocketSourceFunc type.
  *
