@@ -708,6 +708,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
                 return 'ByteArray'
             if giname == 'GObject.Value':
                 return 'Any'
+            if giname == 'GObject.Closure':
+                return 'Function'
             if link:
                 nsname = self._transformer.namespace.name
                 if giname.startswith(nsname + '.'):
