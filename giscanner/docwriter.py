@@ -706,6 +706,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             giname = type_.target_giname
             if giname in ('GLib.ByteArray', 'GLib.Bytes'):
                 return 'ByteArray'
+            if giname == 'GObject.Value':
+                return 'Any'
             if link:
                 nsname = self._transformer.namespace.name
                 if giname.startswith(nsname + '.'):
