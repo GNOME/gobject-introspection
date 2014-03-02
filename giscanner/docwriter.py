@@ -780,8 +780,10 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             if node.retval.type.target_fundamental == 'gboolean':
                 name = 'ok'
 
-            params.append(ast.Parameter(name, node.retval.type,
-                                        ast.PARAM_DIRECTION_OUT))
+            ret_param = ast.Parameter(name, node.retval.type,
+                                      ast.PARAM_DIRECTION_OUT)
+            ret_param.doc = node.retval.doc
+            params.append(ret_param)
         for param in node.parameters:
             if param not in skip:
                 params.append(param)
