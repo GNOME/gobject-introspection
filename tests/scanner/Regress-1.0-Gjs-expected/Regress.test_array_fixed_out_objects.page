@@ -24,7 +24,7 @@ function test_array_fixed_out_objects(): Array(<link xref="Regress.TestObj">Regr
 
 <terms>
 <item>
-<title><code>objs</code></title>
+<title><code>Returns</code></title>
   <p>An array of <link xref="Regress.TestObj"/></p>
 </item>
 </terms>

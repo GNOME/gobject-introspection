@@ -22,7 +22,7 @@ function onAnnotationListCallback(in: Array(String)): Array(String) {
 </item>
 <item>
 <title><code>Returns</code></title>
-
+  <p>list of strings</p>
 </item>
 </terms>
 

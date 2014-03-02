@@ -25,7 +25,7 @@ function test_gvariant_s(): <link href="../GLib-2.0/GLib.Variant.html">GLib.Vari
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>New variant</p>
 </item>
 </terms>
 

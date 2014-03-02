@@ -25,7 +25,7 @@ function calleeowns(): [return_value: Number(gint), toown: <link href="../GObjec
 <terms>
 <item>
 <title><code>return_value</code></title>
-
+  <p>an int</p>
 </item>
 <item>
 <title><code>toown</code></title>

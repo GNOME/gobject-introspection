@@ -33,7 +33,7 @@ function inout(inoutarg: Number(gint)): [return_value: Number(gint), inoutarg: N
 </item>
 <item>
 <title><code>return_value</code></title>
-
+  <p>an int</p>
 </item>
 <item>
 <title><code>inoutarg (out)</code></title>

@@ -41,7 +41,7 @@ function annotation_attribute_func(object: <link xref="Regress.AnnotationObject"
 </item>
 <item>
 <title><code>Returns</code></title>
-
+  <p>The return value.</p>
 </item>
 </terms>
 

@@ -24,7 +24,7 @@ function test_ghash_null_out(): {String: String} {
 
 <terms>
 <item>
-<title><code>out</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

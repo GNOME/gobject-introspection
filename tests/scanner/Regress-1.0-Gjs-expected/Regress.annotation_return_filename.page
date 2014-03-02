@@ -25,7 +25,7 @@ function annotation_return_filename(): String {
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>An annotated filename</p>
 </item>
 </terms>
 

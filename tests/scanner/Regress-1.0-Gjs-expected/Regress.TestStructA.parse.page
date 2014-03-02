@@ -32,7 +32,7 @@ function parse(string: String): <link xref="Regress.TestStructA">Regress.TestStr
   <p>ignored</p>
 </item>
 <item>
-<title><code>a_out</code></title>
+<title><code>Returns</code></title>
   <p>the structure that is to be filled</p>
 </item>
 </terms>

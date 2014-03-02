@@ -32,7 +32,7 @@ function test_strv_in(arr: Array(String)): Boolean {
 
 </item>
 <item>
-<title><code>ok</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

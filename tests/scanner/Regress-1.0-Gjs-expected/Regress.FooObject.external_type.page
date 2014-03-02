@@ -25,7 +25,7 @@ function external_type(): <link href="../Utility-1.0/Utility.Object.html">Utilit
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p><code>null</code> always</p>
 </item>
 </terms>
 

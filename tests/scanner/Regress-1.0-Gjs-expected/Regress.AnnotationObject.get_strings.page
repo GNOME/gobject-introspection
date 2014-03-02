@@ -26,7 +26,7 @@ each string needs to be freed.</p>
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>list of strings</p>
 </item>
 </terms>
 

@@ -28,11 +28,11 @@ function parse_args(argv: Array(String)): Array(String) {
 
 <terms>
 <item>
-<title><code>argv</code></title>
+<title><code>Returns</code></title>
   <p>Argument vector</p>
 </item>
 <item>
-<title><code>argv (out)</code></title>
+<title><code>Returns (out)</code></title>
   <p>Argument vector</p>
 </item>
 </terms>

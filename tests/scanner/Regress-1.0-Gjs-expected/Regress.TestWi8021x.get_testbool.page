@@ -24,7 +24,7 @@ function get_testbool(): Boolean {
 
 <terms>
 <item>
-<title><code>ok</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

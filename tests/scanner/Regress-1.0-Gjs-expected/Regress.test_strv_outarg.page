@@ -24,7 +24,7 @@ function test_strv_outarg(): Array(String) {
 
 <terms>
 <item>
-<title><code>retp</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

@@ -25,7 +25,7 @@ function test_utf8_nonconst_return(): String {
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>UTF-8 string</p>
 </item>
 </terms>
 

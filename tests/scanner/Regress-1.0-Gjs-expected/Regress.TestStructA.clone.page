@@ -24,7 +24,7 @@ function clone(): <link xref="Regress.TestStructA">Regress.TestStructA</link> {
 
 <terms>
 <item>
-<title><code>a_out</code></title>
+<title><code>Returns</code></title>
   <p>the cloned structure</p>
 </item>
 </terms>

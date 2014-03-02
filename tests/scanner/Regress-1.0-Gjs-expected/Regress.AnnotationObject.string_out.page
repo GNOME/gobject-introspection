@@ -25,7 +25,7 @@ function string_out(): [ok: Boolean, str_out: String] {
 <terms>
 <item>
 <title><code>ok</code></title>
-
+  <p>some boolean</p>
 </item>
 <item>
 <title><code>str_out</code></title>

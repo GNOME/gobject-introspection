@@ -28,11 +28,11 @@ function test_array_int_inout(ints: Array(Number(gint))): Array(Number(gint)) {
 
 <terms>
 <item>
-<title><code>ints</code></title>
+<title><code>Returns</code></title>
   <p>a list of integers whose items will be increased by 1, except the first that will be dropped</p>
 </item>
 <item>
-<title><code>ints (out)</code></title>
+<title><code>Returns (out)</code></title>
   <p>a list of integers whose items will be increased by 1, except the first that will be dropped</p>
 </item>
 </terms>

@@ -25,7 +25,7 @@ function test_array_int_full_out(): [return_value: Array(Number(gint)), len: Num
 <terms>
 <item>
 <title><code>return_value</code></title>
-
+  <p>a new array of integers.</p>
 </item>
 <item>
 <title><code>len</code></title>

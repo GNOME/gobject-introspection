@@ -25,7 +25,7 @@ function annotation_string_zero_terminated(): Array(String) {
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>The return value</p>
 </item>
 </terms>
 

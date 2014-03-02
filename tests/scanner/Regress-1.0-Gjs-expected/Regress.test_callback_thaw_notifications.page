@@ -27,7 +27,7 @@ corresponding destroy notfications.</p>
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>Sum of the return values of the invoked callbacks.</p>
 </item>
 </terms>
 

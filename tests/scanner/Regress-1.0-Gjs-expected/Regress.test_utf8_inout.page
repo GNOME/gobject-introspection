@@ -28,11 +28,11 @@ function test_utf8_inout(inout: String): String {
 
 <terms>
 <item>
-<title><code>inout</code></title>
+<title><code>Returns</code></title>
 
 </item>
 <item>
-<title><code>inout (out)</code></title>
+<title><code>Returns (out)</code></title>
 
 </item>
 </terms>

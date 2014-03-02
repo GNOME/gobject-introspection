@@ -25,7 +25,7 @@ function annotation_test_parsing_bug630862(): <link href="../GObject-2.0/GObject
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>An object, note the colon:in here</p>
 </item>
 </terms>
 

@@ -32,7 +32,7 @@ function equals(other: <link xref="Regress.TestBoxed">Regress.TestBoxed</link>):
 
 </item>
 <item>
-<title><code>ok</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

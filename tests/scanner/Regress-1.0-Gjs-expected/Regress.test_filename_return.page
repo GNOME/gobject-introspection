@@ -25,7 +25,7 @@ function test_filename_return(): Array(String) {
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>list of strings</p>
 </item>
 </terms>
 

@@ -24,7 +24,7 @@ function test_cairo_surface_full_out(): <link href="../cairo-1.0/cairo.Surface.h
 
 <terms>
 <item>
-<title><code>surface</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

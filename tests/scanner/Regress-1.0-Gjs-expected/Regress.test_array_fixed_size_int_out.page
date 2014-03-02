@@ -24,7 +24,7 @@ function test_array_fixed_size_int_out(): Array(Number(gint)) {
 
 <terms>
 <item>
-<title><code>ints</code></title>
+<title><code>Returns</code></title>
   <p>a list of 5 integers ranging from 0 to 4</p>
 </item>
 </terms>

@@ -11,7 +11,7 @@
   </info>
   <title>Regress.TestObj::sig-with-hash-prop</title>
   <synopsis><code mime="text/x-gjs">
-connect('sig-with-hash-prop', function (testObj, hash: {String: <link href="../GObject-2.0/GObject.Value.html">GObject.Value</link>}, ): void);
+connect('sig-with-hash-prop', function (testObj, hash: {String: Any}, ): void);
   </code></synopsis>
   <p>This test signal is like TelepathyGlib's
  TpAccount::status-changed</p>

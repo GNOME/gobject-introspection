@@ -32,7 +32,7 @@ function equals(other_a: <link xref="Regress.TestSimpleBoxedA">Regress.TestSimpl
 
 </item>
 <item>
-<title><code>ok</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

@@ -33,7 +33,7 @@ function in(inarg: Number(gint)): Number(gint) {
 </item>
 <item>
 <title><code>Returns</code></title>
-
+  <p>an int</p>
 </item>
 </terms>
 

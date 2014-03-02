@@ -13,14 +13,14 @@
       </api:returns>
       <api:name>regress_test_closure</api:name>
       <api:arg>
-        <api:type>GObject.Closure</api:type>
+        <api:type>Function</api:type>
         <api:name>closure</api:name>
       </api:arg>
     </api:function>
   </info>
   <title>Regress.test_closure</title>
   <synopsis><code mime="text/x-gjs">
-function test_closure(closure: <link href="../GObject-2.0/GObject.Closure.html">GObject.Closure</link>): Number(gint) {
+function test_closure(closure: Function): Number(gint) {
     // Gjs wrapper for regress_test_closure()
 }
   </code></synopsis>

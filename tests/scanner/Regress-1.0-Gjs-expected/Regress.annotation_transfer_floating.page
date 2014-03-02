@@ -25,7 +25,7 @@ function annotation_transfer_floating(): <link href="../GObject-2.0/GObject.Obje
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>A floating object</p>
 </item>
 </terms>
 

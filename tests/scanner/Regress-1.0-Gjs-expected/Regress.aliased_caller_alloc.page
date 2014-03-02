@@ -24,7 +24,7 @@ function aliased_caller_alloc(): <link xref="Regress.AliasedTestBoxed">Regress.A
 
 <terms>
 <item>
-<title><code>boxed</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

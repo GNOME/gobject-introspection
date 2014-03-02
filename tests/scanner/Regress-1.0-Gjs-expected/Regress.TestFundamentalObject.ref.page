@@ -25,7 +25,7 @@ function ref(): <link xref="Regress.TestFundamentalObject">Regress.TestFundament
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>A new <link xref="Regress.TestFundamentalObject"/></p>
 </item>
 </terms>
 

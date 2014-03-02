@@ -25,7 +25,7 @@ function create_object(): <link href="../GObject-2.0/GObject.Object.html">GObjec
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>The object</p>
 </item>
 </terms>
 

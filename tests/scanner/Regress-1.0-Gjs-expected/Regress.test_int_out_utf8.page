@@ -32,7 +32,7 @@ function test_int_out_utf8(in: String): Number(gint) {
 
 </item>
 <item>
-<title><code>length</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

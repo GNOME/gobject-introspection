@@ -22,7 +22,7 @@ function onAnnotationCallback(in: Number(gint)): Number(gint) {
 </item>
 <item>
 <title><code>Returns</code></title>
-
+  <p>array of ints</p>
 </item>
 </terms>
 

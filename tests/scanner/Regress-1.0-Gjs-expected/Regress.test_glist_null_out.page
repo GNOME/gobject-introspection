@@ -24,7 +24,7 @@ function test_glist_null_out(): Array(String) {
 
 <terms>
 <item>
-<title><code>out_list</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

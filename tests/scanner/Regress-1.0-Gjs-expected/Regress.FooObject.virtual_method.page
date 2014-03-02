@@ -32,7 +32,7 @@ function virtual_method(first_param: Number(gint)): Boolean {
 
 </item>
 <item>
-<title><code>ok</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

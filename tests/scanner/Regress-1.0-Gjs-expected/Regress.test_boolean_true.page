@@ -32,7 +32,7 @@ function test_boolean_true(in: Boolean): Boolean {
 
 </item>
 <item>
-<title><code>ok</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

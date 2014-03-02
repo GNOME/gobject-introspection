@@ -29,7 +29,7 @@ function onFooCallback(regress_foo: <link xref="Regress.FooObject">Regress.FooOb
 
 </item>
 <item>
-<title><code>ok</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

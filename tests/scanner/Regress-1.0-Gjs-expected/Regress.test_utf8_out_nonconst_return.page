@@ -25,7 +25,7 @@ function test_utf8_out_nonconst_return(): [return_value: String, out: String] {
 <terms>
 <item>
 <title><code>return_value</code></title>
-
+  <p>a copy of "first"</p>
 </item>
 <item>
 <title><code>out</code></title>

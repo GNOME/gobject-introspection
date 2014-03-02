@@ -28,11 +28,11 @@ function annotation_string_zero_terminated_out(out: Array(String)): Array(String
 
 <terms>
 <item>
-<title><code>out</code></title>
+<title><code>Returns</code></title>
 
 </item>
 <item>
-<title><code>out (out)</code></title>
+<title><code>Returns (out)</code></title>
 
 </item>
 </terms>

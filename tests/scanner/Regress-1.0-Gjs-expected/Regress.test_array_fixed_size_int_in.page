@@ -33,7 +33,7 @@ function test_array_fixed_size_int_in(ints: Array(Number(gint))): Number(gint) {
 </item>
 <item>
 <title><code>Returns</code></title>
-
+  <p>the sum of the items in <code>ints</code></p>
 </item>
 </terms>
 

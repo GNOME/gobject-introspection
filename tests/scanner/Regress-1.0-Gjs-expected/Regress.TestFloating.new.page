@@ -25,7 +25,7 @@ function new(): <link xref="Regress.TestFloating">Regress.TestFloating</link> {
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>A new floating <link xref="Regress.TestFloating"/></p>
 </item>
 </terms>
 

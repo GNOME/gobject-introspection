@@ -25,7 +25,7 @@ function annotation_return_array(): [return_value: Array(String), length: Number
 <terms>
 <item>
 <title><code>return_value</code></title>
-
+  <p>The return value</p>
 </item>
 <item>
 <title><code>length</code></title>

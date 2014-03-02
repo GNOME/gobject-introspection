@@ -65,7 +65,7 @@ function skip_return_val(a: Number(gint), c: Number(gdouble), inout_d: Number(gi
 </item>
 <item>
 <title><code>ok</code></title>
-
+  <p><code>true</code> if the call succeeds, <code>false</code> if @error is set.</p>
 </item>
 <item>
 <title><code>out_b</code></title>

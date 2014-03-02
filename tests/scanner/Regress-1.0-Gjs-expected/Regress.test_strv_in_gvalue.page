@@ -9,14 +9,14 @@
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>GObject.Value</api:type>
+        <api:type>Any</api:type>
       </api:returns>
       <api:name>regress_test_strv_in_gvalue</api:name>
     </api:function>
   </info>
   <title>Regress.test_strv_in_gvalue</title>
   <synopsis><code mime="text/x-gjs">
-function test_strv_in_gvalue(): <link href="../GObject-2.0/GObject.Value.html">GObject.Value</link> {
+function test_strv_in_gvalue(): Any {
     // Gjs wrapper for regress_test_strv_in_gvalue()
 }
   </code></synopsis>

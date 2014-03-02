@@ -33,7 +33,7 @@ function allow_none(somearg: String): <link href="../GObject-2.0/GObject.Object.
 </item>
 <item>
 <title><code>Returns</code></title>
-
+  <p><code>null</code> always</p>
 </item>
 </terms>
 

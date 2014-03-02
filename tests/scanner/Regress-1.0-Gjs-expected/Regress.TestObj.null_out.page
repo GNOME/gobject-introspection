@@ -24,7 +24,7 @@ function null_out(): <link xref="Regress.TestObj">Regress.TestObj</link> {
 
 <terms>
 <item>
-<title><code>obj</code></title>
+<title><code>Returns</code></title>
   <p>A <link xref="Regress.TestObj"/></p>
 </item>
 </terms>

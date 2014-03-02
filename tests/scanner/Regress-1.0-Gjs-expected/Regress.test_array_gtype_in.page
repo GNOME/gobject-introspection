@@ -33,7 +33,7 @@ function test_array_gtype_in(types: Array(GObject.Type)): String {
 </item>
 <item>
 <title><code>Returns</code></title>
-
+  <p>string representation of provided types</p>
 </item>
 </terms>
 

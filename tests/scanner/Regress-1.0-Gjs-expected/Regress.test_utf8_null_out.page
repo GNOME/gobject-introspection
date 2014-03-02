@@ -24,7 +24,7 @@ function test_utf8_null_out(): String {
 
 <terms>
 <item>
-<title><code>char_out</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>

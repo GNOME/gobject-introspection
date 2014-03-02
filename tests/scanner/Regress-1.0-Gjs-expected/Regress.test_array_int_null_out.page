@@ -24,7 +24,7 @@ function test_array_int_null_out(): Array(Number(gint)) {
 
 <terms>
 <item>
-<title><code>arr</code></title>
+<title><code>Returns</code></title>
 
 </item>
 </terms>
