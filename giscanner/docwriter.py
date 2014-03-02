@@ -74,7 +74,7 @@ def get_node_kind(node):
             node_kind = 'constructor'
         else:
             node_kind = 'function'
-    elif isinstance(node, ast.Enum):
+    elif isinstance(node, (ast.Enum, ast.Bitfield)):
         node_kind = 'enum'
     elif isinstance(node, ast.Property) and node.parent is not None:
         node_kind = 'property'
@@ -821,7 +821,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             if resolved:
                 if isinstance(resolved, ast.Compound) and node.type.ctype[-1] != '*':
                     return self._struct_is_simple(resolved)
-                elif isinstance(resolved, ast.Enum):
+                elif isinstance(resolved, (ast.Enum, ast.Bitfield)):
                     return True
             return False
         else:
