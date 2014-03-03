@@ -490,7 +490,7 @@ struct _RegressTestObj
   GType gtype;
 
   /* < private > */
-  void (*function_ptr)();
+  void (*function_ptr) (void);
 };
 
 typedef void (*RegressTestExternallyDefinedCallback) (RegressTestObj *obj, int someint);
