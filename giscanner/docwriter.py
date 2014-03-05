@@ -788,7 +788,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             if param not in skip:
                 params.append(param)
 
-        if len(params) == 1 and params[0].argname == 'return_value':
+        if len(params) == 1:
             params[0].argname = 'Returns'
 
         return params
