@@ -2584,7 +2584,7 @@
 
 
 /**
- * GVariantDict: (skip)
+ * GVariantDict:
  *
  * #GVariantDict is a mutable interface to #GVariant dictionaries.
  *
