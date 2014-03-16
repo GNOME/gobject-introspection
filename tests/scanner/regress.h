@@ -1275,12 +1275,12 @@ void regress_random_function_with_skipped_structure (int x,
 typedef struct _RegressIntset RegressIntset;
 
 /**
- * RegressIntSet: (skip)
+ * RegressIntsetAlias: (skip)
  *
  * Compatibility typedef, like telepathy-glib's TpIntSet
  *
  */
-typedef RegressIntset RegressIntSet;
+typedef RegressIntset RegressIntsetAlias;
 
 /**
  * RegressPtrArrayAlias:
