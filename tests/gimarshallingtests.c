@@ -4264,7 +4264,7 @@ gi_marshalling_tests_object_full_inout (GIMarshallingTestsObject **object)
 }
 
 /**
- * gi_marshalling_tests_object_test_int8_in:
+ * gi_marshalling_tests_object_int8_in:
  * @in: (in):
  */
 void
@@ -4274,7 +4274,7 @@ gi_marshalling_tests_object_int8_in (GIMarshallingTestsObject *object, gint8 in)
 }
 
 /**
- * gi_marshalling_tests_object_test_int8_out:
+ * gi_marshalling_tests_object_int8_out:
  * @out: (out):
  */
 void
