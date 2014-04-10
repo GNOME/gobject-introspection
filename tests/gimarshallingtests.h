@@ -1003,6 +1003,35 @@ void gi_marshalling_tests_interface_test_int8_in (GIMarshallingTestsInterface *s
 
 void gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *test_iface, gint8 in);
 
+/* GIMarshallingTestsInterfaceImpl is a class that implements
+   GIMarshallingTestsInterface */
+
+#define GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL     (gi_marshalling_tests_interface_impl_get_type ())
+#define GI_MARSHALLING_TESTS_INTERFACE_IMPL(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL, GIMarshallingTestsInterfaceImpl))
+#define GI_MARSHALLING_TESTS_INTERFACE_IMPL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL, GIMarshallingTestsInterfaceImplClass))
+#define GI_MARSHALLING_TESTS_IS_INTERFACE_IMPL(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL))
+#define GI_MARSHALLING_TESTS_IS_INTERFACE_IMPL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL))
+#define GI_MARSHALLING_TESTS_INTERFACE_IMPL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE_IMPL, GIMarshallingTestsInterfaceImplClass))
+
+
+typedef struct _GIMarshallingTestsInterfaceImplClass GIMarshallingTestsInterfaceImplClass;
+typedef struct _GIMarshallingTestsInterfaceImpl GIMarshallingTestsInterfaceImpl;
+
+struct _GIMarshallingTestsInterfaceImplClass
+{
+    GObjectClass parent_class;
+};
+
+struct _GIMarshallingTestsInterfaceImpl
+{
+    GObject parent_instance;
+
+    gint int_;
+};
+
+GType gi_marshalling_tests_interface_impl_get_type (void) G_GNUC_CONST;
+GIMarshallingTestsInterface *gi_marshalling_tests_interface_impl_get_as_interface (GIMarshallingTestsInterfaceImpl *self);
+
 /* GIMarshallingTestsInterface2 allows us testing vfunc clashes when a class'
    vfunc implementation ambiguously relates to its prototype */
 

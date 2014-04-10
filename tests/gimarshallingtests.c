@@ -4640,6 +4640,7 @@ gi_marshalling_tests_interface_get_type (void)
   static GType type = 0;
   if (type == 0)
     {
+      /* Not adding prerequisite here for test purposes */
       type = g_type_register_static_simple (G_TYPE_INTERFACE,
                                             "GIMarshallingTestsInterface",
                                             sizeof
@@ -4670,6 +4671,42 @@ gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *t
   gi_marshalling_tests_interface_test_int8_in (test_iface, in);
 }
 
+
+static void test_interface_init (GIMarshallingTestsInterfaceIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GIMarshallingTestsInterfaceImpl, gi_marshalling_tests_interface_impl, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE(GI_MARSHALLING_TESTS_TYPE_INTERFACE, test_interface_init))
+
+static void
+gi_marshalling_tests_interface_impl_test_int8_in (GIMarshallingTestsInterface *self, gint8 in)
+{
+}
+
+static void test_interface_init (GIMarshallingTestsInterfaceIface *iface)
+{
+  iface->test_int8_in = gi_marshalling_tests_interface_impl_test_int8_in;
+}
+
+static void
+gi_marshalling_tests_interface_impl_init (GIMarshallingTestsInterfaceImpl *object)
+{
+}
+
+static void
+gi_marshalling_tests_interface_impl_class_init (GIMarshallingTestsInterfaceImplClass *klass)
+{
+}
+
+/**
+ * gi_marshalling_tests_interface_impl_get_as_interface:
+ *
+ * Returns: (transfer none):
+ */
+GIMarshallingTestsInterface *
+gi_marshalling_tests_interface_impl_get_as_interface (GIMarshallingTestsInterfaceImpl *self)
+{
+  return (GIMarshallingTestsInterface *) self;
+}
 
 static void
 gi_marshalling_tests_interface2_class_init (void *g_iface)
