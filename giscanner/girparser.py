@@ -280,6 +280,8 @@ class GIRParser(object):
                               typeval,
                               node.attrib.get('direction') or ast.PARAM_DIRECTION_IN,
                               node.attrib.get('transfer-ownership'),
+                              node.attrib.get('nullable') == '1',
+                              node.attrib.get('optional') == '1',
                               node.attrib.get('allow-none') == '1',
                               node.attrib.get('scope'),
                               node.attrib.get('caller-allocates') == '1')

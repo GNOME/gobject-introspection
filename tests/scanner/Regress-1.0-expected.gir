@@ -192,7 +192,10 @@ and/or use gtk-doc annotations.  -->
             <doc xml:space="preserve">a #GObject</doc>
             <type name="AnnotationObject" c:type="RegressAnnotationObject*"/>
           </instance-parameter>
-          <parameter name="somearg" transfer-ownership="none" allow-none="1">
+          <parameter name="somearg"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
@@ -516,6 +519,7 @@ each string needs to be freed.</doc>
                      direction="inout"
                      caller-allocates="0"
                      transfer-ownership="full"
+                     nullable="1"
                      allow-none="1">
             <doc xml:space="preserve">This is an argument test</doc>
             <type name="gint" c:type="int*"/>
@@ -2870,6 +2874,7 @@ use it should be.</doc>
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full"
+                     optional="1"
                      allow-none="1">
             <doc xml:space="preserve">A #RegressTestObj</doc>
             <type name="TestObj" c:type="RegressTestObj**"/>
@@ -2895,6 +2900,7 @@ use it should be.</doc>
         <parameters>
           <parameter name="callback"
                      transfer-ownership="none"
+                     nullable="1"
                      allow-none="1"
                      scope="call">
             <type name="TestCallback" c:type="RegressTestCallback"/>
@@ -2909,7 +2915,10 @@ use it should be.</doc>
           <instance-parameter name="obj" transfer-ownership="none">
             <type name="TestObj" c:type="RegressTestObj*"/>
           </instance-parameter>
-          <parameter name="two" transfer-ownership="none" allow-none="1">
+          <parameter name="two"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">Another object</doc>
             <type name="TestObj" c:type="RegressTestObj*"/>
           </parameter>
@@ -3041,6 +3050,7 @@ case.</doc>
           </instance-parameter>
           <parameter name="callback"
                      transfer-ownership="none"
+                     nullable="1"
                      allow-none="1"
                      scope="call">
             <type name="TestCallback" c:type="RegressTestCallback"/>
@@ -3055,7 +3065,10 @@ case.</doc>
           <instance-parameter name="obj" transfer-ownership="none">
             <type name="TestObj" c:type="RegressTestObj*"/>
           </instance-parameter>
-          <parameter name="bare" transfer-ownership="none" allow-none="1">
+          <parameter name="bare"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <type name="GObject.Object" c:type="GObject*"/>
           </parameter>
         </parameters>
@@ -3483,7 +3496,10 @@ raise an error.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="arr" transfer-ownership="none" allow-none="1">
+          <parameter name="arr"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">numbers, or %NULL</doc>
             <array length="1" zero-terminated="0" c:type="gpointer">
               <type name="guint"/>
@@ -3653,7 +3669,10 @@ the introspection client langage.</doc>
             <parameter name="obj" transfer-ownership="none">
               <type name="TestObj" c:type="RegressTestObj*"/>
             </parameter>
-            <parameter name="two" transfer-ownership="none" allow-none="1">
+            <parameter name="two"
+                       transfer-ownership="none"
+                       nullable="1"
+                       allow-none="1">
               <doc xml:space="preserve">Another object</doc>
               <type name="TestObj" c:type="RegressTestObj*"/>
             </parameter>
@@ -4368,12 +4387,11 @@ detection, and fixing it via annotations.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="cancellable" transfer-ownership="none" allow-none="1">
+        <parameter name="cancellable" transfer-ownership="none">
           <type name="Gio.Cancellable" c:type="GCancellable*"/>
         </parameter>
         <parameter name="callback"
                    transfer-ownership="none"
-                   allow-none="1"
                    scope="async"
                    closure="2">
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
@@ -4685,7 +4703,10 @@ exposed to language bindings.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="obj" transfer-ownership="none" allow-none="1">
+        <parameter name="obj"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <doc xml:space="preserve">A #RegressTestObj</doc>
           <type name="TestObj" c:type="RegressTestObj*"/>
         </parameter>
@@ -5023,7 +5044,10 @@ libgnome-keyring.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="arr" transfer-ownership="none" allow-none="1">
+        <parameter name="arr"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <array length="1" zero-terminated="0" c:type="int*">
             <type name="gint" c:type="int"/>
           </array>
@@ -5044,6 +5068,7 @@ libgnome-keyring.</doc>
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full"
+                   optional="1"
                    allow-none="1">
           <array length="1" zero-terminated="0" c:type="int**">
             <type name="gint" c:type="int*"/>
@@ -5088,10 +5113,7 @@ libgnome-keyring.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="callback"
-                   transfer-ownership="none"
-                   allow-none="1"
-                   scope="async">
+        <parameter name="callback" transfer-ownership="none" scope="async">
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
         </parameter>
       </parameters>
@@ -5206,6 +5228,7 @@ libgnome-keyring.</doc>
       <parameters>
         <parameter name="callback"
                    transfer-ownership="none"
+                   nullable="1"
                    allow-none="1"
                    scope="call">
           <type name="TestCallback" c:type="RegressTestCallback"/>
@@ -5345,7 +5368,10 @@ call and can be released on return.</doc>
           <doc xml:space="preserve">GClosure which takes one GVariant and returns a GVariant</doc>
           <type name="GObject.Closure" c:type="GClosure*"/>
         </parameter>
-        <parameter name="arg" transfer-ownership="none" allow-none="1">
+        <parameter name="arg"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <doc xml:space="preserve">a GVariant passed as argument to @closure</doc>
           <type name="GLib.Variant" c:type="GVariant*"/>
         </parameter>
@@ -5560,7 +5586,10 @@ element-type annotation.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="in" transfer-ownership="none" allow-none="1">
+        <parameter name="in"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <type name="GLib.HashTable" c:type="const GHashTable*">
             <type name="utf8"/>
             <type name="utf8"/>
@@ -5578,6 +5607,7 @@ element-type annotation.</doc>
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full"
+                   optional="1"
                    allow-none="1">
           <type name="GLib.HashTable" c:type="const GHashTable**">
             <type name="utf8"/>
@@ -5659,7 +5689,10 @@ element-type annotation.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="in" transfer-ownership="none" allow-none="1">
+        <parameter name="in"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <type name="GLib.SList" c:type="GSList*">
             <type name="utf8"/>
           </type>
@@ -5676,6 +5709,7 @@ element-type annotation.</doc>
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full"
+                   optional="1"
                    allow-none="1">
           <type name="GLib.SList" c:type="GSList**">
             <type name="utf8"/>
@@ -5747,7 +5781,10 @@ element-type annotation.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="in" transfer-ownership="none" allow-none="1">
+        <parameter name="in"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <type name="GLib.SList" c:type="GSList*">
             <type name="utf8"/>
           </type>
@@ -5764,6 +5801,7 @@ element-type annotation.</doc>
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full"
+                   optional="1"
                    allow-none="1">
           <type name="GLib.SList" c:type="GSList**">
             <type name="utf8"/>
@@ -5927,6 +5965,7 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="callback"
                    transfer-ownership="none"
+                   nullable="1"
                    allow-none="1"
                    scope="call">
           <type name="TestCallback" c:type="RegressTestCallback"/>
@@ -6057,6 +6096,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
       <parameters>
         <parameter name="callback"
                    transfer-ownership="none"
+                   nullable="1"
                    allow-none="1"
                    scope="call">
           <type name="TestSimpleCallback" c:type="RegressTestSimpleCallback"/>
@@ -6446,7 +6486,10 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="in" transfer-ownership="none" allow-none="1">
+        <parameter name="in"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <type name="utf8" c:type="char*"/>
         </parameter>
       </parameters>
@@ -6461,6 +6504,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full"
+                   optional="1"
                    allow-none="1">
           <type name="utf8" c:type="char**"/>
         </parameter>

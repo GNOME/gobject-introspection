@@ -775,13 +775,14 @@ class Parameter(TypeContainer):
     """An argument to a function."""
 
     def __init__(self, argname, typenode, direction=None,
-                 transfer=None, allow_none=False, scope=None,
+                 transfer=None, nullable=False, optional=False,
+                 allow_none=False, scope=None,
                  caller_allocates=False):
         TypeContainer.__init__(self, typenode, transfer)
         self.argname = argname
         self.direction = direction
-        self.nullable = False
-        self.optional = False
+        self.nullable = nullable
+        self.optional = optional
 
         if allow_none:
             if self.direction == PARAM_DIRECTION_OUT:

@@ -240,9 +240,11 @@ class GIRWriter(XMLWriter):
             attrs.append(('transfer-ownership',
                           parameter.transfer))
         if parameter.nullable:
+            attrs.append(('nullable', '1'))
             if parameter.direction != ast.PARAM_DIRECTION_OUT:
                 attrs.append(('allow-none', '1'))
         if parameter.optional:
+            attrs.append(('optional', '1'))
             if parameter.direction == ast.PARAM_DIRECTION_OUT:
                 attrs.append(('allow-none', '1'))
         if parameter.scope:
