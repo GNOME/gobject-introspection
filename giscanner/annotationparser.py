@@ -201,6 +201,8 @@ ANN_GET_VALUE_FUNC = 'get-value-func'
 ANN_IN = 'in'
 ANN_INOUT = 'inout'
 ANN_METHOD = 'method'
+ANN_NULLABLE = 'nullable'
+ANN_OPTIONAL = 'optional'
 ANN_OUT = 'out'
 ANN_REF_FUNC = 'ref-func'
 ANN_RENAME_TO = 'rename-to'
@@ -784,6 +786,30 @@ class GtkDocAnnotatable(object):
                          containing the annotation to be validated
         :param ann_name: name of the annotation holding the options to validate
         :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
+
+    def _do_validate_nullable(self, position, ann_name, options):
+        '''
+        Validate the ``(nullable)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options held by the annotation
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=0)
+
+    def _do_validate_optional(self, position, ann_name, options):
+        '''
+        Validate the ``(optional)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options held by the annotation
         '''
 
         self._validate_annotation(position, ann_name, options, exact_n_options=0)

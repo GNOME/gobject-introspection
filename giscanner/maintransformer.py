@@ -27,7 +27,7 @@ from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CL
                                ANN_GET_VALUE_FUNC, ANN_IN, ANN_INOUT, ANN_METHOD, ANN_OUT,
                                ANN_REF_FUNC, ANN_RENAME_TO, ANN_SCOPE, ANN_SET_VALUE_FUNC,
                                ANN_SKIP, ANN_TRANSFER, ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE,
-                               ANN_VFUNC)
+                               ANN_VFUNC, ANN_NULLABLE, ANN_OPTIONAL)
 from .annotationparser import (OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
                                OPT_OUT_CALLEE_ALLOCATES, OPT_OUT_CALLER_ALLOCATES,
                                OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
@@ -578,6 +578,12 @@ class MainTransformer(object):
             node.transfer = transfer
 
         self._adjust_container_type(parent, node, annotations)
+
+        if ANN_NULLABLE in annotations:
+            node.nullable = True
+
+        if ANN_OPTIONAL in annotations:
+            node.optional = True
 
         if ANN_ALLOW_NONE in annotations:
             if node.direction == ast.PARAM_DIRECTION_OUT:
