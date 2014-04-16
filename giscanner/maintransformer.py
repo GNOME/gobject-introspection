@@ -579,9 +579,11 @@ class MainTransformer(object):
 
         self._adjust_container_type(parent, node, annotations)
 
-        if (ANN_ALLOW_NONE in annotations
-        or node.type.target_giname == 'Gio.AsyncReadyCallback'
-        or node.type.target_giname == 'Gio.Cancellable'):
+        if ANN_ALLOW_NONE in annotations:
+            node.allow_none = True
+
+        if (node.type.target_giname == 'Gio.AsyncReadyCallback' or
+                node.type.target_giname == 'Gio.Cancellable'):
             node.allow_none = True
 
         if tag and tag.description:
