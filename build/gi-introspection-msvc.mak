@@ -170,7 +170,7 @@ $(bundled_girs): ..\gir\win32-1.0.gir ..\gir\fontconfig-2.0.gir ..\gir\freetype2
 	@-copy ..\gir\$*.gir $@
 
 # Generate .typelib's from generated .gir's
-$(built_install_typelibs): $(built_install_girs)
+$(built_install_typelibs): $(bundled_girs) $(built_install_girs)
 	@-echo Compiling $*.typelib...
 	@-$(G_IR_COMPILER_CURRENT) --includedir=. --debug --verbose $*.gir -o $@
 
@@ -180,6 +180,8 @@ $(bundled_typelibs): cairo-1.0.gir $(bundled_girs)
 	@-$(G_IR_COMPILER_CURRENT) --includedir=. --debug --verbose $*.gir -o $@
 
 install-introspection: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) cairo-1.0.gir $(bundled_typelibs)
+	@-mkdir $(G_IR_INCLUDEDIR)
+	@-mkdir $(G_IR_TYPELIBDIR)
 	@-copy cairo-1.0.gir $(G_IR_INCLUDEDIR)
 	@-for %a in ($(built_install_girs)) do @copy %a $(G_IR_INCLUDEDIR)
 	@-for %b in ($(built_install_typelibs)) do @copy %b $(G_IR_TYPELIBDIR)
