@@ -780,7 +780,15 @@ class Parameter(TypeContainer):
         TypeContainer.__init__(self, typenode, transfer)
         self.argname = argname
         self.direction = direction
-        self.allow_none = allow_none
+        self.nullable = False
+        self.optional = False
+
+        if allow_none:
+            if self.direction == PARAM_DIRECTION_OUT:
+                self.optional = True
+            else:
+                self.nullable = True
+
         self.scope = scope
         self.caller_allocates = caller_allocates
         self.closure_name = None

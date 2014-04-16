@@ -239,8 +239,12 @@ class GIRWriter(XMLWriter):
         if parameter.transfer:
             attrs.append(('transfer-ownership',
                           parameter.transfer))
-        if parameter.allow_none:
-            attrs.append(('allow-none', '1'))
+        if parameter.nullable:
+            if parameter.direction != ast.PARAM_DIRECTION_OUT:
+                attrs.append(('allow-none', '1'))
+        if parameter.optional:
+            if parameter.direction == ast.PARAM_DIRECTION_OUT:
+                attrs.append(('allow-none', '1'))
         if parameter.scope:
             attrs.append(('scope', parameter.scope))
         if parameter.closure_name is not None:

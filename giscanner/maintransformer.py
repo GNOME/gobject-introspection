@@ -580,12 +580,15 @@ class MainTransformer(object):
         self._adjust_container_type(parent, node, annotations)
 
         if ANN_ALLOW_NONE in annotations:
-            node.allow_none = True
+            if node.direction == ast.PARAM_DIRECTION_OUT:
+                node.optional = True
+            else:
+                node.nullable = True
 
         if (node.direction == ast.PARAM_DIRECTION_IN and
                 (node.type.target_giname == 'Gio.AsyncReadyCallback' or
                  node.type.target_giname == 'Gio.Cancellable')):
-            node.allow_none = True
+            node.nullable = True
 
         if tag and tag.description:
             node.doc = tag.description
