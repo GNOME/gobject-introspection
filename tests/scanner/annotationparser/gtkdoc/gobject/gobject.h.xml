@@ -122,6 +122,70 @@
 
 <test>
   <input>/**
+ * GtkdocHelperStruct:
+ * @a: field
+ *
+ * GtkdocHelperStruct
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocHelperStruct</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>a</name>
+          <description>field</description>
+        </parameter>
+      </parameters>
+      <description>GtkdocHelperStruct</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * GtkdocHelperStruct:
+ * @a: field
+ *
+ * GtkdocHelperStruct
+ */</output>
+</test>
+
+<test>
+  <input>/**
+ * GtkdocHelperEnum:
+ * @GTKDOC_HELPER_ENUM_A: enum a
+ * @GTKDOC_HELPER_ENUM_B: enum b
+ *
+ * GtkdocHelperEnum
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocHelperEnum</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>GTKDOC_HELPER_ENUM_A</name>
+          <description>enum a</description>
+        </parameter>
+        <parameter>
+          <name>GTKDOC_HELPER_ENUM_B</name>
+          <description>enum b</description>
+        </parameter>
+      </parameters>
+      <description>GtkdocHelperEnum</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * GtkdocHelperEnum:
+ * @GTKDOC_HELPER_ENUM_A: enum a
+ * @GTKDOC_HELPER_ENUM_B: enum b
+ *
+ * GtkdocHelperEnum
+ */</output>
+</test>
+
+<test>
+  <input>/**
  * GTKDOC_OBJECT_MACRO_DUMMY:
  * @parameter_1: first arg
  * @parameter_2: second arg

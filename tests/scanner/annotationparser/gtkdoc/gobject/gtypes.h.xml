@@ -7,7 +7,7 @@
  * GtkdocEnum:
  * @GTKDOC_ENUM_V1: first
  * @GTKDOC_ENUM_V2: second
- *    Since: 0.10
+ *    Since: 0.5
  *
  * Enum values for the #GtkdocEnum type.
  */</input>
@@ -24,7 +24,7 @@
         <parameter>
           <name>GTKDOC_ENUM_V2</name>
           <description>second
-   Since: 0.10</description>
+   Since: 0.5</description>
         </parameter>
       </parameters>
       <description>Enum values for the #GtkdocEnum type.</description>
@@ -34,9 +34,44 @@
  * GtkdocEnum:
  * @GTKDOC_ENUM_V1: first
  * @GTKDOC_ENUM_V2: second
- *    Since: 0.10
+ *    Since: 0.5
  *
  * Enum values for the #GtkdocEnum type.
+ */</output>
+</test>
+
+<test>
+  <input>/**
+ * GtkdocEnum2:
+ * @GTKDOC_ENUM2_V1: first
+ * @GTKDOC_ENUM2_V2: second
+ *
+ * Enum values for the #GtkdocEnum2 type.
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocEnum2</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>GTKDOC_ENUM2_V1</name>
+          <description>first</description>
+        </parameter>
+        <parameter>
+          <name>GTKDOC_ENUM2_V2</name>
+          <description>second</description>
+        </parameter>
+      </parameters>
+      <description>Enum values for the #GtkdocEnum2 type.</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * GtkdocEnum2:
+ * @GTKDOC_ENUM2_V1: first
+ * @GTKDOC_ENUM2_V2: second
+ *
+ * Enum values for the #GtkdocEnum2 type.
  */</output>
 </test>
 

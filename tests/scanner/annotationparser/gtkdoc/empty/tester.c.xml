@@ -69,4 +69,54 @@ returns nothing.]]></description>
  */</output>
 </test>
 
+<test>
+  <input>/**
+ * GtkDocTestIf:
+ *
+ * test object
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkDocTestIf</name>
+      </identifier>
+      <description>test object</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * GtkDocTestIf:
+ *
+ * test object
+ */</output>
+</test>
+
+<test>
+  <input>/**
+ * GtkDocTestIfInterface:
+ * @parent: parent interface type.
+ *
+ * test interface
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkDocTestIfInterface</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>parent</name>
+          <description>parent interface type.</description>
+        </parameter>
+      </parameters>
+      <description>test interface</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * GtkDocTestIfInterface:
+ * @parent: parent interface type.
+ *
+ * test interface
+ */</output>
+</test>
+
 </tests>

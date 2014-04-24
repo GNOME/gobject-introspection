@@ -1103,14 +1103,11 @@ class GtkDocCommentBlockParser(object):
         * unexpected introspection behavior, for example missing parameters in the
           generated .gir and .typelib files
 
-    .. NOTE:: :class:`GtkDocCommentBlockParser` functionality is heavily based on gtkdoc-mkdb's
-        `ScanSourceFile()`_ function and is currently in sync with GTK-Doc
-        commit `47abcd5`_.
+    .. NOTE:: :class:`GtkDocCommentBlockParser` functionality is based on gtkdoc-mkdb's
+        `ScanSourceFile()`_ function.
 
     .. _ScanSourceFile():
            http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
-    .. _47abcd5:
-           https://git.gnome.org/browse/gtk-doc/commit/?id=47abcd53b8489ebceec9e394676512a181c1f1f6
     '''
 
     def parse_comment_blocks(self, comments):

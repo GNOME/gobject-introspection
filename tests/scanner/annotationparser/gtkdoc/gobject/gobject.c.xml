@@ -10,6 +10,22 @@
  * @see_also: #GtkdocIface
  * @Image: object.png
  *
+ * > Two line
+ * > quote
+ *
+ * Offsets are time values to be added to local
+ * time to get Coordinated Universal Time (UTC) and should be
+ * <literal>"[±]hh[[:]mm[:ss]]"</literal>.  Dates are either
+ * <literal>"Jn"</literal> (Julian day with n between 1 and 365, leap
+ * years not counted), <literal>"n"</literal> (zero-based Julian day
+ * with n between 0 and 365) or <literal>"Mm.w.d"</literal> (day d
+ * (0 <= d <= 6) of week w (1 <= w <= 5) of month m (1 <= m <= 12), day
+ * 0 is a Sunday).  Times are in local wall clock time, the default is
+ * 02:00:00.
+ *
+ * <literal>lang_COUNTRY@MODIFIER</literal>
+ * <literal>lang_COUNTRY\@MODIFIER</literal>
+ *
  * This file contains non-sense code for the sole purpose of testing the docs.
  * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
  * signal.
@@ -24,11 +40,15 @@
  * GObject *myobj;
  *
  * myobj = gtkdoc_object_new();
- * // do somehing
+ * // do something
  * g_object_unref (myobj);
  * ]|
  *
- * # Examples #
+ * # Examples # {#examples}
+ *
+ * Here are a few examples.
+ *
+ * ## Example 1 ##
  *
  * You can also change parameters:
  * <informalexample>
@@ -36,12 +56,89 @@
  * </informalexample>
  *
  * This example serves two main purposes:
- * - testing conversion (long description
- *   follows here)
+ *
+ * - `test`ing conversion (`long description
+ *   follows here`)
+ *
  * - catching bugs
+ *
+ *   [GTK](http://www.gtk.org) ![Some image](home.png)
+ *
  * - having an example
  *
- * Nothing more to say.
+ * # Discussion
+ *
+ * This is a section with a heading without a trailing hash mark.
+ *
+ * > Do not confuse the GtkUIManager UI Definitions described here with
+ * > the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
+ * > Definitions</link>.
+ *
+ * > Single line quote
+ *
+ * <orderedlist>
+ * <listitem><para>
+ * This list is here to ensure the parsing of the above list
+ * </para></listitem>
+ * <listitem><para>
+ * Doesn't change it.
+ * </para></listitem>
+ * </orderedlist>
+ *
+ * This example serves two main purposes:
+ *
+ * * testing alternate list syntax
+ *
+ *   Don't match this as a link [ style | binding ][ : <replaceable>priority</replaceable> ]
+ *
+ * * not sure if we want this one
+ *
+ *   A link <http://en.wikipedia.org/wiki/MOS_Technology_SID#Technical_details>
+ *
+ * <refsect3><title>An embedded docbook section</title>
+ * <para>Some stuff</para>
+ *
+ * - A list
+ *
+ * - that is not recognised as markdown
+ *
+ * </refsect3>
+ *
+ * # Coda # {#this-is-an-id-tag}
+ *
+ * - One
+ * - Two
+ * - Three
+ *
+ * 1. This is a ordered list
+ *
+ * 1. This is a code block in a list:
+ *    |[{{!-- language="C" --!}}
+ *    GObject *myobj;
+ *
+ *    myobj = gtkdoc_object_new();
+ *    // do something
+ *    g_object_unref (myobj);
+ *    ]|
+ *    And another:
+ *    |[{{!-- language="C" --!}}
+ *    GObject *myobj;
+ *
+ *    myobj = gtkdoc_object_new();
+ *    /&ast; do something &ast;/
+ *    g_object_unref (myobj);
+ *    ]|
+ *
+ * 1. Really
+ *
+ *    Has a paragraph with a [link to the examples][examples].
+ *
+ * 1. Is
+ *
+ * Nothing more to say. Except one more link:
+ *
+ * <http://www.gnome.org/>
+ *
  */]]></input>
   <parser>
     <docblock>
@@ -66,7 +163,23 @@
           <description>object.png</description>
         </parameter>
       </parameters>
-      <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
+      <description><![CDATA[> Two line
+> quote
+
+Offsets are time values to be added to local
+time to get Coordinated Universal Time (UTC) and should be
+<literal>"[±]hh[[:]mm[:ss]]"</literal>.  Dates are either
+<literal>"Jn"</literal> (Julian day with n between 1 and 365, leap
+years not counted), <literal>"n"</literal> (zero-based Julian day
+with n between 0 and 365) or <literal>"Mm.w.d"</literal> (day d
+(0 <= d <= 6) of week w (1 <= w <= 5) of month m (1 <= m <= 12), day
+0 is a Sunday).  Times are in local wall clock time, the default is
+02:00:00.
+
+<literal>lang_COUNTRY@MODIFIER</literal>
+<literal>lang_COUNTRY\@MODIFIER</literal>
+
+This file contains non-sense code for the sole purpose of testing the docs.
 We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
 signal.
 
@@ -80,11 +193,15 @@ whole lifecycle usualy looks like shown in this example:
 GObject *myobj;
 
 myobj = gtkdoc_object_new();
-// do somehing
+// do something
 g_object_unref (myobj);
 ]|
 
-# Examples #
+# Examples # {#examples}
+
+Here are a few examples.
+
+## Example 1 ##
 
 You can also change parameters:
 <informalexample>
@@ -92,12 +209,88 @@ You can also change parameters:
 </informalexample>
 
 This example serves two main purposes:
-- testing conversion (long description
-  follows here)
+
+- `test`ing conversion (`long description
+  follows here`)
+
 - catching bugs
+
+  [GTK](http://www.gtk.org) ![Some image](home.png)
+
 - having an example
 
-Nothing more to say.]]></description>
+# Discussion
+
+This is a section with a heading without a trailing hash mark.
+
+> Do not confuse the GtkUIManager UI Definitions described here with
+> the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
+> Definitions</link>.
+
+> Single line quote
+
+<orderedlist>
+<listitem><para>
+This list is here to ensure the parsing of the above list
+</para></listitem>
+<listitem><para>
+Doesn't change it.
+</para></listitem>
+</orderedlist>
+
+This example serves two main purposes:
+
+* testing alternate list syntax
+
+  Don't match this as a link [ style | binding ][ : <replaceable>priority</replaceable> ]
+
+* not sure if we want this one
+
+  A link <http://en.wikipedia.org/wiki/MOS_Technology_SID#Technical_details>
+
+<refsect3><title>An embedded docbook section</title>
+<para>Some stuff</para>
+
+- A list
+
+- that is not recognised as markdown
+
+</refsect3>
+
+# Coda # {#this-is-an-id-tag}
+
+- One
+- Two
+- Three
+
+1. This is a ordered list
+
+1. This is a code block in a list:
+   |[{{!-- language="C" --!}}
+   GObject *myobj;
+
+   myobj = gtkdoc_object_new();
+   // do something
+   g_object_unref (myobj);
+   ]|
+   And another:
+   |[{{!-- language="C" --!}}
+   GObject *myobj;
+
+   myobj = gtkdoc_object_new();
+   /&ast; do something &ast;/
+   g_object_unref (myobj);
+   ]|
+
+1. Really
+
+   Has a paragraph with a [link to the examples][examples].
+
+1. Is
+
+Nothing more to say. Except one more link:
+
+<http://www.gnome.org/>]]></description>
     </docblock>
   </parser>
   <output><![CDATA[/**
@@ -106,6 +299,22 @@ Nothing more to say.]]></description>
  * @short_description: class for gtk-doc unit test
  * @see_also: #GtkdocIface
  * @Image: object.png
+ *
+ * > Two line
+ * > quote
+ *
+ * Offsets are time values to be added to local
+ * time to get Coordinated Universal Time (UTC) and should be
+ * <literal>"[±]hh[[:]mm[:ss]]"</literal>.  Dates are either
+ * <literal>"Jn"</literal> (Julian day with n between 1 and 365, leap
+ * years not counted), <literal>"n"</literal> (zero-based Julian day
+ * with n between 0 and 365) or <literal>"Mm.w.d"</literal> (day d
+ * (0 <= d <= 6) of week w (1 <= w <= 5) of month m (1 <= m <= 12), day
+ * 0 is a Sunday).  Times are in local wall clock time, the default is
+ * 02:00:00.
+ *
+ * <literal>lang_COUNTRY@MODIFIER</literal>
+ * <literal>lang_COUNTRY\@MODIFIER</literal>
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
  * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
@@ -121,11 +330,15 @@ Nothing more to say.]]></description>
  * GObject *myobj;
  *
  * myobj = gtkdoc_object_new();
- * // do somehing
+ * // do something
  * g_object_unref (myobj);
  * ]|
  *
- * # Examples #
+ * # Examples # {#examples}
+ *
+ * Here are a few examples.
+ *
+ * ## Example 1 ##
  *
  * You can also change parameters:
  * <informalexample>
@@ -133,12 +346,88 @@ Nothing more to say.]]></description>
  * </informalexample>
  *
  * This example serves two main purposes:
- * - testing conversion (long description
- *   follows here)
+ *
+ * - `test`ing conversion (`long description
+ *   follows here`)
+ *
  * - catching bugs
+ *
+ *   [GTK](http://www.gtk.org) ![Some image](home.png)
+ *
  * - having an example
  *
- * Nothing more to say.
+ * # Discussion
+ *
+ * This is a section with a heading without a trailing hash mark.
+ *
+ * > Do not confuse the GtkUIManager UI Definitions described here with
+ * > the similarly named <link linkend="BUILDER-UI">GtkBuilder UI
+ * > Definitions</link>.
+ *
+ * > Single line quote
+ *
+ * <orderedlist>
+ * <listitem><para>
+ * This list is here to ensure the parsing of the above list
+ * </para></listitem>
+ * <listitem><para>
+ * Doesn't change it.
+ * </para></listitem>
+ * </orderedlist>
+ *
+ * This example serves two main purposes:
+ *
+ * * testing alternate list syntax
+ *
+ *   Don't match this as a link [ style | binding ][ : <replaceable>priority</replaceable> ]
+ *
+ * * not sure if we want this one
+ *
+ *   A link <http://en.wikipedia.org/wiki/MOS_Technology_SID#Technical_details>
+ *
+ * <refsect3><title>An embedded docbook section</title>
+ * <para>Some stuff</para>
+ *
+ * - A list
+ *
+ * - that is not recognised as markdown
+ *
+ * </refsect3>
+ *
+ * # Coda # {#this-is-an-id-tag}
+ *
+ * - One
+ * - Two
+ * - Three
+ *
+ * 1. This is a ordered list
+ *
+ * 1. This is a code block in a list:
+ *    |[{{!-- language="C" --!}}
+ *    GObject *myobj;
+ *
+ *    myobj = gtkdoc_object_new();
+ *    // do something
+ *    g_object_unref (myobj);
+ *    ]|
+ *    And another:
+ *    |[{{!-- language="C" --!}}
+ *    GObject *myobj;
+ *
+ *    myobj = gtkdoc_object_new();
+ *    /&ast; do something &ast;/
+ *    g_object_unref (myobj);
+ *    ]|
+ *
+ * 1. Really
+ *
+ *    Has a paragraph with a [link to the examples][examples].
+ *
+ * 1. Is
+ *
+ * Nothing more to say. Except one more link:
+ *
+ * <http://www.gnome.org/>
  */]]></output>
 </test>
 
@@ -155,6 +444,7 @@ Nothing more to say.]]></description>
  * =========
  *
  * All the internal details go here or not:
+ *
  * - single item list
  */</input>
   <parser>
@@ -182,6 +472,7 @@ Internals
 =========
 
 All the internal details go here or not:
+
 - single item list</description>
     </docblock>
   </parser>
@@ -197,7 +488,43 @@ All the internal details go here or not:
  * =========
  *
  * All the internal details go here or not:
+ *
  * - single item list
+ */</output>
+</test>
+
+<test>
+  <input>/**
+ * SECTION:object3
+ * @title: GtkdocObject3
+ * @short_description: class that is mostly undocumented
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:object3</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>title</name>
+          <description>GtkdocObject3</description>
+        </parameter>
+        <parameter>
+          <name>short_description</name>
+          <description>class that is mostly undocumented</description>
+        </parameter>
+      </parameters>
+      <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * SECTION:object3
+ * @title: GtkdocObject3
+ * @short_description: class that is mostly undocumented
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
  */</output>
 </test>
 
@@ -417,6 +744,45 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 
 <test>
   <input>/**
+ * gtkdoc_object_do_not_use:
+ * @self: the object
+ *
+ * Test a deprecation without additional message.
+ *
+ * Deprecated: 3.10
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>gtkdoc_object_do_not_use</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>the object</description>
+        </parameter>
+      </parameters>
+      <description>Test a deprecation without additional message.</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <value>3.10</value>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+  <output>/**
+ * gtkdoc_object_do_not_use:
+ * @self: the object
+ *
+ * Test a deprecation without additional message.
+ *
+ * Deprecated: 3.10
+ */</output>
+</test>
+
+<test>
+  <input>  /**
    * GtkdocObject::otest:
    * @self: myself
    *
@@ -445,7 +811,7 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 </test>
 
 <test>
-  <input>/**
+  <input>  /**
    * GtkdocObject::dep-otest:
    * @self: myself
    *
@@ -520,7 +886,7 @@ otest_callback (GObject  *o,
 </test>
 
 <test>
-  <input>/**
+  <input>  /**
    * GtkdocObject::strings-changed:
    *
    * Something has happened.
@@ -541,7 +907,7 @@ otest_callback (GObject  *o,
 </test>
 
 <test>
-  <input>/**
+  <input>  /**
    * GtkdocObject::variant-changed:
    *
    * Something has happened.
@@ -562,8 +928,8 @@ otest_callback (GObject  *o,
 </test>
 
 <test>
-  <input>/**
-   * GtkdocObject:otest:
+  <input>  /**
+   * GtkdocObject:otest: (type GList(GtkdocObject2))
    *
    * Since: 0.1
    */</input>
@@ -571,6 +937,16 @@ otest_callback (GObject  *o,
     <docblock>
       <identifier>
         <name>GtkdocObject:otest</name>
+        <annotations>
+          <annotation>
+            <name>type</name>
+            <options>
+              <option>
+                <name>GList(GtkdocObject2)</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
       </identifier>
       <tags>
         <tag>
@@ -581,14 +957,14 @@ otest_callback (GObject  *o,
     </docblock>
   </parser>
   <output>  /**
-   * GtkdocObject:otest:
+   * GtkdocObject:otest: (type GList(GtkdocObject2))
    *
    * Since: 0.1
    */</output>
 </test>
 
 <test>
-  <input>/**
+  <input>  /**
    * GtkdocObject:dep-otest:
    *
    * Deprecated: use #GtkdocObject:otest property

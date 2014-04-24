@@ -165,6 +165,35 @@
 
 <test>
   <input>/**
+ * bug_411739_rettype:
+ * @test: field
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=411739
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_411739_rettype</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>test</name>
+          <description>field</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=411739</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * bug_411739_rettype:
+ * @test: field
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=411739
+ */</output>
+</test>
+
+<test>
+  <input>/**
  * Bug446648:
  * @BUG_446648_FOO: field
  *
@@ -919,6 +948,68 @@ but not if we remove the blank line before "int b";</description>
  * BUG_656946:
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656946
+ */</output>
+</test>
+
+<test>
+  <input>/**
+ * BUG_731417_DEPRECATED:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=731417
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>BUG_731417_DEPRECATED</name>
+      </identifier>
+      <description>https://bugzilla.gnome.org/show_bug.cgi?id=731417</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * BUG_731417_DEPRECATED:
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=731417
+ */</output>
+</test>
+
+<test>
+  <input>/**
+ * Bug730658:
+ * @BUG_730658_CAN_READ: Can read
+ * @BUG_730658_CAN_WRITE: Can write
+ * @BUG_730658_IS_DEPRECATED: Is deprecated
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=730658
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug730658</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>BUG_730658_CAN_READ</name>
+          <description>Can read</description>
+        </parameter>
+        <parameter>
+          <name>BUG_730658_CAN_WRITE</name>
+          <description>Can write</description>
+        </parameter>
+        <parameter>
+          <name>BUG_730658_IS_DEPRECATED</name>
+          <description>Is deprecated</description>
+        </parameter>
+      </parameters>
+      <description>https://bugzilla.gnome.org/show_bug.cgi?id=730658</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * Bug730658:
+ * @BUG_730658_CAN_READ: Can read
+ * @BUG_730658_CAN_WRITE: Can write
+ * @BUG_730658_IS_DEPRECATED: Is deprecated
+ *
+ * https://bugzilla.gnome.org/show_bug.cgi?id=730658
  */</output>
 </test>
 

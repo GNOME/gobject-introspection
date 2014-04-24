@@ -973,6 +973,8 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  * bug_624001a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</input>
   <parser>
     <docblock>
@@ -980,12 +982,20 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
         <name>bug_624001a</name>
       </identifier>
       <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>Use main() instead.</description>
+        </tag>
+      </tags>
     </docblock>
   </parser>
   <output>/**
  * bug_624001a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</output>
 </test>
 
@@ -994,6 +1004,8 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  * bug_624001b:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</input>
   <parser>
     <docblock>
@@ -1001,12 +1013,20 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
         <name>bug_624001b</name>
       </identifier>
       <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>Use main() instead.</description>
+        </tag>
+      </tags>
     </docblock>
   </parser>
   <output>/**
  * bug_624001b:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</output>
 </test>
 
@@ -1015,6 +1035,8 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  * bug_624001c:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</input>
   <parser>
     <docblock>
@@ -1022,12 +1044,20 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
         <name>bug_624001c</name>
       </identifier>
       <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>Use main() instead.</description>
+        </tag>
+      </tags>
     </docblock>
   </parser>
   <output>/**
  * bug_624001c:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</output>
 </test>
 
@@ -1036,6 +1066,8 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  * bug_624001d:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</input>
   <parser>
     <docblock>
@@ -1043,12 +1075,20 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
         <name>bug_624001d</name>
       </identifier>
       <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>Use main() instead.</description>
+        </tag>
+      </tags>
     </docblock>
   </parser>
   <output>/**
  * bug_624001d:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</output>
 </test>
 
@@ -1057,6 +1097,8 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  * bug_624001e:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
  */</input>
   <parser>
     <docblock>
@@ -1064,12 +1106,41 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
         <name>bug_624001e</name>
       </identifier>
       <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>Use main() instead.</description>
+        </tag>
+      </tags>
     </docblock>
   </parser>
   <output>/**
  * bug_624001e:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ *
+ * Deprecated: Use main() instead.
+ */</output>
+</test>
+
+<test>
+  <input>/**
+ * bug_711598:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=711598
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_711598</name>
+      </identifier>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=711598</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * bug_711598:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=711598
  */</output>
 </test>
 
@@ -1103,6 +1174,127 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  *
  * Deprecated: 3.10: Use named icon "bar" instead.
  */</output>
+</test>
+
+<test>
+  <input>/**
+ * bug_741941:
+ * @object: the object
+ * @par: parameter
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=741941
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_741941</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>object</name>
+          <description>the object</description>
+        </parameter>
+        <parameter>
+          <name>par</name>
+          <description>parameter</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=741941</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * bug_741941:
+ * @object: the object
+ * @par: parameter
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=741941
+ */</output>
+</test>
+
+<test>
+  <input><![CDATA[/**
+ * bug_732689:
+ * @spec: the string specifying the color.
+ *
+ * Parses a textual specification of a color and fill in the
+ * <structfield>red</structfield>, <structfield>green</structfield>,
+ * and <structfield>blue</structfield> fields of a color.
+ **/]]></input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_732689</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>spec</name>
+          <description>the string specifying the color.</description>
+        </parameter>
+      </parameters>
+      <description><![CDATA[Parses a textual specification of a color and fill in the
+<structfield>red</structfield>, <structfield>green</structfield>,
+and <structfield>blue</structfield> fields of a color.]]></description>
+    </docblock>
+  </parser>
+  <output><![CDATA[/**
+ * bug_732689:
+ * @spec: the string specifying the color.
+ *
+ * Parses a textual specification of a color and fill in the
+ * <structfield>red</structfield>, <structfield>green</structfield>,
+ * and <structfield>blue</structfield> fields of a color.
+ */]]></output>
+</test>
+
+<test>
+  <input><![CDATA[/**
+ * bug_749142:
+ *
+ * The message's structure contains one field:
+ * <itemizedlist>
+ * <listitem><para>int timeout: the timeout.</para></listitem>
+ * </itemizedlist>
+ *
+ * <refsect3>
+ * <title>Example usage</title>
+ * |[
+ * echo "Hello" | foo
+ * ]|
+ * </refsect3>
+ **/]]></input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_749142</name>
+      </identifier>
+      <description><![CDATA[The message's structure contains one field:
+<itemizedlist>
+<listitem><para>int timeout: the timeout.</para></listitem>
+</itemizedlist>
+
+<refsect3>
+<title>Example usage</title>
+|[
+echo "Hello" | foo
+]|
+</refsect3>]]></description>
+    </docblock>
+  </parser>
+  <output><![CDATA[/**
+ * bug_749142:
+ *
+ * The message's structure contains one field:
+ * <itemizedlist>
+ * <listitem><para>int timeout: the timeout.</para></listitem>
+ * </itemizedlist>
+ *
+ * <refsect3>
+ * <title>Example usage</title>
+ * |[
+ * echo "Hello" | foo
+ * ]|
+ * </refsect3>
+ */]]></output>
 </test>
 
 </tests>

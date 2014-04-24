@@ -44,7 +44,6 @@ gtk-doc/*.xml:
   GTK-Doc tests originally taken at revision:
   http://git.gnome.org/browse/gtk-doc/tree/tests?id=2a6b01253fe41412172a60f26705114b953d0a95
   and should be updated regularly to reflect changes in the GTK-Doc project.
-    - updated 2013/07/30 to 1846fc7e904f6f56b74c366d205d6bb946eac17e
 
 gobject-introspection/*.xml:
   GTK-Doc comment blocks specifically designed to ensure GtkDocCommentBlockParser does the
