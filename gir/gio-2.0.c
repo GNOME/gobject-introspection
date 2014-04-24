@@ -18,7 +18,7 @@
  * GAction:name:
  *
  * The name of the action.  This is mostly meaningful for identifying
- * the action once it has been added to a #GActionGroup.
+ * the action once it has been added to a #GActionGroup. It is immutable.
  *
  * Since: 2.28
  */
@@ -28,7 +28,8 @@
  * GAction:parameter-type:
  *
  * The type of the parameter that must be given when activating the
- * action.
+ * action. This is immutable, and may be %NULL if no parameter is needed when
+ * activating the action.
  *
  * Since: 2.28
  */
@@ -47,7 +48,7 @@
  * GAction:state-type:
  *
  * The #GVariantType of the state that the action has, or %NULL if the
- * action is stateless.
+ * action is stateless. This is immutable.
  *
  * Since: 2.28
  */
@@ -3680,7 +3681,7 @@
  * (using g_file_get_path()) when using g_app_info_launch() even if
  * the application requested an URI and not a POSIX path. For example
  * for an desktop-file based application with Exec key `totem
- * \%U` and a single URI, `sftp://foo/file.avi`, then
+ * %U` and a single URI, `sftp://foo/file.avi`, then
  * `/home/user/.gvfs/sftp on foo/file.avi` will be passed. This will
  * only work if a set of suitable GIO extensions (such as gvfs 2.26
  * compiled with FUSE support), is available and operational; if this
@@ -6943,6 +6944,10 @@
  * command-line utility that uses #GSocket, you may need to take into
  * account the fact that your program will not automatically be killed
  * if it tries to write to %stdout after it has been closed.
+ *
+ * Like most other APIs in GLib, #GSocket is not inherently thread safe. To use
+ * a #GSocket concurrently from multiple threads, you must implement your own
+ * locking.
  *
  * Since: 2.22
  */
@@ -19408,8 +19413,9 @@
  * asynchronously. For details of the behaviour, see g_file_copy().
  *
  * If @progress_callback is not %NULL, then that function that will be called
- * just like in g_file_copy(), however the callback will run in the main loop,
- * not in the thread that is doing the I/O operation.
+ * just like in g_file_copy(). The callback will run in the default main context
+ * of the thread calling g_file_copy_async() — the same context as @callback is
+ * run in.
  *
  * When the operation is finished, @callback will be called. You can then call
  * g_file_copy_finish() to get the result of the operation.
@@ -23387,7 +23393,7 @@
  *   (such as `/path/to/my icon.png`) without escaping
  *   if the #GFile for @icon is a native file.  If the file is not
  *   native, the returned string is the result of g_file_get_uri()
- *   (such as `sftp://path/to/my\%20icon.png`).
+ *   (such as `sftp://path/to/my%20icon.png`).
  *
  * - If @icon is a #GThemedIcon with exactly one name, the encoding is
  *    simply the name (such as `network-server`).
@@ -24284,7 +24290,10 @@
  * g_io_error_from_errno:
  * @err_no: Error number as defined in errno.h.
  *
- * Converts errno.h error codes into GIO error codes.
+ * Converts errno.h error codes into GIO error codes. The fallback
+ * value %G_IO_ERROR_FAILED is returned for error codes not currently
+ * handled (but note that future GLib releases may return a more
+ * specific value instead).
  *
  * Returns: #GIOErrorEnum value for the given errno.h error number.
  */
@@ -24294,9 +24303,15 @@
  * g_io_error_from_win32_error:
  * @error_code: Windows error number.
  *
- * Converts some common error codes into GIO error codes. The
- * fallback value G_IO_ERROR_FAILED is returned for error codes not
- * handled.
+ * Converts some common error codes (as returned from GetLastError()
+ * or WSAGetLastError()) into GIO error codes. The fallback value
+ * %G_IO_ERROR_FAILED is returned for error codes not currently
+ * handled (but note that future GLib releases may return a more
+ * specific value instead).
+ *
+ * You can use g_win32_error_message() to get a localized string
+ * corresponding to @error_code. (But note that unlike g_strerror(),
+ * g_win32_error_message() returns a string that must be freed.)
  *
  * Returns: #GIOErrorEnum value for the given error number.
  * Since: 2.26
@@ -27012,15 +27027,15 @@
  * @notification: a #GNotification
  * @label: label of the button
  * @action: an action name
- * @target_format: (allow-none): a GVariant format string, or %NULL
- * @...: positional parameters, as determined by @format_string
+ * @target_format: (allow-none): a #GVariant format string, or %NULL
+ * @...: positional parameters, as determined by @target_format
  *
  * Adds a button to @notification that activates @action when clicked.
  * @action must be an application-wide action (it must start with "app.").
  *
  * If @target_format is given, it is used to collect remaining
- * positional parameters into a GVariant instance, similar to
- * g_variant_new(). @action will be activated with that GVariant as its
+ * positional parameters into a #GVariant instance, similar to
+ * g_variant_new(). @action will be activated with that #GVariant as its
  * parameter.
  *
  * Since: 2.40
@@ -27032,7 +27047,7 @@
  * @notification: a #GNotification
  * @label: label of the button
  * @action: an action name
- * @target: (allow-none): a GVariant to use as @action's parameter, or %NULL
+ * @target: (allow-none): a #GVariant to use as @action's parameter, or %NULL
  *
  * Adds a button to @notification that activates @action when clicked.
  * @action must be an application-wide action (it must start with "app.").
@@ -27096,16 +27111,16 @@
  * g_notification_set_default_action_and_target: (skip)
  * @notification: a #GNotification
  * @action: an action name
- * @target_format: (allow-none): a GVariant format string, or %NULL
- * @...: positional parameters, as determined by @format_string
+ * @target_format: (allow-none): a #GVariant format string, or %NULL
+ * @...: positional parameters, as determined by @target_format
  *
  * Sets the default action of @notification to @action. This action is
  * activated when the notification is clicked on. It must be an
  * application-wide action (it must start with "app.").
  *
  * If @target_format is given, it is used to collect remaining
- * positional parameters into a GVariant instance, similar to
- * g_variant_new(). @action will be activated with that GVariant as its
+ * positional parameters into a #GVariant instance, similar to
+ * g_variant_new(). @action will be activated with that #GVariant as its
  * parameter.
  *
  * When no default action is set, the application that the notification
@@ -27119,15 +27134,11 @@
  * g_notification_set_default_action_and_target_value: (rename-to g_notification_set_default_action_and_target)
  * @notification: a #GNotification
  * @action: an action name
- * @target: (allow-none): a GVariant to use as @action's parameter, or %NULL
+ * @target: (allow-none): a #GVariant to use as @action's parameter, or %NULL
  *
  * Sets the default action of @notification to @action. This action is
  * activated when the notification is clicked on. It must be an
  * application-wide action (start with "app.").
- *
- * If @target_format is given, it is used to collect remaining
- * positional parameters into a GVariant instance, similar to
- * g_variant_new().
  *
  * If @target is non-%NULL, @action will be activated with @target as
  * its parameter.
@@ -30277,9 +30288,10 @@
  * g_settings_schema_source_list_schemas:
  * @source: a #GSettingsSchemaSource
  * @recursive: if we should recurse
- * @non_relocatable: (out) (transfer full): the list of non-relocatable
- *   schemas
- * @relocatable: (out) (transfer full): the list of relocatable schemas
+ * @non_relocatable: (out) (transfer full) (array zero-terminated=1): the
+ *   list of non-relocatable schemas
+ * @relocatable: (out) (transfer full) (array zero-terminated=1): the list
+ *   of relocatable schemas
  *
  * Lists the schemas in a given source.
  *
@@ -38249,31 +38261,6 @@
  *
  * Returns: a new #GZlibDecompressor
  * Since: 2.24
- */
-
-
-/**
- * get_all_desktop_entries_for_mime_type:
- * @mime_type: a mime type.
- * @except: NULL or a strv list
- *
- * Returns all the desktop ids for @mime_type. The desktop files
- * are listed in an order so that default applications are listed before
- * non-default ones, and handlers for inherited mimetypes are listed
- * after the base ones.
- *
- * Optionally doesn't list the desktop ids given in the @except
- *
- * Returns: a #GList containing the desktop ids which claim
- *    to handle @mime_type.
- */
-
-
-/**
- * mime_info_cache_reload:
- * @dir: directory path which needs reloading.
- *
- * Reload the mime information for the @dir.
  */
 
 

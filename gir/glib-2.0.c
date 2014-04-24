@@ -5717,7 +5717,11 @@
  * - If there's a "generic" or "unknown" error code for unrecoverable
  *   errors it doesn't make sense to distinguish with specific codes,
  *   it should be called <NAMESPACE>_<MODULE>_ERROR_FAILED,
- *   for example %G_SPAWN_ERROR_FAILED.
+ *   for example %G_SPAWN_ERROR_FAILED. In the case of error code
+ *   enumerations that may be extended in future releases, you should
+ *   generally not handle this error code explicitly, but should
+ *   instead treat any unrecognized error code as equivalent to
+ *   FAILED.
  *
  * Summary of rules for use of #GError:
  *
@@ -6381,7 +6385,8 @@
  *
  * Both the key and data are arbitrary byte arrays of bytes or characters.
  *
- * Support for HMAC Digests has been added in GLib 2.30.
+ * Support for HMAC Digests has been added in GLib 2.30, and support for SHA-512
+ * in GLib 2.42.
  */
 
 
@@ -6522,7 +6527,7 @@
  * Key-value pairs generally have the form `key=value`, with the
  * exception of localized strings, which have the form
  * `key[locale]=value`, with a locale identifier of the
- * form `lang_COUNTRY\@MODIFIER` where `COUNTRY` and `MODIFIER`
+ * form `lang_COUNTRY@MODIFIER` where `COUNTRY` and `MODIFIER`
  * are optional.
  * Space before and after the '=' character are ignored. Newline, tab,
  * carriage return and backslash characters in value are escaped as \n,
@@ -7257,7 +7262,7 @@
  *
  * The g_rand*_range functions will return high quality equally
  * distributed random numbers, whereas for example the
- * `(g_random_int()\%max)` approach often
+ * `(g_random_int()%max)` approach often
  * doesn't yield equally distributed numbers.
  *
  * GLib changed the seeding algorithm for the pseudo-random number
@@ -12887,7 +12892,7 @@
  * - \%C: the century number (year/100) as a 2-digit integer (00-99)
  * - \%d: the day of the month as a decimal number (range 01 to 31)
  * - \%e: the day of the month as a decimal number (range  1 to 31)
- * - \%F: equivalent to `\%Y-\%m-\%d` (the ISO 8601 date format)
+ * - \%F: equivalent to `%Y-%m-%d` (the ISO 8601 date format)
  * - \%g: the last two digits of the ISO 8601 week-based year as a
  *   decimal number (00-99). This works well with \%V and \%u.
  * - \%G: the ISO 8601 week-based year as a decimal number. This works
@@ -14042,6 +14047,13 @@
  * Returns %TRUE if @error matches @domain and @code, %FALSE
  * otherwise. In particular, when @error is %NULL, %FALSE will
  * be returned.
+ *
+ * If @domain contains a `FAILED` (or otherwise generic) error code,
+ * you should generally not check for it explicitly, but should
+ * instead treat any not-explicitly-recognized error code as being
+ * equilalent to the `FAILED` code. This way, if the domain is
+ * extended in the future to provide a more specific error code for
+ * a certain case, your code will still work.
  *
  * Returns: whether @error has @domain and @code
  */
@@ -15669,6 +15681,8 @@
  * g_hmac_get_digest() have been called on a #GHmac, the HMAC
  * will be closed and it won't be possible to call g_hmac_update()
  * on it anymore.
+ *
+ * Support for digests of type %G_CHECKSUM_SHA512 has been added in GLib 2.42.
  *
  * Returns: the newly created #GHmac, or %NULL.
  *   Use g_hmac_unref() to free the memory allocated by it.
@@ -30839,7 +30853,7 @@
  *
  * If a character passes the g_unichar_iswide() test then it will also pass
  * this test, but not the other way around.  Note that some characters may
- * pas both this test and g_unichar_iszerowidth().
+ * pass both this test and g_unichar_iszerowidth().
  *
  * Returns: %TRUE if the character is wide in legacy East Asian locales
  * Since: 2.12
@@ -35091,12 +35105,12 @@
  * g_win32_error_message:
  * @error: error code.
  *
- * Translate a Win32 error code (as returned by GetLastError()) into
- * the corresponding message. The message is either language neutral,
- * or in the thread's language, or the user's language, the system's
- * language, or US English (see docs for FormatMessage()). The
- * returned string is in UTF-8. It should be deallocated with
- * g_free().
+ * Translate a Win32 error code (as returned by GetLastError() or
+ * WSAGetLastError()) into the corresponding message. The message is
+ * either language neutral, or in the thread's language, or the user's
+ * language, the system's language, or US English (see docs for
+ * FormatMessage()). The returned string is in UTF-8. It should be
+ * deallocated with g_free().
  *
  * Returns: newly-allocated error message
  */
