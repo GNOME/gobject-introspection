@@ -20,6 +20,7 @@
 #
 
 from __future__ import absolute_import
+from __future__ import division
 
 import copy
 from itertools import chain

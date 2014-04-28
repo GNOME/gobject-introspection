@@ -108,6 +108,7 @@ Refer to the `GTK-Doc manual`_ for more detailed usage information.
 
 
 from __future__ import absolute_import
+from __future__ import division
 
 import os
 import re
