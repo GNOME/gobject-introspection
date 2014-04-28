@@ -236,7 +236,7 @@ class CCompiler(object):
                                      include_dirs=includes,
                                      extra_postargs=extra_postargs,
                                      output_dir=source_str[tmpdir_idx + 1:
-                                                           source_str.rfind(os.sep)])
+                                                           source_str.rfind(os.sep)].encode('UTF-8'))
 
     def link(self, output, objects, lib_args):
         # Note: This is used for non-libtool builds only!

@@ -110,6 +110,7 @@ Refer to the `GTK-Doc manual`_ for more detailed usage information.
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
 import re
@@ -1125,9 +1126,10 @@ class GtkDocCommentBlockParser(object):
         for (comment, filename, lineno) in comments:
             try:
                 comment_block = self.parse_comment_block(comment, filename, lineno)
-            except Exception:
+            except Exception as e:
                 error('unrecoverable parse error, please file a GObject-Introspection bug'
-                      'report including the complete comment block at the indicated location.',
+                      'report including the complete comment block at the indicated location. %s' %
+                      str(e),
                       Position(filename, lineno))
                 continue
 
