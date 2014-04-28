@@ -21,14 +21,36 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
+import sys
 import optparse
+import codecs
+from contextlib import contextmanager
 
 from giscanner import message
 from giscanner.annotationparser import GtkDocCommentBlockParser, GtkDocCommentBlockWriter
 from giscanner.scannermain import (get_preprocessor_option_group,
                                    create_source_scanner,
                                    process_packages)
+
+
+@contextmanager
+def encode_stdout(encoding):
+    """Force stdout into a specific encoding."""
+    # Python 2 does not encode stdout writes so wrap it with 'encoding' encoded writer.
+    # Python 3 uses a io.TextIOBase wrapped stdout with the system default encoding.
+    # Re-wrap the underlying buffer with a new writer with the given 'encoding'.
+    # See: https://docs.python.org/3/library/sys.html#sys.stdout
+    old_stdout = sys.stdout
+    if sys.version_info.major < 3:
+        binary_stdout = sys.stdout
+    else:
+        binary_stdout = sys.stdout.buffer
+
+    sys.stdout = codecs.getwriter(encoding)(binary_stdout)
+    yield
+    sys.stdout = old_stdout
 
 
 def annotation_main(args):
@@ -65,16 +87,18 @@ def annotation_main(args):
         parser = GtkDocCommentBlockParser()
         writer = GtkDocCommentBlockWriter(indent=False)
         blocks = parser.parse_comment_blocks(ss.get_comments())
-        print('/' + ('*' * 60) + '/')
-        print('/* THIS FILE IS GENERATED DO NOT EDIT */')
-        print('/' + ('*' * 60) + '/')
-        print('')
-        for block in sorted(blocks.values()):
-            print(writer.write(block))
+
+        with encode_stdout('utf-8'):
+            print('/' + ('*' * 60) + '/')
+            print('/* THIS FILE IS GENERATED DO NOT EDIT */')
+            print('/' + ('*' * 60) + '/')
             print('')
-        print('')
-        print('/' + ('*' * 60) + '/')
-        print('/* THIS FILE IS GENERATED DO NOT EDIT */')
-        print('/' + ('*' * 60) + '/')
+            for block in sorted(blocks.values()):
+                print(writer.write(block))
+                print('')
+            print('')
+            print('/' + ('*' * 60) + '/')
+            print('/* THIS FILE IS GENERATED DO NOT EDIT */')
+            print('/' + ('*' * 60) + '/')
 
     return 0

@@ -141,7 +141,7 @@ symbol_get_ident (PyGISourceSymbol *self,
       return Py_None;
     }
 
-  return PyString_FromString (self->symbol->ident);
+  return PyUnicode_FromString (self->symbol->ident);
 }
 
 static PyObject *
@@ -189,7 +189,7 @@ symbol_get_const_string (PyGISourceSymbol *self,
       return Py_None;
     }
 
-  return PyString_FromString (self->symbol->const_string);
+  return PyUnicode_FromString (self->symbol->const_string);
 }
 
 static PyObject *
@@ -215,7 +215,7 @@ symbol_get_source_filename (PyGISourceSymbol *self,
       return Py_None;
     }
 
-  return PyString_FromString (self->symbol->source_filename);
+  return PyUnicode_FromString (self->symbol->source_filename);
 }
 
 static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
@@ -296,7 +296,7 @@ type_get_name (PyGISourceType *self,
       return Py_None;
     }
 
-  return PyString_FromString (self->type->name);
+  return PyUnicode_FromString (self->type->name);
 }
 
 static PyObject *
@@ -593,10 +593,35 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self)
   for (l = comments; l; l = l->next)
     {
       GISourceComment *comment = l->data;
-      PyObject *item = Py_BuildValue ("(ssi)", comment->comment,
-                                      comment->filename,
-                                      comment->line);
+      PyObject *comment_obj;
+      PyObject *filename_obj;
+      PyObject *item;
+
+      if (comment->comment)
+        {
+          comment_obj = PyUnicode_FromString (comment->comment);
+        }
+      else
+        {
+          Py_INCREF (Py_None);
+          comment_obj = Py_None;
+        }
+
+      if (comment->filename)
+        {
+          filename_obj = PyUnicode_FromString (comment->filename);
+        }
+      else
+        {
+          Py_INCREF (Py_None);
+          filename_obj = Py_None;
+        }
+
+      item = Py_BuildValue ("(OOi)", comment_obj, filename_obj, comment->line);
       PyList_SetItem (list, i++, item);
+
+      Py_DECREF (comment_obj);
+      Py_DECREF (filename_obj);
     }
 
   g_slist_free (comments);

@@ -21,6 +21,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
 import sys
@@ -730,7 +731,7 @@ raise ValueError."""
         name = self._strip_symbol(symbol)
         if symbol.const_string is not None:
             typeval = ast.TYPE_STRING
-            value = unicode(symbol.const_string, 'utf-8')
+            value = symbol.const_string
         elif symbol.const_int is not None:
             if symbol.base_type is not None:
                 typeval = self._create_type_from_base(symbol.base_type)
