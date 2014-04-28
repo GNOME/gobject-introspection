@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
@@ -67,7 +68,7 @@ if __name__ == '__main__':
     else:
         builddir = srcdir
 
-    print "Using source directory: %r build directory: %r" % (srcdir, builddir)
+    print("Using source directory: %r build directory: %r" % (srcdir, builddir))
 
     modules = [{'name':         'glib',
                 'srcname':      '../gir/glib-2.0.c',
@@ -104,6 +105,6 @@ if __name__ == '__main__':
         srcfile.close()
         os.rename(tmpname, srcname)
 
-        print "Updated %r" % (srcname, )
+        print("Updated %r" % (srcname, ))
 
-    print "Done; run \"git diff\" to see any changes."
+    print("Done; run \"git diff\" to see any changes.")

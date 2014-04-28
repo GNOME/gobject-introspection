@@ -31,6 +31,7 @@ against the expected output.
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 from giscanner.annotationparser import (COMMENT_BLOCK_START_RE, COMMENT_BLOCK_END_RE,
                                         COMMENT_ASTERISK_RE, INDENTATION_RE, EMPTY_LINE_RE,

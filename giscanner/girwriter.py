@@ -22,6 +22,7 @@
 from __future__ import with_statement
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 from . import ast
 from .xmlwriter import XMLWriter
@@ -118,7 +119,7 @@ class GIRWriter(XMLWriter):
         elif isinstance(node, ast.Constant):
             self._write_constant(node)
         else:
-            print 'WRITER: Unhandled node', node
+            print('WRITER: Unhandled node', node)
 
     def _append_version(self, node, attrs):
         if node.version:

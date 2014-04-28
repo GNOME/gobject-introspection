@@ -20,6 +20,7 @@
 #
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 import os
 import sys
 import __builtin__
@@ -36,7 +37,7 @@ if debug:
             pydevd.settrace()
     else:
         def on_exception(exctype, value, tb):
-            print "Caught exception: %r %r" % (exctype, value)
+            print("Caught exception: %r %r" % (exctype, value))
             import pdb
             pdb.pm()
         sys.excepthook = on_exception

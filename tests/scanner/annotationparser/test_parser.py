@@ -27,6 +27,7 @@ Tests ensuring annotationparser.py continues to function correctly.
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import difflib
 import os

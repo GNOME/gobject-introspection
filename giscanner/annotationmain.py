@@ -20,6 +20,7 @@
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import optparse
 
@@ -64,16 +65,16 @@ def annotation_main(args):
         parser = GtkDocCommentBlockParser()
         writer = GtkDocCommentBlockWriter(indent=False)
         blocks = parser.parse_comment_blocks(ss.get_comments())
-        print '/' + ('*' * 60) + '/'
-        print '/* THIS FILE IS GENERATED DO NOT EDIT */'
-        print '/' + ('*' * 60) + '/'
-        print
+        print('/' + ('*' * 60) + '/')
+        print('/* THIS FILE IS GENERATED DO NOT EDIT */')
+        print('/' + ('*' * 60) + '/')
+        print('')
         for block in sorted(blocks.values()):
-            print writer.write(block)
-            print
-        print
-        print '/' + ('*' * 60) + '/'
-        print '/* THIS FILE IS GENERATED DO NOT EDIT */'
-        print '/' + ('*' * 60) + '/'
+            print(writer.write(block))
+            print('')
+        print('')
+        print('/' + ('*' * 60) + '/')
+        print('/* THIS FILE IS GENERATED DO NOT EDIT */')
+        print('/' + ('*' * 60) + '/')
 
     return 0

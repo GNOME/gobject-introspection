@@ -20,6 +20,7 @@
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
@@ -381,7 +382,7 @@ raise ValueError."""
         elif stype == CSYMBOL_TYPE_OBJECT:
             pass
         else:
-            print 'transformer: unhandled symbol: %r' % (symbol, )
+            print('transformer: unhandled symbol: %r' % (symbol, ))
 
     def _enum_common_prefix(self, symbol):
         def common_prefix(a, b):

@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import re
 import os
@@ -38,13 +39,13 @@ for line in f:
     continue
   v = int(m.group(1))
   newv = v+1
-  print "Will update micro version from %s to %s" % (v, newv)
+  print("Will update micro version from %s to %s" % (v, newv))
   newf.write(micro_version_replace % (newv, ))
 newf.close()
 
 os.rename(configure_path + '.tmp', configure_path)
-print "Successfully wrote new 'configure.ac' with post-release version bump"
+print("Successfully wrote new 'configure.ac' with post-release version bump")
 
 args=['git', 'commit', '-m', "configure: Post-release version bump", configure_path]
-print "Running: %r" % (args, )
+print("Running: %r" % (args, ))
 subprocess.check_call(args)

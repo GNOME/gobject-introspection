@@ -19,6 +19,7 @@
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import re
 
@@ -825,7 +826,7 @@ class MainTransformer(object):
         try:
             self._adjust_container_type(parent, field, tag.annotations)
         except AttributeError as ex:
-            print ex
+            print(ex)
 
     def _apply_annotations_property(self, parent, prop):
         prefix = self._get_annotation_name(parent)

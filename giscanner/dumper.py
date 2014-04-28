@@ -21,6 +21,7 @@
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import os
 import sys
@@ -294,8 +295,8 @@ class DumpCompiler(object):
             # libtool: Run the assembled link command, we don't use distutils
             # for linking here.
             if not self._options.quiet:
-                print "g-ir-scanner: link: %s" % (
-                    subprocess.list2cmdline(args), )
+                print("g-ir-scanner: link: %s" % (
+                    subprocess.list2cmdline(args), ))
                 sys.stdout.flush()
             msys = os.environ.get('MSYSTEM', None)
             if msys:

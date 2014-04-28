@@ -22,6 +22,7 @@
 
 from __future__ import absolute_import
 from __future__ import division
+from __future__ import print_function
 
 import errno
 import optparse
@@ -345,8 +346,8 @@ def extract_filelist(options):
 
 def create_namespace(options):
     if options.strip_prefix:
-        print """g-ir-scanner: warning: Option --strip-prefix has been deprecated;
-see --identifier-prefix and --symbol-prefix."""
+        print("""g-ir-scanner: warning: Option --strip-prefix has been deprecated;
+see --identifier-prefix and --symbol-prefix.""")
         options.identifier_prefixes.append(options.strip_prefix)
 
     # We do this dance because the empty list has different semantics from
@@ -549,8 +550,9 @@ def scanner_main(args):
         message.fatal("warnings configured as fatal")
         return 1
     elif warning_count > 0 and options.warn_all is False:
-        print ("g-ir-scanner: %s: warning: %d warnings suppressed (use --warn-all to see them)"
-               % (transformer.namespace.name, warning_count, ))
+        print("g-ir-scanner: %s: warning: %d warnings suppressed "
+              "(use --warn-all to see them)" %
+              (transformer.namespace.name, warning_count, ))
 
     # Write out AST
     if options.packages_export:
