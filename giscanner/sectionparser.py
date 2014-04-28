@@ -17,6 +17,8 @@
 # Boston, MA 02111-1307, USA.
 #
 
+from __future__ import absolute_import
+
 import re
 from . import ast
 from .utils import to_underscores

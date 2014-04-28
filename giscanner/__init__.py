@@ -17,7 +17,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 #
-
+from __future__ import absolute_import
 import os
 builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
 if builddir is not None:

@@ -3,6 +3,7 @@
 # e.g.:
 #   ./update-glib-annotations.py ../../glib ../../glib/_build
 
+from __future__ import absolute_import
 
 import os
 import sys

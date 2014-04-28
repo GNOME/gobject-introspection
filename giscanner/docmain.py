@@ -18,6 +18,8 @@
 # 02110-1301, USA.
 #
 
+from __future__ import absolute_import
+
 import os
 import argparse
 

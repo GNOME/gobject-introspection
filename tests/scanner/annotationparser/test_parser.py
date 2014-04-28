@@ -25,6 +25,7 @@ test_parser.py
 Tests ensuring annotationparser.py continues to function correctly.
 '''
 
+from __future__ import absolute_import
 
 import difflib
 import os

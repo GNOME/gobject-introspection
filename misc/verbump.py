@@ -3,6 +3,8 @@
 # * Create a git tag
 # * Bump version in configure.ac and commit it
 
+from __future__ import absolute_import
+
 import re
 import os
 import sys

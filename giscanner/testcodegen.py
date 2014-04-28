@@ -18,6 +18,8 @@
 # Boston, MA 02111-1307, USA.
 #
 
+from __future__ import absolute_import
+
 from StringIO import StringIO
 from . import ast
 from .codegen import CCodeGenerator

@@ -18,7 +18,6 @@
 # 02110-1301, USA.
 #
 
-
 '''
 test_patterns.py
 
@@ -30,6 +29,7 @@ should match, resulting symbolic groups are verified
 against the expected output.
 '''
 
+from __future__ import absolute_import
 
 from giscanner.annotationparser import (COMMENT_BLOCK_START_RE, COMMENT_BLOCK_END_RE,
                                         COMMENT_ASTERISK_RE, INDENTATION_RE, EMPTY_LINE_RE,

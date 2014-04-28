@@ -18,6 +18,8 @@
 # Boston, MA 02111-1307, USA.
 #
 
+from __future__ import absolute_import
+
 import os
 import sys
 import subprocess
