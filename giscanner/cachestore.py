@@ -50,7 +50,8 @@ def _get_versionhash():
     sources.append(sys.argv[0])
     # Using mtimes is a bit (5x) faster than hashing the file contents
     mtimes = (str(os.stat(source).st_mtime) for source in sources)
-    return hashlib.sha1(''.join(mtimes)).hexdigest()
+    # ASCII encoding is sufficient since we are only dealing with numbers.
+    return hashlib.sha1(''.join(mtimes).encode('ascii')).hexdigest()
 
 
 class CacheStore(object):
@@ -108,7 +109,9 @@ class CacheStore(object):
         # the cache all together.
         if self._directory is None:
             return
-        hexdigest = hashlib.sha1(filename).hexdigest()
+        # Assume UTF-8 encoding for the filenames. This doesn't matter so much
+        # as long as the results of this method always produce the same hash.
+        hexdigest = hashlib.sha1(filename.encode('utf-8')).hexdigest()
         return os.path.join(self._directory, hexdigest)
 
     def _cache_is_valid(self, store_filename, filename):
