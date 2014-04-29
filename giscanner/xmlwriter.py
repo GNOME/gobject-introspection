@@ -25,12 +25,18 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
+import sys
 
 from contextlib import contextmanager
-from cStringIO import StringIO
 from xml.sax.saxutils import escape
 
 from .libtoolimporter import LibtoolImporter
+
+if sys.version_info.major < 3:
+    from StringIO import StringIO
+else:
+    from io import StringIO
+    unicode = str
 
 
 with LibtoolImporter(None, None):
@@ -62,8 +68,12 @@ def build_xml_tag(tag_name, attributes=None, data=None, self_indent=0,
 class XMLWriter(object):
 
     def __init__(self):
+        # Build up the XML buffer as unicode strings. When writing to disk,
+        # we can assume the lack of a Byte Order Mark (BOM) and lack
+        # of an "encoding" xml property means utf-8.
+        # See: http://www.opentag.com/xfaq_enc.htm#enc_default
         self._data = StringIO()
-        self._data.write(b'<?xml version="1.0"?>\n')
+        self._data.write('<?xml version="1.0"?>\n')
         self._tag_stack = []
         self._indent = 0
         self._indent_unit = 2
@@ -92,7 +102,12 @@ class XMLWriter(object):
         self._newline_char = ''
 
     def get_xml(self):
+        """Returns a unicode string containing the XML."""
         return self._data.getvalue()
+
+    def get_encoded_xml(self):
+        """Returns a utf-8 encoded bytes object containing the XML."""
+        return self._data.getvalue().encode('utf-8')
 
     def write_line(self, line='', indent=True, do_escape=False):
         if isinstance(line, bytes):
@@ -101,11 +116,11 @@ class XMLWriter(object):
         if do_escape:
             line = escape(line)
         if indent:
-            self._data.write(('%s%s%s' % (self._indent_char * self._indent,
-                                          line,
-                                          self._newline_char)).encode('UTF-8'))
+            self._data.write('%s%s%s' % (self._indent_char * self._indent,
+                                         line,
+                                         self._newline_char))
         else:
-            self._data.write(('%s%s' % (line, self._newline_char)).encode('UTF-8'))
+            self._data.write('%s%s' % (line, self._newline_char))
 
     def write_comment(self, text):
         self.write_line('<!-- %s -->' % (text, ))
