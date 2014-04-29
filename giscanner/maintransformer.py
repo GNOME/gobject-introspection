@@ -747,7 +747,7 @@ class MainTransformer(object):
         field.doc = tag.description
         try:
             self._adjust_container_type(parent, field, tag.annotations)
-        except AttributeError, ex:
+        except AttributeError as ex:
             print ex
 
     def _apply_annotations_property(self, parent, prop):
