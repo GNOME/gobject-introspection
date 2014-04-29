@@ -244,12 +244,15 @@ currently-scanned namespace is first."""
         for ns in self._parsed_includes.values():
             yield ns
 
-    def _sort_matches(self, x, y):
-        if x[0] is self._namespace:
-            return 1
-        elif y[0] is self._namespace:
-            return -1
-        return cmp(x[2], y[2])
+    def _sort_matches(self, val):
+        """Key sort which ensures items in self._namespace are last by returning
+        a tuple key starting with 1 for self._namespace entries and 0 for
+        everythin else.
+        """
+        if val[0] == self._namespace:
+            return 1, val[2]
+        else:
+            return 0, val[2]
 
     def _split_c_string_for_namespace_matches(self, name, is_identifier=False):
         if not is_identifier and self._symbol_filter_cmd:
@@ -283,7 +286,7 @@ currently-scanned namespace is first."""
             else:
                 unprefixed_namespaces.append(ns)
         if matches:
-            matches.sort(self._sort_matches)
+            matches.sort(key=self._sort_matches)
             return list(map(lambda x: (x[0], x[1]), matches))
         elif self._accept_unprefixed:
             return [(self._namespace, name)]
