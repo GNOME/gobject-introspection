@@ -455,8 +455,8 @@ class GIRParser(object):
                 return ast.Type(ctype=ctype)
             elif name in ['GLib.List', 'GLib.SList']:
                 subchild = self._find_first_child(typenode,
-                                                  map(_corens, ('callback', 'array',
-                                                                'varargs', 'type')))
+                                                  list(map(_corens, ('callback', 'array',
+                                                                '    varargs', 'type'))))
                 if subchild is not None:
                     element_type = self._parse_type(typenode)
                 else:
@@ -464,7 +464,7 @@ class GIRParser(object):
                 return ast.List(name, element_type, ctype=ctype)
             elif name == 'GLib.HashTable':
                 subchildren = self._find_children(typenode, _corens('type'))
-                subchildren_types = map(self._parse_type_simple, subchildren)
+                subchildren_types = list(map(self._parse_type_simple, subchildren))
                 while len(subchildren_types) < 2:
                     subchildren_types.append(ast.TYPE_ANY)
                 return ast.Map(subchildren_types[0], subchildren_types[1], ctype=ctype)

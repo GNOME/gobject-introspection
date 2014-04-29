@@ -438,8 +438,8 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
     def _parse_parents(self, xmlnode, node):
         parents_str = xmlnode.attrib.get('parents', '')
         if parents_str != '':
-            parent_types = map(lambda s: ast.Type.create_from_gtype_name(s),
-                               parents_str.split(','))
+            parent_types = list(map(lambda s: ast.Type.create_from_gtype_name(s),
+                                    parents_str.split(',')))
         else:
             parent_types = []
         node.parent_chain = parent_types
