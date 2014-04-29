@@ -3,17 +3,21 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import __builtin__
 import os
 import sys
 import difflib
+
+if sys.version_info.major < 3:
+    import __builtin__ as builtins
+else:
+    import builtins
 
 path = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
 assert path is not None
 sys.path.insert(0, path)
 
 # Not correct, but enough to get the tests going uninstalled
-__builtin__.__dict__['DATADIR'] = path
+builtins.__dict__['DATADIR'] = path
 
 from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Include, Namespace
