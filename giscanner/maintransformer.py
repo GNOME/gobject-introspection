@@ -130,7 +130,7 @@ class MainTransformer(object):
                 origin_name = 'return value'
             message.log_node(
                 message.FATAL, parent,
-                "can't find parameter %s referenced by %s of %r"
+                "can't find parameter %s referenced by %s of '%s'"
                 % (param_name, origin_name, parent.name))
 
         return param.argname
@@ -144,7 +144,7 @@ class MainTransformer(object):
             origin_name = 'field %s' % (origin.name, )
             message.log_node(
                 message.FATAL, parent,
-                "can't find field %s referenced by %s of %r"
+                "can't find field %s referenced by %s of '%s'"
                 % (field_name, origin_name, parent.name))
 
         return field.name
@@ -159,17 +159,17 @@ class MainTransformer(object):
         target = self._namespace.get_by_symbol(rename_to)
         if not target:
             message.warn_node(node,
-                "Can't find symbol %r referenced by \"rename-to\" annotation" % (rename_to, ))
+                "Can't find symbol '%s' referenced by \"rename-to\" annotation" % (rename_to, ))
         elif target.shadowed_by:
             message.warn_node(node,
-                "Function %r already shadowed by %r, can't overwrite "
-                "with %r" % (target.symbol,
+                "Function '%s' already shadowed by '%s', can't overwrite "
+                "with '%s'" % (target.symbol,
                              target.shadowed_by,
                              rename_to))
         elif target.shadows:
             message.warn_node(node,
-                "Function %r already shadows %r, can't multiply shadow "
-                "with %r" % (target.symbol,
+                "Function '%s' already shadows '%s', can't multiply shadow "
+                "with '%s'" % (target.symbol,
                              target.shadows,
                              rename_to))
         else:
@@ -207,7 +207,7 @@ class MainTransformer(object):
             elif isinstance(node, ast.Registered) and node.gtype_name is not None:
                 return node.gtype_name
             return node.c_name
-        raise AssertionError("Unhandled node %r" % (node, ))
+        raise AssertionError("Unhandled node '%s'" % (node, ))
 
     def _get_block(self, node):
         return self._blocks.get(self._get_annotation_name(node))
@@ -297,7 +297,7 @@ class MainTransformer(object):
             elif isinstance(base, ast.Map) and len(rest) == 2:
                 return ast.Map(*rest)
             message.warn(
-                "Too many parameters in type specification %r" % (type_str, ))
+                "Too many parameters in type specification '%s'" % (type_str, ))
             return base
 
         def top_combiner(base, *rest):
@@ -307,7 +307,7 @@ class MainTransformer(object):
 
         result, rest = grab_one(type_str, resolver, top_combiner, combiner)
         if rest:
-            message.warn("Trailing components in type specification %r" % (
+            message.warn("Trailing components in type specification '%s'" % (
                 type_str, ))
 
         if not result.resolved:
@@ -317,7 +317,7 @@ class MainTransformer(object):
                 position = self._get_position(parent, node)
             else:
                 text = type_str
-            message.warn_node(parent, "%s: Unknown type: %r" %
+            message.warn_node(parent, "%s: Unknown type: '%s'" %
                               (text, type_str), positions=position)
         return result
 
@@ -799,13 +799,13 @@ class MainTransformer(object):
                 text = ''
             elif len(unused) == 1:
                 (param, ) = unused
-                text = ', should be %r' % (param, )
+                text = ", should be '%s'" % (param, )
             else:
-                text = ', should be one of %s' % (', '.join(repr(p) for p in unused), )
+                text = ", should be one of %s" % (', '.join("'%s'" % p for p in unused), )
 
             param = block.params.get(doc_name)
-            message.warn('%s: unknown parameter %r in documentation '
-                         'comment%s' % (block.name, doc_name, text),
+            message.warn("%s: unknown parameter '%s' in documentation "
+                         "comment%s" % (block.name, doc_name, text),
                 param.position)
 
     def _apply_annotations_callable(self, node, chain, block):
@@ -924,7 +924,7 @@ class MainTransformer(object):
                             break
                     if not matched:
                         message.warn_node(node,
-                            "Virtual slot %r not found for %r annotation" % (invoker_name,
+                            "Virtual slot '%s' not found for '%s' annotation" % (invoker_name,
                                                                              ANN_VFUNC))
         return True
 
@@ -1255,7 +1255,7 @@ method or constructor of some type."""
             if func.is_constructor:
                 message.warn_node(
                     func,
-                    "Can't find matching type for constructor; symbol=%r" % (func.symbol, ))
+                    "Can't find matching type for constructor; symbol='%s'" % (func.symbol, ))
             return False
 
         # Some sanity checks; only objects and boxeds can have ctors
@@ -1288,7 +1288,7 @@ method or constructor of some type."""
                 if parent is None:
                     message.warn_node(func,
                                       "Return value is not superclass for constructor; "
-                                      "symbol=%r constructed=%r return=%r" %
+                                      "symbol='%s' constructed='%s' return='%s'" %
                                       (func.symbol,
                                        str(origin_node.create_type()),
                                        str(func.retval.type)))
@@ -1296,8 +1296,8 @@ method or constructor of some type."""
         else:
             if origin_node != target:
                 message.warn_node(func,
-                                  "Constructor return type mismatch symbol=%r "
-                                  "constructed=%r return=%r" %
+                                  "Constructor return type mismatch symbol='%s' "
+                                  "constructed='%s' return='%s'" %
                                   (func.symbol,
                                    str(origin_node.create_type()),
                                    str(func.retval.type)))
@@ -1309,8 +1309,8 @@ method or constructor of some type."""
         """Look for virtual methods from the class structure."""
         if not node.glib_type_struct:
             # https://bugzilla.gnome.org/show_bug.cgi?id=629080
-            # message.warn_node(node,
-            #     "Failed to find class structure for %r" % (node.name, ))
+            #message.warn_node(node,
+            #    "Failed to find class structure for '%s'" % (node.name, ))
             return
 
         node_type = node.create_type()

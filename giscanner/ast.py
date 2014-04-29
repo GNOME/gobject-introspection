@@ -564,7 +564,7 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
         return cmp(self.name, other.name)
 
     def __repr__(self):
-        return '%s(%r)' % (self.__class__.__name__, self.name)
+        return "%s('%s')" % (self.__class__.__name__, self.name)
 
     def inherit_file_positions(self, node):
         self.file_positions.update(node.file_positions)
@@ -861,7 +861,7 @@ class Member(Annotated):
         return cmp(self.name, other.name)
 
     def __repr__(self):
-        return '%s(%r)' % (self.__class__.__name__, self.name)
+        return "%s('%s')" % (self.__class__.__name__, self.name)
 
 
 class Compound(Node, Registered):
@@ -934,7 +934,7 @@ class Field(Annotated):
         return cmp(self.name, other.name)
 
     def __repr__(self):
-        return '%s(%r)' % (self.__class__.__name__, self.name)
+        return "%s('%s')" % (self.__class__.__name__, self.name)
 
 
 class Record(Compound):

@@ -68,7 +68,7 @@ if __name__ == '__main__':
     else:
         builddir = srcdir
 
-    print("Using source directory: %r build directory: %r" % (srcdir, builddir))
+    print("Using source directory: '%s' build directory: '%s'" % (srcdir, builddir))
 
     modules = [{'name':         'glib',
                 'srcname':      '../gir/glib-2.0.c',
@@ -105,6 +105,6 @@ if __name__ == '__main__':
         srcfile.close()
         os.rename(tmpname, srcname)
 
-        print("Updated %r" % (srcname, ))
+        print("Updated '%s'" % (srcname, ))
 
     print("Done; run \"git diff\" to see any changes.")

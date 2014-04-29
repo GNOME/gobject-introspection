@@ -136,16 +136,16 @@ def check(args):
     emitted_warnings.sort(key=sortkey)
 
     if len(expected_warnings) != len(emitted_warnings):
-        raise SystemExit('ERROR in %r: %d warnings were emitted, '
-                         'expected %d:\n%s' % (os.path.basename(filename),
+        raise SystemExit("ERROR in '%s': %d warnings were emitted, "
+                         "expected %d:\n%s" % (os.path.basename(filename),
                                                len(emitted_warnings),
                                                len(expected_warnings),
                                                _diff(expected_warnings, emitted_warnings)))
 
     for emitted_warning, expected_warning in zip(emitted_warnings, expected_warnings):
         if expected_warning != emitted_warning:
-            raise SystemExit('ERROR in %r: expected warning does not match emitted '
-                             'warning:\n%s' % (filename,
+            raise SystemExit("ERROR in '%s': expected warning does not match emitted "
+                             "warning:\n%s" % (filename,
                                                _diff([expected_warning], [emitted_warning])))
 
 sys.exit(check(sys.argv[1:]))

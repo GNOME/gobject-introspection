@@ -124,7 +124,7 @@ class SourceType(object):
         self._stype = stype
 
     def __repr__(self):
-        return '<%s type=%r name=%r>' % (
+        return "<%s type='%s' name='%s'>" % (
             self.__class__.__name__,
             ctype_name(self.type),
             self.name)
@@ -171,8 +171,8 @@ class SourceSymbol(object):
         if src:
             line = self.line
             if line:
-                src += ':%r' % (line, )
-        return '<%s type=%r ident=%r src=%r>' % (
+                src += ":'%s'" % (line, )
+        return "<%s type='%s' ident='%s' src='%s'>" % (
             self.__class__.__name__,
             symbol_type_name(self.type),
             self.ident,

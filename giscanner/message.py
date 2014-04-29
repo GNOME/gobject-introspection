@@ -178,7 +178,7 @@ class MessageLogger(object):
     def log_symbol(self, log_type, symbol, text):
         """Log a warning in the context of the given symbol."""
         self.log(log_type, text, symbol.position,
-                 prefix="symbol=%r" % (symbol.ident, ))
+                 prefix="symbol='%s'" % (symbol.ident, ))
 
 
 def log_node(log_type, node, text, context=None, positions=None):

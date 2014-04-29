@@ -142,7 +142,7 @@ class Transformer(object):
     def register_include_uninstalled(self, include_path):
         basename = os.path.basename(include_path)
         if not basename.endswith('.gir'):
-            raise SystemExit("Include path %r must be a filename path "
+            raise SystemExit("Include path '%s' must be a filename path "
                              "ending in .gir" % (include_path, ))
         girname = basename[:-4]
         include = ast.Include.from_string(girname)
@@ -199,7 +199,8 @@ None."""
             path = os.path.join(d, girname)
             if os.path.exists(path):
                 return path
-        sys.stderr.write("Couldn't find include %r (search path: %r)\n" % (girname, searchdirs))
+        sys.stderr.write("Couldn't find include '%s' (search path: '%s')\n" %
+                         (girname, searchdirs))
         sys.exit(1)
 
     @classmethod
@@ -292,7 +293,7 @@ currently-scanned namespace is first."""
             for ns in unprefixed_namespaces:
                 if name in ns:
                     return [(ns, name)]
-        raise ValueError("Unknown namespace for %s %r"
+        raise ValueError("Unknown namespace for %s '%s'"
                          % ('identifier' if is_identifier else 'symbol', name, ))
 
     def split_ctype_namespaces(self, ident):
@@ -340,7 +341,7 @@ raise ValueError."""
                 return name
         (ns, name) = matches[-1]
         raise TransformerException(
-            "Skipping foreign identifier %r from namespace %s" % (ident, ns.name, ))
+            "Skipping foreign identifier '%s' from namespace %s" % (ident, ns.name, ))
         return None
 
     def _strip_symbol(self, symbol):
@@ -382,7 +383,7 @@ raise ValueError."""
         elif stype == CSYMBOL_TYPE_OBJECT:
             pass
         else:
-            print('transformer: unhandled symbol: %r' % (symbol, ))
+            print("transformer: unhandled symbol: '%s'" % (symbol, ))
 
     def _enum_common_prefix(self, symbol):
         def common_prefix(a, b):
@@ -615,7 +616,7 @@ raise ValueError."""
             return ast.Alias(name, target, ctype=symbol.ident)
         else:
             raise NotImplementedError(
-                "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
+                "symbol '%s' of type %s" % (symbol.ident, ctype_name(ctype)))
         return node
 
     def _canonicalize_ctype(self, ctype):

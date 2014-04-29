@@ -300,7 +300,7 @@ blob containing data gleaned from GObject's primitive introspection."""
         (ns, name) = self._transformer.split_csymbol(get_type)
         assert ns is self._namespace
         if name in ('get_type', '_get_gtype'):
-            message.fatal("""The GObject name %r isn't compatible
+            message.fatal("""The GObject name '%s' isn't compatible
 with the configured identifier prefixes:
   %r
 The class would have no name.  Most likely you want to specify a
@@ -353,7 +353,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         if isinstance(record, ast.Record):
             node.ctype = record.ctype
         else:
-            message.warn_node(node, "Couldn't find associated structure for '%r'" % (node.name, ))
+            message.warn_node(node, "Couldn't find associated structure for '%s'" % (node.name, ))
 
         # GtkFileChooserEmbed is an example of a private interface, we
         # just filter them out
