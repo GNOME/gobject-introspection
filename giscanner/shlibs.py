@@ -111,7 +111,7 @@ def _resolve_non_libtool(options, binary, libraries):
 
         shlibs = []
         for line in proc.stdout:
-            for library, pattern in patterns.iteritems():
+            for library, pattern in patterns.items():
                 m = pattern.search(line)
                 if m:
                     del patterns[library]

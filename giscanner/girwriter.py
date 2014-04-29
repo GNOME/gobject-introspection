@@ -88,7 +88,7 @@ class GIRWriter(XMLWriter):
                     return 1
                 else:
                     return cmp(a, b)
-            for node in sorted(namespace.itervalues(), cmp=nscmp):
+            for node in sorted(namespace.values(), cmp=nscmp):
                 self._write_node(node)
 
     def _write_node(self, node):

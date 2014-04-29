@@ -134,7 +134,7 @@ def generate_sections_file(transformer):
 
     general_section = new_section("main", "Main")
 
-    for node in ns.itervalues():
+    for node in ns.values():
         if isinstance(node, ast.Function):
             append_symbol(general_section, node.symbol)
         elif isinstance(node, (ast.Class, ast.Interface)):

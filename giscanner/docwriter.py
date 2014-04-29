@@ -131,7 +131,7 @@ class TemplatedScanner(object):
         groupdict = match.groupdict()
         properties = {name: groupdict.pop(name)}
         name = name + "_"
-        for group, value in groupdict.iteritems():
+        for group, value in groupdict.items():
             if group.startswith(name):
                 key = group[len(name):]
                 properties[key] = value
@@ -435,7 +435,7 @@ class DocFormatter(object):
         node_name = node.namespace.name + '.' + node.name
         impl = []
 
-        for c in node.namespace.itervalues():
+        for c in node.namespace.values():
             if not isinstance(c, ast.Class):
                 continue
             for implemented in c.interfaces:

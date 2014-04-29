@@ -84,12 +84,12 @@ class GDumpParser(object):
         """
 
         # First pass: parsing
-        for node in self._namespace.itervalues():
+        for node in self._namespace.values():
             if isinstance(node, ast.Function):
                 self._initparse_function(node)
 
         if self._namespace.name == 'GObject' or self._namespace.name == 'GLib':
-            for node in self._namespace.itervalues():
+            for node in self._namespace.values():
                 if isinstance(node, ast.Record):
                     self._initparse_gobject_record(node)
 
@@ -116,16 +116,16 @@ class GDumpParser(object):
                 self._introspect_type(child)
 
         # Pair up boxed types and class records
-        for name, boxed in self._boxed_types.iteritems():
+        for name, boxed in self._boxed_types.items():
             self._pair_boxed_type(boxed)
-        for node in self._namespace.itervalues():
+        for node in self._namespace.values():
             if isinstance(node, (ast.Class, ast.Interface)):
                 self._find_class_record(node)
 
         # Clear the _get_type functions out of the namespace;
         # Anyone who wants them can get them from the ast.Class/Interface/Boxed
         to_remove = []
-        for name, node in self._namespace.iteritems():
+        for name, node in self._namespace.items():
             if isinstance(node, ast.Registered) and node.get_type is not None:
                 get_type_name = node.get_type
                 if get_type_name == 'intern':

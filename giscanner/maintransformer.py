@@ -74,14 +74,14 @@ class MainTransformer(object):
         self._namespace.walk(self._pass_type_resolution)
 
         # Generate a reverse mapping "bar_baz" -> BarBaz
-        for node in self._namespace.itervalues():
+        for node in self._namespace.values():
             if isinstance(node, ast.Registered) and node.get_type is not None:
                 self._uscore_type_names[node.c_symbol_prefix] = node
             elif isinstance(node, (ast.Record, ast.Union)):
                 uscored = to_underscores_noprefix(node.name).lower()
                 self._uscore_type_names[uscored] = node
 
-        for node in list(self._namespace.itervalues()):
+        for node in list(self._namespace.values()):
             if isinstance(node, ast.Function):
                 # Discover which toplevel functions are actually methods
                 self._pair_function(node)
@@ -980,14 +980,14 @@ the ones that failed to resolve removed."""
         # but only covers enums that are registered as GObject enums.
         # Create a fallback mapping based on all known enums in this module.
         uscore_enums = {}
-        for enum in self._namespace.itervalues():
+        for enum in self._namespace.values():
             if not isinstance(enum, ast.Enum):
                 continue
             uscored = to_underscores_noprefix(enum.name).lower()
             uscore_enums[uscored] = enum
             uscore_enums[enum.name] = enum
 
-        for node in self._namespace.itervalues():
+        for node in self._namespace.values():
             if not isinstance(node, ast.ErrorQuarkFunction):
                 continue
             full = node.symbol[:-len('_quark')]

@@ -164,7 +164,7 @@ class CCodeGenerator(object):
 
         self._codegen_start()
 
-        for node in self.namespace.itervalues():
+        for node in self.namespace.values():
             if isinstance(node, ast.Function):
                 with self._function(node):
                     body = self._function_bodies.get(node)

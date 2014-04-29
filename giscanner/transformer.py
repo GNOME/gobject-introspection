@@ -116,7 +116,7 @@ class Transformer(object):
         # Run through the tag namespace looking for structs that have not been
         # promoted into the main namespace. In this case we simply promote them
         # with their struct tag.
-        for tag_name, struct in self._tag_ns.iteritems():
+        for tag_name, struct in self._tag_ns.items():
             if not struct.name:
                 try:
                     name = self.strip_identifier(tag_name)
@@ -235,7 +235,7 @@ None."""
         """Return an iterator over all included namespaces; the
 currently-scanned namespace is first."""
         yield self._namespace
-        for ns in self._parsed_includes.itervalues():
+        for ns in self._parsed_includes.values():
             yield ns
 
     def _sort_matches(self, x, y):
@@ -906,7 +906,7 @@ Note that type resolution may not succeed."""
         # which has nominal namespace of "Meta", but a few classes are
         # "Mutter".  We don't export that data in introspection currently.
         # Basically the library should be fixed, but we'll hack around it here.
-        for namespace in self._parsed_includes.itervalues():
+        for namespace in self._parsed_includes.values():
             target = namespace.get_by_ctype(pointer_stripped)
             if target:
                 typeval.target_giname = '%s.%s' % (namespace.name, target.name)

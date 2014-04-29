@@ -463,11 +463,11 @@ functions via get_by_symbol()."""
     def __iter__(self):
         return iter(self.names)
 
-    def iteritems(self):
-        return self.names.iteritems()
+    def items(self):
+        return self.names.items()
 
-    def itervalues(self):
-        return self.names.itervalues()
+    def values(self):
+        return self.names.values()
 
     def get(self, name):
         return self.names.get(name)
@@ -479,7 +479,7 @@ functions via get_by_symbol()."""
         return self.symbols.get(symbol)
 
     def walk(self, callback):
-        for node in self.itervalues():
+        for node in self.values():
             node.walk(callback, [])
 
 
