@@ -298,6 +298,7 @@ def process_packages(options, packages):
         # the error output should have already appeared on our stderr,
         # so we just exit
         return 1
+    output = output.decode('ascii')
     # Some pkg-config files on Windows have options we don't understand,
     # so we explicitly filter to only the ones we need.
     options_whitelist = ['-I', '-D', '-U', '-l', '-L']

@@ -196,7 +196,8 @@ class DumpCompiler(object):
         proc = subprocess.Popen(
             cmd + self._packages,
             stdout=subprocess.PIPE)
-        return proc.communicate()[0].split()
+        out, err = proc.communicate()
+        return out.decode('ascii').split()
 
     def _compile(self, *sources):
         pkgconfig_flags = self._run_pkgconfig('--cflags')

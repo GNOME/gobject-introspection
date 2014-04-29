@@ -116,6 +116,7 @@ def _resolve_non_libtool(options, binary, libraries):
 
         shlibs = []
         for line in proc.stdout:
+            line = line.decode('ascii')
             for library, pattern in patterns.items():
                 m = pattern.search(line)
                 if m:
