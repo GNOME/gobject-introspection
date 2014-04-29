@@ -255,7 +255,7 @@ def passthrough_gir(path, f):
     parser.parse(path)
 
     writer = GIRWriter(parser.get_namespace())
-    f.write(writer.get_xml())
+    f.write(writer.get_encoded_xml())
 
 
 def test_codegen(optstring,
@@ -444,15 +444,16 @@ def create_source_scanner(options, args):
 
 
 def write_output(data, options):
+    """Write encoded XML 'data' to the filename specified in 'options'."""
     if options.output == "-":
         output = sys.stdout
     elif options.reparse_validate_gir:
         main_f, main_f_name = tempfile.mkstemp(suffix='.gir')
-        with os.fdopen(main_f, 'w') as main_f:
+        with os.fdopen(main_f, 'wb') as main_f:
             main_f.write(data)
 
         temp_f, temp_f_name = tempfile.mkstemp(suffix='.gir')
-        with os.fdopen(temp_f, 'w') as temp_f:
+        with os.fdopen(temp_f, 'wb') as temp_f:
             passthrough_gir(main_f_name, temp_f)
         if not utils.files_are_identical(main_f_name, temp_f_name):
             _error("Failed to re-parse gir file; scanned='%s' passthrough='%s'" % (
@@ -468,7 +469,7 @@ def write_output(data, options):
         return 0
     else:
         try:
-            output = open(options.output, "w")
+            output = open(options.output, 'wb')
         except IOError as e:
             _error("opening output for writing: %s" % (e.strerror, ))
 
@@ -564,7 +565,7 @@ def scanner_main(args):
     transformer.namespace.c_includes = options.c_includes
     transformer.namespace.exported_packages = exported_packages
     writer = Writer(transformer.namespace)
-    data = writer.get_xml()
+    data = writer.get_encoded_xml()
 
     write_output(data, options)
 

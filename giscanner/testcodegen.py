@@ -23,7 +23,13 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from StringIO import StringIO
+import sys
+
+if sys.version_info.major < 3:
+    from StringIO import StringIO
+else:
+    from io import StringIO
+
 from . import ast
 from .codegen import CCodeGenerator
 
