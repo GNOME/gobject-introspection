@@ -164,7 +164,7 @@ def get_libtool_command(options):
 
 
 def files_are_identical(path1, path2):
-    with open(path1) as f1, open(path2) as f2:
+    with open(path1, 'rb') as f1, open(path2, 'rb') as f2:
         buf1 = f1.read(8192)
         buf2 = f2.read(8192)
         while buf1 == buf2 and buf1 != '':
