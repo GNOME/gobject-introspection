@@ -1282,7 +1282,7 @@ method or constructor of some type."""
                     continue
                 if len(method.parameters) != len(vfunc.parameters):
                     continue
-                for i in xrange(len(method.parameters)):
+                for i in range(len(method.parameters)):
                     m_type = method.parameters[i].type
                     v_type = vfunc.parameters[i].type
                     if m_type != v_type:
