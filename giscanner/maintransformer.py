@@ -802,7 +802,8 @@ class MainTransformer(object):
                 (param, ) = unused
                 text = ", should be '%s'" % (param, )
             else:
-                text = ", should be one of %s" % (', '.join("'%s'" % p for p in unused), )
+                text = ", should be one of %s" % \
+                       (', '.join("'%s'" % p for p in sorted(unused)), )
 
             param = block.params.get(doc_name)
             message.warn("%s: unknown parameter '%s' in documentation "
