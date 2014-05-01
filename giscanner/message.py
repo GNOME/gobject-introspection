@@ -27,6 +27,7 @@ from __future__ import unicode_literals
 
 import os
 import sys
+import operator
 
 from . import utils
 
@@ -48,12 +49,34 @@ class Position(object):
         self.line = line
         self.column = column
 
-    def __cmp__(self, other):
-        return cmp((self.filename, self.line, self.column),
-                   (other.filename, other.line, other.column))
+    def _compare(self, other, op):
+        return op((self.filename, self.line, self.column),
+                  (other.filename, other.line, other.column))
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __ne__(self, other):
+        return self._compare(other, operator.ne)
+
+    def __hash__(self):
+        return hash((self.filename, self.line, self.column))
 
     def __repr__(self):
-        return '<Position %s:%d:%d>' % (os.path.basename(self.filename), self.line or -1,
+        return '<Position %s:%d:%d>' % (os.path.basename(self.filename),
+                                        self.line or -1,
                                         self.column or -1)
 
     def format(self, cwd):
