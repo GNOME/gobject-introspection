@@ -114,6 +114,7 @@ from __future__ import unicode_literals
 
 import os
 import re
+import operator
 
 from collections import namedtuple
 from operator import ne, gt, lt
@@ -1054,11 +1055,32 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
         #: applied to this :class:`GtkDocCommentBlock`.
         self.tags = OrderedDict()
 
-    def __cmp__(self, other):
+    def _compare(self, other, op):
         # Note: This is used by g-ir-annotation-tool, which does a ``sorted(blocks.values())``,
         #       meaning that keeping this around makes update-glib-annotations.py patches
         #       easier to review.
-        return cmp(self.name, other.name)
+        return op(self.name, other.name)
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __ne__(self, other):
+        return self._compare(other, operator.ne)
+
+    def __hash__(self):
+        return hash(self.name)
 
     def __repr__(self):
         return "<GtkDocCommentBlock '%s' %r>" % (self.name, self.annotations)

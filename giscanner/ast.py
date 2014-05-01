@@ -25,6 +25,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import copy
+import operator
 from itertools import chain
 
 from . import message
@@ -123,15 +124,37 @@ in contrast to the other create_type() functions."""
         assert self.target_giname is not None
         return self.target_giname.split('.')[1]
 
-    def __cmp__(self, other):
+    def _compare(self, other, op):
         if self.target_fundamental:
-            return cmp(self.target_fundamental, other.target_fundamental)
+            return op(self.target_fundamental, other.target_fundamental)
         elif self.target_giname:
-            return cmp(self.target_giname, other.target_giname)
+            return op(self.target_giname, other.target_giname)
         elif self.target_foreign:
-            return cmp(self.target_foreign, other.target_foreign)
+            return op(self.target_foreign, other.target_foreign)
         else:
-            return cmp(self.ctype, other.ctype)
+            return op(self.ctype, other.ctype)
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __ne__(self, other):
+        return self._compare(other, operator.ne)
+
+    def __hash__(self):
+        return hash((self.target_fundamental, self.target_giname,
+                     self.target_foreign, self.ctype))
 
     def is_equiv(self, typeval):
         """Return True if the specified types are compatible at
@@ -498,11 +521,26 @@ class Include(object):
     def from_string(cls, string):
         return cls(*string.split('-', 1))
 
-    def __cmp__(self, other):
-        namecmp = cmp(self.name, other.name)
-        if namecmp != 0:
-            return namecmp
-        return cmp(self.version, other.version)
+    def _compare(self, other, op):
+        return op((self.name, self.version), (other.name, other.version))
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __ne__(self, other):
+        return self._compare(other, operator.ne)
 
     def __hash__(self):
         return hash(str(self))
@@ -558,11 +596,29 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
         assert self.namespace is not None
         return Type(target_giname=('%s.%s' % (self.namespace.name, self.name)))
 
-    def __cmp__(self, other):
-        nscmp = cmp(self.namespace, other.namespace)
-        if nscmp != 0:
-            return nscmp
-        return cmp(self.name, other.name)
+    def _compare(self, other, op):
+        return op((self.namespace, self.name), (other.namespace, other.name))
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __ne__(self, other):
+        return self._compare(other, operator.ne)
+
+    def __hash__(self):
+        return hash((self.namespace, self.name))
 
     def __repr__(self):
         return "%s('%s')" % (self.__class__.__name__, self.name)
@@ -858,8 +914,29 @@ class Member(Annotated):
         self.nick = nick
         self.parent = None
 
-    def __cmp__(self, other):
-        return cmp(self.name, other.name)
+    def _compare(self, other, op):
+        return op(self.name, other.name)
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __ne__(self, other):
+        return self._compare(other, operator.ne)
+
+    def __hash__(self):
+        return hash(self.name)
 
     def __repr__(self):
         return "%s('%s')" % (self.__class__.__name__, self.name)
@@ -931,8 +1008,29 @@ class Field(Annotated):
         self.namespace = None
         self.parent = None  # a compound
 
-    def __cmp__(self, other):
-        return cmp(self.name, other.name)
+    def _compare(self, other, op):
+        return op(self.name, other.name)
+
+    def __lt__(self, other):
+        return self._compare(other, operator.lt)
+
+    def __gt__(self, other):
+        return self._compare(other, operator.gt)
+
+    def __ge__(self, other):
+        return self._compare(other, operator.ge)
+
+    def __le__(self, other):
+        return self._compare(other, operator.le)
+
+    def __eq__(self, other):
+        return self._compare(other, operator.eq)
+
+    def __ne__(self, other):
+        return self._compare(other, operator.ne)
+
+    def __hash__(self):
+        return hash(self.name)
 
     def __repr__(self):
         return "%s('%s')" % (self.__class__.__name__, self.name)
