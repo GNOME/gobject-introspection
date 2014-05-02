@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Scan glib sources.
 # e.g.:
 #   ./update-glib-annotations.py ../../glib ../../glib/_build
