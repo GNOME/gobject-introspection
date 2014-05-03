@@ -1,0 +1,69 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestWi8021x*"
+            }
+        }
+    ],
+    "doc": "",
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "get_testbool",
+            "parameters": [],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "set_testbool",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "v",
+                    "direction": "in",
+                    "type": "gboolean"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "function",
+            "name": "static_method",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "int"
+            }
+        }
+    ],
+    "name": "TestWi8021x",
+    "properties": [
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "testbool",
+            "type": "gboolean"
+        }
+    ],
+    "signals": [],
+    "vfuncs": []
+}

@@ -1,0 +1,27 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "data",
+                    "direction": "in",
+                    "type": "const char*"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestFundamentalSubObject*"
+            }
+        }
+    ],
+    "doc": "",
+    "kind": "class",
+    "methods": [],
+    "name": "TestFundamentalSubObject",
+    "properties": [],
+    "signals": [],
+    "vfuncs": []
+}

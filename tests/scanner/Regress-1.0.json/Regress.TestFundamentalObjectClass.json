@@ -1,0 +1,24 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "type_class"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "copy"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "finalize"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "TestFundamentalObjectClass"
+}

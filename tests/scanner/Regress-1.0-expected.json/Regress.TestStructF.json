@@ -1,0 +1,44 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "ref_count"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "data1"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "data2"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "data3"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "data4"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "data5"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "data6"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "TestStructF"
+}

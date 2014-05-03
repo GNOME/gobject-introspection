@@ -1,0 +1,22 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "one"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "two"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "three"
+        }
+    ],
+    "name": "FooEnumFullname"
+}

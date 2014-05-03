@@ -1,0 +1,49 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "parent_class"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "matrix"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "allow_none_vfunc"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "test_signal"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "test_signal_with_static_scope_arg"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "complex_vfunc"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "_regress_reserved1"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "_regress_reserved2"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "TestObjClass"
+}

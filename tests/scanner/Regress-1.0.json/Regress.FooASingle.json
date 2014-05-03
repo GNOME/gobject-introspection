@@ -1,0 +1,12 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "foo_some_single_enum"
+        }
+    ],
+    "name": "FooASingle"
+}

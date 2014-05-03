@@ -1,0 +1,24 @@
+{
+    "constructors": [],
+    "doc": "  <p>This is a struct for testing field documentation and annotations</p>",
+    "fields": [
+        {
+            "doc": "  <p>Some documentation</p>",
+            "kind": "field",
+            "name": "field1"
+        },
+        {
+            "doc": "  <p>an array of length @len</p>",
+            "kind": "field",
+            "name": "arr"
+        },
+        {
+            "doc": "  <p>the length of array</p>",
+            "kind": "field",
+            "name": "len"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "AnnotationFields"
+}

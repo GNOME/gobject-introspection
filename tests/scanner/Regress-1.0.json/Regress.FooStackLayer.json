@@ -1,0 +1,52 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "desktop"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "bottom"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "normal"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "top"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "dock"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "fullscreen"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "focused_window"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "override_redirect"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "last"
+        }
+    ],
+    "name": "FooStackLayer"
+}

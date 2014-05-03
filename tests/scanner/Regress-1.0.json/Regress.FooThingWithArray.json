@@ -1,0 +1,29 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "x"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "y"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "lines"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "data"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "FooThingWithArray"
+}

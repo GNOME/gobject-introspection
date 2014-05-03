@@ -1,0 +1,14 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "base_iface"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "TestInterfaceIface"
+}

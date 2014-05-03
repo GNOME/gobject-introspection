@@ -1,0 +1,19 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "send_event"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "count"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "FooEventExpose"
+}

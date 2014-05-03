@@ -1,0 +1,19 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_type"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_union"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "TestStructE"
+}

@@ -1,0 +1,39 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestObj*"
+            }
+        }
+    ],
+    "doc": "",
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "instance_method",
+            "parameters": [],
+            "retval": {
+                "type": "int"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "unset_bare",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "TestSubObj",
+    "properties": [],
+    "signals": [],
+    "vfuncs": []
+}

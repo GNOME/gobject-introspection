@@ -1,0 +1,31 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "name"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "set_name",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "name",
+                    "direction": "in",
+                    "type": "const char*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "LikeXklConfigItem"
+}

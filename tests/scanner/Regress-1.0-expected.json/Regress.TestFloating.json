@@ -1,0 +1,20 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestFloating*"
+            }
+        }
+    ],
+    "doc": "",
+    "kind": "class",
+    "methods": [],
+    "name": "TestFloating",
+    "properties": [],
+    "signals": [],
+    "vfuncs": []
+}

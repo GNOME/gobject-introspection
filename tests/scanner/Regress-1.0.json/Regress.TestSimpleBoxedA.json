@@ -1,0 +1,64 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_int"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_int8"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_double"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_enum"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "copy",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestSimpleBoxedA*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "equals",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "other_a",
+                    "direction": "in",
+                    "type": "RegressTestSimpleBoxedA*"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "function",
+            "name": "const_return",
+            "parameters": [],
+            "retval": {
+                "type": "const RegressTestSimpleBoxedA*"
+            }
+        }
+    ],
+    "name": "TestSimpleBoxedA"
+}

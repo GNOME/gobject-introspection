@@ -167,9 +167,9 @@ Headeronly-1.0.gir: headeronly.h
 
 if BUILD_DOCTOOL
 DOCGIRS = Regress-1.0.gir
-CHECKDOCS = $(DOCGIRS:.gir=-C) $(DOCGIRS:.gir=-Python) $(DOCGIRS:.gir=-Gjs) $(DOCGIRS:.gir=-sections.txt)
+CHECKDOCS = $(DOCGIRS:.gir=-C) $(DOCGIRS:.gir=-Python) $(DOCGIRS:.gir=-Gjs) $(DOCGIRS:.gir=-sections.txt) $(DOCGIRS:.gir=.json)
 MALLARD_DIRS = $(DOCGIRS:.gir=-C) $(DOCGIRS:.gir=-Python) $(DOCGIRS:.gir=-Gjs)
-MALLARD_CLEAN = $(DOCGIRS:.gir=-C)/* $(DOCGIRS:.gir=-Python)/* $(DOCGIRS:.gir=-Gjs)/* $(DOCGIRS:.gir=-sections.txt)
+MALLARD_CLEAN = $(DOCGIRS:.gir=-C)/* $(DOCGIRS:.gir=-Python)/* $(DOCGIRS:.gir=-Gjs)/* $(DOCGIRS:.gir=-sections.txt) $(DOCGIRS:.gir=.json)/*
 EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
 CLEANFILES += $(MALLARD_CLEAN)
 
@@ -187,6 +187,9 @@ CLEANFILES += $(MALLARD_CLEAN)
 
 %-sections.txt: %.gir
 	$(AM_V_GEN)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --write-sections-file $*.gir -o $@
+
+%.json: %.gir
+	$(AM_V_GEN)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --write-json-files $*.gir -o $@
 
 else
 CHECKDOCS =
@@ -207,4 +210,5 @@ EXTRA_DIST += \
 	Regress-1.0-Gjs-expected				\
 	Regress-1.0-Python-expected				\
 	Regress-1.0-sections-expected.txt			\
+	Regress-1.0.json						\
 	$(NULL)

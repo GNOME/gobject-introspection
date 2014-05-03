@@ -1,0 +1,36 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_int8"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "nested_a"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "  <p>Make a copy of a RegressTestStructB</p>",
+            "kind": "method",
+            "name": "clone",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "b_out",
+                    "direction": "out",
+                    "type": "RegressTestStructB*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "TestStructB"
+}

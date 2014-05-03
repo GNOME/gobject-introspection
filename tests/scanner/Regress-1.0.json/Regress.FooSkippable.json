@@ -1,0 +1,17 @@
+{
+    "doc": "  <p>Some type that is only interesting from C and should not be\nexposed to language bindings.</p>",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "  <p>a skippable enum value</p>",
+            "kind": "default",
+            "name": "one"
+        },
+        {
+            "doc": "  <p>another skippable enum value</p>",
+            "kind": "default",
+            "name": "two"
+        }
+    ],
+    "name": "FooSkippable"
+}

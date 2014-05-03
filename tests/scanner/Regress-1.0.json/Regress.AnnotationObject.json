@@ -1,0 +1,584 @@
+{
+    "constructors": [],
+    "doc": "  <p>This is an object used to test annotations.</p>",
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "allow_none",
+            "parameters": [
+                {
+                    "allow_none": true,
+                    "argname": "somearg",
+                    "direction": "in",
+                    "type": "const gchar*"
+                }
+            ],
+            "retval": {
+                "type": "GObject*"
+            }
+        },
+        {
+            "doc": "  <p>This is a test for out arguments; GObject defaults to transfer</p>",
+            "kind": "method",
+            "name": "calleeowns",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "toown",
+                    "direction": "out",
+                    "type": "GObject**"
+                }
+            ],
+            "retval": {
+                "type": "gint"
+            }
+        },
+        {
+            "doc": "  <p>This is a test for out arguments, one transferred, other not</p>",
+            "kind": "method",
+            "name": "calleesowns",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "toown1",
+                    "direction": "out",
+                    "type": "GObject**"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "toown2",
+                    "direction": "out",
+                    "type": "GObject**"
+                }
+            ],
+            "retval": {
+                "type": "gint"
+            }
+        },
+        {
+            "doc": "  <p>Test taking a zero-terminated array</p>",
+            "kind": "method",
+            "name": "compute_sum",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "nums",
+                    "direction": "in",
+                    "type": "int*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test taking an array with length parameter</p>",
+            "kind": "method",
+            "name": "compute_sum_n",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "nums",
+                    "direction": "in",
+                    "type": "int*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "n_nums",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test taking a zero-terminated array with length parameter</p>",
+            "kind": "method",
+            "name": "compute_sum_nz",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "nums",
+                    "direction": "in",
+                    "type": "int*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "n_nums",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test returning a caller-owned object</p>",
+            "kind": "method",
+            "name": "create_object",
+            "parameters": [],
+            "retval": {
+                "type": "GObject*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "do_not_use",
+            "parameters": [],
+            "retval": {
+                "type": "GObject*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "extra_annos",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test taking a call-scoped callback</p>",
+            "kind": "method",
+            "name": "foreach",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "func",
+                    "direction": "in",
+                    "type": "RegressAnnotationForeachFunc"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "user_data",
+                    "direction": "in",
+                    "type": "gpointer"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This is a test for returning a hash table mapping strings to\nobjects.</p>",
+            "kind": "method",
+            "name": "get_hash",
+            "parameters": [],
+            "retval": {
+                "type": "GHashTable*"
+            }
+        },
+        {
+            "doc": "  <p>This is a test for returning a list of objects.\nThe list itself should be freed, but not the internal objects,\nintentionally similar example to gtk_container_get_children</p>",
+            "kind": "method",
+            "name": "get_objects",
+            "parameters": [],
+            "retval": {
+                "type": "GSList*"
+            }
+        },
+        {
+            "doc": "  <p>This is a test for returning a list of strings, where\neach string needs to be freed.</p>",
+            "kind": "method",
+            "name": "get_strings",
+            "parameters": [],
+            "retval": {
+                "type": "GList*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "hidden_self",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This is a test for in arguments</p>",
+            "kind": "method",
+            "name": "in",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "inarg",
+                    "direction": "in",
+                    "type": "int*"
+                }
+            ],
+            "retval": {
+                "type": "gint"
+            }
+        },
+        {
+            "doc": "  <p>This is a test for out arguments</p>",
+            "kind": "method",
+            "name": "inout",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "inoutarg",
+                    "direction": "inout",
+                    "type": "int*"
+                }
+            ],
+            "retval": {
+                "type": "gint"
+            }
+        },
+        {
+            "doc": "  <p>This is a second test for out arguments</p>",
+            "kind": "method",
+            "name": "inout2",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "inoutarg",
+                    "direction": "inout",
+                    "type": "int*"
+                }
+            ],
+            "retval": {
+                "type": "gint"
+            }
+        },
+        {
+            "doc": "  <p>This is a 3th test for out arguments</p>",
+            "kind": "method",
+            "name": "inout3",
+            "parameters": [
+                {
+                    "allow_none": true,
+                    "argname": "inoutarg",
+                    "direction": "inout",
+                    "type": "int*"
+                }
+            ],
+            "retval": {
+                "type": "gint"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "method",
+            "parameters": [],
+            "retval": {
+                "type": "gint"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "notrans",
+            "parameters": [],
+            "retval": {
+                "type": "GObject*"
+            }
+        },
+        {
+            "doc": "  <p>This is a test for out arguments</p>",
+            "kind": "method",
+            "name": "out",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "outarg",
+                    "direction": "out",
+                    "type": "int*"
+                }
+            ],
+            "retval": {
+                "type": "gint"
+            }
+        },
+        {
+            "doc": "  <p>Test taking a zero-terminated array with length parameter</p>",
+            "kind": "method",
+            "name": "parse_args",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "argc",
+                    "direction": "inout",
+                    "type": "int*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "argv",
+                    "direction": "inout",
+                    "type": "char***"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test taking a guchar * with a length.</p>",
+            "kind": "method",
+            "name": "set_data",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "data",
+                    "direction": "in",
+                    "type": "guchar*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "length",
+                    "direction": "in",
+                    "type": "gsize"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test taking a gchar * with a length.</p>",
+            "kind": "method",
+            "name": "set_data2",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "data",
+                    "direction": "in",
+                    "type": "gint8*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "length",
+                    "direction": "in",
+                    "type": "gsize"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test taking a gchar * with a length, overriding the array element\ntype.</p>",
+            "kind": "method",
+            "name": "set_data3",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "data",
+                    "direction": "in",
+                    "type": "guint8*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "length",
+                    "direction": "in",
+                    "type": "gsize"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test returning a string as an out parameter</p>",
+            "kind": "method",
+            "name": "string_out",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "str_out",
+                    "direction": "out",
+                    "type": "char**"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "use_buffer",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "bytes",
+                    "direction": "in",
+                    "type": "guchar*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This is here just for the sake of being overriden by its\n<span data-xref=\"Regress.AnnotationObject.watch\"/>.</p>",
+            "kind": "method",
+            "name": "watch",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "func",
+                    "direction": "in",
+                    "type": "RegressAnnotationForeachFunc"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "user_data",
+                    "direction": "in",
+                    "type": "gpointer"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test overriding via the \"Rename To\" annotation.</p>",
+            "kind": "method",
+            "name": "watch_full",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "func",
+                    "direction": "in",
+                    "type": "RegressAnnotationForeachFunc"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "user_data",
+                    "direction": "in",
+                    "type": "gpointer"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "destroy",
+                    "direction": "in",
+                    "type": "GDestroyNotify"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "with_voidp",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "data",
+                    "direction": "in",
+                    "type": "void*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "AnnotationObject",
+    "properties": [
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "function-property",
+            "type": "gpointer"
+        },
+        {
+            "doc": "  <p>This is a property which is a string</p>",
+            "kind": "property",
+            "name": "string-property",
+            "type": "gchar*"
+        },
+        {
+            "doc": "  <p>This is a property annotation intentionally indented with a mix\nof tabs and strings to test the tab handling capabilities of the scanner.</p>",
+            "kind": "property",
+            "name": "tab-property",
+            "type": "gchar*"
+        }
+    ],
+    "signals": [
+        {
+            "doc": "  <p>This signal tests a signal with attributes.</p>",
+            "kind": "signal",
+            "name": "attribute-signal",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "arg1",
+                    "direction": "in",
+                    "type": "gchar*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "arg2",
+                    "direction": "in",
+                    "type": "gchar*"
+                }
+            ],
+            "retval": {
+                "type": "gchar*"
+            }
+        },
+        {
+            "doc": "  <p>This signal tests an empty document argument (<code>arg1</code>)</p>",
+            "kind": "signal",
+            "name": "doc-empty-arg-parsing",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "arg1",
+                    "direction": "in",
+                    "type": "gpointer"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This is a signal which takes a list of strings, but it's not\nknown by GObject as it's only marked as G_TYPE_POINTER</p>",
+            "kind": "signal",
+            "name": "list-signal",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "list",
+                    "direction": "in",
+                    "type": "gpointer"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This is a signal which has a broken signal handler,\nit says it's pointer but it's actually a string.</p>",
+            "kind": "signal",
+            "name": "string-signal",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "string",
+                    "direction": "in",
+                    "type": "gpointer"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "vfuncs": []
+}

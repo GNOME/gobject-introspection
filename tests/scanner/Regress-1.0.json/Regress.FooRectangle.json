@@ -1,0 +1,80 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "x"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "y"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "width"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "height"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "add",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "r2",
+                    "direction": "in",
+                    "type": "const RegressFooRectangle*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This is a C convenience constructor; we have to (skip)\nit because it's not a boxed type.</p>",
+            "kind": "function",
+            "name": "new",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "y",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "width",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "height",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "RegressFooRectangle*"
+            }
+        }
+    ],
+    "name": "FooRectangle"
+}

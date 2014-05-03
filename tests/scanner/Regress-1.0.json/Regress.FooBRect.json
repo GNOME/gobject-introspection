@@ -1,0 +1,59 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "double"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "y",
+                    "direction": "in",
+                    "type": "double"
+                }
+            ],
+            "retval": {
+                "type": "RegressFooBRect*"
+            }
+        }
+    ],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "x"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "y"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "add",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "b2",
+                    "direction": "in",
+                    "type": "RegressFooBRect*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "FooBRect"
+}

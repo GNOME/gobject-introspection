@@ -1,0 +1,20 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [],
+            "retval": {
+                "type": "RegressFooSubobject*"
+            }
+        }
+    ],
+    "doc": "",
+    "kind": "class",
+    "methods": [],
+    "name": "FooSubobject",
+    "properties": [],
+    "signals": [],
+    "vfuncs": []
+}

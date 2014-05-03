@@ -1,0 +1,22 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "invalid"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "ipv4"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "ipv6"
+        }
+    ],
+    "name": "FooAddressType"
+}

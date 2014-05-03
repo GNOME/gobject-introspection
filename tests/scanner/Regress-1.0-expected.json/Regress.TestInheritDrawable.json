@@ -1,0 +1,87 @@
+{
+    "constructors": [],
+    "doc": "",
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "do_foo",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "do_foo_maybe_throw",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "get_origin",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "out",
+                    "type": "int*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "y",
+                    "direction": "out",
+                    "type": "int*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "get_size",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "width",
+                    "direction": "out",
+                    "type": "guint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "height",
+                    "direction": "out",
+                    "type": "guint*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "TestInheritDrawable",
+    "properties": [],
+    "signals": [],
+    "vfuncs": []
+}

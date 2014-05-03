@@ -1,0 +1,48 @@
+{
+    "constructors": [],
+    "doc": "",
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "ref",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestFundamentalObject*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "unref",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "TestFundamentalObject",
+    "properties": [],
+    "signals": [],
+    "vfuncs": [
+        {
+            "doc": "",
+            "kind": "vfunc",
+            "name": "copy",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestFundamentalObject*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "vfunc",
+            "name": "finalize",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ]
+}

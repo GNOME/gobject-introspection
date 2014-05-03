@@ -1,0 +1,17 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "value1"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "value2"
+        }
+    ],
+    "name": "TestEnumUnsigned"
+}

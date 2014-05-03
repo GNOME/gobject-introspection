@@ -1,0 +1,8 @@
+{
+    "constructors": [],
+    "doc": "  <p>Like telepathy-glib's TpIntset.</p>",
+    "fields": [],
+    "kind": "class",
+    "methods": [],
+    "name": "Intset"
+}

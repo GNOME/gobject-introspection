@@ -1,0 +1,59 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "a_string",
+                    "direction": "in",
+                    "type": "const char*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "a_int",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestBoxedD*"
+            }
+        }
+    ],
+    "doc": "",
+    "fields": [],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "copy",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestBoxedD*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "free",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "get_magic",
+            "parameters": [],
+            "retval": {
+                "type": "int"
+            }
+        }
+    ],
+    "name": "TestBoxedD"
+}

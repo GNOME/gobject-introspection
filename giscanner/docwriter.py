@@ -27,6 +27,7 @@ import tempfile
 
 from xml.sax import saxutils
 from mako.lookup import TemplateLookup
+import json
 import markdown
 
 from . import ast, xmlwriter
@@ -177,6 +178,9 @@ class DocFormatter(object):
     def __init__(self, transformer):
         self._transformer = transformer
         self._scanner = DocstringScanner()
+
+        #FIXME: We should put the json functionality in its own subclass
+        self.json = False
 
     def escape(self, text):
         return saxutils.escape(text)
@@ -347,10 +351,23 @@ class DocFormatter(object):
         else:
             return make_page_id(node)
 
+    def _write_xref_tag(self, target, attrdict, data=None, internal=True):
+        if self.json:
+            tag = 'span'
+            attribute_name = 'data-xref'
+        else:
+            tag = 'link'
+            if internal:
+                attribute_name = 'xref'
+            else:
+                attribute_name = 'href'
+
+        attrs = [(attribute_name, target)] + attrdict.items()
+        return xmlwriter.build_xml_tag(tag, attrs, data)
+
     def format_xref(self, node, **attrdict):
         if node is None or not hasattr(node, 'namespace'):
-            attrs = [('xref', 'index')] + attrdict.items()
-            return xmlwriter.build_xml_tag('link', attrs)
+            return self._write_xref_tag('index', attrdict)
         elif isinstance(node, ast.Member):
             # Enum/BitField members are linked to the main enum page.
             return self.format_xref(node.parent, **attrdict) + '.' + node.name
@@ -360,15 +377,12 @@ class DocFormatter(object):
             return self.format_external_xref(node, attrdict)
 
     def format_internal_xref(self, node, attrdict):
-        attrs = [('xref', make_page_id(node))] + attrdict.items()
-        return xmlwriter.build_xml_tag('link', attrs)
+        return self._write_xref_tag(make_page_id(node), attrdict)
 
     def format_external_xref(self, node, attrdict):
         ns = node.namespace
-        attrs = [('href', '../%s-%s/%s.html' % (ns.name, str(ns.version),
-                                                make_page_id(node)))]
-        attrs += attrdict.items()
-        return xmlwriter.build_xml_tag('link', attrs, self.format_page_name(node))
+        target = '../%s-%s/%s.html' % (ns.name, str(ns.version), make_page_id(node))
+        return self._write_xref_tag(target, attrdict, self.format_page_name(node), internal=False)
 
     def field_is_writable(self, field):
         return True
@@ -916,6 +930,165 @@ class DocWriter(object):
 
         self._walk_node(output, self._transformer.namespace, [])
         self._transformer.namespace.walk(lambda node, chain: self._walk_node(output, node, chain))
+
+    def _node_to_json(self, node):
+        node_dict = {}
+        node_dict['name'] = node.name
+        node_dict['kind'] = get_node_kind(node)
+        node_dict['doc'] = self._formatter.format(node, node.doc)
+        return node_dict
+
+    def _parameter_to_json(self, node):
+        node_dict = {}
+        node_dict['argname'] = node.argname
+        node_dict['direction'] = node.direction
+        node_dict['allow_none'] = node.allow_none
+        node_dict['type'] = self._formatter.format_type(node.type)
+
+        return node_dict
+
+    def _parameters_to_json(self, parameters):
+        parameter_dicts = []
+        for parameter in parameters:
+            parameter_dicts.append(self._parameter_to_json(parameter))
+        return parameter_dicts
+
+    def _return_to_json(self, node):
+        node_dict = {}
+        node_dict['type'] = self._formatter.format_type(node.type)
+
+        return node_dict
+
+    def _callable_to_json(self, node):
+        node_dict = self._node_to_json(node)
+        node_dict['retval'] = self._return_to_json(node.retval)
+        node_dict['parameters'] = self._parameters_to_json(node.parameters)
+
+        return node_dict
+
+    def _callables_to_json(self, callables):
+        callable_dicts = []
+        for callable in callables:
+            callable_dicts.append(self._callable_to_json(callable))
+        return callable_dicts
+
+    def _property_to_json(self, node):
+        node_dict = self._node_to_json(node)
+        node_dict['type'] = self._formatter.format_type(node.type)
+
+        return node_dict
+
+    def _properties_to_json(self, properties):
+        property_dicts = []
+        for prop in properties:
+            if not isinstance(prop.type, ast.TypeUnknown):
+                property_dicts.append(self._property_to_json(prop))
+        return property_dicts
+
+    def _vfuncs_to_json(self, vfuncs):
+        vfunc_dicts = []
+        for vfunc in vfuncs:
+            vfunc_dicts.append(self._node_to_json(vfunc))
+        return vfunc_dicts
+
+    def _fields_to_json(self, fields):
+        field_dicts = []
+        for field in fields:
+            field_dicts.append(self._node_to_json(field))
+        return field_dicts
+
+    def _compound_to_json(self, node):
+        node_dict = self._node_to_json(node)
+        node_dict['constructors'] = self._callables_to_json(node.constructors)
+        node_dict['methods'] = self._callables_to_json(node.methods)
+        node_dict['methods'].extend(self._callables_to_json(node.static_methods))
+
+        return node_dict
+
+    def _class_to_json(self, node):
+        node_dict = self._compound_to_json(node)
+        node_dict['properties'] = self._properties_to_json(node.properties)
+        node_dict['signals'] = self._callables_to_json(node.signals)
+        node_dict['vfuncs'] = self._callables_to_json(node.virtual_methods)
+
+        return node_dict
+
+    def _record_to_json(self, node):
+        node_dict = self._compound_to_json(node)
+        node_dict['fields'] = self._fields_to_json(node.fields)
+
+        return node_dict
+
+    def _members_to_json(self, members):
+        member_dicts = []
+        for member in members:
+            member_dicts.append(self._node_to_json(member))
+        return member_dicts
+
+    def _enum_to_json(self, node):
+        node_dict = self._node_to_json(node)
+        node_dict['members'] = self._members_to_json(node.members)
+
+        return node_dict
+
+    def _namespace_to_json(self, namespace):
+        classes = []
+        records = []
+        functions = []
+        enums = []
+        for node in namespace.itervalues():
+            if isinstance(node, ast.Class):
+                classes.append(self._node_to_json(node))
+            elif isinstance(node, ast.Record):
+                records.append(self._node_to_json(node))
+            elif isinstance(node, ast.Function):
+                functions.append(self._node_to_json(node))
+            elif isinstance(node, ast.Enum):
+                enums.append(self._node_to_json(node))
+
+        top_level_dict = {}
+        top_level_dict['name'] = namespace.name
+        top_level_dict['version'] = namespace.version
+        top_level_dict['classes'] = classes
+        top_level_dict['records'] = records
+        top_level_dict['functions'] = functions
+        top_level_dict['enums'] = enums
+
+        return top_level_dict
+
+    def _dump_json(self, node_dict, output_file_name):
+            fp = open(output_file_name, 'w')
+            json.dump(node_dict, fp, sort_keys=True, indent=4,
+                      separators=(',', ': '))
+            fp.close()
+
+    def write_json(self, output):
+        try:
+            os.makedirs(output)
+        except OSError:
+            # directory already made
+            pass
+
+        self._formatter.json = True
+
+        namespace = self._transformer.namespace
+        for node in namespace.itervalues():
+            if isinstance(node, ast.Class):
+                node_dict = self._class_to_json(node)
+            elif isinstance(node, ast.Record):
+                node_dict = self._record_to_json(node)
+            elif isinstance(node, ast.Enum):
+                node_dict = self._enum_to_json(node)
+            else:
+                continue
+
+            output_file_name = os.path.join(os.path.abspath(output),
+                                        '%s.%s.json' % (namespace.name, node.name))
+            self._dump_json(node_dict, output_file_name)
+
+        output_file_name = os.path.join(os.path.abspath(output),
+                                        '%s-%s.json' % (namespace.name, namespace.version))
+        self._dump_json(self._namespace_to_json(namespace), output_file_name)
 
     def _walk_node(self, output, node, chain):
         if isinstance(node, ast.Function) and node.moved_to is not None:

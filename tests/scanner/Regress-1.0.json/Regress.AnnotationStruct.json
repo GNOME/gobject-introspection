@@ -1,0 +1,14 @@
+{
+    "constructors": [],
+    "doc": "  <p>This is a test of an array of object in an field of a struct.</p>",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "objects"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "AnnotationStruct"
+}

@@ -1,0 +1,866 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "constructor",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestObj*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "obj",
+                    "direction": "in",
+                    "type": "RegressTestObj*"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestObj*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new_callback",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "callback",
+                    "direction": "in",
+                    "type": "RegressTestCallbackUserData"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "user_data",
+                    "direction": "in",
+                    "type": "gpointer"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "notify",
+                    "direction": "in",
+                    "type": "GDestroyNotify"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestObj*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new_from_file",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "const char*"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestObj*"
+            }
+        }
+    ],
+    "doc": "",
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "  <p>This method is virtual.  Notably its name differs from the virtual\nslot name, which makes it useful for testing bindings handle this\ncase.</p>",
+            "kind": "method",
+            "name": "do_matrix",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "somestr",
+                    "direction": "in",
+                    "type": "const char*"
+                }
+            ],
+            "retval": {
+                "type": "int"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "emit_sig_with_foreign_struct",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "emit_sig_with_int64",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "emit_sig_with_obj",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "emit_sig_with_uint64",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "forced_method",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "instance_method",
+            "parameters": [],
+            "retval": {
+                "type": "int"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "instance_method_callback",
+            "parameters": [
+                {
+                    "allow_none": true,
+                    "argname": "callback",
+                    "direction": "in",
+                    "type": "RegressTestCallback"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "set_bare",
+            "parameters": [
+                {
+                    "allow_none": true,
+                    "argname": "bare",
+                    "direction": "in",
+                    "type": "GObject*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Check that the out value is skipped</p>",
+            "kind": "method",
+            "name": "skip_inout_param",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "a",
+                    "direction": "in",
+                    "type": "gint"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "out_b",
+                    "direction": "out",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "c",
+                    "direction": "in",
+                    "type": "gdouble"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "inout_d",
+                    "direction": "inout",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "out_sum",
+                    "direction": "out",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "num1",
+                    "direction": "in",
+                    "type": "gint"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "num2",
+                    "direction": "in",
+                    "type": "gint"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "  <p>Check that the out value is skipped</p>",
+            "kind": "method",
+            "name": "skip_out_param",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "a",
+                    "direction": "in",
+                    "type": "gint"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "out_b",
+                    "direction": "out",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "c",
+                    "direction": "in",
+                    "type": "gdouble"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "inout_d",
+                    "direction": "inout",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "out_sum",
+                    "direction": "out",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "num1",
+                    "direction": "in",
+                    "type": "gint"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "num2",
+                    "direction": "in",
+                    "type": "gint"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "  <p>Check that a parameter is skipped</p>",
+            "kind": "method",
+            "name": "skip_param",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "a",
+                    "direction": "in",
+                    "type": "gint"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "out_b",
+                    "direction": "out",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "c",
+                    "direction": "in",
+                    "type": "gdouble"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "inout_d",
+                    "direction": "inout",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "out_sum",
+                    "direction": "out",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "num1",
+                    "direction": "in",
+                    "type": "gint"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "num2",
+                    "direction": "in",
+                    "type": "gint"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "  <p>Check that the return value is skipped</p>",
+            "kind": "method",
+            "name": "skip_return_val",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "a",
+                    "direction": "in",
+                    "type": "gint"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "out_b",
+                    "direction": "out",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "c",
+                    "direction": "in",
+                    "type": "gdouble"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "inout_d",
+                    "direction": "inout",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "out_sum",
+                    "direction": "out",
+                    "type": "gint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "num1",
+                    "direction": "in",
+                    "type": "gint"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "num2",
+                    "direction": "in",
+                    "type": "gint"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "  <p>Check that the return value is skipped. Succeed if a is nonzero, otherwise\nraise an error.</p>",
+            "kind": "method",
+            "name": "skip_return_val_no_out",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "a",
+                    "direction": "in",
+                    "type": "gint"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "torture_signature_0",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "y",
+                    "direction": "out",
+                    "type": "double*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "z",
+                    "direction": "out",
+                    "type": "int*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "foo",
+                    "direction": "in",
+                    "type": "const char*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "q",
+                    "direction": "out",
+                    "type": "int*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "m",
+                    "direction": "in",
+                    "type": "guint"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This function throws an error if m is odd.</p>",
+            "kind": "method",
+            "name": "torture_signature_1",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "y",
+                    "direction": "out",
+                    "type": "double*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "z",
+                    "direction": "out",
+                    "type": "int*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "foo",
+                    "direction": "in",
+                    "type": "const char*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "q",
+                    "direction": "out",
+                    "type": "int*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "m",
+                    "direction": "in",
+                    "type": "guint"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "function",
+            "name": "null_out",
+            "parameters": [
+                {
+                    "allow_none": true,
+                    "argname": "obj",
+                    "direction": "out",
+                    "type": "RegressTestObj**"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "function",
+            "name": "static_method",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "double"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "function",
+            "name": "static_method_callback",
+            "parameters": [
+                {
+                    "allow_none": true,
+                    "argname": "callback",
+                    "direction": "in",
+                    "type": "RegressTestCallback"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "TestObj",
+    "properties": [
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "bare",
+            "type": "GObject"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "boxed",
+            "type": "RegressTestBoxed"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "double",
+            "type": "gdouble"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "float",
+            "type": "gfloat"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "gtype",
+            "type": "GType"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "hash-table",
+            "type": "<map>"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "hash-table-old",
+            "type": "<map>"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "int",
+            "type": "gint"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "list",
+            "type": "gpointer"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "list-old",
+            "type": "gpointer"
+        },
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "string",
+            "type": "gchar*"
+        }
+    ],
+    "signals": [
+        {
+            "doc": "",
+            "kind": "signal",
+            "name": "all",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "signal",
+            "name": "cleanup",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "signal",
+            "name": "first",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This test signal similar to GSettings::change-event</p>",
+            "kind": "signal",
+            "name": "sig-with-array-len-prop",
+            "parameters": [
+                {
+                    "allow_none": true,
+                    "argname": "arr",
+                    "direction": "in",
+                    "type": "guint*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "len",
+                    "direction": "in",
+                    "type": "gint"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This test signal is like TelepathyGlib's\n TpChannel:: group-members-changed-detailed:</p>",
+            "kind": "signal",
+            "name": "sig-with-array-prop",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "arr",
+                    "direction": "in",
+                    "type": "guint*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "signal",
+            "name": "sig-with-foreign-struct",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "cr",
+                    "direction": "in",
+                    "type": "cairo_t"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This test signal is like TelepathyGlib's\n TpAccount::status-changed</p>",
+            "kind": "signal",
+            "name": "sig-with-hash-prop",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "hash",
+                    "direction": "in",
+                    "type": "<map>"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>You can use this with regress_test_obj_emit_sig_with_int64, or raise from\nthe introspection client langage.</p>",
+            "kind": "signal",
+            "name": "sig-with-int64-prop",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "i",
+                    "direction": "in",
+                    "type": "gint64"
+                }
+            ],
+            "retval": {
+                "type": "gint64"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "signal",
+            "name": "sig-with-intarray-ret",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "i",
+                    "direction": "in",
+                    "type": "gint"
+                }
+            ],
+            "retval": {
+                "type": "gint*"
+            }
+        },
+        {
+            "doc": "  <p>Test transfer none GObject as a param (tests refcounting).\nUse with regress_test_obj_emit_sig_with_obj</p>",
+            "kind": "signal",
+            "name": "sig-with-obj",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "obj",
+                    "direction": "in",
+                    "type": "GObject"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Test GStrv as a param.</p>",
+            "kind": "signal",
+            "name": "sig-with-strv",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "strs",
+                    "direction": "in",
+                    "type": "utf8*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>You can use this with regress_test_obj_emit_sig_with_uint64, or raise from\nthe introspection client langage.</p>",
+            "kind": "signal",
+            "name": "sig-with-uint64-prop",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "i",
+                    "direction": "in",
+                    "type": "guint64"
+                }
+            ],
+            "retval": {
+                "type": "guint64"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "signal",
+            "name": "test",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "signal",
+            "name": "test-with-static-scope-arg",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "object",
+                    "direction": "in",
+                    "type": "RegressTestSimpleBoxedA"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "vfuncs": [
+        {
+            "doc": "",
+            "kind": "vfunc",
+            "name": "allow_none_vfunc",
+            "parameters": [
+                {
+                    "allow_none": true,
+                    "argname": "two",
+                    "direction": "in",
+                    "type": "RegressTestObj*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "vfunc",
+            "name": "complex_vfunc",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "someint",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This method is virtual.  Notably its name differs from the virtual\nslot name, which makes it useful for testing bindings handle this\ncase.</p>",
+            "kind": "vfunc",
+            "name": "matrix",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "somestr",
+                    "direction": "in",
+                    "type": "const char*"
+                }
+            ],
+            "retval": {
+                "type": "int"
+            }
+        }
+    ]
+}

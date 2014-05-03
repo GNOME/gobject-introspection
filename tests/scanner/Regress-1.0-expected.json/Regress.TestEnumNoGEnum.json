@@ -1,0 +1,22 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "evalue1"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "evalue2"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "evalue3"
+        }
+    ],
+    "name": "TestEnumNoGEnum"
+}

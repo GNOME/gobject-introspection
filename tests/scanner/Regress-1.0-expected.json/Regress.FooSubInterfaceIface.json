@@ -1,0 +1,29 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "parent_iface"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "destroy_event"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "do_bar"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "do_baz"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "FooSubInterfaceIface"
+}

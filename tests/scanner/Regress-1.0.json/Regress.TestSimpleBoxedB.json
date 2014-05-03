@@ -1,0 +1,29 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_int8"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "nested_a"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "copy",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestSimpleBoxedB*"
+            }
+        }
+    ],
+    "name": "TestSimpleBoxedB"
+}

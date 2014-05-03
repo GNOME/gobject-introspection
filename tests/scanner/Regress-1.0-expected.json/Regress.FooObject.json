@@ -1,0 +1,315 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [],
+            "retval": {
+                "type": "RegressFooObject*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new_as_super",
+            "parameters": [],
+            "retval": {
+                "type": "GObject*"
+            }
+        }
+    ],
+    "doc": "",
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "  <p>This shouldn't be scanned as a constructor.</p>",
+            "kind": "method",
+            "name": "append_new_stack_layer",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "RegressFooOtherObject*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "dup_name",
+            "parameters": [],
+            "retval": {
+                "type": "char*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "external_type",
+            "parameters": [],
+            "retval": {
+                "type": "UtilityObject*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "get_name",
+            "parameters": [],
+            "retval": {
+                "type": "const char*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "handle_glyph",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "glyph",
+                    "direction": "in",
+                    "type": "UtilityGlyph"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "is_it_time_yet",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "time",
+                    "direction": "in",
+                    "type": "time_t"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>Not sure why this test is here...</p>",
+            "kind": "method",
+            "name": "new_cookie",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "target",
+                    "direction": "in",
+                    "type": "const char*"
+                }
+            ],
+            "retval": {
+                "type": "RegressFooObjectCookie"
+            }
+        },
+        {
+            "doc": "  <p>Read some stuff.</p>",
+            "kind": "method",
+            "name": "read",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "offset",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "length",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This is only useful from C.</p>",
+            "kind": "method",
+            "name": "skipped_method",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "take_all",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "x",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "...",
+                    "direction": "in",
+                    "type": "<varargs>"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "various",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "data",
+                    "direction": "in",
+                    "type": "void*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "some_type",
+                    "direction": "in",
+                    "type": "GType"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "virtual_method",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "first_param",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "function",
+            "name": "a_global_method",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "obj",
+                    "direction": "in",
+                    "type": "UtilityObject*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "  <p>This function is intended to match clutter_stage_get_default which\nuses a C sugar return type.</p>",
+            "kind": "function",
+            "name": "get_default",
+            "parameters": [],
+            "retval": {
+                "type": "RegressFooObject*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "function",
+            "name": "static_meth",
+            "parameters": [],
+            "retval": {
+                "type": "int"
+            }
+        }
+    ],
+    "name": "FooObject",
+    "properties": [
+        {
+            "doc": "",
+            "kind": "property",
+            "name": "string",
+            "type": "gchar*"
+        }
+    ],
+    "signals": [
+        {
+            "doc": "",
+            "kind": "signal",
+            "name": "signal",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "object",
+                    "direction": "in",
+                    "type": "GObject"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "p0",
+                    "direction": "in",
+                    "type": "gpointer"
+                }
+            ],
+            "retval": {
+                "type": "gchar*"
+            }
+        }
+    ],
+    "vfuncs": [
+        {
+            "doc": "  <p>Read some stuff.</p>",
+            "kind": "vfunc",
+            "name": "read_fn",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "offset",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "length",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "vfunc",
+            "name": "virtual_method",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "first_param",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        }
+    ]
+}

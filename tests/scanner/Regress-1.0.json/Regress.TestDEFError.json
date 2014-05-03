@@ -1,0 +1,22 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "code0"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "code1"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "code2"
+        }
+    ],
+    "name": "TestDEFError"
+}

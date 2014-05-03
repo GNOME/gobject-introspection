@@ -1,0 +1,18 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "method",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "FooDBusData"
+}

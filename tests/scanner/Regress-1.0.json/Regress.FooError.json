@@ -1,0 +1,22 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "good"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "bad"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "ugly"
+        }
+    ],
+    "name": "FooError"
+}

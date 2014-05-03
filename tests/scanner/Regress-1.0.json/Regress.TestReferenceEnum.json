@@ -1,0 +1,37 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "0"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "1"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "2"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "3"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "4"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "5"
+        }
+    ],
+    "name": "TestReferenceEnum"
+}

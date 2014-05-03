@@ -1,0 +1,29 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "parent_class"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "virtual_method"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "read_fn"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "_reserved"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "FooObjectClass"
+}

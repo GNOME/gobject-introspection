@@ -1,0 +1,19 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "parent_iface"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "do_regress_foo"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "FooInterfaceIface"
+}

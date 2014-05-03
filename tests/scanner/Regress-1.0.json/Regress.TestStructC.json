@@ -1,0 +1,19 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "another_int"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "obj"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "TestStructC"
+}

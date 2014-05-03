@@ -1,0 +1,19 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "priv"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "member"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "FooStruct"
+}

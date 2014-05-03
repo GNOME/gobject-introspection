@@ -1,0 +1,24 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "this_is_public_before"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "this_is_private"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "this_is_public_after"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "TestPrivateStruct"
+}

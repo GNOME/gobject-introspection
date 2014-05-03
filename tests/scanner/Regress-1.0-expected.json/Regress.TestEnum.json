@@ -1,0 +1,27 @@
+{
+    "doc": "  <p>By purpose, not all members have documentation</p>",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "  <p>value 1</p>",
+            "kind": "default",
+            "name": "value1"
+        },
+        {
+            "doc": "  <p>value 2</p>",
+            "kind": "default",
+            "name": "value2"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "value3"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "value4"
+        }
+    ],
+    "name": "TestEnum"
+}

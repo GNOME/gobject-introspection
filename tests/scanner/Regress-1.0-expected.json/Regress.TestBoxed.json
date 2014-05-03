@@ -1,0 +1,123 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestBoxed*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new_alternative_constructor1",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "i",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestBoxed*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new_alternative_constructor2",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "i",
+                    "direction": "in",
+                    "type": "int"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "j",
+                    "direction": "in",
+                    "type": "int"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestBoxed*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new_alternative_constructor3",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "s",
+                    "direction": "in",
+                    "type": "char*"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestBoxed*"
+            }
+        }
+    ],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_int8"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "nested_a"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "priv"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "_not_a_method",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "copy",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestBoxed*"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "equals",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "other",
+                    "direction": "in",
+                    "type": "RegressTestBoxed*"
+                }
+            ],
+            "retval": {
+                "type": "gboolean"
+            }
+        }
+    ],
+    "name": "TestBoxed"
+}

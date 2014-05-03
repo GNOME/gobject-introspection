@@ -1,0 +1,52 @@
+{
+    "constructors": [
+        {
+            "doc": "",
+            "kind": "constructor",
+            "name": "new",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "some_int8",
+                    "direction": "in",
+                    "type": "gint8"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "some_long",
+                    "direction": "in",
+                    "type": "glong"
+                }
+            ],
+            "retval": {
+                "type": "RegressTestBoxedB*"
+            }
+        }
+    ],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_int8"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_long"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "copy",
+            "parameters": [],
+            "retval": {
+                "type": "RegressTestBoxedB*"
+            }
+        }
+    ],
+    "name": "TestBoxedB"
+}

@@ -1,0 +1,34 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "array1"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "array2"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "field"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "list"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "garray"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "TestStructD"
+}

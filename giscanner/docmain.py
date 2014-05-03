@@ -42,6 +42,9 @@ def doc_main(args):
     parser.add_option("", "--write-sections-file",
                       action="store_true", dest="write_sections",
                       help="Generate and write out a sections file")
+    parser.add_option("", "--write-json-files",
+                      action="store_true", dest="write_json",
+                      help="Generate and write out json files describing the API")
 
     options, args = parser.parse_args(args)
     if not options.output:
@@ -65,6 +68,9 @@ def doc_main(args):
         fp = open(options.output, 'w')
         write_sections_file(fp, sections_file)
         fp.close()
+    elif options.write_json:
+        writer = DocWriter(transformer, options.language)
+        writer.write_json(options.output)
     else:
         writer = DocWriter(transformer, options.language)
         writer.write(options.output)

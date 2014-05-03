@@ -1,0 +1,22 @@
+{
+    "doc": "",
+    "kind": "enum",
+    "members": [
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "code1"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "code2"
+        },
+        {
+            "doc": "",
+            "kind": "default",
+            "name": "code3"
+        }
+    ],
+    "name": "TestABCError"
+}

@@ -1,0 +1,20 @@
+{
+    "constructors": [],
+    "doc": "",
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "",
+            "kind": "method",
+            "name": "some_method",
+            "parameters": [],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "FooBuffer",
+    "properties": [],
+    "signals": [],
+    "vfuncs": []
+}

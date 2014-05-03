@@ -1,0 +1,19 @@
+{
+    "constructors": [],
+    "doc": "  <p>This should be skipped, and moreover, all function which\nuse it should be.</p>",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "x"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "v"
+        }
+    ],
+    "kind": "class",
+    "methods": [],
+    "name": "SkippedStructure"
+}

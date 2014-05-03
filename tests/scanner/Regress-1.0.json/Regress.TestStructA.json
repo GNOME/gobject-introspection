@@ -1,0 +1,68 @@
+{
+    "constructors": [],
+    "doc": "",
+    "fields": [
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_int"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_int8"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_double"
+        },
+        {
+            "doc": "",
+            "kind": "field",
+            "name": "some_enum"
+        }
+    ],
+    "kind": "class",
+    "methods": [
+        {
+            "doc": "  <p>Make a copy of a RegressTestStructA</p>",
+            "kind": "method",
+            "name": "clone",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "a_out",
+                    "direction": "out",
+                    "type": "RegressTestStructA*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        },
+        {
+            "doc": "",
+            "kind": "function",
+            "name": "parse",
+            "parameters": [
+                {
+                    "allow_none": false,
+                    "argname": "a_out",
+                    "direction": "out",
+                    "type": "RegressTestStructA*"
+                },
+                {
+                    "allow_none": false,
+                    "argname": "string",
+                    "direction": "in",
+                    "type": "const gchar*"
+                }
+            ],
+            "retval": {
+                "type": "void"
+            }
+        }
+    ],
+    "name": "TestStructA"
+}
