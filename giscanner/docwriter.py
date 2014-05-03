@@ -27,6 +27,7 @@ import tempfile
 
 from xml.sax import saxutils
 from mako.lookup import TemplateLookup
+import markdown
 
 from . import ast, xmlwriter
 from .utils import to_underscores
@@ -200,9 +201,8 @@ class DocFormatter(object):
 
         result = ''
         for para in doc.split('\n\n'):
-            result += '  <p>'
-            result += self.format_inline(node, para)
-            result += '</p>'
+            result += '  '
+            result += markdown.markdown(self.format_inline(node, para))
         return result
 
     def _resolve_type(self, ident):

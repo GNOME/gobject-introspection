@@ -268,6 +268,8 @@ static GValue value;
  * regress_test_value_return:
  * @i: an int
  *
+ * This is a _test_ of **Markdown** formatting within a comment.
+ *
  * Return value: (transfer none): the int wrapped in a GValue.
  */
 const GValue *

@@ -6532,6 +6532,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
     </function>
     <function name="test_value_return"
               c:identifier="regress_test_value_return">
+      <doc xml:space="preserve">This is a _test_ of **Markdown** formatting within a comment.</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve">the int wrapped in a GValue.</doc>
         <type name="GObject.Value" c:type="const GValue*"/>

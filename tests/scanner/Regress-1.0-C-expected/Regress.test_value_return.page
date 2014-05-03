@@ -22,7 +22,7 @@
   <synopsis><code mime="text/x-csrc">
 const GValue* regress_test_value_return (int i);
   </code></synopsis>
-
+  <p>This is a <em>test</em> of <strong>Markdown</strong> formatting within a comment.</p>
 
 <terms>
 <item>
