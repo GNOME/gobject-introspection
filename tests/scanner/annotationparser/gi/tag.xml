@@ -8,7 +8,7 @@
  *
  * Forgotten colon below will result in a warning.
  *
- * Returns: (transfer none) return value
+ * Returns: (allow-none) return value
  **/</input>
   <parser>
     <docblock>
@@ -21,12 +21,7 @@
           <name>returns</name>
           <annotations>
             <annotation>
-              <name>transfer</name>
-              <options>
-                <option>
-                  <name>none</name>
-                </option>
-              </options>
+              <name>allow-none</name>
             </annotation>
           </annotations>
           <description>return value</description>
@@ -34,9 +29,9 @@
       </tags>
     </docblock>
     <messages>
-      <message>6: Warning: Test: missing ":" at column 28:
- * Returns: (transfer none) return value
-                           ^</message>
+      <message>6: Warning: Test: missing ":" at column 25:
+ * Returns: (allow-none) return value
+                        ^</message>
     </messages>
   </parser>
   <output>/**
@@ -44,7 +39,7 @@
  *
  * Forgotten colon below will result in a warning.
  *
- * Returns: (transfer none): return value
+ * Returns: (allow-none): return value
  */</output>
 </test>
 
@@ -176,7 +171,7 @@ Moo: anything</description>
  *
  * Annotations spanning multiple lines are not valid
  *
- * Returns: (skip)
+ * Returns: (allow-none)
  * (transfer full): something
  **/</input>
   <parser>
@@ -190,7 +185,7 @@ Moo: anything</description>
           <name>returns</name>
           <annotations>
             <annotation>
-              <name>skip</name>
+              <name>allow-none</name>
             </annotation>
           </annotations>
           <description>
@@ -209,7 +204,7 @@ Moo: anything</description>
  *
  * Annotations spanning multiple lines are not valid
  *
- * Returns: (skip):
+ * Returns: (allow-none):
  * (transfer full): something
  */</output>
 </test>
@@ -220,7 +215,7 @@ Moo: anything</description>
  *
  * Annotations spanning multiple lines are not valid
  *
- * Returns: (skip): Returns tag having a second line which looks
+ * Returns: (allow-none): Returns tag having a second line which looks
  * (like an annotation), but isn't. This should not result in a warning.
  **/</input>
   <parser>
@@ -234,7 +229,7 @@ Moo: anything</description>
           <name>returns</name>
           <annotations>
             <annotation>
-              <name>skip</name>
+              <name>allow-none</name>
             </annotation>
           </annotations>
           <description>Returns tag having a second line which looks
@@ -248,7 +243,7 @@ Moo: anything</description>
  *
  * Annotations spanning multiple lines are not valid
  *
- * Returns: (skip): Returns tag having a second line which looks
+ * Returns: (allow-none): Returns tag having a second line which looks
  * (like an annotation), but isn't. This should not result in a warning.
  */</output>
 </test>
