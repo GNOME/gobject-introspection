@@ -136,7 +136,11 @@ and/or use gtk-doc annotations.  -->
         <parameter name="item" transfer-ownership="none">
           <type name="utf8" c:type="const char*"/>
         </parameter>
-        <parameter name="user_data" transfer-ownership="none" closure="2">
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="2">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -166,7 +170,11 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="data" transfer-ownership="none" closure="0">
+        <parameter name="data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="0">
           <doc xml:space="preserve">The user data</doc>
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
@@ -376,7 +384,11 @@ are zero-terminated</doc>
             <type name="AnnotationForeachFunc"
                   c:type="RegressAnnotationForeachFunc"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     closure="1">
             <doc xml:space="preserve">Callback user data</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
@@ -724,7 +736,11 @@ regress_annotation_object_watch_full().</doc>
             <type name="AnnotationForeachFunc"
                   c:type="RegressAnnotationForeachFunc"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     closure="1">
             <doc xml:space="preserve">The callback data</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
@@ -751,7 +767,11 @@ regress_annotation_object_watch_full().</doc>
             <type name="AnnotationForeachFunc"
                   c:type="RegressAnnotationForeachFunc"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     closure="1">
             <doc xml:space="preserve">The callback data</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
@@ -1797,7 +1817,11 @@ exposed to language bindings.</doc>
                      closure="1">
             <type name="GObject.Callback" c:type="GCallback"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none" closure="1">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     closure="1">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1826,7 +1850,11 @@ exposed to language bindings.</doc>
                      closure="1">
             <type name="GObject.Callback" c:type="GCallback"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     closure="1">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1882,7 +1910,11 @@ exposed to language bindings.</doc>
                        closure="2">
               <type name="GObject.Callback" c:type="GCallback"/>
             </parameter>
-            <parameter name="user_data" transfer-ownership="none" closure="2">
+            <parameter name="user_data"
+                       transfer-ownership="none"
+                       nullable="1"
+                       allow-none="1"
+                       closure="2">
               <type name="gpointer" c:type="gpointer"/>
             </parameter>
           </parameters>
@@ -2402,7 +2434,11 @@ use it should be.</doc>
         <type name="gint" c:type="int"/>
       </return-value>
       <parameters>
-        <parameter name="user_data" transfer-ownership="none" closure="0">
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="0">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -2873,7 +2909,11 @@ use it should be.</doc>
             <type name="TestCallbackUserData"
                   c:type="RegressTestCallbackUserData"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1"
+                     closure="1">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="notify" transfer-ownership="none" scope="async">
@@ -4251,7 +4291,11 @@ detection, and fixing it via annotations.</doc>
           <type name="AnnotationNotifyFunc"
                 c:type="RegressAnnotationNotifyFunc"/>
         </parameter>
-        <parameter name="data" transfer-ownership="none">
+        <parameter name="data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="2">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -4445,7 +4489,11 @@ detection, and fixing it via annotations.</doc>
                    closure="2">
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
         </parameter>
-        <parameter name="user_data" transfer-ownership="none">
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="2">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -4463,7 +4511,11 @@ detection, and fixing it via annotations.</doc>
                    destroy="2">
           <type name="FooCallback" c:type="RegressFooCallback"/>
         </parameter>
-        <parameter name="data" transfer-ownership="none">
+        <parameter name="data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="1">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="destroy" transfer-ownership="none" scope="async">
@@ -5334,7 +5386,11 @@ libgnome-keyring.</doc>
           <type name="TestCallbackUserData"
                 c:type="RegressTestCallbackUserData"/>
         </parameter>
-        <parameter name="user_data" transfer-ownership="none">
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="1">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -5355,7 +5411,11 @@ is invoked.</doc>
           <type name="TestCallbackUserData"
                 c:type="RegressTestCallbackUserData"/>
         </parameter>
-        <parameter name="user_data" transfer-ownership="none">
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="1">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="notify" transfer-ownership="none" scope="async">
@@ -5426,7 +5486,11 @@ call and can be released on return.</doc>
           <type name="TestCallbackUserData"
                 c:type="RegressTestCallbackUserData"/>
         </parameter>
-        <parameter name="user_data" transfer-ownership="none">
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="1">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -6435,7 +6499,11 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
           <type name="TestCallbackUserData"
                 c:type="RegressTestCallbackUserData"/>
         </parameter>
-        <parameter name="user_data" transfer-ownership="none">
+        <parameter name="user_data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   closure="2">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="notify" transfer-ownership="none" scope="async">
