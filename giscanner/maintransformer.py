@@ -591,7 +591,7 @@ class MainTransformer(object):
             else:
                 node.nullable = True
 
-        if (node.direction == ast.PARAM_DIRECTION_IN and
+        if (node.direction != ast.PARAM_DIRECTION_OUT and
                 (node.type.target_giname == 'Gio.AsyncReadyCallback' or
                  node.type.target_giname == 'Gio.Cancellable')):
             node.nullable = True
