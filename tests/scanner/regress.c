@@ -2679,6 +2679,17 @@ regress_test_obj_instance_method (RegressTestObj *obj)
     return -1;
 }
 
+/**
+ * regress_test_obj_instance_method_full:
+ * @obj: (transfer full):
+ *
+ */
+void
+regress_test_obj_instance_method_full (RegressTestObj *obj)
+{
+  g_object_unref (obj);
+}
+
 double
 regress_test_obj_static_method (int x)
 {

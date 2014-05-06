@@ -276,6 +276,34 @@ test_signal_array_len (GIRepository * repo)
   g_base_info_unref (testobj_info);
 }
 
+static void
+test_instance_transfer_ownership (GIRepository * repo)
+{
+  GIObjectInfo *testobj_info;
+  GIFunctionInfo *func_info;
+  GITransfer transfer;
+
+  g_assert (g_irepository_require (repo, "Regress", NULL, 0, NULL));
+  testobj_info = g_irepository_find_by_name (repo, "Regress", "TestObj");
+  g_assert (testobj_info != NULL);
+
+  func_info = g_object_info_find_method (testobj_info, "instance_method");
+  g_assert (func_info != NULL);
+  transfer = g_callable_info_get_instance_ownership_transfer ((GICallableInfo*) func_info);
+  g_assert_cmpint (GI_TRANSFER_NOTHING, ==, transfer);
+
+  g_base_info_unref (func_info);
+
+  func_info = g_object_info_find_method (testobj_info, "instance_method_full");
+  g_assert (func_info != NULL);
+  transfer = g_callable_info_get_instance_ownership_transfer ((GICallableInfo*) func_info);
+  g_assert_cmpint (GI_TRANSFER_EVERYTHING, ==, transfer);
+
+  g_base_info_unref (func_info);
+
+  g_base_info_unref (testobj_info);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -292,6 +320,7 @@ main (int argc, char **argv)
   test_hash_with_cairo_typelib (repo);
   test_char_types (repo);
   test_signal_array_len (repo);
+  test_instance_transfer_ownership (repo);
 
   exit (0);
 }

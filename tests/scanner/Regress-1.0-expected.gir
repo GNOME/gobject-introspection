@@ -3057,6 +3057,17 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="instance_method_full"
+              c:identifier="regress_test_obj_instance_method_full">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="full">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="set_bare" c:identifier="regress_test_obj_set_bare">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
