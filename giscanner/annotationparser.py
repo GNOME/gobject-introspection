@@ -959,7 +959,7 @@ class GtkDocParameter(GtkDocAnnotatable):
 
     valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CLOSURE, ANN_DESTROY,
                          ANN_ELEMENT_TYPE, ANN_IN, ANN_INOUT, ANN_OUT, ANN_SCOPE, ANN_SKIP,
-                         ANN_TRANSFER, ANN_TYPE)
+                         ANN_TRANSFER, ANN_TYPE, ANN_OPTIONAL, ANN_NULLABLE)
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)
@@ -982,7 +982,7 @@ class GtkDocTag(GtkDocAnnotatable):
     __slots__ = ('name', 'value', 'description')
 
     valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_ELEMENT_TYPE, ANN_SKIP,
-                         ANN_TRANSFER, ANN_TYPE)
+                         ANN_TRANSFER, ANN_TYPE, ANN_NULLABLE, ANN_OPTIONAL)
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)
