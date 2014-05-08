@@ -4387,11 +4387,16 @@ detection, and fixing it via annotations.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="cancellable" transfer-ownership="none">
+        <parameter name="cancellable"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <type name="Gio.Cancellable" c:type="GCancellable*"/>
         </parameter>
         <parameter name="callback"
                    transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
                    scope="async"
                    closure="2">
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
@@ -5113,7 +5118,11 @@ libgnome-keyring.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="callback" transfer-ownership="none" scope="async">
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   scope="async">
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
         </parameter>
       </parameters>
