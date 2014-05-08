@@ -216,6 +216,8 @@ ANN_VFUNC = 'virtual'
 ANN_VALUE = 'value'
 
 GI_ANNS = [ANN_ALLOW_NONE,
+           ANN_NULLABLE,
+           ANN_OPTIONAL,
            ANN_ARRAY,
            ANN_ATTRIBUTES,
            ANN_CLOSURE,
