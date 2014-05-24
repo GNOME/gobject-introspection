@@ -18346,6 +18346,19 @@
 
 
 /**
+ * g_desktop_app_info_get_implementations:
+ * @interface: the name of the interface
+ *
+ * Gets all applications that implement @interface.
+ *
+ * An application implements an interface if that interface is listed in
+ * the Implements= line of the desktop file of the application.
+ *
+ * Since: 2.42
+ */
+
+
+/**
  * g_desktop_app_info_get_is_hidden:
  * @info: a #GDesktopAppInfo.
  *
@@ -18383,14 +18396,16 @@
 /**
  * g_desktop_app_info_get_show_in:
  * @info: a #GDesktopAppInfo
- * @desktop_env: a string specifying a desktop name
+ * @desktop_env: (nullable): a string specifying a desktop name
  *
  * Checks if the application info should be shown in menus that list available
  * applications for a specific name of the desktop, based on the
  * `OnlyShowIn` and `NotShowIn` keys.
  *
- * If @desktop_env is %NULL, then the name of the desktop set with
- * g_desktop_app_info_set_desktop_env() is used.
+ * @desktop_env should typically be given as %NULL, in which case the
+ * `XDG_CURRENT_DESKTOP` environment variable is consulted.  If you want
+ * to override the default mechanism then you may specify @desktop_env,
+ * but this is not recommended.
  *
  * Note that g_app_info_should_show() for @info will include this check (with
  * %NULL for @desktop_env) as well as additional checks.
@@ -18607,18 +18622,10 @@
  * `OnlyShowIn` and `NotShowIn`
  * desktop entry fields.
  *
- * The
- * [Desktop Menu specification](http://standards.freedesktop.org/menu-spec/latest/)
- * recognizes the following:
- * - GNOME
- * - KDE
- * - ROX
- * - XFCE
- * - LXDE
- * - Unity
- * - Old
- *
  * Should be called only once; subsequent calls are ignored.
+ *
+ * Deprecated: 2.42: do not use this API.  Since 2.42 the value of the
+ * `XDG_CURRENT_DESKTOP` environment variable will be used.
  */
 
 
@@ -20011,7 +20018,7 @@
  *
  * Finishes the asynchronous operation started with g_file_enumerator_next_files_async().
  *
- * Returns: (transfer full) (element-type Gio.FileInfo): a #GList of #GFileInfo<!---->s. You must free the list with
+ * Returns: (transfer full) (element-type Gio.FileInfo): a #GList of #GFileInfos. You must free the list with
  *     g_list_free() and unref the infos with g_object_unref() when you're
  *     done with them.
  */
@@ -28599,7 +28606,7 @@
  * the textual form of an IP address (in which case this just becomes
  * a wrapper around g_inet_address_new_from_string()).
  *
- * On success, g_resolver_lookup_by_name() will return a #GList of
+ * On success, g_resolver_lookup_by_name() will return a non-empty #GList of
  * #GInetAddress, sorted in order of preference and guaranteed to not
  * contain duplicates. That is, if using the result to connect to
  * @hostname, you should attempt to connect to the first address
@@ -28608,7 +28615,7 @@
  * result using e.g. g_socket_listener_add_address().
  *
  * If the DNS resolution fails, @error (if non-%NULL) will be set to a
- * value from #GResolverError.
+ * value from #GResolverError and %NULL will be returned.
  *
  * If @cancellable is non-%NULL, it can be used to cancel the
  * operation, in which case @error (if non-%NULL) will be set to
@@ -28618,7 +28625,7 @@
  * address, it may be easier to create a #GNetworkAddress and use its
  * #GSocketConnectable interface.
  *
- * Returns: (element-type GInetAddress) (transfer full): a #GList
+ * Returns: (element-type GInetAddress) (transfer full): a non-empty #GList
  * of #GInetAddress, or %NULL on error. You
  * must unref each of the addresses and free the list when you are
  * done with it. (You can use g_resolver_free_addresses() to do this.)
@@ -28676,15 +28683,16 @@
  * information on what the records contain for each @record_type.
  *
  * If the DNS resolution fails, @error (if non-%NULL) will be set to
- * a value from #GResolverError.
+ * a value from #GResolverError and %NULL will be returned.
  *
  * If @cancellable is non-%NULL, it can be used to cancel the
  * operation, in which case @error (if non-%NULL) will be set to
  * %G_IO_ERROR_CANCELLED.
  *
- * Returns: (element-type GVariant) (transfer full): a #GList of #GVariant,
- * or %NULL on error. You must free each of the records and the list when you are
- * done with it. (You can use g_list_free_full() with g_variant_unref() to do this.)
+ * Returns: (element-type GVariant) (transfer full): a non-empty #GList of
+ * #GVariant, or %NULL on error. You must free each of the records and the list
+ * when you are done with it. (You can use g_list_free_full() with
+ * g_variant_unref() to do this.)
  * Since: 2.34
  */
 
@@ -28714,16 +28722,18 @@
  * @error: return location for a #GError, or %NULL
  *
  * Retrieves the result of a previous call to
- * g_resolver_lookup_records_async(). Returns a list of records as #GVariant
- * tuples. See #GResolverRecordType for information on what the records contain.
+ * g_resolver_lookup_records_async(). Returns a non-empty list of records as
+ * #GVariant tuples. See #GResolverRecordType for information on what the
+ * records contain.
  *
  * If the DNS resolution failed, @error (if non-%NULL) will be set to
  * a value from #GResolverError. If the operation was cancelled,
  * @error will be set to %G_IO_ERROR_CANCELLED.
  *
- * Returns: (element-type GVariant) (transfer full): a #GList of #GVariant,
- * or %NULL on error. You must free each of the records and the list when you are
- * done with it. (You can use g_list_free_full() with g_variant_unref() to do this.)
+ * Returns: (element-type GVariant) (transfer full): a non-empty #GList of
+ * #GVariant, or %NULL on error. You must free each of the records and the list
+ * when you are done with it. (You can use g_list_free_full() with
+ * g_variant_unref() to do this.)
  * Since: 2.34
  */
 
@@ -28743,13 +28753,13 @@
  * @service and @protocol arguments do not include the leading underscore
  * that appears in the actual DNS entry.
  *
- * On success, g_resolver_lookup_service() will return a #GList of
+ * On success, g_resolver_lookup_service() will return a non-empty #GList of
  * #GSrvTarget, sorted in order of preference. (That is, you should
  * attempt to connect to the first target first, then the second if
  * the first fails, etc.)
  *
  * If the DNS resolution fails, @error (if non-%NULL) will be set to
- * a value from #GResolverError.
+ * a value from #GResolverError and %NULL will be returned.
  *
  * If @cancellable is non-%NULL, it can be used to cancel the
  * operation, in which case @error (if non-%NULL) will be set to
@@ -28759,9 +28769,10 @@
  * to create a #GNetworkService and use its #GSocketConnectable
  * interface.
  *
- * Returns: (element-type GSrvTarget) (transfer full): a #GList of #GSrvTarget,
- * or %NULL on error. You must free each of the targets and the list when you are
- * done with it. (You can use g_resolver_free_targets() to do this.)
+ * Returns: (element-type GSrvTarget) (transfer full): a non-empty #GList of
+ * #GSrvTarget, or %NULL on error. You must free each of the targets and the
+ * list when you are done with it. (You can use g_resolver_free_targets() to do
+ * this.)
  * Since: 2.22
  */
 
@@ -28799,8 +28810,9 @@
  * a value from #GResolverError. If the operation was cancelled,
  * @error will be set to %G_IO_ERROR_CANCELLED.
  *
- * Returns: (element-type GSrvTarget) (transfer full): a #GList of #GSrvTarget,
- * or %NULL on error. See g_resolver_lookup_service() for more details.
+ * Returns: (element-type GSrvTarget) (transfer full): a non-empty #GList of
+ * #GSrvTarget, or %NULL on error. See g_resolver_lookup_service() for more
+ * details.
  * Since: 2.22
  */
 

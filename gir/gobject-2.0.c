@@ -4065,7 +4065,7 @@
  *
  * See g_signal_new() for information about signal names.
  *
- * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ * If c_marshaller is %NULL, g_cclosure_marshal_generic() will be used as
  * the marshaller for this signal.
  *
  * Returns: the signal id
@@ -4127,7 +4127,7 @@
  *
  * See g_signal_new() for details on allowed signal names.
  *
- * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ * If c_marshaller is %NULL, g_cclosure_marshal_generic() will be used as
  * the marshaller for this signal.
  *
  * Returns: the signal id
@@ -4320,7 +4320,9 @@
  * when the class is allocated, the private structures for
  * the class and all of its parent types are allocated
  * sequentially in the same memory block as the public
- * structures. This function should be called in the
+ * structures, and are zero-filled.
+ *
+ * This function should be called in the
  * type's get_type() function after the type is registered.
  * The private structure can be retrieved using the
  * G_TYPE_CLASS_GET_PRIVATE() macro.
@@ -4409,7 +4411,7 @@
  * When an object is allocated, the private structures for
  * the type and all of its parent types are allocated
  * sequentially in the same memory block as the public
- * structures.
+ * structures, and are zero-filled.
  *
  * Note that the accumulated size of the private structures of
  * a type and all its parent types cannot exceed 64 KiB.
@@ -4451,6 +4453,8 @@
  *   my_object->priv = G_TYPE_INSTANCE_GET_PRIVATE (my_object,
  *                                                  MY_TYPE_OBJECT,
  *                                                  MyObjectPrivate);
+ *   /<!-- -->* my_object->priv->some_field will be
+ *    * automatically initialised to 0 *<!-- -->/
  * }
  *
  * static int
@@ -4585,6 +4589,9 @@
  * #GObject hierarchy should be created via g_object_new() and never
  * directly through g_type_create_instance() which doesn't handle things
  * like singleton objects or object construction.
+ *
+ * The extended members of the returned instance are guaranteed to be filled
+ * with zeros.
  *
  * Note: Do not use this function, unless you're implementing a
  * fundamental type. Also language bindings should not use this

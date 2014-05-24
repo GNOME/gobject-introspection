@@ -6800,7 +6800,8 @@
 
 /**
  * SECTION:markup
- * @Title: Simple XML Subset Parser * @Short_description: parses a subset of XML
+ * @Title: Simple XML Subset Parser
+ * @Short_description: parses a subset of XML
  * @See_also: [XML Specification](http://www.w3.org/TR/REC-xml/)
  *
  * The "GMarkup" parser is intended to parse a simple markup format
@@ -24911,7 +24912,7 @@
  * Note that on some systems, when variables are overwritten, the memory
  * used for the previous variables and its value isn't reclaimed.
  *
- * You should be mindful fo the fact that environment variable handling
+ * You should be mindful of the fact that environment variable handling
  * in UNIX is not thread-safe, and your program may crash if one thread
  * calls g_setenv() while another thread is calling getenv(). (And note
  * that many functions, such as gettext(), call getenv() internally.)
@@ -27485,7 +27486,8 @@
 
 /**
  * g_string_new:
- * @init: the initial text to copy into the string
+ * @init: (allow-none): the initial text to copy into the string, or %NULL to
+ * start with an empty string.
  *
  * Creates a new #GString, initialized with the given string.
  *
@@ -32757,7 +32759,7 @@
  * serialised data, you must know the type of the #GVariant, and (if the
  * machine might be different) the endianness of the machine that stored
  * it. As a result, file formats or network messages that incorporate
- * serialised #GVariant<!---->s must include this information either
+ * serialised #GVariants must include this information either
  * implicitly (for instance "the file always contains a
  * %G_VARIANT_TYPE_VARIANT and it is always in little-endian order") or
  * explicitly (by storing the type and/or endianness in addition to the
