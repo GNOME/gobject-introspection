@@ -2842,7 +2842,7 @@
 
 
 /**
- * GTlsClientConnection:accepted-cas:
+ * GTlsClientConnection:accepted-cas: (type GLib.List) (element-type GLib.ByteArray)
  *
  * A list of the distinguished names of the Certificate Authorities
  * that the server will accept client certificates signed by. If the
@@ -9993,7 +9993,7 @@
  * The return value (if non-%NULL) should be freed with
  * g_variant_unref() when it is no longer required.
  *
- * Returns: (transfer full): the state range hint
+ * Returns: (nullable) (transfer full): the state range hint
  * Since: 2.28
  */
 
@@ -10147,7 +10147,7 @@
  * possible for an action to be removed and for a new action to be added
  * with the same name but a different parameter type.
  *
- * Returns: the parameter type
+ * Returns: (nullable): the parameter type
  * Since: 2.28
  */
 
@@ -10166,7 +10166,7 @@
  * The return value (if non-%NULL) should be freed with
  * g_variant_unref() when it is no longer required.
  *
- * Returns: (allow-none): the current state of the action
+ * Returns: (nullable): the current state of the action
  * Since: 2.28
  */
 
@@ -10195,7 +10195,7 @@
  * The return value (if non-%NULL) should be freed with
  * g_variant_unref() when it is no longer required.
  *
- * Returns: (transfer full): the state range hint
+ * Returns: (nullable) (transfer full): the state range hint
  * Since: 2.28
  */
 
@@ -10222,7 +10222,8 @@
  * possible for an action to be removed and for a new action to be added
  * with the same name but a different state type.
  *
- * Returns: (transfer full): the state type, if the action is stateful
+ * Returns: (nullable) (transfer full): the state type, if the action
+ * is stateful
  * Since: 2.28
  */
 
@@ -11270,7 +11271,7 @@
  *
  * For local invocation, it will be %NULL.
  *
- * Returns: (allow-none): the platform data, or %NULL
+ * Returns: (nullable): the platform data, or %NULL
  * Since: 2.28
  */
 
@@ -12809,8 +12810,8 @@
  *
  * Gets the top cancellable from the stack.
  *
- * Returns: (transfer none): a #GCancellable from the top of the stack, or %NULL
- * if the stack is empty.
+ * Returns: (nullable) (transfer none): a #GCancellable from the top
+ * of the stack, or %NULL if the stack is empty.
  */
 
 
@@ -13052,8 +13053,8 @@
  *
  * Tries to find a content type based on the mime type name.
  *
- * Returns: (allow-none): Newly allocated string with content type
- *     or %NULL. Free with g_free()
+ * Returns: (nullable): Newly allocated string with content type or
+ *     %NULL. Free with g_free()
  * Since: 2.18
  */
 
@@ -13102,7 +13103,7 @@
  *
  * Gets the mime type for the content type, if one is registered.
  *
- * Returns: (allow-none): the registered mime type for the given @type,
+ * Returns: (nullable): the registered mime type for the given @type,
  *     or %NULL if unknown.
  */
 
@@ -13598,12 +13599,12 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a
- *  NUL terminated byte array with the line that was read in (without
- *  the newlines).  Set @length to a #gsize to get the length of the
- *  read line.  On an error, it will return %NULL and @error will be
- *  set. If there's no content to read, it will still return %NULL,
- *  but @error won't be set.
+ * Returns: (nullable) (transfer full) (array zero-terminated=1) (element-type guint8):
+ *  a NUL terminated byte array with the line that was read in
+ *  (without the newlines).  Set @length to a #gsize to get the length
+ *  of the read line.  On an error, it will return %NULL and @error
+ *  will be set. If there's no content to read, it will still return
+ *  %NULL, but @error won't be set.
  */
 
 
@@ -13638,12 +13639,12 @@
  * string encoding in g_data_input_stream_read_line() applies here as
  * well.
  *
- * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a
- *  NUL-terminated byte array with the line that was read in
- *  (without the newlines).  Set @length to a #gsize to get the
- *  length of the read line.  On an error, it will return %NULL and
- *  @error will be set. If there's no content to read, it will
- *  still return %NULL, but @error won't be set.
+ * Returns: (nullable) (transfer full) (array zero-terminated=1) (element-type guint8):
+ *  a NUL-terminated byte array with the line that was read in
+ *  (without the newlines).  Set @length to a #gsize to get the length
+ *  of the read line.  On an error, it will return %NULL and @error
+ *  will be set. If there's no content to read, it will still return
+ *  %NULL, but @error won't be set.
  * Since: 2.20
  */
 
@@ -13658,12 +13659,12 @@
  * Finish an asynchronous call started by
  * g_data_input_stream_read_line_async().
  *
- * Returns: (transfer full): a string with the line that was read in
- *  (without the newlines).  Set @length to a #gsize to get the length
- *  of the read line.  On an error, it will return %NULL and @error
- *  will be set. For UTF-8 conversion errors, the set error domain is
- *  %G_CONVERT_ERROR.  If there's no content to read, it will still
- *  return %NULL, but @error won't be set.
+ * Returns: (nullable) (transfer full): a string with the line that
+ *  was read in (without the newlines).  Set @length to a #gsize to
+ *  get the length of the read line.  On an error, it will return
+ *  %NULL and @error will be set. For UTF-8 conversion errors, the set
+ *  error domain is %G_CONVERT_ERROR.  If there's no content to read,
+ *  it will still return %NULL, but @error won't be set.
  * Since: 2.30
  */
 
@@ -13681,12 +13682,13 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: (transfer full): a NUL terminated UTF-8 string with the
- *  line that was read in (without the newlines).  Set @length to a
- *  #gsize to get the length of the read line.  On an error, it will
- *  return %NULL and @error will be set.  For UTF-8 conversion errors,
- *  the set error domain is %G_CONVERT_ERROR.  If there's no content to
- *  read, it will still return %NULL, but @error won't be set.
+ * Returns: (nullable) (transfer full): a NUL terminated UTF-8 string
+ *  with the line that was read in (without the newlines).  Set
+ *  @length to a #gsize to get the length of the read line.  On an
+ *  error, it will return %NULL and @error will be set.  For UTF-8
+ *  conversion errors, the set error domain is %G_CONVERT_ERROR.  If
+ *  there's no content to read, it will still return %NULL, but @error
+ *  won't be set.
  * Since: 2.30
  */
 
@@ -16172,7 +16174,8 @@
  *
  * Gets the body of a message.
  *
- * Returns: A #GVariant or %NULL if the body is empty. Do not free, it is owned by @message.
+ * Returns: (transfer none): A #GVariant or %NULL if the body is
+ * empty. Do not free, it is owned by @message.
  * Since: 2.26
  */
 
@@ -17209,8 +17212,8 @@
  * #GObject::notify signal to track changes to the
  * #GDBusObjectManagerClient:name-owner property.
  *
- * Returns: The name owner or %NULL if no name owner exists. Free with
- * g_free().
+ * Returns: (nullable): The name owner or %NULL if no name owner
+ * exists. Free with g_free().
  * Since: 2.30
  */
 
@@ -19973,8 +19976,9 @@
  * enumerator is at the end, %NULL will be returned and @error will
  * be unset.
  *
- * Returns: (transfer full): A #GFileInfo or %NULL on error or end of enumerator.
- *    Free the returned object with g_object_unref() when no longer needed.
+ * Returns: (nullable) (transfer full): A #GFileInfo or %NULL on error
+ *    or end of enumerator.  Free the returned object with
+ *    g_object_unref() when no longer needed.
  */
 
 
@@ -20127,8 +20131,8 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: string containing the #GFile's base name, or %NULL
- *     if given #GFile is invalid. The returned string should be
+ * Returns: (nullable): string containing the #GFile's base name, or
+ *     %NULL if given #GFile is invalid. The returned string should be
  *     freed with g_free() when no longer needed.
  */
 
@@ -20182,9 +20186,9 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: (transfer full): a #GFile structure to the
- *     parent of the given #GFile or %NULL if there is
- *     no parent. Free the returned object with g_object_unref().
+ * Returns: (nullable) (transfer full): a #GFile structure to the
+ *     parent of the given #GFile or %NULL if there is no parent. Free
+ *     the returned object with g_object_unref().
  */
 
 
@@ -20221,9 +20225,9 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: string containing the #GFile's path, or %NULL if
- *     no such path exists. The returned string should be
- *     freed with g_free() when no longer needed.
+ * Returns: (nullable): string containing the #GFile's path, or %NULL
+ *     if no such path exists. The returned string should be freed
+ *     with g_free() when no longer needed.
  */
 
 
@@ -20236,10 +20240,10 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: string with the relative path from @descendant
- *     to @parent, or %NULL if @descendant doesn't have @parent
- *     as prefix. The returned string should be freed with g_free()
- *     when no longer needed.
+ * Returns: (nullable): string with the relative path from @descendant
+ *     to @parent, or %NULL if @descendant doesn't have @parent as
+ *     prefix. The returned string should be freed with g_free() when
+ *     no longer needed.
  */
 
 
@@ -20764,9 +20768,9 @@
  *
  * Lists the file info structure's attributes.
  *
- * Returns: (array zero-terminated=1) (transfer full): a null-terminated array of strings of all of the
- * possible attribute types for the given @name_space, or
- * %NULL on error.
+ * Returns: (nullable) (array zero-terminated=1) (transfer full): a
+ * null-terminated array of strings of all of the possible attribute
+ * types for the given @name_space, or %NULL on error.
  */
 
 
@@ -23405,8 +23409,8 @@
  * - If @icon is a #GThemedIcon with exactly one name, the encoding is
  *    simply the name (such as `network-server`).
  *
- * Returns: An allocated NUL-terminated UTF8 string or %NULL if @icon can't
- * be serialized. Use g_free() to free.
+ * Returns: (nullable): An allocated NUL-terminated UTF8 string or
+ * %NULL if @icon can't be serialized. Use g_free() to free.
  * Since: 2.20
  */
 
@@ -24918,11 +24922,12 @@
  * g_loadable_icon_load:
  * @icon: a #GLoadableIcon.
  * @size: an integer.
- * @type: (out) (allow-none): a location to store the type of the
- *        loaded icon, %NULL to ignore.
- * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occurring, or %NULL to
+ * @type: (out) (optional): a location to store the type of the loaded
+ * icon, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to
  * ignore.
+ * @error: a #GError location to store the error occurring, or %NULL
+ * to ignore.
  *
  * Loads a loadable icon. For the asynchronous version of this function,
  * see g_loadable_icon_load_async().
@@ -24950,8 +24955,8 @@
  * g_loadable_icon_load_finish:
  * @icon: a #GLoadableIcon.
  * @res: a #GAsyncResult.
- * @type: (out) (allow-none): a location to store the type of the
- *        loaded icon, %NULL to ignore.
+ * @type: (out) (optional): a location to store the type of the loaded
+ *        icon, %NULL to ignore.
  * @error: a #GError location to store the error occurring, or %NULL to
  * ignore.
  *
@@ -27933,8 +27938,8 @@
 /**
  * g_pollable_input_stream_read_nonblocking: (virtual read_nonblocking)
  * @stream: a #GPollableInputStream
- * @buffer: a buffer to read data into (which should be at least @count
- *     bytes long).
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *     read data into (which should be at least @count bytes long).
  * @count: the number of bytes you want to read
  * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
@@ -28074,7 +28079,8 @@
 /**
  * g_pollable_stream_read:
  * @stream: a #GInputStream
- * @buffer: a buffer to read data into
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *   read data into
  * @count: the number of bytes to read
  * @blocking: whether to do blocking I/O
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
@@ -30339,7 +30345,7 @@
  *
  * If the schema isn't found, %NULL is returned.
  *
- * Returns: (transfer full): a new #GSettingsSchema
+ * Returns: (nullable) (transfer full): a new #GSettingsSchema
  * Since: 2.32
  */
 
@@ -35974,7 +35980,8 @@
  * and between applications. If a certificate is modified in the database,
  * then it is not guaranteed that this handle will continue to point to it.
  *
- * Returns: (allow-none): a newly allocated string containing the handle.
+ * Returns: (nullable): a newly allocated string containing the
+ * handle.
  * Since: 2.30
  */
 
@@ -37841,8 +37848,8 @@
  * implementations to find the underlying mount to shadow, see
  * g_mount_is_shadowed() for more details.
  *
- * Returns: (transfer full): the activation root of @volume or %NULL. Use
- *     g_object_unref() to free.
+ * Returns: (nullable) (transfer full): the activation root of @volume
+ *     or %NULL. Use g_object_unref() to free.
  * Since: 2.18
  */
 
