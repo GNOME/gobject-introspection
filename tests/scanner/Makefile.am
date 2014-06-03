@@ -167,8 +167,9 @@ Headeronly-1.0.gir: headeronly.h
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate --namespace=Headeronly --nsversion=1.0 --header-only --output=$@ $<
 
 EXTRA_DIST += \
+	identfilter.py \
 	identfilter.h \
-	Identifilter-1.0-expected.gir
+	Identfilter-1.0-expected.gir
 CLEANFILES += Identfilter-1.0.gir
 CHECKGIRS += Identfilter-1.0.gir
 
