@@ -88,16 +88,16 @@
     <CustomBuild Include="..\..\..\config.h.win32">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Installing Build Results...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GIDoInstall)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(InstalledDlls);$(InstalledBins);$(InstalledWin32Bins);%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(InstalledDlls);$(InstalledBins);%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Installing Build Results...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GIDoInstall)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(InstalledDlls);$(InstalledBins);$(InstalledX64Bins);%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(InstalledDlls);$(InstalledBins);%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Installing Build Results...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GIDoInstall)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(InstalledDlls);$(InstalledBins);$(InstalledWin32Bins);%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(InstalledDlls);$(InstalledBins);%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Installing Build Results...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GIDoInstall)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(InstalledDlls);$(InstalledBins);$(InstalledX64Bins);%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(InstalledDlls);$(InstalledBins);%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
