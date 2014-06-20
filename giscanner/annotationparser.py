@@ -208,6 +208,7 @@ ANN_INOUT = 'inout'
 ANN_METHOD = 'method'
 ANN_NULLABLE = 'nullable'
 ANN_OPTIONAL = 'optional'
+ANN_NOT = 'not'
 ANN_OUT = 'out'
 ANN_REF_FUNC = 'ref-func'
 ANN_RENAME_TO = 'rename-to'
@@ -223,6 +224,7 @@ ANN_VALUE = 'value'
 GI_ANNS = [ANN_ALLOW_NONE,
            ANN_NULLABLE,
            ANN_OPTIONAL,
+           ANN_NOT,
            ANN_ARRAY,
            ANN_ATTRIBUTES,
            ANN_CLOSURE,
@@ -272,6 +274,11 @@ OPT_OUT_CALLER_ALLOCATES = 'caller-allocates'
 
 OUT_OPTIONS = [OPT_OUT_CALLEE_ALLOCATES,
                OPT_OUT_CALLER_ALLOCATES]
+
+# (not) annotation options
+OPT_NOT_NULLABLE = 'nullable'
+
+NOT_OPTIONS = [OPT_NOT_NULLABLE]
 
 # (scope) annotation options
 OPT_SCOPE_ASYNC = 'async'
@@ -568,6 +575,18 @@ class GtkDocAnnotatable(object):
                     # GObject-Instrospection version.
                     warn('unknown annotation: %s' % (ann_name, ), position)
 
+                # Validate that (nullable) and (not nullable) are not both
+                # present. Same for (allow-none) and (not nullable).
+                if ann_name == ANN_NOT and OPT_NOT_NULLABLE in options:
+                    if ANN_NULLABLE in self.annotations:
+                        warn('cannot have both "%s" and "%s" present' %
+                             (ANN_NOT + ' ' + OPT_NOT_NULLABLE, ANN_NULLABLE),
+                             position)
+                    if ANN_ALLOW_NONE in self.annotations:
+                        warn('cannot have both "%s" and "%s" present' %
+                             (ANN_NOT + ' ' + OPT_NOT_NULLABLE, ANN_ALLOW_NONE),
+                             position)
+
     def _validate_options(self, position, ann_name, n_options, expected_n_options, operator,
                           message):
         '''
@@ -829,6 +848,19 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
+    def _do_validate_not(self, position, ann_name, options):
+        '''
+        Validate the ``(not)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options held by the annotation
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1,
+                                  choices=NOT_OPTIONS)
+
     def _do_validate_out(self, position, ann_name, options):
         '''
         Validate the ``(out)`` annotation.
@@ -974,7 +1006,7 @@ class GtkDocParameter(GtkDocAnnotatable):
 
     valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CLOSURE, ANN_DESTROY,
                          ANN_ELEMENT_TYPE, ANN_IN, ANN_INOUT, ANN_OUT, ANN_SCOPE, ANN_SKIP,
-                         ANN_TRANSFER, ANN_TYPE, ANN_OPTIONAL, ANN_NULLABLE)
+                         ANN_TRANSFER, ANN_TYPE, ANN_OPTIONAL, ANN_NULLABLE, ANN_NOT)
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)
@@ -997,7 +1029,7 @@ class GtkDocTag(GtkDocAnnotatable):
     __slots__ = ('name', 'value', 'description')
 
     valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_ELEMENT_TYPE, ANN_SKIP,
-                         ANN_TRANSFER, ANN_TYPE, ANN_NULLABLE, ANN_OPTIONAL)
+                         ANN_TRANSFER, ANN_TYPE, ANN_NULLABLE, ANN_OPTIONAL, ANN_NOT)
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)

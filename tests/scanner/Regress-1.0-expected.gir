@@ -790,7 +790,10 @@ regress_annotation_object_watch_full().</doc>
           <instance-parameter name="object" transfer-ownership="none">
             <type name="AnnotationObject" c:type="RegressAnnotationObject*"/>
           </instance-parameter>
-          <parameter name="data" transfer-ownership="none">
+          <parameter name="data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <doc xml:space="preserve">Opaque pointer handle</doc>
             <type name="gpointer" c:type="void*"/>
           </parameter>
@@ -851,7 +854,10 @@ of tabs and strings to test the tab handling capabilities of the scanner.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="arg1" transfer-ownership="none">
+          <parameter name="arg1"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1071,7 +1077,10 @@ it says it's pointer but it's actually a string.</doc>
         <parameter name="b" transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </parameter>
-        <parameter name="data" transfer-ownership="none">
+        <parameter name="data"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
@@ -1553,7 +1562,10 @@ uses a C sugar return type.</doc>
           <instance-parameter name="object" transfer-ownership="none">
             <type name="FooObject" c:type="RegressFooObject*"/>
           </instance-parameter>
-          <parameter name="data" transfer-ownership="none">
+          <parameter name="data"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <type name="gpointer" c:type="void*"/>
           </parameter>
           <parameter name="some_type" transfer-ownership="none">
@@ -1602,7 +1614,10 @@ uses a C sugar return type.</doc>
           <parameter name="object" transfer-ownership="none">
             <type name="GObject.Object"/>
           </parameter>
-          <parameter name="p0" transfer-ownership="none">
+          <parameter name="p0"
+                     transfer-ownership="none"
+                     nullable="1"
+                     allow-none="1">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -5486,11 +5501,7 @@ call and can be released on return.</doc>
           <type name="TestCallbackUserData"
                 c:type="RegressTestCallbackUserData"/>
         </parameter>
-        <parameter name="user_data"
-                   transfer-ownership="none"
-                   nullable="1"
-                   allow-none="1"
-                   closure="1">
+        <parameter name="user_data" transfer-ownership="none" closure="1">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>

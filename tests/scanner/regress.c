@@ -3478,6 +3478,7 @@ regress_test_simple_callback (RegressTestSimpleCallback callback)
 /**
  * regress_test_callback_user_data:
  * @callback: (scope call):
+ * @user_data: (not nullable):
  *
  * Call - callback parameter persists for the duration of the method
  * call and can be released on return.

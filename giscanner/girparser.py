@@ -318,7 +318,7 @@ class GIRParser(object):
             raise ValueError('node %r has no return-value' % (name, ))
         transfer = returnnode.attrib.get('transfer-ownership')
         nullable = returnnode.attrib.get('nullable') == '1'
-        retval = ast.Return(self._parse_type(returnnode), nullable, transfer)
+        retval = ast.Return(self._parse_type(returnnode), nullable, False, transfer)
         self._parse_generic_attribs(returnnode, retval)
         parameters = []
 

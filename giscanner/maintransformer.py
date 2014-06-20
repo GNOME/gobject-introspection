@@ -32,10 +32,11 @@ from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CL
                                ANN_GET_VALUE_FUNC, ANN_IN, ANN_INOUT, ANN_METHOD, ANN_OUT,
                                ANN_REF_FUNC, ANN_RENAME_TO, ANN_SCOPE, ANN_SET_VALUE_FUNC,
                                ANN_SKIP, ANN_TRANSFER, ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE,
-                               ANN_VFUNC, ANN_NULLABLE, ANN_OPTIONAL)
+                               ANN_VFUNC, ANN_NULLABLE, ANN_OPTIONAL, ANN_NOT)
 from .annotationparser import (OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
                                OPT_OUT_CALLEE_ALLOCATES, OPT_OUT_CALLER_ALLOCATES,
-                               OPT_TRANSFER_CONTAINER, OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
+                               OPT_TRANSFER_CONTAINER, OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE,
+                               OPT_NOT_NULLABLE)
 
 from .utils import to_underscores_noprefix
 
@@ -646,9 +647,16 @@ class MainTransformer(object):
         self._apply_transfer_annotation(parent, node, annotations)
         self._adjust_container_type(parent, node, annotations)
 
+        # gpointer parameters and return values are always nullable unless:
+        #  - annotated with (type) and not also with (nullable); or
+        #  - annotated (not nullable)
+        # See: https://bugzilla.gnome.org/show_bug.cgi?id=719966#c22
+        if node.type.is_equiv(ast.TYPE_ANY):
+            node.nullable = True
         if ANN_NULLABLE in annotations:
             if self._is_pointer_type(node, annotations):
                 node.nullable = True
+                node.not_nullable = False
             else:
                 message.warn('invalid "nullable" annotation: '
                              'only valid for pointer types and out parameters',
@@ -678,6 +686,11 @@ class MainTransformer(object):
                 (node.type.target_giname == 'Gio.AsyncReadyCallback' or
                  node.type.target_giname == 'Gio.Cancellable')):
             node.nullable = True
+
+        # Final override for nullability
+        if ANN_NOT in annotations:
+            node.nullable = False
+            node.not_nullable = True
 
         if tag and tag.description:
             node.doc = tag.description
@@ -1443,7 +1456,8 @@ method or constructor of some type."""
         for param in params:
             # By convention, closure user_data parameters are always nullable.
             if param.closure_name is not None and \
-               param.closure_name == param.argname:
+               param.closure_name == param.argname and \
+               not param.not_nullable:
                 param.nullable = True
 
     def _pass3_callable_throws(self, node):
