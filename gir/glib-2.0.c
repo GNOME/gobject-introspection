@@ -986,7 +986,7 @@
  *     This flag cannot be changed.
  * @G_IO_FLAG_IS_WRITABLE: indicates that the io channel is writable.
  *     This flag cannot be changed.
- * G_IO_FLAG_IS_WRITEABLE: a misspelled version of @G_IO_FLAG_IS_WRITABLE
+ * @G_IO_FLAG_IS_WRITEABLE: a misspelled version of @G_IO_FLAG_IS_WRITABLE
  *     that existed before the spelling was fixed in GLib 2.30. It is kept
  *     here for compatibility reasons. Deprecated since 2.30
  * @G_IO_FLAG_IS_SEEKABLE: indicates that the io channel is seekable,
@@ -2624,7 +2624,7 @@
  *
  * ## Using a stack-allocated GVariantDict
  *
- * |[
+ * |[<!-- language="C" -->
  *   GVariant *
  *   add_to_count (GVariant  *orig,
  *                 GError   **error)
@@ -2648,7 +2648,7 @@
  *
  * ## Using heap-allocated GVariantDict
  *
- * |[
+ * |[<!-- language="C" -->
  *   GVariant *
  *   add_to_count (GVariant  *orig,
  *                 GError   **error)
@@ -2790,6 +2790,15 @@
  * G_CSET_A_2_Z:
  *
  * The set of uppercase ASCII alphabet characters.
+ * Used for specifying valid identifier characters
+ * in #GScannerConfig.
+ */
+
+
+/**
+ * G_CSET_DIGITS:
+ *
+ * The set of ASCII digits.
  * Used for specifying valid identifier characters
  * in #GScannerConfig.
  */
@@ -3532,6 +3541,13 @@
 
 
 /**
+ * G_HAVE_GNUC_VISIBILITY:
+ *
+ * Defined to 1 if gcc-style visibility handling is supported.
+ */
+
+
+/**
  * G_HOOK:
  * @hook: a pointer
  *
@@ -4037,6 +4053,14 @@
  * G_LOG_FATAL_MASK:
  *
  * GLib log levels that are considered fatal by default.
+ */
+
+
+/**
+ * G_LOG_LEVEL_USER_SHIFT:
+ *
+ * Log levels below 1<<G_LOG_LEVEL_USER_SHIFT are used by GLib.
+ * Higher bits can be used for user-defined log levels.
  */
 
 
@@ -7336,6 +7360,14 @@
  * SECTION:shell
  * @title: Shell-related Utilities
  * @short_description: shell-like commandline handling
+ *
+ * GLib provides the functions g_shell_quote() and g_shell_unquote()
+ * to handle shell-like quoting in strings. The function g_shell_parse_argv()
+ * parses a string similar to the way a POSIX shell (/bin/sh) would.
+ *
+ * Note that string handling in shells has many obscure and historical
+ * corner-cases which these functions do not necessarily reproduce. They
+ * are good enough in practice, though.
  */
 
 
@@ -7343,6 +7375,17 @@
  * SECTION:spawn
  * @Short_description: process launching
  * @Title: Spawning Processes
+ *
+ * GLib supports spawning of processes with an API that is more
+ * convenient than the bare UNIX fork() and exec().
+ *
+ * The g_spawn family of functions has synchronous (g_spawn_sync())
+ * and asynchronous variants (g_spawn_async(), g_spawn_async_with_pipes()),
+ * as well as convenience variants that take a complete shell-like
+ * commandline (g_spawn_command_line_sync(), g_spawn_command_line_async()).
+ *
+ * See #GSubprocess in GIO for a higher-level API that provides
+ * stream interfaces for communication with child processes.
  */
 
 
@@ -11606,7 +11649,7 @@
 /**
  * g_convert:
  * @str: the string to convert
- * @len: the length of the string, or -1 if the string is
+ * @len: the length of the string in bytes, or -1 if the string is
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
@@ -11649,7 +11692,7 @@
 /**
  * g_convert_with_fallback:
  * @str: the string to convert
- * @len: the length of the string, or -1 if the string is
+ * @len: the length of the string in bytes, or -1 if the string is
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
@@ -11697,7 +11740,7 @@
 /**
  * g_convert_with_iconv:
  * @str: the string to convert
- * @len: the length of the string, or -1 if the string is
+ * @len: the length of the string in bytes, or -1 if the string is
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
@@ -15378,7 +15421,7 @@
  * values are freed yourself.
  *
  * It is safe to continue iterating the #GHashTable afterward:
- * |[
+ * |[<!-- language="C" -->
  * while (g_hash_table_iter_next (&iter, &key, &value))
  *   {
  *     if (condition)
@@ -16401,13 +16444,6 @@
  *
  * Returns: a #GIOChannelError error number, e.g.
  *      %G_IO_CHANNEL_ERROR_INVAL.
- */
-
-
-/**
- * g_io_channel_error_quark:
- *
- * Returns: the quark used as %G_IO_CHANNEL_ERROR
  */
 
 
@@ -33608,7 +33644,7 @@
  * specified in @format_string. This can be achieved by casting them. See
  * the [GVariant varargs documentation][gvariant-varargs].
  *
- * |[
+ * |[<!-- language="C" -->
  * MyFlags some_flags = FLAG_ONE | FLAG_TWO;
  * const gchar *some_strings[] = { "a", "b", "c", NULL };
  * GVariant *new_variant;
@@ -34269,6 +34305,8 @@
 
 /**
  * g_variant_parser_get_error_quark:
+ *
+ * Same as g_variant_error_quark().
  *
  * Deprecated: Use g_variant_parse_error_quark() instead.
  */
@@ -35462,6 +35500,17 @@
 
 
 /**
+ * glib_binary_age:
+ *
+ * The binary age of the GLib library.
+ * Defines how far back backwards compatibility reaches.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
+ */
+
+
+/**
  * glib_check_version:
  * @required_major: the required major version
  * @required_minor: the required minor version
@@ -35503,12 +35552,53 @@
 
 
 /**
+ * glib_interface_age:
+ *
+ * The interface age of the GLib library.
+ * Defines how far back the API has last been extended.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
+ */
+
+
+/**
+ * glib_major_version:
+ *
+ * The major version of the GLib library.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
+ */
+
+
+/**
  * glib_mem_profiler_table:
  *
  * A #GMemVTable containing profiling variants of the memory
  * allocation functions. Use them together with g_mem_profile()
  * in order to get information about the memory allocation pattern
  * of your program.
+ */
+
+
+/**
+ * glib_micro_version:
+ *
+ * The micro version number of the GLib library.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
+ */
+
+
+/**
+ * glib_minor_version:
+ *
+ * The minor version number of the GLib library.
+ *
+ * An integer variable exported from the library linked
+ * against at application run time.
  */
 
 

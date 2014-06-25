@@ -4474,7 +4474,7 @@
  * processes owned by the same uid as the server, you would use a
  * signal handler like the following:
  *
- * |[
+ * |[<!-- language="C" -->
  * static gboolean
  * on_authorize_authenticated_peer (GDBusAuthObserver *observer,
  *                                  GIOStream         *stream,
@@ -32391,8 +32391,9 @@
  * @condition: a #GIOCondition mask to monitor
  * @cancellable: (allow-none): a %GCancellable or %NULL
  *
- * Creates a %GSource that can be attached to a %GMainContext to monitor
- * for the availability of the specified @condition on the socket.
+ * Creates a #GSource that can be attached to a %GMainContext to monitor
+ * for the availability of the specified @condition on the socket. The #GSource
+ * keeps a reference to the @socket.
  *
  * The callback on the source is of the #GSocketSourceFunc type.
  *
@@ -32964,6 +32965,11 @@
  * to accept to identify this particular source, which is
  * useful if you're listening on multiple addresses and do
  * different things depending on what address is connected to.
+ *
+ * The @socket will not be automatically closed when the @listener is finalized
+ * unless the listener held the final reference to the socket. Before GLib 2.42,
+ * the @socket was automatically closed on finalization of the @listener, even
+ * if references to it were held elsewhere.
  *
  * Returns: %TRUE on success, %FALSE on error.
  * Since: 2.22
@@ -34404,8 +34410,8 @@
  * g_subprocess_new: (skip)
  * @flags: flags that define the behaviour of the subprocess
  * @error: (allow-none): return location for an error, or %NULL
- * @argv0: first commandline argument to pass to the subprocess,
- *     followed by more arguments, followed by %NULL
+ * @argv0: first commandline argument to pass to the subprocess
+ * @...: more commandline arguments, followed by %NULL
  *
  * Create a new process with the given flags and varargs argument
  * list.  By default, matching the g_spawn_async() defaults, the

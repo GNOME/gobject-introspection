@@ -1875,8 +1875,12 @@
  * @pspecs: (array length=n_pspecs): the #GParamSpecs array
  *   defining the new properties
  *
- * Installs new properties from an array of #GParamSpecs. This is
- * usually done in the class initializer.
+ * Installs new properties from an array of #GParamSpecs.
+ *
+ * All properties should be installed during the class initializer.  It
+ * is possible to install properties after that, but doing so is not
+ * recommend, and specifically, is not guaranteed to be thread-safe vs.
+ * use of properties on the same type on other threads.
  *
  * The property id of each property is the index of each #GParamSpec in
  * the @pspecs array.
@@ -1943,7 +1947,12 @@
  * @property_id: the id for the new property
  * @pspec: the #GParamSpec for the new property
  *
- * Installs a new property. This is usually done in the class initializer.
+ * Installs a new property.
+ *
+ * All properties should be installed during the class initializer.  It
+ * is possible to install properties after that, but doing so is not
+ * recommend, and specifically, is not guaranteed to be thread-safe vs.
+ * use of properties on the same type on other threads.
  *
  * Note that it is possible to redefine a property in a derived class,
  * by installing a property with the same name. This can be useful at times,
@@ -3876,7 +3885,11 @@
 
 /**
  * g_signal_handlers_destroy:
- * @instance: (type GObject.Object): The instance where a signal handler is sought.
+ * @instance: (type GObject.Object): The instance whose signal handlers are destroyed
+ *
+ * Destroy all signal handlers of a type instance. This function is
+ * an implementation detail of the #GObject dispose implementation,
+ * and should not be used outside of the type system.
  */
 
 
@@ -4453,8 +4466,7 @@
  *   my_object->priv = G_TYPE_INSTANCE_GET_PRIVATE (my_object,
  *                                                  MY_TYPE_OBJECT,
  *                                                  MyObjectPrivate);
- *   /<!-- -->* my_object->priv->some_field will be
- *    * automatically initialised to 0 *<!-- -->/
+ *   // my_object->priv->some_field will be automatically initialised to 0
  * }
  *
  * static int
@@ -5701,12 +5713,13 @@
 
 /**
  * g_value_peek_pointer:
- * @value: An initialized #GValue structure.
+ * @value: An initialized #GValue structure
  *
- * Returns: (transfer none): the value contents as pointer. This
- * function asserts that g_value_fits_pointer() returned %TRUE for the
- * passed in value.  This is an internal function introduced mainly
- * for C marshallers.
+ * Returns the value contents as pointer. This function asserts that
+ * g_value_fits_pointer() returned %TRUE for the passed in value.
+ * This is an internal function introduced mainly for C marshallers.
+ *
+ * Returns: (transfer none): the value contents as pointer
  */
 
 
