@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
-    <VSVER>10</VSVER>
-    <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs$(VSVER)\$(Platform)</GlibEtcInstallRoot>
+    <VSVer>10</VSVer>
+    <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
     <BASE_GI_DIR>$(SolutionDir)\..\..\..</BASE_GI_DIR>
     <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
     <ApiVersion>1.0</ApiVersion>
@@ -10,7 +10,7 @@
     <LibGILibtoolCompatibleDllPrefix>lib</LibGILibtoolCompatibleDllPrefix>
     <LibGILibtoolCompatibleDllSuffix>-$(ApiVersion)-0</LibGILibtoolCompatibleDllSuffix>
     <LibGISeparateVSDllPrefix />
-    <LibGISeparateVSDllSuffix>-1-vs$(VSVER)</LibGISeparateVSDllSuffix>
+    <LibGISeparateVSDllSuffix>-1-vs$(VSVer)</LibGISeparateVSDllSuffix>
     <LibGIDllPrefix>$(LibGISeparateVSDllPrefix)</LibGIDllPrefix>
     <LibGIDllSuffix>$(LibGISeparateVSDllSuffix)</LibGIDllSuffix>
   </PropertyGroup>
@@ -18,8 +18,8 @@
     <_PropertySheetDisplayName>giversionpathsprops</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemGroup>
-    <BuildMacro Include="VSVER">
-      <Value>$(VSVER)</Value>
+    <BuildMacro Include="VSVer">
+      <Value>$(VSVer)</Value>
     </BuildMacro>
     <BuildMacro Include="GlibEtcInstallRoot">
       <Value>$(GlibEtcInstallRoot)</Value>

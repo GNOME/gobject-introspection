@@ -5,7 +5,7 @@
 	Name="giversionpaths"
 	>
 	<UserMacro
-		Name="VSVER"
+		Name="VSVer"
 		Value="9"
 	/>
 	<UserMacro
