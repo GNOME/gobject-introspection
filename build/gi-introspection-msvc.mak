@@ -102,13 +102,6 @@ gi_list:
 	@-echo ..\girepository\gitypelib.h >> $@
 	@-echo ..\girepository\gitypes.h >> $@
 
-# Make a copy of girepository-1.0.lib to girepository-2.0.lib for use
-# during the linking stage of the dump binary, in the generation
-# of GIRepository-2.0.gir (the resulting binary will still be
-# linked and referring to the original girepository DLL)
-win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GLIB_APIVERSION).lib: win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GI_APIVERSION).lib
-	@-copy /b win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GI_APIVERSION).lib $@
-
 # Generated .gir files for GLib/GModule/GObject/Gio/GIRepository
 GLib-$(GLIB_APIVERSION).gir: glib_list
 	@-echo Generating $@...
@@ -148,7 +141,7 @@ Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include	\
 	-I$(BASEDIR)\include --filelist=gio_list -o $@
 
-GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GLIB_APIVERSION).lib
+GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose --warn-all	\
 	--add-include-path=..\gir --add-include-path=. --namespace=GIRepository --nsversion=$(GLIB_APIVERSION)	\
@@ -199,7 +192,6 @@ clean:
 	@-del /f/q ..\gir\cairo-$(GI_APIVERSION).gir
 	@-del /f/q *.typelib
 	@-del /f/q *.gir
-	@-del /f/q win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin\girepository-$(GLIB_APIVERSION).lib
 	@-del /f/q gi_list
 	@-del /f/q gio_list
 	@-del /f/q gobject_list
