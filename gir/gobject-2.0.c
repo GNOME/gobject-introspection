@@ -5712,6 +5712,23 @@
 
 
 /**
+ * g_value_init_from_instance:
+ * @value: An uninitialized #GValue structure.
+ * @instance: the instance
+ *
+ * Initializes and sets @value from an instantiatable type via the
+ * value_table's collect_value() function.
+ *
+ * Note: The @value will be initialised with the exact type of
+ * @instance.  If you wish to set the @value's type to a different GType
+ * (such as a parent class GType), you need to manually call
+ * g_value_init() and g_value_set_instance().
+ *
+ * Since: 2.42
+ */
+
+
+/**
  * g_value_peek_pointer:
  * @value: An initialized #GValue structure
  *

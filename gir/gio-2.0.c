@@ -58,16 +58,23 @@
  * GActionEntry:
  * @name: the name of the action
  * @activate: the callback to connect to the "activate" signal of the
- *            action
+ *            action.  Since GLib 2.40, this can be %NULL for stateful
+ *            actions, in which case the default handler is used.  For
+ *            boolean-stated actions with no parameter, this is a
+ *            toggle.  For other state types (and parameter type equal
+ *            to the state type) this will be a function that
+ *            just calls @change_state (which you should provide).
  * @parameter_type: the type of the parameter that must be passed to the
  *                  activate function for this action, given as a single
  *                  GVariant type string (or %NULL for no parameter)
- * @state: the initial state for this action, given in GVariant text
- *         format.  The state is parsed with no extra type information,
- *         so type tags must be added to the string if they are
- *         necessary.
+ * @state: the initial state for this action, given in
+ *         [GVariant text format][gvariant-text].  The state is parsed
+ *         with no extra type information, so type tags must be added to
+ *         the string if they are necessary.  Stateless actions should
+ *         give %NULL here.
  * @change_state: the callback to connect to the "change-state" signal
- *                of the action
+ *                of the action.  All stateful actions should provide a
+ *                handler here; stateless actions should not.
  *
  * This struct defines a single action.  It is for use with
  * g_action_map_add_action_entries().
@@ -4400,6 +4407,9 @@
  * On FreeBSD, Debian GNU/kFreeBSD, and GNU/Hurd, the native
  * credential type is a struct cmsgcred. This corresponds
  * to %G_CREDENTIALS_TYPE_FREEBSD_CMSGCRED.
+ *
+ * On NetBSD, the native credential type is a struct unpcbid.
+ * This corresponds to %G_CREDENTIALS_TYPE_NETBSD_UNPCBID.
  *
  * On OpenBSD, the native credential type is a struct sockpeercred.
  * This corresponds to %G_CREDENTIALS_TYPE_OPENBSD_SOCKPEERCRED.
@@ -20051,7 +20061,6 @@
  * This call does no blocking I/O.
  *
  * Returns: %TRUE if @file1 and @file2 are equal.
- *     %FALSE if either is not a #GFile.
  */
 
 
@@ -27174,6 +27183,16 @@
 
 
 /**
+ * g_notification_set_priority:
+ * @notification: a #GNotification
+ * @priority: a #GNotificationPriority
+ *
+ * Sets the priority of @notification to @priority. See
+ * #GNotificationPriority for possible values.
+ */
+
+
+/**
  * g_notification_set_title:
  * @notification: a #GNotification
  * @title: the new title for @notification
@@ -27189,7 +27208,7 @@
  * @notification: a #GNotification
  * @urgent: %TRUE if @notification is urgent
  *
- * Sets or unsets whether @notification is marked as urgent.
+ * Deprecated in favor of g_notification_set_priority().
  *
  * Since: 2.40
  */
@@ -33868,7 +33887,7 @@
  * @callback: Callback
  * @user_data: User data
  *
- * Asynchronous version of g_subprocess_communicate_utf().  Complete
+ * Asynchronous version of g_subprocess_communicate_utf8().  Complete
  * invocation with g_subprocess_communicate_utf8_finish().
  */
 
@@ -34266,8 +34285,7 @@
  * @argv0: Command line arguments
  * @...: Continued arguments, %NULL terminated
  *
- * A convenience helper for creating a #GSubprocess given a provided
- * varargs list of arguments.
+ * Creates a #GSubprocess given a provided varargs list of arguments.
  *
  * Since: 2.40
  * Returns: (transfer full): A new #GSubprocess, or %NULL on error (and @error will be set)
@@ -34280,8 +34298,7 @@
  * @argv: (array zero-terminated=1) (element-type utf8): Command line arguments
  * @error: Error
  *
- * A convenience helper for creating a #GSubprocess given a provided
- * array of arguments.
+ * Creates a #GSubprocess given a provided array of arguments.
  *
  * Since: 2.40
  * Returns: (transfer full): A new #GSubprocess, or %NULL on error (and @error will be set)
