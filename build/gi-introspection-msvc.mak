@@ -6,24 +6,7 @@ CAIROGOBJECT_DLLNAME= cairo-gobject-vs$(VSVER)
 
 # Please do not change anything after this line
 
-!include detectenv_msvc.mak
-
-GI_APIVERSION = 1.0
-GLIB_APIVERSION = 2.0
-
-CHECK_PACKAGE = gio-$(GLIB_APIVERSION)
-
-!include introspection-msvc.mak
-
-BINDIR = ..\build\win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin
-G_IR_SCANNER_CURRENT = ..\tools\g-ir-scanner
-G_IR_COMPILER_CURRENT = $(BINDIR)\g-ir-compiler.exe
-
-!if "$(PLAT)" == "x64"
-TIME_T_DEFINE = -Dtime_t=long long
-!else
-TIME_T_DEFINE = -Dtime_t=long
-!endif
+!include gi-build-common-msvc.mak
 
 # The .gir's that are in $(srcroot)/gir, applicable to Windows
 # cairo-1.0.gir is not listed as it needs to be processed first
@@ -60,18 +43,10 @@ built_install_typelibs =	\
 	Gio-$(GLIB_APIVERSION).typelib	\
 	GIRepository-$(GLIB_APIVERSION).typelib
 
-!include introspection-msvc.mak
-
 !if "$(BUILD_INTROSPECTION)" == "TRUE"
 all: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) $(bundled_typelibs)
 
-setgirbuildnev:
-	@set CC=$(CC)
-	@set PYTHONPATH=..;$(BINDIR)
-	@set PATH=$(BINDIR);$(BASEDIR)\bin;$(PATH);$(MINGWDIR)\bin
-	@set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
-	@set LIB=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(BASEDIR)\lib;$(LIB)
-	@set UNINSTALLED_INTROSPECTION_SRCDIR=..
+!include gi-setenv-msvc.mak
 
 glib_list:
 	@-echo Generating file list for GLib...

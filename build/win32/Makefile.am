@@ -14,5 +14,4 @@ EXTRA_DIST = \
 	Regress.def	\
 	sletter.def	\
 	testinherit.def	\
-	test_gir_cmd.txt	\
 	utility.def
