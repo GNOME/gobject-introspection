@@ -53,7 +53,11 @@ VALID_CFGSET = TRUE
 !endif
 
 !if "$(CFG)" == "release"
+!if "$(VSVER)" == "9" && "$(PLAT)" == "x64"
+CFLAGS_ADD = /MD /O1 /Oi
+!else
 CFLAGS_ADD = /MD /O2
+!endif
 !else
 CFLAGS_ADD = /MDd /Od /Zi /DG_ENABLE_DEBUG
 !endif
