@@ -51,6 +51,7 @@ class CCodeGenerator(object):
 
     def _write_prelude(self, out, func):
         out.write("""
+_GI_TEST_EXTERN
 %s
 %s (""" % (self._typecontainer_to_ctype(func.retval), func.symbol))
         l = len(func.parameters)
@@ -110,10 +111,18 @@ class CCodeGenerator(object):
 #define __%s_H__
 
 #include <glib-object.h>
+
+#include "../tests/gitestmacros.h"
+
 """ % (nsupper, nsupper))
 
         self.out_c.write(warning)
-        self.out_c.write("""#include "%s"\n\n""" % (self.out_h_filename, ))
+        self.out_c.write("""
+#include "config.h"
+
+#include "%s"
+
+""" % (self.out_h_filename, ))
 
     def _codegen_end(self):
         self.out_h.write("""#endif\n""")
