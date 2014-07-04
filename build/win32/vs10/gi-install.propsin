@@ -18,6 +18,8 @@ copy ..\..\..\tools\g-ir-annotation-tool $(CopyDir)\bin
 copy ..\..\..\tools\g-ir-doc-tool $(CopyDir)\bin
 copy ..\..\..\tools\g-ir-scanner $(CopyDir)\bin
 
+copy $(BinDir)\glib-print.exe $(CopyDir)\bin
+
 #include "gir.vs10.install"
 
 copy $(BinDir)\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner
