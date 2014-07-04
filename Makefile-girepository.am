@@ -22,6 +22,7 @@ girepo_HEADERS =					\
 	girepository/gitypelib.h			\
 	girepository/gitypes.h				\
 	girepository/giunioninfo.h			\
+	girepository/giversionmacros.h		\
 	girepository/givfuncinfo.h
 
 lib_LTLIBRARIES += libgirepository-1.0.la
