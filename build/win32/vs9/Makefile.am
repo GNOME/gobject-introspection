@@ -8,21 +8,12 @@ EXTRA_DIST = \
 	gi-version-paths.vsprops	\
 	gi-prebuild.vcproj	\
 	girepository.vcprojin	\
-	annotation.vcproj	\
 	cmph-bdz-test.vcproj	\
 	cmph.vcprojin	\
-	foo.vcproj	\
 	g-ir-compiler.vcprojin	\
 	g-ir-generate.vcproj	\
-	gettype.vcproj	\
-	gimarshallingtests.vcproj	\
 	glib-print.vcproj	\
-	gtkfrob.vcproj	\
 	install.vcproj	\
-	regress.vcproj	\
-	sletter.vcproj	\
-	testinherit.vcproj	\
-	utility.vcproj	\
 	_giscanner.vcproj	\
 	README.txt
 
