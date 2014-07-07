@@ -132,5 +132,12 @@
    `char[]'. */
 #define YYTEXT_POINTER 1
 
+/* defines how to decorate public symbols while building */
+#ifdef _MSC_VER
+#define _GI_EXTERN __declspec (dllexport) extern
+#else
+#define _GI_EXTERN __attribute__((visibility("default"))) __declspec (dllexport) extern
+#endif
+
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */
