@@ -1,4 +1,0 @@
-EXPORTS
-s_hello
-s_spawn_error_quark
-s_dbus_error_quark

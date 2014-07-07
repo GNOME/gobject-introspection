@@ -199,7 +199,6 @@ GENERATED_MSVC_FILES =	\
 	config.h.win32
 
 EXTRA_DIST +=	\
-	./girepository/girepository.symbols	\
 	$(GENERATED_MSVC_FILES)
 
 CLEANFILES += $(GENERATED_MSVC_FILES)

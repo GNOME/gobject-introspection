@@ -1,6 +1,0 @@
-EXPORTS
-regress_test_inherit_drawable_get_type
-regress_test_inherit_drawable_do_foo
-regress_test_inherit_drawable_get_origin
-regress_test_inherit_drawable_get_size
-regress_test_inherit_drawable_do_foo_maybe_throw

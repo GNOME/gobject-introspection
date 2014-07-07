@@ -16,7 +16,7 @@ EXTRA_LTLIBRARIES += liboffsets.la
 liboffsets_la_SOURCES = \
 	offsets.h	\
 	offsets.c
-liboffsets_la_CPPFLAGS = $(GIREPO_CFLAGS)
+liboffsets_la_CPPFLAGS = $(GIREPO_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS)
 # dummy rpath to get built dynamically (huh?)
 liboffsets_la_LDFLAGS = -avoid-version -rpath $(libdir)
 

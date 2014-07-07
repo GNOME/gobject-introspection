@@ -44,7 +44,11 @@ libgirepository_internals_la_SOURCES =				\
 	girepository/girwriter.c				\
 	girepository/girwriter.h
 
-libgirepository_internals_la_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
+libgirepository_internals_la_CFLAGS =	\
+	$(GIREPO_CFLAGS)	\
+	$(GI_HIDDEN_VISIBILITY_CFLAGS)	\
+	-I$(top_srcdir)/girepository
+
 libgirepository_internals_la_LIBADD = libgirepository-gthash.la $(GIREPO_LIBS)
 
 libgirepository_1_0_la_SOURCES =			\
@@ -73,12 +77,15 @@ libgirepository_1_0_la_SOURCES =			\
 	girepository/giunioninfo.c			\
 	girepository/givfuncinfo.c
 
-libgirepository_1_0_la_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository -DG_IREPOSITORY_COMPILATION
+libgirepository_1_0_la_CPPFLAGS =	\
+	$(GIREPO_CFLAGS)	\
+	$(GI_HIDDEN_VISIBILITY_CFLAGS)	\
+	-I$(top_srcdir)/girepository	\
+	-DG_IREPOSITORY_COMPILATION
 libgirepository_1_0_la_LIBADD = libgirepository-gthash.la $(GIREPO_LIBS)
 libgirepository_1_0_la_LDFLAGS = \
 	$(EXTRA_LINK_FLAGS) \
-	-no-undefined -version-number 1:0:0 \
-	-export-symbols $(srcdir)/girepository/girepository.symbols
+	-no-undefined -version-number 1:0:0
 
 gdumpdir = $(datadir)/gobject-introspection-1.0/
 gdump_DATA = girepository/gdump.c
