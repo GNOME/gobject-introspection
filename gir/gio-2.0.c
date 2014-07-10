@@ -4520,7 +4520,7 @@
  * over any transport that can by represented as an #GIOStream.
  *
  * This class is rarely used directly in D-Bus clients. If you are writing
- * an D-Bus client, it is often easier to use the g_bus_own_name(),
+ * a D-Bus client, it is often easier to use the g_bus_own_name(),
  * g_bus_watch_name() or g_dbus_proxy_new_for_bus() APIs.
  *
  * As an exception to the usual GLib rule that a particular object must not
@@ -7610,6 +7610,7 @@
  *       task = g_task_new (self, cancellable, callback, user_data);
  *       g_task_set_task_data (task, cake_data, (GDestroyNotify) cake_data_free);
  *       g_task_run_in_thread (task, bake_cake_thread);
+ *       g_object_unref (task);
  *     }
  *
  *     Cake *
@@ -11529,6 +11530,19 @@
 
 
 /**
+ * g_application_get_resource_base_path:
+ * @application: a #GApplication
+ *
+ * Gets the resource base path of @application.
+ *
+ * See g_application_set_resource_base_path() for more information.
+ *
+ * Returns: (nullable): the base resource path, if one is set
+ * Since: 2.42
+ */
+
+
+/**
  * g_application_hold:
  * @application: a #GApplication
  *
@@ -11912,6 +11926,44 @@
  * zero.  Any timeouts currently in progress are not impacted.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_set_resource_base_path:
+ * @application: a #GApplication
+ * @resource_path: (nullable): the resource path to use
+ *
+ * Sets (or unsets) the base resource path of @application.
+ *
+ * The path is used to automatically load various [application
+ * resources][gresource] such as menu layouts and action descriptions.
+ * The various types of resources will be found at fixed names relative
+ * to the given base path.
+ *
+ * By default, the resource base path is determined from the application
+ * ID by prefixing '/' and replacing each '.' with '/'.  This is done at
+ * the time that the #GApplication object is constructed.  Changes to
+ * the application ID after that point will not have an impact on the
+ * resource base path.
+ *
+ * As an example, if the application has an ID of "org.example.app" then
+ * the default resource base path will be "/org/example/app".  If this
+ * is a #GtkApplication (and you have not manually changed the path)
+ * then Gtk will then search for the menus of the application at
+ * "/org/example/app/gtk/menus.ui".
+ *
+ * See #GResource for more information about adding resources to your
+ * application.
+ *
+ * You can disable automatic resource loading functionality by setting
+ * the path to %NULL.
+ *
+ * Changing the resource base path once the application is running is
+ * not recommended.  The point at which the resource path is consulted
+ * for forming paths for various purposes is unspecified.
+ *
+ * Since: 2.42
  */
 
 
@@ -24046,6 +24098,9 @@
  * can happen e.g. near the end of a file. Zero is returned on end of file
  * (or if @count is zero),  but never otherwise.
  *
+ * The returned @buffer is not a nul-terminated string, it can contain nul bytes
+ * at any position, and this function doesn't nul-terminate the @buffer.
+ *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned. If an
@@ -24157,6 +24212,7 @@
  * On error %NULL is returned and @error is set accordingly.
  *
  * Returns: a new #GBytes, or %NULL on error
+ * Since: 2.34
  */
 
 
@@ -24189,6 +24245,8 @@
  * Any outstanding I/O request with higher priority (lower numerical
  * value) will be executed before an outstanding request with lower
  * priority. Default priority is %G_PRIORITY_DEFAULT.
+ *
+ * Since: 2.34
  */
 
 
@@ -24202,6 +24260,7 @@
  * Finishes an asynchronous stream read-into-#GBytes operation.
  *
  * Returns: the newly-allocated #GBytes, or %NULL on error
+ * Since: 2.34
  */
 
 
@@ -34491,6 +34550,9 @@
  *
  * This function does not fail in the case of the subprocess having
  * abnormal termination.  See g_subprocess_wait_check() for that.
+ *
+ * Cancelling @cancellable doesn't kill the subprocess.  Call
+ * g_subprocess_force_exit() if it is desirable.
  *
  * Returns: %TRUE on success, %FALSE if @cancellable was cancelled
  * Since: 2.40

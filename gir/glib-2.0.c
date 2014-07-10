@@ -6486,8 +6486,8 @@
  * events you are interested in on the #GIOChannel, and provide a
  * function to be called whenever these events occur.
  *
- * #GIOChannel instances are created with an initial reference count of
- * 1. g_io_channel_ref() and g_io_channel_unref() can be used to
+ * #GIOChannel instances are created with an initial reference count of 1.
+ * g_io_channel_ref() and g_io_channel_unref() can be used to
  * increment or decrement the reference count respectively. When the
  * reference count falls to 0, the #GIOChannel is freed. (Though it
  * isn't closed automatically, unless it was created using
@@ -27969,6 +27969,10 @@
  * @delimiter. If @max_tokens is reached, the remainder of @string is
  * appended to the last token.
  *
+ * As an example, the result of g_strsplit (":a:bc::d:", ":", -1) is a
+ * %NULL-terminated vector containing the six strings "", "a", "bc", "", "d"
+ * and "".
+ *
  * As a special case, the result of splitting the empty string "" is an empty
  * vector, not a vector containing a single string. The reason for this
  * special case is that being able to represent a empty vector is typically
@@ -27998,7 +28002,7 @@
  * %NULL-terminated vector containing the three strings "abc", "def",
  * and "ghi".
  *
- * The result if g_strsplit_set (":def/ghi:", ":/", -1) is a %NULL-terminated
+ * The result of g_strsplit_set (":def/ghi:", ":/", -1) is a %NULL-terminated
  * vector containing the four strings "", "def", "ghi", and "".
  *
  * As a special case, the result of splitting the empty string "" is an empty
