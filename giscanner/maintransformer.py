@@ -287,7 +287,10 @@ class MainTransformer(object):
                 return base
             if isinstance(base, ast.List) and len(rest) == 1:
                 return ast.List(base.name, *rest)
-            if isinstance(base, ast.Map) and len(rest) == 2:
+            elif isinstance(base, ast.Array) and len(rest) == 1:
+                base.element_type = rest[0]
+                return base
+            elif isinstance(base, ast.Map) and len(rest) == 2:
                 return ast.Map(*rest)
             message.warn(
                 "Too many parameters in type specification %r" % (type_str, ))

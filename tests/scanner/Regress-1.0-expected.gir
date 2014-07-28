@@ -3458,6 +3458,11 @@ raise an error.</doc>
           <type name="utf8"/>
         </type>
       </property>
+      <property name="pptrarray" writable="1" transfer-ownership="none">
+        <array name="GLib.PtrArray" c:type="gpointer">
+          <type name="utf8"/>
+        </array>
+      </property>
       <property name="string" writable="1" transfer-ownership="none">
         <type name="utf8" c:type="gchar*"/>
       </property>

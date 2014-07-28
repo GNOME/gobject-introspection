@@ -2021,6 +2021,7 @@ enum
   PROP_TEST_OBJ_BOXED,
   PROP_TEST_OBJ_HASH_TABLE,
   PROP_TEST_OBJ_LIST,
+  PROP_TEST_OBJ_PPTRARRAY,
   PROP_TEST_OBJ_HASH_TABLE_OLD,
   PROP_TEST_OBJ_LIST_OLD,
   PROP_TEST_OBJ_INT,
@@ -2487,6 +2488,17 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                 G_PARAM_READWRITE);
   g_object_class_install_property (gobject_class,
                                    PROP_TEST_OBJ_LIST,
+                                   pspec);
+
+  /**
+   * RegressTestObj:pptrarray: (type GLib.PtrArray(utf8)) (transfer none)
+   */
+  pspec = g_param_spec_pointer ("pptrarray",
+                                "PtrArray property as a pointer",
+                                "Test annotating with GLib.PtrArray",
+                                G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_PPTRARRAY,
                                    pspec);
 
   /**
