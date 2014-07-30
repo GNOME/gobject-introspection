@@ -45,10 +45,7 @@ def _get_versionhash():
 def _get_cachedir():
     if 'GI_SCANNER_DISABLE_CACHE' in os.environ:
         return None
-    if os.name == 'nt' and 'MSYSTEM' not in os.environ:
-        homedir = os.environ.get('HOMEPATH')
-    else:
-        homedir = os.environ.get('HOME')
+    homedir = os.path.expanduser('~')
     if homedir is None:
         return None
     if not os.path.exists(homedir):
