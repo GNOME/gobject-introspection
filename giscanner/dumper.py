@@ -27,6 +27,7 @@ import tempfile
 
 from .gdumpparser import IntrospectionBinary
 from . import utils
+from .ccompiler import CCompiler
 
 # bugzilla.gnome.org/558436
 # Compile a binary program which is then linked to a library
@@ -287,10 +288,23 @@ class DumpCompiler(object):
                     "Could not find object file: %s" % (source, ))
         args.extend(list(sources))
 
+        cc = CCompiler()
+
         if not self._options.external_library:
-            self._add_link_internal_args(args, libtool)
+            cc.get_internal_link_flags(args,
+                                       libtool,
+                                       self._options.libraries,
+                                       self._options.library_paths,
+                                       self._pkgconfig_msvc_flags,
+                                       self._options.namespace_name,
+                                       self._options.namespace_version)
+            args.extend(self._run_pkgconfig('--libs'))
+
         else:
-            self._add_link_external_args(args)
+            args.extend(self._run_pkgconfig('--libs'))
+            cc.get_external_link_flags(args,
+                                       self._options.libraries,
+                                       self._pkgconfig_msvc_flags)
 
         if not self._options.quiet:
             print "g-ir-scanner: link: %s" % (
@@ -316,75 +330,6 @@ class DumpCompiler(object):
         finally:
             if msys:
                 os.remove(tf_name)
-
-    def _add_link_internal_args(self, args, libtool):
-        # An "internal" link is where the library to be introspected
-        # is being built in the current directory.
-
-        # Search the current directory first
-        # (This flag is not supported nor needed for Visual C++)
-        if self._pkgconfig_msvc_flags == '':
-            args.append('-L.')
-
-        # https://bugzilla.gnome.org/show_bug.cgi?id=625195
-        if not libtool:
-            # We don't have -Wl,-rpath for Visual C++, and that's
-            # going to cause a problem.  Instead, link to internal
-            # libraries by deducing the .lib file name using
-            # the namespace name and version
-            if self._pkgconfig_msvc_flags:
-                if self._options.namespace_version:
-                    args.append(str.lower(self._options.namespace_name) +
-                                '-' +
-                                self._options.namespace_version + '.lib')
-                else:
-                    args.append(str.lower(self._options.namespace_name) + '.lib')
-            else:
-                args.append('-Wl,-rpath=.')
-
-        # Ensure libraries are always linked as we are going to use ldd to work
-        # out their names later
-        if not libtool and self._pkgconfig_msvc_flags == '':
-            args.append('-Wl,--no-as-needed')
-
-        for library in self._options.libraries:
-            # Visual C++: We have the needed .lib files now, and we need to link
-            # to .lib files, not the .dll as the --library option specifies the
-            # .dll(s) the .gir file refers to
-            if self._pkgconfig_msvc_flags == '':
-                if library.endswith(".la"):  # explicitly specified libtool library
-                    args.append(library)
-                else:
-                    args.append('-l' + library)
-
-        for library_path in self._options.library_paths:
-            # Not used/needed on Visual C++, and -Wl,-rpath options
-            # will cause grief
-            if self._pkgconfig_msvc_flags == '':
-                args.append('-L' + library_path)
-                if os.path.isabs(library_path):
-                    if libtool:
-                        args.append('-rpath')
-                        args.append(library_path)
-                    else:
-                        args.append('-Wl,-rpath=' + library_path)
-
-        args.extend(self._run_pkgconfig('--libs'))
-
-    def _add_link_external_args(self, args):
-        # An "external" link is where the library to be introspected
-        # is installed on the system; this case is used for the scanning
-        # of GLib in gobject-introspection itself.
-
-        args.extend(self._run_pkgconfig('--libs'))
-        for library in self._options.libraries:
-            # The --library option on Windows pass in the .dll file(s) the
-            # .gir files refer to, so don't link to them on Visual C++
-            if self._pkgconfig_msvc_flags == '':
-                if library.endswith(".la"):  # explicitly specified libtool library
-                    args.append(library)
-                else:
-                    args.append('-l' + library)
 
 
 def compile_introspection_binary(options, get_type_functions,

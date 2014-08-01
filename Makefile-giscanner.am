@@ -31,6 +31,7 @@ pkgpyexec_PYTHON = 			\
 	giscanner/annotationparser.py	\
 	giscanner/ast.py		\
 	giscanner/cachestore.py		\
+	giscanner/ccompiler.py		\
 	giscanner/codegen.py		\
 	giscanner/docmain.py		\
 	giscanner/docwriter.py		\
