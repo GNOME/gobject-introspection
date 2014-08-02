@@ -50,17 +50,13 @@ into <root>\vs9\<PlatformName>\include\ and the compiled static libffi.lib
 The libintl.h that is used for building GLib needs to be in
 <root>\vs9\<PlatformName>\include, if not already done so
 
-You will also need a working GCC/MinGW compiler installation
-in order to generate the .gir and .typelib files.  One may be
-obtained from the mingw or the mingw64 project.
-
 A working pkg-config tool is also required-it may be obtained from
 http://www.gtk.org/download/win32.php [32-bit]
 http://www.gtk.org/download/win64.php [64-bit]
 
 *** Note! ***
-Please note that due to numerous possible configurations on Python, PKG_CONFIG_PATH and
-MinGW, the build of G-I is now a 2-step process: one with the Visual Studio Projects that
+Please note that due to numerous possible configurations on Python and PKG_CONFIG_PATH,
+the build of G-I is now a 2-step process: one with the Visual Studio Projects that
 will build the libraries, tools, Python Module and test DLLs (except for the everything
 test), and the other one with NMake Makefiles for building the introspection files.
 Please note that if one needs to change the installation location
@@ -77,13 +73,6 @@ PYTHON2: Full path to your Python 2.6.x/2.7.x interpretor (python.exe) if it is
          You need to use an x64/amd64 version of Python for x64 builds, and a Win32/x86
          version of Python for Win32/x86 builds
 PKG_CONFIG_PATH: Location of the .pc (pkg-config) files, especially for the GLib .pc files.
-MINGWDIR: Root installation folder for your Windows GCC (such as MinGW).  For example,
-          if your gcc executable (gcc.exe) is in c:\mingw\bin, use "set MINGWDIR=c:\mingw"
-          You need to use an x64/amd64 version of gcc for x64 builds, and a Win32/x86
-          version of gcc for Win32/x86 builds
-
-GCC is currently needed to as the GCC preprocessor is used to create the introspection dump source
-file, which is then compiled with the Visual C++ compiler to produce the .gir files.
 
 Please see $(srcroot)\build\gi-introspection-msvc.mak for more details.  Doing
 "nmake -f gi-introspection-msvc.mak (options omitted)" will build the various introspection files,
