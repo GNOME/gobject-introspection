@@ -55,7 +55,7 @@ extern int yylex (GISourceScanner *scanner);
 static int yywrap (void);
 static void parse_comment (GISourceScanner *scanner);
 static void parse_trigraph (GISourceScanner *scanner);
-static void process_linemarks (GISourceScanner *scanner);
+static void process_linemarks (GISourceScanner *scanner, gboolean has_line);
 static int check_identifier (GISourceScanner *scanner, const char *);
 static int parse_ignored_macro (void);
 static void print_error (GISourceScanner *scanner);
@@ -98,7 +98,8 @@ stringtext				([^\\\"])|(\\.)
 "#endif".*"\n"				{ return ENDIF_COND; }
 "#pragma ".*"\n"			{ /* Ignore pragma. */ }
 
-"# "[0-9]+" ".*"\n"			{ process_linemarks(scanner); }
+"# "[0-9]+" ".*"\n"			{ process_linemarks(scanner, FALSE); }
+"#line "[0-9]+" ".*"\n"			{ process_linemarks(scanner, TRUE); }
 "#"			                { }
 "{"					{ return '{'; }
 "<%"					{ return '{'; }
@@ -171,6 +172,14 @@ stringtext				([^\\\"])|(\\.)
 "__volatile"	        	        { return VOLATILE; }
 "__volatile__"	        	        { return VOLATILE; }
 "_Bool"					{ return BOOL; }
+"typedef char __static_assert_t".*"\n"	{ /* Ignore */ }
+"__cdecl" 	        	        { /* Ignore */ }
+"__declspec(deprecated(".*"))"		{ /* Ignore */ }
+"__declspec"[\t ]*"("[a-z\t ]+")"	{ /* Ignore */ }
+"__stdcall" 			        { /* ignore */ }
+"__w64"					{ /* ignore */ }
+"__int64"				{ return INT; }
+
 
 "G_GINT64_CONSTANT"			{ return INTL_CONST; }
 "G_GUINT64_CONSTANT"			{ return INTUL_CONST; }
@@ -389,13 +398,17 @@ _realpath (const char *path)
  **/
 
 static void
-process_linemarks (GISourceScanner *scanner)
+process_linemarks (GISourceScanner *scanner, gboolean has_line)
 {
 	char escaped_filename[1025];
 	char *filename;
-        char *real;
+	char *real;
 
-	sscanf(yytext, "# %d \"%1024[^\"]\"", &lineno, escaped_filename);
+	if (has_line)
+		sscanf(yytext, "#line %d \"%1024[^\"]\"", &lineno, escaped_filename);
+	else
+		sscanf(yytext, "# %d \"%1024[^\"]\"", &lineno, escaped_filename);
+
 	filename = g_strcompress (escaped_filename);
 
         real = _realpath (filename);
