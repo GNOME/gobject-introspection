@@ -199,7 +199,8 @@ match the namespace prefix.""")
     group = get_preprocessor_option_group(parser)
     parser.add_option_group(group)
 
-    if os.environ.get('MSYSTEM') == 'MINGW32':
+    msystemenv = os.environ.get('MSYSTEM')
+    if msystemenv and msystemenv.startswith('MINGW'):
         group = get_windows_option_group(parser)
         parser.add_option_group(group)
 
