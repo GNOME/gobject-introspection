@@ -877,6 +877,7 @@ void gi_marshalling_tests_object_static_method (void);
 void gi_marshalling_tests_object_method (GIMarshallingTestsObject *object);
 void gi_marshalling_tests_object_overridden_method (GIMarshallingTestsObject *object);
 GIMarshallingTestsObject *gi_marshalling_tests_object_new (gint int_);
+GIMarshallingTestsObject *gi_marshalling_tests_object_new_fail (gint int_, GError **error);
 
 void gi_marshalling_tests_object_method_array_in (GIMarshallingTestsObject *object, const gint *ints, gint length);
 void gi_marshalling_tests_object_method_array_out (GIMarshallingTestsObject *object, gint **ints, gint *length);

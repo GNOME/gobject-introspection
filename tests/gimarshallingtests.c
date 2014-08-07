@@ -3993,6 +3993,19 @@ gi_marshalling_tests_object_new (gint int_)
   return g_object_new (GI_MARSHALLING_TESTS_TYPE_OBJECT, "int", int_, NULL);
 }
 
+GIMarshallingTestsObject *
+gi_marshalling_tests_object_new_fail (gint int_, GError **error)
+{
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  g_set_error_literal (error,
+                       g_quark_from_static_string (GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN),
+                       GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE,
+                       GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
+
+  return NULL;
+}
+
 /**
  * gi_marshalling_tests_object_method_array_in:
  * @ints: (array length=length):
