@@ -2313,6 +2313,28 @@ use it should be.</doc>
         </parameter>
       </parameters>
     </callback>
+    <callback name="TestCallbackArrayInOut"
+              c:type="RegressTestCallbackArrayInOut">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="ints"
+                   direction="inout"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <array length="1" zero-terminated="0" c:type="int**">
+            <type name="gint" c:type="int*"/>
+          </array>
+        </parameter>
+        <parameter name="length"
+                   direction="inout"
+                   caller-allocates="0"
+                   transfer-ownership="none">
+          <type name="gint" c:type="int*"/>
+        </parameter>
+      </parameters>
+    </callback>
     <callback name="TestCallbackFull" c:type="RegressTestCallbackFull">
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
@@ -4974,6 +4996,18 @@ libgnome-keyring.</doc>
           <array length="0" zero-terminated="0" c:type="GType*">
             <type name="GType" c:type="GType"/>
           </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_inout_callback"
+              c:identifier="regress_test_array_inout_callback">
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="call">
+          <type name="TestCallbackArrayInOut"
+                c:type="RegressTestCallbackArrayInOut"/>
         </parameter>
       </parameters>
     </function>

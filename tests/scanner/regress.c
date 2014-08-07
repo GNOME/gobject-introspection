@@ -3363,6 +3363,37 @@ int regress_test_array_callback (RegressTestCallbackArray callback)
 }
 
 /**
+ * regress_test_array_inout_callback:
+ * @callback: (scope call):
+ *
+ */
+int
+regress_test_array_inout_callback (RegressTestCallbackArrayInOut callback)
+{
+  int *ints;
+  int length;
+
+  ints = g_new (int, 5);
+  for (length = 0; length < 5; ++length)
+    ints[length] = length - 2;
+
+  callback (&ints, &length);
+
+  g_assert_cmpint (length, ==, 4);
+  for (length = 0; length < 4; ++length)
+    g_assert_cmpint (ints[length], ==, length - 1);
+
+  callback (&ints, &length);
+
+  g_assert_cmpint (length, ==, 3);
+  for (length = 0; length < 3; ++length)
+    g_assert_cmpint (ints[length], ==, length);
+
+  g_free (ints);
+  return length;
+}
+
+/**
  * regress_test_simple_callback:
  * @callback: (scope call) (allow-none):
  *

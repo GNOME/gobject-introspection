@@ -713,11 +713,18 @@ typedef int (*RegressTestCallbackFull) (int foo, double bar, char *path);
  * @two_length:
  */
 typedef int (*RegressTestCallbackArray) (int *one, gsize one_length, const char** two, int two_length);
+/**
+ * RegressTestCallbackArrayInOut:
+ * @ints: (inout) (array length=length):
+ * @length: (inout):
+ */
+typedef void (* RegressTestCallbackArrayInOut) (int **ints, int *length);
 
 void regress_test_simple_callback (RegressTestSimpleCallback callback);
 int regress_test_callback (RegressTestCallback callback);
 int regress_test_multi_callback (RegressTestCallback callback);
 int regress_test_array_callback (RegressTestCallbackArray callback);
+int regress_test_array_inout_callback (RegressTestCallbackArrayInOut callback);
 int regress_test_callback_user_data (RegressTestCallbackUserData callback,
                              gpointer user_data);
 int regress_test_callback_destroy_notify (RegressTestCallbackUserData callback,
