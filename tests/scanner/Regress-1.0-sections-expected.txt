@@ -63,6 +63,7 @@ regress_test_array_gint32_in
 regress_test_array_gint64_in
 regress_test_array_gint8_in
 regress_test_array_gtype_in
+regress_test_array_inout_callback
 regress_test_array_int_full_out
 regress_test_array_int_in
 regress_test_array_int_inout
