@@ -14,7 +14,8 @@ tests_DATA =		    \
     everything.c	    \
     everything.h	    \
     gimarshallingtests.c    \
-    gimarshallingtests.h
+    gimarshallingtests.h    \
+    gitestmacros.h
 
 EXTRA_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
 
@@ -23,7 +24,8 @@ libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
 
 EXTRA_DIST += \
 	gimarshallingtests.h \
-	gi-tester
+	gi-tester \
+	gitestmacros.h
 
 BUILT_SOURCES += everything.c everything.h
 
