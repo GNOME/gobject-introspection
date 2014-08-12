@@ -93,7 +93,7 @@ gitestrepo.exe gitestthrows.exe gitypelibtest.exe:
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;1
 
 barapp.exe:
-	$(CC) $(CFLAGS) /I..\girepository ..\tests\scanner\$*.c $(LDFLAGS) girepository-$(GI_APIVERSION).lib
+	$(CC) $(CFLAGS) /I..\girepository -I..\tests ..\tests\scanner\$*.c $(LDFLAGS) girepository-$(GI_APIVERSION).lib
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;1
 
 gitestoffsets.exe: gitestoffsets.c
@@ -132,7 +132,7 @@ Offsets-$(GI_APIVERSION).gir: offsets.dll
 SLetter-$(GI_APIVERSION).gir: sletter.dll
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all --reparse-validate	\
 	--namespace=SLetter --nsversion=$(GI_APIVERSION) \
-	--no-libtool -I..	\
+	--no-libtool -I..\tests -I..	\
 	--add-include-path=. --include=Gio-$(GLIB_APIVERSION)	\
 	--identifier-prefix=S --c-include="sletter.h" --warn-error	\
 	--library=$* --output=$@	\
@@ -141,7 +141,7 @@ SLetter-$(GI_APIVERSION).gir: sletter.dll
 Utility-$(GI_APIVERSION).gir: utility.dll
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all --reparse-validate	\
 	--namespace=Utility --nsversion=$(GI_APIVERSION)	\
-	--no-libtool -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
+	--no-libtool -I..\tests -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
 	--add-include-path=. --include=GObject-$(GLIB_APIVERSION)	\
 	--c-include="utility.h" --warn-error	\
 	--library=$* --output=$@ \
@@ -150,7 +150,7 @@ Utility-$(GI_APIVERSION).gir: utility.dll
 GtkFrob-$(GI_APIVERSION).gir: gtkfrob.dll
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all --reparse-validate	\
 	--namespace=GtkFrob --nsversion=$(GI_APIVERSION)	\
-	--no-libtool -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
+	--no-libtool -I..\tests -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
 	--add-include-path=. --include=GObject-$(GLIB_APIVERSION)	\
 	--identifier-prefix=Gtk --symbol-prefix=gtk_frob --warn-error	\
 	--library=$* --output=$@ \
@@ -159,7 +159,7 @@ GtkFrob-$(GI_APIVERSION).gir: gtkfrob.dll
 GetType-$(GI_APIVERSION).gir: gettype.dll
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all --reparse-validate	\
 	--namespace=GetType --nsversion=$(GI_APIVERSION)	\
-	--no-libtool -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
+	--no-libtool -I..\tests -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
 	--add-include-path=. --include=GObject-$(GLIB_APIVERSION)	\
 	--c-include="gettype.h" --identifier-prefix=GetType --symbol-prefix=gettype	\
 	--library=$* --output=$@ \
@@ -168,7 +168,7 @@ GetType-$(GI_APIVERSION).gir: gettype.dll
 Typedefs-$(GI_APIVERSION).gir: typedefs.dll
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all --reparse-validate	\
 	--namespace=Typedefs --nsversion=$(GI_APIVERSION)	\
-	--no-libtool -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
+	--no-libtool -I..\tests -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
 	--add-include-path=. --include=GObject-$(GLIB_APIVERSION)	\
 	--c-include="typedefs.h" --identifier-prefix=Typedefs --symbol-prefix=typedefs	\
 	--library=$* --output=$@ \
@@ -177,7 +177,7 @@ Typedefs-$(GI_APIVERSION).gir: typedefs.dll
 WarnLib-$(GI_APIVERSION).gir: warnlib.dll
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all --reparse-validate	\
 	--namespace=WarnLib --nsversion=$(GI_APIVERSION)	\
-	--no-libtool -I..	\
+	--no-libtool -I..\tests -I..	\
 	--add-include-path=. --include=Gio-$(GLIB_APIVERSION)	\
 	--c-include="warnlib.h" --symbol-prefix=warnlib_	\
 	--library=$* --output=$@ \
@@ -186,7 +186,7 @@ WarnLib-$(GI_APIVERSION).gir: warnlib.dll
 Regress-$(GI_APIVERSION).gir: Utility-$(GI_APIVERSION).gir regress.dll
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all	\
 	--namespace=Regress --nsversion=$(GI_APIVERSION)	\
-	--no-libtool -I..	\
+	--no-libtool -I..\tests -I..	\
 	--add-include-path=. --include=Gio-$(GLIB_APIVERSION)	\
 	--include=Utility-$(GI_APIVERSION) --include=cairo-$(GI_APIVERSION)	\
 	--c-include="regress.h" --warn-error	\
@@ -201,7 +201,7 @@ Bar-$(GI_APIVERSION).gir: Utility-$(GI_APIVERSION).gir barapp.exe
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all	\
 	--namespace=Bar --nsversion=$(GI_APIVERSION)	\
 	--program=barapp	\
-	--no-libtool -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
+	--no-libtool -I..\tests -I.. --pkg=gobject-$(GLIB_APIVERSION)	\
 	--add-include-path=. --include=GObject-$(GLIB_APIVERSION)	\
 	--accept-unprefixed	\
 	--output=$@	\
