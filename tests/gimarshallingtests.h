@@ -4,6 +4,8 @@
 
 #include <glib-object.h>
 
+#include "gitestmacros.h"
+
 #ifndef __GI_MARSHALLING_TESTS_H__
 #define __GI_MARSHALLING_TESTS_H__
 
@@ -18,255 +20,512 @@ typedef struct _GIMarshallingTestsBoxedStruct GIMarshallingTestsBoxedStruct;
 
 /* Booleans */
 
+_GI_TEST_EXTERN
 gboolean gi_marshalling_tests_boolean_return_true (void);
+
+_GI_TEST_EXTERN
 gboolean gi_marshalling_tests_boolean_return_false (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boolean_in_true (gboolean v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boolean_in_false (gboolean v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boolean_out_true (gboolean *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boolean_out_false (gboolean *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boolean_inout_true_false (gboolean *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boolean_inout_false_true (gboolean *v);
 
 
 /* Integers */
 
+_GI_TEST_EXTERN
 gint8 gi_marshalling_tests_int8_return_max (void);
+
+_GI_TEST_EXTERN
 gint8 gi_marshalling_tests_int8_return_min (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int8_in_max (gint8 v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int8_in_min (gint8 v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int8_out_max (gint8 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int8_out_min (gint8 *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int8_inout_max_min (gint8 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int8_inout_min_max (gint8 *v);
 
 
+
+_GI_TEST_EXTERN
 guint8 gi_marshalling_tests_uint8_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint8_in (guint8 v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint8_out (guint8 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint8_inout (guint8 *v);
 
 
+_GI_TEST_EXTERN
 gint16 gi_marshalling_tests_int16_return_max (void);
+
+_GI_TEST_EXTERN
 gint16 gi_marshalling_tests_int16_return_min (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int16_in_max (gint16 v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int16_in_min (gint16 v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int16_out_max (gint16 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int16_out_min (gint16 *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int16_inout_max_min (gint16 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int16_inout_min_max (gint16 *v);
 
 
+
+_GI_TEST_EXTERN
 guint16 gi_marshalling_tests_uint16_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint16_in (guint16 v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint16_out (guint16 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint16_inout (guint16 *v);
 
 
+
+_GI_TEST_EXTERN
 gint32 gi_marshalling_tests_int32_return_max (void);
+
+_GI_TEST_EXTERN
 gint32 gi_marshalling_tests_int32_return_min (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int32_in_max (gint32 v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int32_in_min (gint32 v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int32_out_max (gint32 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int32_out_min (gint32 *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int32_inout_max_min (gint32 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int32_inout_min_max (gint32 *v);
 
 
+
+_GI_TEST_EXTERN
 guint32 gi_marshalling_tests_uint32_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint32_in (guint32 v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint32_out (guint32 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint32_inout (guint32 *v);
 
 
+
+_GI_TEST_EXTERN
 gint64 gi_marshalling_tests_int64_return_max (void);
+
+_GI_TEST_EXTERN
 gint64 gi_marshalling_tests_int64_return_min (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int64_in_max (gint64 v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int64_in_min (gint64 v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int64_out_max (gint64 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int64_out_min (gint64 *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int64_inout_max_min (gint64 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int64_inout_min_max (gint64 *v);
 
 
+
+_GI_TEST_EXTERN
 guint64 gi_marshalling_tests_uint64_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint64_in (guint64 v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint64_out (guint64 *v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint64_inout (guint64 *v);
 
 
+
+_GI_TEST_EXTERN
 gshort gi_marshalling_tests_short_return_max (void);
+
+_GI_TEST_EXTERN
 gshort gi_marshalling_tests_short_return_min (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_short_in_max (gshort short_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_short_in_min (gshort short_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_short_out_max (gshort *short_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_short_out_min (gshort *short_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_short_inout_max_min (gshort *short_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_short_inout_min_max (gshort *short_);
 
 
+
+_GI_TEST_EXTERN
 gushort gi_marshalling_tests_ushort_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ushort_in (gushort ushort_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ushort_out (gushort *ushort_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ushort_inout (gushort *ushort_);
 
 
+
+_GI_TEST_EXTERN
 gint gi_marshalling_tests_int_return_max (void);
+
+_GI_TEST_EXTERN
 gint gi_marshalling_tests_int_return_min (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_in_max (gint int_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_in_min (gint int_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_out_max (gint *int_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_out_min (gint *int_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_inout_max_min (gint *int_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_inout_min_max (gint *int_);
 
 
+_GI_TEST_EXTERN
 guint gi_marshalling_tests_uint_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint_in (guint uint_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint_out (guint *uint_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_uint_inout (guint *uint_);
 
 
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_long_return_max (void);
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_long_return_min (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_long_in_max (glong long_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_long_in_min (glong long_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_long_out_max (glong *long_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_long_out_min (glong *long_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_long_inout_max_min (glong *long_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_long_inout_min_max (glong *long_);
 
 
+_GI_TEST_EXTERN
 gulong gi_marshalling_tests_ulong_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ulong_in (gulong ulong_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ulong_out (gulong *ulong_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ulong_inout (gulong *ulong_);
 
 
+_GI_TEST_EXTERN
 gssize gi_marshalling_tests_ssize_return_max (void);
+
+_GI_TEST_EXTERN
 gssize gi_marshalling_tests_ssize_return_min (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ssize_in_max (gssize ssize);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ssize_in_min (gssize ssize);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ssize_out_max (gssize *ssize);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ssize_out_min (gssize *ssize);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ssize_inout_max_min (gssize *ssize);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ssize_inout_min_max (gssize *ssize);
 
 
+
+_GI_TEST_EXTERN
 gsize gi_marshalling_tests_size_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_size_in (gsize size);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_size_out (gsize *size);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_size_inout (gsize *size);
 
 
 /* Floating-point */
 
+_GI_TEST_EXTERN
 gfloat gi_marshalling_tests_float_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_float_in (gfloat v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_float_out (gfloat *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_float_inout (gfloat *v);
 
 
+
+_GI_TEST_EXTERN
 gdouble gi_marshalling_tests_double_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_double_in (gdouble v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_double_out (gdouble *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_double_inout (gdouble *v);
 
 
 /* Timestamps */
 
+_GI_TEST_EXTERN
 time_t gi_marshalling_tests_time_t_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_time_t_in (time_t v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_time_t_out (time_t *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_time_t_inout (time_t *v);
 
 
 /* GType */
 
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_gtype_return (void);
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_gtype_string_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gtype_in (GType gtype);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gtype_string_in (GType gtype);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gtype_out (GType *gtype);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gtype_string_out (GType *gtype);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gtype_inout (GType *gtype);
 
 
 /* UTF-8 */
 
+_GI_TEST_EXTERN
 const gchar *gi_marshalling_tests_utf8_none_return (void);
+
+_GI_TEST_EXTERN
 gchar *gi_marshalling_tests_utf8_full_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_none_in (const gchar *utf8);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_full_in (gchar *utf8);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_none_out (gchar **utf8);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_full_out (gchar **utf8);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_dangling_out (gchar **utf8);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_none_inout (gchar **utf8);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_full_inout (gchar **utf8);
 
+
+_GI_TEST_EXTERN
 GSList *gi_marshalling_tests_filename_list_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_as_uint8array_in (const guint8 *array,
                                                  gsize         len);
 
@@ -286,12 +545,20 @@ typedef enum
   GI_MARSHALLING_TESTS_SECOND_ENUM_SECONDVALUE2,
 } GIMarshallingTestsSecondEnum;
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsEnum gi_marshalling_tests_enum_returnv (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_enum_in (GIMarshallingTestsEnum v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_enum_out (GIMarshallingTestsEnum *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_enum_inout (GIMarshallingTestsEnum *v);
 
 
@@ -304,15 +571,24 @@ typedef enum
   GI_MARSHALLING_TESTS_GENUM_VALUE3 = 42
 } GIMarshallingTestsGEnum;
 
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_genum_get_type (void) G_GNUC_CONST;
 #define GI_MARSHALLING_TESTS_TYPE_GENUM (gi_marshalling_tests_genum_get_type ())
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsGEnum gi_marshalling_tests_genum_returnv (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_genum_in (GIMarshallingTestsGEnum v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_genum_out (GIMarshallingTestsGEnum *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *v);
 
 
@@ -328,16 +604,27 @@ typedef enum
   GI_MARSHALLING_TESTS_FLAGS_MASK2 = GI_MARSHALLING_TESTS_FLAGS_MASK
 } GIMarshallingTestsFlags;
 
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_flags_get_type (void) G_GNUC_CONST;
 #define GI_MARSHALLING_TESTS_TYPE_FLAGS (gi_marshalling_tests_flags_get_type ())
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsFlags gi_marshalling_tests_flags_returnv (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_flags_in (GIMarshallingTestsFlags v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_flags_in_zero (GIMarshallingTestsFlags v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_flags_out (GIMarshallingTestsFlags *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_flags_inout (GIMarshallingTestsFlags *v);
 
 /* Flags with no GType */
@@ -352,221 +639,472 @@ typedef enum
   GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_MASK2 = GI_MARSHALLING_TESTS_FLAGS_MASK
 } GIMarshallingTestsNoTypeFlags;
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsNoTypeFlags gi_marshalling_tests_no_type_flags_returnv (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_no_type_flags_in (GIMarshallingTestsNoTypeFlags v);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_no_type_flags_in_zero (GIMarshallingTestsNoTypeFlags v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_no_type_flags_out (GIMarshallingTestsNoTypeFlags *v);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *v);
 
 /* Arrays */
 
+
+_GI_TEST_EXTERN
 gboolean gi_marshalling_tests_init_function (gint *n_args, char ***argv);
 
 /* Fixed-size */
+
+_GI_TEST_EXTERN
 const gint *gi_marshalling_tests_array_fixed_int_return (void);
+
+_GI_TEST_EXTERN
 const gshort *gi_marshalling_tests_array_fixed_short_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_fixed_int_in (const gint *ints);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_fixed_short_in (const gshort *shorts);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_fixed_out (gint **ints);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_fixed_out_struct (GIMarshallingTestsSimpleStruct **structs);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_fixed_inout (gint **ints);
 
 /* Variable-size */
 
+
+_GI_TEST_EXTERN
 const gint *gi_marshalling_tests_array_return (gint *length);
+
+_GI_TEST_EXTERN
 const gint *gi_marshalling_tests_array_return_etc (gint first, gint *length, gint last, gint *sum);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in (const gint *ints, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_len_before (gint length, const gint *ints);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_len_zero_terminated (const gint *ints, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_string_in (const gchar **strings, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_struct_value_in (GIMarshallingTestsBoxedStruct *structs, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_struct_take_in (GIMarshallingTestsBoxedStruct **structs, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_simple_struct_in (GIMarshallingTestsSimpleStruct *structs, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_multi_array_key_value_in (gint length, const gchar **keys, const GValue *values);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_guint64_len (const gint *ints, guint64 length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_guint8_len (const gint *ints, guint8 length);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_out (gint **ints, gint *length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, gint last, gint *sum);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_inout (gint **ints, gint *length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length, gint last, gint *sum);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_nonzero_nonlen (gint first, const guint8 *chars);
 
 /* Zero-terminated */
 
+
+_GI_TEST_EXTERN
 gchar **gi_marshalling_tests_array_zero_terminated_return (void);
+
+_GI_TEST_EXTERN
 gchar **gi_marshalling_tests_array_zero_terminated_return_null (void);
+
+_GI_TEST_EXTERN
 GIMarshallingTestsBoxedStruct **gi_marshalling_tests_array_zero_terminated_return_struct (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_zero_terminated_in (gchar **utf8s);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_zero_terminated_out (gchar ***utf8s);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s);
 
+
+_GI_TEST_EXTERN
 GVariant **gi_marshalling_tests_array_gvariant_none_in (GVariant **variants);
 
+
+_GI_TEST_EXTERN
 GVariant **gi_marshalling_tests_array_gvariant_container_in (GVariant **variants);
 
+
+_GI_TEST_EXTERN
 GVariant **gi_marshalling_tests_array_gvariant_full_in (GVariant **variants);
 
 
 /* GArray */
 
+_GI_TEST_EXTERN
 GArray *gi_marshalling_tests_garray_int_none_return (void);
+
+_GI_TEST_EXTERN
 GArray *gi_marshalling_tests_garray_uint64_none_return (void);
+
+_GI_TEST_EXTERN
 GArray *gi_marshalling_tests_garray_utf8_none_return (void);
+
+_GI_TEST_EXTERN
 GArray *gi_marshalling_tests_garray_utf8_container_return (void);
+
+_GI_TEST_EXTERN
 GArray *gi_marshalling_tests_garray_utf8_full_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_int_none_in (GArray *array_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_uint64_none_in (GArray *array_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_none_in (GArray *array_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_none_out (GArray **array_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_container_out (GArray **array_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_full_out (GArray **array_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_full_out_caller_allocated (GArray *array_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_none_inout (GArray **array_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_container_inout (GArray **array_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_full_inout (GArray **array_);
 
 /* GPtrArray */
+
+_GI_TEST_EXTERN
 GPtrArray *gi_marshalling_tests_gptrarray_utf8_none_return (void);
+
+_GI_TEST_EXTERN
 GPtrArray *gi_marshalling_tests_gptrarray_utf8_container_return (void);
+
+_GI_TEST_EXTERN
 GPtrArray *gi_marshalling_tests_gptrarray_utf8_full_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gptrarray_utf8_none_in (GPtrArray *parray_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gptrarray_utf8_none_out (GPtrArray **parray_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gptrarray_utf8_container_out (GPtrArray **parray_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gptrarray_utf8_full_out (GPtrArray **parray_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gptrarray_utf8_none_inout (GPtrArray **parray_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gptrarray_utf8_container_inout (GPtrArray **parray_);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gptrarray_utf8_full_inout (GPtrArray **parray_);
 
 /* GByteArray */
 
+_GI_TEST_EXTERN
 GByteArray *gi_marshalling_tests_bytearray_full_return (void);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_bytearray_none_in (GByteArray* v);
 
 /* GBytes */
 
+_GI_TEST_EXTERN
 GBytes *gi_marshalling_tests_gbytes_full_return (void);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gbytes_none_in (GBytes* v);
 
 /* GStrv */
 
+_GI_TEST_EXTERN
 GStrv gi_marshalling_tests_gstrv_return (void);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gstrv_in (GStrv g_strv);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gstrv_out (GStrv *g_strv);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gstrv_inout (GStrv *g_strv);
 
 /* GList */
 
+_GI_TEST_EXTERN
 GList *gi_marshalling_tests_glist_int_none_return (void);
+
+_GI_TEST_EXTERN
 GList *gi_marshalling_tests_glist_uint32_none_return (void);
+
+_GI_TEST_EXTERN
 GList *gi_marshalling_tests_glist_utf8_none_return (void);
+
+_GI_TEST_EXTERN
 GList *gi_marshalling_tests_glist_utf8_container_return (void);
+
+_GI_TEST_EXTERN
 GList *gi_marshalling_tests_glist_utf8_full_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_int_none_in (GList *list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_uint32_none_in (GList *list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_utf8_none_in (GList *list);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_utf8_none_out (GList **list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_utf8_container_out (GList **list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_utf8_full_out (GList **list);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_utf8_none_inout (GList **list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_utf8_container_inout (GList **list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_glist_utf8_full_inout (GList **list);
 
 
 /* GSList */
 
+_GI_TEST_EXTERN
 GSList *gi_marshalling_tests_gslist_int_none_return (void);
+
+_GI_TEST_EXTERN
 GSList *gi_marshalling_tests_gslist_utf8_none_return (void);
+
+_GI_TEST_EXTERN
 GSList *gi_marshalling_tests_gslist_utf8_container_return (void);
+
+_GI_TEST_EXTERN
 GSList *gi_marshalling_tests_gslist_utf8_full_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gslist_int_none_in (GSList *list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gslist_utf8_none_in (GSList *list);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gslist_utf8_none_out (GSList **list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gslist_utf8_container_out (GSList **list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gslist_utf8_full_out (GSList **list);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gslist_utf8_none_inout (GSList **list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gslist_utf8_container_inout (GSList **list);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gslist_utf8_full_inout (GSList **list);
 
 
 /* GHashTable */
 
+_GI_TEST_EXTERN
 GHashTable *gi_marshalling_tests_ghashtable_int_none_return (void);
+
+_GI_TEST_EXTERN
 GHashTable *gi_marshalling_tests_ghashtable_utf8_none_return (void);
+
+_GI_TEST_EXTERN
 GHashTable *gi_marshalling_tests_ghashtable_utf8_container_return (void);
+
+_GI_TEST_EXTERN
 GHashTable *gi_marshalling_tests_ghashtable_utf8_full_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_int_none_in (GHashTable *hash_table);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_none_in (GHashTable *hash_table);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_container_in (GHashTable *hash_table);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_full_in (GHashTable *hash_table);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_none_out (GHashTable **hash_table);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_container_out (GHashTable **hash_table);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_full_out (GHashTable **hash_table);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_none_inout (GHashTable **hash_table);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_container_inout (GHashTable **hash_table);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_full_inout (GHashTable **hash_table);
 
 
 /* GValue */
 
+_GI_TEST_EXTERN
 GValue *gi_marshalling_tests_gvalue_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_in (GValue *value);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_int64_in (GValue *value);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_in_with_type (GValue *value, GType type);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_in_with_modification (GValue *value);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_in_enum (GValue *value);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_out (GValue **value);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_int64_out (GValue **value);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_out_caller_allocates (GValue *value);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_inout (GValue **value);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_flat_array (guint         n_values,
                                              const GValue *values);
 
+
+_GI_TEST_EXTERN
 GValue *gi_marshalling_tests_return_gvalue_flat_array (void);
 
+
+_GI_TEST_EXTERN
 GValue *gi_marshalling_tests_gvalue_flat_array_round_trip (const GValue one,
                                                            const GValue two,
                                                            const GValue three);
 
 /* GClosure */
 
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gclosure_in (GClosure *closure);
+
+_GI_TEST_EXTERN
 GClosure *gi_marshalling_tests_gclosure_return (void);
 
 /* Callback return values */
@@ -576,6 +1114,8 @@ GClosure *gi_marshalling_tests_gclosure_return (void);
  */
 typedef glong (* GIMarshallingTestsCallbackReturnValueOnly) (void);
 
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_callback_return_value_only (GIMarshallingTestsCallbackReturnValueOnly callback);
 
 /**
@@ -584,6 +1124,8 @@ glong gi_marshalling_tests_callback_return_value_only (GIMarshallingTestsCallbac
  */
 typedef void (* GIMarshallingTestsCallbackOneOutParameter) (gfloat *a);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_callback_one_out_parameter (GIMarshallingTestsCallbackOneOutParameter  callback,
                                                       gfloat                                    *a);
 
@@ -594,6 +1136,8 @@ void gi_marshalling_tests_callback_one_out_parameter (GIMarshallingTestsCallback
  */
 typedef void (* GIMarshallingTestsCallbackMultipleOutParameters) (gfloat *a, gfloat *b);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_callback_multiple_out_parameters (GIMarshallingTestsCallbackMultipleOutParameters  callback,
                                                             gfloat                                          *a,
                                                             gfloat                                          *b);
@@ -604,6 +1148,8 @@ void gi_marshalling_tests_callback_multiple_out_parameters (GIMarshallingTestsCa
  */
 typedef glong (* GIMarshallingTestsCallbackReturnValueAndOneOutParameter) (glong *a);
 
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_callback_return_value_and_one_out_parameter (GIMarshallingTestsCallbackReturnValueAndOneOutParameter  callback,
                                                                         glong                                                   *a);
 
@@ -614,6 +1160,8 @@ glong gi_marshalling_tests_callback_return_value_and_one_out_parameter (GIMarsha
  */
 typedef glong (* GIMarshallingTestsCallbackReturnValueAndMultipleOutParameters) (glong *a, glong *b);
 
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_callback_return_value_and_multiple_out_parameters (GIMarshallingTestsCallbackReturnValueAndMultipleOutParameters  callback,
                                                                               glong                                                         *a,
                                                                               glong                                                         *b);
@@ -625,11 +1173,15 @@ glong gi_marshalling_tests_callback_return_value_and_multiple_out_parameters (GI
 typedef void (* GIMarshallingTestsCallbackOwnedBoxed) (GIMarshallingTestsBoxedStruct *box,
 						       void                      *user_data);
 
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_callback_owned_boxed (GIMarshallingTestsCallbackOwnedBoxed  callback,
                                                  void *callback_data);
 
 /* Pointer */
 
+
+_GI_TEST_EXTERN
 gpointer gi_marshalling_tests_pointer_in_return (gpointer pointer);
 
 /* Structure */
@@ -648,10 +1200,15 @@ typedef struct {
 } GIMarshallingTestsNotSimpleStruct;
 
 
+_GI_TEST_EXTERN
 GIMarshallingTestsSimpleStruct *gi_marshalling_tests_simple_struct_returnv (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_simple_struct_inv (GIMarshallingTestsSimpleStruct *struct_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_simple_struct_method (GIMarshallingTestsSimpleStruct *struct_);
 
 
@@ -659,10 +1216,16 @@ typedef struct {
     glong long_;
 } GIMarshallingTestsPointerStruct;
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_pointer_struct_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsPointerStruct *gi_marshalling_tests_pointer_struct_returnv (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_pointer_struct_inv (GIMarshallingTestsPointerStruct *struct_);
 
 struct _GIMarshallingTestsBoxedStruct {
@@ -671,32 +1234,56 @@ struct _GIMarshallingTestsBoxedStruct {
     GStrv g_strv;
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_boxed_struct_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsBoxedStruct *gi_marshalling_tests_boxed_struct_new (void);
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsBoxedStruct *gi_marshalling_tests_boxed_struct_returnv (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boxed_struct_inv (GIMarshallingTestsBoxedStruct *struct_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boxed_struct_out (GIMarshallingTestsBoxedStruct **struct_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_boxed_struct_inout (GIMarshallingTestsBoxedStruct **struct_);
 
 typedef union {
     glong long_;
 } GIMarshallingTestsUnion;
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_union_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsUnion *gi_marshalling_tests_union_returnv (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_union_inv (GIMarshallingTestsUnion *union_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_union_out (GIMarshallingTestsUnion **union_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_union_inout (GIMarshallingTestsUnion **union_);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_union_method (GIMarshallingTestsUnion *union_);
 
  /* Object */
@@ -872,63 +1459,151 @@ struct _GIMarshallingTestsObject
     gint int_;
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_object_get_type (void) G_GNUC_CONST;
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_static_method (void);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method (GIMarshallingTestsObject *object);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_overridden_method (GIMarshallingTestsObject *object);
+
+_GI_TEST_EXTERN
 GIMarshallingTestsObject *gi_marshalling_tests_object_new (gint int_);
 GIMarshallingTestsObject *gi_marshalling_tests_object_new_fail (gint int_, GError **error);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_array_in (GIMarshallingTestsObject *object, const gint *ints, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_array_out (GIMarshallingTestsObject *object, gint **ints, gint *length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_array_inout (GIMarshallingTestsObject *object, gint **ints, gint *length);
+
+_GI_TEST_EXTERN
 const gint *gi_marshalling_tests_object_method_array_return (GIMarshallingTestsObject *object, gint *length);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *object, gint8 in);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_int8_out (GIMarshallingTestsObject *object, gint8 *out);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_int8_arg_and_out_caller (GIMarshallingTestsObject *object, gint8 arg, gint8 *out);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_int8_arg_and_out_callee (GIMarshallingTestsObject *object, gint8 arg, gint8 **out);
+
+_GI_TEST_EXTERN
 const gchar* gi_marshalling_tests_object_method_str_arg_out_ret (GIMarshallingTestsObject *object, const gchar* arg, guint *out);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_with_default_implementation (GIMarshallingTestsObject *object, gint8 in);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_method_variant_array_in (GIMarshallingTestsObject *object, GVariant **in, gsize n_in);
 
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_object_vfunc_return_value_only (GIMarshallingTestsObject *self);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_one_out_parameter (GIMarshallingTestsObject *self, gfloat *a);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_multiple_out_parameters (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_caller_allocated_out_parameter (GIMarshallingTestsObject *self, GValue *a);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_array_out_parameter (GIMarshallingTestsObject *self, gfloat **a);
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter (GIMarshallingTestsObject *self, glong *a);
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters (GIMarshallingTestsObject *self, glong *a, glong *b);
+
+_GI_TEST_EXTERN
 gboolean gi_marshalling_tests_object_vfunc_meth_with_error (GIMarshallingTestsObject *object, gint x, GError **error);
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsEnum gi_marshalling_tests_object_vfunc_return_enum (GIMarshallingTestsObject *self);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_out_enum (GIMarshallingTestsObject *self, GIMarshallingTestsEnum *_enum);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_none (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_none (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_none (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_full (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating);
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsObject *gi_marshalling_tests_object_none_return (void);
+
+_GI_TEST_EXTERN
 GIMarshallingTestsObject *gi_marshalling_tests_object_full_return (void);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_none_in (GIMarshallingTestsObject *object);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_full_in (GIMarshallingTestsObject *object);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_none_out (GIMarshallingTestsObject **object);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_full_out (GIMarshallingTestsObject **object);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_none_inout (GIMarshallingTestsObject **object);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_full_inout (GIMarshallingTestsObject **object);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_int8_in (GIMarshallingTestsObject *object, gint8 in);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_int8_out (GIMarshallingTestsObject *object, gint8 *out);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_with_callback (GIMarshallingTestsObject *object,
                                                       GIMarshallingTestsCallbackIntInt callback,
                                                       void *callback_data);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_call_vfunc_with_callback (GIMarshallingTestsObject *object);
 
 #define GI_MARSHALLING_TESTS_TYPE_SUB_OBJECT             (gi_marshalling_tests_sub_object_get_type ())
@@ -951,9 +1626,15 @@ struct _GIMarshallingTestsSubObject
 	GIMarshallingTestsObject parent_instance;
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_sub_object_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_sub_object_sub_method (GIMarshallingTestsSubObject *object);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_sub_object_overwritten_method (GIMarshallingTestsSubObject *object);
 
 #define GI_MARSHALLING_TESTS_TYPE_SUB_SUB_OBJECT             (gi_marshalling_tests_sub_sub_object_get_type ())
@@ -976,6 +1657,8 @@ struct _GIMarshallingTestsSubSubObject
 	GIMarshallingTestsSubObject parent_instance;
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_sub_sub_object_get_type (void) G_GNUC_CONST;
 
 /* Interfaces */
@@ -998,10 +1681,16 @@ struct _GIMarshallingTestsInterfaceIface {
     void (* test_int8_in) (GIMarshallingTestsInterface *self, gint8 in);
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_interface_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_interface_test_int8_in (GIMarshallingTestsInterface *self, gint8 in);
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *test_iface, gint8 in);
 
 /* GIMarshallingTestsInterfaceImpl is a class that implements
@@ -1030,7 +1719,11 @@ struct _GIMarshallingTestsInterfaceImpl
     gint int_;
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_interface_impl_get_type (void) G_GNUC_CONST;
+
+_GI_TEST_EXTERN
 GIMarshallingTestsInterface *gi_marshalling_tests_interface_impl_get_as_interface (GIMarshallingTestsInterfaceImpl *self);
 
 /* GIMarshallingTestsInterface2 allows us testing vfunc clashes when a class'
@@ -1054,6 +1747,8 @@ struct _GIMarshallingTestsInterface2Iface {
     void (* test_int8_in) (GIMarshallingTestsInterface2 *self, gint8 in);
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_interface2_get_type (void) G_GNUC_CONST;
 
 /* GIMarshallingTestsInterface3 tests passing arrays of variants from C to @lang */
@@ -1076,21 +1771,38 @@ struct _GIMarshallingTestsInterface3Iface {
     void (* test_variant_array_in) (GIMarshallingTestsInterface3 *self, GVariant **in, gsize n_in);
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_interface3_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_interface3_test_variant_array_in (GIMarshallingTestsInterface3 *self, GVariant **in, gsize n_in);
 
 /* Multiple output arguments */
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_out_out (gint *int0, gint *int1);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_three_in_three_out(gint a, gint b, gint c,
                                                  gint *out0, gint *out1, gint *out2);
+
+_GI_TEST_EXTERN
 gint gi_marshalling_tests_int_return_out (gint *int_);
 
 /* Default arguments */
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_two_in_utf8_two_in_with_allow_none  (gint a, gint b, const gchar *c, const gchar *d);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_int_one_in_utf8_two_in_one_allows_none  (gint a, const gchar *b, const gchar *c);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_utf8_two_in (const gint *ints, gint length, const gchar *a, const gchar *b);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_utf8_two_in_out_of_order (gint length, const gchar *a, const gint *ints, const gchar *b);
 
 /* GError */
@@ -1100,15 +1812,30 @@ void gi_marshalling_tests_array_in_utf8_two_in_out_of_order (gint length, const 
 #define GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE "gi-marshalling-tests-gerror-message"
 #define GI_MARSHALLING_TESTS_CONSTANT_GERROR_DEBUG_MESSAGE "we got an error, life is shit"
 
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gerror(GError **error);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gerror_array_in(gint *in_ints, GError **error);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gerror_out(GError **error, gchar **debug);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_gerror_out_transfer_none(GError **err, const gchar **debug);
+
+_GI_TEST_EXTERN
 GError *gi_marshalling_tests_gerror_return(void);
 
 /* GParamSpec */
+_GI_TEST_EXTERN
 void gi_marshalling_tests_param_spec_in_bool(const GParamSpec *param);
+
+_GI_TEST_EXTERN
 GParamSpec *gi_marshalling_tests_param_spec_return (void);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_param_spec_out(GParamSpec **param);
 
 /* Overrides */
@@ -1120,12 +1847,19 @@ typedef struct {
     glong long_;
 } GIMarshallingTestsOverridesStruct;
 
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_overrides_struct_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsOverridesStruct *gi_marshalling_tests_overrides_struct_new (void);
 
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_overrides_struct_method (GIMarshallingTestsOverridesStruct *struct_);
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsOverridesStruct *gi_marshalling_tests_overrides_struct_returnv (void);
 
 
@@ -1151,12 +1885,19 @@ struct _GIMarshallingTestsOverridesObject
     glong long_;
 };
 
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_overrides_object_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsOverridesObject *gi_marshalling_tests_overrides_object_new (void);
 
+
+_GI_TEST_EXTERN
 glong gi_marshalling_tests_overrides_object_method (GIMarshallingTestsOverridesObject *object);
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsOverridesObject *gi_marshalling_tests_overrides_object_returnv (void);
 
 /* Properties Object */
@@ -1196,8 +1937,12 @@ struct _GIMarshallingTestsPropertiesObjectClass {
     GObjectClass parent_class;
 };
 
+
+_GI_TEST_EXTERN
 GType gi_marshalling_tests_properties_object_get_type (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 GIMarshallingTestsPropertiesObject *gi_marshalling_tests_properties_object_new (void);
 
 #endif /* _GI_MARSHALLING_TESTS_H_ */

@@ -2,6 +2,8 @@
  *vim: tabstop=4 shiftwidth=4 expandtab
  */
 
+#include "config.h"
+
 #include "gimarshallingtests.h"
 
 #include <string.h>
