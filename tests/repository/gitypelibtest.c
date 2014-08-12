@@ -6,7 +6,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 static void
 test_enum_and_flags_cidentifier (GIRepository * repo)

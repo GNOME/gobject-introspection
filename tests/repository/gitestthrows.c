@@ -2,7 +2,6 @@
 #include "girepository.h"
 
 #include <stdlib.h>
-#include <unistd.h>
 
 
 int
