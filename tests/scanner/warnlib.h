@@ -5,9 +5,13 @@
 
 #include <gio/gio.h>
 
+#include "gitestmacros.h"
+
 #define WARNLIB_UNPAIRED_ERROR (warnlib_unpaired_error_quark ())
+_GI_TEST_EXTERN
 GQuark warnlib_unpaired_error_quark (void);
 
+_GI_TEST_EXTERN
 gboolean warnlib_throw_unpaired (GError **error);
 
 /* interface */
@@ -31,9 +35,12 @@ struct _WarnLibWhateverIface
   void (*do_boo) (WarnLibWhatever *self, int x, gpointer y);
 };
 
+_GI_TEST_EXTERN
 void warnlib_whatever_do_moo (WarnLibWhatever *self, int, gpointer);
+_GI_TEST_EXTERN
 void warnlib_whatever_do_boo (WarnLibWhatever *self, int, gpointer);
 
+_GI_TEST_EXTERN
 GType warnlib_whatever_get_type (void) G_GNUC_CONST;
 
 #endif

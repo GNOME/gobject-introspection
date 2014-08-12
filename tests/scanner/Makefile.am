@@ -20,8 +20,9 @@ EXTRA_LTLIBRARIES = \
 	$(NULL)
 CLEANFILES += $(EXTRA_LTLIBRARIES)
 
+GI_SCANNER_CFLAGS = -I$(top_srcdir)/tests
 AM_CPPFLAGS = -I$(top_srcdir)/girepository
-AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS)
+AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS) $(GI_SCANNER_CFLAGS)
 # -rpath needed to force libtool to build a shared library for a check_LTLIBRARIES
 # target. See http://lists.gnu.org/archive/html/automake/2005-10/msg00107.html
 AM_LDFLAGS = -rpath /unused -avoid-version
@@ -82,6 +83,7 @@ EXTRA_DIST = $(EXPECTEDGIRS)
 
 SLetter-1.0.gir: $(top_builddir)/Gio-2.0.gir libsletter.la
 SLetter_1_0_gir_LIBS = libsletter.la
+SLetter_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 SLetter_1_0_gir_INCLUDES = Gio-2.0
 SLetter_1_0_gir_FILES = $(libsletter_la_SOURCES)
 SLetter_1_0_gir_SCANNERFLAGS = --identifier-prefix=S --c-include="sletter.h" --warn-error
@@ -100,6 +102,7 @@ GIRS += Regress-1.0.gir
 
 WarnLib-1.0.gir: $(top_builddir)/Gio-2.0.gir libwarnlib.la
 WarnLib_1_0_gir_LIBS = libwarnlib.la
+WarnLib_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 WarnLib_1_0_gir_INCLUDES = Gio-2.0
 WarnLib_1_0_gir_FILES = $(libwarnlib_la_SOURCES)
 WarnLib_1_0_gir_SCANNERFLAGS = --c-include="warnlib.h" --symbol-prefix=warnlib_
@@ -108,6 +111,7 @@ GIRS += WarnLib-1.0.gir
 Utility-1.0.gir: libutility.la
 Utility_1_0_gir_PACKAGES = gobject-2.0
 Utility_1_0_gir_LIBS = libutility.la
+Utility_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 Utility_1_0_gir_INCLUDES = GObject-2.0
 Utility_1_0_gir_FILES = $(libutility_la_SOURCES)
 Utility_1_0_gir_SCANNERFLAGS = --c-include="utility.h" --warn-error
@@ -117,6 +121,7 @@ GIRS += Utility-1.0.gir
 GtkFrob-1.0.gir: libgtkfrob.la
 GtkFrob_1_0_gir_PACKAGES = gobject-2.0
 GtkFrob_1_0_gir_LIBS = libgtkfrob.la
+GtkFrob_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 GtkFrob_1_0_gir_INCLUDES = GObject-2.0
 GtkFrob_1_0_gir_FILES = $(libgtkfrob_la_SOURCES)
 GtkFrob_1_0_gir_SCANNERFLAGS = --identifier-prefix=Gtk --symbol-prefix=gtk_frob --warn-error
@@ -127,6 +132,7 @@ GIRS += GtkFrob-1.0.gir
 GetType-1.0.gir: libgettype.la
 GetType_1_0_gir_PACKAGES = gobject-2.0
 GetType_1_0_gir_LIBS = libgettype.la
+GetType_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 GetType_1_0_gir_INCLUDES = GObject-2.0
 GetType_1_0_gir_FILES = $(libgettype_la_SOURCES)
 GetType_1_0_gir_SCANNERFLAGS = --c-include="gettype.h" --identifier-prefix=GetType --symbol-prefix=gettype
@@ -135,6 +141,7 @@ GIRS += GetType-1.0.gir
 Typedefs-1.0.gir: libtypedefs.la
 Typedefs_1_0_gir_PACKAGES = gobject-2.0
 Typedefs_1_0_gir_LIBS = libtypedefs.la
+Typedefs_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 Typedefs_1_0_gir_INCLUDES = GObject-2.0
 Typedefs_1_0_gir_FILES = $(libtypedefs_la_SOURCES)
 Typedefs_1_0_gir_SCANNERFLAGS = --c-include="typedefs.h" --identifier-prefix=Typedefs --symbol-prefix=typedefs
@@ -151,6 +158,7 @@ barapp_LDFLAGS = -export-dynamic
 Bar-1.0.gir: barapp
 Bar_1_0_gir_PACKAGES = gobject-2.0
 Bar_1_0_gir_PROGRAM = ./barapp
+Bar_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 Bar_1_0_gir_INCLUDES = GObject-2.0
 Bar_1_0_gir_FILES = $(barapp_SOURCES)
 Bar_1_0_gir_SCANNERFLAGS = --accept-unprefixed

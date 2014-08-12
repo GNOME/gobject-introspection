@@ -1,6 +1,8 @@
 
 #include <glib-object.h>
 
+#include "gitestmacros.h"
+
 #define BAR_TYPE_BAZ              (bar_baz_get_type ())
 #define BAR_BAZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), BAR_TYPE_BAZ, BarBaz))
 #define BAR_IS_BAZ(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), BAR_TYPE_BAZ))
@@ -18,9 +20,14 @@ struct BarBazClass
   GObjectClass parent_class;
 };
 
+_GI_TEST_EXTERN
 GType bar_baz_get_type          (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 void bar_app_func (void);
+
+_GI_TEST_EXTERN
 void bar_app_func2 (int x, double y);
 
 
@@ -45,6 +52,8 @@ struct MutterWindowClass
   GObjectClass parent_class;
 };
 
+_GI_TEST_EXTERN
 GType mutter_window_get_type          (void) G_GNUC_CONST;
 
+_GI_TEST_EXTERN
 void mutter_window_func (MutterWindow *window, guint v);

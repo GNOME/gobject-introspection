@@ -1,4 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
+#include "config.h"
+
 #include "drawable.h"
 
 G_DEFINE_ABSTRACT_TYPE (RegressTestInheritDrawable, regress_test_inherit_drawable, G_TYPE_OBJECT);

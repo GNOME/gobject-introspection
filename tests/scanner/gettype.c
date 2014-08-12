@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "gettype.h"
 
 G_DEFINE_TYPE (GetTypeObject, gettype_object, G_TYPE_OBJECT);

@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "typedefs.h"
 
 static TypedefsBoxedWithTypedefBefore *

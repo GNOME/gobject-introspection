@@ -1,4 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
+#include "config.h"
+
 #include "barapp.h"
 
 #include <girepository.h>

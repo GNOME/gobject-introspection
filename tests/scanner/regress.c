@@ -1,4 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
+#include "config.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <glib-object.h>

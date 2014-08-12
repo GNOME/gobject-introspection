@@ -3,6 +3,8 @@
 
 #include <glib-object.h>
 #include <gio/gio.h> /* GAsyncReadyCallback */
+
+#include "gitestmacros.h"
 #include "utility.h"
 
 #define REGRESS_FOO_SUCCESS_INT 0x1138
@@ -58,10 +60,16 @@ struct _RegressFooInterfaceIface
   void (*do_regress_foo) (RegressFooInterface *self, int x);
 };
 
+
+_GI_TEST_EXTERN
 GType                 regress_foo_interface_get_type       (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 void regress_foo_interface_do_regress_foo (RegressFooInterface *iface, int x);
 
+
+_GI_TEST_EXTERN
 void regress_foo_interface_static_method (int x);
 
 struct _RegressFooSubInterfaceIface
@@ -79,9 +87,15 @@ struct _RegressFooSubInterfaceIface
   void (*do_baz) (RegressFooSubInterface *self, GCallback callback, gpointer user_data);
 };
 
+
+_GI_TEST_EXTERN
 GType                 regress_foo_sub_interface_get_type       (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 void regress_foo_sub_interface_do_bar (RegressFooSubInterface *self);
+
+_GI_TEST_EXTERN
 void regress_foo_sub_interface_do_baz (RegressFooSubInterface *self,
                                        GCallback callback,
                                        gpointer user_data);
@@ -106,35 +120,67 @@ struct _RegressFooObjectClass
   GCallback _reserved[4];
 };
 
+
+_GI_TEST_EXTERN
 gint                  regress_foo_init                     (void);
 
+
+_GI_TEST_EXTERN
 GType                 regress_foo_object_get_type          (void) G_GNUC_CONST;
+
+_GI_TEST_EXTERN
 RegressFooObject*            regress_foo_object_new               (void);
+
+_GI_TEST_EXTERN
 UtilityObject*        regress_foo_object_external_type     (RegressFooObject *object);
+
+_GI_TEST_EXTERN
 GObject*              regress_foo_object_new_as_super      (void);
 
+
+_GI_TEST_EXTERN
 void                  regress_foo_object_various           (RegressFooObject *object, void *data, GType some_type);
 
+
+_GI_TEST_EXTERN
 void                  regress_foo_object_take_all          (RegressFooObject *object, int x, ...);
 
 typedef gpointer RegressFooObjectCookie;
 
+
+_GI_TEST_EXTERN
 RegressFooObjectCookie       regress_foo_object_new_cookie        (RegressFooObject *object, const char *target);
 
+
+_GI_TEST_EXTERN
 void                  regress_foo_object_is_it_time_yet    (RegressFooObject *object, time_t time);
 
+
+_GI_TEST_EXTERN
 const char *          regress_foo_object_get_name          (RegressFooObject *object);
 
+
+_GI_TEST_EXTERN
 char *                regress_foo_object_dup_name          (RegressFooObject *object);
 
+
+_GI_TEST_EXTERN
 void                  regress_foo_object_handle_glyph      (RegressFooObject *object, UtilityGlyph glyph);
 
+
+_GI_TEST_EXTERN
 gboolean              regress_foo_object_virtual_method    (RegressFooObject *object, int first_param);
 
+
+_GI_TEST_EXTERN
 void                  regress_foo_object_read              (RegressFooObject *object, int offset, int length);
 
+
+_GI_TEST_EXTERN
 int                   regress_foo_object_static_meth       (void);
 
+
+_GI_TEST_EXTERN
 void                  regress_foo_object_skipped_method    (RegressFooObject *object);
 
 struct _RegressFooSubobject
@@ -147,17 +193,31 @@ struct _RegressFooSubobjectClass
   RegressFooObjectClass parent_class;
 };
 
+
+_GI_TEST_EXTERN
 GType                 regress_foo_subobject_get_type       (void) G_GNUC_CONST;
+
+_GI_TEST_EXTERN
 RegressFooSubobject*         regress_foo_subobject_new            (void);
 
+
+_GI_TEST_EXTERN
 RegressFooObject *           regress_foo_object_get_default       (void);
 
+
+_GI_TEST_EXTERN
 GType                 regress_foo_buffer_get_type          (void);
 
+
+_GI_TEST_EXTERN
 void                  regress_foo_buffer_some_method       (RegressFooBuffer *buffer);
 
+
+_GI_TEST_EXTERN
 GType                 regress_foo_other_object_get_type    (void) G_GNUC_CONST;
 
+
+_GI_TEST_EXTERN
 RegressFooObject *           regress_foo_not_a_constructor_new    (void);
 
 typedef enum
@@ -167,10 +227,16 @@ typedef enum
   REGRESS_FOO_ENUM_DELTA
 } RegressFooEnumType;
 
+
+_GI_TEST_EXTERN
 GType regress_foo_enum_type_get_type (void);
 
+
+_GI_TEST_EXTERN
 int                   regress_foo_enum_type_method         (RegressFooEnumType regress_foo_enum);
 
+
+_GI_TEST_EXTERN
 RegressFooEnumType           regress_foo_enum_type_returnv        (int x);
 
 typedef enum
@@ -180,6 +246,8 @@ typedef enum
   REGRESS_FOO_FLAGS_THIRD  = 1 << 2
 } RegressFooFlagsType;
 
+
+_GI_TEST_EXTERN
 GType regress_foo_flags_type_get_type (void);
 
 typedef enum
@@ -213,18 +281,34 @@ typedef enum
 
 typedef struct _RegressFooBoxed RegressFooBoxed;
 
+
+_GI_TEST_EXTERN
 GType                 regress_foo_boxed_get_type       (void) G_GNUC_CONST;
+
+_GI_TEST_EXTERN
 RegressFooBoxed*             regress_foo_boxed_new            (void);
+
+_GI_TEST_EXTERN
 void                  regress_foo_boxed_method         (RegressFooBoxed* boxed);
 
 /* This one tests capitalization handling with respect to DBus */
 typedef struct _RegressFooDBusData RegressFooDBusData;
+
+_GI_TEST_EXTERN
 GType                 regress_foo_dbus_data_get_type       (void) G_GNUC_CONST;
+
+_GI_TEST_EXTERN
 void                  regress_foo_dbus_data_method         (RegressFooDBusData* dbusdata);
 
 /* FIXME: Scanner does not support this yet
+
+_GI_TEST_EXTERN
 const char *REGRESS_FOO_CONSTANT_STR = "regress_foo-constant-str";
+
+_GI_TEST_EXTERN
 const int REGRESS_FOO_CONSTANT_INT = 10;
+
+_GI_TEST_EXTERN
 const float REGRESS_FOO_CONSTANT_FLOAT = 10;
 */
 
@@ -255,14 +339,20 @@ struct _RegressFooRectangle
   gint height;
 };
 
+
+_GI_TEST_EXTERN
 void
 regress_foo_method_external_references (UtilityObject *object,
                                         UtilityEnumType e,
                                         UtilityFlagType f,
                                         UtilityStruct s);
 
+
+_GI_TEST_EXTERN
 void regress_foo_rectangle_add(RegressFooRectangle *r1, const RegressFooRectangle *r2);
 
+
+_GI_TEST_EXTERN
 RegressFooRectangle * regress_foo_rectangle_new (int x, int y, int width, int height);
 
 
@@ -301,10 +391,16 @@ struct _RegressFooBRect
   double y;
 };
 
+
+_GI_TEST_EXTERN
 GType regress_foo_brect_get_type (void);
 
+
+_GI_TEST_EXTERN
 RegressFooBRect *regress_foo_brect_new (double x, double y);
 
+
+_GI_TEST_EXTERN
 void regress_foo_brect_add (RegressFooBRect *b1, RegressFooBRect *b2);
 
 typedef union _RegressFooBUnion RegressFooBUnion;
@@ -338,36 +434,69 @@ struct _RegressFooThingWithArray
   guchar *data;
 } ;
 
+
+_GI_TEST_EXTERN
 RegressFooBUnion *regress_foo_bunion_new (void);
 
+
+_GI_TEST_EXTERN
 GType regress_foo_bunion_get_type (void);
 
+
+_GI_TEST_EXTERN
 int regress_foo_bunion_get_contained_type (RegressFooBUnion *bunion);
 
+
+_GI_TEST_EXTERN
 void regress_foo_test_unsigned_qualifier (unsigned int unsigned_param);
+
+_GI_TEST_EXTERN
 void regress_foo_test_unsigned_type (unsigned unsigned_param);
 
+
+_GI_TEST_EXTERN
 void regress_foo_test_string_array (char **array);
 
+
+_GI_TEST_EXTERN
 void regress_foo_test_string_array_with_g (gchar **array);
 
+
+_GI_TEST_EXTERN
 GArray *regress_foo_test_array (void);
 
+
+_GI_TEST_EXTERN
 const char * regress_foo_test_const_char_retval (void);
+
+_GI_TEST_EXTERN
 const RegressFooStruct * regress_foo_test_const_struct_retval (void);
+
+_GI_TEST_EXTERN
 void regress_foo_test_const_char_param (const char * param);
+
+_GI_TEST_EXTERN
 void regress_foo_test_const_struct_param (const RegressFooStruct * param);
 
 typedef void (*RegressFooVarargsCallback) (const char * param, ...);
+
+_GI_TEST_EXTERN
 void regress_foo_test_varargs_callback (gint i, RegressFooVarargsCallback callback);
+
+_GI_TEST_EXTERN
 void regress_foo_test_varargs_callback2 (RegressFooVarargsCallback callback);
+
+_GI_TEST_EXTERN
 void regress_foo_test_varargs_callback3 (RegressFooVarargsCallback callback,
                                          RegressFooVarargsCallback callback2);
 
 /* Make sure callbacks get the right scope by default */
+_GI_TEST_EXTERN
 void regress_foo_async_ready_callback(GCancellable *cancellable,
                                       GAsyncReadyCallback callback,
                                       gpointer user_data);
+
+_GI_TEST_EXTERN
 void regress_foo_destroy_notify_callback(RegressFooCallback callback,
                                          gpointer data,
                                          GDestroyNotify destroy);
@@ -377,8 +506,12 @@ typedef enum {
   REGRESS_FOO_ERROR_BAD,
   REGRESS_FOO_ERROR_UGLY
 } RegressFooError;
+
+_GI_TEST_EXTERN
 GType regress_foo_error_get_type (void);
 
+
+_GI_TEST_EXTERN
 GQuark regress_foo_error_quark (void);
 
 typedef enum
@@ -400,7 +533,11 @@ typedef enum
 } RegressFooASingle;
 
 /* Should be skipped */
+
+_GI_TEST_EXTERN
 void regress_foo_some_variant (guint x, va_list args);
+
+_GI_TEST_EXTERN
 void regress_foo_some_variant_ptr (guint x, va_list *args);
 
 /**
@@ -424,14 +561,22 @@ struct _RegressFooForeignStruct
   int regress_foo;
 };
 
+
+_GI_TEST_EXTERN
 RegressFooForeignStruct* regress_foo_foreign_struct_new (void);
+
+_GI_TEST_EXTERN
 RegressFooForeignStruct* regress_foo_foreign_struct_copy (RegressFooForeignStruct *original);
 
 /* This one should be a global, not a method on UtilityObject since
  * it's a separate namespace.
  */
+
+_GI_TEST_EXTERN
 void regress_foo_object_a_global_method (UtilityObject *obj);
 
+
+_GI_TEST_EXTERN
 RegressFooOtherObject * regress_foo_object_append_new_stack_layer (RegressFooObject *obj, int x);
 
 #endif /* __REGRESS_FOO_OBJECT_H__ */

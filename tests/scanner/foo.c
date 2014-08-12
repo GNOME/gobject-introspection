@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "foo.h"
 
 /* A hidden type not exposed publicly, similar to GUPNP's XML wrapper

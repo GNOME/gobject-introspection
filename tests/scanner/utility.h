@@ -3,6 +3,8 @@
 
 #include <glib-object.h>
 
+#include "gitestmacros.h"
+
 #define UTILITY_TYPE_OBJECT              (utility_object_get_type ())
 #define UTILITY_OBJECT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), UTILITY_TYPE_OBJECT, UtilityObject))
 #define UTILITY_IS_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), UTILITY_TYPE_OBJECT))
@@ -53,7 +55,11 @@ typedef struct
 
 typedef void (*UtilityFileFunc)(const char *path, gpointer user_data);
 
+
+_GI_TEST_EXTERN
 GType                 utility_object_get_type          (void) G_GNUC_CONST;
+
+_GI_TEST_EXTERN
 void                  utility_object_watch_dir         (UtilityObject *object,
                                                         const char *path,
                                                         UtilityFileFunc func,
@@ -90,6 +96,7 @@ typedef union
   double real;
 } UtilityUnion;
 
+_GI_TEST_EXTERN
 void utility_dir_foreach (const char *path, UtilityFileFunc func, gpointer user_data);
 
 #endif /* __UTILITY_H__ */

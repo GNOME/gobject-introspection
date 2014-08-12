@@ -1,4 +1,6 @@
 /* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
+#include "config.h"
+
 #include "annotation.h"
 
 char backslash_parsing_tester = '\\';
