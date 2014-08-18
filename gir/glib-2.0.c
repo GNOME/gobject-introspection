@@ -11389,9 +11389,6 @@
  * Otherwise, the variable is destroyed using @destroy and the
  * pointer is set to %NULL.
  *
- * This function is threadsafe and modifies the pointer atomically,
- * using memory barriers where needed.
- *
  * A macro is also included that allows this function to be used without
  * pointer casts.
  *

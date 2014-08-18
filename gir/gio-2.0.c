@@ -3206,6 +3206,26 @@
 
 
 /**
+ * GUnixMountType:
+ * @G_UNIX_MOUNT_TYPE_UNKNOWN: Unknown UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_FLOPPY: Floppy disk UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_CDROM: CDROM UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_NFS: Network File System (NFS) UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_ZIP: ZIP UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_JAZ: JAZZ UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_MEMSTICK: Memory Stick UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_CF: Compact Flash UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_SM: Smart Media UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_SDMMC: SD/MMC UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_IPOD: iPod UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_CAMERA: Digital camera UNIX mount type.
+ * @G_UNIX_MOUNT_TYPE_HD: Hard drive UNIX mount type.
+ *
+ * Types of UNIX mounts.
+ */
+
+
+/**
  * GUnixOutputStream:close-fd:
  *
  * Whether to close the file descriptor when the stream is closed.
@@ -8718,6 +8738,215 @@
 
 
 /**
+ * _g_dbus_initialize:
+ *
+ * Does various one-time init things such as
+ *
+ *  - registering the G_DBUS_ERROR error domain
+ *  - parses the G_DBUS_DEBUG environment variable
+ */
+
+
+/**
+ * _g_file_attribute_value_as_string:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Converts a #GFileAttributeValue to a string for display.
+ * The returned string should be freed when no longer needed.
+ *
+ * Returns: a string from the @attr, %NULL on error, or "<invalid>"
+ * if @attr is of type %G_FILE_ATTRIBUTE_TYPE_INVALID.
+ */
+
+
+/**
+ * _g_file_attribute_value_clear:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Clears the value of @attr and sets its type to
+ * %G_FILE_ATTRIBUTE_TYPE_INVALID.
+ */
+
+
+/**
+ * _g_file_attribute_value_free:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Frees the memory used by @attr.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_boolean:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the boolean value from a file attribute value. If the value is not the
+ * right type then %FALSE will be returned.
+ *
+ * Returns: the boolean value contained within the attribute, or %FALSE.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_byte_string:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the byte string from a file attribute value. If the value is not the
+ * right type then %NULL will be returned.
+ *
+ * Returns: the byte string contained within the attribute or %NULL.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_int32:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the signed 32-bit integer from a file attribute value. If the value
+ * is not the right type then 0 will be returned.
+ *
+ * Returns: the signed 32-bit integer from the attribute, or 0.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_int64:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the signed 64-bit integer from a file attribute value. If the value
+ * is not the right type then 0 will be returned.
+ *
+ * Returns: the signed 64-bit integer from the attribute, or 0.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_object:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the GObject from a file attribute value. If the value
+ * is not the right type then %NULL will be returned.
+ *
+ * Returns: the GObject from the attribute, or %NULL.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_string:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the string from a file attribute value. If the value is not the
+ * right type then %NULL will be returned.
+ *
+ * Returns: the UTF-8 string value contained within the attribute, or %NULL.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_uint32:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the unsigned 32-bit integer from a file attribute value. If the value
+ * is not the right type then 0 will be returned.
+ *
+ * Returns: the unsigned 32-bit integer from the attribute, or 0.
+ */
+
+
+/**
+ * _g_file_attribute_value_get_uint64:
+ * @attr: a #GFileAttributeValue.
+ *
+ * Gets the unsigned 64-bit integer from a file attribute value. If the value
+ * is not the right type then 0 will be returned.
+ *
+ * Returns: the unsigned 64-bit integer from the attribute, or 0.
+ */
+
+
+/**
+ * _g_file_attribute_value_new:
+ *
+ * Creates a new file attribute.
+ *
+ * Returns: a #GFileAttributeValue.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_boolean:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #gboolean to set within the type.
+ *
+ * Sets the attribute value to the given boolean value.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_byte_string:
+ * @attr: a #GFileAttributeValue.
+ * @string: a byte string to set within the type.
+ *
+ * Sets the attribute value to a given byte string.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_int32:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #gint32 to set within the type.
+ *
+ * Sets the attribute value to the given signed 32-bit integer.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_int64:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #gint64 to set within the type.
+ *
+ * Sets the attribute value to a given signed 64-bit integer.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_object:
+ * @attr: a #GFileAttributeValue.
+ * @obj: a #GObject.
+ *
+ * Sets the attribute to contain the value @obj.
+ * The @attr references the GObject internally.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_string:
+ * @attr: a #GFileAttributeValue.
+ * @string: a UTF-8 string to set within the type.
+ *
+ * Sets the attribute value to a given UTF-8 string.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_uint32:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #guint32 to set within the type.
+ *
+ * Sets the attribute value to the given unsigned 32-bit integer.
+ */
+
+
+/**
+ * _g_file_attribute_value_set_uint64:
+ * @attr: a #GFileAttributeValue.
+ * @value: a #guint64 to set within the type.
+ *
+ * Sets the attribute value to a given unsigned 64-bit integer.
+ */
+
+
+/**
  * _g_freedesktop_dbus_call_add_match:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_rule: Argument to pass with the method invocation.
@@ -9880,6 +10109,16 @@
  * Returns: (transfer none): an object implementing
  *     @extension_point, or %NULL if there are no usable
  *     implementations.
+ */
+
+
+/**
+ * _g_win32_mount_new:
+ * @volume_monitor: a #GVolumeMonitor.
+ * @path: a win32 path.
+ * @volume: usually NULL
+ *
+ * Returns: a #GWin32Mount for the given win32 path.
  */
 
 
@@ -19411,6 +19650,25 @@
  *
  * Unreferences @matcher. If the reference count falls below 1,
  * the @matcher is automatically freed.
+ */
+
+
+/**
+ * g_file_attribute_value_dup:
+ * @other: a #GFileAttributeValue to duplicate.
+ *
+ * Duplicates a file attribute.
+ *
+ * Returns: a duplicate of the @other.
+ */
+
+
+/**
+ * g_file_attribute_value_set:
+ * @attr: a #GFileAttributeValue to set the value in.
+ * @new_value: a #GFileAttributeValue to get the value from.
+ *
+ * Sets an attribute's value from another attribute.
  */
 
 
@@ -29030,6 +29288,14 @@
 
 
 /**
+ * g_resource_new_from_table:
+ * @table: (transfer full): a GvdbTable
+ *
+ * Returns: (transfer full): a new #GResource for @table
+ */
+
+
+/**
  * g_resource_open_stream:
  * @resource: A #GResource
  * @path: A pathname inside the resource
@@ -37321,6 +37587,17 @@
 
 
 /**
+ * g_unix_mount_guess_type:
+ * @mount_entry: a #GUnixMount.
+ *
+ * Guesses the type of a unix mount. If the mount type cannot be
+ * determined, returns %G_UNIX_MOUNT_TYPE_UNKNOWN.
+ *
+ * Returns: a #GUnixMountType.
+ */
+
+
+/**
  * g_unix_mount_is_readonly:
  * @mount_entry: a #GUnixMount.
  *
@@ -37466,6 +37743,18 @@
  *
  * Returns: (transfer full): a #GIcon
  * Since: 2.34
+ */
+
+
+/**
+ * g_unix_mount_point_guess_type:
+ * @mount_point: a #GUnixMountPoint.
+ *
+ * Guesses the type of a unix mount point.
+ * If the mount type cannot be determined,
+ * returns %G_UNIX_MOUNT_TYPE_UNKNOWN.
+ *
+ * Returns: a #GUnixMountType.
  */
 
 
@@ -38365,6 +38654,19 @@
  *
  * Returns: a new #GZlibDecompressor
  * Since: 2.24
+ */
+
+
+/**
+ * get_viewable_logical_drives:
+ *
+ * Returns the list of logical and viewable drives as defined by
+ * GetLogicalDrives() and the registry keys
+ * Software\Microsoft\Windows\CurrentVersion\Policies\Explorer under
+ * HKLM or HKCU. If neither key exists the result of
+ * GetLogicalDrives() is returned.
+ *
+ * Returns: bitmask with same meaning as returned by GetLogicalDrives()
  */
 
 
