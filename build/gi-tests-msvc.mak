@@ -97,7 +97,7 @@ barapp.exe:
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;1
 
 gitestoffsets.exe: gitestoffsets.c
-	$(CC) $(CFLAGS) /I..\girepository /I..\tests\offsets $*.c $(LDFLAGS) girepository-$(GI_APIVERSION).lib
+	$(CC) $(CFLAGS) /I..\girepository /I..\tests\offsets /I..\tests $*.c $(LDFLAGS) girepository-$(GI_APIVERSION).lib
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;1
 	@set GI_TYPELIB_PATH=.
 	@-$@ offsets.compiled offsets.introspected
@@ -124,7 +124,7 @@ Everything-$(GI_APIVERSION).gir: everything.dll
 Offsets-$(GI_APIVERSION).gir: offsets.dll
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --warn-all --warn-error --reparse-validate	\
 	--namespace=Offsets --nsversion=$(GI_APIVERSION)	\
-	--no-libtool -I.. -I..\tests\offsets	\
+	--no-libtool -I.. -I..\tests\offsets -I..\tests	\
 	--pkg=gobject-$(GLIB_APIVERSION) --add-include-path=. --include=GObject-$(GLIB_APIVERSION)	\
 	--library=$* --output=$@	\
 	..\tests\offsets\offsets.h ..\tests\offsets\offsets.c

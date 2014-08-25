@@ -16,7 +16,7 @@ EXTRA_LTLIBRARIES += liboffsets.la
 liboffsets_la_SOURCES = \
 	offsets.h	\
 	offsets.c
-liboffsets_la_CPPFLAGS = $(GIREPO_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS)
+liboffsets_la_CPPFLAGS = $(GIREPO_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS) -I$(top_srcdir)/tests
 # dummy rpath to get built dynamically (huh?)
 liboffsets_la_LDFLAGS = -avoid-version -rpath $(libdir)
 
@@ -25,7 +25,7 @@ Offsets_1_0_gir_INCLUDES = GObject-2.0
 Offsets_1_0_gir_LIBS = liboffsets.la
 Offsets_1_0_gir_PACKAGES = gobject-2.0
 Offsets_1_0_gir_FILES = $(srcdir)/offsets.h $(srcdir)/offsets.c
-Offsets_1_0_gir_SCANNERFLAGS = --warn-all --warn-error
+Offsets_1_0_gir_SCANNERFLAGS = --warn-all --warn-error  -I$(top_srcdir)/tests
 INTROSPECTION_GIRS += Offsets-1.0.gir
 
 CLEANFILES += Offsets-1.0.gir Offsets-1.0.typelib liboffsets.la
@@ -35,7 +35,7 @@ CLEANFILES += Offsets-1.0.gir Offsets-1.0.typelib liboffsets.la
 EXTRA_PROGRAMS += gitestoffsets
 
 nodist_gitestoffsets_SOURCES = gitestoffsets.c
-gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
+gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository -I$(top_srcdir)/tests
 gitestoffsets_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
 gitestoffsets.c: gen-gitestoffsets offsets.h Offsets-1.0.typelib

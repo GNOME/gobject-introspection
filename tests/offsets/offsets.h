@@ -5,6 +5,8 @@
 #include <glib-object.h>
 #include <time.h>
 
+#include "gitestmacros.h"
+
 /* Test we get the alignment right for various basic types; we put
  * a char in front of of each field to make it more likely that we'll
  * stress out the alignment code.
