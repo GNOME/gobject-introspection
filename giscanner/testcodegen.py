@@ -46,9 +46,23 @@ def uscore_from_type(typeval):
 
 class EverythingCodeGenerator(object):
 
-    def __init__(self, out_h_filename, out_c_filename):
+    def __init__(self,
+                 out_h_filename,
+                 out_c_filename,
+                 function_decoration,
+                 include_first_header,
+                 include_last_header,
+                 include_first_src,
+                 include_last_src):
         self.namespace = ast.Namespace('Everything', '1.0')
-        self.gen = CCodeGenerator(self.namespace, out_h_filename, out_c_filename)
+        self.gen = CCodeGenerator(self.namespace,
+                                  out_h_filename,
+                                  out_c_filename,
+                                  function_decoration,
+                                  include_first_header,
+                                  include_last_header,
+                                  include_first_src,
+                                  include_last_src)
 
     def write(self):
         func = ast.Function('nullfunc',
