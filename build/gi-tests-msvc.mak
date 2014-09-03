@@ -247,7 +247,10 @@ warn_tests_log.txt:
 # Rules for source code generation
 everything.c everything.h:
 	$(PYTHON2) $(G_IR_SCANNER_CURRENT) -I.. \
-	--generate-typelib-tests=Everything,everything.h,everything.c
+	--generate-typelib-tests=Everything,everything.h,everything.c	\
+	--function-decoration=_GI_TEST_EXTERN	\
+	--include-first-in-src=config.h	\
+	--include-last-in-header=gitestmacros.h
 
 gitestoffsets.c: Offsets-$(GI_APIVERSION).typelib
 	$(PYTHON2) ..\tests\offsets\gen-gitestoffsets ..\tests\offsets\offsets.h > $@
