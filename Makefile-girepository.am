@@ -30,7 +30,11 @@ noinst_LTLIBRARIES += libgirepository-internals.la libgirepository-gthash.la
 
 libgirepository_gthash_la_SOURCES =				\
 	girepository/gthash.c
-libgirepository_gthash_la_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
+libgirepository_gthash_la_CFLAGS =	\
+	$(GIREPO_CFLAGS)	\
+	$(GI_HIDDEN_VISIBILITY_CFLAGS)	\
+	-I$(top_srcdir)/girepository
+
 libgirepository_gthash_la_LIBADD = libcmph.la $(GIREPO_LIBS)
 
 libgirepository_internals_la_SOURCES =				\
