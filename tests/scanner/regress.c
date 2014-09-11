@@ -3639,6 +3639,7 @@ regress_test_async_ready_callback (GAsyncReadyCallback callback)
   GSimpleAsyncResult *result = g_simple_async_result_new (NULL, callback, NULL,
     regress_test_async_ready_callback);
   g_simple_async_result_complete_in_idle (result);
+  g_object_unref (result);
   G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
