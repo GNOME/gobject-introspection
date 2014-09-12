@@ -1299,34 +1299,38 @@ static const gchar *string_array[] = {
 GHashTable *
 regress_test_ghash_gvalue_return (void)
 {
-  GHashTable *hash;
-  GValue *value;
-  hash = g_hash_table_new_full(g_str_hash, g_str_equal,
-                               g_free, (GDestroyNotify)g_value_free);
+  static GHashTable *hash = NULL;
 
-  value = g_value_new(G_TYPE_INT);
-  g_value_set_int(value, 12);
-  g_hash_table_insert(hash, g_strdup("integer"), value);
+  if (hash == NULL)
+    {
+      GValue *value;
+      hash = g_hash_table_new_full(g_str_hash, g_str_equal,
+                                   g_free, (GDestroyNotify)g_value_free);
 
-  value = g_value_new(G_TYPE_BOOLEAN);
-  g_value_set_boolean(value, TRUE);
-  g_hash_table_insert(hash, g_strdup("boolean"), value);
+      value = g_value_new(G_TYPE_INT);
+      g_value_set_int(value, 12);
+      g_hash_table_insert(hash, g_strdup("integer"), value);
 
-  value = g_value_new(G_TYPE_STRING);
-  g_value_set_string(value, "some text");
-  g_hash_table_insert(hash, g_strdup("string"), value);
+      value = g_value_new(G_TYPE_BOOLEAN);
+      g_value_set_boolean(value, TRUE);
+      g_hash_table_insert(hash, g_strdup("boolean"), value);
 
-  value = g_value_new(G_TYPE_STRV);
-  g_value_set_boxed(value, string_array);
-  g_hash_table_insert(hash, g_strdup("strings"), value);
+      value = g_value_new(G_TYPE_STRING);
+      g_value_set_string(value, "some text");
+      g_hash_table_insert(hash, g_strdup("string"), value);
 
-  value = g_value_new(REGRESS_TEST_TYPE_FLAGS);
-  g_value_set_flags(value, REGRESS_TEST_FLAG1 | REGRESS_TEST_FLAG3);
-  g_hash_table_insert(hash, g_strdup("flags"), value);
+      value = g_value_new(G_TYPE_STRV);
+      g_value_set_boxed(value, string_array);
+      g_hash_table_insert(hash, g_strdup("strings"), value);
 
-  value = g_value_new(regress_test_enum_get_type());
-  g_value_set_enum(value, REGRESS_TEST_VALUE2);
-  g_hash_table_insert(hash, g_strdup("enum"), value);
+      value = g_value_new(REGRESS_TEST_TYPE_FLAGS);
+      g_value_set_flags(value, REGRESS_TEST_FLAG1 | REGRESS_TEST_FLAG3);
+      g_hash_table_insert(hash, g_strdup("flags"), value);
+
+      value = g_value_new(regress_test_enum_get_type());
+      g_value_set_enum(value, REGRESS_TEST_VALUE2);
+      g_hash_table_insert(hash, g_strdup("enum"), value);
+    }
 
   return hash;
 }
