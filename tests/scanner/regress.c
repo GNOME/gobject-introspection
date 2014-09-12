@@ -520,6 +520,7 @@ regress_test_utf8_inout (char **inout)
 {
   /* inout parameter, transfer mode full */
   g_assert (strcmp (*inout, utf8_const) == 0);
+  g_free (*inout);
   *inout = g_strdup (utf8_nonconst);
 }
 
