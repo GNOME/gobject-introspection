@@ -664,6 +664,8 @@ regress_test_array_int_inout (int *n_ints, int **ints)
       new_ints = g_malloc(sizeof(**ints) * *n_ints);
       for (i = 0; i < *n_ints; i++)
 	new_ints[i] = (*ints)[i + 1] + 1;
+
+      g_free (*ints);
       *ints = new_ints;
     }
 }
