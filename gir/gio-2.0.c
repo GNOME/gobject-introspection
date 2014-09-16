@@ -5337,7 +5337,7 @@
  * implements methods for getting information that all files should
  * contain, and allows for manipulation of extended attributes.
  *
- * See [GFileAttribute][gio-GFileAttribute for more information on how
+ * See [GFileAttribute][gio-GFileAttribute] for more information on how
  * GIO handles file attributes.
  *
  * To obtain a #GFileInfo for a #GFile, use g_file_query_info() (or its
@@ -18687,6 +18687,8 @@
  * An application implements an interface if that interface is listed in
  * the Implements= line of the desktop file of the application.
  *
+ * Returns: (element-type GDesktopAppInfo) (transfer full): a list of #GDesktopAppInfo
+ * objects.
  * Since: 2.42
  */
 

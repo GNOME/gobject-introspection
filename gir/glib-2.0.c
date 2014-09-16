@@ -4997,9 +4997,11 @@
  * An example using a #GPtrArray:
  * |[<!-- language="C" -->
  *   GPtrArray *array;
- *   gchar *string1 = "one", *string2 = "two", *string3 = "three";
+ *   gchar *string1 = "one";
+ *   gchar *string2 = "two";
+ *   gchar *string3 = "three";
  *
- *   gparray = g_ptr_array_new ();
+ *   array = g_ptr_array_new ();
  *   g_ptr_array_add (array, (gpointer) string1);
  *   g_ptr_array_add (array, (gpointer) string2);
  *   g_ptr_array_add (array, (gpointer) string3);
@@ -29316,11 +29318,16 @@
  * until it is destroyed by g_thread_pool_free(). If @exclusive is
  * %FALSE, threads are created when needed and shared between all
  * non-exclusive thread pools. This implies that @max_threads may
- * not be -1 for exclusive thread pools.
+ * not be -1 for exclusive thread pools. Besides, exclusive thread
+ * pools are not affected by g_thread_pool_set_max_idle_time()
+ * since their threads are never considered idle and returned to the
+ * global pool.
  *
  * @error can be %NULL to ignore errors, or non-%NULL to report
  * errors. An error can only occur when @exclusive is set to %TRUE
  * and not all @max_threads threads could be created.
+ * See #GThreadError for possible errors that may occurr.
+ * Note, even in case of error a valid #GThreadPool is returned.
  *
  * Returns: the new #GThreadPool
  */
