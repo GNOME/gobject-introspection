@@ -6004,10 +6004,11 @@
  * in the gio library, for those.)
  *
  * For space-efficiency, the #GVariant serialisation format does not
- * automatically include the variant's type or endianness, which must
- * either be implied from context (such as knowledge that a particular
- * file format always contains a little-endian %G_VARIANT_TYPE_VARIANT)
- * or supplied out-of-band (for instance, a type and/or endianness
+ * automatically include the variant's length, type or endianness,
+ * which must either be implied from context (such as knowledge that a
+ * particular file format always contains a little-endian
+ * %G_VARIANT_TYPE_VARIANT which occupies the whole length of the file)
+ * or supplied out-of-band (for instance, a length, type and/or endianness
  * indicator could be placed at the beginning of a file, network message
  * or network stream).
  *
@@ -6040,7 +6041,8 @@
  *
  * This is the memory that is used for storing GVariant data in
  * serialised form.  This is what would be sent over the network or
- * what would end up on disk.
+ * what would end up on disk, not counting any indicator of the
+ * endianness, or of the length or type of the top-level variant.
  *
  * The amount of memory required to store a boolean is 1 byte. 16,
  * 32 and 64 bit integers and double precision floating point numbers
@@ -18734,7 +18736,18 @@
  *
  * Finds a #GSource given a pair of context and ID.
  *
- * Returns: (transfer none): the #GSource if found, otherwise, %NULL
+ * It is a programmer error to attempt to lookup a non-existent source.
+ *
+ * More specifically: source IDs can be reissued after a source has been
+ * destroyed and therefore it is never valid to use this function with a
+ * source ID which may have already been removed.  An example is when
+ * scheduling an idle to run in another thread with g_idle_add(): the
+ * idle may already have run and been removed by the time this function
+ * is called on its (now invalid) source ID.  This source ID may have
+ * been reissued, leading to the operation being performed against the
+ * wrong source.
+ *
+ * Returns: (transfer none): the #GSource
  */
 
 
@@ -25851,9 +25864,8 @@
  * g_source_get_name:
  * @source: a #GSource
  *
- * Gets a name for the source, used in debugging and profiling.
- * The name may be #NULL if it has never been set with
- * g_source_set_name().
+ * Gets a name for the source, used in debugging and profiling.  The
+ * name may be #NULL if it has never been set with g_source_set_name().
  *
  * Returns: the name of the source
  * Since: 2.26
@@ -26060,6 +26072,15 @@
  *
  * It is a programmer error to attempt to remove a non-existent source.
  *
+ * More specifically: source IDs can be reissued after a source has been
+ * destroyed and therefore it is never valid to use this function with a
+ * source ID which may have already been removed.  An example is when
+ * scheduling an idle to run in another thread with g_idle_add(): the
+ * idle may already have run and been removed by the time this function
+ * is called on its (now invalid) source ID.  This source ID may have
+ * been reissued, leading to the operation being performed against the
+ * wrong source.
+ *
  * Returns: For historical reasons, this function always returns %TRUE
  */
 
@@ -26213,6 +26234,11 @@
  * one could change the name in the "check" function of a #GSourceFuncs
  * to include details like the event type in the source name.
  *
+ * Use caution if changing the name while another thread may be
+ * accessing it with g_source_get_name(); that function does not copy
+ * the value, and changing the value will free it while the other thread
+ * may be attempting to use it.
+ *
  * Since: 2.26
  */
 
@@ -26226,6 +26252,18 @@
  *
  * This is a convenience utility to set source names from the return
  * value of g_idle_add(), g_timeout_add(), etc.
+ *
+ * It is a programmer error to attempt to set the name of a non-existent
+ * source.
+ *
+ * More specifically: source IDs can be reissued after a source has been
+ * destroyed and therefore it is never valid to use this function with a
+ * source ID which may have already been removed.  An example is when
+ * scheduling an idle to run in another thread with g_idle_add(): the
+ * idle may already have run and been removed by the time this function
+ * is called on its (now invalid) source ID.  This source ID may have
+ * been reissued, leading to the operation being performed against the
+ * wrong source.
  *
  * Since: 2.26
  */
