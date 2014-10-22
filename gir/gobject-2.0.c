@@ -4744,6 +4744,21 @@
 
 
 /**
+ * g_type_get_instance_count:
+ * @type: a #GType
+ *
+ * Returns the number of instances allocated of the particular type;
+ * this is only available if GLib is built with debugging support and
+ * the instance_count debug flag is set (by setting the GOBJECT_DEBUG
+ * variable to include instance-count).
+ *
+ * Returns: the number of instances allocated of the given type;
+ *   if instance counts are not available, returns 0.
+ * Since: 2.44
+ */
+
+
+/**
  * g_type_get_plugin:
  * @type: #GType to retrieve the plugin for
  *

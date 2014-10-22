@@ -15538,6 +15538,13 @@
  * allocated for the key and value that get called when removing the
  * entry from the #GHashTable.
  *
+ * Since version 2.42 it is permissible for destroy notify functions to
+ * recursively remove further items from the hash table. This is only
+ * permissible if the application still holds a reference to the hash table.
+ * This means that you may need to ensure that the hash table is empty by
+ * calling g_hash_table_remove_all before releasing the last reference using
+ * g_hash_table_unref().
+ *
  * Returns: a new #GHashTable
  */
 
@@ -21168,6 +21175,18 @@
 
 
 /**
+ * g_option_context_get_strict_posix:
+ * @context: a #GoptionContext
+ *
+ * Returns whether strict POSIX code is enabled.
+ *
+ * See g_option_context_set_strict_posix() for more information.
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * g_option_context_get_summary:
  * @context: a #GOptionContext
  *
@@ -21334,6 +21353,39 @@
  * treated differently when generating `--help` output.
  *
  * Since: 2.6
+ */
+
+
+/**
+ * g_option_context_set_strict_posix:
+ * @context: a #GoptionContext
+ *
+ * Sets strict POSIX mode.
+ *
+ * By default, this mode is disabled.
+ *
+ * In strict POSIX mode, the first non-argument parameter encountered
+ * (eg: filename) terminates argument processing.  Remaining arguments
+ * are treated as non-options and are not attempted to be parsed.
+ *
+ * If strict POSIX mode is disabled then parsing is done in the GNU way
+ * where option arguments can be freely mixed with non-options.
+ *
+ * As an example, consider "ls foo -l".  With GNU style parsing, this
+ * will list "foo" in long mode.  In strict POSIX style, this will list
+ * the files named "foo" and "-l".
+ *
+ * It may be useful to force strict POSIX mode when creating "verb
+ * style" command line tools.  For example, the "gsettings" command line
+ * tool supports the global option "--schemadir" as well as many
+ * subcommands ("get", "set", etc.) which each have their own set of
+ * arguments.  Using strict POSIX mode will allow parsing the global
+ * options up to the verb name while leaving the remaining options to be
+ * parsed by the relevant subcommand (which can be determined by
+ * examining the verb name, which should be present in argv[1] after
+ * parsing).
+ *
+ * Since: 2.44
  */
 
 
@@ -21891,6 +21943,10 @@
  *
  * If @dest is %NULL, free @src; otherwise, moves @src into *@dest.
  * The error variable @dest points to must be %NULL.
+ *
+ * Note that @src is no longer valid after this call. If you want
+ * to keep using the same GError*, you need to set it to %NULL
+ * after calling this function on it.
  */
 
 
@@ -29364,7 +29420,7 @@
  * @error can be %NULL to ignore errors, or non-%NULL to report
  * errors. An error can only occur when @exclusive is set to %TRUE
  * and not all @max_threads threads could be created.
- * See #GThreadError for possible errors that may occurr.
+ * See #GThreadError for possible errors that may occur.
  * Note, even in case of error a valid #GThreadPool is returned.
  *
  * Returns: the new #GThreadPool

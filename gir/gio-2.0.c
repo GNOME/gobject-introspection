@@ -13274,6 +13274,13 @@
  *
  * If cancellable is currently in use by any cancellable operation
  * then the behavior of this function is undefined.
+ *
+ * Note that it is generally not a good idea to reuse an existing
+ * cancellable for more operations after it has been cancelled once,
+ * as this function might tempt you to do. The recommended practice
+ * is to drop the reference to a cancellable after cancelling it,
+ * and let it die with the outstanding async operations. You should
+ * create a fresh cancellable for further async operations.
  */
 
 
@@ -20392,7 +20399,7 @@
  * @file1: the first #GFile
  * @file2: the second #GFile
  *
- * Checks equality of two given #GFiles.
+ * Checks if the two given #GFiles refer to the same file.
  *
  * Note that two #GFiles that differ can still refer to the same
  * file on the filesystem due to various forms of filename
@@ -20657,6 +20664,9 @@
  * pathname match @prefix. Only full pathname elements are matched,
  * so a path like /foo is not considered a prefix of /foobar, only
  * of /foo/bar.
+ *
+ * A #GFile is not a prefix of itself. If you want to check for
+ * equality, use g_file_equal().
  *
  * This call does no I/O, as it works purely on names. As such it can
  * sometimes return %FALSE even if @file is inside a @prefix (from a
@@ -24422,10 +24432,64 @@
  * read into @buffer.
  *
  * If there is an error during the operation %FALSE is returned and @error
- * is set to indicate the error status, @bytes_read is updated to contain
- * the number of bytes read into @buffer before the error occurred.
+ * is set to indicate the error status.
+ *
+ * As a special exception to the normal conventions for functions that
+ * use #GError, if this function returns %FALSE (and sets @error) then
+ * @bytes_read will be set to the number of bytes that were successfully
+ * read before the error was encountered.  This functionality is only
+ * available from C.  If you need it from another language then you must
+ * write your own loop around g_input_stream_read().
  *
  * Returns: %TRUE on success, %FALSE if there was an error
+ */
+
+
+/**
+ * g_input_stream_read_all_async:
+ * @stream: A #GInputStream
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *     read data into (which should be at least count bytes long)
+ * @count: the number of bytes that will be read from the stream
+ * @io_priority: the [I/O priority][io-priority] of the request
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Request an asynchronous read of @count bytes from the stream into the
+ * buffer starting at @buffer.
+ *
+ * This is the asynchronous equivalent of g_input_stream_read_all().
+ *
+ * Call g_input_stream_read_all_finish() to collect the result.
+ *
+ * Any outstanding I/O request with higher priority (lower numerical
+ * value) will be executed before an outstanding request with lower
+ * priority. Default priority is %G_PRIORITY_DEFAULT.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * g_input_stream_read_all_finish:
+ * @stream: a #GInputStream
+ * @result: a #GAsyncResult
+ * @bytes_read: (out): location to store the number of bytes that was read from the stream
+ * @error: a #GError location to store the error occurring, or %NULL to ignore
+ *
+ * Finishes an asynchronous stream read operation started with
+ * g_input_stream_read_all_async().
+ *
+ * As a special exception to the normal conventions for functions that
+ * use #GError, if this function returns %FALSE (and sets @error) then
+ * @bytes_read will be set to the number of bytes that were successfully
+ * read before the error was encountered.  This functionality is only
+ * available from C.  If you need it from another language then you must
+ * write your own loop around g_input_stream_read_async().
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error
+ * Since: 2.44
  */
 
 
@@ -27929,10 +27993,70 @@
  * is set to @count.
  *
  * If there is an error during the operation %FALSE is returned and @error
- * is set to indicate the error status, @bytes_written is updated to contain
- * the number of bytes written into the stream before the error occurred.
+ * is set to indicate the error status.
+ *
+ * As a special exception to the normal conventions for functions that
+ * use #GError, if this function returns %FALSE (and sets @error) then
+ * @bytes_written will be set to the number of bytes that were
+ * successfully written before the error was encountered.  This
+ * functionality is only available from C.  If you need it from another
+ * language then you must write your own loop around
+ * g_output_stream_write().
  *
  * Returns: %TRUE on success, %FALSE if there was an error
+ */
+
+
+/**
+ * g_output_stream_write_all_async:
+ * @stream: A #GOutputStream
+ * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write
+ * @count: the number of bytes to write
+ * @io_priority: the io priority of the request
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Request an asynchronous write of @count bytes from @buffer into
+ * the stream. When the operation is finished @callback will be called.
+ * You can then call g_output_stream_write_all_finish() to get the result of the
+ * operation.
+ *
+ * This is the asynchronous version of g_output_stream_write_all().
+ *
+ * Call g_output_stream_write_all_finish() to collect the result.
+ *
+ * Any outstanding I/O request with higher priority (lower numerical
+ * value) will be executed before an outstanding request with lower
+ * priority. Default priority is %G_PRIORITY_DEFAULT.
+ *
+ * Note that no copy of @buffer will be made, so it must stay valid
+ * until @callback is called.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * g_output_stream_write_all_finish:
+ * @stream: a #GOutputStream
+ * @result: a #GAsyncResult
+ * @bytes_written: (out): location to store the number of bytes that was written to the stream
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
+ *
+ * Finishes an asynchronous stream write operation started with
+ * g_output_stream_write_all_async().
+ *
+ * As a special exception to the normal conventions for functions that
+ * use #GError, if this function returns %FALSE (and sets @error) then
+ * @bytes_written will be set to the number of bytes that were
+ * successfully written before the error was encountered.  This
+ * functionality is only available from C.  If you need it from another
+ * language then you must write your own loop around
+ * g_output_stream_write_async().
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error
+ * Since: 2.44
  */
 
 
@@ -35473,7 +35597,7 @@
  * @connection: a #GTcpConnection
  * @graceful_disconnect: Whether to do graceful disconnects or not
  *
- * This enabled graceful disconnects on close. A graceful disconnect
+ * This enables graceful disconnects on close. A graceful disconnect
  * means that we signal the receiving end that the connection is terminated
  * and wait for it to close the connection before closing the connection.
  *
@@ -35831,8 +35955,17 @@
  * @file: file containing a PEM-encoded certificate to import
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Creates a #GTlsCertificate from the PEM-encoded data in @file. If
- * @file cannot be read or parsed, the function will return %NULL and
+ * Creates a #GTlsCertificate from the PEM-encoded data in @file. The
+ * returned certificate will be the first certificate found in @file. As
+ * of GLib 2.44, if @file contains more certificates it will try to load
+ * a certificate chain. All certificates will be verified in the order
+ * found (top-level certificate should be the last one in the file) and
+ * the #GTlsCertificate:issuer property of each certificate will be set
+ * accordingly if the verification succeeds. If any certificate in the
+ * chain cannot be verified, the first certificate in the file will
+ * still be returned.
+ *
+ * If @file cannot be read or parsed, the function will return %NULL and
  * set @error. Otherwise, this behaves like
  * g_tls_certificate_new_from_pem().
  *
@@ -35843,14 +35976,25 @@
 
 /**
  * g_tls_certificate_new_from_files:
- * @cert_file: file containing a PEM-encoded certificate to import
+ * @cert_file: file containing one or more PEM-encoded certificates to
+ * import
  * @key_file: file containing a PEM-encoded private key to import
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Creates a #GTlsCertificate from the PEM-encoded data in @cert_file
- * and @key_file. If either file cannot be read or parsed, the
- * function will return %NULL and set @error. Otherwise, this behaves
- * like g_tls_certificate_new_from_pem().
+ * and @key_file. The returned certificate will be the first certificate
+ * found in @cert_file. As of GLib 2.44, if @cert_file contains more
+ * certificates it will try to load a certificate chain. All
+ * certificates will be verified in the order found (top-level
+ * certificate should be the last one in the file) and the
+ * #GTlsCertificate:issuer property of each certificate will be set
+ * accordingly if the verification succeeds. If any certificate in the
+ * chain cannot be verified, the first certificate in the file will
+ * still be returned.
+ *
+ * If either file cannot be read or parsed, the function will return
+ * %NULL and set @error. Otherwise, this behaves like
+ * g_tls_certificate_new_from_pem().
  *
  * Returns: the new certificate, or %NULL on error
  * Since: 2.28
@@ -35863,14 +36007,20 @@
  * @length: the length of @data, or -1 if it's 0-terminated.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Creates a new #GTlsCertificate from the PEM-encoded data in @data.
- * If @data includes both a certificate and a private key, then the
+ * Creates a #GTlsCertificate from the PEM-encoded data in @data. If
+ * @data includes both a certificate and a private key, then the
  * returned certificate will include the private key data as well. (See
  * the #GTlsCertificate:private-key-pem property for information about
  * supported formats.)
  *
- * If @data includes multiple certificates, only the first one will be
- * parsed.
+ * The returned certificate will be the first certificate found in
+ * @data. As of GLib 2.44, if @data contains more certificates it will
+ * try to load a certificate chain. All certificates will be verified in
+ * the order found (top-level certificate should be the last one in the
+ * file) and the #GTlsCertificate:issuer property of each certificate
+ * will be set accordingly if the verification succeeds. If any
+ * certificate in the chain cannot be verified, the first certificate in
+ * the file will still be returned.
  *
  * Returns: the new certificate, or %NULL if @data is invalid
  * Since: 2.28
