@@ -6886,7 +6886,7 @@
  * This also means that there is no need to check if the call succeeded.
  *
  * It's important to match g_malloc() (and wrappers such as g_new()) with
- * g_free(), g_slice_alloc() and wrappers such as g_slice_new()) with
+ * g_free(), g_slice_alloc() (and wrappers such as g_slice_new()) with
  * g_slice_free(), plain malloc() with free(), and (if you're using C++)
  * new with delete and new[] with delete[]. Otherwise bad things can happen,
  * since these allocators may use different memory pools (and new/delete call
@@ -22476,12 +22476,14 @@
 /**
  * g_queue_insert_after:
  * @queue: a #GQueue
- * @sibling: a #GList link that must be part of @queue
+ * @sibling: (nullable): a #GList link that must be part of @queue, or %NULL to
+ *   push at the head of the queue.
  * @data: the data to insert
  *
- * Inserts @data into @queue after @sibling
+ * Inserts @data into @queue after @sibling.
  *
- * @sibling must be part of @queue
+ * @sibling must be part of @queue. Since GLib 2.44 a %NULL sibling pushes the
+ * data at the head of the queue.
  *
  * Since: 2.4
  */
@@ -22490,12 +22492,14 @@
 /**
  * g_queue_insert_before:
  * @queue: a #GQueue
- * @sibling: a #GList link that must be part of @queue
+ * @sibling: (nullable): a #GList link that must be part of @queue, or %NULL to
+ *   push at the tail of the queue.
  * @data: the data to insert
  *
  * Inserts @data into @queue before @sibling.
  *
- * @sibling must be part of @queue.
+ * @sibling must be part of @queue. Since GLib 2.44 a %NULL sibling pushes the
+ * data at the tail of the queue.
  *
  * Since: 2.4
  */
