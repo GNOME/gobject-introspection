@@ -27231,8 +27231,10 @@
  * g_strfreev:
  * @str_array: a %NULL-terminated array of strings to free
  *
- * Frees a %NULL-terminated array of strings, and the array itself.
- * If called on a %NULL value, g_strfreev() simply returns.
+ * Frees a %NULL-terminated array of strings, as well as each
+ * string it contains.
+ *
+ * If @str_array is %NULL, this function simply returns.
  */
 
 
@@ -28178,6 +28180,18 @@
  * Deprecated: 2.2: This function is totally broken for the reasons
  *     discussed in the g_strncasecmp() docs - use g_ascii_strup()
  *     or g_utf8_strup() instead.
+ */
+
+
+/**
+ * g_strv_contains:
+ * @strv: a %NULL-terminated array of strings
+ * @str: a string
+ *
+ * Checks if @strv contains @str. @strv must not be %NULL.
+ *
+ * Returns: %TRUE if @str is an element of @strv, according to g_str_equal().
+ * Since: 2.44
  */
 
 

@@ -2887,11 +2887,16 @@
 /**
  * GTlsClientConnection:use-ssl3:
  *
- * If %TRUE, tells the connection to use SSL 3.0 rather than trying
- * to negotiate the best version of TLS or SSL to use. This can be
- * used when talking to servers that don't implement version
- * negotiation correctly and therefore refuse to handshake at all with
- * a "modern" TLS handshake.
+ * If %TRUE, tells the connection to use a fallback version of TLS
+ * or SSL, rather than trying to negotiate the best version of TLS
+ * to use. This can be used when talking to servers that don't
+ * implement version negotiation correctly and therefore refuse to
+ * handshake at all with a "modern" TLS handshake.
+ *
+ * Despite the property name, the fallback version is not
+ * necessarily SSL 3.0; if SSL 3.0 has been disabled, the
+ * #GTlsClientConnection will use the next highest available version
+ * (normally TLS 1.0) as the fallback version.
  *
  * Since: 2.28
  */
@@ -6416,6 +6421,16 @@
  * are restricted to lowercase characters, numbers and '-'. Furthermore,
  * the names must begin with a lowercase character, must not end
  * with a '-', and must not contain consecutive dashes.
+ *
+ * GSettings supports change notification.  The primary mechanism to
+ * watch for changes is to connect to the "changed" signal.  You can
+ * optionally watch for changes on only a single key by using a signal
+ * detail.  Signals are only guaranteed to be emitted for a given key
+ * after you have read the value of that key while a signal handler was
+ * connected for that key.  Signals may or may not be emitted in the
+ * case that the key "changed" to the value that you had previously
+ * read.  Signals may be reported in additional cases as well and the
+ * "changed" signal should really be treated as "may have changed".
  *
  * Similar to GConf, the default values in GSettings schemas can be
  * localized, but the localized values are stored in gettext catalogs
@@ -27175,8 +27190,36 @@
  * Creates a new #GSocketConnectable for connecting to the given
  * @hostname and @port.
  *
+ * Note that depending on the configuration of the machine, a
+ * @hostname of `localhost` may refer to the IPv4 loopback address
+ * only, or to both IPv4 and IPv6; use
+ * g_network_address_new_loopback() to create a #GNetworkAddress that
+ * is guaranteed to resolve to both addresses.
+ *
  * Returns: (transfer full) (type GNetworkAddress): the new #GNetworkAddress
  * Since: 2.22
+ */
+
+
+/**
+ * g_network_address_new_loopback:
+ * @port: the port
+ *
+ * Creates a new #GSocketConnectable for connecting to the local host
+ * over a loopback connection to the given @port. This is intended for
+ * use in connecting to local services which may be running on IPv4 or
+ * IPv6.
+ *
+ * The connectable will return IPv4 and IPv6 loopback addresses,
+ * regardless of how the host resolves `localhost`. By contrast,
+ * g_network_address_new() will often only return an IPv4 address when
+ * resolving `localhost`, and an IPv6 address for `localhost6`.
+ *
+ * g_network_address_get_hostname() will always return `localhost` for
+ * #GNetworkAddresses created with this constructor.
+ *
+ * Returns: (transfer full) (type GNetworkAddress): the new #GNetworkAddress
+ * Since: 2.44
  */
 
 
