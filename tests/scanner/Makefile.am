@@ -5,7 +5,7 @@ include $(top_srcdir)/Makefile.introspection
 
 SUBDIRS = . annotationparser
 
-INTROSPECTION_SCANNER_ARGS += --warn-all
+INTROSPECTION_SCANNER_ARGS += --warn-all --reparse-validate
 
 CLEANFILES =
 
