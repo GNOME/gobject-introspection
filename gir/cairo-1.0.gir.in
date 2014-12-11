@@ -22,7 +22,7 @@
 	    glib:type-name="CairoRegion"
 	    glib:get-type="cairo_gobject_region_get_type"/>
     <enumeration name="Content" c:type="cairo_content_t"
-		 glib:type-name="CairoContent"
+		 glib:type-name="cairo_content_t"
 		 glib:get-type="cairo_gobject_content_get_type">
       <member name="COLOR"
 	      value="4096"
