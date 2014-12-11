@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <repository version="1.2"
-            xmlns="http://www.gtk.org/introspection/core/1.0"
-            xmlns:c="http://www.gtk.org/introspection/c/1.0"
-            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+	    xmlns="http://www.gtk.org/introspection/core/1.0"
+	    xmlns:c="http://www.gtk.org/introspection/c/1.0"
+	    xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <package name="%CAIRO_GIR_PACKAGE%"/>
   <namespace name="cairo" version="1.0"
 	     shared-library="%CAIRO_SHARED_LIBRARY%"
@@ -25,23 +25,23 @@
 		 glib:type-name="CairoContent"
 		 glib:get-type="cairo_gobject_content_get_type">
       <member name="COLOR"
-              value="4096"
-              c:identifier="CAIRO_CONTENT_COLOR"/>
+	      value="4096"
+	      c:identifier="CAIRO_CONTENT_COLOR"/>
       <member name="ALPHA"
-              value="8192"
-              c:identifier="CAIRO_CONTENT_ALPHA"/>
+	      value="8192"
+	      c:identifier="CAIRO_CONTENT_ALPHA"/>
       <member name="COLOR_ALPHA"
-              value="12288"
-              c:identifier="CAIRO_CONTENT_COLOR_ALPHA"/>
+	      value="12288"
+	      c:identifier="CAIRO_CONTENT_COLOR_ALPHA"/>
     </enumeration>
     <record name="FontOptions" c:type="cairo_font_options_t" foreign="1"/>
     <record name="FontType" c:type="cairo_font_type_t" foreign="1"/>
     <record name="FontFace" c:type="cairo_font_face_t" foreign="1"
-		 glib:type-name="CairoFontFace"
-		 glib:get-type="cairo_gobject_font_face_get_type"/>
+	    glib:type-name="CairoFontFace"
+	    glib:get-type="cairo_gobject_font_face_get_type"/>
     <record name="ScaledFont" c:type="cairo_scaled_font_t" foreign="1"
-		 glib:type-name="CairoScaledFont"
-		 glib:get-type="cairo_gobject_scaled_font_get_type"/>
+	    glib:type-name="CairoScaledFont"
+	    glib:get-type="cairo_gobject_scaled_font_get_type"/>
     <record name="Path" c:type="cairo_path_t" foreign="1"/>
     <record name="RectangleInt" c:type="cairo_rectangle_int_t"
 	    glib:type-name="CairoRectangleInt"
@@ -61,7 +61,7 @@
     </record>
     <function name="image_surface_create" c:identifier="cairo_image_surface_create">
       <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
+	<type name="none" c:type="void"/>
       </return-value>
       <parameters>
       </parameters>
