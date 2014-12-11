@@ -24,13 +24,13 @@
     <enumeration name="Content" c:type="cairo_content_t"
 		 glib:type-name="cairo_content_t"
 		 glib:get-type="cairo_gobject_content_get_type">
-      <member name="COLOR"
+      <member name="color"
 	      value="4096"
 	      c:identifier="CAIRO_CONTENT_COLOR"/>
-      <member name="ALPHA"
+      <member name="alpha"
 	      value="8192"
 	      c:identifier="CAIRO_CONTENT_ALPHA"/>
-      <member name="COLOR_ALPHA"
+      <member name="color_alpha"
 	      value="12288"
 	      c:identifier="CAIRO_CONTENT_COLOR_ALPHA"/>
     </enumeration>
