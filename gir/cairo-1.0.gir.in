@@ -37,7 +37,25 @@
     <record name="FontOptions" c:type="cairo_font_options_t" foreign="1"
 	    glib:type-name="CairoFontOptions"
 	    glib:get-type="cairo_gobject_font_options_get_type"/>
-    <record name="FontType" c:type="cairo_font_type_t" foreign="1"/>
+    <enumeration name="FontType" c:type="cairo_font_type_t"
+		 glib:type-name="cairo_font_type_t"
+		 glib:get-type="cairo_gobject_font_type_get_type">
+      <member name="toy"
+	      value="0"
+	      c:identifier="CAIRO_FONT_TYPE_TOY"/>
+      <member name="ft"
+	      value="1"
+	      c:identifier="CAIRO_FONT_TYPE_FT"/>
+      <member name="win32"
+	      value="2"
+	      c:identifier="CAIRO_FONT_TYPE_WIN32"/>
+      <member name="quartz"
+	      value="3"
+	      c:identifier="CAIRO_FONT_TYPE_QUARTZ"/>
+      <member name="user"
+	      value="4"
+	      c:identifier="CAIRO_FONT_TYPE_USER"/>
+    </enumeration>
     <record name="FontFace" c:type="cairo_font_face_t" foreign="1"
 	    glib:type-name="CairoFontFace"
 	    glib:get-type="cairo_gobject_font_face_get_type"/>
