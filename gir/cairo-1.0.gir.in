@@ -34,7 +34,9 @@
 	      value="12288"
 	      c:identifier="CAIRO_CONTENT_COLOR_ALPHA"/>
     </enumeration>
-    <record name="FontOptions" c:type="cairo_font_options_t" foreign="1"/>
+    <record name="FontOptions" c:type="cairo_font_options_t" foreign="1"
+	    glib:type-name="CairoFontOptions"
+	    glib:get-type="cairo_gobject_font_options_get_type"/>
     <record name="FontType" c:type="cairo_font_type_t" foreign="1"/>
     <record name="FontFace" c:type="cairo_font_face_t" foreign="1"
 	    glib:type-name="CairoFontFace"
