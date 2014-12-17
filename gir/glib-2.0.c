@@ -3471,7 +3471,7 @@
  * G_GSIZE_MODIFIER:
  *
  * The platform dependent length modifier for conversion specifiers
- * for scanning and printing values of type #gsize or #gssize. It
+ * for scanning and printing values of type #gsize. It
  * is a string literal.
  *
  * Since: 2.6
@@ -3483,6 +3483,17 @@
  *
  * This is the platform dependent conversion specifier for scanning
  * and printing values of type #gssize. See also #G_GINT16_FORMAT.
+ *
+ * Since: 2.6
+ */
+
+
+/**
+ * G_GSSIZE_MODIFIER:
+ *
+ * The platform dependent length modifier for conversion specifiers
+ * for scanning and printing values of type #gssize. It
+ * is a string literal.
  *
  * Since: 2.6
  */
@@ -3679,6 +3690,16 @@
 
 
 /**
+ * G_KEY_FILE_DESKTOP_KEY_ACTIONS:
+ *
+ * A key under #G_KEY_FILE_DESKTOP_GROUP, whose value is a string list
+ * giving the available application actions.
+ *
+ * Since: 2.38
+ */
+
+
+/**
  * G_KEY_FILE_DESKTOP_KEY_CATEGORIES:
  *
  * A key under #G_KEY_FILE_DESKTOP_GROUP, whose value is a list
@@ -3696,6 +3717,16 @@
  * string giving the tooltip for the desktop entry.
  *
  * Since: 2.14
+ */
+
+
+/**
+ * G_KEY_FILE_DESKTOP_KEY_DBUS_ACTIVATABLE:
+ *
+ * A key under #G_KEY_FILE_DESKTOP_GROUP, whose value is a boolean set to true
+ * if the application is D-Bus activatable.
+ *
+ * Since: 2.38
  */
 
 
@@ -11413,6 +11444,7 @@
  * attempt to correctly handle %EINTR, which has platform-specific
  * semantics.
  *
+ * Returns: %TRUE on success, %FALSE if there was an error.
  * Since: 2.36
  */
 
@@ -15176,6 +15208,7 @@
  *
  * Checks if @key is in @hash_table.
  *
+ * Returns: %TRUE if @key is in @hash_table, %FALSE otherwise.
  * Since: 2.32
  */
 
@@ -15311,7 +15344,7 @@
  * %NULL was used as the value for a key.
  *
  * Note: in the common case of a string-keyed #GHashTable, the return
- * value of this function can be conveniently cast to (gchar **).
+ * value of this function can be conveniently cast to (const gchar **).
  *
  * You should always free the return result with g_free().  In the
  * above-mentioned case of a string-keyed hash table, it may be
@@ -21182,6 +21215,7 @@
  *
  * See g_option_context_set_strict_posix() for more information.
  *
+ * Returns: %TRUE if strict POSIX is enabled, %FALSE otherwise.
  * Since: 2.44
  */
 
@@ -21359,6 +21393,7 @@
 /**
  * g_option_context_set_strict_posix:
  * @context: a #GoptionContext
+ * @strict_posix: the new value
  *
  * Sets strict POSIX mode.
  *
@@ -35803,7 +35838,7 @@
  * to #G_MAXSSIZE.
  *
  * To print or scan values of this type, use
- * %G_GSIZE_MODIFIER and/or %G_GSSIZE_FORMAT.
+ * %G_GSSIZE_MODIFIER and/or %G_GSSIZE_FORMAT.
  */
 
 

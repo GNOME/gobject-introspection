@@ -1910,6 +1910,17 @@
 
 
 /**
+ * GNetworkMonitor:connectivity:
+ *
+ * More detailed information about the host's network connectivity.
+ * See g_network_monitor_get_connectivity() and
+ * #GNetworkConnectivity for more details.
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * GNetworkMonitor:network-available:
  *
  * Whether the network is considered available. That is, whether the
@@ -27372,6 +27383,35 @@
 
 
 /**
+ * g_network_monitor_get_connectivity:
+ * @monitor: the #GNetworkMonitor
+ *
+ * Gets a more detailed networking state than
+ * g_network_monitor_get_network_available().
+ *
+ * If #GNetworkMonitor:network-available is %FALSE, then the
+ * connectivity state will be %G_NETWORK_CONNECTIVITY_LOCAL.
+ *
+ * If #GNetworkMonitor:network-available is %TRUE, then the
+ * connectivity state will be %G_NETWORK_CONNECTIVITY_FULL (if there
+ * is full Internet connectivity), %G_NETWORK_CONNECTIVITY_LIMITED (if
+ * the host has a default route, but appears to be unable to actually
+ * reach the full Internet), or %G_NETWORK_CONNECTIVITY_PORTAL (if the
+ * host is trapped behind a "captive portal" that requires some sort
+ * of login or acknowledgement before allowing full Internet access).
+ *
+ * Note that in the case of %G_NETWORK_CONNECTIVITY_LIMITED and
+ * %G_NETWORK_CONNECTIVITY_PORTAL, it is possible that some sites are
+ * reachable but others are not. In this case, applications can
+ * attempt to connect to remote servers, but should gracefully fall
+ * back to their "offline" behavior if the connection attempt fails.
+ *
+ * Returns: the network connectivity state
+ * Since: 2.44
+ */
+
+
+/**
  * g_network_monitor_get_default:
  *
  * Gets the default #GNetworkMonitor for the system.
@@ -33847,6 +33887,56 @@
  * Returns: Number of bytes written (which may be less than @size), or -1
  * on error
  * Since: 2.22
+ */
+
+
+/**
+ * g_socket_send_messages:
+ * @socket: a #GSocket
+ * @messages: (array length=num_messages): an array of #GOutputMessage structs
+ * @num_messages: the number of elements in @messages
+ * @flags: an int containing #GSocketMsgFlags flags
+ * @cancellable: (allow-none): a %GCancellable or %NULL
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Send multiple data messages from @socket in one go.  This is the most
+ * complicated and fully-featured version of this call. For easier use, see
+ * g_socket_send(), g_socket_send_to(), and g_socket_send_message().
+ *
+ * @messages must point to an array of #GOutputMessage structs and
+ * @num_messages must be the length of this array. Each #GOutputMessage
+ * contains an address to send the data to, and a pointer to an array of
+ * #GOutputVector structs to describe the buffers that the data to be sent
+ * for each message will be gathered from. Using multiple #GOutputVectors is
+ * more memory-efficient than manually copying data from multiple sources
+ * into a single buffer, and more network-efficient than making multiple
+ * calls to g_socket_send(). Sending multiple messages in one go avoids the
+ * overhead of making a lot of syscalls in scenarios where a lot of data
+ * packets need to be sent (e.g. high-bandwidth video streaming over RTP/UDP),
+ * or where the same data needs to be sent to multiple recipients.
+ *
+ * @flags modify how the message is sent. The commonly available arguments
+ * for this are available in the #GSocketMsgFlags enum, but the
+ * values there are the same as the system values, and the flags
+ * are passed in as-is, so you can pass in system-specific flags too.
+ *
+ * If the socket is in blocking mode the call will block until there is
+ * space for all the data in the socket queue. If there is no space available
+ * and the socket is in non-blocking mode a %G_IO_ERROR_WOULD_BLOCK error
+ * will be returned if no data was written at all, otherwise the number of
+ * messages sent will be returned. To be notified when space is available,
+ * wait for the %G_IO_OUT condition. Note though that you may still receive
+ * %G_IO_ERROR_WOULD_BLOCK from g_socket_send() even if you were previously
+ * notified of a %G_IO_OUT condition. (On Windows in particular, this is
+ * very common due to the way the underlying APIs work.)
+ *
+ * On error -1 is returned and @error is set accordingly.
+ *
+ * Returns: number of messages sent, or -1 on error. Note that the number of
+ *     messages sent may be smaller than @num_messages if the socket is
+ *     non-blocking or if @num_messages was larger than UIO_MAXIOV (1024),
+ *     in which case the caller may re-try to send the remaining messages.
+ * Since: 2.44
  */
 
 
