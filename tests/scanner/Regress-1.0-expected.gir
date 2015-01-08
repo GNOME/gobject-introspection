@@ -4542,6 +4542,12 @@ detection, and fixing it via annotations.</doc>
         <doc xml:space="preserve">A floating object</doc>
         <type name="GObject.Object" c:type="GObject*"/>
       </return-value>
+      <parameters>
+        <parameter name="object" transfer-ownership="none">
+          <doc xml:space="preserve">an object</doc>
+          <type name="GObject.Object" c:type="GObject*"/>
+        </parameter>
+      </parameters>
     </function>
     <function name="annotation_versioned"
               c:identifier="regress_annotation_versioned"

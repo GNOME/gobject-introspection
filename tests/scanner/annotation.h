@@ -276,7 +276,7 @@ gchar* regress_annotation_return_filename (void);
 
 
 _GI_TEST_EXTERN
-GObject * regress_annotation_transfer_floating(void);
+GObject * regress_annotation_transfer_floating (GObject *object);
 
 /* This one we can handle properly */
 #define REGRESS_ANNOTATION_CALCULATED_DEFINE (10 * 10)

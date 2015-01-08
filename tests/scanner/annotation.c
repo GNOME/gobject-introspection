@@ -821,11 +821,12 @@ regress_annotation_return_filename (void)
 
 /**
  * regress_annotation_transfer_floating:
+ * @object: (in) (transfer floating): an object
  *
  * Returns: (transfer floating): A floating object
  */
 GObject *
-regress_annotation_transfer_floating(void)
+regress_annotation_transfer_floating (GObject *object)
 {
   return NULL;
 }
