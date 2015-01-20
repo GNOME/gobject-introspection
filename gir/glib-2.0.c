@@ -6481,15 +6481,33 @@
  * ]|
  * For an application, note that you also have to call bindtextdomain(),
  * bind_textdomain_codeset(), textdomain() and setlocale() early on in your
- * main() to make gettext() work.
+ * main() to make gettext() work. For example:
+ * |[<!-- language="C" -->
+ * #include <glib/gi18n.h>
+ * #include <locale.h>
+ *
+ * int
+ * main (int argc, char **argv)
+ * {
+ *   setlocale (LC_ALL, "");
+ *   bindtextdomain (GETTEXT_PACKAGE, DATADIR "/locale");
+ *   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+ *   textdomain (GETTEXT_PACKAGE);
+ *
+ *   // Rest of your application.
+ * }
+ * ]|
+ * where `DATADIR` is as typically provided by automake.
  *
  * For a library, you only have to call bindtextdomain() and
  * bind_textdomain_codeset() in your initialization function. If your library
  * doesn't have an initialization function, you can call the functions before
  * the first translated message.
  *
- * The gettext manual covers details of how to set up message extraction
- * with xgettext.
+ * The
+ * [gettext manual](http://www.gnu.org/software/gettext/manual/gettext.html#Maintainers)
+ * covers details of how to integrate gettext into a project’s build system and
+ * workflow.
  */
 
 
@@ -7545,8 +7563,73 @@
  * over plain g_assert() is that the assertion messages can be more
  * elaborate, and include the values of the compared entities.
  *
- * GLib ships with two utilities called gtester and gtester-report to
- * facilitate running tests and producing nicely formatted test reports.
+ * GLib ships with two utilities called [gtester][gtester] and
+ * [gtester-report][gtester-report] to facilitate running tests and producing
+ * nicely formatted test reports.
+ *
+ * A full example of creating a test suite with two tests using fixtures:
+ * |[<!-- language="C" -->
+ * #include <glib.h>
+ * #include <locale.h>
+ *
+ * typedef struct {
+ *   MyObject *obj;
+ *   OtherObject *helper;
+ * } MyObjectFixture;
+ *
+ * static void
+ * my_object_fixture_set_up (MyObjectFixture *fixture,
+ *                           gconstpointer user_data)
+ * {
+ *   fixture->obj = my_object_new ();
+ *   my_object_set_prop1 (fixture->obj, "some-value");
+ *   my_object_do_some_complex_setup (fixture->obj, user_data);
+ *
+ *   fixture->helper = other_object_new ();
+ * }
+ *
+ * static void
+ * my_object_fixture_tear_down (MyObjectFixture *fixture,
+ *                              gconstpointer user_data)
+ * {
+ *   g_clear_object (&fixture->helper);
+ *   g_clear_object (&fixture->obj);
+ * }
+ *
+ * static void
+ * test_my_object_test1 (MyObjectFixture *fixture,
+ *                       gconstpointer user_data)
+ * {
+ *   g_assert_cmpstr (my_object_get_property (fixture->obj), ==, "initial-value");
+ * }
+ *
+ * static void
+ * test_my_object_test2 (MyObjectFixture *fixture,
+ *                       gconstpointer user_data)
+ * {
+ *   my_object_do_some_work_using_helper (fixture->obj, fixture->helper);
+ *   g_assert_cmpstr (my_object_get_property (fixture->obj), ==, "updated-value");
+ * }
+ *
+ * int
+ * main (int argc, char *argv[])
+ * {
+ *   setlocale (LC_ALL, "");
+ *
+ *   g_test_init (&argc, &argv, NULL);
+ *   g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=");
+ *
+ *   // Define the tests.
+ *   g_test_add ("/my-object/test1", MyObjectFixture, "some-user-data",
+ *               my_object_fixture_set_up, test_my_object_test1,
+ *               my_object_fixture_tear_down);
+ *   g_test_add ("/my-object/test2", MyObjectFixture, "some-user-data",
+ *               my_object_fixture_set_up, test_my_object_test2,
+ *               my_object_fixture_tear_down);
+ *
+ *   return g_test_run ();
+ * }
+ * ]|
  */
 
 
@@ -13205,7 +13288,7 @@
  * calendar year (so that these days have the same week-numbering year
  * as the Thursday occurring early in the next year).
  *
- * For Friday, Saturaday and Sunday occurring near the start of the year,
+ * For Friday, Saturday and Sunday occurring near the start of the year,
  * this may mean that the week-numbering year is one less than the
  * calendar year (so that these days have the same week-numbering year
  * as the Thursday occurring late in the previous year).
@@ -28252,11 +28335,12 @@
  * @fteardown: The function to tear down the fixture data.
  *
  * Hook up a new test case at @testpath, similar to g_test_add_func().
- * A fixture data structure with setup and teardown function may be provided
- * though, similar to g_test_create_case().
+ * A fixture data structure with setup and teardown functions may be provided,
+ * similar to g_test_create_case().
+ *
  * g_test_add() is implemented as a macro, so that the fsetup(), ftest() and
- * fteardown() callbacks can expect a @Fixture pointer as first argument in
- * a type safe manner.
+ * fteardown() callbacks can expect a @Fixture pointer as their first argument
+ * in a type safe manner. They otherwise have type #GTestFixtureFunc.
  *
  * Since: 2.16
  */
@@ -28406,14 +28490,14 @@
  * Create a new #GTestCase, named @test_name, this API is fairly
  * low level, calling g_test_add() or g_test_add_func() is preferable.
  * When this test is executed, a fixture structure of size @data_size
- * will be allocated and filled with 0s. Then @data_setup is called
- * to initialize the fixture. After fixture setup, the actual test
- * function @data_test is called. Once the test run completed, the
- * fixture structure is torn down  by calling @data_teardown and
- * after that the memory is released.
+ * will be automatically allocated and filled with zeros. Then @data_setup is
+ * called to initialize the fixture. After fixture setup, the actual test
+ * function @data_test is called. Once the test run completes, the
+ * fixture structure is torn down by calling @data_teardown and
+ * after that the memory is automatically released by the test framework.
  *
  * Splitting up a test run into fixture setup, test function and
- * fixture teardown is most usful if the same fixture is used for
+ * fixture teardown is most useful if the same fixture is used for
  * multiple tests. In this cases, g_test_create_case() will be
  * called with the same fixture, but varying @test_name and
  * @data_test arguments.
