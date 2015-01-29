@@ -294,6 +294,14 @@ class SourceScanner(object):
         cpp_args += ['-E', '-C', '-I.', '-']
         cpp_args += self._cpp_options
 
+        # We expect the preprocessor to remove macros. If debugging is turned
+        # up high enough that won't happen, so strip these out. Bug #720504
+        for flag in ['-g3', '-ggdb3', '-gstabs3', '-gcoff3', '-gxcoff3', '-gvms3']:
+            try:
+                cpp_args.remove(flag)
+            except ValueError:
+                pass
+
         proc = subprocess.Popen(cpp_args,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
