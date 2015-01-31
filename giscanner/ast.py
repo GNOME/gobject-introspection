@@ -374,6 +374,7 @@ class Namespace(object):
         self.type_names = {}         # Maps from GTName -> node
         self.ctypes = {}             # Maps from CType -> node
         self.symbols = {}            # Maps from function symbols -> Function
+        # Immediate includes only, not their transitive closure:
         self.includes = set()        # Include
         self.shared_libraries = []   # str
         self.c_includes = []         # str
