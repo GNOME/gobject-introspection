@@ -5,6 +5,7 @@ GIRepository
 GIRepositoryLoadFlags
 g_irepository_get_default
 g_irepository_get_dependencies
+g_irepository_get_immediate_dependencies
 g_irepository_get_loaded_namespaces
 g_irepository_get_n_infos
 g_irepository_get_info
