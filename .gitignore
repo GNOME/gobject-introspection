@@ -11,6 +11,7 @@
 Makefile
 Makefile.in
 aclocal.m4
+gtk-doc.m4
 autom4te.cache
 compile
 config.guess
