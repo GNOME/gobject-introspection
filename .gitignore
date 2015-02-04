@@ -57,6 +57,7 @@ gobject-introspection-1.0.pc
 gobject-introspection-no-export-1.0.pc
 gthash-test
 scannerlexer.c
+scannerlexer.h
 scannerparser.c
 scannerparser.h
 test-driver
