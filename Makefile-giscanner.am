@@ -10,6 +10,11 @@ AM_YFLAGS = -d -t
 
 # Why do I have to do this automake?
 scannerlexer.h: scannerlexer.c
+scannerlexer.c: 
+	$(LEX) --outfile=scannerlexer.c --header=scannerlexer.h giscanner/scannerlexer.l
+scannerparser.h: scannerparser.c
+scannerparser.c: 
+	$(YACC) --output=scannerparser.c --defines=scannerparser.h giscanner/scannerparser.y
 
 noinst_LTLIBRARIES += libgiscanner.la
 
