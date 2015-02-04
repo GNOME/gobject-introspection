@@ -28,18 +28,18 @@ AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS) $(GI_HIDDEN_VISIBI
 AM_LDFLAGS = -rpath /unused -avoid-version
 LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
 
-libsletter_la_SOURCES = $(srcdir)/sletter.c $(srcdir)/sletter.h
+libsletter_la_SOURCES = sletter.c sletter.h
 libsletter_la_LIBADD = $(GIO_LIBS)
 libsletter_la_CFLAGS = $(AM_CFLAGS)
 libsletter_la_LDFLAGS = $(AM_LDFLAGS)
 
-libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
-libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
+libutility_la_SOURCES = utility.c utility.h
+libgtkfrob_la_SOURCES = gtkfrob.c gtkfrob.h
 libregress_la_SOURCES = \
-	$(srcdir)/regress.c $(srcdir)/regress.h \
-	$(srcdir)/annotation.c $(srcdir)/annotation.h \
-	$(srcdir)/foo.c $(srcdir)/foo.h \
-	$(srcdir)/drawable.c $(srcdir)/drawable.h \
+	regress.c regress.h \
+	annotation.c annotation.h \
+	foo.c foo.h \
+	drawable.c drawable.h \
 	$(NULL)
 REGRESS_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 libregress_la_CPPFLAGS = -DREGRESS_PRINT_PREVIEW_COMMAND=\"$(REGRESS_PRINT_PREVIEW_COMMAND)\" \
@@ -49,11 +49,11 @@ if HAVE_CAIRO
 libregress_la_LIBADD += $(CAIRO_LIBS)
 endif
 libwarnlib_la_CFLAGS = $(AM_CFLAGS)
-libwarnlib_la_SOURCES = $(srcdir)/warnlib.c $(srcdir)/warnlib.h
+libwarnlib_la_SOURCES = warnlib.c warnlib.h
 libwarnlib_la_LIBADD = $(GIO_LIBS)
 libwarnlib_la_LDFLAGS = -export-symbols-regex '^warnlib_' -no-undefined
-libgettype_la_SOURCES = $(srcdir)/gettype.c $(srcdir)/gettype.h
-libtypedefs_la_SOURCES = $(srcdir)/typedefs.c $(srcdir)/typedefs.h
+libgettype_la_SOURCES = gettype.c gettype.h
+libtypedefs_la_SOURCES = typedefs.c typedefs.h
 
 testsdir = $(datadir)/gobject-introspection-1.0/tests
 tests_DATA = $(libregress_la_SOURCES) $(libwarnlib_la_SOURCES) $(libutility_la_SOURCES)
@@ -151,7 +151,7 @@ if !OS_WIN32
 EXTRA_PROGRAMS = barapp
 CLEANFILES += $(EXTRA_PROGRAMS)
 
-barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
+barapp_SOURCES = barapp.c barapp.h
 barapp_LDADD = $(top_builddir)/libgirepository-1.0.la
 barapp_LDFLAGS = -export-dynamic
 
@@ -184,7 +184,7 @@ CHECKGIRS += Identfilter-1.0.gir
 Identfilter-1.0.gir: identfilter.h
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
 		--namespace=Identfilter --accept-unprefixed --nsversion=1.0 --header-only \
-		--identifier-filter-cmd="$(PYTHON) $(srcdir)/identfilter.py" \
+		--identifier-filter-cmd="$(PYTHON) identfilter.py" \
 		--output=$@ $<
 
 EXTRA_DIST += \
