@@ -8,6 +8,8 @@
 *.pyc
 *.stamp
 *~
+*.log
+*.trs
 Makefile
 Makefile.in
 aclocal.m4
@@ -80,6 +82,8 @@ tests/scanner/SLetter-1.0.gir
 tests/scanner/Utility-1.0.gir
 tests/scanner/WarnLib-1.0.gir
 tests/scanner/barapp
+tests/scanner/Identfilter-1.0.gir
+tests/scanner/Typedefs-1.0.gir
 tests/doctool/DocExamples-1.0.gir
 tests/offsets/Offsets-1.0.gir
 tests/offsets/gitestoffsets
@@ -146,3 +150,5 @@ docs/giscanner/_build/*
 !tests/scanner/*-expected/*.page
 *-sections.txt
 !tests/scanner/*-sections-expected.txt
+
+**/.dirstamp
