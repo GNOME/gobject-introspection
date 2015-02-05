@@ -2855,6 +2855,87 @@
 
 
 /**
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC:
+ * @TypeName: a type name to define a g_autoptr() cleanup function for
+ * @func: the cleanup function
+ *
+ * Defines the appropriate cleanup function for a pointer type.
+ *
+ * The function will not be called if the variable to be cleaned up
+ * contains %NULL.
+ *
+ * This will typically be the _free() or _unref() function for the given
+ * type.
+ *
+ * With this definition, it will be possible to use g_autoptr() with
+ * @TypeName.
+ *
+ * |[
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC(GObject, g_object_unref)
+ * ]|
+ *
+ * This macro should be used unconditionally; it is a no-op on compilers
+ * where cleanup is not supported.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC:
+ * @TypeName: a type name to define a g_auto() cleanup function for
+ * @func: the clear function
+ *
+ * Defines the appropriate cleanup function for a type.
+ *
+ * This will typically be the _clear() function for the given type.
+ *
+ * With this definition, it will be possible to use g_auto() with
+ * @TypeName.
+ *
+ * |[
+ * G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC(GQueue, g_queue_clear)
+ * ]|
+ *
+ * This macro should be used unconditionally; it is a no-op on compilers
+ * where cleanup is not supported.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * G_DEFINE_AUTO_CLEANUP_FREE_FUNC:
+ * @TypeName: a type name to define a g_auto() cleanup function for
+ * @func: the free function
+ * @none: the "none" value for the type
+ *
+ * Defines the appropriate cleanup function for a type.
+ *
+ * With this definition, it will be possible to use g_auto() with
+ * @TypeName.
+ *
+ * This function will be rarely used.  It is used with pointer-based
+ * typedefs and non-pointer types where the value of the variable
+ * represents a resource that must be freed.  Two examples are #GStrv
+ * and file descriptors.
+ *
+ * @none specifies the "none" value for the type in question.  It is
+ * probably something like %NULL or -1.  If the variable is found to
+ * contain this value then the free function will not be called.
+ *
+ * |[
+ * G_DEFINE_AUTO_CLEANUP_FREE_FUNC(GStrv, g_strfreev, NULL)
+ * ]|
+ *
+ * This macro should be used unconditionally; it is a no-op on compilers
+ * where cleanup is not supported.
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * G_DEFINE_QUARK:
  * @QN: the name to return a #GQuark for
  * @q_n: prefix for the function name
@@ -8410,7 +8491,8 @@
  * the string back using g_ascii_strtod() gives the same machine-number
  * (on machines with IEEE compatible 64bit doubles). It is
  * guaranteed that the size of the resulting string will never
- * be larger than @G_ASCII_DTOSTR_BUF_SIZE bytes.
+ * be larger than @G_ASCII_DTOSTR_BUF_SIZE bytes, including the terminating
+ * nul character, which is always added.
  *
  * Returns: The pointer to the buffer with the converted string.
  */
@@ -8428,6 +8510,8 @@
  * decimal point. To format the number you pass in
  * a printf()-style format string. Allowed conversion
  * specifiers are 'e', 'E', 'f', 'F', 'g' and 'G'.
+ *
+ * The returned buffer is guaranteed to be nul-terminated.
  *
  * If you just want to want to serialize the value into a
  * string, use g_ascii_dtostr().
@@ -9766,6 +9850,118 @@
  *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
+ */
+
+
+/**
+ * g_auto:
+ * @TypeName: a supported variable type
+ *
+ * Helper to declare a variable with automatic cleanup.
+ *
+ * The variable is cleaned up in a way appropriate to its type when the
+ * variable goes out of scope.  The type must support this.
+ *
+ * This feature is only supported on GCC and clang.  This macro is not
+ * defined on other compilers and should not be used in programs that
+ * are intended to be portable to those compilers.
+ *
+ * This is meant to be used with stack-allocated structures and
+ * non-pointer types.  For the (more commonly used) pointer version, see
+ * g_autoptr().
+ *
+ * This macro can be used to avoid having to do explicit cleanups of
+ * local variables when exiting functions.  It often vastly simplifies
+ * handling of error conditions, removing the need for various tricks
+ * such as 'goto out' or repeating of cleanup code.  It is also helpful
+ * for non-error cases.
+ *
+ * Consider the following example:
+ *
+ * |[
+ * GVariant *
+ * my_func(void)
+ * {
+ *   g_auto(GQueue) queue = G_QUEUE_INIT;
+ *   g_auto(GVariantBuilder) builder;
+ *
+ *   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+ *
+ *   ...
+ *
+ *   if (error_condition)
+ *     return NULL;
+ *
+ *   ...
+ *
+ *   return g_variant_builder_end (&builder);
+ * }
+ * ]|
+ *
+ * You must initialise the variable in some way -- either by use of an
+ * initialiser or by ensuring that an _init function will be called on
+ * it unconditionally before it goes out of scope.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * g_autoptr:
+ * @TypeName: a supported variable type
+ *
+ * Helper to declare a pointer variable with automatic cleanup.
+ *
+ * The variable is cleaned up in a way appropriate to its type when the
+ * variable goes out of scope.  The type must support this.
+ *
+ * This feature is only supported on GCC and clang.  This macro is not
+ * defined on other compilers and should not be used in programs that
+ * are intended to be portable to those compilers.
+ *
+ * This is meant to be used to declare pointers to types with cleanup
+ * functions.  The type of the variable is a pointer to @TypeName.  You
+ * must not add your own '*'.
+ *
+ * This macro can be used to avoid having to do explicit cleanups of
+ * local variables when exiting functions.  It often vastly simplifies
+ * handling of error conditions, removing the need for various tricks
+ * such as 'goto out' or repeating of cleanup code.  It is also helpful
+ * for non-error cases.
+ *
+ * Consider the following example:
+ *
+ * |[
+ * gboolean
+ * check_exists(GVariant *dict)
+ * {
+ *   g_autoptr(GVariant) dirname;
+ *   g_autoptr(GVariant) basename = NULL;
+ *   g_autoptr(gchar) path = NULL;
+ *
+ *   dirname = g_variant_lookup_value (dict, "dirname", G_VARIANT_TYPE_STRING);
+ *
+ *   if (dirname == NULL)
+ *     return FALSE;
+ *
+ *   basename = g_variant_lookup_value (dict, "basename", G_VARIANT_TYPE_STRING);
+ *
+ *   if (basename == NULL)
+ *     return FALSE;
+ *
+ *   path = g_build_filename (g_variant_get_string (dirname, NULL),
+ *                            g_variant_get_string (basename, NULL),
+ *                            NULL);
+ *
+ *   return g_access (path, R_OK) == 0;
+ * }
+ * ]|
+ *
+ * You must initialise the variable in some way -- either by use of an
+ * initialiser or by ensuring that it is assigned to unconditionally
+ * before it goes out of scope.
+ *
+ * Since: 2.44
  */
 
 
@@ -29710,7 +29906,7 @@
 /**
  * g_thread_self:
  *
- * This functions returns the #GThread corresponding to the
+ * This function returns the #GThread corresponding to the
  * current thread. Note that this function does not increase
  * the reference count of the returned struct.
  *
@@ -35382,6 +35578,32 @@
 
 
 /**
+ * g_win32_check_windows_version:
+ * @major: major version of Windows
+ * @minor: minor version of Windows
+ * @spver: Windows Service Pack Level, 0 if none
+ * @os_type: Type of Windows OS
+ *
+ * Returns whether the version of the Windows operating system the
+ * code is running on is at least the specified major, minor and
+ * service pack versions.  See MSDN documentation for the Operating
+ * System Version.  Software that needs even more detailed version and
+ * feature information should use the Win32 API VerifyVersionInfo()
+ * directly.
+ *
+ * Successive calls of this function can be used for enabling or
+ * disabling features at run-time for a range of Windows versions,
+ * as per the VerifyVersionInfo() API documentation.
+ *
+ * Returns: %TRUE if the Windows Version is the same or greater than
+ *          the specified major, minor and service pack versions, and
+ *          whether the running Windows is a workstation or server edition
+ *          of Windows, if specifically specified.
+ * Since: 2.44
+ */
+
+
+/**
  * g_win32_error_message:
  * @error: error code.
  *
@@ -35560,6 +35782,9 @@
 /**
  * g_win32_get_windows_version:
  *
+ * This function is deprecated. Use
+ * g_win32_check_windows_version() instead.
+ *
  * Returns version information for the Windows operating system the
  * code is running on. See MSDN documentation for the GetVersion()
  * function. To summarize, the most significant bit is one on Win9x,
@@ -35571,7 +35796,11 @@
  * GetVersionEx() and VerifyVersionInfo().
  *
  * Returns: The version information.
- * Since: 2.6
+ * Deprecated: 2.44: Be aware that for Windows 8.1 and Windows Server
+ * 2012 R2 and later, this will return 62 unless the application is
+ * manifested for Windows 8.1/Windows Server 2012 R2, for example.
+ * MSDN stated that GetVersion(), which is used here, is subject to
+ * further change or removal after Windows 8.1.
  */
 
 

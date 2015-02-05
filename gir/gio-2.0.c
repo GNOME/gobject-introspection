@@ -3,6 +3,14 @@
 /************************************************************/
 
 /**
+ * GAction:
+ *
+ * #GAction is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
  * GAction:enabled:
  *
  * If @action is currently enabled.
@@ -86,6 +94,14 @@
  * the future.
  *
  * See g_action_map_add_action_entries() for an example.
+ */
+
+
+/**
+ * GActionGroup:
+ *
+ * #GActionGroup is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -181,6 +197,14 @@
 
 
 /**
+ * GActionMap:
+ *
+ * #GActionMap is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
  * GActionMapInterface:
  * @lookup_action: the virtual function pointer for g_action_map_lookup_action()
  * @add_action: the virtual function pointer for g_action_map_add_action()
@@ -199,6 +223,53 @@
  * g_app_info_monitor_get() and connect to the "changed" signal.
  *
  * Since: 2.40
+ */
+
+
+/**
+ * GAppInfoMonitor::changed:
+ *
+ * Signal emitted when the app info database for changes (ie: newly installed
+ * or removed applications).
+ */
+
+
+/**
+ * GAppLaunchContext::launch-failed:
+ * @context: the object emitting the signal
+ * @startup_notify_id: the startup notification id for the failed launch
+ *
+ * The ::launch-failed signal is emitted when a #GAppInfo launch
+ * fails. The startup notification id is provided, so that the launcher
+ * can cancel the startup notification.
+ *
+ * Since: 2.36
+ */
+
+
+/**
+ * GAppLaunchContext::launched:
+ * @context: the object emitting the signal
+ * @info: the #GAppInfo that was just launched
+ * @platform_data: additional platform-specific data for this launch
+ *
+ * The ::launched signal is emitted when a #GAppInfo is successfully
+ * launched. The @platform_data is an GVariant dictionary mapping
+ * strings to variants (ie a{sv}), which contains additional,
+ * platform-specific data about this launch. On UNIX, at least the
+ * "pid" and "startup-notification-id" keys will be present.
+ *
+ * Since: 2.36
+ */
+
+
+/**
+ * GApplication:
+ *
+ * #GApplication is an opaque data structure and can only be accessed
+ * using the following functions.
+ *
+ * Since: 2.28
  */
 
 
@@ -350,10 +421,20 @@
  * @dbus_unregister: invoked locally during unregistration, if the application
  *     is using its D-Bus backend. Use this to undo anything done by the
  *     @dbus_register vfunc. Since: 2.34
+ * @handle_local_options: invoked locally after the parsing of the commandline
+ *  options has occurred.
  *
  * Virtual function table for #GApplication.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * GApplicationCommandLine:
+ *
+ * #GApplicationCommandLine is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -455,6 +536,14 @@
  * Class structure for #GCredentials.
  *
  * Since: 2.26
+ */
+
+
+/**
+ * GDBusActionGroup:
+ *
+ * #GDBusActionGroup is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -734,6 +823,14 @@
 
 
 /**
+ * GDBusMenuModel:
+ *
+ * #GDBusMenuModel is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
  * GDBusMessage:
  *
  * The #GDBusMessage structure contains only private data and should
@@ -772,6 +869,14 @@
 
 
 /**
+ * GDBusObject:
+ *
+ * #GDBusObject is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
  * GDBusObject::interface-added:
  * @object: The #GDBusObject emitting the signal.
  * @interface: The #GDBusInterface that was added.
@@ -790,6 +895,14 @@
  * Emitted when @interface is removed from @object.
  *
  * Since: 2.30
+ */
+
+
+/**
+ * GDBusObjectManager:
+ *
+ * #GDBusObjectManager is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -1342,6 +1455,14 @@
 
 
 /**
+ * GDesktopAppInfoLookup:
+ *
+ * #GDesktopAppInfoLookup is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
  * GDrive::changed:
  * @drive: a #GDrive.
  *
@@ -1408,6 +1529,22 @@
  * GFilenameCompleter::got-completion-data:
  *
  * Emitted when the file name completion information comes available.
+ */
+
+
+/**
+ * GIOExtension:
+ *
+ * #GIOExtension is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
+ * GIOExtensionPoint:
+ *
+ * #GIOExtensionPoint is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -1564,6 +1701,60 @@
  * The `sin6_scope_id` field, for IPv6 addresses.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * GListModel:
+ *
+ * #GListModel is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
+ * GListModel::items-changed:
+ * @list: the #GListModel that changed
+ * @position: the position at which @list changed
+ * @removed: the number of items removed
+ * @added: the number of items added
+ *
+ * This signal is emitted whenever items were added or removed to
+ * @list. At @position, @removed items were removed and @added items
+ * were added in their place.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * GListModelInterface:
+ * @g_iface: parent #GTypeInterface
+ * @get_item_type: the virtual function pointer for g_list_model_get_item_type()
+ * @get_n_items: the virtual function pointer for g_list_model_get_n_items()
+ * @get_item: the virtual function pointer for g_list_model_get_item()
+ *
+ * The virtual function table for #GListModel.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * GListStore:
+ *
+ * #GListStore is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
+ * GListStore:item-type:
+ *
+ * The type of items contained in this list store. Items must be
+ * subclasses of #GObject.
+ *
+ * Since: 2.44
  */
 
 
@@ -1946,6 +2137,23 @@
 
 
 /**
+ * GNetworkMonitorInterface:
+ * @g_iface: The parent interface.
+ * @network_changed: the virtual function pointer for the
+ *  GNetworkMonitor::network-changed signal.
+ * @can_reach: the virtual function pointer for g_network_monitor_can_reach()
+ * @can_reach_async: the virtual function pointer for
+ *  g_network_monitor_can_reach_async()
+ * @can_reach_finish: the virtual function pointer for
+ *  g_network_monitor_can_reach_finish()
+ *
+ * The virtual function table for #GNetworkMonitor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * GNetworkService:
  *
  * A #GSocketConnectable for resolving a SRV record and connecting to
@@ -2108,6 +2316,15 @@
 
 
 /**
+ * GProxyAddressClass:
+ *
+ * Class structure for #GProxyAddress.
+ *
+ * Since: 2.26
+ */
+
+
+/**
  * GProxyAddressEnumerator:default-port:
  *
  * The default port to use if #GProxyAddressEnumerator:uri does not
@@ -2123,6 +2340,28 @@
  * The proxy resolver to use.
  *
  * Since: 2.36
+ */
+
+
+/**
+ * GProxyResolverInterface:
+ * @g_iface: The parent interface.
+ * @is_supported: the virtual function pointer for g_proxy_resolver_is_supported()
+ * @lookup: the virtual function pointer for g_proxy_resolver_lookup()
+ * @lookup_async: the virtual function pointer for
+ *  g_proxy_resolver_lookup_async()
+ * @lookup_finish: the virtual function pointer for
+ *  g_proxy_resolver_lookup_finish()
+ *
+ * The virtual function table for #GProxyResolver.
+ */
+
+
+/**
+ * GRemoteActionGroup:
+ *
+ * #GRemoteActionGroup is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -2151,6 +2390,14 @@
  *
  * Emitted when the resolver notices that the system resolver
  * configuration has changed.
+ */
+
+
+/**
+ * GSettings:
+ *
+ * #GSettings is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -2322,11 +2569,27 @@
 
 
 /**
+ * GSettingsSchemaKey:
+ *
+ * #GSettingsSchemaKey is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
  * GSettingsSchemaSource:
  *
  * This is an opaque structure type.  You may not access it directly.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * GSimpleAction:
+ *
+ * #GSimpleAction is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -2656,6 +2919,14 @@
 
 
 /**
+ * GStaticResource:
+ *
+ * #GStaticResource is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
  * GTask:
  *
  * The opaque object representing a synchronous or asynchronous task
@@ -2687,6 +2958,14 @@
  * `g_task_return_` function.
  *
  * Since: 2.36
+ */
+
+
+/**
+ * GTcpWrapperConnection:
+ *
+ * #GTcpWrapperConnection is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -3178,11 +3457,35 @@
 
 
 /**
+ * GUnixConnection:
+ *
+ * #GUnixConnection is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
  * GUnixCredentialsMessage:credentials:
  *
  * The credentials stored in the message.
  *
  * Since: 2.26
+ */
+
+
+/**
+ * GUnixFDList:
+ *
+ * #GUnixFDList is an opaque data structure and can only be accessed
+ * using the following functions.
+ */
+
+
+/**
+ * GUnixFDMessage:
+ *
+ * #GUnixFDMessage is an opaque data structure and can only be accessed
+ * using the following functions.
  */
 
 
@@ -5698,6 +6001,77 @@
 
 
 /**
+ * SECTION:glistmodel
+ * @title: GListModel
+ * @short_description: An interface describing a dynamic list of objects
+ * @include: gio/gio.h
+ * @see_also: #GListStore
+ *
+ * #GListModel is an interface that represents a mutable list of
+ * #GObjects. Its main intention is as a model for various widgets in
+ * user interfaces, such as list views, but it can also be used as a
+ * convenient method of returning lists of data, with support for
+ * updates.
+ *
+ * Each object in the list may also report changes in itself via some
+ * mechanism (normally the #GObject::notify signal).  Taken together
+ * with the #GListModel::items-changed signal, this provides for a list
+ * that can change its membership, and in which the members can change
+ * their individual properties.
+ *
+ * A good example would be the list of visible wireless network access
+ * points, where each access point can report dynamic properties such as
+ * signal strength.
+ *
+ * It is important to note that the #GListModel itself does not report
+ * changes to the individual items.  It only reports changes to the list
+ * membership.  If you want to observe changes to the objects themselves
+ * then you need to connect signals to the objects that you are
+ * interested in.
+ *
+ * All items in a #GListModel are of (or derived from) the same type.
+ * g_list_model_get_item_type() returns that type.  The type may be an
+ * interface, in which case all objects in the list must implement it.
+ *
+ * The semantics are close to that of an array:
+ * g_list_model_get_length() returns the number of items in the list and
+ * g_list_model_get_item() returns an item at a (0-based) position. In
+ * order to allow implementations to calculate the list length lazily,
+ * you can also iterate over items: starting from 0, repeatedly call
+ * g_list_model_get_item() until it returns %NULL.
+ *
+ * An implementation may create objects lazily, but must take care to
+ * return the same object for a given position until all references to
+ * it are gone.
+ *
+ * On the other side, a consumer is expected only to hold references on
+ * objects that are currently "user visible", in order to faciliate the
+ * maximum level of laziness in the implementation of the list and to
+ * reduce the required number of signal connections at a given time.
+ *
+ * This interface is intended only to be used from a single thread.  The
+ * thread in which it is appropriate to use it depends on the particular
+ * implementation, but typically it will be from the thread that owns
+ * the [thread-default main context][g-main-context-push-thread-default]
+ * in effect at the time that the model was created.
+ */
+
+
+/**
+ * SECTION:gliststore
+ * @title: GListStore
+ * @short_description: A simple implementation of #GListModel
+ * @include: gio/gio.h
+ *
+ * #GListStore is a simple implementation of #GListModel that stores all
+ * items in memory.
+ *
+ * It provides insertions, deletions, and lookups in logarithmic time
+ * with a fast path for the common case of iterating the list linearly.
+ */
+
+
+/**
  * SECTION:gloadableicon
  * @short_description: Loadable Icons
  * @include: gio/gio.h
@@ -8023,6 +8397,10 @@
  * @title: GTlsBackend
  * @short_description: TLS backend implementation
  * @include: gio/gio.h
+ *
+ * TLS (Transport Layer Security, aka SSL) backend
+ *
+ * Since: 2.28
  */
 
 
@@ -10134,16 +10512,6 @@
  * Returns: (transfer none): an object implementing
  *     @extension_point, or %NULL if there are no usable
  *     implementations.
- */
-
-
-/**
- * _g_win32_mount_new:
- * @volume_monitor: a #GVolumeMonitor.
- * @path: a win32 path.
- * @volume: usually NULL
- *
- * Returns: a #GWin32Mount for the given win32 path.
  */
 
 
@@ -25367,6 +25735,218 @@
 
 
 /**
+ * g_list_model_get_item: (skip)
+ * @list: a #GListModel
+ * @position: the position of the item to fetch
+ *
+ * Get the item at @position. If @position is greater than the number of
+ * items in @list, %NULL is returned.
+ *
+ * %NULL is never returned for an index that is smaller than the length
+ * of the list.  See g_list_model_get_n_items().
+ *
+ * Returns: (transfer full) (nullable) (type GObject): the item at @position.
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_model_get_item_type:
+ * @list: a #GListModel
+ *
+ * Gets the type of the items in @list. All items returned from
+ * g_list_model_get_type() are of that type or a subtype, or are an
+ * implementation of that interface.
+ *
+ * The item type of a #GListModel can not change during the life of the
+ * model.
+ *
+ * Returns: the #GType of the items contained in @list.
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_model_get_n_items:
+ * @list: a #GListModel
+ *
+ * Gets the number of items in @list.
+ *
+ * Depending on the model implementation, calling this function may be
+ * less efficient than iterating the list with increasing values for
+ * @position until g_list_model_get_item() returns %NULL.
+ *
+ * Returns: the number of items in @list.
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_model_get_object: (rename-to g_list_model_get_item)
+ * @list: a #GListModel
+ * @position: the position of the item to fetch
+ *
+ * Get the item at @position. If @position is greater than the number of
+ * items in @list, %NULL is returned.
+ *
+ * %NULL is never returned for an index that is smaller than the length
+ * of the list.  See g_list_model_get_n_items().
+ *
+ * Returns: (transfer full) (nullable): the object at @position.
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_model_items_changed:
+ * @list: a #GListModel
+ * @position: the position at which @list changed
+ * @removed: the number of items removed
+ * @added: the number of items added
+ *
+ * Emits the #GListModel::items-changed signal on @list.
+ *
+ * This function should only be called by classes implementing
+ * #GListModel. It has to be called after the internal representation
+ * of @list has been updated, because handlers connected to this signal
+ * might query the new state of the list.
+ *
+ * Implementations must only make changes to the model (as visible to
+ * its consumer) in places that will not cause problems for that
+ * consumer.  For models that are driven directly by a write API (such
+ * as #GListStore), changes can be reported in response to uses of that
+ * API.  For models that represent remote data, changes should only be
+ * made from a fresh mainloop dispatch.  It is particularly not
+ * permitted to make changes in response to a call to the #GListModel
+ * consumer API.
+ *
+ * Stated another way: in general, it is assumed that code making a
+ * series of accesses to the model via the API, without returning to the
+ * mainloop, and without calling other code, will continue to view the
+ * same contents of the model.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_store_append:
+ * @store: a #GListStore
+ * @item: the new item
+ *
+ * Appends @item to @store. @item must be of type #GListStore:item-type.
+ *
+ * This function takes a ref on @item.
+ *
+ * Use g_list_store_splice() to append multiple items at the same time
+ * efficiently.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_store_insert:
+ * @store: a #GListStore
+ * @position: the position at which to insert the new item
+ * @item: the new item
+ *
+ * Inserts @item into @store at @position. @item must be of type
+ * #GListStore:item-type or derived from it. @position must be smaller
+ * than the length of the list, or equal to it to append.
+ *
+ * This function takes a ref on @item.
+ *
+ * Use g_list_store_splice() to insert multiple items at the same time
+ * efficiently.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_store_insert_sorted:
+ * @store: a #GListStore
+ * @item: the new item
+ *
+ * Inserts @item into @store at a position to be determined by the
+ * @compare_func.
+ *
+ * The list must already be sorted before calling this function or the
+ * result is undefined.  Usually you would approach this by only ever
+ * inserting items by way of this function.
+ *
+ * This function takes a ref on @item.
+ *
+ * Returns: the position at which @item was inserted
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_store_new:
+ * @item_type: the #GType of items in the list
+ *
+ * Creates a new #GListStore with items of type @item_type. @item_type
+ * must be a subclass of #GObject.
+ *
+ * Returns: a new #GListStore
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_store_remove:
+ * @store: a #GListStore
+ * @position: the position of the item that is to be removed
+ *
+ * Removes the item from @store that is at @position. @position must be
+ * smaller than the current length of the list.
+ *
+ * Use g_list_store_splice() to remove multiple items at the same time
+ * efficiently.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_store_remove_all:
+ * @store: a #GListStore
+ *
+ * Removes all items from @store.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * g_list_store_splice:
+ * @store: a #GListStore
+ * @position: the position at which to make the change
+ * @n_removals: the number of items to remove
+ * @additions: (array length=n_additions): the items to add
+ * @n_additions: the number of items to add
+ *
+ * Changes @store by removing @n_removals items and adding @n_additions
+ * items to it. @additions must contain @n_additions items of type
+ * #GListStore:item-type.  %NULL is not permitted.
+ *
+ * This function is more efficient than g_list_store_insert() and
+ * g_list_store_remove(), because it only emits
+ * #GListModel::items-changed once for the change.
+ *
+ * This function takes a ref on each item in @additions.
+ *
+ * The parameters @position and @n_removals must be correct (ie:
+ * @position + @n_removals must be less than or equal to the length of
+ * the list at the time this function is called).
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * g_loadable_icon_load:
  * @icon: a #GLoadableIcon.
  * @size: an integer.
@@ -30466,6 +31046,8 @@
 /**
  * g_settings_list_relocatable_schemas:
  *
+ * <!-- -->
+ *
  * Returns: (element-type utf8) (transfer none): a list of relocatable
  *   #GSettings schemas that are available.  The list must not be
  *   modified or freed.
@@ -30476,6 +31058,8 @@
 
 /**
  * g_settings_list_schemas:
+ *
+ * <!-- -->
  *
  * Returns: (element-type utf8) (transfer none): a list of #GSettings
  *   schemas that are available.  The list must not be modified or
@@ -30524,7 +31108,7 @@
  * backend, and a #GMainContext to which signals are dispatched.
  *
  * This constructor therefore gives you full control over constructing
- * #GSettings instances.  The first 4 parameters are given directly as
+ * #GSettings instances.  The first 3 parameters are given directly as
  * @schema, @backend and @path, and the main context is taken from the
  * thread-default (as per g_settings_new()).
  *
@@ -30736,6 +31320,17 @@
 
 
 /**
+ * g_settings_schema_key_get_name:
+ * @key: a #GSettingsSchemaKey
+ *
+ * Gets the name of @key.
+ *
+ * Returns: the name of @key.
+ * Since: 2.44
+ */
+
+
+/**
  * g_settings_schema_key_get_range:
  * @key: a #GSettingsSchemaKey
  *
@@ -30849,6 +31444,20 @@
  * Decrease the reference count of @key, possibly freeing it.
  *
  * Since: 2.40
+ */
+
+
+/**
+ * g_settings_schema_list_children:
+ * @schema: a #GSettingsSchema
+ *
+ * Gets the list of children in @schema.
+ *
+ * You should free the return value with g_strfreev() when you are done
+ * with it.
+ *
+ * Returns: (transfer full) (element-type utf8): a list of the children on @settings
+ * Since: 2.44
  */
 
 
@@ -31375,6 +31984,20 @@
  * If the @value GVariant is floating, it is consumed.
  *
  * Since: 2.30
+ */
+
+
+/**
+ * g_simple_action_set_state_hint:
+ * @simple: a #GSimpleAction
+ * @state_hint: (allow-none): a #GVariant representing the state hint
+ *
+ * Sets the state hint for the action.
+ *
+ * See g_action_get_state_hint() for more information about
+ * action state hints.
+ *
+ * Since: 2.44
  */
 
 
