@@ -164,6 +164,11 @@ the latter is not specified.""")
     parser.add_option("", "--symbol-prefix",
                       action="append", dest="symbol_prefixes", default=[],
                       help="Remove this prefix from C symbols (function names)")
+    parser.add_option("", "--symbol-filter-cmd",
+                      action="store", dest="symbol_filter_cmd", default='',
+                      help='Filter symbols (function names) through the given '
+                           'shell command which will receive the symbol name as input '
+                           'to stdin and is expected to output the filtered results to stdout.')
     parser.add_option("", "--accept-unprefixed",
                       action="store_true", dest="accept_unprefixed", default=False,
                       help="""If specified, accept symbols and identifiers that do not
@@ -367,7 +372,8 @@ see --identifier-prefix and --symbol-prefix."""
 def create_transformer(namespace, options):
     transformer = Transformer(namespace,
                               accept_unprefixed=options.accept_unprefixed,
-                              identifier_filter_cmd=options.identifier_filter_cmd)
+                              identifier_filter_cmd=options.identifier_filter_cmd,
+                              symbol_filter_cmd=options.symbol_filter_cmd)
     transformer.set_include_paths(options.include_paths)
     if options.passthrough_gir:
         transformer.disable_cache()

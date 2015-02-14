@@ -83,6 +83,7 @@ tests/scanner/Utility-1.0.gir
 tests/scanner/WarnLib-1.0.gir
 tests/scanner/barapp
 tests/scanner/Identfilter-1.0.gir
+tests/scanner/Symbolfilter-1.0.gir
 tests/scanner/Typedefs-1.0.gir
 tests/doctool/DocExamples-1.0.gir
 tests/offsets/Offsets-1.0.gir

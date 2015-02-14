@@ -50,7 +50,8 @@ if os.name != 'nt':
 class Transformer(object):
     namespace = property(lambda self: self._namespace)
 
-    def __init__(self, namespace, accept_unprefixed=False, identifier_filter_cmd=''):
+    def __init__(self, namespace, accept_unprefixed=False,
+                 identifier_filter_cmd='', symbol_filter_cmd=''):
         self._cachestore = CacheStore()
         self._accept_unprefixed = accept_unprefixed
         self._namespace = namespace
@@ -60,6 +61,7 @@ class Transformer(object):
         self._includepaths = []
         self._passthrough_mode = False
         self._identifier_filter_cmd = identifier_filter_cmd
+        self._symbol_filter_cmd = symbol_filter_cmd
 
         # Cache a list of struct/unions in C's "tag namespace". This helps
         # manage various orderings of typedefs and structs. See:
@@ -242,6 +244,18 @@ currently-scanned namespace is first."""
         return cmp(x[2], y[2])
 
     def _split_c_string_for_namespace_matches(self, name, is_identifier=False):
+        if not is_identifier and self._symbol_filter_cmd:
+            proc = subprocess.Popen(self._symbol_filter_cmd,
+                                    stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                    shell=True)
+            _name = name
+            name, err = proc.communicate(name)
+            if proc.returncode:
+                raise ValueError('filter: "%s" exited: %d with error: %s' %
+                                 (self._symbol_filter_cmd, proc.returncode, err))
+
         matches = []  # Namespaces which might contain this name
         unprefixed_namespaces = []  # Namespaces with no prefix, last resort
         for ns in self._iter_namespaces():
