@@ -14948,7 +14948,8 @@
 
 /**
  * g_get_charset:
- * @charset: return location for character set name
+ * @charset: (out) (optional) (transfer none): return location for character set
+ *   name, or %NULL.
  *
  * Obtains the character set for the [current locale][setlocale]; you
  * might use this character set as an argument to g_convert(), to convert
@@ -18499,7 +18500,8 @@
  *
  * This function iterates over the whole list to count its elements.
  * Use a #GQueue instead of a GList if you regularly need the number
- * of items.
+ * of items. To check whether the list is non-empty, it is faster to check
+ * @list against %NULL.
  *
  * Returns: the number of elements in the #GList
  */
@@ -21378,13 +21380,11 @@
 /**
  * g_option_context_add_group:
  * @context: a #GOptionContext
- * @group: the group to add
+ * @group: (transfer full): the group to add
  *
  * Adds a #GOptionGroup to the @context, so that parsing with @context
- * will recognize the options in the group. Note that the group will
- * be freed together with the context when g_option_context_free() is
- * called, so you must not free the group yourself after adding it
- * to a context.
+ * will recognize the options in the group. Note that this will take
+ * ownership of the @group and thus the @group should not be freed.
  *
  * Since: 2.6
  */
@@ -21479,9 +21479,9 @@
  *
  * Returns a pointer to the main group of @context.
  *
- * Returns: the main group of @context, or %NULL if @context doesn't
- *  have a main group. Note that group belongs to @context and should
- *  not be modified or freed.
+ * Returns: (transfer none): the main group of @context, or %NULL if
+ *  @context doesn't have a main group. Note that group belongs to
+ *  @context and should not be modified or freed.
  * Since: 2.6
  */
 
@@ -21658,7 +21658,7 @@
 /**
  * g_option_context_set_main_group:
  * @context: a #GOptionContext
- * @group: the group to set as main group
+ * @group: (transfer full): the group to set as main group
  *
  * Sets a #GOptionGroup as main group of the @context.
  * This has the same effect as calling g_option_context_add_group(),
@@ -21774,6 +21774,7 @@
  * which have been added to a #GOptionContext.
  *
  * Since: 2.6
+ * Deprecated: 2.44: Use g_option_group_unref() instead.
  */
 
 
@@ -21794,8 +21795,19 @@
  * Creates a new #GOptionGroup.
  *
  * Returns: a newly created option group. It should be added
- *   to a #GOptionContext or freed with g_option_group_free().
+ *   to a #GOptionContext or freed with g_option_group_unref().
  * Since: 2.6
+ */
+
+
+/**
+ * g_option_group_ref:
+ * @group: a #GOptionGroup
+ *
+ * Increments the reference count of @group by one.
+ *
+ * Returns: a #GoptionGroup
+ * Since: 2.44
  */
 
 
@@ -21859,6 +21871,18 @@
  * user-visible strings.
  *
  * Since: 2.6
+ */
+
+
+/**
+ * g_option_group_unref:
+ * @group: a #GOptionGroup
+ *
+ * Decrements the reference count of @group by one.
+ * If the reference count drops to 0, the @group will be freed.
+ * and all memory allocated by the @group is released.
+ *
+ * Since: 2.44
  */
 
 
@@ -25892,7 +25916,8 @@
  * Gets the number of elements in a #GSList.
  *
  * This function iterates over the whole list to
- * count its elements.
+ * count its elements. To check whether the list is non-empty, it is faster to
+ * check @list against %NULL.
  *
  * Returns: the number of elements in the #GSList
  */
@@ -28546,7 +28571,7 @@
  * g_test_add_data_func:
  * @testpath: /-separated test case path name for the test.
  * @test_data: Test data argument for the test function.
- * @test_func: The test function to invoke for this test.
+ * @test_func: (scope async): The test function to invoke for this test.
  *
  * Create a new test case, similar to g_test_create_case(). However
  * the test is assumed to use no fixture, and test suites are automatically
@@ -28579,7 +28604,7 @@
 /**
  * g_test_add_func:
  * @testpath: /-separated test case path name for the test.
- * @test_func: The test function to invoke for this test.
+ * @test_func: (scope async): The test function to invoke for this test.
  *
  * Create a new test case, similar to g_test_create_case(). However
  * the test is assumed to use no fixture, and test suites are automatically
@@ -28679,9 +28704,9 @@
  * @test_name: the name for the test case
  * @data_size: the size of the fixture data structure
  * @test_data: test data argument for the test functions
- * @data_setup: the function to set up the fixture data
- * @data_test: the actual test function
- * @data_teardown: the function to teardown the fixture data
+ * @data_setup: (scope async): the function to set up the fixture data
+ * @data_test: (scope async): the actual test function
+ * @data_teardown: (scope async): the function to teardown the fixture data
  *
  * Create a new #GTestCase, named @test_name, this API is fairly
  * low level, calling g_test_add() or g_test_add_func() is preferable.

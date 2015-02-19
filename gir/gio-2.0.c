@@ -383,6 +383,16 @@
 
 
 /**
+ * GApplication:is-busy:
+ *
+ * Whether the application is currently marked as busy through
+ * g_application_mark_busy() or g_application_bind_busy_property().
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * GApplicationClass:
  * @startup: invoked on the primary instance immediately after registration
  * @shutdown: invoked only on the registered primary instance immediately
@@ -2704,6 +2714,29 @@
  * action is stateless.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * GSimpleIOStream:
+ *
+ * A wrapper around a #GInputStream and a #GOutputStream.
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * GSimpleIOStream:input-stream:
+ *
+ * Since: 2.44
+ */
+
+
+/**
+ * GSimpleIOStream:output-stream:
+ *
+ * Since: 2.44
  */
 
 
@@ -7289,6 +7322,25 @@
 
 
 /**
+ * SECTION:gsimpleiostream
+ * @short_description: A wrapper around an input and an output stream.
+ * @include: gio/gio.h
+ * @see_also: #GIOStream
+ *
+ * GSimpleIOStream creates a #GIOStream from an arbitrary #GInputStream and
+ * #GOutputStream. This allows any pair of input and output streams to be used
+ * with #GIOStream methods.
+ *
+ * This is useful when you obtained a #GInputStream and a #GOutputStream
+ * by other means, for instance creating them with platform specific methods as
+ * g_unix_input_stream_new() or g_win32_input_stream_new(), and you want
+ * to take advantage of the methods provided by #GIOStream.
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * SECTION:gsimplepermission
  * @title: GSimplePermission
  * @short_description: A GPermission that doesn't change value
@@ -11805,6 +11857,23 @@
 
 
 /**
+ * g_application_bind_busy_property:
+ * @application: a #GApplication
+ * @object: a #GObject
+ * @property: the name of a boolean property of @object
+ *
+ * Marks @application as busy (see g_application_mark_busy()) while
+ * @property on @object is %TRUE.
+ *
+ * The binding holds a reference to @application while it is active, but
+ * not to @object. Instead, the binding is destroyed when @object is
+ * finalized.
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * g_application_command_line_create_file_for_arg:
  * @cmdline: a #GApplicationCommandLine
  * @arg: an argument from @cmdline
@@ -12157,6 +12226,18 @@
 
 
 /**
+ * g_application_get_is_busy:
+ * @application: a #GApplication
+ *
+ * Gets the application's current busy state, as set through
+ * g_application_mark_busy() or g_application_bind_busy_property().
+ *
+ * Returns: %TRUE if @application is currenty marked as busy
+ * Since: 2.44
+ */
+
+
+/**
  * g_application_get_is_registered:
  * @application: a #GApplication
  *
@@ -12442,11 +12523,7 @@
  * use.
  *
  * This function sets the prgname (g_set_prgname()), if not already set,
- * to the basename of argv[0].  Since 2.38, if %G_APPLICATION_IS_SERVICE
- * is specified, the prgname is set to the application ID.  The main
- * impact of this is is that the wmclass of windows created by Gtk+ will
- * be set accordingly, which helps the window manager determine which
- * application is showing the window.
+ * to the basename of argv[0].
  *
  * Since 2.40, applications that are not explicitly flagged as services
  * or launchers (ie: neither %G_APPLICATION_IS_SERVICE or
@@ -12625,6 +12702,20 @@
  * for forming paths for various purposes is unspecified.
  *
  * Since: 2.42
+ */
+
+
+/**
+ * g_application_unbind_busy_property:
+ * @application: a #GApplication
+ * @object: a #GObject
+ * @property: the name of a boolean property of @object
+ *
+ * Destroys a binding between @property and the busy state of
+ * @application that was previously created with
+ * g_application_bind_busy_property().
+ *
+ * Since: 2.44
  */
 
 
@@ -24667,16 +24758,6 @@
 
 
 /**
- * g_input_stream_async_read_is_via_threads:
- * @stream: input stream
- *
- * Checks if an input stream's read_async function uses threads.
- *
- * Returns: %TRUE if @stream's read_async function uses threads.
- */
-
-
-/**
  * g_input_stream_clear_pending:
  * @stream: input stream
  *
@@ -28300,16 +28381,6 @@
  *
  * Returns: (transfer full): a newly created #GSettingsBackend
  * Since: 2.28
- */
-
-
-/**
- * g_output_stream_async_write_is_via_threads:
- * @stream: a #GOutputStream.
- *
- * Checks if an ouput stream's write_async function uses threads.
- *
- * Returns: %TRUE if @stream's write_async function uses threads.
  */
 
 
@@ -32346,6 +32417,19 @@
  * of @error, so the caller does not need to free it any more.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_simple_io_stream_new:
+ * @input_stream: a #GInputStream.
+ * @output_stream: a #GOutputStream.
+ *
+ * Creates a new #GSimpleIOStream wrapping @input_stream and @output_stream.
+ * See also #GIOStream.
+ *
+ * Returns: a new #GSimpleIOStream instance.
+ * Since: 2.44
  */
 
 
