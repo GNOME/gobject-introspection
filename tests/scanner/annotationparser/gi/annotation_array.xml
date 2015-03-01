@@ -159,7 +159,7 @@ are zero-terminated</description>
  * annotation_object_parse_args:
  * @object: a #AnnotationObject
  * @argc: (inout): Length of the argument vector
- * @argv: (inout) (array length=argc zero-terminated=1): Argument vector
+ * @argv: (inout) (array length=argc zero-terminated): Argument vector
  *
  * Test taking a zero-terminated array with length parameter
  **/</input>
@@ -197,7 +197,6 @@ are zero-terminated</description>
                 </option>
                 <option>
                   <name>zero-terminated</name>
-                  <value>1</value>
                 </option>
               </options>
             </annotation>
@@ -212,7 +211,7 @@ are zero-terminated</description>
  * annotation_object_parse_args:
  * @object: a #AnnotationObject
  * @argc: (inout): Length of the argument vector
- * @argv: (inout) (array length=argc zero-terminated=1): Argument vector
+ * @argv: (inout) (array length=argc zero-terminated): Argument vector
  *
  * Test taking a zero-terminated array with length parameter
  */</output>
@@ -466,9 +465,8 @@ are zero-terminated</description>
       </tags>
     </docblock>
     <messages>
-      <message>3: Warning: Test: "array" annotation option "zero-terminated" needs a value</message>
       <message>4: Warning: Test: "array" annotation option "length" needs a value</message>
-      <message>6: Warning: Test: invalid "array" annotation option "zero-terminated" value "yes", must be an integer</message>
+      <message>6: Warning: Test: invalid "array" annotation option "zero-terminated" value "yes", must be 0 or 1</message>
     </messages>
   </parser>
   <output>/**

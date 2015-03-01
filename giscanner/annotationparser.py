@@ -652,7 +652,7 @@ class GtkDocAnnotatable(object):
             return
 
         for option, value in options.items():
-            if option in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
+            if option == OPT_ARRAY_FIXED_SIZE:
                 try:
                     int(value)
                 except (TypeError, ValueError):
@@ -663,6 +663,11 @@ class GtkDocAnnotatable(object):
                         warn('invalid "%s" annotation option "%s" value "%s", must be an integer' %
                              (ann_name, option, value),
                              position)
+            elif option == OPT_ARRAY_ZERO_TERMINATED:
+                if value is not None and value not in ['0', '1']:
+                    warn('invalid "%s" annotation option "%s" value "%s", must be 0 or 1' %
+                         (ann_name, option, value),
+                         position)
             elif option == OPT_ARRAY_LENGTH:
                 if value is None:
                     warn('"%s" annotation option "length" needs a value' % (ann_name, ),

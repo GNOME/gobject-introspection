@@ -449,7 +449,7 @@ regress_annotation_object_compute_sum_n(RegressAnnotationObject *object,
 /**
  * regress_annotation_object_compute_sum_nz:
  * @object: a #RegressAnnotationObject
- * @nums: (array length=n_nums zero-terminated=1): Sequence of numbers that
+ * @nums: (array length=n_nums zero-terminated): Sequence of numbers that
  * are zero-terminated
  * @n_nums: Length of number array
  *

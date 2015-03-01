@@ -1332,7 +1332,7 @@ gi_marshalling_tests_array_in_len_before (gint length, const gint *ints)
 
 /**
  * gi_marshalling_tests_array_in_len_zero_terminated:
- * @ints: (array length=length zero-terminated=1):
+ * @ints: (array length=length zero-terminated):
  * @length:
  */
 void
@@ -1584,7 +1584,7 @@ gi_marshalling_tests_array_in_nonzero_nonlen (gint first, const guint8 *chars)
 /**
  * gi_marshalling_tests_array_zero_terminated_return:
  *
- * Returns: (array zero-terminated=1) (transfer none):
+ * Returns: (array zero-terminated) (transfer none):
  */
 gchar **
 gi_marshalling_tests_array_zero_terminated_return (void)
@@ -1596,7 +1596,7 @@ gi_marshalling_tests_array_zero_terminated_return (void)
 /**
  * gi_marshalling_tests_array_zero_terminated_return_null:
  *
- * Returns: (array zero-terminated=1) (transfer none):
+ * Returns: (array zero-terminated) (transfer none):
  */
 gchar **
 gi_marshalling_tests_array_zero_terminated_return_null (void)
@@ -1607,7 +1607,7 @@ gi_marshalling_tests_array_zero_terminated_return_null (void)
 /**
  * gi_marshalling_tests_array_zero_terminated_return_struct:
  *
- * Returns: (array zero-terminated=1) (transfer full):
+ * Returns: (array zero-terminated) (transfer full):
  */
 GIMarshallingTestsBoxedStruct **
 gi_marshalling_tests_array_zero_terminated_return_struct (void)
@@ -1630,7 +1630,7 @@ gi_marshalling_tests_array_zero_terminated_return_struct (void)
 
 /**
  * gi_marshalling_tests_array_zero_terminated_in:
- * @utf8s: (array zero-terminated=1) (transfer none):
+ * @utf8s: (array zero-terminated) (transfer none):
  */
 void
 gi_marshalling_tests_array_zero_terminated_in (gchar **utf8s)
@@ -1643,7 +1643,7 @@ gi_marshalling_tests_array_zero_terminated_in (gchar **utf8s)
 
 /**
  * gi_marshalling_tests_array_zero_terminated_out:
- * @utf8s: (out) (array zero-terminated=1) (transfer none):
+ * @utf8s: (out) (array zero-terminated) (transfer none):
  */
 void
 gi_marshalling_tests_array_zero_terminated_out (gchar *** utf8s)
@@ -1654,7 +1654,7 @@ gi_marshalling_tests_array_zero_terminated_out (gchar *** utf8s)
 
 /**
  * gi_marshalling_tests_array_zero_terminated_inout:
- * @utf8s: (inout) (array zero-terminated=1) (transfer none):
+ * @utf8s: (inout) (array zero-terminated) (transfer none):
  */
 void
 gi_marshalling_tests_array_zero_terminated_inout (gchar *** utf8s)
@@ -1671,9 +1671,9 @@ gi_marshalling_tests_array_zero_terminated_inout (gchar *** utf8s)
 
 /**
  * gi_marshalling_tests_array_gvariant_none_in:
- * @variants: (array zero-terminated=1) (transfer none):
+ * @variants: (array zero-terminated) (transfer none):
  *
- * Returns: (array zero-terminated=1) (transfer none):
+ * Returns: (array zero-terminated) (transfer none):
  */
 GVariant **
 gi_marshalling_tests_array_gvariant_none_in (GVariant **variants)
@@ -1697,9 +1697,9 @@ gi_marshalling_tests_array_gvariant_none_in (GVariant **variants)
 
 /**
  * gi_marshalling_tests_array_gvariant_container_in:
- * @variants: (array zero-terminated=1) (transfer container):
+ * @variants: (array zero-terminated) (transfer container):
  *
- * Returns: (array zero-terminated=1) (transfer container):
+ * Returns: (array zero-terminated) (transfer container):
  */
 GVariant **
 gi_marshalling_tests_array_gvariant_container_in (GVariant **variants)
@@ -1721,9 +1721,9 @@ gi_marshalling_tests_array_gvariant_container_in (GVariant **variants)
 
 /**
  * gi_marshalling_tests_array_gvariant_full_in:
- * @variants: (array zero-terminated=1) (transfer full):
+ * @variants: (array zero-terminated) (transfer full):
  *
- * Returns: (array zero-terminated=1) (transfer full):
+ * Returns: (array zero-terminated) (transfer full):
  */
 GVariant **
 gi_marshalling_tests_array_gvariant_full_in (GVariant **variants)
@@ -3333,7 +3333,7 @@ _marshal_INT__VOID (GClosure *closure,
 
 /**
  * gi_marshalling_tests_gclosure_return:
- * 
+ *
  * Return: a #GClosure
  */
 GClosure *
@@ -4340,7 +4340,7 @@ void gi_marshalling_tests_object_vfunc_caller_allocated_out_parameter (GIMarshal
 
 /**
  * gi_marshalling_tests_object_vfunc_array_out_parameter:
- * @a: (out) (array zero-terminated=1):
+ * @a: (out) (array zero-terminated):
  */
 void gi_marshalling_tests_object_vfunc_array_out_parameter (GIMarshallingTestsObject *self, gfloat **a)
 {
@@ -4909,7 +4909,7 @@ gi_marshalling_tests_gerror (GError **error)
 
 /**
  * gi_marshalling_tests_gerror_array_in:
- * @in_ints: (array zero-terminated=1):
+ * @in_ints: (array zero-terminated):
  */
 void
 gi_marshalling_tests_gerror_array_in (gint *in_ints, GError **error)

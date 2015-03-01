@@ -386,10 +386,14 @@ class MainTransformer(object):
         array_options = annotations.get(ANN_ARRAY)
         container_type = ast.Array(array_type, element_type_node, ctype=node.type.ctype,
                                    is_const=node.type.is_const)
-        if OPT_ARRAY_ZERO_TERMINATED in array_options:
-            container_type.zeroterminated = array_options.get(OPT_ARRAY_ZERO_TERMINATED) == '1'
-        else:
+        if array_options.get(OPT_ARRAY_ZERO_TERMINATED, '0') == '0':
             container_type.zeroterminated = False
+        else:
+            if (OPT_ARRAY_ZERO_TERMINATED in array_options
+            or array_options.get(OPT_ARRAY_ZERO_TERMINATED) == '1'):
+                container_type.zeroterminated = True
+            else:
+                container_type.zeroterminated = False
 
         length = array_options.get(OPT_ARRAY_LENGTH)
         if length:

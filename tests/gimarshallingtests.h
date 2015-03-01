@@ -1378,7 +1378,7 @@ struct _GIMarshallingTestsObjectClass
 
     /**
      * GIMarshallingTestsObjectClass::vfunc_array_out_parameter:
-     * @a: (out) (array zero-terminated=1):
+     * @a: (out) (array zero-terminated):
      */
     void  (* vfunc_array_out_parameter) (GIMarshallingTestsObject *self, gfloat **a);
 
