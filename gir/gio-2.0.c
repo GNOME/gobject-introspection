@@ -11859,7 +11859,7 @@
 /**
  * g_application_bind_busy_property:
  * @application: a #GApplication
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @property: the name of a boolean property of @object
  *
  * Marks @application as busy (see g_application_mark_busy()) while
@@ -12708,7 +12708,7 @@
 /**
  * g_application_unbind_busy_property:
  * @application: a #GApplication
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @property: the name of a boolean property of @object
  *
  * Destroys a binding between @property and the busy state of
@@ -13544,7 +13544,7 @@
 
 /**
  * g_cancellable_cancel:
- * @cancellable: a #GCancellable object.
+ * @cancellable: (nullable): a #GCancellable object.
  *
  * Will set @cancellable to cancelled, and will emit the
  * #GCancellable::cancelled signal. (However, see the warning about
@@ -13555,7 +13555,9 @@
  * it from a thread other than the one running the operation that was
  * passed the @cancellable.
  *
- * The convention within gio is that cancelling an asynchronous
+ * If @cancellable is %NULL, this function returns immediately for convenience.
+ *
+ * The convention within GIO is that cancelling an asynchronous
  * operation causes it to complete asynchronously. That is, if you
  * cancel the operation from the same thread in which it is running,
  * then the operation's #GAsyncReadyCallback will not be invoked until
@@ -20803,6 +20805,57 @@
 
 
 /**
+ * g_file_enumerator_iterate:
+ * @direnum: an open #GFileEnumerator
+ * @out_info: (out) (transfer none) (allow-none): Output location for the next #GFileInfo, or %NULL
+ * @out_child: (out) (transfer none) (allow-none): Output location for the next #GFile, or %NULL
+ * @cancellable: a #GCancellable
+ * @error: a #GError
+ *
+ * This is a version of g_file_enumerator_next_file() that's easier to
+ * use correctly from C programs.  With g_file_enumerator_next_file(),
+ * the gboolean return value signifies "end of iteration or error", which
+ * requires allocation of a temporary #GError.
+ *
+ * In contrast, with this function, a %FALSE return from
+ * gs_file_enumerator_iterate() *always* means
+ * "error".  End of iteration is signaled by @out_info or @out_child being %NULL.
+ *
+ * Another crucial difference is that the references for @out_info and
+ * @out_child are owned by @direnum (they are cached as hidden
+ * properties).  You must not unref them in your own code.  This makes
+ * memory management significantly easier for C code in combination
+ * with loops.
+ *
+ * Finally, this function optionally allows retrieving a #GFile as
+ * well.
+ *
+ * You must specify at least one of @out_info or @out_child.
+ *
+ * The code pattern for correctly using g_file_enumerator_iterate() from C
+ * is:
+ *
+ * |[
+ * direnum = g_file_enumerate_children (file, ...);
+ * while (TRUE)
+ *   {
+ *     GFileInfo *info;
+ *     if (!g_file_enumerator_iterate (direnum, &info, NULL, cancellable, error))
+ *       goto out;
+ *     if (!info)
+ *       break;
+ *     ... do stuff with "info"; do not unref it! ...
+ *   }
+ *
+ * out:
+ *   g_object_unref (direnum); // Note: frees the last @info
+ * ]|
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * g_file_enumerator_next_file:
  * @enumerator: a #GFileEnumerator.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
@@ -25949,6 +26002,8 @@
  * g_list_store_insert_sorted:
  * @store: a #GListStore
  * @item: the new item
+ * @compare_func: pairwise comparison function for sorting
+ * @user_data: (closure): user data for @compare_func
  *
  * Inserts @item into @store at a position to be determined by the
  * @compare_func.
@@ -29392,7 +29447,8 @@
 /**
  * g_property_action_new:
  * @name: the name of the action to create
- * @object: the object that has the property to wrap
+ * @object: (type GObject.Object): the object that has the property
+ *   to wrap
  * @property_name: the name of the property
  *
  * Creates a #GAction corresponding to the value of property
@@ -31904,7 +31960,7 @@
 
 /**
  * g_settings_unbind:
- * @object: the object
+ * @object: (type GObject.Object): the object
  * @property: the property whose binding is removed
  *
  * Removes an existing binding for @property on @object.

@@ -9907,6 +9907,34 @@
 
 
 /**
+ * g_autofree:
+ *
+ * Macro to add an attribute to pointer variable to ensure automatic
+ * cleanup using g_free().
+ *
+ * This macro differs from g_autoptr() in that it is an attribute supplied
+ * before the type name, rather than wrapping the type definition.  Instead
+ * of using a type-specific lookup, this macro always calls g_free() directly.
+ *
+ * This means it's useful for any type that is returned from
+ * g_malloc().
+ *
+ * Otherwise, this macro has similar constraints as g_autoptr() - only
+ * supported on GCC and clang, the variable must be initialized, etc.
+ *
+ * |[
+ * gboolean
+ * operate_on_malloc_buf (void)
+ * {
+ *   g_autofree guint8* membuf = NULL;
+ *
+ *   membuf = g_malloc (8192);
+ *
+ *   /* Some computation on membuf
+ */
+
+
+/**
  * g_autoptr:
  * @TypeName: a supported variable type
  *
