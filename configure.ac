@@ -266,7 +266,7 @@ fi
 
 dnl Not enabled by default until 3.6 cycle when we can propose mako as
 dnl an external dependency
-AC_ARG_ENABLE(doctool,[  --disable-doctool           disable g-ir-doctool ],,enable_doctool=auto)
+AC_ARG_ENABLE(doctool,[  --disable-doctool           disable g-ir-doc-tool ],,enable_doctool=auto)
 AS_IF([ test x$enable_doctool != xno], [
    AM_CHECK_PYMOD(mako,,have_python_mako=yes,have_python_mako=no)
 ])
@@ -286,7 +286,7 @@ AC_MSG_CHECKING([for glib source directory to use for documentation])
 AC_ARG_WITH(glib-src,
 	[  --with-glib-src=PATH    Source directory for glib - needed to add docs to gir],
 	GLIBSRC=$withval
-) 
+)
 AM_CONDITIONAL(WITH_GLIBSRC, test x"$GLIBSRC" != x)
 AC_SUBST(GLIBSRC)
 AC_MSG_RESULT([$GLIBSRC])
