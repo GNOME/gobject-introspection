@@ -10,7 +10,7 @@ m4_define(gi_version, gi_major_version.gi_minor_version.gi_micro_version)
 AC_PREREQ([2.63])
 AC_INIT([gobject-introspection],
         [gi_version],
-        [http://bugzilla.gnome.org/enter_bug.cgi?product=glib&component=introspection],
+        [http://bugzilla.gnome.org/enter_bug.cgi?product=gobject-introspection],
         [gobject-introspection])
 
 AC_CONFIG_HEADER([config.h])
