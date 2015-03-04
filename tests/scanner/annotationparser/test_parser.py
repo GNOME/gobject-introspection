@@ -450,7 +450,7 @@ def load_tests(loader, tests, pattern):
     # Load test cases from disc
     tests_dir = os.path.dirname(os.path.abspath(__file__))
 
-    for name, test_case in _all_tests.iteritems():
+    for name, test_case in _all_tests.items():
         tests = loader.loadTestsFromTestCase(test_case)
         suite.addTests(tests)
     return suite
