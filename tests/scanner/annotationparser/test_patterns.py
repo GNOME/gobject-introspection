@@ -889,12 +889,11 @@ def create_test_method(testcase):
 
 def create_test_case(tests_class_name, testcases):
     test_methods = {}
-    for (index, testcase) in enumerate(testcases):
-        test_method_name = 'test_%03d' % index
-
-        test_method = create_test_method(testcase)
-        test_method.__name__ = test_method_name
-        test_methods[test_method_name] = test_method
+    for counter, test in enumerate(testcases):
+        test_name = 'test_%03d' % (counter + 1)
+        test_method = create_test_method(test)
+        test_method.__name__ = test_name
+        test_methods[test_name] = test_method
 
     return type(tests_class_name, (unittest.TestCase,), test_methods)
 
@@ -914,7 +913,8 @@ def create_test_cases():
                             ('TestTag', tag_tests),
                             ('TestTagValueVersion', tag_value_version_tests),
                             ('TestTagValueStability', tag_value_stability_tests)):
-        test_cases[name] = create_test_case(name, test_data)
+        test_case = create_test_case(name, test_data)
+        test_cases[test_case.__name__] = test_case
 
     return test_cases
 
@@ -925,18 +925,6 @@ def create_test_cases():
 # are run in parameterized mode, e.g: python -m unittest test_parser.Test...
 _all_tests = create_test_cases()
 globals().update(_all_tests)
-
-
-# Hook function for Python test loader.
-def load_tests(loader, tests, pattern):
-    suite = unittest.TestSuite()
-    # add standard tests from module
-    suite.addTests(tests)
-
-    for name, test_case in _all_tests.items():
-        tests = loader.loadTestsFromTestCase(test_case)
-        suite.addTests(tests)
-    return suite
 
 
 if __name__ == '__main__':

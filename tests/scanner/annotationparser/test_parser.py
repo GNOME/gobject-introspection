@@ -436,26 +436,5 @@ _all_tests = create_test_cases()
 globals().update(_all_tests)
 
 
-# Hook function for Python test loader.
-def load_tests(loader, tests, pattern):
-    suite = unittest.TestSuite()
-    # add standard tests from module
-    suite.addTests(tests)
-
-    # Initialize message logger
-    namespace = Namespace('Test', '1.0')
-    logger = MessageLogger.get(namespace=namespace)
-    logger.enable_warnings((WARNING, ERROR, FATAL))
-
-    # Load test cases from disc
-    tests_dir = os.path.dirname(os.path.abspath(__file__))
-
-    for name, test_case in _all_tests.items():
-        tests = loader.loadTestsFromTestCase(test_case)
-        suite.addTests(tests)
-    return suite
-
-
 if __name__ == '__main__':
-    # Run test suite
     unittest.main()
