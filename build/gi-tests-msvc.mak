@@ -5,7 +5,7 @@
 !include gi-build-common-msvc.mak
 
 BASE_GLIB_LIBS = gio-$(GLIB_APIVERSION).lib gobject-$(GLIB_APIVERSION).lib gmodule-$(GLIB_APIVERSION).lib glib-$(GLIB_APIVERSION).lib
-CFLAGS = $(CFLAGS_ADD) /I.. /W3 /we4013 /FImsvc_recommended_pragmas.h
+CFLAGS = $(CFLAGS_ADD) /I.. /W3 /we4013 /FImsvc_recommended_pragmas.h /DHAVE_CONFIG_H
 LDFLAGS = /link $(LDFLAGS_ARCH) $(BASE_GLIB_LIBS)
 LDFLAGS_DLL = /link $(LDFLAGS_ARCH) /DLL /out:$@ /implib:$*-$(GI_APIVERSION).lib $(BASE_GLIB_LIBS)
 
