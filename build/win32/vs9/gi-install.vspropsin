@@ -11,17 +11,22 @@
 mkdir $(CopyDir)&#x0D;&#x0A;
 mkdir $(CopyDir)\bin&#x0D;&#x0A;
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\$(LibGIDllPrefix)girepository$(LibGIDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\$(LibGIDllPrefix)girepository$(LibGIDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\g-ir-compiler.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\g-ir-compiler.pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\g-ir-generate.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\g-ir-generate.pdb $(CopyDir)\bin&#x0D;&#x0A;
 copy ..\..\..\tools\g-ir-annotation-tool $(CopyDir)\bin&#x0D;&#x0A;
 copy ..\..\..\tools\g-ir-doc-tool $(CopyDir)\bin&#x0D;&#x0A;
 copy ..\..\..\tools\g-ir-scanner $(CopyDir)\bin&#x0D;&#x0A;
 
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\glib-print.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\glib-print.pdb $(CopyDir)\bin&#x0D;&#x0A;
 
 #include "gir.vs9.install"
 
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\_giscanner.pdb $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 
 mkdir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
 
