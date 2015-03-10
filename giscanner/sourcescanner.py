@@ -281,18 +281,36 @@ class SourceScanner(object):
 
         defines = ['__GI_SCANNER__']
         undefs = []
+
+        tmp_fd_cpp, tmp_name_cpp = tempfile.mkstemp(prefix='g-ir-cpp-', suffix='.c')
+        fp_cpp = os.fdopen(tmp_fd_cpp, 'w')
+        self._write_preprocess_src(fp_cpp, defines, undefs, filenames)
+        fp_cpp.close()
+
+        tmpfile_basename = os.path.basename(os.path.splitext(tmp_name_cpp)[0])
+
+        # Output file name of the preprocessor, only really used on non-MSVC,
+        # so we want the name to match the output file name of the MSVC preprocessor
+        tmpfile_output = tmpfile_basename + '.i'
+
         cpp_args = os.environ.get('CC', 'cc').split()  # support CC="ccache gcc"
-        if 'cl' in cpp_args:
-            # The Microsoft compiler/preprocessor (cl) does not accept
-            # source input from stdin (the '-' flag), so we need
-            # some help from gcc from MinGW/Cygwin or so.
-            # Note that the generated dumper program is
-            # still built and linked by Visual C++.
-            cpp_args = ['gcc']
-        cpp_args += os.environ.get('CPPFLAGS', '').split()
-        cpp_args += os.environ.get('CFLAGS', '').split()
-        cpp_args += ['-E', '-C', '-I.', '-']
+
+        cpp_args += ['-E', '-C', '-I.']
+
+        # MSVC: The '-P' option makes the preprocessor output to a file, but we
+        # can't specify directly the name of the output file, so we use the
+        # MSVC-style preprocessor output file name for all builds for simplicity
+        # Define the following macros to silence many, many warnings
+        # in using the MSVC preprocessor during the parsing stage...
+        if 'cl.exe' in cpp_args or 'cl' in cpp_args:
+            cpp_args += ('-P',
+                         '-D_USE_DECLSPECS_FOR_SAL',
+                         '-D_CRT_SECURE_NO_WARNINGS',
+                         '-D_CRT_NONSTDC_NO_WARNINGS',
+                         '-DSAL_NO_ATTRIBUTE_DECLARATIONS')
+
         cpp_args += self._cpp_options
+        cpp_args += [tmp_name_cpp]
 
         # We expect the preprocessor to remove macros. If debugging is turned
         # up high enough that won't happen, so strip these out. Bug #720504
@@ -306,32 +324,30 @@ class SourceScanner(object):
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
 
-        for define in defines:
-            proc.stdin.write('#ifndef %s\n' % (define, ))
-            proc.stdin.write('# define %s\n' % (define, ))
-            proc.stdin.write('#endif\n')
-        for undef in undefs:
-            proc.stdin.write('#undef %s\n' % (undef, ))
-        for filename in filenames:
-            proc.stdin.write('#include <%s>\n' % (filename, ))
-        proc.stdin.close()
+        if 'cl.exe' not in cpp_args and'cl' not in cpp_args:
+            cpp_args += ['-o', tmpfile_output]
 
-        tmp_fd, tmp_name = tempfile.mkstemp()
-        fp = os.fdopen(tmp_fd, 'w+b')
-        while True:
-            data = proc.stdout.read(4096)
-            if data is None:
-                break
-            fp.write(data)
-            if len(data) < 4096:
-                break
-        fp.seek(0, 0)
+        proc = subprocess.Popen(cpp_args)
 
         assert proc, 'Proc was none'
         proc.wait()
         if proc.returncode != 0:
             raise SystemExit('Error while processing the source.')
 
+        os.unlink(tmp_name_cpp)
+        fp = open(tmpfile_output, 'r')
+
         self._scanner.parse_file(fp.fileno())
         fp.close()
-        os.unlink(tmp_name)
+        os.unlink(tmpfile_output)
+
+    def _write_preprocess_src(self, fp, defines, undefs, filenames):
+        # Write to the temp file for feeding into the preprocessor
+        for define in defines:
+            fp.write('#ifndef %s\n' % (define, ))
+            fp.write('# define %s\n' % (define, ))
+            fp.write('#endif\n')
+        for undef in undefs:
+            fp.write('#undef %s\n' % (undef, ))
+        for filename in filenames:
+            fp.write('#include <%s>\n' % (filename, ))
