@@ -61,7 +61,15 @@ class CCompiler(object):
             compiler_name = distutils.ccompiler.get_default_compiler()
 
         # Now, create the distutils ccompiler instance based on the info we have.
-        self.compiler = distutils.ccompiler.new_compiler(compiler=compiler_name)
+        if compiler_name == 'msvc':
+            # For MSVC, we need to create a instance of a subclass of distutil's
+            # MSVC9Compiler class, as it does not provide a preprocess()
+            # implementation
+            from . import msvccompiler
+            self.compiler = msvccompiler.get_msvc_compiler()
+
+        else:
+            self.compiler = distutils.ccompiler.new_compiler(compiler=compiler_name)
         customize_compiler(self.compiler)
 
         # customize_compiler from distutils only does customization
@@ -146,6 +154,31 @@ class CCompiler(object):
                     args.append(library)
                 else:
                     args.append('-l' + library)
+
+    def preprocess(self, source, output, cpp_options):
+        extra_postargs = ['-C']
+        (include_paths, macros, postargs) = self._set_cpp_options(cpp_options)
+
+        # We always want to include the current path
+        include_dirs = ['.']
+
+        include_dirs.extend(include_paths)
+        extra_postargs.extend(postargs)
+
+        # Define these macros when using Visual C++ to silence many warnings,
+        # and prevent stepping on many Visual Studio-specific items, so that
+        # we don't have to handle them specifically in scannerlexer.l
+        if self.check_is_msvc():
+            macros.append(('_USE_DECLSPECS_FOR_SAL', None))
+            macros.append(('_CRT_SECURE_NO_WARNINGS', None))
+            macros.append(('_CRT_NONSTDC_NO_WARNINGS', None))
+            macros.append(('SAL_NO_ATTRIBUTE_DECLARATIONS', None))
+
+        self.compiler.preprocess(source=source,
+                                 output_file=output,
+                                 macros=macros,
+                                 include_dirs=include_dirs,
+                                 extra_postargs=extra_postargs)
 
     def resolve_windows_libs(self, libraries, options):
         args = []
@@ -238,3 +271,32 @@ class CCompiler(object):
             return True
         else:
             return False
+
+    # Private APIs
+    def _set_cpp_options(self, options):
+        includes = []
+        macros = []
+        other_options = []
+
+        for o in options:
+            option = utils.cflag_real_include_path(o)
+            if option.startswith('-I'):
+                includes.append(option[len('-I'):])
+            elif option.startswith('-D'):
+                macro = option[len('-D'):]
+                macro_index = macro.find('=')
+                if macro_index == -1:
+                    macro_name = macro
+                    macro_value = None
+                else:
+                    macro_name = macro[:macro_index]
+                    macro_value = macro[macro_index + 1:]
+                macros.append((macro_name, macro_value))
+            elif option.startswith('-U'):
+                macros.append((option[len('-U'):],))
+            else:
+                # We expect the preprocessor to remove macros. If debugging is turned
+                # up high enough that won't happen, so don't add those flags. Bug #720504
+                if option not in ['-g3', '-ggdb3', '-gstabs3', '-gcoff3', '-gxcoff3', '-gvms3']:
+                    other_options.append(option)
+        return (includes, macros, other_options)

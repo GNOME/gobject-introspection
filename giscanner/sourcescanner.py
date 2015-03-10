@@ -25,6 +25,7 @@ import tempfile
 
 from .libtoolimporter import LibtoolImporter
 from .message import Position
+from .ccompiler import CCompiler
 
 with LibtoolImporter(None, None):
     if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
@@ -282,6 +283,8 @@ class SourceScanner(object):
         defines = ['__GI_SCANNER__']
         undefs = []
 
+        cc = CCompiler()
+
         tmp_fd_cpp, tmp_name_cpp = tempfile.mkstemp(prefix='g-ir-cpp-', suffix='.c')
         fp_cpp = os.fdopen(tmp_fd_cpp, 'w')
         self._write_preprocess_src(fp_cpp, defines, undefs, filenames)
@@ -293,46 +296,9 @@ class SourceScanner(object):
         # so we want the name to match the output file name of the MSVC preprocessor
         tmpfile_output = tmpfile_basename + '.i'
 
-        cpp_args = os.environ.get('CC', 'cc').split()  # support CC="ccache gcc"
-
-        cpp_args += ['-E', '-C', '-I.']
-
-        # MSVC: The '-P' option makes the preprocessor output to a file, but we
-        # can't specify directly the name of the output file, so we use the
-        # MSVC-style preprocessor output file name for all builds for simplicity
-        # Define the following macros to silence many, many warnings
-        # in using the MSVC preprocessor during the parsing stage...
-        if 'cl.exe' in cpp_args or 'cl' in cpp_args:
-            cpp_args += ('-P',
-                         '-D_USE_DECLSPECS_FOR_SAL',
-                         '-D_CRT_SECURE_NO_WARNINGS',
-                         '-D_CRT_NONSTDC_NO_WARNINGS',
-                         '-DSAL_NO_ATTRIBUTE_DECLARATIONS')
-
-        cpp_args += self._cpp_options
-        cpp_args += [tmp_name_cpp]
-
-        # We expect the preprocessor to remove macros. If debugging is turned
-        # up high enough that won't happen, so strip these out. Bug #720504
-        for flag in ['-g3', '-ggdb3', '-gstabs3', '-gcoff3', '-gxcoff3', '-gvms3']:
-            try:
-                cpp_args.remove(flag)
-            except ValueError:
-                pass
-
-        proc = subprocess.Popen(cpp_args,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE)
-
-        if 'cl.exe' not in cpp_args and'cl' not in cpp_args:
-            cpp_args += ['-o', tmpfile_output]
-
-        proc = subprocess.Popen(cpp_args)
-
-        assert proc, 'Proc was none'
-        proc.wait()
-        if proc.returncode != 0:
-            raise SystemExit('Error while processing the source.')
+        cc.preprocess(tmp_name_cpp,
+                      tmpfile_output,
+                      self._cpp_options)
 
         os.unlink(tmp_name_cpp)
         fp = open(tmpfile_output, 'r')

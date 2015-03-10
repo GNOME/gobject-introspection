@@ -43,6 +43,7 @@ pkgpyexec_PYTHON = 			\
 	giscanner/libtoolimporter.py	\
 	giscanner/maintransformer.py	\
 	giscanner/message.py		\
+	giscanner/msvccompiler.py	\
 	giscanner/shlibs.py		\
 	giscanner/scannermain.py	\
 	giscanner/sectionparser.py	\
