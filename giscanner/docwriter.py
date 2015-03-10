@@ -36,6 +36,30 @@ from mako.lookup import TemplateLookup
 from . import ast, xmlwriter
 from .utils import to_underscores
 
+# Freely inspired from
+# https://github.com/GNOME/yelp-xsl/blob/master/js/syntax.html
+language_mimes = {
+    "bash-script": "application/x-shellscript",
+    "shell": "application/x-shellscript",
+    "csharp": "text/x-csharp",
+    "css": "text/css",
+    "diff": "text/xpatch",
+    "html": "text/html",
+    "java": "text/x-java",
+    "javascript": "application/javascript",
+    "lisp": "text/x-scheme",
+    "lua": "text-x-lua",
+    "c": "text/x-csrc",
+    "c++": "text/x-c++src",
+    "pascal": "text/x-pascal",
+    "perl": "application/x-perl",
+    "php": "application/x-php",
+    "python": "text/x-python",
+    "ruby": "application/x-ruby",
+    "sql": "text/x-sql",
+    "yaml": "application/x-yaml",
+}
+
 
 def make_page_id(node, recursive=False):
     if isinstance(node, ast.Namespace):
@@ -164,8 +188,14 @@ class TemplatedScanner(object):
 class DocstringScanner(TemplatedScanner):
     def __init__(self):
         specs = [
+            ('new_paragraph', r'\n\n'),
+            ('new_line', r'\n'),
             ('!alpha', r'[a-zA-Z0-9_]+'),
             ('!alpha_dash', r'[a-zA-Z0-9_-]+'),
+            ('code_start_with_language',
+                r'\|\[\<!\-\-\s*language\s*\=\s*\"<<language_name:alpha>>\"\s*\-\-\>'),
+            ('code_start', r'\|\['),
+            ('code_end', r'\]\|'),
             ('property', r'#<<type_name:alpha>>:(<<property_name:alpha_dash>>)'),
             ('signal', r'#<<type_name:alpha>>::(<<signal_name:alpha_dash>>)'),
             ('type_name', r'#(<<type_name:alpha>>)'),
@@ -181,6 +211,10 @@ class DocFormatter(object):
     def __init__(self, transformer):
         self._transformer = transformer
         self._scanner = DocstringScanner()
+        # If we are processing a code block as defined by
+        # https://wiki.gnome.org/Projects/GTK%2B/DocumentationSyntax/Markdown
+        # we won't insert paragraphs and will respect new lines.
+        self._processing_code = False
 
     def escape(self, text):
         return saxutils.escape(text)
@@ -203,11 +237,9 @@ class DocFormatter(object):
         if doc is None:
             return ''
 
-        result = ''
-        for para in doc.split('\n\n'):
-            result += '  <p>'
-            result += self.format_inline(node, para)
-            result += '</p>'
+        result = '<p>'
+        result += self.format_inline(node, doc)
+        result += '</p>'
         return result
 
     def _resolve_type(self, ident):
@@ -307,6 +339,29 @@ class DocFormatter(object):
 
         return self.format_xref(func)
 
+    def _process_code_start(self, node, match, props):
+        self._processing_code = True
+        return "</p><code>"
+
+    def _process_code_start_with_language(self, node, match, props):
+        mime = language_mimes[props["language_name"].lower()]
+        self._processing_code = True
+        if not mime:
+            return "</p><code>"
+        return '</p><code mime="' + mime + '">'
+
+    def _process_code_end(self, node, match, props):
+        self._processing_code = False
+        return "</code><p>"
+
+    def _process_new_line(self, node, match, props):
+        return '\n'
+
+    def _process_new_paragraph(self, node, match, props):
+        if self._processing_code:
+            return '\n\n'
+        return "</p><p>"
+
     def _process_token(self, node, tok):
         kind, match, props = tok
 
@@ -318,6 +373,11 @@ class DocFormatter(object):
             'enum_value': self._process_enum_value,
             'parameter': self._process_parameter,
             'function_call': self._process_function_call,
+            'code_start': self._process_code_start,
+            'code_start_with_language': self._process_code_start_with_language,
+            'code_end': self._process_code_end,
+            'new_line': self._process_new_line,
+            'new_paragraph': self._process_new_paragraph,
         }
 
         return dispatch[kind](node, match, props)
