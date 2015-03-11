@@ -94,7 +94,7 @@ class MessageLogger(object):
     def get_error_count(self):
         return self._error_count
 
-    def log(self, log_type, text, positions=None, prefix=None):
+    def log(self, log_type, text, positions=None, prefix=None, marker_pos=None, marker_line=None):
         """
         Log a warning, using optional file positioning information.
         If the warning is related to a ast.Node type, see log_node().
@@ -125,6 +125,9 @@ class MessageLogger(object):
             self._error_count += 1
         elif log_type == FATAL:
             error_type = "Fatal"
+
+        if marker_pos is not None and marker_line is not None:
+            text = '%s\n%s\n%s' % (text, marker_line, ' ' * marker_pos + '^')
 
         if prefix:
             text = ('%s: %s: %s: %s: %s\n' % (last_position, error_type,
@@ -179,9 +182,9 @@ def log_node(log_type, node, text, context=None, positions=None):
     ml.log_node(log_type, node, text, context=context, positions=positions)
 
 
-def warn(text, positions=None, prefix=None):
+def warn(text, positions=None, prefix=None, marker_pos=None, marker_line=None):
     ml = MessageLogger.get()
-    ml.log(WARNING, text, positions, prefix)
+    ml.log(WARNING, text, positions, prefix, marker_pos, marker_line)
 
 
 def warn_node(node, text, context=None, positions=None):
@@ -193,11 +196,11 @@ def warn_symbol(symbol, text):
     ml.log_symbol(WARNING, symbol, text)
 
 
-def error(text, positions=None, prefix=None):
+def error(text, positions=None, prefix=None, marker_pos=None, marker_line=None):
     ml = MessageLogger.get()
-    ml.log(ERROR, text, positions, prefix)
+    ml.log(ERROR, text, positions, prefix, marker_pos, marker_line)
 
 
-def fatal(text, positions=None, prefix=None):
+def fatal(text, positions=None, prefix=None, marker_pos=None, marker_line=None):
     ml = MessageLogger.get()
-    ml.log(FATAL, text, positions, prefix)
+    ml.log(FATAL, text, positions, prefix, marker_pos, marker_line)
