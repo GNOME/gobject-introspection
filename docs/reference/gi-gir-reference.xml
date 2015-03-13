@@ -16,7 +16,9 @@
 	</refnamediv>
 
   <para>
-    This chapter describes the GIR XML markup format.
+    This chapter describes the GIR XML markup format. This describes exported C
+    API, including documentation. It may contain installation-specific data,
+    such as library filenames which may differ between platforms.
   </para>
 
   <refsect2 id="gi-gir-api-node">
