@@ -1936,7 +1936,7 @@ class GtkDocCommentBlockParser(object):
         Parse annotations out of field data. For example::
 
             ┌──────────────────────────────────────────────────────────────┐
-            │ '(skip): description of some parameter                       │ ─▷ source
+            │ '(skip): description of some parameter'                      │ ─▷ source
             ├──────────────────────────────────────────────────────────────┤
             │ ({'skip': []}, 'description of some parameter')              │ ◁─ annotations and
             └──────────────────────────────────────────────────────────────┘    remaining fields
