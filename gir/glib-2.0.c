@@ -5636,7 +5636,8 @@
  * functions in GLib and GTK+ do not use the #GError facility.
  *
  * Functions that can fail take a return location for a #GError as their
- * last argument. For example:
+ * last argument. On error, a new #GError instance will be allocated and
+ * returned to the caller via this argument. For example:
  * |[<!-- language="C" -->
  * gboolean g_file_get_contents (const gchar  *filename,
  *                               gchar       **contents,
@@ -5745,7 +5746,8 @@
  * ]|
  *
  * If the sub-function does not indicate errors other than by
- * reporting a #GError, you need to create a temporary #GError
+ * reporting a #GError (or if its return value does not reliably indicate
+ * errors) you need to create a temporary #GError
  * since the passed-in one may be %NULL. g_propagate_error() is
  * intended for use in this case.
  * |[<!-- language="C" -->
@@ -14937,7 +14939,9 @@
  * @mem: (allow-none): the memory to free
  *
  * Frees the memory pointed to by @mem.
- * If @mem is %NULL it simply returns.
+ *
+ * If @mem is %NULL it simply returns, so there is no need to check @mem
+ * against %NULL before calling this function.
  */
 
 
@@ -15632,6 +15636,10 @@
  * Retrieves every key inside @hash_table. The returned data is valid
  * until changes to the hash release those keys.
  *
+ * This iterates over every entry in the hash table to build its return value.
+ * To iterate over the entries in a #GHashTable more efficiently, use a
+ * #GHashTableIter.
+ *
  * Returns: a #GList containing all the keys inside the hash
  *     table. The content of the list is owned by the hash table and
  *     should not be modified or freed. Use g_list_free() when done
@@ -15654,6 +15662,10 @@
  * Note: in the common case of a string-keyed #GHashTable, the return
  * value of this function can be conveniently cast to (const gchar **).
  *
+ * This iterates over every entry in the hash table to build its return value.
+ * To iterate over the entries in a #GHashTable more efficiently, use a
+ * #GHashTableIter.
+ *
  * You should always free the return result with g_free().  In the
  * above-mentioned case of a string-keyed hash table, it may be
  * appropriate to use g_strfreev() if you call g_hash_table_steal_all()
@@ -15671,6 +15683,10 @@
  *
  * Retrieves every value inside @hash_table. The returned data
  * is valid until @hash_table is modified.
+ *
+ * This iterates over every entry in the hash table to build its return value.
+ * To iterate over the entries in a #GHashTable more efficiently, use a
+ * #GHashTableIter.
  *
  * Returns: a #GList containing all the values inside the hash
  *     table. The content of the list is owned by the hash table and
@@ -16576,8 +16592,10 @@
  * sources and will not be called again.
  *
  * This internally creates a main loop source using g_idle_source_new()
- * and attaches it to the main loop context using g_source_attach().
- * You can do these steps manually if you need greater control.
+ * and attaches it to the global #GMainContext using g_source_attach(), so
+ * the callback will be invoked in whichever thread is running that main
+ * context. You can do these steps manually if you need greater control or to
+ * use a custom main context.
  *
  * Returns: the ID (greater than 0) of the event source.
  */
@@ -16596,8 +16614,10 @@
  * removed from the list of event sources and will not be called again.
  *
  * This internally creates a main loop source using g_idle_source_new()
- * and attaches it to the main loop context using g_source_attach().
- * You can do these steps manually if you need greater control.
+ * and attaches it to the global #GMainContext using g_source_attach(), so
+ * the callback will be invoked in whichever thread is running that main
+ * context. You can do these steps manually if you need greater control or to
+ * use a custom main context.
  *
  * Returns: the ID (greater than 0) of the event source.
  */
@@ -18408,7 +18428,10 @@
  * g_list_free_1:
  * @list: a #GList element
  *
- * Frees one #GList element.
+ * Frees one #GList element, but does not update links from the next and
+ * previous elements in the list, so you should not call this function on an
+ * element that is currently part of a list.
+ *
  * It is usually used after g_list_remove_link().
  */
 
@@ -18554,6 +18577,10 @@
  *
  * Gets the element at the given position in a #GList.
  *
+ * This iterates over the list until it reaches the @n-th position. If you
+ * intend to iterate over every element, it is better to use a for-loop as
+ * described in the #GList introduction.
+ *
  * Returns: the element, or %NULL if the position is off
  *     the end of the #GList
  */
@@ -18565,6 +18592,10 @@
  * @n: the position of the element
  *
  * Gets the data of the element at the given position.
+ *
+ * This iterates over the list until it reaches the @n-th position. If you
+ * intend to iterate over every element, it is better to use a for-loop as
+ * described in the #GList introduction.
  *
  * Returns: the element's data, or %NULL if the position
  *     is off the end of the #GList
@@ -22009,7 +22040,7 @@
  * i.e. after the "/" in UNIX or "C:\" under Windows. If @file_name
  * is not an absolute path it returns %NULL.
  *
- * Returns: a pointer into @file_name after the root component
+ * Returns: (nullable): a pointer into @file_name after the root component
  */
 
 
@@ -27894,7 +27925,7 @@
  * it's %FALSE, the caller gains ownership of the buffer and must
  * free it after use with g_free().
  *
- * Returns: the character data of @string
+ * Returns: (nullable): the character data of @string
  *          (i.e. %NULL if @free_segment is %TRUE)
  */
 
@@ -30346,8 +30377,10 @@
  * optimizations and more efficient system power usage.
  *
  * This internally creates a main loop source using g_timeout_source_new()
- * and attaches it to the main loop context using g_source_attach(). You can
- * do these steps manually if you need greater control.
+ * and attaches it to the global #GMainContext using g_source_attach(), so
+ * the callback will be invoked in whichever thread is running that main
+ * context. You can do these steps manually if you need greater control or to
+ * use a custom main context.
  *
  * The interval given is in terms of monotonic time, not wall clock
  * time.  See g_get_monotonic_time().
@@ -30380,8 +30413,10 @@
  * (it does not try to 'catch up' time lost in delays).
  *
  * This internally creates a main loop source using g_timeout_source_new()
- * and attaches it to the main loop context using g_source_attach(). You can
- * do these steps manually if you need greater control.
+ * and attaches it to the global #GMainContext using g_source_attach(), so
+ * the callback will be invoked in whichever thread is running that main
+ * context. You can do these steps manually if you need greater control or to
+ * use a custom main context.
  *
  * The interval given in terms of monotonic time, not wall clock time.
  * See g_get_monotonic_time().
@@ -30948,7 +30983,9 @@
  *
  * Attempts to realloc @mem to a new size, @n_bytes, and returns %NULL
  * on failure. Contrast with g_realloc(), which aborts the program
- * on failure. If @mem is %NULL, behaves the same as g_try_malloc().
+ * on failure.
+ *
+ * If @mem is %NULL, behaves the same as g_try_malloc().
  *
  * Returns: the allocated memory, or %NULL.
  */
@@ -33069,11 +33106,11 @@
  * Similar to g_variant_get_string() except that instead of returning
  * a constant string, the string is duplicated.
  *
- * The string will always be utf8 encoded.
+ * The string will always be UTF-8 encoded.
  *
  * The return value must be freed using g_free().
  *
- * Returns: (transfer full): a newly allocated string, utf8 encoded
+ * Returns: (transfer full): a newly allocated string, UTF-8 encoded
  * Since: 2.24
  */
 
@@ -33512,7 +33549,7 @@
  * type.  This includes the types %G_VARIANT_TYPE_STRING,
  * %G_VARIANT_TYPE_OBJECT_PATH and %G_VARIANT_TYPE_SIGNATURE.
  *
- * The string will always be utf8 encoded.
+ * The string will always be UTF-8 encoded.
  *
  * If @length is non-%NULL then the length of the string (in bytes) is
  * returned there.  For trusted values, this information is already
@@ -33523,7 +33560,7 @@
  *
  * The return value remains valid as long as @value exists.
  *
- * Returns: (transfer none): the constant string, utf8 encoded
+ * Returns: (transfer none): the constant string, UTF-8 encoded
  * Since: 2.24
  */
 
@@ -34206,7 +34243,7 @@
  *
  * Creates an array-of-bytes #GVariant with the contents of @string.
  * This function is just like g_variant_new_string() except that the
- * string need not be valid utf8.
+ * string need not be valid UTF-8.
  *
  * The nul terminator character at the end of the string is stored in
  * the array.
@@ -34546,11 +34583,11 @@
 
 /**
  * g_variant_new_string:
- * @string: a normal utf8 nul-terminated string
+ * @string: a normal UTF-8 nul-terminated string
  *
  * Creates a string #GVariant with the contents of @string.
  *
- * @string must be valid utf8.
+ * @string must be valid UTF-8.
  *
  * Returns: (transfer none): a floating reference to a new string #GVariant instance
  * Since: 2.24
@@ -34574,11 +34611,11 @@
 
 /**
  * g_variant_new_take_string: (skip)
- * @string: a normal utf8 nul-terminated string
+ * @string: a normal UTF-8 nul-terminated string
  *
  * Creates a string #GVariant with the contents of @string.
  *
- * @string must be valid utf8.
+ * @string must be valid UTF-8.
  *
  * This function consumes @string.  g_free() will be called on @string
  * when it is no longer required.

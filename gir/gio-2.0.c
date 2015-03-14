@@ -2968,6 +2968,23 @@
 
 
 /**
+ * GTask:completed:
+ *
+ * Whether the task has completed, meaning its callback (if set) has been
+ * invoked. This can only happen after g_task_return_pointer(),
+ * g_task_return_error() or one of the other return functions have been called
+ * on the task.
+ *
+ * This property is guaranteed to change from %FALSE to %TRUE exactly once.
+ *
+ * The #GObject::notify signal for this change is emitted in the same main
+ * context as the task’s callback, immediately after that callback is invoked.
+ *
+ * Since: 2.44
+ */
+
+
+/**
  * GTaskThreadFunc:
  * @task: the #GTask
  * @source_object: (type GObject): @task's source object
@@ -5489,9 +5506,15 @@
  * the operation, producing a GAsyncResult which is then passed to the
  * function's matching _finish() operation.
  *
- * Some #GFile operations do not have synchronous analogs, as they may
- * take a very long time to finish, and blocking may leave an application
- * unusable. Notable cases include:
+ * It is highly recommended to use asynchronous calls when running within a
+ * shared main loop, such as in the main thread of an application. This avoids
+ * I/O operations blocking other sources on the main loop from being dispatched.
+ * Synchronous I/O operations should be performed from worker threads. See the
+ * [introduction to asynchronous programming section][async-programming] for
+ * more.
+ *
+ * Some #GFile operations almost always take a noticeable amount of time, and
+ * so do not have synchronous analogs. Notable cases include:
  * - g_file_mount_mountable() to mount a mountable file.
  * - g_file_unmount_mountable_with_operation() to unmount a mountable file.
  * - g_file_eject_mountable_with_operation() to eject a mountable file.
@@ -30234,14 +30257,6 @@
 
 
 /**
- * g_resource_new_from_table:
- * @table: (transfer full): a GvdbTable
- *
- * Returns: (transfer full): a new #GResource for @table
- */
-
-
-/**
  * g_resource_open_stream:
  * @resource: A #GResource
  * @path: A pathname inside the resource
@@ -35989,6 +36004,19 @@
 
 
 /**
+ * g_task_get_completed:
+ * @task: a #GTask.
+ *
+ * Gets the value of #GTask:completed. This changes from %FALSE to %TRUE after
+ * the task’s callback is invoked, and will return %FALSE if called from inside
+ * the callback.
+ *
+ * Returns: %TRUE if the task has completed, %FALSE otherwise.
+ * Since: 2.44
+ */
+
+
+/**
  * g_task_get_context:
  * @task: a #GTask
  *
@@ -36361,6 +36389,7 @@
  * Normally this is used with tasks created with a %NULL
  * `callback`, but note that even if the task does
  * have a callback, it will not be invoked when @task_func returns.
+ * #GTask:completed will be set to %TRUE just before this function returns.
  *
  * Since: 2.36
  */
@@ -38696,14 +38725,33 @@
 
 
 /**
+ * g_unix_mount_monitor_get:
+ *
+ * Gets the #GUnixMountMonitor for the current thread-default main
+ * context.
+ *
+ * The mount monitor can be used to monitor for changes to the list of
+ * mounted filesystems as well as the list of mount points (ie: fstab
+ * entries).
+ *
+ * You must only call g_object_unref() on the return value from under
+ * the same main context as you called this function.
+ *
+ * Returns: (transfer full): the #GUnixMountMonitor.
+ * Since: 2.44
+ */
+
+
+/**
  * g_unix_mount_monitor_new:
  *
- * Gets a new #GUnixMountMonitor. The default rate limit for which the
- * monitor will report consecutive changes for the mount and mount
- * point entry files is the default for a #GFileMonitor. Use
- * g_unix_mount_monitor_set_rate_limit() to change this.
+ * Deprecated alias for g_unix_mount_monitor_get().
+ *
+ * This function was never a true constructor, which is why it was
+ * renamed.
  *
  * Returns: a #GUnixMountMonitor.
+ * Deprecated: 2.44: Use g_unix_mount_monitor_get() instead.
  */
 
 
@@ -38713,10 +38761,16 @@
  * @limit_msec: a integer with the limit in milliseconds to
  *     poll for changes.
  *
- * Sets the rate limit to which the @mount_monitor will report
- * consecutive change events to the mount and mount point entry files.
+ * This function does nothing.
+ *
+ * Before 2.44, this was a partially-effective way of controlling the
+ * rate at which events would be reported under some uncommon
+ * circumstances.  Since @mount_monitor is a singleton, it also meant
+ * that calling this function would have side effects for other users of
+ * the monitor.
  *
  * Since: 2.18
+ * Deprecated: 2.44: This function does nothing.  Don't call it.
  */
 
 

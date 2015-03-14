@@ -3310,6 +3310,11 @@
  *
  * Decreases the reference count of @object. When its reference count
  * drops to 0, the object is finalized (i.e. its memory is freed).
+ *
+ * If the pointer to the #GObject may be reused in future (for example, if it is
+ * an instance variable of another object), it is recommended to clear the
+ * pointer to %NULL rather than retain a dangling pointer to a potentially
+ * invalid #GObject instance. Use g_clear_object() for this.
  */
 
 
@@ -3368,7 +3373,10 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecBoolean instance specifying a %G_TYPE_BOOLEAN
- * property.
+ * property. In many cases, it may be more appropriate to use an enum with
+ * g_param_spec_enum(), both to improve code clarity by using explicitly named
+ * values, and to allow for more values to be added in future without breaking
+ * API.
  *
  * See g_param_spec_internal() for details on property names.
  *
@@ -3716,6 +3724,8 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecPointer instance specifying a pointer property.
+ * Where possible, it is better to use g_param_spec_object() or
+ * g_param_spec_boxed() to expose memory management information.
  *
  * See g_param_spec_internal() for details on property names.
  *
