@@ -30,8 +30,19 @@
 # the MIT License: http://www.opensource.org/licenses/mit-license.php
 
 
+import sys
+
+
+py2k = sys.version_info < (3, 0)
+
+
 class OrderedDict(dict):
     """A dict that returns keys/values/items in the order they were added."""
+
+    __slots__ = '_list',
+
+    def __reduce__(self):
+        return OrderedDict, (self.items(),)
 
     def __init__(self, ____sequence=None, **kwargs):
         self._list = []
@@ -61,6 +72,7 @@ class OrderedDict(dict):
                     self.__setitem__(key, ____sequence[key])
             else:
                 for key, value in ____sequence:
+                    print key, value
                     self[key] = value
         if kwargs:
             self.update(kwargs)
@@ -75,25 +87,26 @@ class OrderedDict(dict):
     def __iter__(self):
         return iter(self._list)
 
+    def keys(self):
+        return list(self)
+
     def values(self):
         return [self[key] for key in self._list]
 
-    def itervalues(self):
-        return iter([self[key] for key in self._list])
-
-    def keys(self):
-        return list(self._list)
-
-    def iterkeys(self):
-        return iter(self.keys())
-
     def items(self):
-        return [(key, self[key]) for key in self.keys()]
+        return [(key, self[key]) for key in self._list]
 
-    def iteritems(self):
-        return iter(self.items())
+    if py2k:
+        def itervalues(self):
+            return iter(self.values())
 
-    def __setitem__(self, key, obj):
+        def iterkeys(self):
+            return iter(self)
+
+        def iteritems(self):
+            return iter(self.items())
+
+    def __setitem__(self, key, object):
         if key not in self:
             try:
                 self._list.append(key)
@@ -101,7 +114,7 @@ class OrderedDict(dict):
                 # work around Python pickle loads() with
                 # dict subclass (seems to ignore __setstate__?)
                 self._list = [key]
-        dict.__setitem__(self, key, obj)
+        dict.__setitem__(self, key, object)
 
     def __delitem__(self, key):
         dict.__delitem__(self, key)
