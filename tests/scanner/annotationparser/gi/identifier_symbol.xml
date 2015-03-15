@@ -393,6 +393,9 @@
           <annotation>
             <name>skip</name>
           </annotation>
+          <annotation>
+            <name>foreign</name>
+          </annotation>
         </annotations>
       </identifier>
       <parameters>
@@ -414,20 +417,13 @@
           <description>first parameter</description>
         </parameter>
       </parameters>
-      <description>(foreign)
-Annotations spanning multiple lines are not valid</description>
+      <description>Annotations spanning multiple lines are not valid</description>
     </docblock>
-    <messages>
-      <message>3: Error: Test: ignoring invalid multiline annotation continuation:
- * (foreign)
-   ^</message>
-    </messages>
   </parser>
   <output>/**
- * test_multiline_annotations_on_identifier: (skip)
+ * test_multiline_annotations_on_identifier: (skip) (foreign)
  * @param1: (allow-none) (transfer full): first parameter
  *
- * (foreign)
  * Annotations spanning multiple lines are not valid
  */</output>
 </test>

@@ -138,23 +138,24 @@
             <annotation>
               <name>allow-none</name>
             </annotation>
+            <annotation>
+              <name>transfer</name>
+              <options>
+                <option>
+                  <name>full</name>
+                </option>
+              </options>
+            </annotation>
           </annotations>
-          <description>
-(transfer full): first parameter</description>
+          <description>first parameter</description>
         </parameter>
       </parameters>
       <description>Annotations spanning multiple lines are not valid</description>
     </docblock>
-    <messages>
-      <message>4: Error: Test: ignoring invalid multiline annotation continuation:
- * (transfer full): first parameter
-   ^</message>
-    </messages>
   </parser>
   <output>/**
  * test_multiline_annotations_on_parameter:
- * @param1: (allow-none):
- * (transfer full): first parameter
+ * @param1: (allow-none) (transfer full): first parameter
  *
  * Annotations spanning multiple lines are not valid
  */</output>
@@ -202,7 +203,7 @@
  * anjuta_async_notify_get_error:
  *
  * @self: An #AnjutaAsyncNotify object
- * @error: Return location for the error set by the called interface to which 
+ * @error: Return location for the error set by the called interface to which
  *                 this object was passed. If no error is set, @error is set to NULL.
  *
  * Gets the error set on @self.

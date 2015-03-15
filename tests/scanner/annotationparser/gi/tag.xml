@@ -187,25 +187,26 @@ Moo: anything</description>
             <annotation>
               <name>allow-none</name>
             </annotation>
+            <annotation>
+              <name>transfer</name>
+              <options>
+                <option>
+                  <name>full</name>
+                </option>
+              </options>
+            </annotation>
           </annotations>
-          <description>
-(transfer full): something</description>
+          <description>something</description>
         </tag>
       </tags>
     </docblock>
-    <messages>
-      <message>7: Error: Test: ignoring invalid multiline annotation continuation:
- * (transfer full): something
-   ^</message>
-    </messages>
   </parser>
   <output>/**
  * test_multiline_annotations_on_tag:
  *
  * Annotations spanning multiple lines are not valid
  *
- * Returns: (allow-none):
- * (transfer full): something
+ * Returns: (allow-none) (transfer full): something
  */</output>
 </test>
 
