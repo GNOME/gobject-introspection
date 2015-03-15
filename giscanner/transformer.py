@@ -200,8 +200,7 @@ None."""
         if extra_include_dirs is not None:
             self.set_include_paths(extra_include_dirs)
         self.set_passthrough_mode()
-        self._parse_include(filename)
-        parser = self._cachestore.load(filename)
+        parser = self._parse_include(filename)
         self._namespace = parser.get_namespace()
         del self._parsed_includes[self._namespace.name]
         return self
@@ -226,6 +225,7 @@ None."""
                 self._pkg_config_packages.add(pkg)
         namespace = parser.get_namespace()
         self._parsed_includes[namespace.name] = namespace
+        return parser
 
     def _iter_namespaces(self):
         """Return an iterator over all included namespaces; the
