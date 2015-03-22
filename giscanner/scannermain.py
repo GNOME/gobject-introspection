@@ -280,7 +280,7 @@ def process_options(output, allowed_flags):
 
 
 def process_packages(options, packages):
-    args = ['pkg-config', '--cflags']
+    args = [os.environ.get('PKG_CONFIG', 'pkg-config'), '--cflags']
     args.extend(packages)
     output = subprocess.Popen(args,
                               stdout=subprocess.PIPE).communicate()[0]
