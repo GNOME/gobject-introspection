@@ -281,8 +281,7 @@ class CCompiler(object):
                     args.append(utils.which(os.environ.get('SHELL', 'sh.exe')))
                 args.extend(libtool)
                 args.append('--mode=execute')
-            # FIXME: it could have prefix (i686-w64-mingw32-dlltool.exe)
-            args.extend(['dlltool.exe', '--identify'])
+            args.extend([os.environ.get('DLLTOOL', 'dlltool.exe'), '--identify'])
             proc = subprocess.Popen([self.compiler_cmd, '-print-search-dirs'],
                                     stdout=subprocess.PIPE)
             o, e = proc.communicate()
