@@ -287,7 +287,7 @@ class CCompiler(object):
             o, e = proc.communicate()
             for line in o.decode('ascii').splitlines():
                 if line.startswith('libraries: '):
-                    libsearch = line[len('libraries: '):].split(';')
+                    libsearch = line[len('libraries: '):].split(os.pathsep)
 
         shlibs = []
         not_resolved = []
