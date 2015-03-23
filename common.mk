@@ -24,8 +24,12 @@ INTROSPECTION_SCANNER_ARGS = \
     --add-include-path=$(top_builddir) \
     --add-include-path=$(top_builddir)/gir
 
+# GI_CROSS_LAUNCHER is the command to use for executing g-ir-compiler.
+# Normally will be undefined but can be set (e.g. to wine or qemu)
+# when cross-compiling
 INTROSPECTION_COMPILER = \
     env PATH=".libs:$(PATH)" \
+        $(GI_CROSS_LAUNCHER) \
         $(top_builddir)/g-ir-compiler$(EXEEXT)
 
 INTROSPECTION_COMPILER_ARGS = \
