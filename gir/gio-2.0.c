@@ -34412,6 +34412,9 @@
  * will be set to non-blocking mode, independent on the blocking
  * mode of the #GSocket.
  *
+ * On success, the returned #GSocket takes ownership of @fd. On failure, the
+ * caller must close @fd themselves.
+ *
  * Returns: a #GSocket or %NULL on error.
  *     Free the returned object with g_object_unref().
  * Since: 2.22
