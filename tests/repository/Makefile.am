@@ -5,15 +5,15 @@ LIBS = $(GOBJECT_LIBS)
 EXTRA_PROGRAMS = gitestrepo gitestthrows gitypelibtest
 CLEANFILES = $(EXTRA_PROGRAMS)
 
-gitestrepo_SOURCES = $(srcdir)/gitestrepo.c
+gitestrepo_SOURCES = gitestrepo.c
 gitestrepo_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 gitestrepo_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
-gitestthrows_SOURCES = $(srcdir)/gitestthrows.c
+gitestthrows_SOURCES = gitestthrows.c
 gitestthrows_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 gitestthrows_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
-gitypelibtest_SOURCES = $(srcdir)/gitypelibtest.c
+gitypelibtest_SOURCES = gitypelibtest.c
 gitypelibtest_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 gitypelibtest_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
