@@ -86,7 +86,7 @@ SLetter_1_0_gir_LIBS = libsletter.la
 SLetter_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 SLetter_1_0_gir_INCLUDES = Gio-2.0
 SLetter_1_0_gir_FILES = $(libsletter_la_SOURCES)
-SLetter_1_0_gir_SCANNERFLAGS = --identifier-prefix=S --c-include="sletter.h" --warn-error
+SLetter_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --identifier-prefix=S --c-include="sletter.h" --warn-error
 GIRS += SLetter-1.0.gir
 
 Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir Utility-1.0.gir libregress.la
@@ -97,7 +97,7 @@ if HAVE_CAIRO
 Regress_1_0_gir_INCLUDES += cairo-1.0 
 endif
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
-Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h" --warn-error
+Regress_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --c-include="regress.h" --warn-error
 GIRS += Regress-1.0.gir
 
 WarnLib-1.0.gir: $(top_builddir)/Gio-2.0.gir libwarnlib.la
@@ -105,7 +105,7 @@ WarnLib_1_0_gir_LIBS = libwarnlib.la
 WarnLib_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 WarnLib_1_0_gir_INCLUDES = Gio-2.0
 WarnLib_1_0_gir_FILES = $(libwarnlib_la_SOURCES)
-WarnLib_1_0_gir_SCANNERFLAGS = --c-include="warnlib.h" --symbol-prefix=warnlib_
+WarnLib_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --c-include="warnlib.h" --symbol-prefix=warnlib_
 GIRS += WarnLib-1.0.gir
 
 Utility-1.0.gir: libutility.la
@@ -114,7 +114,7 @@ Utility_1_0_gir_LIBS = libutility.la
 Utility_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 Utility_1_0_gir_INCLUDES = GObject-2.0
 Utility_1_0_gir_FILES = $(libutility_la_SOURCES)
-Utility_1_0_gir_SCANNERFLAGS = --c-include="utility.h" --warn-error
+Utility_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --c-include="utility.h" --warn-error
 GIRS += Utility-1.0.gir
 
 # This one tests different --namespace and --strip-prefix
@@ -124,7 +124,7 @@ GtkFrob_1_0_gir_LIBS = libgtkfrob.la
 GtkFrob_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 GtkFrob_1_0_gir_INCLUDES = GObject-2.0
 GtkFrob_1_0_gir_FILES = $(libgtkfrob_la_SOURCES)
-GtkFrob_1_0_gir_SCANNERFLAGS = --identifier-prefix=Gtk --symbol-prefix=gtk_frob --warn-error
+GtkFrob_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --identifier-prefix=Gtk --symbol-prefix=gtk_frob --warn-error
 GIRS += GtkFrob-1.0.gir
 
 # This tests that functions called _get_type are only matched if they have no
@@ -135,7 +135,7 @@ GetType_1_0_gir_LIBS = libgettype.la
 GetType_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 GetType_1_0_gir_INCLUDES = GObject-2.0
 GetType_1_0_gir_FILES = $(libgettype_la_SOURCES)
-GetType_1_0_gir_SCANNERFLAGS = --c-include="gettype.h" --identifier-prefix=GetType --symbol-prefix=gettype
+GetType_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --c-include="gettype.h" --identifier-prefix=GetType --symbol-prefix=gettype
 GIRS += GetType-1.0.gir
 
 Typedefs-1.0.gir: libtypedefs.la
@@ -144,7 +144,7 @@ Typedefs_1_0_gir_LIBS = libtypedefs.la
 Typedefs_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 Typedefs_1_0_gir_INCLUDES = GObject-2.0
 Typedefs_1_0_gir_FILES = $(libtypedefs_la_SOURCES)
-Typedefs_1_0_gir_SCANNERFLAGS = --c-include="typedefs.h" --identifier-prefix=Typedefs --symbol-prefix=typedefs
+Typedefs_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --c-include="typedefs.h" --identifier-prefix=Typedefs --symbol-prefix=typedefs
 GIRS += Typedefs-1.0.gir
 
 if !OS_WIN32
@@ -161,7 +161,7 @@ Bar_1_0_gir_PROGRAM = ./barapp
 Bar_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
 Bar_1_0_gir_INCLUDES = GObject-2.0
 Bar_1_0_gir_FILES = $(barapp_SOURCES)
-Bar_1_0_gir_SCANNERFLAGS = --accept-unprefixed
+Bar_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --accept-unprefixed
 GIRS += Bar-1.0.gir
 endif
 

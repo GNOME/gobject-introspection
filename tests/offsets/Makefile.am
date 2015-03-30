@@ -25,7 +25,7 @@ Offsets_1_0_gir_INCLUDES = GObject-2.0
 Offsets_1_0_gir_LIBS = liboffsets.la
 Offsets_1_0_gir_PACKAGES = gobject-2.0
 Offsets_1_0_gir_FILES = $(srcdir)/offsets.h $(srcdir)/offsets.c
-Offsets_1_0_gir_SCANNERFLAGS = --warn-all --warn-error  -I$(top_srcdir)/tests
+Offsets_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error  -I$(top_srcdir)/tests
 INTROSPECTION_GIRS += Offsets-1.0.gir
 
 CLEANFILES += Offsets-1.0.gir Offsets-1.0.typelib liboffsets.la
