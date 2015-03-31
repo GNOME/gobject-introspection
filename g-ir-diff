@@ -1,0 +1,121 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+# Copyright © 2015 Collabora Ltd.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+
+import os
+import sys
+import __builtin__
+
+if os.name == 'nt':
+    datadir = os.path.join(os.path.dirname(__file__), '..', 'share')
+else:
+    datadir = "/opt/gnome3/build/share"
+
+__builtin__.__dict__['DATADIR'] = datadir
+
+if 'GI_SCANNER_DEBUG' in os.environ:
+    def on_exception(exctype, value, tb):
+        print("Caught exception: %r %r" % (exctype, value))
+        import pdb
+        pdb.pm()
+    sys.excepthook = on_exception
+
+srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
+if srcdir is not None:
+    path = srcdir
+else:
+    # This is a private directory, we don't want to pollute the global
+    # namespace.
+    if os.name == 'nt':
+        # Makes g-ir-scanner 'relocatable' at runtime on Windows.
+        path = os.path.join(os.path.dirname(__file__),
+                            '..', 'lib', 'gobject-introspection')
+    else:
+        # TODO
+        path = os.path.join('/opt/gnome3/build/lib', 'gobject-introspection')
+sys.path.insert(0, path)
+
+import argparse
+from giscanner.girparser import GIRParser
+from giscanner.gircomparator import GIRComparator
+
+# Warning categories.
+WARNING_CATEGORIES = [
+    'info',
+    'backwards-compatibility',
+    'forwards-compatibility',
+]
+
+
+if __name__ == '__main__':
+    # Parse command line arguments.
+    parser = argparse.ArgumentParser(
+        description='Comparing GIR APIs for stability')
+    parser.add_argument('old_file', type=str, help='Old GIR file')
+    parser.add_argument('new_file', type=str, help='New GIR file')
+    parser.add_argument('--warnings', dest='warnings', metavar='CATEGORY,…',
+                        type=str,
+                        help='Warning categories (%s)' %
+                             ', '.join(WARNING_CATEGORIES))
+
+    args = parser.parse_args()
+
+    if not args.old_file or not args.new_file:
+        parser.print_help()
+        sys.exit(1)
+
+    if args.warnings is None:
+        # Enable all warnings by default
+        _enabled_warnings = WARNING_CATEGORIES
+    else:
+        _enabled_warnings = args.warnings.split(',')
+
+    enabled_warnings = []
+    i = 0
+    for category in _enabled_warnings:
+        if category not in WARNING_CATEGORIES:
+            parser.print_help()
+            sys.exit(1)
+
+        # TODO: this is really unneat
+        enabled_warnings.append(i)
+        i += 1
+
+    # Parse the two files.
+    old_parser = GIRParser()
+    new_parser = GIRParser()
+
+    try:
+        filename = args.old_file
+        old_parser.parse(args.old_file)
+        filename = args.new_file
+        new_parser.parse(args.new_file)
+    except Exception as e:
+        sys.stderr.write('Error parsing ‘%s’:\n' % filename)
+        sys.stderr.write(e)
+        sys.exit(1)
+
+    old_namespace = old_parser.get_namespace()
+    new_namespace = new_parser.get_namespace()
+
+    # Compare the interfaces.
+    comparator = GIRComparator(old_namespace, new_namespace, enabled_warnings)
+    out = comparator.compare()
+    comparator.print_output()
+    sys.exit(out)
