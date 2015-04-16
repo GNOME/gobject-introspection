@@ -846,10 +846,11 @@ class Alias(Node):
 class TypeContainer(Annotated):
     """A fundamental base class for Return and Parameter."""
 
-    def __init__(self, typenode, nullable, transfer):
+    def __init__(self, typenode, nullable, transfer, direction):
         Annotated.__init__(self)
         self.type = typenode
         self.nullable = nullable
+        self.direction = direction
         if transfer is not None:
             self.transfer = transfer
         elif typenode.is_const:
@@ -865,9 +866,8 @@ class Parameter(TypeContainer):
                  transfer=None, nullable=False, optional=False,
                  allow_none=False, scope=None,
                  caller_allocates=False):
-        TypeContainer.__init__(self, typenode, nullable, transfer)
+        TypeContainer.__init__(self, typenode, nullable, transfer, direction)
         self.argname = argname
-        self.direction = direction
         self.optional = optional
         self.parent = None  # A Callable
 
@@ -887,8 +887,8 @@ class Return(TypeContainer):
     """A return value from a function."""
 
     def __init__(self, rtype, nullable=False, transfer=None):
-        TypeContainer.__init__(self, rtype, nullable, transfer)
-        self.direction = PARAM_DIRECTION_OUT
+        TypeContainer.__init__(self, rtype, nullable, transfer,
+                               direction=PARAM_DIRECTION_OUT)
         self.parent = None  # A Callable
 
 
