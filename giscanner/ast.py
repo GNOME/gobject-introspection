@@ -882,6 +882,10 @@ class Parameter(TypeContainer):
         self.closure_name = None
         self.destroy_name = None
 
+    @property
+    def name(self):
+        return self.argname
+
 
 class Return(TypeContainer):
     """A return value from a function."""
