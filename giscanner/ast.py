@@ -665,6 +665,34 @@ class Callable(Node):
         self.instance_parameter = None  # Parameter
         self.parent = None  # A Class or Interface
 
+    def _get_retval(self):
+        return self._retval
+
+    def _set_retval(self, value):
+        self._retval = value
+        if self._retval is not None:
+            self._retval.parent = self
+    retval = property(_get_retval, _set_retval)
+
+    def _get_instance_parameter(self):
+        return self._instance_parameter
+
+    def _set_instance_parameter(self, value):
+        self._instance_parameter = value
+        if value is not None:
+            value.parent = self
+    instance_parameter = property(_get_instance_parameter,
+                                  _set_instance_parameter)
+
+    def _get_parameters(self):
+        return self._parameters
+
+    def _set_parameters(self, value):
+        self._parameters = value
+        for param in self._parameters:
+            param.parent = self
+    parameters = property(_get_parameters, _set_parameters)
+
     # Returns all parameters, including the instance parameter
     @property
     def all_parameters(self):
@@ -703,6 +731,8 @@ class Function(Callable):
         # copy the parameters array so a change to self.parameters does not
         # influence clone.parameters.
         clone.parameters = self.parameters[:]
+        for param in clone.parameters:
+            param.parent = clone
         return clone
 
     def is_type_meta_function(self):
@@ -839,6 +869,7 @@ class Parameter(TypeContainer):
         self.argname = argname
         self.direction = direction
         self.optional = optional
+        self.parent = None  # A Callable
 
         if allow_none:
             if self.direction == PARAM_DIRECTION_OUT:
@@ -858,6 +889,7 @@ class Return(TypeContainer):
     def __init__(self, rtype, nullable=False, transfer=None):
         TypeContainer.__init__(self, rtype, nullable, transfer)
         self.direction = PARAM_DIRECTION_OUT
+        self.parent = None  # A Callable
 
 
 class Enum(Node, Registered):

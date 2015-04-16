@@ -371,6 +371,9 @@ class GIRParser(object):
 
         self._parse_type_array_length(parameters, returnnode, retval.type)
 
+        # Re-set the function's parameters to notify it of changes to the list.
+        func.parameters = parameters
+
         self._parse_generic_attribs(node, func)
 
         self._namespace.track(func)
