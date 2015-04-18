@@ -1527,7 +1527,28 @@
  *
  * Emitted when @file has been changed.
  *
- * If using #G_FILE_MONITOR_SEND_MOVED flag and @event_type is
+ * If using %G_FILE_MONITOR_WATCH_RENAMES on a directory monitor, and
+ * the information is available (and if supported by the backend),
+ * @event_type may be %G_FILE_MONITOR_EVENT_RENAMED,
+ * %G_FILE_MONITOR_EVENT_MOVED_IN or %G_FILE_MONITOR_EVENT_MOVED_OUT.
+ *
+ * In all cases @file will be a child of the monitored directory.  For
+ * renames, @file will be the old name and @other_file is the new
+ * name.  For "moved in" events, @file is the name of the file that
+ * appeared and @other_file is the old name that it was moved from (in
+ * another directory).  For "moved out" events, @file is the name of
+ * the file that used to be in this directory and @other_file is the
+ * name of the file at its new location.
+ *
+ * It makes sense to treat %G_FILE_MONITOR_EVENT_MOVED_IN as
+ * equivalent to %G_FILE_MONITOR_EVENT_CREATED and
+ * %G_FILE_MONITOR_EVENT_MOVED_OUT as equivalent to
+ * %G_FILE_MONITOR_EVENT_DELETED, with extra information.
+ * %G_FILE_MONITOR_EVENT_RENAMED is equivalent to a delete/create
+ * pair.  This is exactly how the events will be reported in the case
+ * that the %G_FILE_MONITOR_WATCH_RENAMES flag is not in use.
+ *
+ * If using the deprecated flag %G_FILE_MONITOR_SEND_MOVED flag and @event_type is
  * #G_FILE_MONITOR_EVENT_MOVED, @file will be set to a #GFile containing the
  * old path, and @other_file will be set to a #GFile containing the new path.
  *
@@ -2921,6 +2942,21 @@
  * The proxy resolver to use
  *
  * Since: 2.36
+ */
+
+
+/**
+ * GSocketListener::event:
+ * @listener: the #GSocketListener
+ * @event: the event that is occurring
+ * @socket: the #GSocket the event is occurring on
+ *
+ * Emitted when @listener's activity on @socket changes state.
+ * Note that when @listener is used to listen on both IPv4 and
+ * IPv6, a separate set of signals will be emitted for each, and
+ * the order they happen in is undefined.
+ *
+ * Since: 2.46
  */
 
 
@@ -22467,7 +22503,7 @@
  *
  * Cancels a file monitor.
  *
- * Returns: %TRUE if monitor was cancelled.
+ * Returns: always %TRUE
  */
 
 
@@ -22495,22 +22531,6 @@
  * Returns: (transfer full): a #GFileMonitor for the given @file,
  *     or %NULL on error.
  *     Free the returned object with g_object_unref().
- */
-
-
-/**
- * g_file_monitor_emit_event:
- * @monitor: a #GFileMonitor.
- * @child: a #GFile.
- * @other_file: a #GFile.
- * @event_type: a set of #GFileMonitorEvent flags.
- *
- * Emits the #GFileMonitor::changed signal if a change
- * has taken place. Should be called from file monitor
- * implementations only.
- *
- * The signal will be emitted from an idle handler (in the
- * [thread-default main context][g-main-context-push-thread-default]).
  */
 
 
@@ -32156,6 +32176,8 @@
  * Reports an error in an asynchronous function in an idle function by
  * directly setting the contents of the #GAsyncResult with the given error
  * information.
+ *
+ * Deprecated: 2.46: Use g_task_report_error().
  */
 
 
@@ -32169,6 +32191,8 @@
  * Reports an error in an idle function. Similar to
  * g_simple_async_report_error_in_idle(), but takes a #GError rather
  * than building a new one.
+ *
+ * Deprecated: 2.46: Use g_task_report_error().
  */
 
 
@@ -32184,6 +32208,7 @@
  * ownership of @error, so the caller does not have to free it any more.
  *
  * Since: 2.28
+ * Deprecated: 2.46: Use g_task_report_error().
  */
 
 
@@ -32198,6 +32223,8 @@
  *
  * Calling this function takes a reference to @simple for as long as
  * is needed to complete the call.
+ *
+ * Deprecated: 2.46: Use #GTask instead.
  */
 
 
@@ -32212,6 +32239,8 @@
  *
  * Calling this function takes a reference to @simple for as long as
  * is needed to complete the call.
+ *
+ * Deprecated: 2.46: Use #GTask instead.
  */
 
 
@@ -32223,6 +32252,7 @@
  *
  * Returns: %TRUE if the operation's result was %TRUE, %FALSE
  *     if the operation's result was %FALSE.
+ * Deprecated: 2.46: Use #GTask and g_task_propagate_boolean() instead.
  */
 
 
@@ -32233,6 +32263,7 @@
  * Gets a pointer result as returned by the asynchronous function.
  *
  * Returns: a pointer from the result.
+ * Deprecated: 2.46: Use #GTask and g_task_propagate_pointer() instead.
  */
 
 
@@ -32243,6 +32274,7 @@
  * Gets a gssize from the asynchronous result.
  *
  * Returns: a gssize returned from the asynchronous function.
+ * Deprecated: 2.46: Use #GTask and g_task_propagate_int() instead.
  */
 
 
@@ -32253,6 +32285,7 @@
  * Gets the source tag for the #GSimpleAsyncResult.
  *
  * Returns: a #gpointer to the source object for the #GSimpleAsyncResult.
+ * Deprecated: 2.46.: Use #GTask and g_task_get_source_tag() instead.
  */
 
 
@@ -32277,6 +32310,7 @@
  *
  * Returns: #TRUE if all checks passed or #FALSE if any failed.
  * Since: 2.20
+ * Deprecated: 2.46: Use #GTask and g_task_is_valid() instead.
  */
 
 
@@ -32299,6 +32333,7 @@
  * this function returns.
  *
  * Returns: a #GSimpleAsyncResult.
+ * Deprecated: 2.46: Use g_task_new() instead.
  */
 
 
@@ -32315,6 +32350,7 @@
  * Creates a new #GSimpleAsyncResult with a set error.
  *
  * Returns: a #GSimpleAsyncResult.
+ * Deprecated: 2.46: Use g_task_new() and g_task_return_new_error() instead.
  */
 
 
@@ -32328,6 +32364,7 @@
  * Creates a #GSimpleAsyncResult from an error condition.
  *
  * Returns: a #GSimpleAsyncResult.
+ * Deprecated: 2.46: Use g_task_new() and g_task_return_error() instead.
  */
 
 
@@ -32343,6 +32380,7 @@
  *
  * Returns: a #GSimpleAsyncResult
  * Since: 2.28
+ * Deprecated: 2.46: Use g_task_new() and g_task_return_error() instead.
  */
 
 
@@ -32359,6 +32397,7 @@
  * function will return %TRUE with @dest set appropriately.
  *
  * Returns: %TRUE if the error was propagated to @dest. %FALSE otherwise.
+ * Deprecated: 2.46: Use #GTask instead.
  */
 
 
@@ -32375,6 +32414,8 @@
  *
  * Calling this function takes a reference to @simple for as long as
  * is needed to run the job and report its completion.
+ *
+ * Deprecated: 2.46: Use #GTask and g_task_run_in_thread() instead.
  */
 
 
@@ -32400,6 +32441,7 @@
  * unrelated g_simple_async_result_set_handle_cancellation() function.
  *
  * Since: 2.32
+ * Deprecated: 2.46: Use #GTask instead.
  */
 
 
@@ -32412,6 +32454,8 @@
  * @...: a list of variables to fill in @format.
  *
  * Sets an error within the asynchronous result without a #GError.
+ *
+ * Deprecated: 2.46: Use #GTask and g_task_return_new_error() instead.
  */
 
 
@@ -32425,6 +32469,8 @@
  *
  * Sets an error within the asynchronous result without a #GError.
  * Unless writing a binding, see g_simple_async_result_set_error().
+ *
+ * Deprecated: 2.46: Use #GTask and g_task_return_error() instead.
  */
 
 
@@ -32434,6 +32480,8 @@
  * @error: #GError.
  *
  * Sets the result from a #GError.
+ *
+ * Deprecated: 2.46: Use #GTask and g_task_return_error() instead.
  */
 
 
@@ -32447,6 +32495,8 @@
  * This function has nothing to do with
  * g_simple_async_result_set_check_cancellable().  It only refers to the
  * #GCancellable passed to g_simple_async_result_run_in_thread().
+ *
+ * Deprecated: 2.46
  */
 
 
@@ -32456,6 +32506,8 @@
  * @op_res: a #gboolean.
  *
  * Sets the operation result to a boolean within the asynchronous result.
+ *
+ * Deprecated: 2.46: Use #GTask and g_task_return_boolean() instead.
  */
 
 
@@ -32466,6 +32518,8 @@
  * @destroy_op_res: a #GDestroyNotify function.
  *
  * Sets the operation result within the asynchronous result to a pointer.
+ *
+ * Deprecated: 2.46: Use #GTask and g_task_return_pointer() instead.
  */
 
 
@@ -32476,6 +32530,8 @@
  *
  * Sets the operation result within the asynchronous result to
  * the given @op_res.
+ *
+ * Deprecated: 2.46: Use #GTask and g_task_return_int() instead.
  */
 
 
@@ -32488,6 +32544,7 @@
  * of @error, so the caller does not need to free it any more.
  *
  * Since: 2.28
+ * Deprecated: 2.46: Use #GTask and g_task_return_error() instead.
  */
 
 
@@ -36374,6 +36431,12 @@
  *
  * See #GTaskThreadFunc for more details about how @task_func is handled.
  *
+ * Although GLib currently rate-limits the tasks queued via
+ * g_task_run_in_thread(), you should not assume that it will always
+ * do this. If you have a very large number of tasks to run, but don't
+ * want them to all run at once, you should only queue a limited
+ * number of them at a time.
+ *
  * Since: 2.36
  */
 
@@ -36393,6 +36456,12 @@
  * `callback`, but note that even if the task does
  * have a callback, it will not be invoked when @task_func returns.
  * #GTask:completed will be set to %TRUE just before this function returns.
+ *
+ * Although GLib currently rate-limits the tasks queued via
+ * g_task_run_in_thread_sync(), you should not assume that it will
+ * always do this. If you have a very large number of tasks to run,
+ * but don't want them to all run at once, you should only queue a
+ * limited number of them at a time.
  *
  * Since: 2.36
  */
@@ -36985,6 +37054,22 @@
  *
  * Returns: the appropriate #GTlsCertificateFlags
  * Since: 2.28
+ */
+
+
+/**
+ * g_tls_client_connection_copy_session_state:
+ * @conn: a #GTlsClientConnection
+ * @source: a #GTlsClientConnection
+ *
+ * Copies session state from one connection to another. This is
+ * not normally needed, but may be used when the same session
+ * needs to be used between different endpoints as is required
+ * by some protocols such as FTP over TLS. @source should have
+ * already completed a handshake, and @conn should not have
+ * completed a handshake.
+ *
+ * Since: 2.46
  */
 
 
