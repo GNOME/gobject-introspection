@@ -72,7 +72,6 @@ class OrderedDict(dict):
                     self.__setitem__(key, ____sequence[key])
             else:
                 for key, value in ____sequence:
-                    print key, value
                     self[key] = value
         if kwargs:
             self.update(kwargs)
