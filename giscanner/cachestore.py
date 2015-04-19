@@ -45,6 +45,11 @@ def _get_versionhash():
 def _get_cachedir():
     if 'GI_SCANNER_DISABLE_CACHE' in os.environ:
         return None
+
+    xdg_cache_home = os.environ.get('XDG_CACHE_HOME')
+    if xdg_cache_home is not None and os.path.exists(xdg_cache_home):
+        return xdg_cache_home
+
     homedir = os.path.expanduser('~')
     if homedir is None:
         return None
