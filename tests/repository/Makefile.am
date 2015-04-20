@@ -23,7 +23,6 @@ gitypelibtest_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
 TESTS = gitestrepo giteststructinfo gitestthrows gitypelibtest
 TESTS_ENVIRONMENT=env GI_TYPELIB_PATH="$(top_builddir):$(top_builddir)/gir:$(top_builddir)/tests:$(top_builddir)/tests/scanner" \
-	XDG_DATA_DIRS="$(top_srcdir)/gir:$(XDG_DATA_DIRS)" \
 	PATH="$(top_builddir)/tests/scanner/.libs:$(PATH)" \
 	CC="$(CC)" \
 	LD_LIBRARY_PATH="$(top_builddir)/tests/scanner/.libs:$(LD_LIBRARY_PATH)" \
