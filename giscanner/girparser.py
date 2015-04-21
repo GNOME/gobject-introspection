@@ -489,7 +489,7 @@ class GIRParser(object):
         lenidx = typenode.attrib.get('length')
         if lenidx is not None:
             idx = int(lenidx)
-            assert idx < len(siblings), "%r %d >= %d" % (parent, idx, len(siblings))
+            assert idx < len(siblings), "%r %d >= %d" % (siblings, idx, len(siblings))
             if isinstance(siblings[idx], ast.Field):
                 typeval.length_param_name = siblings[idx].name
             else:
