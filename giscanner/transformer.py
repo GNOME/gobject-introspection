@@ -502,8 +502,6 @@ raise ValueError."""
         return value
 
     def _create_parameters(self, symbol, base_type):
-        # warn if we see annotations for unknown parameters
-        param_names = set(child.ident for child in base_type.child_list)
         for i, child in enumerate(base_type.child_list):
             yield self._create_parameter(symbol, i, child)
 
