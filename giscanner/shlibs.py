@@ -24,7 +24,7 @@ import platform
 import re
 import subprocess
 
-from .utils import get_libtool_command, extract_libtool_shlib, which
+from .utils import get_libtool_command, extract_libtool_shlib
 from .ccompiler import CCompiler
 
 
