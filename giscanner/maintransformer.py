@@ -349,7 +349,7 @@ class MainTransformer(object):
         # (except enums and flags) or basic types that are
         # as big as a gpointer
         if array_type == ast.Array.GLIB_PTRARRAY:
-            if ((element_type in ast.BASIC_GIR_TYPES and not element_type in ast.POINTER_TYPES)
+            if ((element_type in ast.BASIC_GIR_TYPES and element_type not in ast.POINTER_TYPES)
             or isinstance(element_type, (ast.Enum, ast.Bitfield))):
                 message.warn("invalid (element-type) for a GPtrArray, "
                              "must be a pointer", annotations.position)
@@ -358,7 +358,7 @@ class MainTransformer(object):
         if array_type == ast.Array.GLIB_BYTEARRAY:
             if element_type == ast.TYPE_ANY:
                 array.element_type = ast.TYPE_UINT8
-            elif not element_type in [ast.TYPE_UINT8, ast.TYPE_INT8, ast.TYPE_CHAR]:
+            elif element_type not in [ast.TYPE_UINT8, ast.TYPE_INT8, ast.TYPE_CHAR]:
                 message.warn("invalid (element-type) for a GByteArray, "
                              "must be one of guint8, gint8 or gchar",
                              annotations.position)
@@ -1250,8 +1250,8 @@ method or constructor of some type."""
         """Look for virtual methods from the class structure."""
         if not node.glib_type_struct:
             # https://bugzilla.gnome.org/show_bug.cgi?id=629080
-            #message.warn_node(node,
-            #    "Failed to find class structure for %r" % (node.name, ))
+            # message.warn_node(node,
+            #     "Failed to find class structure for %r" % (node.name, ))
             return
 
         node_type = node.create_type()

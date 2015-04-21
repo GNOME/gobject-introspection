@@ -63,9 +63,9 @@ PEP8_EXCLUDES=--exclude='.svn,CVS,.bzr,.hg,.git,__pycache__,.\#*'
 check-local:
 	@echo "TEST: PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs \
-		$(PYTHON) $(top_srcdir)/misc/pep8.py --max-line-length=99 --ignore=E128 $(PEP8_EXCLUDES)
+		$(PYTHON) $(top_srcdir)/misc/pep8.py --max-line-length=99 --ignore=E128,W503 $(PEP8_EXCLUDES)
 	@find $(top_srcdir)/tests -name \*.py | sort | uniq | xargs \
-		$(PYTHON) $(top_srcdir)/misc/pep8.py --ignore=E127,E501 $(PEP8_EXCLUDES)
+		$(PYTHON) $(top_srcdir)/misc/pep8.py --ignore=E127,E402,E501,E731 $(PEP8_EXCLUDES)
 
 check-pyflakes:
 	@echo "  CHECK Pyflakes"

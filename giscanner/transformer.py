@@ -96,7 +96,7 @@ class Transformer(object):
 
     def parse(self, symbols):
         for symbol in symbols:
-            ## WORKAROUND ##
+            # WORKAROUND
             # https://bugzilla.gnome.org/show_bug.cgi?id=550616
             if symbol.ident in ['gst_g_error_get_type']:
                 continue
@@ -159,7 +159,7 @@ namespaces."""
             if ns == self._namespace.name:
                 return self._namespace.get(giname)
             # Fallback to the main namespace if not a dependency and matches a prefix
-            if ns in self._namespace.identifier_prefixes and not ns in self._parsed_includes:
+            if ns in self._namespace.identifier_prefixes and ns not in self._parsed_includes:
                 message.warn(("Deprecated reference to identifier " +
                               "prefix %s in GIName %s") % (ns, name))
                 return self._namespace.get(giname)

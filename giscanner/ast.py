@@ -172,13 +172,10 @@ class TypeUnknown(Type):
     def __init__(self):
         Type.__init__(self, _target_unknown=True)
 
-######
-## Fundamental types
-######
-# Two special ones
+# Fundamental types, two special ones
 TYPE_NONE = Type(target_fundamental='none', ctype='void')
 TYPE_ANY = Type(target_fundamental='gpointer', ctype='gpointer')
-# "Basic" types
+# Fundamental types, "Basic" types
 TYPE_BOOLEAN = Type(target_fundamental='gboolean', ctype='gboolean')
 TYPE_INT8 = Type(target_fundamental='gint8', ctype='gint8')
 TYPE_UINT8 = Type(target_fundamental='guint8', ctype='guint8')
@@ -328,10 +325,7 @@ type_names['ssize_t'] = TYPE_LONG
 # Obj-C
 type_names['id'] = TYPE_ANY
 
-##
-## Parameters
-##
-
+# Parameters
 PARAM_DIRECTION_IN = 'in'
 PARAM_DIRECTION_OUT = 'out'
 PARAM_DIRECTION_INOUT = 'inout'

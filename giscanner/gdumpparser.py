@@ -203,7 +203,7 @@ blob containing data gleaned from GObject's primitive introspection."""
 
     def _initparse_gobject_record(self, record):
         if (record.name.startswith('ParamSpec')
-        and not record.name in ('ParamSpecPool', 'ParamSpecClass', 'ParamSpecTypeInfo')):
+        and record.name not in ('ParamSpecPool', 'ParamSpecClass', 'ParamSpecTypeInfo')):
             parent = None
             if record.name != 'ParamSpec':
                 parent = ast.Type(target_giname='GObject.ParamSpec')
@@ -359,7 +359,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         else:
             self._namespace.append(node, replace=True)
 
-    ## WORKAROUND ##
+    # WORKAROUND
     # https://bugzilla.gnome.org/show_bug.cgi?id=550616
     def _introspect_boxed_gstreamer_workaround(self, xmlnode):
         node = ast.Boxed('ParamSpecMiniObject', gtype_name='GParamSpecMiniObject',

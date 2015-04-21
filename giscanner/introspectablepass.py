@@ -96,7 +96,7 @@ class IntrospectablePass(object):
 
         if (is_parameter
         and isinstance(target, ast.Callback)
-        and not node.type.target_giname in ('GLib.DestroyNotify', 'Gio.AsyncReadyCallback')
+        and node.type.target_giname not in ('GLib.DestroyNotify', 'Gio.AsyncReadyCallback')
         and node.scope is None):
             self._parameter_warning(
                 parent,
