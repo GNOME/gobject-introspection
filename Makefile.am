@@ -96,7 +96,7 @@ prepare-release-tag: Makefile
 	git tag -m "Tag $(TAG_VERSION)" -a $(TAG_PREFIX)$(TAG_VERSION)
 
 prepare-minor-release: $(DISTNAME) prepare-release-tag Makefile
-	env top_srcdir=$(top_srcdir) python $(top_srcdir)/tools/verbump.py
+	env top_srcdir=$(top_srcdir) python $(top_srcdir)/misc/verbump.py
 
 upload-release: $(DISTNAME) Makefile
 	git log origin/master..master
