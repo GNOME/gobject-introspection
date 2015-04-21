@@ -54,5 +54,5 @@ if srcdir is not None:
 __builtin__.__dict__['DATADIR'] = datadir
 sys.path.insert(0, pylibdir)
 
-from giscanner.scannermain import scanner_main
-sys.exit(scanner_main(sys.argv))
+from giscanner.@TOOL_MODULE@ import @TOOL_FUNCTION@
+sys.exit(@TOOL_FUNCTION@(sys.argv))
