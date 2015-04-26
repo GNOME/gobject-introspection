@@ -34,6 +34,31 @@
               value="12288"
               c:identifier="CAIRO_CONTENT_COLOR_ALPHA"/>
     </enumeration>
+    <enumeration name="Format" c:type="cairo_format_t"
+                 glib:type-name="CairoFormat"
+                 glib:get-type="cairo_gobject_format_get_type">
+      <member name="INVALID"
+              value="-1"
+              c:identifier="CAIRO_FORMAT_INVALID"/>
+      <member name="ARGB32"
+              value="0"
+              c:identifier="CAIRO_FORMAT_ARGB32"/>
+      <member name="RGB24"
+              value="1"
+              c:identifier="CAIRO_FORMAT_RGB24"/>
+      <member name="A8"
+              value="2"
+              c:identifier="CAIRO_FORMAT_A8"/>
+      <member name="A1"
+              value="3"
+              c:identifier="CAIRO_FORMAT_A1"/>
+      <member name="RGB16_565"
+              value="4"
+              c:identifier="CAIRO_FORMAT_RGB16_565"/>
+      <member name="RGB30"
+              value="5"
+              c:identifier="CAIRO_FORMAT_RGB30"/>
+    </enumeration>
     <record name="FontOptions" c:type="cairo_font_options_t" foreign="1"/>
     <record name="FontType" c:type="cairo_font_type_t" foreign="1"/>
     <record name="FontFace" c:type="cairo_font_face_t" foreign="1"
