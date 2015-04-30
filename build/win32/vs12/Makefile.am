@@ -32,5 +32,3 @@ MSVC_VER = 12
 MSVC_VER_LONG = 2013
 
 include $(top_srcdir)/build/Makefile-newvs.am
-
-$(EXTRA_DIST): create_vcxproj copy_filters create_props
