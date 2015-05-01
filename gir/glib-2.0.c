@@ -34778,7 +34778,8 @@
  * with empty arrays).
  *
  * In the event that the parsing is successful, the resulting #GVariant
- * is returned.
+ * is returned. It is never floating, and must be freed with
+ * g_variant_unref().
  *
  * In case of any error, %NULL will be returned.  If @error is non-%NULL
  * then it will be set to reflect the error that occurred.
@@ -34786,7 +34787,7 @@
  * Officially, the language understood by the parser is "any string
  * produced by g_variant_print()".
  *
- * Returns: a reference to a #GVariant, or %NULL
+ * Returns: a non-floating reference to a #GVariant, or %NULL
  */
 
 
