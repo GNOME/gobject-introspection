@@ -112,12 +112,6 @@ in contrast to the other create_type() functions."""
             return Array(None, bare_utf8, ctype=None, gtype_name=gtype_name,
                          is_const=False)
 
-        # Workaround for Gdk.Rectangle being boxed alias for
-        # cairo.RectangleInt.  G-I does not support boxing of aliases.
-        # See https://bugzilla.gnome.org/show_bug.cgi?id=655423
-        if gtype_name == 'GdkRectangle':
-            gtype_name = 'CairoRectangleInt'
-
         return cls(gtype_name=gtype_name)
 
     def get_giname(self):
