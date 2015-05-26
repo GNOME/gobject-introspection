@@ -4156,7 +4156,7 @@
  *
  * For example, GTK+ uses this in its Makefile.am:
  * |[
- * INCLUDES = -DG_LOG_DOMAIN=\"Gtk\"
+ * AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Gtk\"
  * ]|
  */
 
@@ -13275,7 +13275,7 @@
  * - \%A: the full weekday name according to the current locale
  * - \%b: the abbreviated month name according to the current locale
  * - \%B: the full month name according to the current locale
- * - \%c: the  preferred date and time rpresentation for the current locale
+ * - \%c: the preferred date and time representation for the current locale
  * - \%C: the century number (year/100) as a 2-digit integer (00-99)
  * - \%d: the day of the month as a decimal number (range 01 to 31)
  * - \%e: the day of the month as a decimal number (range  1 to 31)

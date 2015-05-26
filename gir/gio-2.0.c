@@ -6743,7 +6743,7 @@
  *
  * Applications and libraries often contain binary or textual data that is
  * really part of the application, rather than user data. For instance
- * #GtkBuilder .ui files, splashscreen images, GMenu markup xml, CSS files,
+ * #GtkBuilder .ui files, splashscreen images, GMenu markup XML, CSS files,
  * icons, etc. These are often shipped as files in `$datadir/appname`, or
  * manually included as literal strings in the code.
  *
@@ -6764,7 +6764,7 @@
  * The only options currently supported are:
  *
  * `xml-stripblanks` which will use the xmllint command
- * to strip ignorable whitespace from the xml file. For this to work,
+ * to strip ignorable whitespace from the XML file. For this to work,
  * the `XMLLINT` environment variable must be set to the full path to
  * the xmllint executable, or xmllint must be in the `PATH`; otherwise
  * the preprocessing step is skipped.
@@ -6777,7 +6777,7 @@
  * abort.
  *
  * Resource bundles are created by the [glib-compile-resources][glib-compile-resources] program
- * which takes an xml file that describes the bundle, and a set of files that the xml references. These
+ * which takes an XML file that describes the bundle, and a set of files that the XML references. These
  * are combined into a binary resource bundle.
  *
  * An example resource description:
@@ -6799,23 +6799,29 @@
  * /org/gtk/Example/menumarkup.xml
  * ]|
  *
- * Note that all resources in the process share the same namespace, so use java-style
+ * Note that all resources in the process share the same namespace, so use Java-style
  * path prefixes (like in the above example) to avoid conflicts.
  *
- * You can then use [glib-compile-resources][glib-compile-resources] to compile the xml to a
+ * You can then use [glib-compile-resources][glib-compile-resources] to compile the XML to a
  * binary bundle that you can load with g_resource_load(). However, its more common to use the --generate-source and
  * --generate-header arguments to create a source file and header to link directly into your application.
+ * This will generate `get_resource()`, `register_resource()` and
+ * `unregister_resource()` functions, prefixed by the `--c-name` argument passed
+ * to [glib-compile-resources][glib-compile-resources]. `get_resource()` returns
+ * the generated #GResource object. The register and unregister functions
+ * register the resource so its files can be accessed using
+ * g_resources_lookup_data().
  *
  * Once a #GResource has been created and registered all the data in it can be accessed globally in the process by
  * using API calls like g_resources_open_stream() to stream the data or g_resources_lookup_data() to get a direct pointer
- * to the data. You can also use uris like "resource:///org/gtk/Example/data/splashscreen.png" with #GFile to access
+ * to the data. You can also use URIs like "resource:///org/gtk/Example/data/splashscreen.png" with #GFile to access
  * the resource data.
  *
  * There are two forms of the generated source, the default version uses the compiler support for constructor
  * and destructor functions (where available) to automatically create and register the #GResource on startup
  * or library load time. If you pass --manual-register two functions to register/unregister the resource is instead
  * created. This requires an explicit initialization call in your application/library, but it works on all platforms,
- * even on the minor ones where this is not available. (Constructor support is available for at least Win32, MacOS and Linux.)
+ * even on the minor ones where this is not available. (Constructor support is available for at least Win32, Mac OS and Linux.)
  *
  * Note that resource data can point directly into the data segment of e.g. a library, so if you are unloading libraries
  * during runtime you need to be very careful with keeping around pointers to data from a resource, as this goes away
@@ -26009,7 +26015,7 @@
 /**
  * g_list_store_append:
  * @store: a #GListStore
- * @item: the new item
+ * @item: (type GObject): the new item
  *
  * Appends @item to @store. @item must be of type #GListStore:item-type.
  *
@@ -26026,7 +26032,7 @@
  * g_list_store_insert:
  * @store: a #GListStore
  * @position: the position at which to insert the new item
- * @item: the new item
+ * @item: (type GObject): the new item
  *
  * Inserts @item into @store at @position. @item must be of type
  * #GListStore:item-type or derived from it. @position must be smaller
@@ -26044,8 +26050,8 @@
 /**
  * g_list_store_insert_sorted:
  * @store: a #GListStore
- * @item: the new item
- * @compare_func: pairwise comparison function for sorting
+ * @item: (type GObject): the new item
+ * @compare_func: (scope call): pairwise comparison function for sorting
  * @user_data: (closure): user data for @compare_func
  *
  * Inserts @item into @store at a position to be determined by the
@@ -26104,7 +26110,7 @@
  * @store: a #GListStore
  * @position: the position at which to make the change
  * @n_removals: the number of items to remove
- * @additions: (array length=n_additions): the items to add
+ * @additions: (array length=n_additions) (element-type GObject): the items to add
  * @n_additions: the number of items to add
  *
  * Changes @store by removing @n_removals items and adding @n_additions
@@ -28021,7 +28027,8 @@
  * is deprecated, because it depends on the contents of /etc/services,
  * which is generally quite sparse on platforms other than Linux.)
  *
- * Returns: (transfer full): the new #GNetworkAddress, or %NULL on error
+ * Returns: (transfer full) (type GNetworkAddress): the new
+ *   #GNetworkAddress, or %NULL on error
  * Since: 2.22
  */
 
@@ -28039,7 +28046,8 @@
  * g_network_address_parse() allows #GSocketClient to determine
  * when to use application-specific proxy protocols.
  *
- * Returns: (transfer full): the new #GNetworkAddress, or %NULL on error
+ * Returns: (transfer full) (type GNetworkAddress): the new
+ *   #GNetworkAddress, or %NULL on error
  * Since: 2.26
  */
 
