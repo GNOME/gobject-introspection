@@ -3438,6 +3438,20 @@ regress_test_callback_user_data (RegressTestCallbackUserData callback,
   return callback(user_data);
 }
 
+/**
+ * regress_test_callback_return_full:
+ * @callback: (scope call):
+ *
+ **/
+void
+regress_test_callback_return_full (RegressTestCallbackReturnFull callback)
+{
+  RegressTestObj *obj;
+
+  obj = callback ();
+  g_object_unref (obj);
+}
+
 static GSList *notified_callbacks = NULL;
 
 /**
