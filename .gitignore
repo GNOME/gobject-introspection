@@ -71,6 +71,7 @@ tests/everything.c
 tests/everything.h
 tests/offsets/gitestoffsets.c
 tests/repository/gitestrepo
+tests/repository/giteststructinfo
 tests/repository/gitestthrows
 tests/repository/gitypelibtest
 tests/scanner/Bar-1.0.gir
