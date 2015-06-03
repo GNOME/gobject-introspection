@@ -1,11 +1,9 @@
 
 #include "girepository.h"
 
-#include <stdlib.h>
 
-
-int
-main(int argc, char **argv)
+static void
+test_invoke_gerror (void)
 {
   GIRepository *repo;
   GITypelib *ret;
@@ -36,12 +34,20 @@ main(int argc, char **argv)
                                           0,
                                           &ret_arg,
                                           &error);
-  g_free(in_arg[0].v_string);
+  g_free (in_arg[0].v_string);
 
   g_assert (invoke_return == FALSE);
   g_assert (error != NULL);
   g_assert (error->domain == G_FILE_ERROR);
   g_assert (error->code == G_FILE_ERROR_NOENT);
+}
 
-  exit(0);
+int
+main(int argc, char **argv)
+{
+  g_test_init (&argc, &argv, NULL);
+
+  g_test_add_func ("/girepository/throws/invoke-gerror", test_invoke_gerror);
+
+  return g_test_run ();
 }
