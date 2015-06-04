@@ -1,4 +1,4 @@
-#!@PYTHON@
+#!/usr/bin/env @PYTHON@
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
 # Copyright (C) 2008  Johan Dahlin
