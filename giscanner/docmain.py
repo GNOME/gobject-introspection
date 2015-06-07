@@ -30,6 +30,8 @@ from .docwriter import DocWriter
 from .sectionparser import generate_sections_file, write_sections_file
 from .transformer import Transformer
 
+FORMATS = ['mallard', 'sections']
+
 
 def doc_main(args):
     parser = argparse.ArgumentParser()
@@ -42,16 +44,23 @@ def doc_main(args):
                       action="store", dest="language",
                       default="c",
                       help="Output language")
+    parser.add_argument("-f", "--format",
+                        action="store", dest="format",
+                        default="mallard",
+                        help="Output format [%s]" % ", ".join(FORMATS))
     parser.add_argument("-I", "--add-include-path",
                       action="append", dest="include_paths", default=[],
                       help="include paths for other GIR files")
     parser.add_argument("-s", "--write-sections-file",
-                      action="store_true", dest="write_sections",
-                      help="Generate and write out a sections file")
+                        action="store_const", dest="format", const="sections",
+                        help="Backwards-compatible equivalent to '-f sections'")
 
     args = parser.parse_args(args[1:])
     if not args.output:
         raise SystemExit("missing output parameter")
+    if args.format not in FORMATS:
+        raise SystemExit("Unknown output format %s (supported: %s)" %
+            (args.format, ", ".join(FORMATS)))
 
     if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
         top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
@@ -62,13 +71,13 @@ def doc_main(args):
     extra_include_dirs.extend(args.include_paths)
     transformer = Transformer.parse_from_gir(args.girfile, extra_include_dirs)
 
-    if args.write_sections:
+    if args.format == 'sections':
         sections_file = generate_sections_file(transformer)
 
         with open(args.output, 'w') as fp:
             write_sections_file(fp, sections_file)
     else:
-        writer = DocWriter(transformer, args.language)
+        writer = DocWriter(transformer, args.language, args.format)
         writer.write(args.output)
 
     return 0
