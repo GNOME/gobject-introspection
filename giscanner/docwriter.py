@@ -878,23 +878,30 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
                              for p in construct_params)
 
 LANGUAGES = {
-    "c": DocFormatterC,
-    "python": DocFormatterPython,
-    "gjs": DocFormatterGjs,
+    "mallard": {
+        "c": DocFormatterC,
+        "python": DocFormatterPython,
+        "gjs": DocFormatterGjs,
+    },
+}
+OUTPUT_EXTENSIONS = {
+    "mallard": "page",
 }
 
 
 class DocWriter(object):
-    def __init__(self, transformer, language):
+    def __init__(self, transformer, language, output_format):
         self._transformer = transformer
 
         try:
-            formatter_class = LANGUAGES[language.lower()]
+            formatter_class = LANGUAGES[output_format.lower()][language.lower()]
         except KeyError:
-            raise SystemExit("Unsupported language: %s" % (language, ))
+            raise SystemExit("Unsupported language %s for output format %s" %
+                (language, output_format))
 
         self._formatter = formatter_class(self._transformer)
         self._language = self._formatter.language
+        self._output_format = output_format
 
         self._lookup = self._get_template_lookup()
 
@@ -905,7 +912,7 @@ class DocWriter(object):
         else:
             srcdir = os.path.dirname(__file__)
 
-        template_dir = os.path.join(srcdir, 'doctemplates')
+        template_dir = os.path.join(srcdir, 'doctemplates', self._output_format)
 
         return TemplateLookup(directories=[template_dir],
                               module_directory=tempfile.mkdtemp(),
@@ -956,6 +963,7 @@ class DocWriter(object):
                                  ast=ast)
 
         output_file_name = os.path.join(os.path.abspath(output),
-                                        page_id + '.page')
+                                        page_id + "." +
+                                        OUTPUT_EXTENSIONS[self._output_format])
         with open(output_file_name, 'wb') as fp:
             fp.write(result)
