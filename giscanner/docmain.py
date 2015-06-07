@@ -61,6 +61,9 @@ def doc_main(args):
     args = parser.parse_args(args[1:])
     if not args.output:
         raise SystemExit("missing output parameter")
+    if args.format not in FORMATS:
+        raise SystemExit("Unknown output format %s (supported: %s)" %
+            (args.format, ", ".join(FORMATS)))
 
     if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
         top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']

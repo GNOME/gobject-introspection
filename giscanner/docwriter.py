@@ -910,6 +910,7 @@ class DocWriter(object):
 
         self._formatter = formatter_class(self._transformer)
         self._language = self._formatter.language
+        self._output_format = output_format
 
         self._lookup = self._get_template_lookup()
 
