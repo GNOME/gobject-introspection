@@ -18,6 +18,7 @@
 # Boston, MA 02111-1307, USA.
 #
 
+import errno
 import re
 import os
 import subprocess
@@ -209,3 +210,81 @@ def which(program):
                 return exe_file + '.exe'
 
     return None
+
+
+def makedirs(name, mode=0o777, exist_ok=False):
+    """Super-mkdir; create a leaf directory and all intermediate ones.  Works like
+    mkdir, except that any intermediate path segment (not just the rightmost)
+    will be created if it does not exist. If the target directory already
+    exists, raise an OSError if exist_ok is False. Otherwise no exception is
+    raised.  This is recursive.
+
+    Note: This function has been imported from Python 3.4 sources and adapted to work
+    with Python 2.X because get_user_cache_dir() uses the exist_ok parameter. It can
+    be removed again when Python 2.X support is dropped.
+    """
+    head, tail = os.path.split(name)
+    if not tail:
+        head, tail = os.path.split(head)
+    if head and tail and not os.path.exists(head):
+        try:
+            makedirs(head, mode, exist_ok)
+        except OSError as e:
+            # be happy if someone already created the path
+            if e.errno != errno.EEXIST:
+                raise
+        if tail == cdir:           # xxx/newdir/. exists if xxx/newdir exists
+            return
+    try:
+        os.mkdir(name, mode)
+    except OSError as e:
+        if not exist_ok or e.errno != errno.EEXIST or not os.path.isdir(name):
+            raise
+
+
+def get_user_cache_dir(dir=None):
+    '''
+    This is a Python reimplemention of `g_get_user_cache_dir()` because we don't want to
+    rely on the python-xdg package and we can't depend on GLib via introspection.
+    If any changes are made to that function they'll need to be copied here.
+    '''
+
+    xdg_cache_home = os.environ.get('XDG_CACHE_HOME')
+    if xdg_cache_home is not None:
+        if dir is not None:
+            xdg_cache_home = os.path.join(xdg_cache_home, dir)
+        try:
+            makedirs(xdg_cache_home, mode=0o755, exist_ok=True)
+        except:
+            # Let's fall back to ~/.cache below
+            pass
+        else:
+            return xdg_cache_home
+
+    homedir = os.path.expanduser('~')
+    if homedir is not None:
+        cachedir = os.path.join(homedir, '.cache')
+        if dir is not None:
+            cachedir = os.path.join(cachedir, dir)
+        try:
+            makedirs(cachedir, mode=0o755, exist_ok=True)
+        except:
+            return None
+        else:
+            return cachedir
+
+    return None
+
+
+def get_system_data_dirs():
+    '''
+    This is a Python reimplemention of `g_get_system_data_dirs()` because we don't want to
+    rely on the python-xdg package and we can't depend on GLib via introspection.
+    If any changes are made to that function they'll need to be copied here.
+    '''
+    xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(os.pathsep)]
+    if not xdg_data_dirs and os.name != 'nt':
+        xdg_data_dirs.append('/usr/local/share')
+        xdg_data_dirs.append('/usr/share')
+
+    return xdg_data_dirs

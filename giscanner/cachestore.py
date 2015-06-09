@@ -29,6 +29,9 @@ import tempfile
 
 import giscanner
 
+from . import utils
+
+
 _CACHE_VERSION_FILENAME = '.cache-version'
 
 
@@ -42,50 +45,18 @@ def _get_versionhash():
     return hashlib.sha1(''.join(mtimes)).hexdigest()
 
 
-def _get_cachedir():
-    if 'GI_SCANNER_DISABLE_CACHE' in os.environ:
-        return None
-
-    xdg_cache_home = os.environ.get('XDG_CACHE_HOME')
-    if xdg_cache_home is not None and os.path.exists(xdg_cache_home):
-        return xdg_cache_home
-
-    homedir = os.path.expanduser('~')
-    if homedir is None:
-        return None
-    if not os.path.exists(homedir):
-        return None
-
-    cachedir = os.path.join(homedir, '.cache')
-    if not os.path.exists(cachedir):
-        try:
-            os.mkdir(cachedir, 0o755)
-        except OSError:
-            return None
-
-    scannerdir = os.path.join(cachedir, 'g-ir-scanner')
-    if not os.path.exists(scannerdir):
-        try:
-            os.mkdir(scannerdir, 0o755)
-        except OSError:
-            return None
-    # If it exists and is a file, don't cache at all
-    elif not os.path.isdir(scannerdir):
-        return None
-    return scannerdir
-
-
 class CacheStore(object):
 
     def __init__(self):
-        try:
-            self._directory = _get_cachedir()
-        except OSError as e:
-            if e.errno != errno.EPERM:
-                raise
-            self._directory = None
-
+        self._directory = self._get_cachedir()
         self._check_cache_version()
+
+    def _get_cachedir(self):
+        if 'GI_SCANNER_DISABLE_CACHE' in os.environ:
+            return None
+        else:
+            cachedir = utils.get_user_cache_dir('g-ir-scanner')
+            return cachedir
 
     def _check_cache_version(self):
         if self._directory is None:

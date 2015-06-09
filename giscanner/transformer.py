@@ -24,6 +24,7 @@ import subprocess
 
 from . import ast
 from . import message
+from . import utils
 from .cachestore import CacheStore
 from .girparser import GIRParser
 from .sourcescanner import (
@@ -38,13 +39,6 @@ from .sourcescanner import (
 
 class TransformerException(Exception):
     pass
-
-
-_xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(os.pathsep)]
-_xdg_data_dirs.append(DATADIR)
-
-if os.name != 'nt':
-    _xdg_data_dirs.append('/usr/share')
 
 
 class Transformer(object):
@@ -182,9 +176,17 @@ None."""
 
     # Private
 
+    def _get_gi_data_dirs(self):
+        data_dirs = utils.get_system_data_dirs()
+        data_dirs.append(DATADIR)
+        if os.name != 'nt':
+            # For backwards compatibility, was always unconditionally added to the list.
+            data_dirs.append('/usr/share')
+        return data_dirs
+
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
-        for path in _xdg_data_dirs:
+        for path in self._get_gi_data_dirs():
             searchdirs.append(os.path.join(path, 'gir-1.0'))
         searchdirs.append(os.path.join(DATADIR, 'gir-1.0'))
 
