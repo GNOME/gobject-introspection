@@ -485,7 +485,7 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 #endif
 #endif
 
-#ifndef MSVC_USE_FD_DIRECTLY
+#if !defined(MSVC_USE_FD_DIRECTLY) && !defined(__MINGW64_VERSION_MAJOR)
   {
 #if defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==5
 #define PYTHON_MSVCRXX_DLL "msvcr71.dll"
