@@ -2099,6 +2099,14 @@
 
 
 /**
+ * GNativeSocketAddress:
+ *
+ * An socket address, corresponding to a general struct
+ * sockadd address of a type not otherwise handled by glib.
+ */
+
+
+/**
  * GNetworkAddress:
  *
  * A #GSocketConnectable for resolving a hostname and connecting to
@@ -2252,6 +2260,16 @@
  * g_action_change_state() have no effect.
  *
  * Since: 2.38
+ */
+
+
+/**
+ * GPropertyAction:invert-boolean:
+ *
+ * If %TRUE, the state of the action will be the negation of the
+ * property value, provided the property is boolean.
+ *
+ * Since: 2.46
  */
 
 
@@ -2880,7 +2898,7 @@
  * @client: the #GSocketClient
  * @event: the event that is occurring
  * @connectable: the #GSocketConnectable that @event is occurring on
- * @connection: the current representation of the connection
+ * @connection: (nullable): the current representation of the connection
  *
  * Emitted when @client's activity on @connectable changes state.
  * Among other things, this can be used to provide progress
@@ -3459,6 +3477,43 @@
 
 
 /**
+ * GTlsDatabaseClass:
+ * @verify_chain: Virtual method implementing
+ *  g_tls_database_verify_chain().
+ * @verify_chain_async: Virtual method implementing
+ *  g_tls_database_verify_chain_async().
+ * @verify_chain_finish: Virtual method implementing
+ *  g_tls_database_verify_chain_finish().
+ * @create_certificate_handle: Virtual method implementing
+ *  g_tls_database_create_certificate_handle().
+ * @lookup_certificate_for_handle: Virtual method implementing
+ *  g_tls_database_lookup_certificate_for_handle().
+ * @lookup_certificate_for_handle_async: Virtual method implementing
+ *  g_tls_database_lookup_certificate_for_handle_async().
+ * @lookup_certificate_for_handle_finish: Virtual method implementing
+ *  g_tls_database_lookup_certificate_for_handle_finish().
+ * @lookup_certificate_issuer: Virtual method implementing
+ *  g_tls_database_lookup_certificate_issuer().
+ * @lookup_certificate_issuer_async: Virtual method implementing
+ *  g_tls_database_lookup_certificate_issuer_async().
+ * @lookup_certificate_issuer_finish: Virtual method implementing
+ *  g_tls_database_lookup_certificate_issuer_finish().
+ * @lookup_certificates_issued_by: Virtual method implementing
+ *  g_tls_database_lookup_certificates_issued_by().
+ * @lookup_certificates_issued_by_async: Virtual method implementing
+ *  g_tls_database_lookup_certificates_issued_by_async().
+ * @lookup_certificates_issued_by_finish: Virtual method implementing
+ *  g_tls_database_lookup_certificates_issued_by_finish().
+ *
+ * The class for #GTlsDatabase. Derived classes should implement the various
+ * virtual methods. _async and _finish methods have a default
+ * implementation that runs the corresponding sync method in a thread.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * GTlsFileDatabase:
  *
  * Implemented by a #GTlsDatabase which allows you to load certificates
@@ -3501,6 +3556,15 @@
  *     If the implementation returns %G_TLS_INTERACTION_HANDLED, then the
  *     password argument of the async method should have been filled in by using
  *     g_tls_password_set_value() or a similar function.
+ * @request_certificate: ask for a certificate synchronously. If the
+ *     implementation returns %G_TLS_INTERACTION_HANDLED, then the connection
+ *     argument should have been filled in by using
+ *     g_tls_connection_set_certificate().
+ * @request_certificate_async: ask for a certificate asyncronously.
+ * @request_certificate_finish: complete operation to ask for a certificate
+ *     asynchronously. If the implementation returns %G_TLS_INTERACTION_HANDLED,
+ *     then the connection argument of the async method should have been
+ *     filled in by using g_tls_connection_set_certificate().
  *
  * The class for #GTlsInteraction. Derived classes implement the various
  * virtual interaction methods to handle TLS interactions.
@@ -3827,6 +3891,24 @@
  * The file handle that the stream writes to.
  *
  * Since: 2.26
+ */
+
+
+/**
+ * GWin32RegistryKey:path:
+ *
+ * A path to the key in the registry, in UTF-8.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * GWin32RegistryKey:path-utf16:
+ *
+ * A path to the key in the registry, in UTF-16.
+ *
+ * Since: 2.46
  */
 
 
@@ -6410,6 +6492,15 @@
 
 
 /**
+ * SECTION:gnativesocketaddress
+ * @short_description: Native GSocketAddress
+ * @include: gio/gio.h
+ *
+ * An socket address of some unknown native type.
+ */
+
+
+/**
  * SECTION:gnetworkaddress
  * @short_description: A GSocketConnectable for resolving hostnames
  * @include: gio/gio.h
@@ -6886,7 +6977,8 @@
  *
  * Normally, a schema has as fixed path that determines where the settings
  * are stored in the conceptual global tree of settings. However, schemas
- * can also be 'relocatable', i.e. not equipped with a fixed path. This is
+ * can also be '[relocatable][gsettings-relocatable]', i.e. not equipped with
+ * a fixed path. This is
  * useful e.g. when the schema describes an 'account', and you want to be
  * able to store a arbitrary number of accounts.
  *
@@ -6918,9 +7010,33 @@
  * Similar to GConf, the default values in GSettings schemas can be
  * localized, but the localized values are stored in gettext catalogs
  * and looked up with the domain that is specified in the
- * gettext-domain attribute of the <schemalist> or <schema>
- * elements and the category that is specified in the l10n attribute of
- * the <key> element.
+ * `gettext-domain` attribute of the <schemalist> or <schema>
+ * elements and the category that is specified in the `l10n` attribute of
+ * the <default> element. The string which is translated includes all text in
+ * the <default> element, including any surrounding quotation marks.
+ *
+ * The `l10n` attribute must be set to `messages` or `time`, and sets the
+ * [locale category for
+ * translation](https://www.gnu.org/software/gettext/manual/html_node/Aspects.html#index-locale-categories-1).
+ * The `messages` category should be used by default; use `time` for
+ * translatable date or time formats. A translation comment can be added as an
+ * XML comment immediately above the <default> element — it is recommended to
+ * add these comments to aid translators understand the meaning and
+ * implications of the default value. An optional translation `context`
+ * attribute can be set on the <default> element to disambiguate multiple
+ * defaults which use the same string.
+ *
+ * For example:
+ * |[
+ *  <!-- Translators: A list of words which are not allowed to be typed, in
+ *       GVariant serialization syntax.
+ *       See: https://developer.gnome.org/glib/stable/gvariant-text.html -->
+ *  <default l10n='messages' context='Banned words'>['bad', 'words']</default>
+ * ]|
+ *
+ * Translations of default values must remain syntactically valid serialized
+ * #GVariants (e.g. retaining any surrounding quotation marks) or runtime
+ * errors will occur.
  *
  * GSettings uses schemas in a compact binary form that is created
  * by the [glib-compile-schemas][glib-compile-schemas]
@@ -7050,6 +7166,83 @@
  * automatically binds it to the writability of the bound setting.
  * If this 'magic' gets in the way, it can be suppressed with the
  * #G_SETTINGS_BIND_NO_SENSITIVITY flag.
+ *
+ * ## Relocatable schemas # {#gsettings-relocatable}
+ *
+ * A relocatable schema is one with no `path` attribute specified on its
+ * <schema> element. By using g_settings_new_with_path(), a #GSettings object
+ * can be instantiated for a relocatable schema, assigning a path to the
+ * instance. Paths passed to g_settings_new_with_path() will typically be
+ * constructed dynamically from a constant prefix plus some form of instance
+ * identifier; but they must still be valid GSettings paths. Paths could also
+ * be constant and used with a globally installed schema originating from a
+ * dependency library.
+ *
+ * For example, a relocatable schema could be used to store geometry information
+ * for different windows in an application. If the schema ID was
+ * `org.foo.MyApp.Window`, it could be instantiated for paths
+ * `/org/foo/MyApp/main/`, `/org/foo/MyApp/document-1/`,
+ * `/org/foo/MyApp/document-2/`, etc. If any of the paths are well-known
+ * they can be specified as <child> elements in the parent schema, e.g.:
+ * |[
+ * <schema id="org.foo.MyApp" path="/org/foo/MyApp/">
+ *   <child name="main" schema="org.foo.MyApp.Window"/>
+ * </schema>
+ * ]|
+ *
+ * ## Build system integration # {#gsettings-build-system}
+ *
+ * GSettings comes with autotools integration to simplify compiling and
+ * installing schemas. To add GSettings support to an application, add the
+ * following to your `configure.ac`:
+ * |[
+ * GLIB_GSETTINGS
+ * ]|
+ *
+ * In the appropriate `Makefile.am`, use the following snippet to compile and
+ * install the named schema:
+ * |[
+ * gsettings_SCHEMAS = org.foo.MyApp.gschema.xml
+ * EXTRA_DIST = $(gsettings_SCHEMAS)
+ *
+ * @GSETTINGS_RULES@
+ * ]|
+ *
+ * No changes are needed to the build system to mark a schema XML file for
+ * translation. Assuming it sets the `gettext-domain` attribute, a schema may
+ * be marked for translation by adding it to `POTFILES.in`, assuming gettext
+ * 0.19 is in use (the preferred method for translation):
+ * |[
+ * data/org.foo.MyApp.gschema.xml
+ * ]|
+ *
+ * Alternatively, if intltool 0.50.1 is in use:
+ * |[
+ * [type: gettext/gsettings]data/org.foo.MyApp.gschema.xml
+ * ]|
+ *
+ * GSettings will use gettext to look up translations for the <summary> and
+ * <description> elements, and also any <default> elements which have a `l10n`
+ * attribute set. Translations must not be included in the `.gschema.xml` file
+ * by the build system, for example by using intltool XML rules with a
+ * `.gschema.xml.in` template.
+ *
+ * If an enumerated type defined in a C header file is to be used in a GSettings
+ * schema, it can either be defined manually using an <enum> element in the
+ * schema XML, or it can be extracted automatically from the C header. This
+ * approach is preferred, as it ensures the two representations are always
+ * synchronised. To do so, add the following to the relevant `Makefile.am`:
+ * |[
+ * gsettings_ENUM_NAMESPACE = org.foo.MyApp
+ * gsettings_ENUM_FILES = my-app-enums.h my-app-misc.h
+ * ]|
+ *
+ * `gsettings_ENUM_NAMESPACE` specifies the schema namespace for the enum files,
+ * which are specified in `gsettings_ENUM_FILES`. This will generate a
+ * `org.foo.MyApp.enums.xml` file containing the extracted enums, which will be
+ * automatically included in the schema compilation, install and uninstall
+ * rules. It should not be committed to version control or included in
+ * `EXTRA_DIST`.
  */
 
 
@@ -7219,7 +7412,7 @@
  * @include: gio/gio.h
  * @see_also: #GAsyncResult, #GTask
  *
- * As of GLib 2.36, #GSimpleAsyncResult is deprecated in favor of
+ * As of GLib 2.46, #GSimpleAsyncResult is deprecated in favor of
  * #GTask, which provides a simpler API.
  *
  * #GSimpleAsyncResult implements #GAsyncResult.
@@ -8899,6 +9092,47 @@
  * Note that `<gio/gwin32outputstream.h>` belongs to the Windows-specific GIO
  * interfaces, thus you have to use the `gio-windows-2.0.pc` pkg-config file
  * when using it.
+ */
+
+
+/**
+ * SECTION:gwin32registrykey
+ * @title: GWin32RegistryKey
+ * @short_description: W32 registry access helper
+ * @include: gio/win32/gwin32registrykey.h
+ *
+ * #GWin32RegistryKey represents a single Windows Registry key.
+ *
+ * #GWin32RegistryKey is used by a number of helper functions that read
+ * Windows Registry. All keys are opened with read-only access, and at
+ * the moment there is no API for writing into registry keys or creating
+ * new ones.
+ *
+ * #GWin32RegistryKey implements the #GInitable interface, so if it is manually
+ * constructed by e.g. g_object_new() you must call g_initable_init() and check
+ * the results before using the object. This is done automatically
+ * in g_win32_registry_key_new() and g_win32_registry_key_get_child(), so these
+ * functions can return %NULL.
+ *
+ * To increase efficiency, a UTF-16 variant is available for all functions
+ * that deal with key or value names in the registry. Use these to perform
+ * deep registry queries or other operations that require querying a name
+ * of a key or a value and then opening it (or querying its data). The use
+ * of UTF-16 functions avoids the overhead of converting names to UTF-8 and
+ * back.
+ *
+ * All functions operate in current user's context (it is not possible to
+ * access registry tree of a different user).
+ *
+ * Key paths must use '\\' as a separator, '/' is not supported. Key names
+ * must not include '\\', because it's used as a separator. Value names
+ * can include '\\'.
+ *
+ * Key and value names are not case sensitive.
+ *
+ * Full key name (excluding the pre-defined ancestor's name) can't exceed
+ * 255 UTF-16 characters, give or take. Value name can't exceed 16383 UTF-16
+ * characters. Tree depth is limited to 512 levels.
  */
 
 
@@ -10982,8 +11216,7 @@
  * possible for an action to be removed and for a new action to be added
  * with the same name but a different state type.
  *
- * Returns: (nullable) (transfer full): the state type, if the action
- * is stateful
+ * Returns: (nullable): the state type, if the action is stateful
  * Since: 2.28
  */
 
@@ -23458,7 +23691,9 @@
  * or the error %G_IO_ERROR_WRONG_ETAG will be returned.
  *
  * If @make_backup is %TRUE, this function will attempt to make a backup
- * of @file.
+ * of @file. Internally, it uses g_file_replace(), so will try to replace the
+ * file contents in the safest way possible. For example, atomic renames are
+ * used when replacing local files’ contents.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -27925,6 +28160,18 @@
 
 
 /**
+ * g_native_socket_address_new:
+ * @address: a #GNativeAddress
+ * @port: a port number
+ *
+ * Creates a new #GNativeSocketAddress for @address and @port.
+ *
+ * Returns: a new #GNativeSocketAddress
+ * Since: 2.46
+ */
+
+
+/**
  * g_network_address_get_hostname:
  * @addr: a #GNetworkAddress
  *
@@ -30306,7 +30553,7 @@
  * g_resource_ref:
  * @resource: A #GResource
  *
- * Atomically increments the reference count of @array by one. This
+ * Atomically increments the reference count of @resource by one. This
  * function is MT-safe and may be called from any thread.
  *
  * Returns: The passed in #GResource
@@ -30319,7 +30566,7 @@
  * @resource: A #GResource
  *
  * Atomically decrements the reference count of @resource by one. If the
- * reference count drops to 0, all memory allocated by the array is
+ * reference count drops to 0, all memory allocated by the resource is
  * released. This function is MT-safe and may be called from any
  * thread.
  *
@@ -31628,6 +31875,22 @@
  *
  * Returns: (transfer full) (element-type utf8): a list of the children on @settings
  * Since: 2.44
+ */
+
+
+/**
+ * g_settings_schema_list_keys:
+ * @schema: a #GSettingsSchema
+ *
+ * Introspects the list of keys on @schema.
+ *
+ * You should probably not be calling this function from "normal" code
+ * (since you should already know what keys are in your schema).  This
+ * function is intended for introspection reasons.
+ *
+ * Returns: (transfer full) (element-type utf8): a list of the keys on
+ *   @schema
+ * Since: 2.46
  */
 
 
@@ -35547,9 +35810,8 @@
  * Returns the value of the environment variable @variable in the
  * environment of processes launched from this launcher.
  *
- * The returned string is in the GLib file name encoding.  On UNIX, this
- * means that it can be an arbitrary byte string.  On Windows, it will
- * be UTF-8.
+ * On UNIX, the returned string can be an arbitrary byte string.
+ * On Windows, it will be UTF-8.
  *
  * Returns: the value of the environment variable, %NULL if unset
  * Since: 2.40
@@ -35625,9 +35887,8 @@
  * As an alternative, you can use g_subprocess_launcher_setenv(),
  * g_subprocess_launcher_unsetenv(), etc.
  *
- * All strings in this array are expected to be in the GLib file name
- * encoding.  On UNIX, this means that they can be arbitrary byte
- * strings.  On Windows, they should be in UTF-8.
+ * On UNIX, all strings in this array can be arbitrary byte strings.
+ * On Windows, they should be in UTF-8.
  *
  * Since: 2.40
  */
@@ -35730,9 +35991,9 @@
  * Sets the environment variable @variable in the environment of
  * processes launched from this launcher.
  *
- * Both the variable's name and value should be in the GLib file name
- * encoding. On UNIX, this means that they can be arbitrary byte
- * strings. On Windows, they should be in UTF-8.
+ * On UNIX, both the variable's name and value can be arbitrary byte
+ * strings, except that the variable's name cannot contain '='.
+ * On Windows, they should be in UTF-8.
  *
  * Since: 2.40
  */
@@ -35875,9 +36136,8 @@
  * Removes the environment variable @variable from the environment of
  * processes launched from this launcher.
  *
- * The variable name should be in the GLib file name encoding.  On UNIX,
- * this means that they can be arbitrary byte strings.  On Windows, they
- * should be in UTF-8.
+ * On UNIX, the variable's name can be an arbitrary byte string not
+ * containing '='. On Windows, it should be in UTF-8.
  *
  * Since: 2.40
  */
@@ -39815,6 +40075,596 @@
  * is closed.
  *
  * Since: 2.26
+ */
+
+
+/**
+ * g_win32_registry_key_erase_change_indicator:
+ * @key: (in) (transfer none): a #GWin32RegistryKey
+ *
+ * Erases change indicator of the @key.
+ *
+ * Subsequent calls to g_win32_registry_key_has_changed() will return %FALSE
+ * until the key is put on watch again by calling
+ * g_win32_registry_key_watch() again.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_key_get_child:
+ * @key: (in) (transfer none): a parent #GWin32RegistryKey
+ * @subkey: (in) (transfer none): name of a child key to open (in UTF-8), relative to @key
+ * @error: (inout) (nullable): a pointer to a %NULL #GError, or %NULL
+ *
+ * Opens a @subkey of the @key.
+ *
+ * Returns: (nullable): a #GWin32RegistryKey or %NULL if can't be opened. Free
+ *                      with g_object_unref().
+ */
+
+
+/**
+ * g_win32_registry_key_get_child_w:
+ * @key: (in) (transfer none): a parent #GWin32RegistryKey
+ * @subkey: (in) (transfer none): name of a child key to open (in UTF-8), relative to @key
+ * @error: (inout) (nullable): a pointer to a %NULL #GError, or %NULL
+ *
+ * Opens a @subkey of the @key.
+ *
+ * Returns: (nullable): a #GWin32RegistryKey or %NULL if can't be opened. Free
+ *                      with g_object_unref().
+ */
+
+
+/**
+ * g_win32_registry_key_get_path:
+ * @key: (in) (transfer none): a #GWin32RegistryKey
+ *
+ * Get full path to the key
+ *
+ * Returns: (transfer none): a full path to the key (in UTF-8),
+ *     or %NULL if it can't be converted to UTF-8.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_key_get_path_w:
+ * @key: (in) (transfer none): a #GWin32RegistryKey
+ *
+ * Get full path to the key
+ *
+ * Returns: (transfer none): a full path to the key (in UTF-16)
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_key_get_value:
+ * @key: (in) (transfer none): a #GWin32RegistryKey
+ * @auto_expand: (in): %TRUE to automatically expand G_WIN32_REGISTRY_VALUE_EXPAND_STR
+ *     to G_WIN32_REGISTRY_VALUE_STR.
+ * @value_name: (in) (transfer none): name of the value to get (in UTF-8).
+ *   Empty string means the '(Default)' value.
+ * @value_type: (out) (optional): type of the value retrieved.
+ * @value_data: (out callee-allocates) (optional): contents of the value.
+ * @value_data_size: (out) (optional): size of the buffer pointed
+ *   by @value_data.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Get data from a value of a key. String data is guaranteed to be
+ * appropriately terminated and will be in UTF-8.
+ *
+ * Returns: %TRUE on success, %FALSE on failure.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_key_get_value_w:
+ * @key: (in) (transfer none): a #GWin32RegistryKey
+ * @auto_expand: (in): %TRUE to automatically expand G_WIN32_REGISTRY_VALUE_EXPAND_STR
+ *     to G_WIN32_REGISTRY_VALUE_STR.
+ * @value_name: (in) (transfer none): name of the value to get (in UTF-16).
+ *   Empty string means the '(Default)' value.
+ * @value_type: (out) (optional): type of the value retrieved.
+ * @value_data: (out callee-allocates) (optional): contents of the value.
+ * @value_data_size: (out) (optional): size of the buffer pointed
+ *   by @value_data.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Get data from a value of a key.
+ *
+ * Get data from a value of a key. String data is guaranteed to be
+ * appropriately terminated and will be in UTF-16.
+ *
+ * When calling with value_data == NULL (to get data size without getting
+ * the data itself) remember that returned size corresponds to possibly
+ * unterminated string data (if value is some kind of string), because
+ * termination cannot be checked and fixed unless the data is retreived
+ * too.
+ *
+ * Returns: %TRUE on success, %FALSE on failure.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_key_has_changed:
+ * @key: (in) (transfer none): a #GWin32RegistryKey
+ *
+ * Check the @key's status indicator.
+ *
+ * Returns: %TRUE if the @key was put under watch at some point and has changed
+ * since then, %FALSE if it either wasn't changed or wasn't watched at all.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_key_new:
+ * @path: absolute full name of a key to open (in UTF-8)
+ * @error: (nullable): a pointer to a %NULL #GError, or %NULL
+ *
+ * Creates an object that represents a registry key specified by @path.
+ * @path must start with one of the following pre-defined names:
+ * - HKEY_CLASSES_ROOT
+ * - HKEY_CURRENT_CONFIG
+ * - HKEY_CURRENT_USER
+ * - HKEY_CURRENT_USER_LOCAL_SETTINGS
+ * - HKEY_LOCAL_MACHINE
+ * - HKEY_PERFORMANCE_DATA
+ * - HKEY_PERFORMANCE_NLSTEXT
+ * - HKEY_PERFORMANCE_TEXT
+ * - HKEY_USERS
+ * @path must not end with '\\'.
+ *
+ * Returns: (nullable) (transfer full): a #GWin32RegistryKey or %NULL if can't
+ *   be opened. Free with g_object_unref().
+ */
+
+
+/**
+ * g_win32_registry_key_new_w:
+ * @path: (in) (transfer none): absolute full name of a key to open (in UTF-16)
+ * @error: (inout) (nullable): a pointer to a %NULL #GError, or %NULL
+ *
+ * Creates an object that represents a registry key specified by @path.
+ * @path must start with one of the following pre-defined names:
+ * - HKEY_CLASSES_ROOT
+ * - HKEY_CURRENT_CONFIG
+ * - HKEY_CURRENT_USER
+ * - HKEY_CURRENT_USER_LOCAL_SETTINGS
+ * - HKEY_LOCAL_MACHINE
+ * - HKEY_PERFORMANCE_DATA
+ * - HKEY_PERFORMANCE_NLSTEXT
+ * - HKEY_PERFORMANCE_TEXT
+ * - HKEY_USERS
+ * @path must not end with L'\\'.
+ *
+ * Returns: (nullable) (transfer full): a #GWin32RegistryKey or %NULL if can't
+ *   be opened. Free with g_object_unref().
+ */
+
+
+/**
+ * g_win32_registry_key_watch:
+ * @key: (in) (transfer none): a #GWin32RegistryKey
+ * @watch_children: (in): %TRUE also watch the children of the @key, %FALSE
+ *     to watch the key only.
+ * @change_flags: (in): specifies the types of changes to watch for.
+ * @callback: (in) (nullable): a function to invoke when a change occurs.
+ * @user_data: (in) (nullable): a pointer to pass to @callback on invocation.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Puts @key under a watch.
+ *
+ * When the key changes, an APC will be queued in the current thread. The APC
+ * will run when the current thread enters alertable state (GLib main loop
+ * should do that; if you are not using it, see MSDN documentation for W32API
+ * calls that put thread into alertable state). When it runs, it will
+ * atomically switch an indicator in the @key. If a callback was specified,
+ * it is invoked at that point. Subsequent calls to
+ * g_win32_registry_key_has_changed() will return %TRUE, and the callback (if
+ * it was specified) will not be invoked anymore.
+ * Calling g_win32_registry_key_erase_change_indicator() will reset the indicator,
+ * and g_win32_registry_key_has_changed() will start returning %FALSE.
+ * To resume the watch, call g_win32_registry_key_watch_for_changes() again.
+ *
+ * Calling g_win32_registry_key_watch_for_changes() for a key that is already
+ * being watched is allowed and affects nothing.
+ *
+ * The fact that the key is being watched will be used internally to update
+ * key path (if it changes).
+ *
+ * Returns: %TRUE on success, %FALSE on failure.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_assign:
+ * @iter: a #GWin32RegistrySubkeyIter
+ * @other: another #GWin32RegistrySubkeyIter
+ *
+ * Assigns the value of @other to @iter.  This function
+ * is not useful in applications, because iterators can be assigned
+ * with `GWin32RegistrySubkeyIter i = j;`. The
+ * function is used by language bindings.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_clear:
+ * @iter: (in) (transfer none): a #GWin32RegistrySubkeyIter
+ *
+ * Frees internal buffers of a #GWin32RegistrySubkeyIter.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_copy:
+ * @iter: an iterator
+ *
+ * Creates a dynamically-allocated copy of an iterator. Dynamically-allocated
+ * state of the iterator is duplicated too.
+ *
+ * Returns: (transfer full): a copy of the @iter,
+ * free with g_win32_registry_subkey_iter_free ()
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_free:
+ * @iter: a dynamically-allocated iterator
+ *
+ * Free an iterator allocated on the heap. For iterators that are allocated
+ * on the stack use g_win32_registry_subkey_iter_clear () instead.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_get_name:
+ * @iter: (in) (transfer none): a #GWin32RegistrySubkeyIter
+ * @subkey_name: (out callee-allocates) (transfer none): Pointer to a location
+ *     to store the name of a subkey (in UTF-8). Free with g_free().
+ * @subkey_name_len: (out) (optional): Pointer to a location to store the
+ *     length of @subkey_name, in gchars, excluding NUL-terminator.
+ *     %NULL if length is not needed.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Gets the name of the subkey at the @iter potision.
+ *
+ * Returns: %TRUE if the name was retrieved, %FALSE otherwise.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_get_name_w:
+ * @iter: (in) (transfer none): a #GWin32RegistrySubkeyIter
+ * @subkey_name: (out callee-allocates) (transfer none): Pointer to a location
+ *     to store the name of a subkey (in UTF-16).
+ * @subkey_name_len: (out) (optional) (transfer none): Pointer to a location
+ *     to store the length of @subkey_name, in gunichar2s, excluding
+ *     NUL-terminator.
+ *     %NULL if length is not needed.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Same as g_win32_registry_subkey_iter_get_next(), but outputs UTF-16-encoded
+ * data, without converting it to UTF-8 first.
+ *
+ * Returns: %TRUE if the name was retrieved, %FALSE otherwise.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_init:
+ * @iter: (in) (transfer none): a pointer to a #GWin32RegistrySubkeyIter
+ * @key: (in) (transfer none): a #GWin32RegistryKey to iterate over
+ * @error: (inout) (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Initialises (without allocating) a #GWin32RegistrySubkeyIter.  @iter may be
+ * completely uninitialised prior to this call; its old value is
+ * ignored.
+ *
+ * The iterator remains valid for as long as @key exists.
+ * Clean up its internal buffers with a call to
+ * g_win32_registry_subkey_iter_clear() when done.
+ *
+ * Returns: %TRUE if iterator was initialized successfully, %FALSE on error.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_n_subkeys:
+ * @iter: (in) (transfer none): a #GWin32RegistrySubkeyIter
+ *
+ * Queries the number of subkeys items in the key that we are
+ * iterating over.  This is the total number of subkeys -- not the number
+ * of items remaining.
+ *
+ * This information is accurate at the point of iterator initialization,
+ * and may go out of sync with reality even while subkeys are enumerated.
+ *
+ * Returns: the number of subkeys in the key
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_subkey_iter_next:
+ * @iter: (in) (transfer none): a #GWin32RegistrySubkeyIter
+ * @skip_errors: (in): %TRUE if iterator should silently ignore errors (such as
+ *     the actual number of subkeys being less than expected) and
+ *     proceed forward
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Moves iterator to the next subkey.
+ * Enumeration errors can be ignored if @skip_errors is %TRUE
+ *
+ * Here is an example for iterating with g_win32_registry_subkey_iter_next():
+ * |[<!-- language="C" -->
+ *   // recursively iterate a key
+ *   void
+ *   iterate_key_recursive (GWin32RegistryKey *key)
+ *   {
+ *     GWin32RegistrySubkeyIter iter;
+ *     gchar *name;
+ *     GWin32RegistryKey *child;
+ *
+ *     if (!g_win32_registry_subkey_iter_init (&iter, key, NULL))
+ *       return;
+ *
+ *     while (g_win32_registry_subkey_iter_next (&iter, TRUE, NULL))
+ *       {
+ *         if (!g_win32_registry_subkey_iter_get_name (&iter, &name, NULL, NULL))
+ *           continue;
+ *
+ *         g_print ("subkey '%s'\n", name);
+ *         child = g_win32_registry_key_get_child (key, name, NULL);
+ *
+ *         if (child)
+ *           iterate_key_recursive (child);
+ *       }
+ *
+ *     g_win32_registry_subkey_iter_clear (&iter);
+ *   }
+ * ]|
+ *
+ * Returns: %TRUE if next subkey info was retrieved, %FALSE otherwise.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_assign:
+ * @iter: a #GWin32RegistryValueIter
+ * @other: another #GWin32RegistryValueIter
+ *
+ * Assigns the value of @other to @iter.  This function
+ * is not useful in applications, because iterators can be assigned
+ * with `GWin32RegistryValueIter i = j;`. The
+ * function is used by language bindings.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_clear:
+ * @iter: (in) (transfer none): a #GWin32RegistryValueIter
+ *
+ * Frees internal buffers of a #GWin32RegistryValueIter.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_copy:
+ * @iter: an iterator
+ *
+ * Creates a dynamically-allocated copy of an iterator. Dynamically-allocated
+ * state of the iterator is duplicated too.
+ *
+ * Returns: (transfer full): a copy of the @iter,
+ * free with g_win32_registry_value_iter_free ().
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_free:
+ * @iter: a dynamically-allocated iterator
+ *
+ * Free an iterator allocated on the heap. For iterators that are allocated
+ * on the stack use g_win32_registry_value_iter_clear () instead.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_get_data:
+ * @iter: (in) (transfer none): a #GWin32RegistryValueIter
+ * @value_data: (out callee-allocates) (optional) (transfer none): Pointer to a
+ *     location to store the data of the value (in UTF-8, if it's a string).
+ * @value_data_size: (out) (optional): Pointer to a location to store the length
+ *     of @value_data, in bytes (including any NUL-terminators, if it's a
+ *     string).
+ *     %NULL if length is not needed.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Stores the data of the value currently being iterated over in @value_data,
+ * and its length - in @value_data_len (if not %NULL).
+ *
+ * Returns: %TRUE if value data was retrieved, %FALSE otherwise.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_get_data_w:
+ * @iter: (in) (transfer none): a #GWin32RegistryValueIter
+ * @auto_expand: (in): %TRUE to automatically expand G_WIN32_REGISTRY_VALUE_EXPAND_STR to
+ *     G_WIN32_REGISTRY_VALUE_STR.
+ * @value_data: (out callee-allocates) (optional) (transfer none): Pointer to a
+ *     location to store the data of the value (in UTF-16, if it's a string).
+ * @value_data_len: (out) (optional): Pointer to a location to store the size
+ *     of @value_data, in bytes (including any NUL-terminators, if it's a
+ *     string).
+ *     %NULL if length is not needed.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Stores the data of the value currently being iterated over in @value_data,
+ * and its length - in @value_data_len (if not %NULL).
+ *
+ * Returns: %TRUE if value data was retrieved, %FALSE otherwise.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_get_name:
+ * @iter: (in) (transfer none): a #GWin32RegistryValueIter
+ * @value_name: (out callee-allocates) (transfer none): Pointer to a location
+ *     to store the name of a value (in UTF-8).
+ * @value_name_len: (out) (optional): Pointer to a location to store the length
+ *     of @value_name, in gchars, excluding NUL-terminator.
+ *     %NULL if length is not needed.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Stores the name of the value currently being iterated over in @value_name,
+ * and its length - in @value_name_len (if not %NULL).
+ *
+ * Returns: %TRUE if value name was retrieved, %FALSE otherwise.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_get_name_w:
+ * @iter: (in) (transfer none): a #GWin32RegistryValueIter
+ * @value_name: (out callee-allocates) (transfer none): Pointer to a location
+ *     to store the name of a value (in UTF-16).
+ * @value_name_len: (out) (optional): Pointer to a location to store the length
+ *     of @value_name, in gunichar2s, excluding NUL-terminator.
+ *     %NULL if length is not needed.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Stores the name of the value currently being iterated over in @value_name,
+ * and its length - in @value_name (if not %NULL).
+ *
+ * Returns: %TRUE if value name was retrieved, %FALSE otherwise.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_get_value_type:
+ * @iter: (in) (transfer none): a #GWin32RegistryValueIter
+ * @value_type: (out): Pointer to a location to store the type of
+ *     the value.
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Stores the type of the value currently being iterated over in @value_type.
+ *
+ * Returns: %TRUE if value type was retrieved, %FALSE otherwise.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_init:
+ * @iter: (in) (transfer none): a pointer to a #GWin32RegistryValueIter
+ * @key: (in) (transfer none): a #GWin32RegistryKey to iterate over
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Initialises (without allocating) a #GWin32RegistryValueIter.  @iter may be
+ * completely uninitialised prior to this call; its old value is
+ * ignored.
+ *
+ * The iterator remains valid for as long as @key exists.
+ * Clean up its internal buffers with a call to
+ * g_win32_registry_value_iter_clear() when done.
+ *
+ * Returns: %TRUE if iterator was initialized successfully, %FALSE on error.
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_n_values:
+ * @iter: (in) (transfer none): a #GWin32RegistryValueIter
+ *
+ * Queries the number of values items in the key that we are
+ * iterating over.  This is the total number of values -- not the number
+ * of items remaining.
+ *
+ * This information is accurate at the point of iterator initialization,
+ * and may go out of sync with reality even while values are enumerated.
+ *
+ * Returns: the number of values in the key
+ * Since: 2.46
+ */
+
+
+/**
+ * g_win32_registry_value_iter_next:
+ * @iter: (in) (transfer none): a #GWin32RegistryValueIter
+ * @skip_errors: (in): %TRUE if iterator should silently ignore errors (such as
+ *     the actual number of values being less than expected) and
+ *     proceed forward
+ * @error: (nullable): a pointer to %NULL #GError, or %NULL
+ *
+ * Advances iterator to the next value in the key. If no more values remain then
+ * FALSE is returned.
+ * Enumeration errors can be ignored if @skip_errors is %TRUE
+ *
+ * Here is an example for iterating with g_win32_registry_value_iter_next():
+ * |[<!-- language="C" -->
+ *   // iterate values of a key
+ *   void
+ *   iterate_values_recursive (GWin32RegistryKey *key)
+ *   {
+ *     GWin32RegistryValueIter iter;
+ *     gchar *name;
+ *     GWin32RegistryValueType val_type;
+ *     gchar *val_data;
+ *
+ *     if (!g_win32_registry_value_iter_init (&iter, key, NULL))
+ *       return;
+ *
+ *     while (g_win32_registry_value_iter_next (&iter, TRUE, NULL))
+ *       {
+ *         if ((!g_win32_registry_value_iter_get_value_type (&iter, &value)) ||
+ *             ((val_type != G_WIN32_REGISTRY_VALUE_STR) &&
+ *              (val_type != G_WIN32_REGISTRY_VALUE_EXPAND_STR)))
+ *           continue;
+ *
+ *         if (g_win32_registry_value_iter_get_value (&iter, TRUE, &name, NULL,
+ *                                                    &val_data, NULL, NULL))
+ *           g_print ("value '%s' = '%s'\n", name, val_data);
+ *       }
+ *
+ *     g_win32_registry_value_iter_clear (&iter);
+ *   }
+ * ]|
+ *
+ * Returns: %TRUE if next value info was retrieved, %FALSE otherwise.
+ * Since: 2.46
  */
 
 

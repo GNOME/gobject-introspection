@@ -12732,8 +12732,8 @@
  * @date: a #GDate
  *
  * Returns the week of the year, where weeks are understood to start on
- * Monday. If the date is before the first Monday of the year, return
- * 0. The date must be valid.
+ * Monday. If the date is before the first Monday of the year, return 0.
+ * The date must be valid.
  *
  * Returns: week of the year
  */
@@ -12769,9 +12769,9 @@
  * g_date_get_sunday_week_of_year:
  * @date: a #GDate
  *
- * Returns the week of the year during which this date falls, if weeks
- * are understood to being on Sunday. The date must be valid. Can return
- * 0 if the day is before the first Sunday of the year.
+ * Returns the week of the year during which this date falls, if
+ * weeks are understood to being on Sunday. The date must be valid.
+ * Can return 0 if the day is before the first Sunday of the year.
  *
  * Returns: week number
  */
@@ -14339,8 +14339,7 @@
  * @envp: (allow-none) (array zero-terminated=1) (transfer none): an environment
  *     list (eg, as returned from g_get_environ()), or %NULL
  *     for an empty environment list
- * @variable: the environment variable to get, in the GLib file name
- *     encoding
+ * @variable: the environment variable to get
  *
  * Returns the value of the environment variable @variable in the
  * provided list @envp.
@@ -14438,7 +14437,7 @@
  * If @domain contains a `FAILED` (or otherwise generic) error code,
  * you should generally not check for it explicitly, but should
  * instead treat any not-explicitly-recognized error code as being
- * equilalent to the `FAILED` code. This way, if the domain is
+ * equivalent to the `FAILED` code. This way, if the domain is
  * extended in the future to provide a more specific error code for
  * a certain case, your code will still work.
  *
@@ -15478,14 +15477,13 @@
 
 /**
  * g_getenv:
- * @variable: the environment variable to get, in the GLib file name
- *     encoding
+ * @variable: the environment variable to get
  *
  * Returns the value of an environment variable.
  *
- * The name and value are in the GLib file name encoding. On UNIX,
- * this means the actual bytes which might or might not be in some
- * consistent character set and encoding. On Windows, it is in UTF-8.
+ * On UNIX, the name and value are byte strings which might or might not
+ * be in some consistent character set and encoding. On Windows, they are
+ * in UTF-8.
  * On Windows, in case the environment variable's value contains
  * references to other environment variables, they are expanded.
  *
@@ -17489,6 +17487,8 @@
  * @group_name. If both @key and @group_name are %NULL, then
  * @comment will be read from above the first group in the file.
  *
+ * Note that the returned string includes the '#' comment markers.
+ *
  * Returns: a comment that should be freed with g_free()
  * Since: 2.6
  */
@@ -18012,9 +18012,13 @@
  * @error: return location for a #GError
  *
  * Places a comment above @key from @group_name.
+ *
  * If @key is %NULL then @comment will be written above @group_name.
  * If both @key and @group_name  are %NULL, then @comment will be
  * written above the first group in the file.
+ *
+ * Note that this function prepends a '#' comment marker to
+ * each line of @comment.
  *
  * Returns: %TRUE if the comment was written, %FALSE otherwise
  * Since: 2.6
@@ -18980,6 +18984,25 @@
  * ]|
  *
  * Returns: the id of the new handler
+ */
+
+
+/**
+ * g_log_set_handler_full: (rename-to g_log_set_handler)
+ * @log_domain: (allow-none): the log domain, or %NULL for the default ""
+ *     application domain
+ * @log_levels: the log levels to apply the log handler for.
+ *     To handle fatal and recursive messages as well, combine
+ *     the log levels with the #G_LOG_FLAG_FATAL and
+ *     #G_LOG_FLAG_RECURSION bit flags.
+ * @log_func: the log handler function
+ * @user_data: data passed to the log handler
+ * @destroy: destroy notify for @user_data, or %NULL
+ *
+ * Like g_log_sets_handler(), but takes a destroy notify for the @user_data.
+ *
+ * Returns: the id of the new handler
+ * Since: 2.46
  */
 
 
@@ -25410,10 +25433,9 @@
  * @value: the value for to set the variable to.
  * @overwrite: whether to change the variable if it already exists.
  *
- * Sets an environment variable. Both the variable's name and value
- * should be in the GLib file name encoding. On UNIX, this means that
- * they can be arbitrary byte strings. On Windows, they should be in
- * UTF-8.
+ * Sets an environment variable. On UNIX, both the variable's name and
+ * value can be arbitrary byte strings, except that the variable's name
+ * cannot contain '='. On Windows, they should be in UTF-8.
  *
  * Note that on some systems, when variables are overwritten, the memory
  * used for the previous variables and its value isn't reclaimed.
