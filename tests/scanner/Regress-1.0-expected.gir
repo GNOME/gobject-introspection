@@ -2391,6 +2391,12 @@ use it should be.</doc>
         </parameter>
       </parameters>
     </callback>
+    <callback name="TestCallbackReturnFull"
+              c:type="RegressTestCallbackReturnFull">
+      <return-value transfer-ownership="full">
+        <type name="TestObj" c:type="RegressTestObj*"/>
+      </return-value>
+    </callback>
     <callback name="TestCallbackUserData" c:type="RegressTestCallbackUserData">
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
@@ -5353,6 +5359,18 @@ condition in bindings which needs to be tested.</doc>
         </parameter>
         <parameter name="notify" transfer-ownership="none" scope="async">
           <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_callback_return_full"
+              c:identifier="regress_test_callback_return_full">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="call">
+          <type name="TestCallbackReturnFull"
+                c:type="RegressTestCallbackReturnFull"/>
         </parameter>
       </parameters>
     </function>
