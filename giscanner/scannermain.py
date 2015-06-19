@@ -375,7 +375,7 @@ def create_transformer(namespace, options):
                               identifier_filter_cmd=options.identifier_filter_cmd,
                               symbol_filter_cmd=options.symbol_filter_cmd)
     transformer.set_include_paths(options.include_paths)
-    if options.passthrough_gir:
+    if options.passthrough_gir or options.reparse_validate_gir:
         transformer.disable_cache()
         transformer.set_passthrough_mode()
 
