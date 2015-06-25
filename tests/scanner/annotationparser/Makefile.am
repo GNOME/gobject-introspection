@@ -4,7 +4,7 @@ TESTS = \
 	test_parser.py \
 	test_patterns.py
 
-TESTS_ENVIRONMENT = builddir=$(builddir) top_builddir=$(top_builddir) srcdir=$(srcdir) top_srcdir=$(top_srcdir) \
+TESTS_ENVIRONMENT = env builddir=$(builddir) top_builddir=$(top_builddir) srcdir=$(srcdir) top_srcdir=$(top_srcdir) \
 	PYTHON=$(PYTHON) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir)
 LOG_COMPILER = $(top_srcdir)/tests/gi-tester
 

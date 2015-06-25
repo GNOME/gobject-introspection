@@ -183,7 +183,6 @@ CHECKGIRS += Identfilter-1.0.gir
 
 Identfilter-1.0.gir: identfilter.h
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
-		--warn-all --reparse-validate \
 		--namespace=Identfilter --accept-unprefixed --nsversion=1.0 --header-only \
 		--identifier-filter-cmd="$(PYTHON) $(srcdir)/identfilter.py" \
 		--output=$@ $<
