@@ -20,7 +20,6 @@
 
 import imp
 import os
-import platform
 import sys
 
 from .utils import extract_libtool
@@ -54,16 +53,14 @@ class LibtoolImporter(object):
 
     def load_module(self, name):
         realpath = extract_libtool(self.path)
-        platform_system = platform.system()
 
-        if platform_system == 'Darwin':
-            extension = '.dylib'
-        elif platform_system == 'Windows':
-            extension = '.dll'
-        else:
-            extension = '.so'
+        # The first item of the suffix tuple (which can be, depending on platform,
+        # one or more valid filename extensions used to name c extension modules)
+        # is ignored by imp.load_module(). Thus, there is no use in pretending it
+        # is important and we set it to an empty string.
+        suffix = ('', 'rb', imp.C_EXTENSION)
 
-        mod = imp.load_module(name, open(realpath), realpath, (extension, 'rb', 3))
+        mod = imp.load_module(name, open(realpath), realpath, suffix)
         mod.__loader__ = self
         return mod
 
