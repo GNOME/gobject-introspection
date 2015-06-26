@@ -158,3 +158,8 @@ docs/giscanner/_build/*
 #coverage reports
 .coverage
 htmlcov*
+
+#PyDev/Eclipse
+.settings
+.project
+.pydevproject
