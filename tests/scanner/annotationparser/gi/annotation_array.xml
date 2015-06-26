@@ -405,6 +405,61 @@ are zero-terminated</description>
 
 <test>
   <input>/**
+ * annotation_array_fixed_size:
+ * @data1: (array fixed-size): a value
+ * @data2: (array fixed-size=a): a value
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_array_fixed_size</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>data1</name>
+          <annotations>
+            <annotation>
+              <name>array</name>
+              <options>
+                <option>
+                  <name>fixed-size</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>a value</description>
+        </parameter>
+        <parameter>
+          <name>data2</name>
+          <annotations>
+            <annotation>
+              <name>array</name>
+              <options>
+                <option>
+                  <name>fixed-size</name>
+                  <value>a</value>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>a value</description>
+        </parameter>
+      </parameters>
+    </docblock>
+    <messages>
+      <message>3: Warning: Test: "array" annotation option "fixed-size" needs a value</message>
+      <message>4: Warning: Test: invalid "array" annotation option "fixed-size" value "a", must be an integer</message>
+    </messages>
+  </parser>
+  <output>/**
+ * annotation_array_fixed_size:
+ * @data1: (array fixed-size): a value
+ * @data2: (array fixed-size=a): a value
+ */</output>
+</test>
+
+<test>
+  <input>/**
  * g_app_launch_context_get_environment:
  * @arg1: (array zero-terminated): ...
  * @arg2: (array length): ...
