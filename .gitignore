@@ -154,3 +154,7 @@ docs/giscanner/_build/*
 !tests/scanner/*-sections-expected.txt
 
 **/.dirstamp
+
+#coverage reports
+.coverage
+htmlcov*
