@@ -55,7 +55,10 @@ EXTRA_DIST += 			\
 	$(man_MANS)		\
 	$(m4_DATA)		\
 	misc/pep8.py		\
-	misc/pyflakes.py
+	misc/pyflakes.py	\
+	misc/update-glib-annotations.py	\
+	misc/update-gtkdoc-tests.py	\
+	misc/verbump.py
 
 # Default pep8.py --exclude + emacs backup files
 PEP8_EXCLUDES=--exclude='.svn,CVS,.bzr,.hg,.git,__pycache__,.\#*'
