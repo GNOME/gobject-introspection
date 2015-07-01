@@ -9256,6 +9256,36 @@
 
 
 /**
+ * g_async_queue_push_front:
+ * @queue: a #GAsyncQueue
+ * @data: @data to push into the @queue
+ *
+ * Pushes the @data into the @queue. @data must not be %NULL.
+ * In contrast to g_async_queue_push(), this function
+ * pushes the new item ahead of the items already in the queue,
+ * so that it will be the next one to be popped off the queue.
+ *
+ * Since: 2.46
+ */
+
+
+/**
+ * g_async_queue_push_front_unlocked:
+ * @queue: a #GAsyncQueue
+ * @data: @data to push into the @queue
+ *
+ * Pushes the @data into the @queue. @data must not be %NULL.
+ * In contrast to g_async_queue_push_unlocked(), this function
+ * pushes the new item ahead of the items already in the queue,
+ * so that it will be the next one to be popped off the queue.
+ *
+ * This function must be called while holding the @queue's lock.
+ *
+ * Since: 2.46
+ */
+
+
+/**
  * g_async_queue_push_sorted:
  * @queue: a #GAsyncQueue
  * @data: the @data to push into the @queue
@@ -9335,6 +9365,32 @@
  * Deprecated: 2.8: Reference counting is done atomically.
  * so g_async_queue_ref() can be used regardless of the @queue's
  * lock.
+ */
+
+
+/**
+ * g_async_queue_remove:
+ * @queue: a #GAsyncQueue
+ * @data: the @data to remove from the @queue
+ *
+ * Remove an item from the queue. This function does not block.
+ *
+ * Returns: %TRUE if the item was removed
+ * Since: 2.46
+ */
+
+
+/**
+ * g_async_queue_remove_unlocked:
+ * @queue: a #GAsyncQueue
+ * @data: the @data to remove from the @queue
+ *
+ * Remove an item from the queue. This function does not block.
+ *
+ * This function must be called while holding the @queue's lock.
+ *
+ * Returns: %TRUE if the item was removed
+ * Since: 2.46
  */
 
 
@@ -29822,6 +29878,19 @@
  * Returns the number of currently unused threads.
  *
  * Returns: the number of currently unused threads
+ */
+
+
+/**
+ * g_thread_pool_move_to_front:
+ * @pool: a #GThreadPool
+ * @data: an unprocessed item in the pool
+ *
+ * Moves the item to the front of the queue of unprocessed
+ * items, so that it will be processed next.
+ *
+ * Returns: %TRUE if the item was found and moved
+ * Since: 2.46
  */
 
 
