@@ -75,23 +75,22 @@ class CacheStore(object):
         if current_hash == cache_hash:
             return
 
-        versiontmp = version + '.tmp'
-
         self._clean()
+
+        tmp_fd, tmp_filename = tempfile.mkstemp(prefix='g-ir-scanner-cache-version-')
         try:
-            fp = open(versiontmp, 'w')
+            with os.fdopen(tmp_fd, 'w') as tmp_file:
+                tmp_file.write(current_hash)
+
+            # On Unix, this would just be os.rename() but Windows
+            # doesn't allow that.
+            shutil.move(tmp_filename, version)
         except IOError as e:
             # Permission denied
             if e.errno == errno.EACCES:
                 return
             else:
                 raise
-
-        fp.write(current_hash)
-        fp.close()
-        # On Unix, this would just be os.rename() but Windows
-        # doesn't allow that.
-        shutil.move(versiontmp, version)
 
     def _get_filename(self, filename):
         # If we couldn't create the directory we're probably
