@@ -953,6 +953,5 @@ class DocWriter(object):
 
         output_file_name = os.path.join(os.path.abspath(output),
                                         page_id + '.page')
-        fp = open(output_file_name, 'w')
-        fp.write(result)
-        fp.close()
+        with open(output_file_name, 'w') as fp:
+            fp.write(result)

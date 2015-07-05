@@ -80,9 +80,8 @@ _libtool_pat = re.compile("dlname='([A-z0-9\.\-\+]+)'\n")
 
 
 def _extract_dlname_field(la_file):
-    f = open(la_file)
-    data = f.read()
-    f.close()
+    with open(la_file) as f:
+        data = f.read()
     m = _libtool_pat.search(data)
     if m:
         return m.groups()[0]
@@ -94,9 +93,8 @@ _libtool_libdir_pat = re.compile("libdir='([^']+)'")
 
 
 def _extract_libdir_field(la_file):
-    f = open(la_file)
-    data = f.read()
-    f.close()
+    with open(la_file) as f:
+        data = f.read()
     m = _libtool_libdir_pat.search(data)
     if m:
         return m.groups()[0]
@@ -166,16 +164,13 @@ def get_libtool_command(options):
 
 
 def files_are_identical(path1, path2):
-    f1 = open(path1)
-    f2 = open(path2)
-    buf1 = f1.read(8192)
-    buf2 = f2.read(8192)
-    while buf1 == buf2 and buf1 != '':
+    with open(path1) as f1, open(path2) as f2:
         buf1 = f1.read(8192)
         buf2 = f2.read(8192)
-    f1.close()
-    f2.close()
-    return buf1 == buf2
+        while buf1 == buf2 and buf1 != '':
+            buf1 = f1.read(8192)
+            buf2 = f2.read(8192)
+        return buf1 == buf2
 
 
 def cflag_real_include_path(cflag):

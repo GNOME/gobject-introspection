@@ -322,8 +322,8 @@ def extract_filelist(options):
     filenames = []
     if not os.path.exists(options.filelist):
         _error('%s: no such filelist file' % (options.filelist, ))
-    filelist_file = open(options.filelist, "r")
-    lines = filelist_file.readlines()
+    with open(options.filelist, "r") as filelist_file:
+        lines = filelist_file.readlines()
     for line in lines:
         # We don't support real C++ parsing yet, but we should be able
         # to understand C API implemented in C++ files.
@@ -443,14 +443,12 @@ def write_output(data, options):
         output = sys.stdout
     elif options.reparse_validate_gir:
         main_f, main_f_name = tempfile.mkstemp(suffix='.gir')
-        main_f = os.fdopen(main_f, 'w')
-        main_f.write(data)
-        main_f.close()
+        with os.fdopen(main_f, 'w') as main_f:
+            main_f.write(data)
 
         temp_f, temp_f_name = tempfile.mkstemp(suffix='.gir')
-        temp_f = os.fdopen(temp_f, 'w')
-        passthrough_gir(main_f_name, temp_f)
-        temp_f.close()
+        with os.fdopen(temp_f, 'w') as temp_f:
+            passthrough_gir(main_f_name, temp_f)
         if not utils.files_are_identical(main_f_name, temp_f_name):
             _error("Failed to re-parse gir file; scanned=%r passthrough=%r" % (
                 main_f_name, temp_f_name))
