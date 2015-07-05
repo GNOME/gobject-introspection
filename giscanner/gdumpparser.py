@@ -145,16 +145,15 @@ class GDumpParser(object):
         """Load the library (or executable), returning an XML
 blob containing data gleaned from GObject's primitive introspection."""
         in_path = os.path.join(self._binary.tmpdir, 'functions.txt')
-        f = open(in_path, 'w')
-        for func in self._get_type_functions:
-            f.write('get-type:')
-            f.write(func)
-            f.write('\n')
-        for func in self._error_quark_functions:
-            f.write('error-quark:')
-            f.write(func)
-            f.write('\n')
-        f.close()
+        with open(in_path, 'w') as f:
+            for func in self._get_type_functions:
+                f.write('get-type:')
+                f.write(func)
+                f.write('\n')
+            for func in self._error_quark_functions:
+                f.write('error-quark:')
+                f.write(func)
+                f.write('\n')
         out_path = os.path.join(self._binary.tmpdir, 'dump.xml')
 
         args = []

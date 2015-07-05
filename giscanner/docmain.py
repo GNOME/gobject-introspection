@@ -60,9 +60,8 @@ def doc_main(args):
     if args.write_sections:
         sections_file = generate_sections_file(transformer)
 
-        fp = open(args.output, 'w')
-        write_sections_file(fp, sections_file)
-        fp.close()
+        with open(args.output, 'w') as fp:
+            write_sections_file(fp, sections_file)
     else:
         writer = DocWriter(transformer, args.language)
         writer.write(args.output)

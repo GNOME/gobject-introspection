@@ -114,44 +114,42 @@ class DumpCompiler(object):
                                       'gdump.c')
         if not os.path.isfile(gdump_path):
             raise SystemExit("Couldn't find %r" % (gdump_path, ))
-        gdump_file = open(gdump_path)
-        gdump_contents = gdump_file.read()
-        gdump_file.close()
+        with open(gdump_path) as gdump_file:
+            gdump_contents = gdump_file.read()
         tpl_args['gdump_include'] = gdump_contents
         tpl_args['init_sections'] = "\n".join(self._options.init_sections)
 
         c_path = self._generate_tempfile(tmpdir, '.c')
-        f = open(c_path, 'w')
-        f.write(_PROGRAM_TEMPLATE % tpl_args)
+        with open(c_path, 'w') as f:
+            f.write(_PROGRAM_TEMPLATE % tpl_args)
 
-        # We need to reference our get_type and error_quark functions
-        # to make sure they are pulled in at the linking stage if the
-        # library is a static library rather than a shared library.
-        if len(self._get_type_functions) > 0:
-            for func in self._get_type_functions:
-                f.write("extern GType " + func + "(void);\n")
-            f.write("GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
-            first = True
-            for func in self._get_type_functions:
-                if first:
-                    first = False
-                else:
-                    f.write(",\n")
-                f.write("  " + func)
-            f.write("\n};\n")
-        if len(self._error_quark_functions) > 0:
-            for func in self._error_quark_functions:
-                f.write("extern GQuark " + func + "(void);\n")
-            f.write("GQuark (*GI_ERROR_QUARK_FUNCS_[])(void) = {\n")
-            first = True
-            for func in self._error_quark_functions:
-                if first:
-                    first = False
-                else:
-                    f.write(",\n")
-                f.write("  " + func)
-            f.write("\n};\n")
-        f.close()
+            # We need to reference our get_type and error_quark functions
+            # to make sure they are pulled in at the linking stage if the
+            # library is a static library rather than a shared library.
+            if len(self._get_type_functions) > 0:
+                for func in self._get_type_functions:
+                    f.write("extern GType " + func + "(void);\n")
+                f.write("GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
+                first = True
+                for func in self._get_type_functions:
+                    if first:
+                        first = False
+                    else:
+                        f.write(",\n")
+                    f.write("  " + func)
+                f.write("\n};\n")
+            if len(self._error_quark_functions) > 0:
+                for func in self._error_quark_functions:
+                    f.write("extern GQuark " + func + "(void);\n")
+                f.write("GQuark (*GI_ERROR_QUARK_FUNCS_[])(void) = {\n")
+                first = True
+                for func in self._error_quark_functions:
+                    if first:
+                        first = False
+                    else:
+                        f.write(",\n")
+                    f.write("  " + func)
+                f.write("\n};\n")
 
         # Microsoft compilers generate intermediate .obj files
         # during compilation, unlike .o files like GCC and others
@@ -316,11 +314,10 @@ class DumpCompiler(object):
             # Create a temporary script file that
             # runs the command we want
             tf, tf_name = tempfile.mkstemp()
-            f = os.fdopen(tf, 'wb')
-            shellcontents = ' '.join([x.replace('\\', '/') for x in args])
-            fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
-            f.write(fcontents)
-            f.close()
+            with os.fdopen(tf, 'wb') as f:
+                shellcontents = ' '.join([x.replace('\\', '/') for x in args])
+                fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
+                f.write(fcontents)
             shell = utils.which(shell)
             args = [shell, tf_name.replace('\\', '/')]
         try:

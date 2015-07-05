@@ -64,7 +64,8 @@ class CacheStore(object):
         current_hash = _get_versionhash()
         version = os.path.join(self._directory, _CACHE_VERSION_FILENAME)
         try:
-            cache_hash = open(version).read()
+            with open(version, 'r') as version_file:
+                cache_hash = version_file.read()
         except IOError as e:
             # File does not exist
             if e.errno == errno.ENOENT:
@@ -137,7 +138,8 @@ class CacheStore(object):
 
         tmp_fd, tmp_filename = tempfile.mkstemp(prefix='g-ir-scanner-cache-')
         try:
-            cPickle.dump(data, os.fdopen(tmp_fd, 'w'))
+            with os.fdopen(tmp_fd, 'w') as tmp_file:
+                cPickle.dump(data, tmp_file)
         except IOError as e:
             # No space left on device
             if e.errno == errno.ENOSPC:
