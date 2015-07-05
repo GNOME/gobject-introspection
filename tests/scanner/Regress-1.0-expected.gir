@@ -5718,6 +5718,19 @@ element-type annotation.</doc>
         </type>
       </return-value>
     </function>
+    <function name="test_glist_gtype_container_in"
+              c:identifier="regress_test_glist_gtype_container_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="container">
+          <type name="GLib.List" c:type="GList*">
+            <type name="GType"/>
+          </type>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_glist_nothing_in"
               c:identifier="regress_test_glist_nothing_in">
       <return-value transfer-ownership="none">

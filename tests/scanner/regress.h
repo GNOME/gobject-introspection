@@ -206,6 +206,9 @@ _GI_TEST_EXTERN
 GList *regress_test_glist_everything_return (void);
 
 _GI_TEST_EXTERN
+void regress_test_glist_gtype_container_in (GList *in);
+
+_GI_TEST_EXTERN
 void regress_test_glist_nothing_in (const GList *in);
 
 _GI_TEST_EXTERN

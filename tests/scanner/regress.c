@@ -990,6 +990,24 @@ regress_assert_test_sequence_list (const GList *in)
 }
 
 /**
+ * regress_test_glist_gtype_container_in:
+ * @in: (element-type GType) (transfer container):
+ */
+void
+regress_test_glist_gtype_container_in (GList *in)
+{
+  GList *l = in;
+
+  g_assert (GPOINTER_TO_SIZE (l->data) == REGRESS_TEST_TYPE_OBJ);
+  l = l->next;
+  g_assert (GPOINTER_TO_SIZE (l->data) == REGRESS_TEST_TYPE_SUB_OBJ);
+  l = l->next;
+  g_assert (l == NULL);
+
+  g_list_free (in);
+}
+
+/**
  * regress_test_glist_nothing_in:
  * @in: (element-type utf8):
  */
