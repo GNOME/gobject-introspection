@@ -5716,7 +5716,7 @@ element-type annotation.</doc>
     </function>
     <function name="test_ghash_null_return"
               c:identifier="regress_test_ghash_null_return">
-      <return-value transfer-ownership="none">
+      <return-value transfer-ownership="none" nullable="1">
         <type name="GLib.HashTable" c:type="const GHashTable*">
           <type name="utf8"/>
           <type name="utf8"/>
@@ -6181,6 +6181,18 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
                 c:type="RegressTestCallbackOwnedGError"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_return_allow_none"
+              c:identifier="regress_test_return_allow_none">
+      <return-value transfer-ownership="full" nullable="1">
+        <type name="utf8" c:type="char*"/>
+      </return-value>
+    </function>
+    <function name="test_return_nullable"
+              c:identifier="regress_test_return_nullable">
+      <return-value transfer-ownership="full" nullable="1">
+        <type name="utf8" c:type="char*"/>
+      </return-value>
     </function>
     <function name="test_short" c:identifier="regress_test_short">
       <return-value transfer-ownership="none">

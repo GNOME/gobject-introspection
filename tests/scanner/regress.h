@@ -15,6 +15,13 @@
 _GI_TEST_EXTERN
 void regress_set_abort_on_error (gboolean abort_on_error);
 
+/* return annotations */
+_GI_TEST_EXTERN
+char *regress_test_return_allow_none (void);
+
+_GI_TEST_EXTERN
+char *regress_test_return_nullable (void);
+
 /* basic types */
 _GI_TEST_EXTERN
 gboolean regress_test_boolean (gboolean in);

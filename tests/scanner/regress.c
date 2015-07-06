@@ -25,6 +25,30 @@ regress_set_abort_on_error (gboolean in)
   abort_on_error = in;
 }
 
+/* return annotations */
+
+/**
+ * regress_test_return_allow_none:
+ *
+ * Returns: (allow-none):
+ */
+char *
+regress_test_return_allow_none (void)
+{
+  return NULL;
+}
+
+/**
+ * regress_test_return_nullable:
+ *
+ * Returns: (nullable):
+ */
+char *
+regress_test_return_nullable (void)
+{
+  return NULL;
+}
+
 /* basic types */
 gboolean
 regress_test_boolean (gboolean in)

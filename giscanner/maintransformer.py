@@ -653,7 +653,8 @@ class MainTransformer(object):
             node.optional = True
 
         if ANN_ALLOW_NONE in annotations:
-            if node.direction == ast.PARAM_DIRECTION_OUT:
+            if (node.direction == ast.PARAM_DIRECTION_OUT and
+                    not isinstance(node, ast.Return)):
                 node.optional = True
             else:
                 node.nullable = True
