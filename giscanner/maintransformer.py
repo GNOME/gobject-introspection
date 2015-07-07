@@ -784,6 +784,12 @@ class MainTransformer(object):
             tag = block.tags.get(TAG_RETURNS)
         else:
             tag = None
+
+        if tag is not None and return_.type == ast.TYPE_NONE:
+            message.warn('%s: invalid return annotation' % (block.name,),
+                         tag.position)
+            tag = None
+
         self._apply_annotations_param_ret_common(parent, return_, tag)
 
     def _apply_annotations_params(self, parent, params, block):
@@ -871,7 +877,6 @@ class MainTransformer(object):
 
         if block:
             self._apply_annotations_annotated(signal, block)
-
             # We're only attempting to name the signal parameters if
             # the number of parameters (@foo) is the same or greater
             # than the number of signal parameters

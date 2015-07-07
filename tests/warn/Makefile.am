@@ -14,6 +14,7 @@ TESTS = \
 	invalid-option.h \
 	invalid-optional.h \
 	invalid-out.h \
+	invalid-return.h \
 	invalid-transfer.h \
 	missing-element-type.h \
 	return-gobject.h \

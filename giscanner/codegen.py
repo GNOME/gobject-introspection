@@ -108,10 +108,11 @@ class CCodeGenerator(object):
                 self._write_annotation_transfer(param)
             self.out_c.write(":\n")
         self.out_c.write(' *\n')
-        self.out_c.write(' * Undocumented.\n')
-        self.out_c.write(' *\n')
-        self.out_c.write(' * Returns:')
-        self._write_annotation_transfer(func.retval)
+        self.out_c.write(' * Undocumented.')
+        if func.retval.type != ast.TYPE_NONE:
+            self.out_c.write('\n *\n')
+            self.out_c.write(' * Returns: ')
+            self._write_annotation_transfer(func.retval)
         self.out_c.write('\n */')
 
     @contextmanager
