@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.gtk.org/introspection/core/1.0"
+           elementFormDefault="qualified"
+           version="1.2"
+           xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:xml="http://www.w3.org/XML/1998/namespace"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:c="http://www.gtk.org/introspection/c/1.0"
+           xmlns:glib="http://www.gtk.org/introspection/glib/1.0"
+           xmlns:gi="http://www.gtk.org/introspection/core/1.0">
+
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"
+             schemaLocation="xml.xsd" />
+  <xs:import namespace="http://www.gtk.org/introspection/c/1.0"
+             schemaLocation="c.xsd"/>
+  <xs:import namespace="http://www.gtk.org/introspection/glib/1.0"
+             schemaLocation="glib.xsd"/>
+
+  <!-- Types -->
+
+  <xs:simpleType name="boolean">
+    <xs:annotation>
+      <xs:documentation>
+        • g-ir-scanner : generates {1, 0}
+        • g-ir-compiler: parses {1, 0} but not {true, false, 1, 0} (xs:boolean)
+                         so we define our own gi:boolean type
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:pattern value="1|0" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Attributes -->
+
+  <xs:attributeGroup name="function-attributes">
+    <xs:attribute name="throws" type="gi:boolean" />
+    <xs:attribute name="version" type="xs:string" />
+    <xs:attribute name="moved-to" type="xs:string" />
+    <xs:attribute name="shadows" type="xs:string" />
+    <xs:attribute name="shadowed-by" type="xs:string" />
+    <xs:attribute ref="c:identifier" use="optional" />
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="generic-attributes">
+    <xs:attribute name="deprecated" type="gi:boolean" />
+    <xs:attribute name="deprecated-version" type="xs:string" />
+    <xs:attribute name="introspectable" type="gi:boolean" />
+    <xs:attribute name="stability" type="xs:string" />
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="parameter-attributes">
+    <xs:attribute name="allow-none" type="gi:boolean" />
+    <xs:attribute name="caller-allocates" type="gi:boolean" />
+    <xs:attribute name="closure" type="xs:string" />
+    <xs:attribute name="destroy" type="xs:string" />
+    <xs:attribute name="direction" type="xs:string" />
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="nullable" type="gi:boolean" />
+    <xs:attribute name="optional" type="gi:boolean" />
+    <xs:attribute name="retval" type="gi:boolean">
+      <xs:annotation>
+        <xs:documentation>
+          • g-ir-scanner : not generated.
+          • g-ir-compiler: possible left-over from gidlparser days, see commit
+                           1675d0574f188d627d1f18d7c1c78279bb4ae102 (Initial revision)
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="scope" type="xs:string" />
+    <xs:attribute name="skip" type="xs:string" />
+    <xs:attribute name="transfer-ownership" type="xs:string" />
+  </xs:attributeGroup>
+
+  <!-- Groups -->
+
+  <xs:group name="callable-group">
+    <xs:sequence>
+      <xs:group ref="gi:generic-group" />
+      <xs:element ref="gi:return-value" minOccurs="0" maxOccurs="1" />
+      <xs:element ref="gi:parameters" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="generic-group">
+    <xs:sequence>
+      <xs:element ref="gi:attribute" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element ref="gi:doc" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: ignored
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element ref="gi:doc-deprecated" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: ignored
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element ref="gi:doc-stability" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: ignored
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element ref="gi:doc-version" minOccurs="0" maxOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: ignored
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:group name="parameter-group">
+    <xs:sequence>
+      <xs:group ref="gi:generic-group" />
+      <xs:choice minOccurs="1" maxOccurs="1">
+        <xs:element ref="gi:array" />
+        <xs:element ref="gi:type" />
+        <xs:element ref="gi:varargs" />
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <!-- Root element -->
+
+  <xs:element name="repository">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="gi:include" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:namespace" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="gi:package" minOccurs="0" maxOccurs="1" />
+        <xs:element ref="c:include" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+
+      <xs:attribute name="version" type="xs:string" fixed="1.2" />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Elements -->
+
+  <xs:element name="alias">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:choice minOccurs="0">
+          <xs:element ref="gi:array" />
+          <xs:element ref="gi:type" />
+        </xs:choice>
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute ref="c:type">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="array">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="gi:type" maxOccurs="unbounded" />
+        <xs:element ref="gi:array" />
+      </xs:choice>
+
+      <xs:attribute name="fixed-size" type="xs:string" />
+      <xs:attribute name="length" type="xs:string" />
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute name="zero-terminated" type="xs:string" />
+      <xs:attribute ref="c:type" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="attribute">
+    <xs:complexType mixed="true">
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="value" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="bitfield">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:choice minOccurs="0" maxOccurs="unbounded" >
+          <xs:element ref="gi:field" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element ref="gi:function" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element ref="gi:member" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element ref="gi:record" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element ref="gi:union" minOccurs="0" maxOccurs="unbounded" />
+        </xs:choice>
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute ref="glib:get-type" />
+      <xs:attribute ref="glib:type-name" />
+      <xs:attribute ref="c:type" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="callback">
+    <xs:complexType>
+      <xs:group ref="gi:callable-group" />
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attributeGroup ref="gi:function-attributes"/>
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute ref="c:type" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="class">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:element ref="gi:implements" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:constant" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              • giscanner/girwriter.py : not generated
+              • girepository/girparser.c: parsed
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="gi:constructor" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:field" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:function" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:method" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:property" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:record" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:union" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:virtual-method" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="glib:signal" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute name="parent" type="xs:string" />
+      <xs:attribute name="abstract" type="gi:boolean" />
+      <xs:attribute ref="glib:type-name" use="required" />
+      <xs:attribute ref="glib:get-type" />
+      <xs:attribute ref="glib:type-struct" />
+      <xs:attribute ref="glib:fundamental" />
+      <xs:attribute ref="glib:ref-func" />
+      <xs:attribute ref="glib:unref-func" />
+      <xs:attribute ref="glib:set-value-func" />
+      <xs:attribute ref="glib:get-value-func" />
+      <xs:attribute ref="c:symbol-prefix">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ref="c:type">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="constant">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:choice minOccurs="0">
+          <xs:element ref="gi:type" />
+          <xs:element ref="gi:array" />
+        </xs:choice>
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="value" type="xs:string" use="required" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute ref="c:type">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="constructor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="gi:callable-group" />
+      </xs:sequence>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attributeGroup ref="gi:function-attributes" />
+      <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="discriminator">
+    <xs:annotation>
+      <xs:documentation>
+        • giscanner/girwriter.py : not generated
+        • girepository/girparser.c: parsed, TODO: figure out parent nodes...
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="type" type="xs:string" use="required" />
+      <xs:attribute name="offset" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="doc">
+    <xs:complexType mixed="true">
+      <xs:attribute ref="xml:space" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="doc-deprecated">
+    <xs:complexType mixed="true">
+      <xs:attribute ref="xml:space" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="doc-stability">
+    <xs:complexType mixed="true">
+      <xs:attribute ref="xml:space" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="doc-version">
+    <xs:complexType mixed="true">
+      <xs:attribute ref="xml:space" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="enumeration">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:element ref="gi:member" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:function" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute ref="glib:get-type" />
+      <xs:attribute ref="glib:error-domain"/>
+      <xs:attribute ref="glib:type-name" />
+      <xs:attribute ref="c:type">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="field">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="gi:callback" />
+        <xs:element ref="gi:record" />
+        <xs:element ref="gi:union" />
+        <xs:element ref="gi:type" />
+        <xs:element ref="gi:array" />
+
+        <xs:element ref="gi:doc" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>
+              • giscanner/girwriter.py : generated
+              • girepository/girparser.c: ignored
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="readable" type="gi:boolean" />
+      <xs:attribute name="writable" type="gi:boolean" />
+      <xs:attribute name="bits" type="xs:string" />
+      <xs:attribute name="branch" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : not generated
+            • girepository/girparser.c: parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="private" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="function">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:callable-group" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attributeGroup ref="gi:function-attributes" />
+      <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="include">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute name="version" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="instance-parameter">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:parameter-group" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:parameter-attributes" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="implements">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="interface">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:element name="prerequisite" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:constant" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>
+              • giscanner/girwriter.py : not generated
+              • girepository/girparser.c: parsed
+            </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element ref="gi:function" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:virtual-method" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:method" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:property" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:field" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:record" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:union" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="glib:signal" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute ref="glib:type-name" use="required" />
+      <xs:attribute ref="glib:get-type" use="required" />
+      <xs:attribute ref="glib:type-struct" />
+      <xs:attribute ref="c:symbol-prefix">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute ref="c:type">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="member">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+      </xs:choice>
+
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="value" type="xs:string" />
+      <xs:attribute ref="glib:nick" />
+      <xs:attribute ref="c:identifier" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="method">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:callable-group" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attributeGroup ref="gi:function-attributes" />
+      <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="namespace">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="gi:alias" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:bitfield" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:callback" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:class" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:constant" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:enumeration" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:function" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:interface" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:record" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:union" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="glib:boxed" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute name="shared-library" type="xs:string" />
+      <xs:attribute ref="c:identifier-prefixes" />
+      <xs:attribute ref="c:symbol-prefixes" />
+      <xs:attribute ref="c:prefix" /> 
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="package">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="parameter">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:parameter-group" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:parameter-attributes" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="parameters">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="gi:instance-parameter" minOccurs="0" maxOccurs="1" />
+        <xs:element ref="gi:parameter" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="property">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:choice minOccurs="0">
+          <xs:element ref="gi:type" />
+          <xs:element ref="gi:array" />
+        </xs:choice>
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute name="readable" type="gi:boolean" default="1" />
+      <xs:attribute name="writable" type="gi:boolean" />
+      <xs:attribute name="construct" type="gi:boolean" />
+      <xs:attribute name="construct-only" type="gi:boolean" />
+      <xs:attribute name="transfer-ownership" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="record">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:element ref="gi:field" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:record" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:union" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:constructor" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:method" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:function" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute name="disguised" type="gi:boolean" />
+      <xs:attribute name="foreign" type="xs:string" />
+      <xs:attribute ref="glib:get-type" />
+      <xs:attribute ref="glib:is-gtype-struct-for" />
+      <xs:attribute ref="glib:type-name" />
+      <xs:attribute ref="c:type" />
+      <xs:attribute ref="c:symbol-prefix" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="return-value">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:choice minOccurs="0">
+          <xs:element ref="gi:type" />
+          <xs:element ref="gi:array" />
+        </xs:choice>
+      </xs:choice>
+
+      <xs:attribute name="nullable" type="gi:boolean" />
+      <xs:attribute name="skip" type="xs:string" />
+      <xs:attribute name="transfer-ownership" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="type">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="gi:type" maxOccurs="unbounded" />
+        <xs:element ref="gi:array" />
+        <xs:element ref="gi:varargs" />
+      </xs:choice>
+
+      <xs:attribute name="name" />
+      <xs:attribute name="zero-terminated" />
+      <xs:attribute name="fixed-size" />
+      <xs:attribute name="length" />
+      <xs:attribute name="foreign" />
+      <xs:attribute ref="c:type" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="union">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:generic-group" />
+        <xs:element ref="gi:field" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:record" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:union" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:constructor" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:method" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:function" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="name" type="xs:string" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute ref="glib:get-type" />
+      <xs:attribute ref="glib:type-name" />
+      <xs:attribute ref="c:symbol-prefix" />
+      <xs:attribute ref="c:type" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="varargs">
+    <xs:complexType></xs:complexType>
+  </xs:element>
+
+  <xs:element name="virtual-method">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="gi:callable-group" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="invoker" type="xs:string" />
+      <xs:attribute name="is-class-closure" type="gi:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : not generated
+            • girepository/girparser.c: parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="must-chain-up" type="gi:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : not generated
+            • girepository/girparser.c: parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="offset" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : not generated
+            • girepository/girparser.c: parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="override" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : not generated
+            • girepository/girparser.c: parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="throws" type="gi:boolean" />
+      <xs:attribute name="version" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.gtk.org/introspection/glib/1.0"
+           elementFormDefault="qualified"
+           version="1.2"
+           xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:c="http://www.gtk.org/introspection/c/1.0"
+           xmlns:glib="http://www.gtk.org/introspection/glib/1.0"
+           xmlns:gi="http://www.gtk.org/introspection/core/1.0">
+
+  <xs:import namespace="http://www.gtk.org/introspection/c/1.0"
+             schemaLocation="c.xsd"/>
+  <xs:import namespace="http://www.gtk.org/introspection/core/1.0"
+             schemaLocation="gir.xsd"/>
+
+  <!-- Attributes -->
+
+  <xs:attribute name="error-domain" type="xs:string" />
+
+  <xs:attribute name="fundamental" type="xs:string" />
+
+  <xs:attribute name="get-type" type="xs:string" />
+
+  <xs:attribute name="get-value-func" type="xs:string" />
+
+  <xs:attribute name="is-gtype-struct-for" type="xs:string" />
+
+  <xs:attribute name="name" type="xs:string" />
+
+  <xs:attribute name="nick" type="xs:string" />
+
+  <xs:attribute name="ref-func" type="xs:string" />
+
+  <xs:attribute name="set-value-func" type="xs:string" />
+
+  <xs:attribute name="type-name" type="xs:string" />
+
+  <xs:attribute name="type-struct" type="xs:string" />
+
+  <xs:attribute name="unref-func" type="xs:string" />
+
+  <!-- Elements -->
+
+  <xs:element name="boxed">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="gi:constructor" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:method" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element ref="gi:function" minOccurs="0" maxOccurs="unbounded" />
+      </xs:choice>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute ref="glib:get-type" use="required" />
+      <xs:attribute ref="glib:name" use="required" />
+      <xs:attribute ref="glib:type-name" use="required" />
+      <xs:attribute ref="c:symbol-prefix" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : generated
+            • girepository/girparser.c: not parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="signal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="gi:generic-group" />
+        <xs:element ref="gi:return-value" minOccurs="0" maxOccurs="1" />
+        <xs:element ref="gi:parameters" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+
+      <xs:attributeGroup ref="gi:generic-attributes" />
+      <xs:attribute name="action" type="gi:boolean" />
+      <xs:attribute name="detailed" type="gi:boolean" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="no-hooks" type="xs:string" />
+      <xs:attribute name="no-recurse" type="gi:boolean" />
+      <xs:attribute name="version" type="xs:string" />
+      <xs:attribute name="when" type="xs:string" use="optional" />
+      <xs:attribute name="has-class-closure" type="gi:boolean">
+        <xs:annotation>
+          <xs:documentation>
+            • giscanner/girwriter.py : not generated
+            • girepository/girparser.c: parsed
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

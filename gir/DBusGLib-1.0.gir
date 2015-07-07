@@ -2,12 +2,13 @@
 <repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
-	    xmlns:glib="http://www.gtk.org/introspection/glib/1.0"
-	    c:identifier-prefixes="DBus"
-	    c:symbol-prefixes="DBus">
+	    xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GObject" version="2.0"/>
   <package name="dbus-glib-1"/>
-  <namespace name="DBusGLib" version="1.0" c:prefix="DBusG">
+  <namespace name="DBusGLib"
+             version="1.0"
+             c:identifier-prefixes="DBusG"
+             c:symbol-prefixes="DBusG">
     <record name="Connection" c:type="DBusGConnection"/>
     <record name="MethodInvocation" c:type="DBusGMethodInvocation"/>
     <class name="Proxy" c:type="DBusGProxy" parent="GObject.Object"

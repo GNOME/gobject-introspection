@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://www.gtk.org/introspection/c/1.0"
+           elementFormDefault="qualified"
+           version="1.2"
+           xmlns="http://www.w3.org/1999/xhtml"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:c="http://www.gtk.org/introspection/c/1.0">
+
+  <!-- Attributes -->
+
+  <xs:attribute name="identifier" type="xs:string" />
+
+  <xs:attribute name="identifier-prefixes" type="xs:string" />
+
+  <xs:attribute name="prefix" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>
+        • giscanner/girwriter.py : not generated
+        • girepository/girparser.c: parsed for backwards compatibility (vala
+                         supposedly stil generates this attribute)
+      </xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
+
+  <xs:attribute name="symbol-prefixes" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>
+        • giscanner/girwriter.py: generated
+        • girepository/girparser.c: not parsed
+      </xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
+
+  <xs:attribute name="symbol-prefix" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>
+        • giscanner/girwriter.py : generated
+        • girepository/girparser.c: not parsed
+      </xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
+
+  <xs:attribute name="type" type="xs:string" />
+
+  <!-- Elements -->
+
+  <xs:element name="include">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
