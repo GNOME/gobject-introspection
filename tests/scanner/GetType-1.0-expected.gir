@@ -11,9 +11,27 @@ and/or use gtk-doc annotations.  -->
   <c:include name="gettype.h"/>
   <namespace name="GetType"
              version="1.0"
-             shared-library="libgettype.so"
+             shared-library="libgettype-1.0.so"
              c:identifier-prefixes="GetType"
              c:symbol-prefixes="gettype">
+    <function-macro name="IS_OBJECT"
+                    c:identifier="GETTYPE_IS_OBJECT"
+                    introspectable="0">
+      <source-position filename="gettype.h" line="10"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function-macro>
+    <function-macro name="OBJECT"
+                    c:identifier="GETTYPE_OBJECT"
+                    introspectable="0">
+      <source-position filename="gettype.h" line="9"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function-macro>
     <class name="Object"
            c:symbol-prefix="object"
            c:type="GetTypeObject"
