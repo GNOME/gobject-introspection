@@ -10,9 +10,31 @@ and/or use gtk-doc annotations.  -->
   <c:include name="warnlib.h"/>
   <namespace name="WarnLib"
              version="1.0"
-             shared-library=""
+             shared-library="libwarnlib-1.0.so"
              c:identifier-prefixes="WarnLib"
              c:symbol-prefixes="warnlib_">
+    <function_macro name="IS_WHATEVER" c:identifier="WARNLIB_IS_WHATEVER">
+      <source-position filename="warnlib.h" line="20"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="WHATEVER" c:identifier="WARNLIB_WHATEVER">
+      <source-position filename="warnlib.h" line="19"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="WHATEVER_GET_IFACE"
+                    c:identifier="WARNLIB_WHATEVER_GET_IFACE">
+      <source-position filename="warnlib.h" line="21"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
     <interface name="Whatever"
                c:symbol-prefix="whatever"
                c:type="WarnLibWhatever"

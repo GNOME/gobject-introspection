@@ -176,6 +176,16 @@ class MainTransformer(object):
         block = self._blocks.get(node.symbol)
         self._apply_annotations_callable(node, chain, block)
 
+    def _apply_annotations_function_macro(self, node, chain):
+        block = self._blocks.get(node.symbol)
+        for param in node.parameters:
+            if block:
+                doc_param = block.params.get(param.argname)
+                if doc_param:
+                    param.doc = doc_param.description
+                    param.doc_position = doc_param.position
+        self._apply_annotations_annotated (node, block)
+
     def _pass_read_annotations_early(self, node, chain):
         if isinstance(node, ast.Record):
             if node.ctype is not None:
@@ -215,6 +225,8 @@ class MainTransformer(object):
             self._apply_annotations_alias(node, chain)
         if isinstance(node, ast.Function):
             self._apply_annotations_function(node, chain)
+        if isinstance(node, ast.FunctionMacro):
+            self._apply_annotations_function_macro(node, chain)
         if isinstance(node, ast.Callback):
             self._apply_annotations_callable(node, chain, block=self._get_block(node))
         if isinstance(node, (ast.Class, ast.Interface, ast.Union, ast.Enum,

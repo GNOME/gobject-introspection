@@ -142,6 +142,7 @@ class GIRParser(object):
 
         if not self._types_only:
             parser_methods[_corens('constant')] = self._parse_constant
+            parser_methods[_corens('function_macro')] = self._parse_function_macro
             parser_methods[_corens('function')] = self._parse_function
 
         for node in ns.getchildren():
@@ -309,6 +310,23 @@ class GIRParser(object):
     def _parse_function(self, node):
         function = self._parse_function_common(node, ast.Function)
         self._namespace.append(function)
+
+    def _parse_function_macro(self, node):
+        name = node.attrib['name']
+        symbol = node.attrib.get(_cns('identifier'))
+        parameters = []
+        parameters_node = node.find(_corens('parameters'))
+        if (parameters_node is not None):
+            for paramnode in self._find_children(parameters_node, _corens('parameter')):
+                param = ast.Parameter (paramnode.attrib.get('name'), None)
+                parameters.append(param)
+                self._parse_generic_attribs (paramnode, param)
+
+        func = ast.FunctionMacro (name, parameters, symbol)
+        self._parse_generic_attribs(node, func)
+
+        self._namespace.track(func)
+        self._namespace.append(func)
 
     def _parse_parameter(self, node):
         typeval = self._parse_type(node)

@@ -31,7 +31,7 @@ from .sourcescanner import (
     SourceSymbol, ctype_name, CTYPE_POINTER,
     CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY, CTYPE_TYPEDEF,
     CTYPE_VOID, CTYPE_ENUM, CTYPE_FUNCTION, CTYPE_STRUCT,
-    CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
+    CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_FUNCTION_MACRO, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
     TYPE_QUALIFIER_CONST, TYPE_QUALIFIER_VOLATILE)
@@ -77,7 +77,11 @@ class Transformer(object):
         # handle #ifdef.  But this introduces an arch-dependency in the .gir
         # file.  So far this has only come up scanning glib - in theory, other
         # modules will just depend on that.
-        if isinstance(original, ast.Constant) and isinstance(node, ast.Constant):
+        if original and\
+                (isinstance (original, ast.FunctionMacro) or isinstance (node,
+                    ast.FunctionMacro)):
+            pass
+        elif isinstance(original, ast.Constant) and isinstance(node, ast.Constant):
             pass
         elif original is node:
             # Ignore attempts to add the same node to the namespace. This can
@@ -368,6 +372,8 @@ raise ValueError."""
             stype = symbol.type
         if stype == CSYMBOL_TYPE_FUNCTION:
             return self._create_function(symbol)
+        elif stype == CSYMBOL_TYPE_FUNCTION_MACRO:
+            return self._create_function_macro(symbol)
         elif stype == CSYMBOL_TYPE_TYPEDEF:
             return self._create_typedef(symbol)
         elif stype == CSYMBOL_TYPE_STRUCT:
@@ -449,6 +455,15 @@ raise ValueError."""
         func = ast.Function(name, return_, parameters, False, symbol.ident)
         func.add_symbol_reference(symbol)
         return func
+
+    def _create_function_macro(self, symbol):
+        if symbol.ident.startswith('_'):
+            return None
+        parameters = list(self._create_parameters(symbol, symbol.base_type))
+        name = self._strip_symbol(symbol)
+        macro = ast.FunctionMacro (name, parameters, symbol.ident)
+        macro.add_symbol_reference (symbol)
+        return macro
 
     def _create_source_type(self, source_type, is_parameter=False):
         assert source_type is not None
@@ -719,7 +734,10 @@ raise ValueError."""
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
             return ast.Parameter('...', ast.Varargs())
         else:
-            ptype = self._create_type_from_base(symbol.base_type, is_parameter=True)
+            if symbol.base_type:
+                ptype = self._create_type_from_base(symbol.base_type, is_parameter=True)
+            else:
+                ptype = None
 
             if symbol.ident is None:
                 if symbol.base_type and symbol.base_type.type != CTYPE_VOID:
