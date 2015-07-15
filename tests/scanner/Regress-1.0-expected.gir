@@ -12,7 +12,7 @@ and/or use gtk-doc annotations.  -->
   <c:include name="regress.h"/>
   <namespace name="Regress"
              version="1.0"
-             shared-library="libregress.so"
+             shared-library="libregress-1.0.so"
              c:identifier-prefixes="Regress"
              c:symbol-prefixes="regress">
     <alias name="AliasedTestBoxed" c:type="RegressAliasedTestBoxed">
@@ -1247,6 +1247,15 @@ it says it's pointer but it's actually a string.</doc>
       <source-position filename="regress.h" line="521"/>
       <type name="gdouble" c:type="gdouble"/>
     </constant>
+    <function_macro name="FOO_BUFFER"
+                    c:identifier="REGRESS_FOO_BUFFER"
+                    introspectable="0">
+      <source-position filename="foo.h" line="36"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
     <constant name="FOO_DEFINE_SHOULD_BE_EXPOSED"
               value="should be exposed"
               c:type="REGRESS_FOO_DEFINE_SHOULD_BE_EXPOSED">
@@ -1259,18 +1268,153 @@ it says it's pointer but it's actually a string.</doc>
       <source-position filename="foo.h" line="249"/>
       <type name="gint" c:type="gint"/>
     </constant>
+    <function_macro name="FOO_INTERFACE"
+                    c:identifier="REGRESS_FOO_INTERFACE"
+                    introspectable="0">
+      <source-position filename="foo.h" line="17"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_INTERFACE_GET_INTERFACE"
+                    c:identifier="REGRESS_FOO_INTERFACE_GET_INTERFACE"
+                    introspectable="0">
+      <source-position filename="foo.h" line="19"/>
+      <parameters>
+        <parameter name="inst">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_IS_BUFFER"
+                    c:identifier="REGRESS_FOO_IS_BUFFER"
+                    introspectable="0">
+      <source-position filename="foo.h" line="37"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_IS_INTERFACE"
+                    c:identifier="REGRESS_FOO_IS_INTERFACE"
+                    introspectable="0">
+      <source-position filename="foo.h" line="18"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_IS_OBJECT"
+                    c:identifier="REGRESS_FOO_IS_OBJECT"
+                    introspectable="0">
+      <source-position filename="foo.h" line="29"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_IS_OTHER_OBJECT"
+                    c:identifier="REGRESS_FOO_IS_OTHER_OBJECT"
+                    introspectable="0">
+      <source-position filename="foo.h" line="41"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_IS_SUBINTERFACE"
+                    c:identifier="REGRESS_FOO_IS_SUBINTERFACE"
+                    introspectable="0">
+      <source-position filename="foo.h" line="23"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_IS_SUBOBJECT"
+                    c:identifier="REGRESS_FOO_IS_SUBOBJECT"
+                    introspectable="0">
+      <source-position filename="foo.h" line="33"/>
+      <parameters>
+        <parameter name="subobject">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_IS_TILE_HANDLER"
+                    c:identifier="REGRESS_FOO_IS_TILE_HANDLER"
+                    introspectable="0">
+      <source-position filename="foo.c" line="630"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_OBJECT"
+                    c:identifier="REGRESS_FOO_OBJECT"
+                    introspectable="0">
+      <source-position filename="foo.h" line="28"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_OTHER_OBJECT"
+                    c:identifier="REGRESS_FOO_OTHER_OBJECT"
+                    introspectable="0">
+      <source-position filename="foo.h" line="40"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
     <constant name="FOO_PIE_IS_TASTY"
               value="3.141590"
               c:type="REGRESS_FOO_PIE_IS_TASTY">
       <source-position filename="foo.h" line="14"/>
       <type name="gdouble" c:type="gdouble"/>
     </constant>
+    <function_macro name="FOO_SUBINTERFACE"
+                    c:identifier="REGRESS_FOO_SUBINTERFACE"
+                    introspectable="0">
+      <source-position filename="foo.h" line="22"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_SUBINTERFACE_GET_INTERFACE"
+                    c:identifier="REGRESS_FOO_SUBINTERFACE_GET_INTERFACE"
+                    introspectable="0">
+      <source-position filename="foo.h" line="24"/>
+      <parameters>
+        <parameter name="inst">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="FOO_SUBOBJECT"
+                    c:identifier="REGRESS_FOO_SUBOBJECT"
+                    introspectable="0">
+      <source-position filename="foo.h" line="32"/>
+      <parameters>
+        <parameter name="subobject">
+        </parameter>
+      </parameters>
+    </function_macro>
     <constant name="FOO_SUCCESS_INT"
               value="4408"
               c:type="REGRESS_FOO_SUCCESS_INT">
       <source-position filename="foo.h" line="10"/>
       <type name="gint" c:type="gint"/>
     </constant>
+    <function_macro name="FOO_TILE_HANDLER"
+                    c:identifier="REGRESS_FOO_TILE_HANDLER"
+                    introspectable="0">
+      <source-position filename="foo.c" line="629"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
     <enumeration name="FooASingle" c:type="RegressFooASingle">
       <source-position filename="foo.h" line="534"/>
       <member name="foo_some_single_enum"
@@ -2582,6 +2726,213 @@ use it should be.</doc>
         <type name="gdouble" c:type="double"/>
       </field>
     </record>
+    <function_macro name="TEST_FLOATING"
+                    c:identifier="REGRESS_TEST_FLOATING"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1247"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_FLOATING_GET_CLASS"
+                    c:identifier="REGRESS_TEST_FLOATING_GET_CLASS"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1249"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_FUNDAMENTAL_OBJECT"
+                    c:identifier="REGRESS_TEST_FUNDAMENTAL_OBJECT"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1001"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_FUNDAMENTAL_OBJECT_CAST"
+                    c:identifier="REGRESS_TEST_FUNDAMENTAL_OBJECT_CAST"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1003"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_FUNDAMENTAL_OBJECT_CLASS"
+                    c:identifier="REGRESS_TEST_FUNDAMENTAL_OBJECT_CLASS"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1002"/>
+      <parameters>
+        <parameter name="klass">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_FUNDAMENTAL_OBJECT_GET_CLASS"
+                    c:identifier="REGRESS_TEST_FUNDAMENTAL_OBJECT_GET_CLASS"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1000"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_GNUC_EXTENSION_STMT"
+                    c:identifier="REGRESS_TEST_GNUC_EXTENSION_STMT"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1425"/>
+      <parameters>
+        <parameter name="foo">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_INTERFACE"
+                    c:identifier="REGRESS_TEST_INTERFACE"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1195"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_INTERFACE_GET_IFACE"
+                    c:identifier="REGRESS_TEST_INTERFACE_GET_IFACE"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1197"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_IS_FLOATING"
+                    c:identifier="REGRESS_TEST_IS_FLOATING"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1248"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_IS_FUNDAMENTAL_OBJECT"
+                    c:identifier="REGRESS_TEST_IS_FUNDAMENTAL_OBJECT"
+                    introspectable="0">
+      <source-position filename="regress.h" line="998"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_IS_FUNDAMENTAL_OBJECT_CLASS"
+                    c:identifier="REGRESS_TEST_IS_FUNDAMENTAL_OBJECT_CLASS"
+                    introspectable="0">
+      <source-position filename="regress.h" line="999"/>
+      <parameters>
+        <parameter name="klass">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_IS_INTERFACE"
+                    c:identifier="REGRESS_TEST_IS_INTERFACE"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1196"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_IS_OBJECT"
+                    c:identifier="REGRESS_TEST_IS_OBJECT"
+                    introspectable="0">
+      <source-position filename="regress.h" line="761"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_IS_SUB_OBJECT"
+                    c:identifier="REGRESS_TEST_IS_SUB_OBJECT"
+                    introspectable="0">
+      <source-position filename="regress.h" line="964"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_IS_WI_802_1X"
+                    c:identifier="REGRESS_TEST_IS_WI_802_1X"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1214"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_OBJECT"
+                    c:identifier="REGRESS_TEST_OBJECT"
+                    introspectable="0">
+      <source-position filename="regress.h" line="760"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_OBJ_GET_CLASS"
+                    c:identifier="REGRESS_TEST_OBJ_GET_CLASS"
+                    introspectable="0">
+      <source-position filename="regress.h" line="762"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_SUB_OBJECT"
+                    c:identifier="REGRESS_TEST_SUB_OBJECT"
+                    introspectable="0">
+      <source-position filename="regress.h" line="963"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_SUB_OBJ_GET_CLASS"
+                    c:identifier="REGRESS_TEST_SUB_OBJ_GET_CLASS"
+                    introspectable="0">
+      <source-position filename="regress.h" line="965"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_VALUE_HOLDS_FUNDAMENTAL_OBJECT"
+                    c:identifier="REGRESS_TEST_VALUE_HOLDS_FUNDAMENTAL_OBJECT"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1038"/>
+      <parameters>
+        <parameter name="value">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_WI_802_1X"
+                    c:identifier="REGRESS_TEST_WI_802_1X"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1213"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="TEST_WI_802_1X_GET_CLASS"
+                    c:identifier="REGRESS_TEST_WI_802_1X_GET_CLASS"
+                    introspectable="0">
+      <source-position filename="regress.h" line="1215"/>
+      <parameters>
+        <parameter name="obj">
+        </parameter>
+      </parameters>
+    </function_macro>
     <enumeration name="TestABCError"
                  glib:type-name="RegressTestABCError"
                  glib:get-type="regress_test_abc_error_get_type"

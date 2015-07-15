@@ -728,6 +728,13 @@ class Callable(Node):
         raise ValueError("Unknown argument %s" % (name, ))
 
 
+class FunctionMacro(Node):
+    def __init__(self, name, parameters, symbol):
+        Node.__init__(self, name)
+        self.symbol = symbol
+        self.parameters = parameters
+        self.introspectable = False
+
 class Function(Callable):
 
     def __init__(self, name, retval, parameters, throws, symbol):
@@ -868,7 +875,7 @@ class TypeContainer(Annotated):
         self.direction = direction
         if transfer is not None:
             self.transfer = transfer
-        elif typenode.is_const:
+        elif typenode and typenode.is_const:
             self.transfer = PARAM_TRANSFER_NONE
         else:
             self.transfer = None
