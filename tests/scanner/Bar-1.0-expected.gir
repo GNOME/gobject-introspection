@@ -10,9 +10,16 @@ and/or use gtk-doc annotations.  -->
   <package name="gobject-2.0"/>
   <namespace name="Bar"
              version="1.0"
-             shared-library=""
+             shared-library="libbarapp-1.0.so"
              c:identifier-prefixes="Bar"
              c:symbol-prefixes="bar">
+    <function_macro name="BAZ" c:identifier="BAR_BAZ" introspectable="0">
+      <source-position filename="barapp.h" line="7"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
     <class name="Baz"
            c:symbol-prefix="baz"
            c:type="BarBaz"
@@ -33,6 +40,31 @@ and/or use gtk-doc annotations.  -->
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
+    <function_macro name="IS_BAZ" c:identifier="BAR_IS_BAZ" introspectable="0">
+      <source-position filename="barapp.h" line="8"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="MUTTER_IS_WINDOW"
+                    c:identifier="MUTTER_IS_WINDOW"
+                    introspectable="0">
+      <source-position filename="barapp.h" line="40"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="MUTTER_WINDOW"
+                    c:identifier="MUTTER_WINDOW"
+                    introspectable="0">
+      <source-position filename="barapp.h" line="39"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
     <class name="MutterWindow"
            c:symbol-prefix="mutter_window"
            c:type="MutterWindow"

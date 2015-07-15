@@ -90,6 +90,8 @@ class GIRWriter(XMLWriter):
     def _write_node(self, node):
         if isinstance(node, ast.Function):
             self._write_function(node)
+        elif isinstance(node, ast.FunctionMacro):
+            self._write_function_macro(node)
         elif isinstance(node, ast.Enum):
             self._write_enum(node)
         elif isinstance(node, ast.Bitfield):
@@ -222,6 +224,15 @@ class GIRWriter(XMLWriter):
             attrs.append(('moved-to', func.moved_to))
         self._write_callable(func, tag_name, attrs)
 
+    def _write_function_macro(self, macro):
+        attrs = [('name', macro.name),
+                 ('c:identifier', macro.symbol)]
+        self._append_version(macro, attrs)
+        self._append_node_generic(macro, attrs)
+        with self.tagcontext('function_macro', attrs):
+            self._write_generic(macro)
+            self._write_untyped_parameters(macro)
+
     def _write_method(self, method):
         self._write_function(method, tag_name='method')
 
@@ -254,6 +265,20 @@ class GIRWriter(XMLWriter):
                 self._write_parameter(callable, callable.instance_parameter, 'instance-parameter')
             for parameter in callable.parameters:
                 self._write_parameter(callable, parameter)
+
+    def _write_untyped_parameters(self, macro):
+        if not macro.parameters:
+            return
+        with self.tagcontext('parameters'):
+            for parameter in macro.parameters:
+                self._write_untyped_parameter(macro, parameter)
+
+    def _write_untyped_parameter(self, macro, parameter):
+        attrs = []
+        if parameter.argname is not None:
+            attrs.append(('name', parameter.argname))
+        with self.tagcontext('parameter', attrs):
+            self._write_generic(parameter)
 
     def _write_parameter(self, parent, parameter, nodename='parameter'):
         attrs = []

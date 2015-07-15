@@ -11,7 +11,7 @@ and/or use gtk-doc annotations.  -->
   <c:include name="utility.h"/>
   <namespace name="Utility"
              version="1.0"
-             shared-library="libutility.so"
+             shared-library="libutility-1.0.so"
              c:identifier-prefixes="Utility"
              c:symbol-prefixes="utility">
     <alias name="Glyph" c:type="UtilityGlyph">
@@ -79,6 +79,24 @@ and/or use gtk-doc annotations.  -->
       <member name="c" value="4" c:identifier="UTILITY_FLAG_C">
       </member>
     </bitfield>
+    <function_macro name="IS_OBJECT"
+                    c:identifier="UTILITY_IS_OBJECT"
+                    introspectable="0">
+      <source-position filename="utility.h" line="10"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
+    <function_macro name="OBJECT"
+                    c:identifier="UTILITY_OBJECT"
+                    introspectable="0">
+      <source-position filename="utility.h" line="9"/>
+      <parameters>
+        <parameter name="object">
+        </parameter>
+      </parameters>
+    </function_macro>
     <class name="Object"
            c:symbol-prefix="object"
            c:type="UtilityObject"
