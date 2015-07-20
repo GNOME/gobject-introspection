@@ -21,6 +21,13 @@
 import os
 import subprocess
 
+import sys
+import distutils
+
+from distutils.msvccompiler import MSVCCompiler
+from distutils.cygwinccompiler import Mingw32CCompiler
+from distutils.sysconfig import customize_compiler
+
 from . import utils
 
 
