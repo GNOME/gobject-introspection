@@ -2999,6 +2999,15 @@
 
 
 /**
+ * GSocketService:active:
+ *
+ * Whether the service is currently accepting connections.
+ *
+ * Since: 2.46
+ */
+
+
+/**
  * GSrvTarget:
  *
  * A single target host/port that a network service is running on.
@@ -34742,6 +34751,9 @@
  *
  * On success, the returned #GSocket takes ownership of @fd. On failure, the
  * caller must close @fd themselves.
+ *
+ * Since GLib 2.46, it is no longer a fatal error to call this on a non-socket
+ * descriptor.  Instead, a GError will be set with code %G_IO_ERROR_FAILED
  *
  * Returns: a #GSocket or %NULL on error.
  *     Free the returned object with g_object_unref().
