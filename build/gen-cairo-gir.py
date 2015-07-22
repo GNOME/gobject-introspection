@@ -40,7 +40,6 @@ def setup_vars_cairo(src, dest, dllname):
 def main(argv):
     parser = optparse.OptionParser()
     parser.add_option('--dllname', dest='dllname', action='store', help='Full file name of the Cairo-GObject DLL for the Cairo Introspection File')
-    parser.add_option('--vsver', dest='vsver', action='store', help='Version of Visual Studio used, 9 or 2008 for VS 2008, 10 or 2010 for VS2010, 11 or 2012 for VS2012')
     opt, args = parser.parse_args(argv)
     if opt.dllname is None:
         print ('dllname must be specified.  Please refer to %s -h for more information' % os.path.basename(__file__))
