@@ -2,7 +2,11 @@
 
 # Change or pass in as a variable/env var if needed
 # The main DLLs that are used to build introspection files that are "installed"
-CAIROGOBJECT_DLLNAME= cairo-gobject-vs$(VSVER)
+!if "$(USE_LIBTOOL_NAME)" == "1"
+CAIROGOBJECT_DLLNAME = libcairo-gobject-2
+!else
+CAIROGOBJECT_DLLNAME = cairo-gobject-vs$(VSVER)
+!endif
 
 # Please do not change anything after this line
 
