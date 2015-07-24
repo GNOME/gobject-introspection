@@ -29,11 +29,4 @@ copy ..\..\..\tools\g-ir-doc-tool.in ..\..\..\tools\g-ir-doc-tool
 copy ..\..\..\tools\g-ir-annotation-tool.in ..\..\..\tools\g-ir-annotation-tool
 		      "
 	/>
-	<UserMacro
-		Name="GenerateGIRDef"
-		Value="
-echo EXPORTS &gt; $(DefDir)\girepository.def&#x0D;&#x0A;
-cl -EP ..\..\..\girepository\girepository.symbols &gt;&gt; $(DefDir)\girepository.def&#x0D;&#x0A;
-			  "
-	/>
 </VisualStudioPropertySheet>
