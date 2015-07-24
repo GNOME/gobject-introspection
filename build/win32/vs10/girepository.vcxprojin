@@ -85,9 +85,6 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <PreLinkEvent>
-      <Command>$(GenerateGIRDef)</Command>
-    </PreLinkEvent>
     <Link>
       <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll</OutputFile>
@@ -111,9 +108,6 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <PreLinkEvent>
-      <Command>$(GenerateGIRDef)</Command>
-    </PreLinkEvent>
     <Link>
       <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll</OutputFile>
@@ -142,9 +136,6 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <PreLinkEvent>
-      <Command>$(GenerateGIRDef)</Command>
-    </PreLinkEvent>
     <Link>
       <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll</OutputFile>
@@ -171,9 +162,6 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <PreLinkEvent>
-      <Command>$(GenerateGIRDef)</Command>
-    </PreLinkEvent>
     <Link>
       <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll</OutputFile>

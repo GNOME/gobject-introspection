@@ -8,10 +8,6 @@
     <CopyGIRScanner>copy ..\..\..\tools\g-ir-scanner.in ..\..\..\tools\g-ir-scanner</CopyGIRScanner>
     <CopyGIRDocTool>copy ..\..\..\tools\g-ir-doc-tool.in ..\..\..\tools\g-ir-doc-tool</CopyGIRDocTool>
     <CopyGIRAnnotationTool>copy ..\..\..\tools\g-ir-annotation-tool.in ..\..\..\tools\g-ir-annotation-tool</CopyGIRAnnotationTool>
-    <GenerateGIRDef>
-echo EXPORTS &gt; $(DefDir)\girepository.def
-cl -EP ..\..\..\girepository\girepository.symbols &gt;&gt; $(DefDir)\girepository.def
-    </GenerateGIRDef>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gigensrcsprops</_PropertySheetDisplayName>
@@ -28,9 +24,6 @@ cl -EP ..\..\..\girepository\girepository.symbols &gt;&gt; $(DefDir)\girepositor
     </BuildMacro>
     <BuildMacro Include="CopyGIRAnnotationTool">
       <Value>$(CopyGIRAnnotationTool)</Value>
-    </BuildMacro>
-    <BuildMacro Include="GenerateGIRDef">
-      <Value>$(GenerateGIRDef)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
