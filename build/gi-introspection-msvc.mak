@@ -135,7 +135,7 @@ GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir
 # Bundled cairo-1.0.gir.in processing
 cairo-1.0.gir: ..\gir\cairo-1.0.gir.in
 	@-echo Generating $@ from $*.gir.in...
-	@-$(PYTHON2) gen-cairo-gir.py --dllname=$(CAIROGOBJECT_DLLNAME)
+	@-$(PYTHON2) gen-win32-cairo-gir.py --dllname=$(CAIROGOBJECT_DLLNAME)
 
 # Copy the .gir's bundled with G-I to this folder
 $(bundled_girs): ..\gir\win32-1.0.gir ..\gir\fontconfig-2.0.gir ..\gir\freetype2-2.0.gir ..\gir\GL-1.0.gir ..\gir\libxml2-2.0.gir
