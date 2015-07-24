@@ -2,10 +2,12 @@
 
 # Change or pass in as a variable/env var if needed
 # The main DLLs that are used to build introspection files that are "installed"
+!if "$(CAIROGOBJECT_DLLNAME)" == ""
 !if "$(USE_LIBTOOL_NAME)" == "1"
-CAIROGOBJECT_DLLNAME = libcairo-gobject-2
+CAIROGOBJECT_DLLNAME = libcairo-gobject-2.dll
 !else
-CAIROGOBJECT_DLLNAME = cairo-gobject-vs$(VSVER)
+CAIROGOBJECT_DLLNAME = cairo-gobject-vs$(VSVER).dll
+!endif
 !endif
 
 # Please do not change anything after this line
@@ -48,7 +50,7 @@ built_install_typelibs =	\
 	GIRepository-$(GLIB_APIVERSION).typelib
 
 !if "$(BUILD_INTROSPECTION)" == "TRUE"
-all: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) $(bundled_typelibs)
+all: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) $(bundled_typelibs) msg_cairo
 
 !include gi-setenv-msvc.mak
 
@@ -132,9 +134,8 @@ GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir
 
 # Bundled cairo-1.0.gir.in processing
 cairo-1.0.gir: ..\gir\cairo-1.0.gir.in
-	@-echo Generating and copying $@ from $*.gir.in...
-	@-if not exist ..\gir\$*.gir $(PYTHON2) gen-cairo-gir.py --dllname=$(CAIROGOBJECT_DLLNAME).dll
-	@-copy ..\gir\$*.gir $@
+	@-echo Generating $@ from $*.gir.in...
+	@-$(PYTHON2) gen-cairo-gir.py --dllname=$(CAIROGOBJECT_DLLNAME)
 
 # Copy the .gir's bundled with G-I to this folder
 $(bundled_girs): ..\gir\win32-1.0.gir ..\gir\fontconfig-2.0.gir ..\gir\freetype2-2.0.gir ..\gir\GL-1.0.gir ..\gir\libxml2-2.0.gir
@@ -150,6 +151,20 @@ $(built_install_typelibs): $(bundled_girs) $(built_install_girs)
 $(bundled_typelibs): cairo-1.0.gir $(bundled_girs)
 	@-echo Compiling the bundled $*.gir that came with the GobjectIntrospection package...
 	@-$(G_IR_COMPILER_CURRENT) --includedir=. --debug --verbose $*.gir -o $@
+
+msg_cairo:
+	@-echo.
+	@-echo ************* Note ***********************************
+	@-echo The cairo-1.0.gir links to $(CAIROGOBJECT_DLLNAME),
+	@-echo please ensure that this is the correct DLL where the
+	@-echo cairo-gobject symbols can be loaded, which needs to
+	@-echo be in your PATH when running programs or scripts
+	@-echo using cairo-1.0.typelib.
+	@-echo.
+	@-echo If not, please clean the build and redo the build
+	@-echo specifying the correct DLL by passing in
+	@-echo CAIROGOBJECT_DLLNAME^=^<your DLL full filename^> when
+	@-echo invoking this NMake Makefile
 
 install-introspection: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) cairo-1.0.gir $(bundled_typelibs)
 	@-mkdir $(G_IR_INCLUDEDIR)
@@ -168,7 +183,6 @@ install-introspection:
 !endif
 
 clean:
-	@-del /f/q ..\gir\cairo-$(GI_APIVERSION).gir
 	@-del /f/q *.typelib
 	@-del /f/q *.gir
 	@-del /f/q gi_list

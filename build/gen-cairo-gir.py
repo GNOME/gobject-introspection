@@ -51,7 +51,7 @@ def main(argv):
 
     # Set up variables in cairo-1.0.gir.in to produce cairo-1.0.gir
     setup_vars_cairo(os.path.join(preset_gir_path, 'cairo-1.0.gir.in'),
-                     os.path.join(preset_gir_path, 'cairo-1.0.gir'),
+                     'cairo-1.0.gir',
                      opt.dllname)
 
 if __name__ == '__main__':
