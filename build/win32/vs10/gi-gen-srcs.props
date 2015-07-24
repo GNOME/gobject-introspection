@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
-    <Import Project="gi-build-defines.props" />
+    <Import Project="gi-extra-paths.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <CopyConfigH>copy ..\..\..\config.h.win32 ..\..\..\config.h</CopyConfigH>
-    <CopyGIRScanner>copy ..\..\..\tools\g-ir-scanner.in ..\..\..\tools\g-ir-scanner</CopyGIRScanner>
-    <CopyGIRDocTool>copy ..\..\..\tools\g-ir-doc-tool.in ..\..\..\tools\g-ir-doc-tool</CopyGIRDocTool>
-    <CopyGIRAnnotationTool>copy ..\..\..\tools\g-ir-annotation-tool.in ..\..\..\tools\g-ir-annotation-tool</CopyGIRAnnotationTool>
+    <GenToolsScripts>$(PythonDir)\python ..\..\..\build\gen-win32-gi-r-tools.py</GenToolsScripts>
+    <GenToolsScriptsX64>$(PythonDirX64)\python ..\..\..\build\gen-win32-gi-r-tools.py</GenToolsScriptsX64>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gigensrcsprops</_PropertySheetDisplayName>
@@ -16,14 +15,11 @@
     <BuildMacro Include="CopyConfigH">
       <Value>$(CopyConfigH)</Value>
     </BuildMacro>
-    <BuildMacro Include="CopyGIRScanner">
-      <Value>$(CopyGIRScanner)</Value>
+    <BuildMacro Include="GenToolsScripts">
+      <Value>$(GenToolsScripts)</Value>
     </BuildMacro>
-    <BuildMacro Include="CopyGIRDocTool">
-      <Value>$(CopyGIRDocTool)</Value>
-    </BuildMacro>
-    <BuildMacro Include="CopyGIRAnnotationTool">
-      <Value>$(CopyGIRAnnotationTool)</Value>
+    <BuildMacro Include="GenToolsScriptsX64">
+      <Value>$(GenToolsScriptsX64)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

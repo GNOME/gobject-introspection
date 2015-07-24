@@ -95,47 +95,19 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CopyConfigH)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\config.h;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\..\..\tools\g-ir-scanner.in">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying g-ir-scanner from g-ir-scanner.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CopyGIRScanner)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\tools\g-ir-scanner;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying g-ir-scanner from g-ir-scanner.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CopyGIRScanner)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\tools\g-ir-scanner;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying g-ir-scanner from g-ir-scanner.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CopyGIRScanner)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\tools\g-ir-scanner;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying g-ir-scanner from g-ir-scanner.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CopyGIRScanner)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\tools\g-ir-scanner;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\tools\g-ir-doc-tool.in">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying g-ir-doc-tool from g-ir-doc-tool.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CopyGIRDocTool)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\tools\g-ir-doc-tool;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying g-ir-doc-tool from g-ir-doc-tool.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CopyGIRDocTool)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\tools\g-ir-doc-tool;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying g-ir-doc-tool from g-ir-doc-tool.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CopyGIRDocTool)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\tools\g-ir-doc-tool;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying g-ir-doc-tool from g-ir-doc-tool.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CopyGIRDocTool)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\tools\g-ir-doc-tool;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\tools\g-ir-annotation-tool.in">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying g-ir-annotation-tool from g-ir-annotation-tool.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CopyGIRAnnotationTool)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying g-ir-annotation-tool from g-ir-annotation-tool.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CopyGIRAnnotationTool)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying g-ir-annotation-tool from g-ir-annotation-tool.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CopyGIRAnnotationTool)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying g-ir-annotation-tool from g-ir-annotation-tool.in...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CopyGIRAnnotationTool)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
+    <CustomBuild Include="..\..\..\tools\g-ir-tool-template.in">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating Tools Scripts...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenToolsScripts)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating Tools Scripts...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenToolsScripts)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating Tools Scripts...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenToolsScriptsX64)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating Tools Scripts...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenToolsScriptsX64)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

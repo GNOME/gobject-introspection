@@ -94,105 +94,37 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File RelativePath="..\..\..\tools\g-ir-scanner.in">
+			<File RelativePath="..\..\..\tools\g-ir-tool-template.in">
 				<FileConfiguration Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying g-ir-scanner from g-ir-scanner.in..."
-						CommandLine="$(CopyGIRScanner)"
-						Outputs="..\..\..\tools\g-ir-scanner"
+						Description="Generating Tools Scripts..."
+						CommandLine="$(GenToolsScripts)"
+						Outputs="..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying g-ir-scanner from g-ir-scanner.in..."
-						CommandLine="$(CopyGIRScanner)"
-						Outputs="..\..\..\tools\g-ir-scanner"
+						Description="Generating Tools Scripts..."
+						CommandLine="$(GenToolsScripts)"
+						Outputs="..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Debug|x64">
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying g-ir-scanner from g-ir-scanner.in..."
-						CommandLine="$(CopyGIRScanner)"
-						Outputs="..\..\..\tools\g-ir-scanner"
+						Description="Generating Tools Scripts..."
+						CommandLine="$(GenToolsScriptsX64)"
+						Outputs="..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|x64">
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying g-ir-scanner from g-ir-scanner.in..."
-						CommandLine="$(CopyGIRScanner)"
-						Outputs="..\..\..\tools\g-ir-scanner"
-					/>
-				</FileConfiguration>
-			</File>
-			<File RelativePath="..\..\..\tools\g-ir-doc-tool.in">
-				<FileConfiguration Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying g-ir-doc-tool from g-ir-doc-tool.in..."
-						CommandLine="$(CopyGIRDocTool)"
-						Outputs="..\..\..\tools\g-ir-doc-tool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying g-ir-doc-tool from g-ir-doc-tool.in..."
-						CommandLine="$(CopyGIRDocTool)"
-						Outputs="..\..\..\tools\g-ir-doc-tool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug|x64">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying g-ir-doc-tool from g-ir-doc-tool.in..."
-						CommandLine="$(CopyGIRDocTool)"
-						Outputs="..\..\..\tools\g-ir-doc-tool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|x64">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying g-ir-doc-tool from g-ir-doc-tool.in..."
-						CommandLine="$(CopyGIRDocTool)"
-						Outputs="..\..\..\tools\g-ir-doc-tool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File RelativePath="..\..\..\tools\g-ir-annotation-tool.in">
-				<FileConfiguration Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying g-ir-annotation-tool from g-ir-annotation-tool.in..."
-						CommandLine="$(CopyGIRAnnotationTool)"
-						Outputs="..\..\..\tools\g-ir-annotation-tool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying g-ir-annotation-tool from g-ir-annotation-tool.in..."
-						CommandLine="$(CopyGIRAnnotationTool)"
-						Outputs="..\..\..\tools\g-ir-annotation-tool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug|x64">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying g-ir-annotation-tool from g-ir-annotation-tool.in..."
-						CommandLine="$(CopyGIRAnnotationTool)"
-						Outputs="..\..\..\tools\g-ir-annotation-tool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|x64">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Copying g-ir-annotation-tool from g-ir-annotation-tool.in..."
-						CommandLine="$(CopyGIRAnnotationTool)"
-						Outputs="..\..\..\tools\g-ir-annotation-tool"
+						Description="Generating Tools Scripts..."
+						CommandLine="$(GenToolsScriptsX64)"
+						Outputs="..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool"
 					/>
 				</FileConfiguration>
 			</File>

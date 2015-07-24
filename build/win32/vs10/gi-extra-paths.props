@@ -7,7 +7,7 @@
     <!-- PythonDir currently needs to point to a 32-bit/x86 Python 2.6/2.7 installation -->
     <PythonDir>c:\\python27</PythonDir>
     <!-- PythonDirX64 currently needs to point to an x86-64/x64 Python 2.6/2.7 installation -->
-    <PythonDirX64>c:\\python27.x64</PythonDirX64>
+    <PythonDirX64>$(PythonDir).x64</PythonDirX64>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>giextrapathsprops</_PropertySheetDisplayName>

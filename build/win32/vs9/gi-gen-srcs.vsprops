@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="gigensrcsprops"
-	InheritedPropertySheets=".\gi-build-defines.vsprops"
+	InheritedPropertySheets=".\gi-extra-paths.vsprops"
 	>
 	<UserMacro
 		Name="CopyConfigH"
@@ -12,21 +12,11 @@ copy ..\..\..\config.h.win32 ..\..\..\config.h
 			  "
 	/>
 	<UserMacro
-		Name="CopyGIRScanner"
-		Value="
-copy ..\..\..\tools\g-ir-scanner.in ..\..\..\tools\g-ir-scanner
-			  "
+		Name="GenToolsScripts"
+		Value="$(PythonDir)\python ..\..\..\build\gen-win32-gi-r-tools.py"
 	/>
 	<UserMacro
-		Name="CopyGIRDocTool"
-		Value="
-copy ..\..\..\tools\g-ir-doc-tool.in ..\..\..\tools\g-ir-doc-tool
-			  "
-	/>
-	<UserMacro
-		Name="CopyGIRAnnotationTool"
-		Value="
-copy ..\..\..\tools\g-ir-annotation-tool.in ..\..\..\tools\g-ir-annotation-tool
-		      "
+		Name="GenToolsScriptsX64"
+		Value="$(PythonDirX64)\python ..\..\..\build\gen-win32-gi-r-tools.py"
 	/>
 </VisualStudioPropertySheet>
