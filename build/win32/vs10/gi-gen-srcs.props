@@ -5,8 +5,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <CopyConfigH>copy ..\..\..\config.h.win32 ..\..\..\config.h</CopyConfigH>
-    <GenToolsScripts>$(PythonDir)\python ..\..\..\build\gen-win32-gi-r-tools.py</GenToolsScripts>
-    <GenToolsScriptsX64>$(PythonDirX64)\python ..\..\..\build\gen-win32-gi-r-tools.py</GenToolsScriptsX64>
+    <GenToolsScripts>$(PythonDir)\python ..\..\..\build\gen-win32-g-ir-tools.py</GenToolsScripts>
+    <GenToolsScriptsX64>$(PythonDirX64)\python ..\..\..\build\gen-win32-g-ir-tools.py</GenToolsScriptsX64>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gigensrcsprops</_PropertySheetDisplayName>
