@@ -165,6 +165,8 @@ stringtext				([^\\\"])|(\\.)
 "__inline"				{ return INLINE; }
 "__nonnull" 			        { if (!parse_ignored_macro()) REJECT; }
 "_Noreturn" 			        { /* Ignore */ }
+/* Apparently found in the wild in OS X system headers */
+"__signed"                              { return SIGNED; }
 "__signed__"				{ return SIGNED; }
 "__restrict"				{ return RESTRICT; }
 "__restrict__"				{ return RESTRICT; }
