@@ -158,8 +158,8 @@ msg_cairo:
 	@-echo The cairo-1.0.gir links to $(CAIROGOBJECT_DLLNAME),
 	@-echo please ensure that this is the correct DLL where the
 	@-echo cairo-gobject symbols can be loaded, which needs to
-	@-echo be in your PATH when running programs or scripts
-	@-echo using cairo-1.0.typelib.
+	@-echo found when running programs or scripts that would
+	@-echo cairo-1.0.typelib.
 	@-echo.
 	@-echo If not, please clean the build and redo the build
 	@-echo specifying the correct DLL by passing in
