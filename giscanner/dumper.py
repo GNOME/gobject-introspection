@@ -78,25 +78,21 @@ class LinkerError(Exception):
 
 class DumpCompiler(object):
 
+    _compiler = None
+
     def __init__(self, options, get_type_functions, error_quark_functions):
         self._options = options
         self._get_type_functions = get_type_functions
         self._error_quark_functions = error_quark_functions
 
-        self._compiler_cmd = os.environ.get('CC', 'cc')
-        self._linker_cmd = os.environ.get('CC', self._compiler_cmd)
+        # Acquire the compiler (and linker) commands via the CCompiler class in ccompiler.py
+        self._compiler = CCompiler()
+
         self._pkgconfig_cmd = os.environ.get('PKG_CONFIG', 'pkg-config')
-        self._pkgconfig_msvc_flags = ''
-        # Enable the --msvc-syntax pkg-config flag when
-        # the Microsoft compiler is used
-        # (This is the other way to check whether Visual C++ is used subsequently)
-        args = self._compiler_cmd.split()
-        if 'cl.exe' in args or 'cl' in args:
-            self._pkgconfig_msvc_flags = '--msvc-syntax'
-        self._uninst_srcdir = os.environ.get(
-            'UNINSTALLED_INTROSPECTION_SRCDIR')
+        self._uninst_srcdir = os.environ.get('UNINSTALLED_INTROSPECTION_SRCDIR')
         self._packages = ['gio-2.0 gmodule-2.0']
         self._packages.extend(options.packages)
+        self._linker_cmd = os.environ.get('CC', 'cc')
 
     # Public API
 
@@ -155,7 +151,7 @@ class DumpCompiler(object):
 
         # Microsoft compilers generate intermediate .obj files
         # during compilation, unlike .o files like GCC and others
-        if self._pkgconfig_msvc_flags:
+        if self._compiler.check_is_msvc():
             o_path = self._generate_tempfile(tmpdir, '.obj')
         else:
             o_path = self._generate_tempfile(tmpdir, '.o')
@@ -193,8 +189,8 @@ class DumpCompiler(object):
     def _run_pkgconfig(self, flag):
         # Enable the --msvc-syntax pkg-config flag when
         # the Microsoft compiler is used
-        if self._pkgconfig_msvc_flags:
-            cmd = [self._pkgconfig_cmd, self._pkgconfig_msvc_flags, flag]
+        if self._compiler.check_is_msvc():
+            cmd = [self._pkgconfig_cmd, '--msvc-syntax', flag]
         else:
             cmd = [self._pkgconfig_cmd, flag]
         proc = subprocess.Popen(
@@ -204,14 +200,14 @@ class DumpCompiler(object):
 
     def _compile(self, output, *sources):
         # Not strictly speaking correct, but easier than parsing shell
-        args = self._compiler_cmd.split()
+        args = self._compiler.compiler_cmd.split()
         # Do not add -Wall when using init code as we do not include any
         # header of the library being introspected
-        if self._compiler_cmd == 'gcc' and not self._options.init_sections:
+        if self._compiler.compiler_cmd == 'gcc' and not self._options.init_sections:
             args.append('-Wall')
         # The Microsoft compiler uses different option flags for
         # silencing warnings on deprecated function usage
-        if self._pkgconfig_msvc_flags:
+        if self._compiler.check_is_msvc():
             args.append("-wd4996")
         else:
             args.append("-Wno-deprecated-declarations")
@@ -227,7 +223,7 @@ class DumpCompiler(object):
             args.append('-I' + include)
         # The Microsoft compiler uses different option flags for
         # compilation result output
-        if self._pkgconfig_msvc_flags:
+        if self._compiler.check_is_msvc():
             args.extend(['-c', '-Fe' + output, '-Fo' + output])
         else:
             args.extend(['-c', '-o', output])
@@ -258,7 +254,7 @@ class DumpCompiler(object):
         args.extend(self._linker_cmd.split())
         # We can use -o for the Microsoft compiler/linker,
         # but it is considered deprecated usage with that
-        if self._pkgconfig_msvc_flags:
+        if self._compiler.check_is_msvc():
             args.extend(['-Fe' + output])
         else:
             args.extend(['-o', output])
@@ -288,23 +284,18 @@ class DumpCompiler(object):
                     "Could not find object file: %s" % (source, ))
         args.extend(list(sources))
 
-        cc = CCompiler()
+        pkg_config_libs = self._run_pkgconfig('--libs')
 
         if not self._options.external_library:
-            cc.get_internal_link_flags(args,
-                                       libtool,
-                                       self._options.libraries,
-                                       self._options.library_paths,
-                                       self._pkgconfig_msvc_flags,
-                                       self._options.namespace_name,
-                                       self._options.namespace_version)
-            args.extend(self._run_pkgconfig('--libs'))
+            self._compiler.get_internal_link_flags(args,
+                                                   libtool,
+                                                   self._options.libraries,
+                                                   self._options.library_paths)
+            args.extend(pkg_config_libs)
 
         else:
-            args.extend(self._run_pkgconfig('--libs'))
-            cc.get_external_link_flags(args,
-                                       self._options.libraries,
-                                       self._pkgconfig_msvc_flags)
+            args.extend(pkg_config_libs)
+            self._compiler.get_external_link_flags(args, self._options.libraries)
 
         if not self._options.quiet:
             print "g-ir-scanner: link: %s" % (
