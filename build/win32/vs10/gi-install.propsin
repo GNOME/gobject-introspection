@@ -24,7 +24,9 @@ copy ..\..\..\tools\g-ir-scanner $(CopyDir)\bin
 copy $(BinDir)\glib-print.exe $(CopyDir)\bin
 copy $(BinDir)\glib-print.pdb $(CopyDir)\bin
 
-#include "gir.vs10.install"
+mkdir $(CopyDir)\include\gobject-introspection-1.0\girepository
+#include "girepository.vs10.headers"
+#include "giscanner.vs10.scripts"
 
 copy $(BinDir)\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner
 copy $(BinDir)\_giscanner.pdb $(CopyDir)\lib\gobject-introspection\giscanner
