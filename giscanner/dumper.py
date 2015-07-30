@@ -24,7 +24,6 @@ import sys
 import subprocess
 import shutil
 import tempfile
-from distutils.errors import LinkError
 
 from .gdumpparser import IntrospectionBinary
 from . import utils
@@ -93,6 +92,7 @@ class DumpCompiler(object):
         self._uninst_srcdir = os.environ.get('UNINSTALLED_INTROSPECTION_SRCDIR')
         self._packages = ['gio-2.0 gmodule-2.0']
         self._packages.extend(options.packages)
+        self._linker_cmd = os.environ.get('CC', 'cc')
 
     # Public API
 
@@ -149,23 +149,29 @@ class DumpCompiler(object):
             f.write("\n};\n")
         f.close()
 
-        o_path = self._generate_tempfile(tmpdir, self._compiler.compiler.obj_extension)
-        if self._compiler.compiler.exe_extension:
-            ext = self._compiler.compiler.exe_extension
+        # Microsoft compilers generate intermediate .obj files
+        # during compilation, unlike .o files like GCC and others
+        if self._compiler.check_is_msvc():
+            o_path = self._generate_tempfile(tmpdir, '.obj')
+        else:
+            o_path = self._generate_tempfile(tmpdir, '.o')
+
+        if os.name == 'nt':
+            ext = '.exe'
         else:
             ext = ''
 
         bin_path = self._generate_tempfile(tmpdir, ext)
 
         try:
-            introspection_obj = self._compile(o_path, c_path)
+            self._compile(o_path, c_path)
         except CompilerError as e:
             if not utils.have_debug_flag('save-temps'):
                 shutil.rmtree(tmpdir)
             raise SystemExit('compilation of temporary binary failed:' + str(e))
 
         try:
-            self._link(introspection_obj, bin_path, o_path)
+            self._link(bin_path, o_path)
         except LinkerError as e:
             if not utils.have_debug_flag('save-temps'):
                 shutil.rmtree(tmpdir)
@@ -193,68 +199,128 @@ class DumpCompiler(object):
         return proc.communicate()[0].split()
 
     def _compile(self, output, *sources):
+        # Not strictly speaking correct, but easier than parsing shell
+        args = self._compiler.compiler_cmd.split()
+        # Do not add -Wall when using init code as we do not include any
+        # header of the library being introspected
+        if self._compiler.compiler_cmd == 'gcc' and not self._options.init_sections:
+            args.append('-Wall')
+        # The Microsoft compiler uses different option flags for
+        # silencing warnings on deprecated function usage
+        if self._compiler.check_is_msvc():
+            args.append("-wd4996")
+        else:
+            args.append("-Wno-deprecated-declarations")
         pkgconfig_flags = self._run_pkgconfig('--cflags')
+        args.extend([utils.cflag_real_include_path(f) for f in pkgconfig_flags])
+        cppflags = os.environ.get('CPPFLAGS', '')
+        for cppflag in cppflags.split():
+            args.append(cppflag)
+        cflags = os.environ.get('CFLAGS', '')
+        for cflag in cflags.split():
+            args.append(cflag)
+        for include in self._options.cpp_includes:
+            args.append('-I' + include)
+        # The Microsoft compiler uses different option flags for
+        # compilation result output
+        if self._compiler.check_is_msvc():
+            args.extend(['-c', '-Fe' + output, '-Fo' + output])
+        else:
+            args.extend(['-c', '-o', output])
+        for source in sources:
+            if not os.path.exists(source):
+                raise CompilerError(
+                    "Could not find c source file: %s" % (source, ))
+        args.extend(list(sources))
+        if not self._options.quiet:
+            print "g-ir-scanner: compile: %s" % (
+                subprocess.list2cmdline(args), )
+            sys.stdout.flush()
+        try:
+            subprocess.check_call(args)
+        except subprocess.CalledProcessError as e:
+            raise CompilerError(e)
 
-        return self._compiler.compile(pkgconfig_flags,
-                                      self._options.cpp_includes,
-                                      sources,
-                                      self._options.init_sections,
-                                      self._options.quiet)
-
-    def _add_link_internal_args(self, libtool):
-        # An "internal" link is where the library to be introspected
-        # is being built in the current directory.
-        libs = []
-        libs.extend(self._compiler.get_internal_link_flags(libtool,
-                                               self._options.libraries,
-                                               self._options.library_paths))
-
-        libs.extend(self._run_pkgconfig('--libs'))
-
-        return libs
-
-    def _add_link_external_args(self):
-        # An "external" link is where the library to be introspected
-        # is installed on the system; this case is used for the scanning
-        # of GLib in gobject-introspection itself.
-        libs = []
-
-        libs.extend(self._run_pkgconfig('--libs'))
-
-        libs.extend(self._compiler.get_external_link_flags(self._options.libraries))
-        return libs
-
-    def _link(self, introspection_obj, output, *sources):
-        link_args = []
-
+    def _link(self, output, *sources):
+        args = []
         libtool = utils.get_libtool_command(self._options)
+        if libtool:
+            args.extend(libtool)
+            args.append('--mode=link')
+            args.append('--tag=CC')
+            if self._options.quiet:
+                args.append('--silent')
+
+        args.extend(self._linker_cmd.split())
+        # We can use -o for the Microsoft compiler/linker,
+        # but it is considered deprecated usage with that
+        if self._compiler.check_is_msvc():
+            args.extend(['-Fe' + output])
+        else:
+            args.extend(['-o', output])
+        if libtool:
+            if os.name == 'nt':
+                args.append('-Wl,--export-all-symbols')
+            else:
+                args.append('-export-dynamic')
+
+        cppflags = os.environ.get('CPPFLAGS', '')
+        for cppflag in cppflags.split():
+            args.append(cppflag)
+        cflags = os.environ.get('CFLAGS', '')
+        for cflag in cflags.split():
+            args.append(cflag)
+        ldflags = os.environ.get('LDFLAGS', '')
+        for ldflag in ldflags.split():
+            args.append(ldflag)
+
+        # Make sure to list the library to be introspected first since it's
+        # likely to be uninstalled yet and we want the uninstalled RPATHs have
+        # priority (or we might run with installed library that is older)
+
+        for source in sources:
+            if not os.path.exists(source):
+                raise CompilerError(
+                    "Could not find object file: %s" % (source, ))
+        args.extend(list(sources))
+
+        pkg_config_libs = self._run_pkgconfig('--libs')
 
         if not self._options.external_library:
-            link_args.extend(self._add_link_internal_args(libtool))
+            self._compiler.get_internal_link_flags(args,
+                                                   libtool,
+                                                   self._options.libraries,
+                                                   self._options.library_paths)
+            args.extend(pkg_config_libs)
+
         else:
-            link_args.extend(self._add_link_external_args())
+            args.extend(pkg_config_libs)
+            self._compiler.get_external_link_flags(args, self._options.libraries)
 
+        if not self._options.quiet:
+            print "g-ir-scanner: link: %s" % (
+                subprocess.list2cmdline(args), )
+            sys.stdout.flush()
+        msys = os.environ.get('MSYSTEM', None)
+        if msys:
+            shell = os.environ.get('SHELL', 'sh.exe')
+            # Create a temporary script file that
+            # runs the command we want
+            tf, tf_name = tempfile.mkstemp()
+            f = os.fdopen(tf, 'wb')
+            shellcontents = ' '.join([x.replace('\\', '/') for x in args])
+            fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
+            f.write(fcontents)
+            f.close()
+            shell = utils.which(shell)
+            args = [shell, tf_name.replace('\\', '/')]
         try:
-            self._compiler.link(output,
-                                introspection_obj,
-                                link_args,
-                                libtool,
-                                self._options.quiet)
-
-        # Ignore failing to embed the manifest files, when the manifest
-        # file does not exist, especially for MSVC 2010 and later builds.
-        # If we are on Visual C++ 2005/2008, where
-        # this embedding is required, the build will fail anyway, as
-        # the dumper program will likely fail to run, and this means
-        # something went wrong with the build.
-        except LinkError, e:
-            msg = str(e)
-
-            if msg[msg.rfind('mt.exe'):] == 'mt.exe\' failed with exit status 31':
-                sys.exc_clear()
-                pass
-            else:
-                raise LinkError(e)
+            subprocess.check_call(args)
+        except subprocess.CalledProcessError as e:
+            raise LinkerError(e)
+        finally:
+            if msys:
+                os.remove(tf_name)
 
 
 def compile_introspection_binary(options, get_type_functions,

@@ -106,76 +106,54 @@ class CCompiler(object):
 
             self._cflags_no_deprecation_warnings = "-Wno-deprecated-declarations"
 
-    def get_internal_link_flags(self, libtool, libraries, libpaths):
+    def get_internal_link_flags(self, args, libtool, libraries, libpaths):
         # An "internal" link is where the library to be introspected
         # is being built in the current directory.
-        internal_link_args = []
 
         # Search the current directory first
-        self.compiler.add_library_dir('.')
+        # (This flag is not supported nor needed for Visual C++)
+        if not self.check_is_msvc():
+            args.append('-L.')
 
-        if self.check_is_msvc():
-            for library in libraries:
-                # MSVC Builds don't use libtool, so no .la libraries,
-                # so just add the library directly.
-                self.compiler.add_library(library)
-            for libpath in libpaths:
-                self.compiler.add_library_dir(libpath)
-
-        else:
+            # https://bugzilla.gnome.org/show_bug.cgi?id=625195
             if not libtool:
-                # https://bugzilla.gnome.org/show_bug.cgi?id=625195
-                internal_link_args.append('-Wl,-rpath=.')
+                args.append('-Wl,-rpath=.')
+                args.append('-Wl,--no-as-needed')
 
-                # Ensure libraries are always linked as we are going to use ldd to work
-                # out their names later
-                internal_link_args.append('-Wl,--no-as-needed')
-
-            for library in libraries:
+        for library in libraries:
+            if self.check_is_msvc():
+                args.append(library + '.lib')
+            else:
                 if library.endswith(".la"):  # explicitly specified libtool library
-                    self.compiler.add_library_dir('.libs')
-                    if os.name != 'nt':
-                        self.compiler.add_runtime_library_dir('.libs')
-                    if (library.startswith('lib')):
-                        self.compiler.add_library(library[len('lib'):library.rfind('.la')])
-                    else:
-                        self.compiler.add_library(library[:library.rfind('.la')])
+                    args.append(library)
                 else:
-                    self.compiler.add_library(library)
+                    args.append('-l' + library)
 
-            for libpath in libpaths:
-                self.compiler.add_library_dir(libpath)
-
-                # Not used/needed on Windows, add_runtime_library_dir()
-                # will cause grief on Windows
-                if os.name != 'nt':
-                    self.compiler.add_runtime_library_dir(libpath)
-                if os.path.isabs(libpath):
+        for library_path in libpaths:
+            # Not used/needed on Visual C++, and -Wl,-rpath options
+            # will cause grief
+            if not self.check_is_msvc():
+                args.append('-L' + library_path)
+                if os.path.isabs(library_path):
                     if libtool:
-                        internal_link_args.append('-rpath')
-                        internal_link_args.append(libpath)
+                        args.append('-rpath')
+                        args.append(library_path)
                     else:
-                        internal_link_args.append('-Wl,-rpath=' + libpath)
+                        args.append('-Wl,-rpath=' + library_path)
 
-        return internal_link_args
-
-    def get_external_link_flags(self, libraries):
+    def get_external_link_flags(self, args, libraries):
         # An "external" link is where the library to be introspected
         # is installed on the system; this case is used for the scanning
         # of GLib in gobject-introspection itself.
 
-        external_link_args = []
-
         for library in libraries:
-            if library.endswith(".la"):  # explicitly specified libtool library
-                if (library.startswith('lib')):
-                    self.compiler.add_library(library[len('lib'):library.rfind('.la')])
-                else:
-                    self.compiler.add_library(library[:library.rfind('.la')])
+            if self.check_is_msvc():
+                args.append(library + '.lib')
             else:
-                self.compiler.add_library(library)
-
-        return external_link_args
+                if library.endswith(".la"):  # explicitly specified libtool library
+                    args.append(library)
+                else:
+                    args.append('-l' + library)
 
     def preprocess(self, source, output, cpp_options):
         extra_postargs = ['-C']
@@ -201,57 +179,6 @@ class CCompiler(object):
                                  macros=macros,
                                  include_dirs=include_dirs,
                                  extra_postargs=extra_postargs)
-
-    def compile(self, pkg_config_cflags, cpp_includes, source, init_sections, quiet):
-        extra_postargs = []
-        includes = []
-        cpp_options = None
-        source_str = ''.join(source)
-        tmpdir_idx = source_str.rfind(os.sep, 0, source_str.rfind(os.sep))
-        (include_paths, macros, extra_args) = \
-            self._set_cpp_options(pkg_config_cflags)
-
-        for include in cpp_includes:
-            includes.append(include)
-
-        # Do not add -Wall when using init code as we do not include any
-        # header of the library being introspected
-        if self.compiler_cmd == 'gcc' and not init_sections:
-            extra_postargs.append('-Wall')
-        extra_postargs.append(self._cflags_no_deprecation_warnings)
-
-        includes.extend(include_paths)
-        extra_postargs.extend(extra_args)
-
-        return self.compiler.compile(sources=source,
-                                     macros=macros,
-                                     include_dirs=includes,
-                                     extra_postargs=extra_postargs,
-                                     output_dir=source_str[tmpdir_idx + 1:
-                                                           source_str.rfind(os.sep)])
-
-    def link(self, output, objects, lib_args, libtool, quiet):
-        extra_preargs = []
-        extra_postargs = []
-        library_dirs = []
-        libraries = []
-        output_str = ''.join(output)
-        output_dir = output_str[:output_str.rfind(os.sep)]
-
-        if libtool:
-            if os.name == 'nt':
-                extra_postargs.append('-Wl,--export-all-symbols')
-            else:
-                extra_postargs.append('-export-dynamic')
-
-        for arg in lib_args:
-            extra_postargs.append(arg)
-
-        self.compiler.link(target_desc=self.compiler.EXECUTABLE,
-                           objects=objects,
-                           output_filename=output,
-                           extra_preargs=extra_preargs,
-                           extra_postargs=extra_postargs)
 
     def resolve_windows_libs(self, libraries, options):
         args = []
