@@ -102,7 +102,7 @@ class CCompiler(object):
             if (isinstance(self.compiler, Mingw32CCompiler)):
                 self.compiler_cmd = self.compiler.compiler[0]
             else:
-                self.compiler_cmd = ''.join(self.compiler.executables['compiler'])
+                self.compiler_cmd = ' '.join(self.compiler.compiler)
 
             self._cflags_no_deprecation_warnings = "-Wno-deprecated-declarations"
 
