@@ -6956,6 +6956,35 @@
  * On UNIX, the GLib mainloop is incompatible with fork(). Any program
  * using the mainloop must either exec() or exit() from the child
  * without returning to the mainloop.
+ *
+ * ## Memory management of sources # {#mainloop-memory-management}
+ *
+ * There are two options for memory management of the user data passed to a
+ * #GSource to be passed to its callback on invocation. This data is provided
+ * in calls to g_timeout_add(), g_timeout_add_full(), g_idle_add(), etc. and
+ * more generally, using g_source_set_callback(). This data is typically an
+ * object which ‘owns’ the timeout or idle callback, such as a widget or a
+ * network protocol implementation. In many cases, it is an error for the
+ * callback to be invoked after this owning object has been destroyed, as that
+ * results in use of freed memory.
+ *
+ * The first, and preferred, option is to store the source ID returned by
+ * functions such as g_timeout_add() or g_source_attach(), and explicitly
+ * remove that source from the main context using g_source_remove() when the
+ * owning object is finalised. This ensures that the callback can only be
+ * invoked while the object is still alive.
+ *
+ * The second option is to hold a strong reference to the object in the
+ * callback, and to release it in the callback’s #GDestroyNotify. This ensures
+ * that the object is kept alive until after the source is finalized, which is
+ * guaranteed to be after it is invoked for the final time. The #GDestroyNotify
+ * is another callback passed to the ‘full’ variants of #GSource functions (for
+ * example, g_timeout_add_full()). It is called when the source is finalized,
+ * and is designed for releasing references like this.
+ *
+ * One important caveat of this second approach is that it will keep the object
+ * alive indefinitely if the main loop is stopped before the #GSource is
+ * invoked, which may be undesirable.
  */
 
 
@@ -7023,7 +7052,7 @@
  * g_slice_free(), plain malloc() with free(), and (if you're using C++)
  * new with delete and new[] with delete[]. Otherwise bad things can happen,
  * since these allocators may use different memory pools (and new/delete call
- * constructors and destructors). See also g_mem_set_vtable().
+ * constructors and destructors).
  */
 
 
@@ -7585,6 +7614,13 @@
  * certain number of columns, then \%Ns is not a correct solution
  * anyway, since it fails to take wide characters (see g_unichar_iswide())
  * into account.
+ *
+ * Note also that there are various printf() parameters which are platform
+ * dependent. GLib provides platform independent macros for these parameters
+ * which should be used instead. A common example is %G_GUINT64_FORMAT, which
+ * should be used instead of `%llu` or similar parameters for formatting
+ * 64-bit integers. These macros are all named `G_*_FORMAT`; see
+ * [Basic Types][glib-Basic-Types].
  */
 
 
@@ -7837,6 +7873,20 @@
  * and #GAsyncQueue, which are thread-safe and need no further
  * application-level locking to be accessed from multiple threads.
  * Most refcounting functions such as g_object_ref() are also thread-safe.
+ *
+ * A common use for #GThreads is to move a long-running blocking operation out
+ * of the main thread and into a worker thread. For GLib functions, such as
+ * single GIO operations, this is not necessary, and complicates the code.
+ * Instead, the `…_async()` version of the function should be used from the main
+ * thread, eliminating the need for locking and synchronisation between multiple
+ * threads. If an operation does need to be moved to a worker thread, consider
+ * using g_task_run_in_thread(), or a #GThreadPool. #GThreadPool is often a
+ * better choice than #GThread, as it handles thread reuse and task queueing;
+ * #GTask uses this internally.
+ *
+ * However, if multiple blocking operations need to be performed in sequence,
+ * and it is not possible to use #GTask for them, moving them to a worker thread
+ * can clarify the code.
  */
 
 
@@ -9373,7 +9423,7 @@
  * @queue: a #GAsyncQueue
  * @data: the @data to remove from the @queue
  *
- * Remove an item from the queue. This function does not block.
+ * Remove an item from the queue.
  *
  * Returns: %TRUE if the item was removed
  * Since: 2.46
@@ -9385,7 +9435,7 @@
  * @queue: a #GAsyncQueue
  * @data: the @data to remove from the @queue
  *
- * Remove an item from the queue. This function does not block.
+ * Remove an item from the queue.
  *
  * This function must be called while holding the @queue's lock.
  *
@@ -14450,6 +14500,10 @@
  *
  * A convenience function/macro to log an error message.
  *
+ * This is not intended for end user error reporting. Use of #GError is
+ * preferred for that instead, as it allows calling functions to perform actions
+ * conditional on the type of error.
+ *
  * Error messages are always fatal, resulting in a call to
  * abort() to terminate the application. This function will
  * result in a core dump; don't use it for errors you expect.
@@ -16018,7 +16072,7 @@
  * If you supplied a @key_destroy_func when creating the
  * #GHashTable, the old key is freed using that function.
  *
- * Returns: %TRUE of the key did not exist yet
+ * Returns: %TRUE if the key did not exist yet
  */
 
 
@@ -16646,6 +16700,9 @@
  * returns %FALSE it is automatically removed from the list of event
  * sources and will not be called again.
  *
+ * See [memory management of sources][mainloop-memory-management] for details
+ * on how to handle the return value and memory management of @data.
+ *
  * This internally creates a main loop source using g_idle_source_new()
  * and attaches it to the global #GMainContext using g_source_attach(), so
  * the callback will be invoked in whichever thread is running that main
@@ -16667,6 +16724,9 @@
  * Adds a function to be called whenever there are no higher priority
  * events pending.  If the function returns %FALSE it is automatically
  * removed from the list of event sources and will not be called again.
+ *
+ * See [memory management of sources][mainloop-memory-management] for details
+ * on how to handle the return value and memory management of @data.
  *
  * This internally creates a main loop source using g_idle_source_new()
  * and attaches it to the global #GMainContext using g_source_attach(), so
@@ -20688,25 +20748,20 @@
  * This function is useful for avoiding an extra copy of allocated memory returned
  * by a non-GLib-based API.
  *
- * A different allocator can be set using g_mem_set_vtable().
- *
  * Returns: if %TRUE, malloc() and g_malloc() can be mixed.
+ * Deprecated: 2.46: GLib always uses the system malloc, so this function always
+ * returns %TRUE.
  */
 
 
 /**
  * g_mem_profile:
  *
- * Outputs a summary of memory usage.
+ * GLib used to support some tools for memory profiling, but this
+ * no longer works. There are many other useful tools for memory
+ * profiling these days which can be used instead.
  *
- * It outputs the frequency of allocations of different sizes,
- * the total number of bytes which have been allocated,
- * the total number of bytes which have been freed,
- * and the difference between the previous two values, i.e. the number of bytes
- * still in use.
- *
- * Note that this function will not output anything unless you have
- * previously installed the #glib_mem_profiler_table with g_mem_set_vtable().
+ * Deprecated: 2.46: Use other memory profiling tools instead
  */
 
 
@@ -20714,17 +20769,12 @@
  * g_mem_set_vtable:
  * @vtable: table of memory allocation routines.
  *
- * Sets the #GMemVTable to use for memory allocation. You can use this
- * to provide custom memory allocation routines.
+ * This function used to let you override the memory allocation function.
+ * However, its use was incompatible with the use of global constructors
+ * in GLib and GIO, because those use the GLib allocators before main is
+ * reached. Therefore this function is now deprecated and is just a stub.
  *
- * The @vtable only needs to provide malloc(), realloc(), and free()
- * functions; GLib can provide default implementations of the others.
- * The malloc() and realloc() implementations should return %NULL on
- * failure, GLib will handle error-checking for you. @vtable is copied,
- * so need not persist after this function has been called.
- *
- * Note that this function must be called before using any other GLib
- * functions.
+ * Deprecated: 2.46: Use other memory profiling tools instead
  */
 
 
@@ -26709,6 +26759,9 @@
  * should not count on @func being called with @data as its first
  * parameter.
  *
+ * See [memory management of sources][mainloop-memory-management] for details
+ * on how to handle memory management of @data.
+ *
  * Typically, you won't use this function. Instead use functions specific
  * to the type of source you are using.
  */
@@ -26952,13 +27005,8 @@
  * main(). wmain() has a wide character argument vector as parameter.
  *
  * At least currently, mingw doesn't support wmain(), so if you use
- * mingw to develop the spawned program, it will have to call the
- * undocumented function __wgetmainargs() to get the wide character
- * argument vector and environment. See gspawn-win32-helper.c in the
- * GLib sources or init.c in the mingw runtime sources for a prototype
- * for that function. Alternatively, you can retrieve the Win32 system
- * level wide character command line passed to the spawned program
- * using the GetCommandLineW() function.
+ * mingw to develop the spawned program, it should call
+ * g_win32_get_command_line() to get arguments in UTF-8.
  *
  * On Windows the low-level child process creation API CreateProcess()
  * doesn't use argument vectors, but a command line. The C runtime
@@ -27355,6 +27403,10 @@
  *
  * It can be passed to g_hash_table_new() as the @hash_func parameter,
  * when using non-%NULL strings as keys in a #GHashTable.
+ *
+ * Note that this function may not be a perfect fit for all use cases.
+ * For example, it produces some hash collisions with strings as short
+ * as 2.
  *
  * Returns: a hash value corresponding to the key
  */
@@ -29795,6 +29847,10 @@
  * If the thread can not be created the program aborts. See
  * g_thread_try_new() if you want to attempt to deal with failures.
  *
+ * If you are using threads to offload (potentially many) short-lived tasks,
+ * #GThreadPool may be more appropriate than manually spawning and tracking
+ * multiple #GThreads.
+ *
  * To free the struct returned by this function, use g_thread_unref().
  * Note that g_thread_join() implicitly unrefs the #GThread as well.
  *
@@ -30463,6 +30519,9 @@
  * timeout is recalculated based on the current time and the given interval
  * (it does not try to 'catch up' time lost in delays).
  *
+ * See [memory management of sources][mainloop-memory-management] for details
+ * on how to handle the return value and memory management of @data.
+ *
  * If you want to have a timer in the "seconds" range and do not care
  * about the exact time of the first call of the timer, use the
  * g_timeout_add_seconds() function; this function allows for more
@@ -30504,6 +30563,9 @@
  * timeout is recalculated based on the current time and the given interval
  * (it does not try to 'catch up' time lost in delays).
  *
+ * See [memory management of sources][mainloop-memory-management] for details
+ * on how to handle the return value and memory management of @data.
+ *
  * This internally creates a main loop source using g_timeout_source_new()
  * and attaches it to the global #GMainContext using g_source_attach(), so
  * the callback will be invoked in whichever thread is running that main
@@ -30536,6 +30598,9 @@
  * Note that the first call of the timer may not be precise for timeouts
  * of one second. If you need finer precision and have such a timeout,
  * you may want to use g_timeout_add() instead.
+ *
+ * See [memory management of sources][mainloop-memory-management] for details
+ * on how to handle the return value and memory management of @data.
  *
  * The interval given is in terms of monotonic time, not wall clock
  * time.  See g_get_monotonic_time().
@@ -30571,6 +30636,9 @@
  * event sources. Thus they should not be relied on for precise timing.
  * After each call to the timeout function, the time of the next
  * timeout is recalculated based on the current time and the given @interval
+ *
+ * See [memory management of sources][mainloop-memory-management] for details
+ * on how to handle the return value and memory management of @data.
  *
  * If you want timing more precise than whole seconds, use g_timeout_add()
  * instead.
@@ -33641,7 +33709,7 @@
  * type.  This includes the types %G_VARIANT_TYPE_STRING,
  * %G_VARIANT_TYPE_OBJECT_PATH and %G_VARIANT_TYPE_SIGNATURE.
  *
- * The string will always be UTF-8 encoded.
+ * The string will always be UTF-8 encoded, and will never be %NULL.
  *
  * If @length is non-%NULL then the length of the string (in bytes) is
  * returned there.  For trusted values, this information is already
@@ -34679,7 +34747,9 @@
  *
  * Creates a string #GVariant with the contents of @string.
  *
- * @string must be valid UTF-8.
+ * @string must be valid UTF-8, and must not be %NULL. To encode
+ * potentially-%NULL strings, use g_variant_new() with `ms` as the
+ * [format string][gvariant-format-strings-maybe-types].
  *
  * Returns: (transfer none): a floating reference to a new string #GVariant instance
  * Since: 2.24
@@ -34707,7 +34777,8 @@
  *
  * Creates a string #GVariant with the contents of @string.
  *
- * @string must be valid UTF-8.
+ * @string must be valid UTF-8, and must not be %NULL. To encode
+ * potentially-%NULL strings, use this with g_variant_new_maybe().
  *
  * This function consumes @string.  g_free() will be called on @string
  * when it is no longer required.
@@ -35750,6 +35821,10 @@
  *
  * A convenience function/macro to log a warning message.
  *
+ * This is not intended for end user error reporting. Use of #GError is
+ * preferred for that instead, as it allows calling functions to perform actions
+ * conditional on the type of error.
+ *
  * You can make warnings fatal at runtime by setting the `G_DEBUG`
  * environment variable (see
  * [Running GLib Applications](glib-running.html)).
@@ -36227,10 +36302,7 @@
 /**
  * glib_mem_profiler_table:
  *
- * A #GMemVTable containing profiling variants of the memory
- * allocation functions. Use them together with g_mem_profile()
- * in order to get information about the memory allocation pattern
- * of your program.
+ * Deprecated: 2.46: Use other memory profiling tools instead
  */
 
 

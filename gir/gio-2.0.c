@@ -316,8 +316,8 @@
  *
  * In the event that the application is marked
  * %G_APPLICATION_HANDLES_COMMAND_LINE the "normal processing" will
- * send the @option dictionary to the primary instance where it can be
- * read with g_application_command_line_get_options().  The signal
+ * send the @options dictionary to the primary instance where it can be
+ * read with g_application_command_line_get_options_dict().  The signal
  * handler can modify the dictionary before returning, and the
  * modified dictionary will be sent.
  *
@@ -2172,6 +2172,31 @@
  * See also #GNetworkMonitor::network-changed.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * GNetworkMonitor:network-metered:
+ *
+ * Whether the network is considered metered. That is, whether the
+ * system has traffic flowing through the default connection that is
+ * subject to limitations set by service providers. For example, traffic
+ * might be billed by the amount of data transmitted, or there might be a
+ * quota on the amount of traffic per month. This is typical with tethered
+ * connections (3G and 4G) and in such situations, bandwidth intensive
+ * applications may wish to avoid network activity where possible if it will
+ * cost the user money or use up their limited quota.
+ *
+ * If more information is required about specific devices then the
+ * system network management API should be used instead (for example,
+ * NetworkManager or ConnMan).
+ *
+ * If this information is not available then no networks will be
+ * marked as metered.
+ *
+ * See also #GNetworkMonitor:network-available.
+ *
+ * Since: 2.46
  */
 
 
@@ -10876,6 +10901,16 @@
 
 
 /**
+ * _g_poll_file_monitor_new:
+ * @file: a #GFile.
+ *
+ * Polls @file for changes.
+ *
+ * Returns: a new #GFileMonitor for the given #GFile.
+ */
+
+
+/**
  * g_action_activate:
  * @action: a #GAction
  * @parameter: (allow-none): the parameter to the activation
@@ -16188,6 +16223,25 @@
 
 
 /**
+ * g_dbus_connection_register_object_with_closures: (rename-to g_dbus_connection_register_object)
+ * @connection: A #GDBusConnection.
+ * @object_path: The object path to register at.
+ * @interface_info: Introspection data for the interface.
+ * @method_call_closure: (nullable): #GClosure for handling incoming method calls.
+ * @get_property_closure: (nullable): #GClosure for getting a property.
+ * @set_property_closure: (nullable): #GClosure for setting a property.
+ * @error: Return location for error or %NULL.
+ *
+ * Version of g_dbus_connection_register_object() using closures instead of a
+ * #GDBusInterfaceVTable for easier binding in other languages.
+ *
+ * Returns: 0 if @error is set, otherwise a registration id (never 0)
+ * that can be used with g_dbus_connection_unregister_object() .
+ * Since: 2.46
+ */
+
+
+/**
  * g_dbus_connection_register_subtree:
  * @connection: a #GDBusConnection
  * @object_path: the object path to register the subtree at
@@ -16435,7 +16489,8 @@
  *     all object paths
  * @arg0: (allow-none): contents of first string argument to match on or %NULL
  *     to match on all kinds of arguments
- * @flags: flags describing how to subscribe to the signal (currently unused)
+ * @flags: #GDBusSignalFlags describing how arg0 is used in subscribing to the
+ *     signal
  * @callback: callback to invoke when there is a signal matching the requested data
  * @user_data: user data to pass to @callback
  * @user_data_free_func: (allow-none): function to free @user_data with when
@@ -28459,6 +28514,18 @@
 
 
 /**
+ * g_network_monitor_get_network_metered:
+ * @monitor: the #GNetworkMonitor
+ *
+ * Checks if the network is metered.
+ * See #GNetworkMonitor:network-metered for more details.
+ *
+ * Returns: whether the connection is metered
+ * Since: 2.46
+ */
+
+
+/**
  * g_network_service_get_domain:
  * @srv: a #GNetworkService
  *
@@ -29457,16 +29524,6 @@
 
 
 /**
- * g_poll_file_monitor_new:
- * @file: a #GFile.
- *
- * Polls @file for changes.
- *
- * Returns: a new #GFileMonitor for the given #GFile.
- */
-
-
-/**
  * g_pollable_input_stream_can_poll:
  * @stream: a #GPollableInputStream.
  *
@@ -30440,6 +30497,9 @@
  * Returns all the names of children at the specified @path in the resource.
  * The return result is a %NULL terminated list of strings which should
  * be released with g_strfreev().
+ *
+ * If @path is invalid or does not exist in the #GResource,
+ * %G_RESOURCE_ERROR_NOT_FOUND will be returned.
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
