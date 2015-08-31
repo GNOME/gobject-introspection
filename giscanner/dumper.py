@@ -24,6 +24,7 @@ import sys
 import subprocess
 import shutil
 import tempfile
+from distutils.errors import LinkError
 
 from .gdumpparser import IntrospectionBinary
 from . import utils
@@ -92,7 +93,10 @@ class DumpCompiler(object):
         self._uninst_srcdir = os.environ.get('UNINSTALLED_INTROSPECTION_SRCDIR')
         self._packages = ['gio-2.0 gmodule-2.0']
         self._packages.extend(options.packages)
-        self._linker_cmd = os.environ.get('CC', 'cc')
+        if hasattr(self._compiler.compiler, 'linker_exe'):
+            self._linker_cmd = self._compiler.compiler.linker_exe
+        else:
+            self._linker_cmd = []
 
     # Public API
 
@@ -147,29 +151,22 @@ class DumpCompiler(object):
                     f.write("  " + func)
                 f.write("\n};\n")
 
-        # Microsoft compilers generate intermediate .obj files
-        # during compilation, unlike .o files like GCC and others
-        if self._compiler.check_is_msvc():
-            o_path = self._generate_tempfile(tmpdir, '.obj')
-        else:
-            o_path = self._generate_tempfile(tmpdir, '.o')
-
-        if os.name == 'nt':
-            ext = '.exe'
+        if self._compiler.compiler.exe_extension:
+            ext = self._compiler.compiler.exe_extension
         else:
             ext = ''
 
         bin_path = self._generate_tempfile(tmpdir, ext)
 
         try:
-            self._compile(o_path, c_path)
+            introspection_obj = self._compile(c_path)
         except CompilerError as e:
             if not utils.have_debug_flag('save-temps'):
                 shutil.rmtree(tmpdir)
             raise SystemExit('compilation of temporary binary failed:' + str(e))
 
         try:
-            self._link(bin_path, o_path)
+            self._link(bin_path, introspection_obj)
         except LinkerError as e:
             if not utils.have_debug_flag('save-temps'):
                 shutil.rmtree(tmpdir)
@@ -196,91 +193,59 @@ class DumpCompiler(object):
             stdout=subprocess.PIPE)
         return proc.communicate()[0].split()
 
-    def _compile(self, output, *sources):
-        # Not strictly speaking correct, but easier than parsing shell
-        args = self._compiler.compiler_cmd.split()
-        # Do not add -Wall when using init code as we do not include any
-        # header of the library being introspected
-        if self._compiler.compiler_cmd == 'gcc' and not self._options.init_sections:
-            args.append('-Wall')
-        # The Microsoft compiler uses different option flags for
-        # silencing warnings on deprecated function usage
-        if self._compiler.check_is_msvc():
-            args.append("-wd4996")
-        else:
-            args.append("-Wno-deprecated-declarations")
+    def _compile(self, *sources):
         pkgconfig_flags = self._run_pkgconfig('--cflags')
-        args.extend([utils.cflag_real_include_path(f) for f in pkgconfig_flags])
-        cppflags = os.environ.get('CPPFLAGS', '')
-        for cppflag in cppflags.split():
-            args.append(cppflag)
-        cflags = os.environ.get('CFLAGS', '')
-        for cflag in cflags.split():
-            args.append(cflag)
-        for include in self._options.cpp_includes:
-            args.append('-I' + include)
-        # The Microsoft compiler uses different option flags for
-        # compilation result output
-        if self._compiler.check_is_msvc():
-            args.extend(['-c', '-Fe' + output, '-Fo' + output])
-        else:
-            args.extend(['-c', '-o', output])
-        for source in sources:
-            if not os.path.exists(source):
-                raise CompilerError(
-                    "Could not find c source file: %s" % (source, ))
-        args.extend(list(sources))
-        if not self._options.quiet:
-            print "g-ir-scanner: compile: %s" % (
-                subprocess.list2cmdline(args), )
-            sys.stdout.flush()
-        try:
-            subprocess.check_call(args)
-        except subprocess.CalledProcessError as e:
-            raise CompilerError(e)
+        return self._compiler.compile(pkgconfig_flags,
+                                      self._options.cpp_includes,
+                                      sources,
+                                      self._options.init_sections)
 
-    def _link(self, output, *sources):
+    def _link(self, output, sources):
         args = []
         libtool = utils.get_libtool_command(self._options)
         if libtool:
+            # Note: MSVC Builds do not use libtool!
+            # In the libtool case, put together the linker command, as we did before.
+            # We aren't using distutils to link in this case.
             args.extend(libtool)
             args.append('--mode=link')
             args.append('--tag=CC')
             if self._options.quiet:
                 args.append('--silent')
 
-        args.extend(self._linker_cmd.split())
-        # We can use -o for the Microsoft compiler/linker,
-        # but it is considered deprecated usage with that
-        if self._compiler.check_is_msvc():
-            args.extend(['-Fe' + output])
-        else:
+            args.extend(self._linker_cmd)
+
             args.extend(['-o', output])
-        if libtool:
             if os.name == 'nt':
                 args.append('-Wl,--export-all-symbols')
             else:
                 args.append('-export-dynamic')
 
-        cppflags = os.environ.get('CPPFLAGS', '')
-        for cppflag in cppflags.split():
-            args.append(cppflag)
-        cflags = os.environ.get('CFLAGS', '')
-        for cflag in cflags.split():
-            args.append(cflag)
-        ldflags = os.environ.get('LDFLAGS', '')
-        for ldflag in ldflags.split():
-            args.append(ldflag)
+        if not self._compiler.check_is_msvc():
+            # These envvars are not used for MSVC Builds!
+            # MSVC Builds use the INCLUDE, LIB envvars,
+            # which are automatically picked up during
+            # compilation and linking
+            cppflags = os.environ.get('CPPFLAGS', '')
+            for cppflag in cppflags.split():
+                args.append(cppflag)
+            cflags = os.environ.get('CFLAGS', '')
+            for cflag in cflags.split():
+                args.append(cflag)
+            ldflags = os.environ.get('LDFLAGS', '')
+            for ldflag in ldflags.split():
+                args.append(ldflag)
 
         # Make sure to list the library to be introspected first since it's
         # likely to be uninstalled yet and we want the uninstalled RPATHs have
         # priority (or we might run with installed library that is older)
-
         for source in sources:
             if not os.path.exists(source):
                 raise CompilerError(
                     "Could not find object file: %s" % (source, ))
-        args.extend(list(sources))
+
+        if libtool:
+            args.extend(sources)
 
         pkg_config_libs = self._run_pkgconfig('--libs')
 
@@ -293,31 +258,61 @@ class DumpCompiler(object):
 
         else:
             args.extend(pkg_config_libs)
-            self._compiler.get_external_link_flags(args, self._options.libraries)
+            self._compiler.get_external_link_flags(args,
+                                                   libtool,
+                                                   self._options.libraries)
 
-        if not self._options.quiet:
-            print "g-ir-scanner: link: %s" % (
-                subprocess.list2cmdline(args), )
-            sys.stdout.flush()
-        msys = os.environ.get('MSYSTEM', None)
-        if msys:
-            shell = os.environ.get('SHELL', 'sh.exe')
-            # Create a temporary script file that
-            # runs the command we want
-            tf, tf_name = tempfile.mkstemp()
-            with os.fdopen(tf, 'wb') as f:
-                shellcontents = ' '.join([x.replace('\\', '/') for x in args])
-                fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
-                f.write(fcontents)
-            shell = utils.which(shell)
-            args = [shell, tf_name.replace('\\', '/')]
-        try:
-            subprocess.check_call(args)
-        except subprocess.CalledProcessError as e:
-            raise LinkerError(e)
-        finally:
+        if not libtool:
+            # non-libtool: prepare distutils for linking the introspection
+            # dumper program...
+            try:
+                self._compiler.link(output,
+                                    sources,
+                                    args)
+
+            # Ignore failing to embed the manifest files, when the manifest
+            # file does not exist, especially for MSVC 2010 and later builds.
+            # If we are on Visual C++ 2005/2008, where
+            # this embedding is required, the build will fail anyway, as
+            # the dumper program will likely fail to run, and this means
+            # something went wrong with the build.
+            except LinkError, e:
+                if self._compiler.check_is_msvc():
+                    msg = str(e)
+
+                    if msg[msg.rfind('mt.exe'):] == 'mt.exe\' failed with exit status 31':
+                        sys.exc_clear()
+                        pass
+                    else:
+                        raise LinkError(e)
+                else:
+                    raise LinkError(e)
+        else:
+            # libtool: Run the assembled link command, we don't use distutils
+            # for linking here.
+            if not self._options.quiet:
+                print "g-ir-scanner: link: %s" % (
+                    subprocess.list2cmdline(args), )
+                sys.stdout.flush()
+            msys = os.environ.get('MSYSTEM', None)
             if msys:
-                os.remove(tf_name)
+                shell = os.environ.get('SHELL', 'sh.exe')
+                # Create a temporary script file that
+                # runs the command we want
+                tf, tf_name = tempfile.mkstemp()
+                with os.fdopen(tf, 'wb') as f:
+                    shellcontents = ' '.join([x.replace('\\', '/') for x in args])
+                    fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
+                    f.write(fcontents)
+                shell = utils.which(shell)
+                args = [shell, tf_name.replace('\\', '/')]
+            try:
+                subprocess.check_call(args)
+            except subprocess.CalledProcessError as e:
+                raise LinkerError(e)
+            finally:
+                if msys:
+                    os.remove(tf_name)
 
 
 def compile_introspection_binary(options, get_type_functions,
