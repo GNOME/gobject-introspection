@@ -4761,6 +4761,21 @@ exposed to language bindings.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="func_obj_nullable_in"
+              c:identifier="regress_func_obj_nullable_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1">
+          <doc xml:space="preserve">A #RegressTestObj</doc>
+          <type name="TestObj" c:type="RegressTestObj*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="global_get_flags_out"
               c:identifier="regress_global_get_flags_out">
       <return-value transfer-ownership="none">

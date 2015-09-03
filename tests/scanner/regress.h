@@ -918,6 +918,8 @@ void regress_func_obj_null_in (RegressTestObj *obj);
 _GI_TEST_EXTERN
 void regress_test_obj_null_out (RegressTestObj **obj);
 
+void regress_func_obj_nullable_in (RegressTestObj *obj);
+
 /* inheritance */
 #define REGRESS_TEST_TYPE_SUB_OBJ           (regress_test_sub_obj_get_type ())
 #define REGRESS_TEST_SUB_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_TEST_TYPE_SUB_OBJ, RegressTestSubObj))

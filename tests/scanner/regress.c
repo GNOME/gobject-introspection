@@ -3002,6 +3002,15 @@ regress_test_obj_null_out (RegressTestObj **obj)
 }
 
 /**
+ * regress_func_obj_nullable_in:
+ * @obj: (nullable): A #RegressTestObj
+ */
+void
+regress_func_obj_nullable_in (RegressTestObj *obj)
+{
+}
+
+/**
  * regress_test_array_fixed_out_objects:
  * @objs: (out) (array fixed-size=2) (transfer full): An array of #RegressTestObj
  */
