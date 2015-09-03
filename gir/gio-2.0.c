@@ -7031,16 +7031,6 @@
  * the names must begin with a lowercase character, must not end
  * with a '-', and must not contain consecutive dashes.
  *
- * GSettings supports change notification.  The primary mechanism to
- * watch for changes is to connect to the "changed" signal.  You can
- * optionally watch for changes on only a single key by using a signal
- * detail.  Signals are only guaranteed to be emitted for a given key
- * after you have read the value of that key while a signal handler was
- * connected for that key.  Signals may or may not be emitted in the
- * case that the key "changed" to the value that you had previously
- * read.  Signals may be reported in additional cases as well and the
- * "changed" signal should really be treated as "may have changed".
- *
  * Similar to GConf, the default values in GSettings schemas can be
  * localized, but the localized values are stored in gettext catalogs
  * and looked up with the domain that is specified in the
@@ -15467,6 +15457,13 @@
  * message. Similary, if a filter consumes an outgoing message, the
  * message will not be sent to the other peer.
  *
+ * If @user_data_free_func is non-%NULL, it will be called (in the
+ * thread-default main context of the thread you are calling this
+ * method from) at some point after @user_data is no longer
+ * needed. (It is not guaranteed to be called synchronously when the
+ * filter is removed, and may be called after @connection has been
+ * destroyed.)
+ *
  * Returns: a filter identifier that can be used with
  *     g_dbus_connection_remove_filter()
  * Since: 2.26
@@ -16300,6 +16297,13 @@
  *
  * Removes a filter.
  *
+ * Note that since filters run in a different thread, there is a race
+ * condition where it is possible that the filter will be running even
+ * after calling g_dbus_connection_remove_filter(), so you cannot just
+ * free data that the filter might be using. Instead, you should pass
+ * a #GDestroyNotify to g_dbus_connection_add_filter(), which will be
+ * called when it is guaranteed that the data is no longer needed.
+ *
  * Since: 2.26
  */
 
@@ -16515,6 +16519,13 @@
  * %G_DBUS_SIGNAL_FLAGS_MATCH_ARG0_PATH are given, @arg0 is
  * interpreted as part of a namespace or path.  The first argument
  * of a signal is matched against that part as specified by D-Bus.
+ *
+ * If @user_data_free_func is non-%NULL, it will be called (in the
+ * thread-default main context of the thread you are calling this
+ * method from) at some point after @user_data is no longer
+ * needed. (It is not guaranteed to be called synchronously when the
+ * signal is unsubscribed from, and may be called after @connection
+ * has been destroyed.)
  *
  * Returns: a subscription identifier that can be used with g_dbus_connection_signal_unsubscribe()
  * Since: 2.26
@@ -21479,7 +21490,8 @@
  * g_file_get_path:
  * @file: input #GFile
  *
- * Gets the local pathname for #GFile, if one exists.
+ * Gets the local pathname for #GFile, if one exists. If non-%NULL, this is
+ * guaranteed to be an absolute, canonical path. It might contain symlinks.
  *
  * This call does no blocking I/O.
  *
@@ -21547,10 +21559,10 @@
  *
  * If @parent is %NULL then this function returns %TRUE if @file has any
  * parent at all.  If @parent is non-%NULL then %TRUE is only returned
- * if @file is a child of @parent.
+ * if @file is an immediate child of @parent.
  *
- * Returns: %TRUE if @file is a child of @parent (or any parent in the
- *          case that @parent is %NULL).
+ * Returns: %TRUE if @file is an immediate child of @parent (or any parent in
+ *          the case that @parent is %NULL).
  * Since: 2.24
  */
 
@@ -26401,6 +26413,18 @@
  * Removes all items from @store.
  *
  * Since: 2.44
+ */
+
+
+/**
+ * g_list_store_sort:
+ * @store: a #GListStore
+ * @compare_func: (scope call): pairwise comparison function for sorting
+ * @user_data: (closure): user data for @compare_func
+ *
+ * Sort the items in @store according to @compare_func.
+ *
+ * Since: 2.46
  */
 
 
