@@ -25,6 +25,7 @@ import sys
 import distutils
 
 from distutils.msvccompiler import MSVCCompiler
+from distutils.unixccompiler import UnixCCompiler
 from distutils.cygwinccompiler import Mingw32CCompiler
 from distutils.sysconfig import customize_compiler
 
@@ -205,6 +206,21 @@ class CCompiler(object):
 
         for include in cpp_includes:
             includes.append(include)
+
+        if isinstance(self.compiler, UnixCCompiler):
+            # This is to handle the case where macros are defined in CFLAGS
+            cflags = os.environ.get('CFLAGS')
+            if cflags:
+                for i, cflag in enumerate(cflags.split()):
+                    if cflag.startswith('-D'):
+                        stridx = cflag.find('=')
+                        if stridx > -1:
+                            macroset = (cflag[2:stridx],
+                                        cflag[stridx + 1:])
+                        else:
+                            macroset = (cflag[2:], None)
+                        if macroset not in macros:
+                            macros.append(macroset)
 
         # Do not add -Wall when using init code as we do not include any
         # header of the library being introspected
