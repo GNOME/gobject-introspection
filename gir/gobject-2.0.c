@@ -3534,11 +3534,11 @@
 
 /**
  * g_param_spec_get_default_value:
- * @param: a #GParamSpec
+ * @pspec: a #GParamSpec
  *
- * Gets the default value of @param as a pointer to a #GValue.
+ * Gets the default value of @pspec as a pointer to a #GValue.
  *
- * The #GValue will remain value for the life of @param.
+ * The #GValue will remain value for the life of @pspec.
  *
  * Returns: a pointer to a #GValue which must not be modified
  * Since: 2.38
@@ -3555,6 +3555,17 @@
  * This allows for pointer-value comparisons.
  *
  * Returns: the name of @pspec.
+ */
+
+
+/**
+ * g_param_spec_get_name_quark:
+ * @param: a #GParamSpec
+ *
+ * Gets the GQuark for the name.
+ *
+ * Returns: the GQuark for @pspec->name.
+ * Since: 2.46
  */
 
 
