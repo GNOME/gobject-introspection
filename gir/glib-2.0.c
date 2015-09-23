@@ -1884,6 +1884,14 @@
 
 
 /**
+ * GStrv:
+ *
+ * A typedef alias for gchar**. This is mostly useful when used together with
+ * g_auto().
+ */
+
+
+/**
  * GTestCase:
  *
  * An opaque structure representing a test case.
@@ -9332,9 +9340,9 @@
 /**
  * g_async_queue_push_front:
  * @queue: a #GAsyncQueue
- * @data: @data to push into the @queue
+ * @item: data to push into the @queue
  *
- * Pushes the @data into the @queue. @data must not be %NULL.
+ * Pushes the @item into the @queue. @item must not be %NULL.
  * In contrast to g_async_queue_push(), this function
  * pushes the new item ahead of the items already in the queue,
  * so that it will be the next one to be popped off the queue.
@@ -9346,9 +9354,9 @@
 /**
  * g_async_queue_push_front_unlocked:
  * @queue: a #GAsyncQueue
- * @data: @data to push into the @queue
+ * @item: data to push into the @queue
  *
- * Pushes the @data into the @queue. @data must not be %NULL.
+ * Pushes the @item into the @queue. @item must not be %NULL.
  * In contrast to g_async_queue_push_unlocked(), this function
  * pushes the new item ahead of the items already in the queue,
  * so that it will be the next one to be popped off the queue.
@@ -9445,7 +9453,7 @@
 /**
  * g_async_queue_remove:
  * @queue: a #GAsyncQueue
- * @data: the @data to remove from the @queue
+ * @item: the data to remove from the @queue
  *
  * Remove an item from the queue.
  *
@@ -9457,7 +9465,7 @@
 /**
  * g_async_queue_remove_unlocked:
  * @queue: a #GAsyncQueue
- * @data: the @data to remove from the @queue
+ * @item: the data to remove from the @queue
  *
  * Remove an item from the queue.
  *
@@ -10017,8 +10025,10 @@
  * {
  *   g_auto(GQueue) queue = G_QUEUE_INIT;
  *   g_auto(GVariantBuilder) builder;
+ *   g_auto(GStrv) strv;
  *
  *   g_variant_builder_init (&builder, G_VARIANT_TYPE_VARDICT);
+ *   strv = g_strsplit("a:b:c", ":", -1);
  *
  *   ...
  *
@@ -10096,9 +10106,8 @@
  * gboolean
  * check_exists(GVariant *dict)
  * {
- *   g_autoptr(GVariant) dirname;
- *   g_autoptr(GVariant) basename = NULL;
- *   g_autoptr(gchar) path = NULL;
+ *   g_autoptr(GVariant) dirname, basename = NULL;
+ *   g_autofree gchar *path = NULL;
  *
  *   dirname = g_variant_lookup_value (dict, "dirname", G_VARIANT_TYPE_STRING);
  *
@@ -10121,6 +10130,8 @@
  * You must initialise the variable in some way -- either by use of an
  * initialiser or by ensuring that it is assigned to unconditionally
  * before it goes out of scope.
+ *
+ * See also g_auto(), g_autofree() and g_steal_pointer().
  *
  * Since: 2.44
  */
