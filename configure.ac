@@ -247,7 +247,7 @@ AC_C_CONST
 
 # Checks for library functions.
 AC_FUNC_STRTOD
-AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull])
+AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull getauxval])
 AC_CHECK_FUNCS([backtrace backtrace_symbols])
 
 # Python
