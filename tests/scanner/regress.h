@@ -1033,6 +1033,7 @@ regress_test_fundamental_sub_object_new (const char *data);
 
 /* callback */
 typedef void (*RegressTestSimpleCallback) (void);
+typedef void RegressTestNoPtrCallback (void);
 typedef int (*RegressTestCallback) (void);
 typedef int (*RegressTestCallbackUserData) (gpointer user_data);
 /**
@@ -1075,6 +1076,9 @@ typedef void (* RegressTestCallbackArrayInOut) (int **ints, int *length);
 
 _GI_TEST_EXTERN
 void regress_test_simple_callback (RegressTestSimpleCallback callback);
+
+_GI_TEST_EXTERN
+void regress_test_noptr_callback (RegressTestNoPtrCallback callback);
 
 _GI_TEST_EXTERN
 int regress_test_callback (RegressTestCallback callback);

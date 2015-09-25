@@ -596,6 +596,8 @@ raise ValueError."""
         ctype = symbol.base_type.type
         if (ctype == CTYPE_POINTER and symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_typedef_callback(symbol)
+        elif (ctype == CTYPE_FUNCTION):
+            node = self._create_typedef_callback(symbol)
         elif (ctype == CTYPE_POINTER and symbol.base_type.base_type.type == CTYPE_STRUCT):
             node = self._create_typedef_compound(ast.Record, symbol, disguised=True)
         elif ctype == CTYPE_STRUCT:
@@ -871,8 +873,14 @@ raise ValueError."""
             compound.fields.append(field)
 
     def _create_callback(self, symbol, member=False):
-        parameters = list(self._create_parameters(symbol, symbol.base_type.base_type))
-        retval = self._create_return(symbol.base_type.base_type.base_type)
+        if (symbol.base_type.type == CTYPE_FUNCTION):  # function
+            paramtype = symbol.base_type
+            retvaltype = symbol.base_type.base_type
+        elif (symbol.base_type.type == CTYPE_POINTER):  # function pointer
+            paramtype = symbol.base_type.base_type
+            retvaltype = symbol.base_type.base_type.base_type
+        parameters = list(self._create_parameters(symbol, paramtype))
+        retval = self._create_return(retvaltype)
 
         # Mark the 'user_data' arguments
         for i, param in enumerate(parameters):

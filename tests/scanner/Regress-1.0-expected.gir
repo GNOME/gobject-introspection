@@ -2883,6 +2883,11 @@ use it should be.</doc>
         <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
       </field>
     </record>
+    <callback name="TestNoPtrCallback" c:type="RegressTestNoPtrCallback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+    </callback>
     <class name="TestObj"
            c:symbol-prefix="test_obj"
            c:type="RegressTestObj"
@@ -6221,6 +6226,21 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
         <parameter name="a" transfer-ownership="none">
           <doc xml:space="preserve">An integer</doc>
           <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_noptr_callback"
+              c:identifier="regress_test_noptr_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   nullable="1"
+                   allow-none="1"
+                   scope="call">
+          <type name="TestNoPtrCallback" c:type="RegressTestNoPtrCallback"/>
         </parameter>
       </parameters>
     </function>

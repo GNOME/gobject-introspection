@@ -3476,6 +3476,20 @@ regress_test_simple_callback (RegressTestSimpleCallback callback)
 }
 
 /**
+ * regress_test_noptr_callback:
+ * @callback: (scope call) (allow-none):
+ *
+ **/
+void
+regress_test_noptr_callback (RegressTestNoPtrCallback callback)
+{
+    if (callback != NULL)
+        callback();
+
+    return;
+}
+
+/**
  * regress_test_callback_user_data:
  * @callback: (scope call):
  * @user_data: (not nullable):
