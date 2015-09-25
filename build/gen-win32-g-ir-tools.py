@@ -13,26 +13,29 @@ import os
 import sys
 import optparse
 
-from gi_msvc_build_utils import process_in
+import replace
 from gi_msvc_build_utils import parent_dir
 
 def setup_vars_tools(module, func, srcfile, outfile):
-    vars = {}
-
-    # Well, we are using the "relocatable" feature on Windows...
-    blah = 'this\\\\is\\\\ignored\\\\on\\\\windows'
-    vars['datarootdir'] = blah
-    vars['libdir'] = blah
-
     # This doesn't really matter for cmd.exe usage, but
     # let's just set this like this here, in case one
     # wants to use MinGW with the scripts generated here
-    vars['PYTHON'] = 'python'
+    replace.replace(srcfile,
+                    outfile + '.tmp0',
+                    '@PYTHON@',
+                    'python')
 
-    # The parts that really matter.
-    vars['TOOL_MODULE'] = module
-    vars['TOOL_FUNCTION'] = func
-    process_in(srcfile, outfile, vars, 2)
+    # Now replace the needed items...
+    replace.replace(outfile + '.tmp0',
+                    outfile + '.tmp',
+                    '@TOOL_MODULE@',
+                    module)
+    os.unlink(outfile + '.tmp0')
+    replace.replace(outfile + '.tmp',
+                    outfile,
+                    '@TOOL_FUNCTION@',
+                    func)
+    os.unlink(outfile + '.tmp')
 
 def main(argv):
     modules = ['scannermain','annotationmain','docmain']
