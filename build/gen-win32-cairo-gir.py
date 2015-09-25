@@ -30,15 +30,15 @@ def main(argv):
 
     # Set up variables in cairo-1.0.gir.in to produce cairo-1.0.gir
     replace.replace(os.path.join(preset_gir_path, 'cairo-1.0.gir.in'),
-                    os.path.join(preset_gir_path, 'cairo-1.0.gir.tmp'),
+                    'cairo-1.0.gir.tmp',
                     '%CAIRO_GIR_PACKAGE%',
                     'cairo-gobject')
 
-    replace.replace(os.path.join(preset_gir_path, 'cairo-1.0.gir.tmp'),
-                    os.path.join(preset_gir_path, 'cairo-1.0.gir'),
+    replace.replace('cairo-1.0.gir.tmp',
+                    'cairo-1.0.gir',
                     '%CAIRO_SHARED_LIBRARY%',
                     args.dllname)
-    os.unlink(os.path.join(preset_gir_path, 'cairo-1.0.gir.tmp'))
+    os.unlink('cairo-1.0.gir.tmp')
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
