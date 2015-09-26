@@ -979,7 +979,7 @@ Note that type resolution may not succeed."""
             if typenode.target.target_giname is not None:
                 typenode = self.lookup_giname(typenode.target.target_giname)
             elif typenode.target.target_fundamental is not None:
-                typenode = ast.type_names[typenode.target.target_fundamental]
+                typenode = typenode.target
             else:
                 break
         return typenode
