@@ -3409,7 +3409,7 @@ glong
 /**
  * gi_marshalling_tests_pointer_in_return:
  *
- * Returns: (transfer none): The same pointer
+ * Returns: The same pointer
  */
 gpointer
 gi_marshalling_tests_pointer_in_return (gpointer pointer)

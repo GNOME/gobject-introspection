@@ -30,7 +30,7 @@ from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CL
                                ANN_VFUNC, ANN_NULLABLE, ANN_OPTIONAL)
 from .annotationparser import (OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
                                OPT_OUT_CALLEE_ALLOCATES, OPT_OUT_CALLER_ALLOCATES,
-                               OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
+                               OPT_TRANSFER_CONTAINER, OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
 
 from .utils import to_underscores_noprefix
 
@@ -467,7 +467,7 @@ class MainTransformer(object):
     def _get_transfer_default_returntype_basic(self, typeval):
         if (typeval.is_equiv(ast.BASIC_GIR_TYPES)
         or typeval.is_const
-        or typeval.is_equiv(ast.TYPE_NONE)):
+        or typeval.is_equiv((ast.TYPE_ANY, ast.TYPE_NONE))):
             return ast.PARAM_TRANSFER_NONE
         elif typeval.is_equiv(ast.TYPE_STRING):
             # Non-const strings default to FULL
@@ -537,6 +537,62 @@ class MainTransformer(object):
         else:
             raise AssertionError(node)
 
+    def _is_pointer_type(self, node, annotations):
+        if (not isinstance(node, ast.Return) and
+                node.direction in (ast.PARAM_DIRECTION_OUT,
+                                   ast.PARAM_DIRECTION_INOUT)):
+            return True
+
+        target = self._transformer.lookup_typenode(node.type)
+        target = self._transformer.resolve_aliases(target)
+        target = node.type if target is None else target
+
+        return (not isinstance(target, ast.Type) or
+                target not in ast.BASIC_TYPES or
+                target.ctype.endswith('*'))
+
+    def _apply_transfer_annotation(self, parent, node, annotations):
+        transfer_annotation = annotations.get(ANN_TRANSFER)
+        if not transfer_annotation or len(transfer_annotation) != 1:
+            return
+
+        transfer = transfer_annotation[0]
+
+        target = self._transformer.lookup_typenode(node.type)
+        target = self._transformer.resolve_aliases(target)
+        target = node.type if target is None else target
+        node_type = target if isinstance(target, ast.Type) else node.type
+
+        if transfer == OPT_TRANSFER_FLOATING:
+            transfer = OPT_TRANSFER_NONE
+
+            if not isinstance(target, (ast.Class, ast.Interface)):
+                message.warn('invalid "transfer" annotation: '
+                             'only valid for object and interface types',
+                             annotations.position)
+                return
+
+        elif transfer == OPT_TRANSFER_CONTAINER:
+            if (ANN_ARRAY not in annotations and
+                    not isinstance(target, (ast.Array, ast.List, ast.Map))):
+                message.warn('invalid "transfer" annotation: '
+                             'only valid for container types',
+                             annotations.position)
+                return
+
+        elif (not self._is_pointer_type(node, annotations) and
+              node_type not in (ast.TYPE_STRING, ast.TYPE_FILENAME) and
+              not isinstance(target, (ast.Array, ast.List, ast.Map,
+                                      ast.Record, ast.Compound, ast.Boxed,
+                                      ast.Class, ast.Interface))):
+            message.warn('invalid "transfer" annotation: '
+                         'only valid for array, struct, union, boxed, '
+                         'object and interface types',
+                         annotations.position)
+            return
+
+        node.transfer = transfer
+
     def _apply_annotations_param_ret_common(self, parent, node, tag):
         annotations = tag.annotations if tag else {}
 
@@ -577,13 +633,7 @@ class MainTransformer(object):
             # Also reset the transfer default if we're toggling direction
             node.transfer = self._get_transfer_default(parent, node)
 
-        transfer_annotation = annotations.get(ANN_TRANSFER)
-        if transfer_annotation and len(transfer_annotation) == 1:
-            transfer = transfer_annotation[0]
-            if transfer == OPT_TRANSFER_FLOATING:
-                transfer = OPT_TRANSFER_NONE
-            node.transfer = transfer
-
+        self._apply_transfer_annotation(parent, node, annotations)
         self._adjust_container_type(parent, node, annotations)
 
         if ANN_NULLABLE in annotations:
