@@ -567,16 +567,16 @@ class MainTransformer(object):
             transfer = OPT_TRANSFER_NONE
 
             if not isinstance(target, (ast.Class, ast.Interface)):
-                message.warn('invalid "transfer" annotation: '
-                             'only valid for object and interface types',
+                message.warn('invalid "transfer" annotation for {0}: '
+                             'only valid for object and interface types'.format(target),
                              annotations.position)
                 return
 
         elif transfer == OPT_TRANSFER_CONTAINER:
             if (ANN_ARRAY not in annotations and
                     not isinstance(target, (ast.Array, ast.List, ast.Map))):
-                message.warn('invalid "transfer" annotation: '
-                             'only valid for container types',
+                message.warn('invalid "transfer" annotation for {0}: '
+                             'only valid for container types'.format(target),
                              annotations.position)
                 return
 
@@ -585,9 +585,9 @@ class MainTransformer(object):
               not isinstance(target, (ast.Array, ast.List, ast.Map,
                                       ast.Record, ast.Compound, ast.Boxed,
                                       ast.Class, ast.Interface))):
-            message.warn('invalid "transfer" annotation: '
+            message.warn('invalid "transfer" annotation for {0}: '
                          'only valid for array, struct, union, boxed, '
-                         'object and interface types',
+                         'object and interface types'.format(target),
                          annotations.position)
             return
 
