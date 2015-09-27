@@ -1461,7 +1461,7 @@ uses a C sugar return type.</doc>
               c:identifier="regress_foo_object_new_cookie"
               introspectable="0">
         <doc xml:space="preserve">Not sure why this test is here...</doc>
-        <return-value transfer-ownership="none">
+        <return-value>
           <type name="FooObjectCookie" c:type="RegressFooObjectCookie"/>
         </return-value>
         <parameters>

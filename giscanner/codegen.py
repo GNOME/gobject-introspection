@@ -84,30 +84,28 @@ class CCodeGenerator(object):
         self._write_prelude(self.out_h, func)
         self.out_h.write(";\n\n")
 
-    def _write_annotation_transfer(self, node):
-        if (node.type not in ast.BASIC_TYPES or
-                node.type.ctype.endswith('*')):
-            self.out_c.write(" (transfer %s)" % (node.transfer, ))
+    def _write_annotation_transfer(self, transfer):
+        self.out_c.write("(transfer %s)" % (transfer, ))
 
     def _write_docs(self, func):
         self.out_c.write("/**\n * %s:\n" % (func.symbol, ))
         for param in func.parameters:
-            self.out_c.write(" * @%s" % (param.argname, ))
+            self.out_c.write(" * @%s: " % (param.argname, ))
             if param.direction in (ast.PARAM_DIRECTION_OUT,
                                    ast.PARAM_DIRECTION_INOUT):
                 if param.caller_allocates:
                     allocate_string = ' caller-allocates'
                 else:
                     allocate_string = ''
-                self.out_c.write(": (%s%s) " % (param.direction,
-                                                allocate_string))
-                self._write_annotation_transfer(param)
+                self.out_c.write("(%s%s) " % (param.direction,
+                                              allocate_string))
+                self._write_annotation_transfer(param.transfer)
             self.out_c.write(":\n")
         self.out_c.write(' *\n')
         self.out_c.write(' * Undocumented.\n')
         self.out_c.write(' *\n')
-        self.out_c.write(' * Returns:')
-        self._write_annotation_transfer(func.retval)
+        self.out_c.write(' * Returns: ')
+        self._write_annotation_transfer(func.retval.transfer)
         self.out_c.write('\n */')
 
     @contextmanager

@@ -65,9 +65,6 @@ class EverythingCodeGenerator(object):
                                   include_last_src)
 
     def write(self):
-        types = [ast.TYPE_ANY]
-        types.extend(ast.INTROSPECTABLE_BASIC)
-
         func = ast.Function('nullfunc',
                             ast.Return(ast.TYPE_NONE, transfer=ast.PARAM_TRANSFER_NONE),
                             [], False, self.gen.gen_symbol('nullfunc'))
@@ -77,7 +74,7 @@ class EverythingCodeGenerator(object):
 
         # First pass, generate constant returns
         prefix = 'const return '
-        for typeval in types:
+        for typeval in ast.INTROSPECTABLE_BASIC:
             name = prefix + uscore_from_type(typeval)
             sym = self.gen.gen_symbol(name)
             func = ast.Function(name,
@@ -90,7 +87,7 @@ class EverythingCodeGenerator(object):
 
         # Void return, one parameter
         prefix = 'oneparam '
-        for typeval in types:
+        for typeval in ast.INTROSPECTABLE_BASIC:
             if typeval is ast.TYPE_NONE:
                 continue
             name = prefix + uscore_from_type(typeval)
@@ -104,7 +101,7 @@ class EverythingCodeGenerator(object):
 
         # Void return, one (out) parameter
         prefix = 'one_outparam '
-        for typeval in types:
+        for typeval in ast.INTROSPECTABLE_BASIC:
             if typeval is ast.TYPE_NONE:
                 continue
             name = prefix + uscore_from_type(typeval)
@@ -122,7 +119,7 @@ class EverythingCodeGenerator(object):
 
         # Passthrough one parameter
         prefix = 'passthrough_one '
-        for typeval in types:
+        for typeval in ast.INTROSPECTABLE_BASIC:
             if typeval is ast.TYPE_NONE:
                 continue
             name = prefix + uscore_from_type(typeval)
