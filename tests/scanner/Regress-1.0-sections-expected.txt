@@ -47,6 +47,7 @@ regress_foo_test_varargs_callback2
 regress_foo_test_varargs_callback3
 regress_func_obj_null_in
 regress_func_obj_nullable_in
+regress_get_variant
 regress_global_get_flags_out
 regress_has_parameter_named_attrs
 regress_introspectable_via_alias

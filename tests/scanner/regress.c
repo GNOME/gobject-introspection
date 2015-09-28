@@ -4112,3 +4112,14 @@ regress_like_xkl_config_item_set_name (RegressLikeXklConfigItem *self,
   strncpy (self->name, name, sizeof (self->name) - 1);
   self->name[sizeof(self->name)-1] = '\0';
 }
+
+/**
+ * regress_get_variant:
+ *
+ * Returns: (transfer floating): A new variant
+ */
+GVariant *
+regress_get_variant (void)
+{
+  return g_variant_new_int32 (42);
+}

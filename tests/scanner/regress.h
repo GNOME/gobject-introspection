@@ -1425,4 +1425,7 @@ typedef struct {
   };
 } RegressAnAnonymousUnion;
 
+GVariant *
+regress_get_variant (void);
+
 #endif /* __GITESTTYPES_H__ */

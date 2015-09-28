@@ -4776,6 +4776,12 @@ exposed to language bindings.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="get_variant" c:identifier="regress_get_variant">
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve">A new variant</doc>
+        <type name="GLib.Variant" c:type="GVariant*"/>
+      </return-value>
+    </function>
     <function name="global_get_flags_out"
               c:identifier="regress_global_get_flags_out">
       <return-value transfer-ownership="none">
