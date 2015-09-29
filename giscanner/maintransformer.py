@@ -508,7 +508,11 @@ class MainTransformer(object):
         elif isinstance(parent, ast.Function) and parent.is_constructor:
             if isinstance(target, ast.Class):
                 initially_unowned_type = ast.Type(target_giname='GObject.InitiallyUnowned')
-                initially_unowned = self._transformer.lookup_typenode(initially_unowned_type)
+                try:
+                    initially_unowned = self._transformer.lookup_typenode(initially_unowned_type)
+                except KeyError as e:
+                    message.error_node(node, "constructor found but GObject is not in includes")
+                    return None
                 if initially_unowned and self._is_gi_subclass(typeval, initially_unowned_type):
                     return ast.PARAM_TRANSFER_NONE
                 else:

@@ -190,6 +190,8 @@ def warn(text, positions=None, prefix=None, marker_pos=None, marker_line=None):
 def warn_node(node, text, context=None, positions=None):
     log_node(WARNING, node, text, context=context, positions=positions)
 
+def error_node(node, text, context=None, positions=None):
+    log_node(ERROR, node, text, context=context, positions=positions)
 
 def warn_symbol(symbol, text):
     ml = MessageLogger.get()
