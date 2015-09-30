@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Scan glib sources.
 # e.g.:
 #   ./update-glib-annotations.py ../../glib ../../glib/_build
@@ -6,6 +6,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
 import sys
@@ -100,7 +101,10 @@ if __name__ == '__main__':
         if os.path.isfile(srcname):
             os.unlink(srcname)
 
-        srcfile = open(tmpname, 'w')
+        # Extract annotations into a file opened in binary mode.
+        # Since g-ir-scanner-tool outputs utf-8 encoded data, we simply pass
+        # that directly into this file via. the underlying subprocess call.
+        srcfile = open(tmpname, 'wb')
         extract_annotations(module, srcdir, builddir, srcfile)
         srcfile.close()
         os.rename(tmpname, srcname)

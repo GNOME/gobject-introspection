@@ -1,12 +1,17 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import unittest
 import tempfile
 import os
 import sys
-import __builtin__
+
+if sys.version_info.major < 3:
+    import __builtin__ as builtins
+else:
+    import builtins
 
 
 os.environ['GI_SCANNER_DISABLE_CACHE'] = '1'
@@ -15,7 +20,7 @@ assert path is not None
 sys.path.insert(0, path)
 
 # Not correct, but enough to get the tests going uninstalled
-__builtin__.__dict__['DATADIR'] = path
+builtins.__dict__['DATADIR'] = path
 
 from giscanner import ast
 from giscanner.sourcescanner import SourceScanner

@@ -21,15 +21,20 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import errno
-import cPickle
 import glob
 import hashlib
 import os
 import shutil
 import sys
 import tempfile
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 import giscanner
 
@@ -45,7 +50,8 @@ def _get_versionhash():
     sources.append(sys.argv[0])
     # Using mtimes is a bit (5x) faster than hashing the file contents
     mtimes = (str(os.stat(source).st_mtime) for source in sources)
-    return hashlib.sha1(''.join(mtimes)).hexdigest()
+    # ASCII encoding is sufficient since we are only dealing with numbers.
+    return hashlib.sha1(''.join(mtimes).encode('ascii')).hexdigest()
 
 
 class CacheStore(object):
@@ -103,7 +109,9 @@ class CacheStore(object):
         # the cache all together.
         if self._directory is None:
             return
-        hexdigest = hashlib.sha1(filename).hexdigest()
+        # Assume UTF-8 encoding for the filenames. This doesn't matter so much
+        # as long as the results of this method always produce the same hash.
+        hexdigest = hashlib.sha1(filename.encode('utf-8')).hexdigest()
         return os.path.join(self._directory, hexdigest)
 
     def _cache_is_valid(self, store_filename, filename):
@@ -142,8 +150,8 @@ class CacheStore(object):
 
         tmp_fd, tmp_filename = tempfile.mkstemp(prefix='g-ir-scanner-cache-')
         try:
-            with os.fdopen(tmp_fd, 'w') as tmp_file:
-                cPickle.dump(data, tmp_file)
+            with os.fdopen(tmp_fd, 'wb') as tmp_file:
+                pickle.dump(data, tmp_file)
         except IOError as e:
             # No space left on device
             if e.errno == errno.ENOSPC:
@@ -166,7 +174,7 @@ class CacheStore(object):
         if store_filename is None:
             return
         try:
-            fd = open(store_filename)
+            fd = open(store_filename, 'rb')
         except IOError as e:
             if e.errno == errno.ENOENT:
                 return None
@@ -175,8 +183,8 @@ class CacheStore(object):
         if not self._cache_is_valid(store_filename, filename):
             return None
         try:
-            data = cPickle.load(fd)
-        except (AttributeError, EOFError, ValueError, cPickle.BadPickleGet):
+            data = pickle.load(fd)
+        except (AttributeError, EOFError, ValueError, pickle.BadPickleGet):
             # Broken cache entry, remove it
             self._remove_filename(store_filename)
             data = None

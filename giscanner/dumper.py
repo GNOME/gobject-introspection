@@ -22,6 +22,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
 import sys
@@ -195,7 +196,8 @@ class DumpCompiler(object):
         proc = subprocess.Popen(
             cmd + self._packages,
             stdout=subprocess.PIPE)
-        return proc.communicate()[0].split()
+        out, err = proc.communicate()
+        return out.decode('ascii').split()
 
     def _compile(self, *sources):
         pkgconfig_flags = self._run_pkgconfig('--cflags')

@@ -21,10 +21,17 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
+
 import os
 import sys
-import __builtin__
 
+if sys.version_info.major < 3:
+    import __builtin__ as builtins
+else:
+    import builtins
+
+builtins.__dict__['DATADIR'] = "@datarootdir@"
 
 debug = os.getenv('GI_SCANNER_DEBUG', '').split(',')
 if debug:
@@ -53,7 +60,6 @@ srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
 if srcdir is not None:
     pylibdir = srcdir
 
-__builtin__.__dict__['DATADIR'] = datadir
 sys.path.insert(0, pylibdir)
 
 from giscanner.@TOOL_MODULE@ import @TOOL_FUNCTION@

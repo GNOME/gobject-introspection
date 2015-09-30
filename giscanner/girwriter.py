@@ -23,6 +23,7 @@ from __future__ import with_statement
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 from . import ast
 from .xmlwriter import XMLWriter
@@ -81,17 +82,12 @@ class GIRWriter(XMLWriter):
             # We define a custom sorting function here because
             # we want aliases to be first.  They're a bit
             # special because the typelib compiler expands them.
-            def nscmp(a, b):
-                if isinstance(a, ast.Alias):
-                    if isinstance(b, ast.Alias):
-                        return cmp(a.name, b.name)
-                    else:
-                        return -1
-                elif isinstance(b, ast.Alias):
-                    return 1
+            def nscmp(val):
+                if isinstance(val, ast.Alias):
+                    return 0, val
                 else:
-                    return cmp(a, b)
-            for node in sorted(namespace.values(), cmp=nscmp):
+                    return 1, val
+            for node in sorted(namespace.values(), key=nscmp):
                 self._write_node(node)
 
     def _write_node(self, node):

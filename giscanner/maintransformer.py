@@ -20,6 +20,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import re
 
@@ -801,7 +802,8 @@ class MainTransformer(object):
                 (param, ) = unused
                 text = ", should be '%s'" % (param, )
             else:
-                text = ", should be one of %s" % (', '.join("'%s'" % p for p in unused), )
+                text = ", should be one of %s" % \
+                       (', '.join("'%s'" % p for p in sorted(unused)), )
 
             param = block.params.get(doc_name)
             message.warn("%s: unknown parameter '%s' in documentation "

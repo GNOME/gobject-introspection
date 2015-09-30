@@ -24,6 +24,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
 import re
@@ -353,7 +354,7 @@ class DocFormatter(object):
 
     def format_xref(self, node, **attrdict):
         if node is None or not hasattr(node, 'namespace'):
-            attrs = [('xref', 'index')] + attrdict.items()
+            attrs = [('xref', 'index')] + list(sorted(attrdict.items()))
             return xmlwriter.build_xml_tag('link', attrs)
         elif isinstance(node, ast.Member):
             # Enum/BitField members are linked to the main enum page.
@@ -364,14 +365,14 @@ class DocFormatter(object):
             return self.format_external_xref(node, attrdict)
 
     def format_internal_xref(self, node, attrdict):
-        attrs = [('xref', make_page_id(node))] + attrdict.items()
+        attrs = [('xref', make_page_id(node))] + list(sorted(attrdict.items()))
         return xmlwriter.build_xml_tag('link', attrs)
 
     def format_external_xref(self, node, attrdict):
         ns = node.namespace
         attrs = [('href', '../%s-%s/%s.html' % (ns.name, str(ns.version),
                                                 make_page_id(node)))]
-        attrs += attrdict.items()
+        attrs += list(sorted(attrdict.items()))
         return xmlwriter.build_xml_tag('link', attrs, self.format_page_name(node))
 
     def field_is_writable(self, field):
@@ -605,8 +606,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         default_constructor = None
 
         introspectable_constructors = \
-            filter(lambda c: getattr(c, 'introspectable', True),
-                   node.constructors)
+            list(filter(lambda c: getattr(c, 'introspectable', True),
+                   node.constructors))
         for c in introspectable_constructors:
             if zero_args_constructor is None and \
                len(c.parameters) == 0:
@@ -863,12 +864,11 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             if isinstance(node, ast.Compound):
                 fields = filter(self.field_is_writable, node.fields)
                 out = ''
-                if len(fields) > 0:
-                    out += "{\n"
-                    for f in fields:
-                        out += "    <link xref='%s.%s-%s'>%s</link>: value\n" % \
-                               (node.namespace.name, node.name, f.name, f.name)
-                    out += "}"
+                for f in fields:
+                    out += "    <link xref='%s.%s-%s'>%s</link>: value\n" % \
+                           (node.namespace.name, node.name, f.name, f.name)
+                if out:
+                    out = "{\n" + out + "}"
                 return out
             else:
                 return ''
@@ -957,5 +957,5 @@ class DocWriter(object):
 
         output_file_name = os.path.join(os.path.abspath(output),
                                         page_id + '.page')
-        with open(output_file_name, 'w') as fp:
+        with open(output_file_name, 'wb') as fp:
             fp.write(result)

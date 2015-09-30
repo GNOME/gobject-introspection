@@ -22,6 +22,7 @@ from __future__ import with_statement
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
 import subprocess
@@ -290,9 +291,8 @@ class SourceScanner(object):
         cc = CCompiler()
 
         tmp_fd_cpp, tmp_name_cpp = tempfile.mkstemp(prefix='g-ir-cpp-', suffix='.c')
-        fp_cpp = os.fdopen(tmp_fd_cpp, 'w')
-        self._write_preprocess_src(fp_cpp, defines, undefs, filenames)
-        fp_cpp.close()
+        with os.fdopen(tmp_fd_cpp, 'wb') as fp_cpp:
+            self._write_preprocess_src(fp_cpp, defines, undefs, filenames)
 
         tmpfile_basename = os.path.basename(os.path.splitext(tmp_name_cpp)[0])
 

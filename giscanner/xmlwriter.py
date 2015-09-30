@@ -22,14 +22,21 @@ from __future__ import with_statement
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
+import sys
 
 from contextlib import contextmanager
-from cStringIO import StringIO
 from xml.sax.saxutils import escape
 
 from .libtoolimporter import LibtoolImporter
+
+if sys.version_info.major < 3:
+    from StringIO import StringIO
+else:
+    from io import StringIO
+    unicode = str
 
 
 with LibtoolImporter(None, None):
@@ -43,13 +50,13 @@ def build_xml_tag(tag_name, attributes=None, data=None, self_indent=0,
                   self_indent_char=' '):
     if attributes is None:
         attributes = []
-    prefix = u'<%s' % (tag_name, )
+    prefix = '<%s' % (tag_name, )
     if data is not None:
-        if isinstance(data, str):
+        if isinstance(data, bytes):
             data = data.decode('UTF-8')
-        suffix = u'>%s</%s>' % (escape(data), tag_name)
+        suffix = '>%s</%s>' % (escape(data), tag_name)
     else:
-        suffix = u'/>'
+        suffix = '/>'
     attrs = collect_attributes(
         tag_name, attributes,
         self_indent,
@@ -61,6 +68,10 @@ def build_xml_tag(tag_name, attributes=None, data=None, self_indent=0,
 class XMLWriter(object):
 
     def __init__(self):
+        # Build up the XML buffer as unicode strings. When writing to disk,
+        # we can assume the lack of a Byte Order Mark (BOM) and lack
+        # of an "encoding" xml property means utf-8.
+        # See: http://www.opentag.com/xfaq_enc.htm#enc_default
         self._data = StringIO()
         self._data.write('<?xml version="1.0"?>\n')
         self._tag_stack = []
@@ -75,10 +86,10 @@ class XMLWriter(object):
             attributes = []
         attrs = collect_attributes(tag_name, attributes,
                                    self._indent, self._indent_char, len(tag_name) + 2)
-        self.write_line(u'<%s%s>' % (tag_name, attrs))
+        self.write_line('<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):
-        self.write_line(u'</%s>' % (tag_name, ))
+        self.write_line('</%s>' % (tag_name, ))
 
     # Public API
 
@@ -91,20 +102,25 @@ class XMLWriter(object):
         self._newline_char = ''
 
     def get_xml(self):
+        """Returns a unicode string containing the XML."""
         return self._data.getvalue()
 
-    def write_line(self, line=u'', indent=True, do_escape=False):
-        if isinstance(line, str):
+    def get_encoded_xml(self):
+        """Returns a utf-8 encoded bytes object containing the XML."""
+        return self._data.getvalue().encode('utf-8')
+
+    def write_line(self, line='', indent=True, do_escape=False):
+        if isinstance(line, bytes):
             line = line.decode('utf-8')
         assert isinstance(line, unicode)
         if do_escape:
             line = escape(line)
         if indent:
             self._data.write('%s%s%s' % (self._indent_char * self._indent,
-                                         line.encode('utf-8'),
+                                         line,
                                          self._newline_char))
         else:
-            self._data.write('%s%s' % (line.encode('utf-8'), self._newline_char))
+            self._data.write('%s%s' % (line, self._newline_char))
 
     def write_comment(self, text):
         self.write_line('<!-- %s -->' % (text, ))

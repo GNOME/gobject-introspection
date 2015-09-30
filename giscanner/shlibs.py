@@ -22,6 +22,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import os
 import platform
@@ -115,6 +116,7 @@ def _resolve_non_libtool(options, binary, libraries):
 
         shlibs = []
         for line in proc.stdout:
+            line = line.decode('ascii')
             for library, pattern in patterns.items():
                 m = pattern.search(line)
                 if m:
