@@ -1311,7 +1311,7 @@ method or constructor of some type."""
         """Look for virtual methods from the class structure."""
         if not node.glib_type_struct:
             # https://bugzilla.gnome.org/show_bug.cgi?id=629080
-            #message.warn_node(node,
+            # message.warn_node(node,
             #    "Failed to find class structure for '%s'" % (node.name, ))
             return
 

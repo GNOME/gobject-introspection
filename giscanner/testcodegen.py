@@ -25,13 +25,13 @@ from __future__ import unicode_literals
 
 import sys
 
+from . import ast
+from .codegen import CCodeGenerator
+
 if sys.version_info.major < 3:
     from StringIO import StringIO
 else:
     from io import StringIO
-
-from . import ast
-from .codegen import CCodeGenerator
 
 DEFAULT_C_VALUES = {ast.TYPE_ANY: 'NULL',
                     ast.TYPE_STRING: '""',
