@@ -97,7 +97,7 @@ class Position(object):
 class MessageLogger(object):
     _instance = None
 
-    def __init__(self, namespace, output=None):
+    def __init__(self, namespace=None, output=None):
         if output is None:
             output = sys.stderr
         self._cwd = os.getcwd()
@@ -158,8 +158,12 @@ class MessageLogger(object):
             text = '%s\n%s\n%s' % (text, marker_line, ' ' * marker_pos + '^')
 
         if prefix:
-            text = ('%s: %s: %s: %s: %s\n' % (last_position, error_type,
-                                              self._namespace.name, prefix, text))
+            if self._namespace:
+                text = ('%s: %s: %s: %s: %s\n' % (last_position, error_type,
+                                                  self._namespace.name, prefix, text))
+            else:
+                text = ('%s: %s: %s: %s\n' % (last_position, error_type,
+                                              prefix, text))
         else:
             if self._namespace:
                 text = ('%s: %s: %s: %s\n' % (last_position, error_type,
