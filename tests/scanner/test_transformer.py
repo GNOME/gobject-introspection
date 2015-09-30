@@ -51,7 +51,7 @@ class TestIdentifierFilter(unittest.TestCase):
               r"-e 's/^test_t$/TestContext/' " \
               r"-e 's/\(.*\)_t$/\1/' " \
               r"-e 's/^test_/Test_/' " \
-              r"-e 's/_\([a-z]\)/\u\1/g'"
+              r"-e 's/_\([a-z]\)/" + '\\u' + r"\1/g'"
 
         namespace = ast.Namespace('Test', '1.0')
         xformer = Transformer(namespace, identifier_filter_cmd=cmd)
