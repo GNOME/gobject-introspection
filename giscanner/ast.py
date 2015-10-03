@@ -344,6 +344,7 @@ type_names['FILE*'] = TYPE_ANY
 # the relevant methods, but on the other hand, since these types are just
 # integers it's easy enough to expand them.
 type_names['size_t'] = type_names['gsize']
+type_names['ssize_t'] = type_names['gssize']
 type_names['time_t'] = TYPE_LONG
 type_names['off_t'] = type_names['gsize']
 type_names['pid_t'] = TYPE_INT
@@ -351,8 +352,6 @@ type_names['uid_t'] = TYPE_UINT
 type_names['gid_t'] = TYPE_UINT
 type_names['dev_t'] = TYPE_INT
 type_names['socklen_t'] = TYPE_INT32
-type_names['size_t'] = TYPE_ULONG
-type_names['ssize_t'] = TYPE_LONG
 
 # Obj-C
 type_names['id'] = TYPE_ANY
