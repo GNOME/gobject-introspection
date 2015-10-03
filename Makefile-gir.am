@@ -2,8 +2,6 @@ BUILT_GIRSOURCES =
 SUBSTITUTED_GIRSOURCES =
 
 STATIC_GIRSOURCES =                 \
-        gir/DBus-1.0.gir            \
-        gir/DBusGLib-1.0.gir        \
         gir/fontconfig-2.0.gir      \
         gir/freetype2-2.0.gir       \
         gir/GL-1.0.gir              \
@@ -31,8 +29,6 @@ EXTRA_DIST += gir/cairo-1.0.gir.in
 
 # Doesn't seem to work to do gir/%.typelib =(
 gir/cairo-1.0.typelib: g-ir-compiler$(EXEEXT)
-gir/DBus-1.0.typelib: g-ir-compiler$(EXEEXT)
-gir/DBusGLib-1.0.typelib: g-ir-compiler$(EXEEXT)
 gir/fontconfig-2.0.typelib: g-ir-compiler$(EXEEXT)
 gir/freetype2-2.0.typelib: g-ir-compiler$(EXEEXT)
 gir/GL-1.0.typelib: g-ir-compiler$(EXEEXT)
@@ -91,8 +87,6 @@ endif
 BUILT_GIRSOURCES += GLib-2.0.gir
 
 GLib-2.0.gir: g-ir-scanner g-ir-compiler$(EXEEXT)
-
-gir/DBusGLib-1.0.typelib: GObject-2.0.gir
 
 # gobject
 GOBJECT_INCLUDEDIR=$(shell "${PKG_CONFIG}" --variable=includedir gobject-2.0)/glib-2.0

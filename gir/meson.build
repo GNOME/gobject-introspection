@@ -20,8 +20,6 @@ cairo_gir = configure_file(
 
 gir_files = [
   cairo_gir,
-  'DBus-1.0.gir',
-  'DBusGLib-1.0.gir',
   'fontconfig-2.0.gir',
   'freetype2-2.0.gir',
   'GL-1.0.gir',
