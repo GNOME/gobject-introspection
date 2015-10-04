@@ -647,17 +647,32 @@ class MainTransformer(object):
         self._adjust_container_type(parent, node, annotations)
 
         if ANN_NULLABLE in annotations:
-            node.nullable = True
+            if self._is_pointer_type(node, annotations):
+                node.nullable = True
+            else:
+                message.warn('invalid "nullable" annotation: '
+                             'only valid for pointer types and out parameters',
+                             annotations.position)
 
         if ANN_OPTIONAL in annotations:
-            node.optional = True
+            if (not isinstance(node, ast.Return) and
+                    node.direction == ast.PARAM_DIRECTION_OUT):
+                node.optional = True
+            else:
+                message.warn('invalid "optional" annotation: '
+                             'only valid for out parameters',
+                             annotations.position)
 
         if ANN_ALLOW_NONE in annotations:
             if (node.direction == ast.PARAM_DIRECTION_OUT and
                     not isinstance(node, ast.Return)):
                 node.optional = True
-            else:
+            elif self._is_pointer_type(node, annotations):
                 node.nullable = True
+            else:
+                message.warn('invalid "allow-none" annotation: '
+                             'only valid for pointer types and out parameters',
+                             annotations.position)
 
         if (node.direction != ast.PARAM_DIRECTION_OUT and
                 (node.type.target_giname == 'Gio.AsyncReadyCallback' or
