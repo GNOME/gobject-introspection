@@ -192,9 +192,7 @@ class MessageLogger(object):
         elif context and context.file_positions:
             positions = context.file_positions
         else:
-            positions = []
-            if not context:
-                text = "context=%r %s" % (node, text)
+            positions = set()
 
         if context:
             text = "%s: %s" % (getattr(context, 'symbol', context.name), text)
