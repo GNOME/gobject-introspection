@@ -24,6 +24,7 @@ EXTRA_DIST = \
 	gi/annotation_in.xml			\
 	gi/annotation_in_out.xml		\
 	gi/annotation_method.xml		\
+	gi/annotation_not_nullable.xml		\
 	gi/annotation_out.xml			\
 	gi/annotation_ref_func.xml		\
 	gi/annotation_rename_to.xml		\
