@@ -9,5 +9,6 @@ EXTRA_DIST =	\
 	gi_msvc_build_utils.py		\
 	gi-setenv-msvc.mak		\
 	gi-tests-msvc.mak		\
-	introspection-msvc.mak	\
-	replace.py
+	introspection-msvc.mak		\
+	replace.py			\
+	Makefile.msvc-introspection
