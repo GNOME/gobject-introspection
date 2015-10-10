@@ -617,6 +617,9 @@ raise ValueError."""
                 target = ast.TYPE_ANY
             if name in ast.type_names:
                 return None
+            # https://bugzilla.gnome.org/show_bug.cgi?id=755882
+            if name.endswith('_autoptr'):
+                return None
             return ast.Alias(name, target, ctype=symbol.ident)
         else:
             raise NotImplementedError(
