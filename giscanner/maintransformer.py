@@ -1451,14 +1451,15 @@ method or constructor of some type."""
                   param.argname is not None and
                   param.argname.endswith('data')):
                 callback_param.closure_name = param.argname
-                param.closure_name = param.argname
 
         for param in params:
             # By convention, closure user_data parameters are always nullable.
-            if param.closure_name is not None and \
-               param.closure_name == param.argname and \
-               not param.not_nullable:
-                param.nullable = True
+            if param.closure_name is not None:
+                idx = node.get_parameter_index(param.closure_name)
+                assert idx >= 0
+                closure_param = params[idx]
+                if not closure_param.not_nullable:
+                    closure_param.nullable = True
 
     def _pass3_callable_throws(self, node):
         """Check to see if we have anything that looks like a

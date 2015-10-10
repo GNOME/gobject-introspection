@@ -100,8 +100,7 @@ and/or use gtk-doc annotations.  -->
           <parameter name="user_data"
                      transfer-ownership="none"
                      nullable="1"
-                     allow-none="1"
-                     closure="2">
+                     allow-none="1">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="destroy" transfer-ownership="none" scope="async">
@@ -180,8 +179,7 @@ and/or use gtk-doc annotations.  -->
         <parameter name="user_data"
                    transfer-ownership="none"
                    nullable="1"
-                   allow-none="1"
-                   closure="2">
+                   allow-none="1">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
