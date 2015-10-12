@@ -5623,10 +5623,12 @@
  * GLib provides a standard method of reporting errors from a called
  * function to the calling code. (This is the same problem solved by
  * exceptions in other languages.) It's important to understand that
- * this method is both a data type (the #GError struct) and a set of
- * rules. If you use #GError incorrectly, then your code will not
+ * this method is both a data type (the #GError struct) and a [set of
+ * rules][gerror-rules]. If you use #GError incorrectly, then your code will not
  * properly interoperate with other code that uses #GError, and users
- * of your API will probably get confused.
+ * of your API will probably get confused. In most cases, [using #GError is
+ * preferred over numeric error codes][gerror-comparison], but there are
+ * situations where numeric error codes are useful for performance.
  *
  * First and foremost: #GError should only be used to report recoverable
  * runtime errors, never to report programming errors. If the programmer
@@ -5871,6 +5873,29 @@
  *   generally not handle this error code explicitly, but should
  *   instead treat any unrecognized error code as equivalent to
  *   FAILED.
+ *
+ * ## Comparison of #GError and traditional error handling # {#gerror-comparison}
+ *
+ * #GError has several advantages over traditional numeric error codes:
+ * importantly, tools like
+ * [gobject-introspection](https://developer.gnome.org/gi/stable/) understand
+ * #GErrors and convert them to exceptions in bindings; the message includes
+ * more information than just a code; and use of a domain helps prevent
+ * misinterpretation of error codes.
+ *
+ * #GError has disadvantages though: it requires a memory allocation, and
+ * formatting the error message string has a performance overhead. This makes it
+ * unsuitable for use in retry loops where errors are a common case, rather than
+ * being unusual. For example, using %G_IO_ERROR_WOULD_BLOCK means hitting these
+ * overheads in the normal control flow. String formatting overhead can be
+ * eliminated by using g_set_error_literal() in some cases.
+ *
+ * These performance issues can be compounded if a function wraps the #GErrors
+ * returned by the functions it calls: this multiplies the number of allocations
+ * and string formatting operations. This can be partially mitigated by using
+ * g_prefix_error().
+ *
+ * ## Rules for use of #GError # {#gerror-rules}
  *
  * Summary of rules for use of #GError:
  *
@@ -8827,8 +8852,8 @@
 /**
  * g_ascii_strtod:
  * @nptr: the string to convert to a numeric value.
- * @endptr: if non-%NULL, it returns the character after
- *           the last character used in the conversion.
+ * @endptr: (out) (transfer none) (optional): if non-%NULL, it returns the
+ *           character after the last character used in the conversion.
  *
  * Converts a string to a #gdouble value.
  *
@@ -8861,8 +8886,8 @@
 /**
  * g_ascii_strtoll:
  * @nptr: the string to convert to a numeric value.
- * @endptr: if non-%NULL, it returns the character after
- *           the last character used in the conversion.
+ * @endptr: (out) (transfer none) (optional): if non-%NULL, it returns the
+ *           character after the last character used in the conversion.
  * @base: to be used for the conversion, 2..36 or 0
  *
  * Converts a string to a #gint64 value.
@@ -8891,8 +8916,8 @@
 /**
  * g_ascii_strtoull:
  * @nptr: the string to convert to a numeric value.
- * @endptr: if non-%NULL, it returns the character after
- *           the last character used in the conversion.
+ * @endptr: (out) (transfer none) (optional): if non-%NULL, it returns the
+ *           character after the last character used in the conversion.
  * @base: to be used for the conversion, 2..36 or 0
  *
  * Converts a string to a #guint64 value.
@@ -10041,7 +10066,7 @@
  * }
  * ]|
  *
- * You must initialise the variable in some way -- either by use of an
+ * You must initialize the variable in some way -- either by use of an
  * initialiser or by ensuring that an _init function will be called on
  * it unconditionally before it goes out of scope.
  *
@@ -11403,7 +11428,7 @@
 /**
  * g_bytes_get_data:
  * @bytes: a #GBytes
- * @size: (out) (allow-none): location to return size of byte data
+ * @size: (out) (optional): location to return size of byte data
  *
  * Get the byte data in the #GBytes. This data should not be modified.
  *
@@ -11413,8 +11438,8 @@
  * may represent an empty string with @data non-%NULL and @size as 0. %NULL will
  * not be returned if @size is non-zero.
  *
- * Returns: (transfer none) (array length=size) (type guint8) (allow-none): a pointer to the
- *          byte data, or %NULL
+ * Returns: (transfer none) (array length=size) (element-type guint8) (nullable):
+ *          a pointer to the byte data, or %NULL
  * Since: 2.32
  */
 
@@ -11448,7 +11473,7 @@
 
 /**
  * g_bytes_new:
- * @data: (transfer none) (array length=size) (element-type guint8) (allow-none):
+ * @data: (transfer none) (array length=size) (element-type guint8) (nullable):
  *        the data to be used for the bytes
  * @size: the size of @data
  *
@@ -11480,7 +11505,7 @@
 
 /**
  * g_bytes_new_static: (skip)
- * @data: (transfer full) (array length=size) (element-type guint8) (allow-none):
+ * @data: (transfer full) (array length=size) (element-type guint8) (nullable):
  *           the data to be used for the bytes
  * @size: the size of @data
  *
@@ -11496,7 +11521,7 @@
 
 /**
  * g_bytes_new_take:
- * @data: (transfer full) (array length=size) (element-type guint8) (allow-none):
+ * @data: (transfer full) (array length=size) (element-type guint8) (nullable):
  *           the data to be used for the bytes
  * @size: the size of @data
  *
@@ -11519,8 +11544,9 @@
 
 
 /**
- * g_bytes_new_with_free_func:
- * @data: (array length=size) (allow-none): the data to be used for the bytes
+ * g_bytes_new_with_free_func: (skip)
+ * @data: (array length=size) (element-type guint8) (nullable):
+ *           the data to be used for the bytes
  * @size: the size of @data
  * @free_func: the function to call to release the data
  * @user_data: data to pass to @free_func
@@ -11553,7 +11579,7 @@
 
 /**
  * g_bytes_unref:
- * @bytes: (allow-none): a #GBytes
+ * @bytes: (nullable): a #GBytes
  *
  * Releases a reference on @bytes.  This may result in the bytes being
  * freed.
@@ -11582,7 +11608,7 @@
 /**
  * g_bytes_unref_to_data:
  * @bytes: (transfer full): a #GBytes
- * @size: location to place the length of the returned data
+ * @size: (out): location to place the length of the returned data
  *
  * Unreferences the bytes, and returns a pointer the same byte data
  * contents.
@@ -11592,8 +11618,8 @@
  * g_bytes_new_take() or g_byte_array_free_to_bytes(). In all other cases the
  * data is copied.
  *
- * Returns: (transfer full): a pointer to the same byte data, which should
- *          be freed with g_free()
+ * Returns: (transfer full) (array length=size) (element-type guint8):
+ *          a pointer to the same byte data, which should be freed with g_free()
  * Since: 2.32
  */
 
@@ -22502,11 +22528,13 @@
 
 /**
  * g_propagate_error:
- * @dest: error return location
- * @src: error to move into the return location
+ * @dest: (out callee-allocates) (optional) (nullable): error return location
+ * @src: (transfer full): error to move into the return location
  *
  * If @dest is %NULL, free @src; otherwise, moves @src into *@dest.
  * The error variable @dest points to must be %NULL.
+ *
+ * @src must be non-%NULL.
  *
  * Note that @src is no longer valid after this call. If you want
  * to keep using the same GError*, you need to set it to %NULL
@@ -28721,8 +28749,8 @@
 /**
  * g_strtod:
  * @nptr: the string to convert to a numeric value.
- * @endptr: if non-%NULL, it returns the character after
- *           the last character used in the conversion.
+ * @endptr: (out) (transfer none) (optional): if non-%NULL, it returns the
+ *           character after the last character used in the conversion.
  *
  * Converts a string to a #gdouble value.
  * It calls the standard strtod() function to handle the conversion, but

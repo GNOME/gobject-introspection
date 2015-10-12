@@ -6180,12 +6180,12 @@
  * @see_also: #GInputStream, #GOutputStream
  *
  * GIOStream represents an object that has both read and write streams.
- * Generally the two streams acts as separate input and output streams,
+ * Generally the two streams act as separate input and output streams,
  * but they share some common resources and state. For instance, for
- * seekable streams they may use the same position in both streams.
+ * seekable streams, both streams may use the same position.
  *
- * Examples of #GIOStream objects are #GSocketConnection which represents
- * a two-way network connection, and #GFileIOStream which represent a
+ * Examples of #GIOStream objects are #GSocketConnection, which represents
+ * a two-way network connection; and #GFileIOStream, which represents a
  * file handle opened in read-write mode.
  *
  * To do the actual reading and writing you need to get the substreams
@@ -6194,8 +6194,8 @@
  * The #GIOStream object owns the input and the output streams, not the other
  * way around, so keeping the substreams alive will not keep the #GIOStream
  * object alive. If the #GIOStream object is freed it will be closed, thus
- * closing the substream, so even if the substreams stay alive they will
- * always just return a %G_IO_ERROR_CLOSED for all operations.
+ * closing the substreams, so even if the substreams stay alive they will
+ * always return %G_IO_ERROR_CLOSED for all operations.
  *
  * To close a stream use g_io_stream_close() which will close the common
  * stream object and also the individual substreams. You can also close
@@ -7678,7 +7678,8 @@
  * %NULL.
  *
  * Sockets operate in two general modes, blocking or non-blocking. When
- * in blocking mode all operations block until the requested operation
+ * in blocking mode all operations (which don’t take an explicit blocking
+ * parameter) block until the requested operation
  * is finished or there is an error. In non-blocking mode all calls that
  * would block return immediately with a %G_IO_ERROR_WOULD_BLOCK error.
  * To know when a call would successfully run you can call g_socket_condition_check(),
@@ -15960,8 +15961,8 @@
  * each application is a client. So this method will always return
  * %NULL for message bus clients.
  *
- * Returns: (transfer none): a #GCredentials or %NULL if not available.
- *     Do not free this object, it is owned by @connection.
+ * Returns: (transfer none) (nullable): a #GCredentials or %NULL if not
+ *     available. Do not free this object, it is owned by @connection.
  * Since: 2.26
  */
 
@@ -25999,7 +26000,7 @@
  * @error: location to store the error occurring, or %NULL to ignore
  *
  * Closes the stream, releasing resources related to it. This will also
- * closes the individual input and output streams, if they are not already
+ * close the individual input and output streams, if they are not already
  * closed.
  *
  * Once the stream is closed, all other operations will return
@@ -34203,7 +34204,7 @@
  * g_socket_get_available_bytes:
  * @socket: a #GSocket
  *
- * Get the amount of data pending in the OS input buffer.
+ * Get the amount of data pending in the OS input buffer, without blocking.
  *
  * If @socket is a UDP or SCTP socket, this will return the size of
  * just the next packet, even if additional packets are buffered after
@@ -34468,6 +34469,11 @@
  *
  * Check whether the socket is connected. This is only useful for
  * connection-oriented sockets.
+ *
+ * If using g_socket_shutdown(), this function will return %TRUE until the
+ * socket has been shut down for reading and writing. If you do a non-blocking
+ * connect, this function will not return %TRUE until after you call
+ * g_socket_check_connect_result().
  *
  * Returns: %TRUE if socket is connected, %FALSE otherwise.
  * Since: 2.22
@@ -34924,8 +34930,8 @@
  * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: a #GError pointer, or %NULL
  *
- * Receive data from a socket.  This is the most complicated and
- * fully-featured version of this call. For easier use, see
+ * Receive data from a socket.  For receiving multiple messages, see
+ * g_socket_receive_messages(); for easier use, see
  * g_socket_receive() and g_socket_receive_from().
  *
  * If @address is non-%NULL then @address will be set equal to the
@@ -34964,6 +34970,8 @@
  * values there are the same as the system values, and the flags
  * are passed in as-is, so you can pass in system-specific flags too
  * (and g_socket_receive_message() may pass system-specific flags out).
+ * Flags passed in to the parameter affect the receive operation; flags returned
+ * out of it are relevant to the specific returned message.
  *
  * As with g_socket_receive(), data may be discarded if @socket is
  * %G_SOCKET_TYPE_DATAGRAM or %G_SOCKET_TYPE_SEQPACKET and you do not
@@ -34985,6 +34993,73 @@
  * Returns: Number of bytes read, or 0 if the connection was closed by
  * the peer, or -1 on error
  * Since: 2.22
+ */
+
+
+/**
+ * g_socket_receive_messages:
+ * @socket: a #GSocket
+ * @messages: (array length=num_messages): an array of #GInputMessage structs
+ * @num_messages: the number of elements in @messages
+ * @flags: an int containing #GSocketMsgFlags flags for the overall operation
+ * @cancellable: (allow-none): a %GCancellable or %NULL
+ * @error: #GError for error reporting, or %NULL to ignore
+ *
+ * Receive multiple data messages from @socket in one go.  This is the most
+ * complicated and fully-featured version of this call. For easier use, see
+ * g_socket_receive(), g_socket_receive_from(), and g_socket_receive_message().
+ *
+ * @messages must point to an array of #GInputMessage structs and
+ * @num_messages must be the length of this array. Each #GInputMessage
+ * contains a pointer to an array of #GInputVector structs describing the
+ * buffers that the data received in each message will be written to. Using
+ * multiple #GInputVectors is more memory-efficient than manually copying data
+ * out of a single buffer to multiple sources, and more system-call-efficient
+ * than making multiple calls to g_socket_receive(), such as in scenarios where
+ * a lot of data packets need to be received (e.g. high-bandwidth video
+ * streaming over RTP/UDP).
+ *
+ * @flags modify how all messages are received. The commonly available
+ * arguments for this are available in the #GSocketMsgFlags enum, but the
+ * values there are the same as the system values, and the flags
+ * are passed in as-is, so you can pass in system-specific flags too. These
+ * flags affect the overall receive operation. Flags affecting individual
+ * messages are returned in #GInputMessage.flags.
+ *
+ * The other members of #GInputMessage are treated as described in its
+ * documentation.
+ *
+ * If #GSocket:blocking is %TRUE the call will block until @num_messages have
+ * been received, or the end of the stream is reached.
+ *
+ * If #GSocket:blocking is %FALSE the call will return up to @num_messages
+ * without blocking, or %G_IO_ERROR_WOULD_BLOCK if no messages are queued in the
+ * operating system to be received.
+ *
+ * In blocking mode, if #GSocket:timeout is positive and is reached before any
+ * messages are received, %G_IO_ERROR_TIMED_OUT is returned, otherwise up to
+ * @num_messages are returned. (Note: This is effectively the
+ * behaviour of `MSG_WAITFORONE` with recvmmsg().)
+ *
+ * To be notified when messages are available, wait for the
+ * %G_IO_IN condition. Note though that you may still receive
+ * %G_IO_ERROR_WOULD_BLOCK from g_socket_receive_messages() even if you were
+ * previously notified of a %G_IO_IN condition.
+ *
+ * If the remote peer closes the connection, any messages queued in the
+ * operating system will be returned, and subsequent calls to
+ * g_socket_receive_messages() will return 0 (with no error set).
+ *
+ * On error -1 is returned and @error is set accordingly. An error will only
+ * be returned if zero messages could be received; otherwise the number of
+ * messages successfully received before the error will be returned.
+ *
+ * Returns: number of messages received, or -1 on error. Note that the number
+ *     of messages received may be smaller than @num_messages if in non-blocking
+ *     mode, if the peer closed the connection, or if @num_messages
+ *     was larger than `UIO_MAXIOV` (1024), in which case the caller may re-try
+ *     to receive the remaining messages.
+ * Since: 2.48
  */
 
 
@@ -35051,8 +35126,8 @@
  * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Send data to @address on @socket.  This is the most complicated and
- * fully-featured version of this call. For easier use, see
+ * Send data to @address on @socket.  For sending multiple messages see
+ * g_socket_send_messages(); for easier use, see
  * g_socket_send() and g_socket_send_to().
  *
  * If @address is %NULL then the message is sent to the default receiver
@@ -35135,7 +35210,9 @@
  * notified of a %G_IO_OUT condition. (On Windows in particular, this is
  * very common due to the way the underlying APIs work.)
  *
- * On error -1 is returned and @error is set accordingly.
+ * On error -1 is returned and @error is set accordingly. An error will only
+ * be returned if zero messages could be sent; otherwise the number of messages
+ * successfully sent before the error will be returned.
  *
  * Returns: number of messages sent, or -1 on error. Note that the number of
  *     messages sent may be smaller than @num_messages if the socket is
@@ -35253,7 +35330,8 @@
  * @blocking: Whether to use blocking I/O or not.
  *
  * Sets the blocking mode of the socket. In blocking mode
- * all operations block until they succeed or there is an error. In
+ * all operations (which don’t take an explicit blocking parameter) block until
+ * they succeed or there is an error. In
  * non-blocking mode all functions return results immediately or
  * with a %G_IO_ERROR_WOULD_BLOCK error.
  *
@@ -35421,7 +35499,7 @@
  * @shutdown_write: whether to shut down the write side
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Shut down part of a full-duplex connection.
+ * Shut down part or all of a full-duplex connection.
  *
  * If @shutdown_read is %TRUE then the receiving side of the connection
  * is shut down, and further reading is disallowed.
@@ -35431,9 +35509,10 @@
  *
  * It is allowed for both @shutdown_read and @shutdown_write to be %TRUE.
  *
- * One example where this is used is graceful disconnect for TCP connections
- * where you close the sending side, then wait for the other side to close
- * the connection, thus ensuring that the other side saw all sent data.
+ * One example where it is useful to shut down only one side of a connection is
+ * graceful disconnect for TCP connections where you close the sending side,
+ * then wait for the other side to close the connection, thus ensuring that the
+ * other side saw all sent data.
  *
  * Returns: %TRUE on success, %FALSE on error
  * Since: 2.22
@@ -39568,6 +39647,9 @@
  *
  * If @type is %G_UNIX_SOCKET_ADDRESS_PATH, this is equivalent to
  * calling g_unix_socket_address_new().
+ *
+ * If @type is %G_UNIX_SOCKET_ADDRESS_ANONYMOUS, @path and @path_len will be
+ * ignored.
  *
  * If @path_type is %G_UNIX_SOCKET_ADDRESS_ABSTRACT, then @path_len
  * bytes of @path will be copied to the socket's path, and only those

@@ -3939,7 +3939,7 @@
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
- * @default_value: default value for the property specified
+ * @default_value: (nullable): default value for the property specified
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecString instance.
@@ -6853,10 +6853,10 @@
  * g_value_unset:
  * @value: An initialized #GValue structure.
  *
- * Clears the current value in @value and "unsets" the type,
- * this releases all resources associated with this GValue.
- * An unset value is the same as an uninitialized (zero-filled)
- * #GValue structure.
+ * Clears the current value in @value (if any) and "unsets" the type,
+ * this releases all resources associated with this GValue. An unset
+ * value is the same as an uninitialized (zero-filled) #GValue
+ * structure.
  */
 
 
