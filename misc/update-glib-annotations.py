@@ -20,14 +20,6 @@ for k in ['UNINSTALLED_INTROSPECTION_SRCDIR',
         os.environ[k] = path
 
 possible_builddirs = ['../_build/', '..', '../../build/']
-builddir = None
-for d in possible_builddirs:
-    if os.path.isfile(os.path.join(d, 'g-ir-annotation-tool')):
-        builddir = d
-        break
-assert builddir is not None
-annotation_tool_base_args = [os.path.join(builddir, 'g-ir-annotation-tool'),
-                             '--extract']
 
 
 def directory_includes(dirs, srcdir, builddir):
@@ -55,6 +47,9 @@ def extract_annotations(module, srcdir, builddir, outfile):
         if sourcename.endswith('.c'):
             sources.append(os.path.join(subdir, sourcename))
 
+    annotation_tool_base_args = [
+        os.path.join(builddir, 'g-ir-annotation-tool'), '--extract']
+
     return subprocess.check_call(annotation_tool_base_args +
                                  module['defines'] +
                                  includes +
@@ -67,7 +62,11 @@ if __name__ == '__main__':
     if len(sys.argv) == 3:
         builddir = sys.argv[2]
     else:
-        builddir = srcdir
+        for d in possible_builddirs:
+            if os.path.isfile(os.path.join(d, 'g-ir-annotation-tool')):
+                builddir = d
+                break
+        assert builddir is not None
 
     print("Using source directory: '%s' build directory: '%s'" % (srcdir, builddir))
 
