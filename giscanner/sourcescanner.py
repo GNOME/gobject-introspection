@@ -314,10 +314,10 @@ class SourceScanner(object):
     def _write_preprocess_src(self, fp, defines, undefs, filenames):
         # Write to the temp file for feeding into the preprocessor
         for define in defines:
-            fp.write('#ifndef %s\n' % (define, ))
-            fp.write('# define %s\n' % (define, ))
-            fp.write('#endif\n')
+            fp.write(('#ifndef %s\n' % (define, )).encode())
+            fp.write(('# define %s\n' % (define, )).encode())
+            fp.write('#endif\n'.encode())
         for undef in undefs:
-            fp.write('#undef %s\n' % (undef, ))
+            fp.write(('#undef %s\n' % (undef, )).encode())
         for filename in filenames:
-            fp.write('#include <%s>\n' % (filename, ))
+            fp.write(('#include <%s>\n' % (filename, )).encode())

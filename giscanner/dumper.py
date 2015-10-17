@@ -282,7 +282,7 @@ class DumpCompiler(object):
             # this embedding is required, the build will fail anyway, as
             # the dumper program will likely fail to run, and this means
             # something went wrong with the build.
-            except LinkError, e:
+            except LinkError as e:
                 if self._compiler.check_is_msvc():
                     msg = str(e)
 
