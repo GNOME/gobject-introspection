@@ -152,13 +152,15 @@ GIO_LIBDIR=$(shell "${PKG_CONFIG}" --variable=libdir gio-2.0)
 GIO_LIBRARY=gio-2.0
 
 if HAVE_GIO_UNIX
-GIO_UNIX_HDRS=$(shell "${PKG_CONFIG}" --variable=includedir gio-unix-2.0)/gio-unix-2.0/gio/*.h
+GIO_UNIX_INCLUDEDIR = $(shell "${PKG_CONFIG}" --variable=includedir gio-unix-2.0)/gio-unix-2.0
+GIO_UNIX_HDRS = $(GIO_UNIX_INCLUDEDIR)/gio/*.h
 GIO_UNIX_PACKAGES = gio-unix-2.0
 else
+GIO_UNIX_INCLUDEDIR =
 GIO_UNIX_HDRS=
 GIO_UNIX_PACKAGES =
 endif
-GIO_CINCLUDES=$(patsubst %,--c-include='%',$(shell echo $(GIO_UNIX_HDRS)))
+GIO_CINCLUDES=$(patsubst $(GIO_UNIX_INCLUDEDIR)/%,--c-include='%',$(wildcard $(GIO_UNIX_HDRS)))
 
 Gio-2.0.gir: GObject-2.0.gir
 
