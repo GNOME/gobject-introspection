@@ -21,7 +21,9 @@ include Makefile-cmph.am
 include Makefile-girepository.am
 include Makefile-giscanner.am
 include Makefile-examples.am
+if BUILD_INTROSPECTION_DATA
 include Makefile-gir.am
+endif
 include Makefile-tools.am
 
 ## Process this file with automake to produce Makefile.in
