@@ -383,6 +383,48 @@ dnl
 AM_CONDITIONAL(MSVC_BASE_NO_TOOLSET_SET, [test x$MSVC_BASE_TOOLSET = x])
 AM_CONDITIONAL(MSVC_NO_TOOLSET_SET, [test x$MSVC_TOOLSET = x])
 
+AC_ARG_ENABLE([host-gi],
+[AS_HELP_STRING([--enable-host-gi],[Use gobject introspection tools installed in the host system (useful when cross-compiling)])],
+[case "${enableval}" in
+  yes) host_gi=true ;;
+  no)  host_gi=false ;;
+  *) AC_MSG_ERROR([bad value ${enableval} for --enable-host-gi]) ;;
+esac],[host_gi=false])
+AM_CONDITIONAL([USE_HOST_GI], [test x$host_gi = xtrue])
+
+AC_ARG_ENABLE([gi-cross-wrapper],
+[AS_HELP_STRING([--enable-gi-cross-wrapper=path],[Use a wrapper to run gicompiler and binaries produced by giscanner (useful when cross-compiling)])],
+[
+GI_CROSS_WRAPPER="${enableval}"
+use_wrapper=true
+],[
+GI_CROSS_WRAPPER=""
+use_wrapper=false
+])
+AC_SUBST(GI_CROSS_WRAPPER)
+AM_CONDITIONAL([USE_CROSS_WRAPPER], [test x$use_wrapper = xtrue])
+
+AC_ARG_ENABLE([gi-ldd-wrapper],
+[AS_HELP_STRING([--enable-gi-ldd-wrapper=path],[Use a ldd wrapper instead of system's ldd command in giscanner (useful when cross-compiling)])],
+[
+GI_LDD_WRAPPER="${enableval}"
+use_ldd_wrapper=true
+],[
+GI_LDD_WRAPPER=""
+use_ldd_wrapper=false
+])
+AC_SUBST(GI_LDD_WRAPPER)
+AM_CONDITIONAL([USE_LDD_WRAPPER], [test x$use_ldd_wrapper = xtrue])
+
+AC_ARG_ENABLE([introspection-data],
+[AS_HELP_STRING([--enable-introspection-data],[Build introspection data (.gir and .typelib files) in addition to library and tools])],
+[case "${enableval}" in
+  yes) introspection_data=true ;;
+  no)  introspection_data=false ;;
+  *) AC_MSG_ERROR([bad value ${enableval} for --enable-introspection-data]) ;;
+esac],[introspection_data=true])
+AM_CONDITIONAL([BUILD_INTROSPECTION_DATA], [test x$introspection_data = xtrue])
+
 AC_CONFIG_FILES([
 Makefile
 tests/Makefile
