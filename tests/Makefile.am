@@ -1,6 +1,9 @@
 include $(top_srcdir)/common.mk
 
-SUBDIRS = . scanner repository offsets warn
+SUBDIRS = . scanner repository warn
+if BUILD_INTROSPECTION_DATA
+SUBDIRS += offsets
+endif
 
 EXTRA_DIST=
 BUILT_SOURCES=
