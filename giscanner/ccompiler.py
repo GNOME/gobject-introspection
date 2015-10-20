@@ -128,11 +128,12 @@ class CCompiler(object):
                     self.compiler.add_runtime_library_dir('.')
 
                 # https://bugzilla.gnome.org/show_bug.cgi?id=625195
-                args.append('-Wl,-rpath=.')
+                args.append('-Wl,-rpath,.')
 
                 # Ensure libraries are always linked as we are going to use ldd to work
                 # out their names later
-                args.append('-Wl,--no-as-needed')
+                if sys.platform != 'darwin':
+                    args.append('-Wl,--no-as-needed')
 
             for library in libraries:
                 self.compiler.add_library(library)
@@ -140,7 +141,7 @@ class CCompiler(object):
                 for library_path in libpaths:
                     args.append('-L' + library_path)
                     if os.path.isabs(library_path):
-                        args.append('-Wl,-rpath=' + library_path)
+                        args.append('-Wl,-rpath,' + library_path)
 
         else:
             # libtool case: assemble linker command arguments, like we did before
