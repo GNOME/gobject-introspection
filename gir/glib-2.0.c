@@ -19558,7 +19558,7 @@
  * @timeout_: (out): location to store timeout to be used in polling
  * @fds: (out caller-allocates) (array length=n_fds): location to
  *       store #GPollFD records that need to be polled.
- * @n_fds: length of @fds.
+ * @n_fds: (in): length of @fds.
  *
  * Determines information necessary to poll this main loop.
  *
@@ -25077,6 +25077,21 @@
  *
  * Returns: a #GSequenceIter pointing to the new item
  * Since: 2.14
+ */
+
+
+/**
+ * g_sequence_is_empty:
+ * @seq: a #GSequence
+ *
+ * Returns %TRUE if the sequence contains zero items.
+ *
+ * This function is functionally identical to checking the result of
+ * g_sequence_get_length() being equal to zero. However this function is
+ * implemented in O(1) running time.
+ *
+ * Returns: %TRUE if the sequence is empty, otherwise %FALSE.
+ * Since: 2.48
  */
 
 
