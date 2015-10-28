@@ -326,10 +326,11 @@ raise ValueError."""
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
                                     shell=True)
-            ident, err = proc.communicate(ident)
+            proc_ident, err = proc.communicate(ident.encode())
             if proc.returncode:
                 raise ValueError('filter: "%s" exited: %d with error: %s' %
                                  (self._identifier_filter_cmd, proc.returncode, err))
+            ident = proc_ident.decode('ascii')
 
         hidden = ident.startswith('_')
         if hidden:
