@@ -285,7 +285,7 @@ class CCompiler(object):
             proc = subprocess.Popen([self.compiler_cmd, '-print-search-dirs'],
                                     stdout=subprocess.PIPE)
             o, e = proc.communicate()
-            for line in o.splitlines():
+            for line in o.decode('ascii').splitlines():
                 if line.startswith('libraries: '):
                     libsearch = line[len('libraries: '):].split(';')
 
@@ -313,7 +313,7 @@ class CCompiler(object):
                         proc = subprocess.Popen(args + [implib],
                                                 stdout=subprocess.PIPE)
                         o, e = proc.communicate()
-                        for line in o.splitlines():
+                        for line in o.decode('ascii').splitlines():
                             if self.check_is_msvc():
                                 # On Visual Studio, dumpbin -symbols something.lib gives the
                                 # filename of DLL without the '.dll' extension that something.lib
