@@ -80,8 +80,8 @@ class MSVCCompiler(distutils.msvccompiler.MSVCCompiler):
         if self.force or output_file is None or newer(source, output_file):
             try:
                 self.spawn(cpp_args)
-            except DistutilsExecError, msg:
-                print msg
+            except (DistutilsExecError, msg):
+                print(msg)
                 raise CompileError
 
         # The /P option for the MSVC preprocessor will output the results
