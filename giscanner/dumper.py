@@ -287,7 +287,8 @@ class DumpCompiler(object):
                     msg = str(e)
 
                     if msg[msg.rfind('mt.exe'):] == 'mt.exe\' failed with exit status 31':
-                        sys.exc_clear()
+                        if sys.version_info < (3, 0):
+                            sys.exc_clear()
                         pass
                     else:
                         raise LinkError(e)
