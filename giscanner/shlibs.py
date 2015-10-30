@@ -97,7 +97,9 @@ def _resolve_non_libtool(options, binary, libraries):
             args.extend(libtool)
             args.append('--mode=execute')
         platform_system = platform.system()
-        if platform_system == 'Darwin':
+        if options.ldd_wrapper:
+            args.extend([options.ldd_wrapper, binary.args[0]])
+        elif platform_system == 'Darwin':
             args.extend(['otool', '-L', binary.args[0]])
         else:
             args.extend(['ldd', binary.args[0]])
