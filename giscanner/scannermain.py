@@ -124,6 +124,9 @@ def _get_option_parser():
     parser.add_option("", "--use-binary-wrapper",
                       action="store", dest="wrapper", default=None,
                       help="wrapper to use for running programs (useful when cross-compiling)")
+    parser.add_option("", "--use-ldd-wrapper",
+                      action="store", dest="ldd_wrapper", default=None,
+                      help="wrapper to use instead of ldd (useful when cross-compiling)")
     parser.add_option("", "--program-arg",
                       action="append", dest="program_args", default=[],
                       help="extra arguments to program")
