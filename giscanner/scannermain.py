@@ -29,6 +29,7 @@ import errno
 import optparse
 import os
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -450,6 +451,13 @@ def write_output(data, options):
         output = sys.stdout
     elif options.reparse_validate_gir:
         main_f, main_f_name = tempfile.mkstemp(suffix='.gir')
+
+        if (os.path.isfile(options.output)):
+            shutil.copystat(options.output, main_f_name)
+        else:
+            os.chmod(main_f_name,
+                     stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+
         with os.fdopen(main_f, 'wb') as main_f:
             main_f.write(data)
 
