@@ -31,9 +31,9 @@ if sys.version_info.major < 3:
 else:
     import builtins
 
-debug = os.getenv('GI_SCANNER_DEBUG', '').split(',')
+debug = os.getenv('GI_SCANNER_DEBUG')
 if debug:
-    if 'pydevd' in debug:
+    if 'pydevd' in debug.split(','):
         # http://pydev.org/manual_adv_remote_debugger.html
         pydevdpath = os.getenv('PYDEVDPATH', None)
         if pydevdpath is not None and os.path.isdir(pydevdpath):
