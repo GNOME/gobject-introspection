@@ -465,7 +465,6 @@ def write_output(data, options):
         except OSError as e:
             if e.errno == errno.EPERM:
                 os.unlink(main_f_name)
-                return 0
             raise
         return 0
     else:
