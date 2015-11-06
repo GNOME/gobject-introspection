@@ -3151,6 +3151,44 @@ case.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="not_nullable_element_typed_gpointer_in"
+              c:identifier="regress_test_obj_not_nullable_element_typed_gpointer_in">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:space="preserve">A #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+          <parameter name="input" transfer-ownership="none">
+            <doc xml:space="preserve">some uint8 array</doc>
+            <array length="1" zero-terminated="0" c:type="gpointer">
+              <type name="guint8"/>
+            </array>
+          </parameter>
+          <parameter name="count" transfer-ownership="none">
+            <doc xml:space="preserve">length of @input</doc>
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="not_nullable_typed_gpointer_in"
+              c:identifier="regress_test_obj_not_nullable_typed_gpointer_in">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:space="preserve">A #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+          <parameter name="input" transfer-ownership="none">
+            <doc xml:space="preserve">some #GObject</doc>
+            <type name="GObject.Object" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="set_bare" c:identifier="regress_test_obj_set_bare">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>

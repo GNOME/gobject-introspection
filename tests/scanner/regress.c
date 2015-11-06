@@ -3042,6 +3042,30 @@ regress_func_obj_nullable_in (RegressTestObj *obj)
 }
 
 /**
+ * regress_test_obj_not_nullable_typed_gpointer_in:
+ * @obj: A #RegressTestObj
+ * @input: (type GObject): some #GObject
+ */
+void
+regress_test_obj_not_nullable_typed_gpointer_in (RegressTestObj *obj,
+                                                 gpointer        input)
+{
+}
+
+/**
+ * regress_test_obj_not_nullable_element_typed_gpointer_in:
+ * @obj: A #RegressTestObj
+ * @input: (element-type guint8) (array length=count): some uint8 array
+ * @count: length of @input
+ */
+void
+regress_test_obj_not_nullable_element_typed_gpointer_in (RegressTestObj *obj,
+                                                         gpointer        input,
+                                                         guint           count)
+{
+}
+
+/**
  * regress_test_array_fixed_out_objects:
  * @objs: (out) (array fixed-size=2) (transfer full): An array of #RegressTestObj
  */

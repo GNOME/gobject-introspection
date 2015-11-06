@@ -927,6 +927,13 @@ void regress_test_obj_null_out (RegressTestObj **obj);
 
 void regress_func_obj_nullable_in (RegressTestObj *obj);
 
+void regress_test_obj_not_nullable_typed_gpointer_in (RegressTestObj *obj,
+                                                      gpointer        input);
+
+void regress_test_obj_not_nullable_element_typed_gpointer_in (RegressTestObj *obj,
+                                                              gpointer        input,
+                                                              guint           count);
+
 /* inheritance */
 #define REGRESS_TEST_TYPE_SUB_OBJ           (regress_test_sub_obj_get_type ())
 #define REGRESS_TEST_SUB_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_TEST_TYPE_SUB_OBJ, RegressTestSubObj))

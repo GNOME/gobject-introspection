@@ -649,6 +649,7 @@ class MainTransformer(object):
 
         # gpointer parameters and return values are always nullable unless:
         #  - annotated with (type) and not also with (nullable); or
+        #  - annotated with (element-type) and not also with (nullable); or
         #  - annotated (not nullable)
         # See: https://bugzilla.gnome.org/show_bug.cgi?id=719966#c22
         if node.type.is_equiv(ast.TYPE_ANY):
