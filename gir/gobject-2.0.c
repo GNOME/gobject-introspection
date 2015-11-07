@@ -828,18 +828,19 @@
 /**
  * g_boxed_copy:
  * @boxed_type: The type of @src_boxed.
- * @src_boxed: The boxed structure to be copied.
+ * @src_boxed: (not nullable): The boxed structure to be copied.
  *
  * Provide a copy of a boxed structure @src_boxed which is of type @boxed_type.
  *
- * Returns: (transfer full): The newly created copy of the boxed structure.
+ * Returns: (transfer full) (not nullable): The newly created copy of the boxed
+ *    structure.
  */
 
 
 /**
  * g_boxed_free:
  * @boxed_type: The type of @boxed.
- * @boxed: The boxed structure to be freed.
+ * @boxed: (not nullable): The boxed structure to be freed.
  *
  * Free the boxed structure @boxed which is of type @boxed_type.
  */
@@ -886,7 +887,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -901,17 +902,22 @@
 
 /**
  * g_cclosure_marshal_BOOLEAN__FLAGS:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: a #GValue which can store the returned #gboolean
- * @n_param_values: 2
- * @param_values: a #GValue array holding instance and arg1
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `gboolean (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter
- * denotes a flags type.
+ * A #GClosureMarshal function for use with signals with handlers that
+ * take a flags type as an argument and return a boolean.  If you have
+ * such a signal, you will probably also need to use an accumulator,
+ * such as g_signal_accumulator_true_handled().
  */
 
 
@@ -921,7 +927,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -971,23 +977,39 @@
 
 /**
  * g_cclosure_marshal_BOOL__FLAGS:
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * Another name for g_cclosure_marshal_BOOLEAN__FLAGS().
+ * An old alias for g_cclosure_marshal_BOOLEAN__FLAGS().
  */
 
 
 /**
  * g_cclosure_marshal_STRING__OBJECT_POINTER:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: a #GValue, which can store the returned string
- * @n_param_values: 3
- * @param_values: a #GValue array holding instance, arg1 and arg2
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `gchar* (*callback) (gpointer instance, GObject *arg1, gpointer arg2, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with handlers that
+ * take a #GObject and a pointer and produce a string.  It is highly
+ * unlikely that your signal handler fits this description.
  */
 
 
@@ -997,7 +1019,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1012,16 +1034,20 @@
 
 /**
  * g_cclosure_marshal_VOID__BOOLEAN:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #gboolean parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gboolean arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single
+ * boolean argument.
  */
 
 
@@ -1031,7 +1057,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1046,16 +1072,20 @@
 
 /**
  * g_cclosure_marshal_VOID__BOXED:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #GBoxed* parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, GBoxed *arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single
+ * argument which is any boxed pointer type.
  */
 
 
@@ -1065,7 +1095,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1080,16 +1110,20 @@
 
 /**
  * g_cclosure_marshal_VOID__CHAR:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #gchar parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gchar arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single
+ * character argument.
  */
 
 
@@ -1099,7 +1133,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1114,16 +1148,20 @@
 
 /**
  * g_cclosure_marshal_VOID__DOUBLE:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #gdouble parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gdouble arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with one
+ * double-precision floating point argument.
  */
 
 
@@ -1133,7 +1171,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1148,16 +1186,20 @@
 
 /**
  * g_cclosure_marshal_VOID__ENUM:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the enumeration parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter denotes an enumeration type..
+ * A #GClosureMarshal function for use with signals with a single
+ * argument with an enumerated type.
  */
 
 
@@ -1167,7 +1209,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1182,16 +1224,20 @@
 
 /**
  * g_cclosure_marshal_VOID__FLAGS:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the flags parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gint arg1, gpointer user_data)` where the #gint parameter denotes a flags type.
+ * A #GClosureMarshal function for use with signals with a single
+ * argument with a flags types.
  */
 
 
@@ -1201,7 +1247,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1216,16 +1262,20 @@
 
 /**
  * g_cclosure_marshal_VOID__FLOAT:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #gfloat parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gfloat arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with one
+ * single-precision floating point argument.
  */
 
 
@@ -1235,7 +1285,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1250,16 +1300,20 @@
 
 /**
  * g_cclosure_marshal_VOID__INT:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #gint parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gint arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single
+ * integer argument.
  */
 
 
@@ -1269,7 +1323,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1284,16 +1338,20 @@
 
 /**
  * g_cclosure_marshal_VOID__LONG:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #glong parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, glong arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with with a single
+ * long integer argument.
  */
 
 
@@ -1303,7 +1361,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1318,16 +1376,20 @@
 
 /**
  * g_cclosure_marshal_VOID__OBJECT:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #GObject* parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, GObject *arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single
+ * #GObject argument.
  */
 
 
@@ -1337,7 +1399,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1352,16 +1414,20 @@
 
 /**
  * g_cclosure_marshal_VOID__PARAM:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #GParamSpec* parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, GParamSpec *arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single
+ * argument of type #GParamSpec.
  */
 
 
@@ -1371,7 +1437,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1386,16 +1452,24 @@
 
 /**
  * g_cclosure_marshal_VOID__POINTER:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #gpointer parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gpointer arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single raw
+ * pointer argument type.
+ *
+ * If it is possible, it is better to use one of the more specific
+ * functions such as g_cclosure_marshal_VOID__OBJECT() or
+ * g_cclosure_marshal_VOID__OBJECT().
  */
 
 
@@ -1405,7 +1479,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1420,16 +1494,20 @@
 
 /**
  * g_cclosure_marshal_VOID__STRING:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #gchar* parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, const gchar *arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single string
+ * argument.
  */
 
 
@@ -1439,7 +1517,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1454,16 +1532,20 @@
 
 /**
  * g_cclosure_marshal_VOID__UCHAR:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #guchar parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, guchar arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single
+ * unsigned character argument.
  */
 
 
@@ -1473,7 +1555,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1488,31 +1570,39 @@
 
 /**
  * g_cclosure_marshal_VOID__UINT:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #guint parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, guint arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with with a single
+ * unsigned integer argument.
  */
 
 
 /**
  * g_cclosure_marshal_VOID__UINT_POINTER:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 3
- * @param_values: a #GValue array holding instance, arg1 and arg2
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, guint arg1, gpointer arg2, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a unsigned int
+ * and a pointer as arguments.
  */
 
 
@@ -1522,7 +1612,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1541,7 +1631,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1556,16 +1646,20 @@
 
 /**
  * g_cclosure_marshal_VOID__ULONG:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #gulong parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gulong arg1, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with a single
+ * unsigned long integer argument.
  */
 
 
@@ -1575,7 +1669,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1590,18 +1684,20 @@
 
 /**
  * g_cclosure_marshal_VOID__VARIANT:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 2
- * @param_values: a #GValue array holding the instance and the #GVariant* parameter
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, GVariant *arg1, gpointer user_data)`.
- *
- * Since: 2.26
+ * A #GClosureMarshal function for use with signals with a single
+ * #GVariant argument.
  */
 
 
@@ -1611,7 +1707,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1626,16 +1722,19 @@
 
 /**
  * g_cclosure_marshal_VOID__VOID:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: ignored
- * @n_param_values: 1
- * @param_values: a #GValue array holding only the instance
- * @invocation_hint: the invocation hint given as the last argument
- *  to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller
+ * @closure: A #GClosure.
+ * @return_value: A #GValue to store the return value. May be %NULL
+ *   if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValues holding the arguments
+ *   on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to
+ *   g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the
+ *   marshaller, see g_closure_set_marshal() and
+ *   g_closure_set_meta_marshal()
  *
- * A marshaller for a #GCClosure with a callback of type
- * `void (*callback) (gpointer instance, gpointer user_data)`.
+ * A #GClosureMarshal function for use with signals with no arguments.
  */
 
 
@@ -1645,7 +1744,7 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1688,7 +1787,8 @@
  * @return_value: (allow-none): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
- * @instance: the instance on which the closure is invoked.
+ * @instance: (type GObject.TypeInstance): the instance on which the closure is
+ *  invoked.
  * @args_list: va_list of arguments to be passed to the closure.
  * @marshal_data: (allow-none): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
@@ -1707,7 +1807,7 @@
 /**
  * g_cclosure_new: (skip)
  * @callback_func: the function to invoke
- * @user_data: user data to pass to @callback_func
+ * @user_data: (closure callback_func): user data to pass to @callback_func
  * @destroy_data: destroy notify to be called when @user_data is no longer used
  *
  * Creates a new closure which invokes @callback_func with @user_data as
@@ -1750,7 +1850,7 @@
 /**
  * g_cclosure_new_swap: (skip)
  * @callback_func: the function to invoke
- * @user_data: user data to pass to @callback_func
+ * @user_data: (closure callback_func): user data to pass to @callback_func
  * @destroy_data: destroy notify to be called when @user_data is no longer used
  *
  * Creates a new closure which invokes @callback_func with @user_data as
@@ -1782,7 +1882,7 @@
 /**
  * g_closure_add_finalize_notifier: (skip)
  * @closure: a #GClosure
- * @notify_data: data to pass to @notify_func
+ * @notify_data: (closure notify_func): data to pass to @notify_func
  * @notify_func: the callback function to register
  *
  * Registers a finalization notifier which will be called when the
@@ -1797,7 +1897,7 @@
 /**
  * g_closure_add_invalidate_notifier: (skip)
  * @closure: a #GClosure
- * @notify_data: data to pass to @notify_func
+ * @notify_data: (closure notify_func): data to pass to @notify_func
  * @notify_func: the callback function to register
  *
  * Registers an invalidation notifier which will be called when the
@@ -1810,9 +1910,11 @@
 /**
  * g_closure_add_marshal_guards: (skip)
  * @closure: a #GClosure
- * @pre_marshal_data: data to pass to @pre_marshal_notify
+ * @pre_marshal_data: (closure pre_marshal_notify): data to pass
+ *  to @pre_marshal_notify
  * @pre_marshal_notify: a function to call before the closure callback
- * @post_marshal_data: data to pass to @post_marshal_notify
+ * @post_marshal_data: (closure post_marshal_notify): data to pass
+ *  to @post_marshal_notify
  * @post_marshal_notify: a function to call after the closure callback
  *
  * Adds a pair of notifiers which get invoked before and after the
@@ -1975,7 +2077,8 @@
 /**
  * g_closure_set_meta_marshal: (skip)
  * @closure: a #GClosure
- * @marshal_data: context-dependent data to pass to @meta_marshal
+ * @marshal_data: (closure meta_marshal): context-dependent data to pass
+ *  to @meta_marshal
  * @meta_marshal: a #GClosureMarshal function
  *
  * Sets the meta marshaller of @closure.  A meta marshaller wraps
@@ -2251,7 +2354,8 @@
 /**
  * g_object_add_weak_pointer: (skip)
  * @object: The object that should be weak referenced.
- * @weak_pointer_location: (inout): The memory address of a pointer.
+ * @weak_pointer_location: (inout) (not optional) (nullable): The memory address
+ *    of a pointer.
  *
  * Adds a weak reference from weak_pointer to @object to indicate that
  * the pointer located at @weak_pointer_location is only valid during
@@ -2523,7 +2627,7 @@
 
 /**
  * g_object_connect: (skip)
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @signal_spec: the spec for the first signal
  * @...: #GCallback for the first signal, followed by data for the
  *       first signal, followed optionally by more signal
@@ -2553,13 +2657,13 @@
  * 				     NULL);
  * ]|
  *
- * Returns: (transfer none): @object
+ * Returns: (transfer none) (type GObject.Object): @object
  */
 
 
 /**
  * g_object_disconnect: (skip)
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @signal_spec: the spec for the first signal
  * @...: #GCallback for the first signal, followed by data for the first signal,
  *  followed optionally by more signal spec/callback/data triples,
@@ -2665,7 +2769,7 @@
 
 /**
  * g_object_get: (skip)
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @first_property_name: name of the first property to get
  * @...: return location for the first property, followed optionally by more
  *  name/return location pairs, followed by %NULL
@@ -2757,8 +2861,8 @@
 
 /**
  * g_object_interface_find_property:
- * @g_iface: any interface vtable for the interface, or the default
- *  vtable for the interface
+ * @g_iface: (type GObject.TypeInterface): any interface vtable for the
+ *  interface, or the default vtable for the interface
  * @property_name: name of a property to lookup.
  *
  * Find the #GParamSpec with the given name for an
@@ -2776,7 +2880,8 @@
 
 /**
  * g_object_interface_install_property:
- * @g_iface: any interface vtable for the interface, or the default
+ * @g_iface: (type GObject.TypeInterface): any interface vtable for the
+ *    interface, or the default
  *  vtable for the interface.
  * @pspec: the #GParamSpec for the new property
  *
@@ -2801,8 +2906,8 @@
 
 /**
  * g_object_interface_list_properties:
- * @g_iface: any interface vtable for the interface, or the default
- *  vtable for the interface
+ * @g_iface: (type GObject.TypeInterface): any interface vtable for the
+ *  interface, or the default vtable for the interface
  * @n_properties_p: (out): location to store number of properties returned.
  *
  * Lists the properties of an interface.Generally, the interface
@@ -2842,7 +2947,8 @@
  * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
  *
- * Returns: (transfer full): a new instance of @object_type
+ * Returns: (transfer full) (type GObject.Object): a new instance of
+ *   @object_type
  */
 
 
@@ -2990,7 +3096,8 @@
 /**
  * g_object_remove_weak_pointer: (skip)
  * @object: The object that is weak referenced.
- * @weak_pointer_location: (inout): The memory address of a pointer.
+ * @weak_pointer_location: (inout) (not optional) (nullable): The memory address
+ *    of a pointer.
  *
  * Removes a weak reference from @object that was previously added
  * using g_object_add_weak_pointer(). The @weak_pointer_location has
@@ -3069,7 +3176,7 @@
 
 /**
  * g_object_set: (skip)
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @first_property_name: name of the first property to set
  * @...: value for the first property, followed optionally by more
  *  name/value pairs, followed by %NULL
@@ -3462,7 +3569,7 @@
 
 /**
  * g_param_spec_get_name_quark:
- * @param: a #GParamSpec
+ * @pspec: a #GParamSpec
  *
  * Gets the GQuark for the name.
  *
@@ -3591,7 +3698,7 @@
  * @blurb, which should be a somewhat longer description, suitable for
  * e.g. a tooltip. The @nick and @blurb should ideally be localized.
  *
- * Returns: a newly allocated #GParamSpec instance
+ * Returns: (type GObject.ParamSpec): a newly allocated #GParamSpec instance
  */
 
 
@@ -4163,7 +4270,8 @@
 
 /**
  * g_signal_chain_from_overridden_handler: (skip)
- * @instance: the instance the signal is being emitted on.
+ * @instance: (type GObject.TypeInstance): the instance the signal is being
+ *    emitted on.
  * @...: parameters to be passed to the parent class closure, followed by a
  *  location for the return value. If the return type of the signal
  *  is #G_TYPE_NONE, the return value location can be omitted.
@@ -4227,10 +4335,11 @@
 
 /**
  * g_signal_connect_object: (skip)
- * @instance: the instance to connect to.
+ * @instance: (type GObject.TypeInstance): the instance to connect to.
  * @detailed_signal: a string of the form "signal-name::detail".
  * @c_handler: the #GCallback to connect.
- * @gobject: the object to pass as data to @c_handler.
+ * @gobject: (type GObject.Object) (nullable): the object to pass as data
+ *    to @c_handler.
  * @connect_flags: a combination of #GConnectFlags.
  *
  * This is similar to g_signal_connect_data(), but uses a closure which
@@ -4279,7 +4388,8 @@
 
 /**
  * g_signal_emit_valist: (skip)
- * @instance: the instance the signal is being emitted on.
+ * @instance: (type GObject.TypeInstance): the instance the signal is being
+ *    emitted on.
  * @signal_id: the signal id
  * @detail: the detail
  * @var_args: a list of parameters to be passed to the signal, followed by a
@@ -4984,7 +5094,8 @@
 
 /**
  * g_type_class_add_private:
- * @g_class: class structure for an instantiatable type
+ * @g_class: (type GObject.TypeClass): class structure for an instantiatable
+ *    type
  * @private_size: size of private structure
  *
  * Registers a private structure for an instantiatable type.
@@ -5056,7 +5167,7 @@
 
 /**
  * g_type_class_get_instance_private_offset: (skip)
- * @g_class: a #GTypeClass
+ * @g_class: (type GObject.TypeClass): a #GTypeClass
  *
  * Gets the offset of the private data for instances of @g_class.
  *
@@ -6297,7 +6408,7 @@
 /**
  * g_value_init_from_instance:
  * @value: An uninitialized #GValue structure.
- * @instance: the instance
+ * @instance: (type GObject.TypeInstance): the instance
  *
  * Initializes and sets @value from an instantiatable type via the
  * value_table's collect_value() function.
@@ -6801,7 +6912,7 @@
  * g_weak_ref_init: (skip)
  * @weak_ref: (inout): uninitialized or empty location for a weak
  *    reference
- * @object: (allow-none): a #GObject or %NULL
+ * @object: (type GObject.Object) (nullable): a #GObject or %NULL
  *
  * Initialise a non-statically-allocated #GWeakRef.
  *
@@ -6820,7 +6931,7 @@
 /**
  * g_weak_ref_set: (skip)
  * @weak_ref: location for a weak reference
- * @object: (allow-none): a #GObject or %NULL
+ * @object: (type GObject.Object) (nullable): a #GObject or %NULL
  *
  * Change the object to which @weak_ref points, or set it to
  * %NULL.

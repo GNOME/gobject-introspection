@@ -1937,7 +1937,7 @@
 
 /**
  * GTestFixtureFunc:
- * @fixture: the test fixture
+ * @fixture: (not nullable): the test fixture
  * @user_data: the data provided when registering the test
  *
  * The type used for functions that operate on test fixtures.  This is
@@ -5336,6 +5336,29 @@
 
 
 /**
+ * SECTION:checkedmath
+ * @title: Bounds-checking integer arithmetic
+ * @short_description: a set of helpers for performing checked integer arithmetic
+ *
+ * GLib offers a set of macros for doing additions and multiplications
+ * of unsigned integers, with checks for overflows.
+ *
+ * The helpers all have three arguments.  A pointer to the destination
+ * is always the first argument and the operands to the operation are
+ * the other two.
+ *
+ * Following standard GLib convention, the helpers return %TRUE in case
+ * of success (ie: no overflow).
+ *
+ * The helpers may be macros, normal functions or inlines.  They may be
+ * implemented with inline assembly or compiler intrinsics where
+ * available.
+ *
+ * Since: 2.48
+ */
+
+
+/**
  * SECTION:checksum
  * @title: Data Checksums
  * @short_description: computes the checksum for data
@@ -8265,7 +8288,7 @@
 /**
  * g_array_append_vals:
  * @array: a #GArray
- * @data: a pointer to the elements to append to the end of the array
+ * @data: (not nullable): a pointer to the elements to append to the end of the array
  * @len: the number of elements to append
  *
  * Adds @len elements onto the end of the array.
@@ -8347,7 +8370,7 @@
  * g_array_insert_vals:
  * @array: a #GArray
  * @index_: the index to place the elements at
- * @data: a pointer to the elements to insert
+ * @data: (not nullable): a pointer to the elements to insert
  * @len: the number of elements to insert
  *
  * Inserts @len elements into a #GArray at the given index.
@@ -8393,7 +8416,7 @@
 /**
  * g_array_prepend_vals:
  * @array: a #GArray
- * @data: a pointer to the elements to prepend to the start of the array
+ * @data: (not nullable): a pointer to the elements to prepend to the start of the array
  * @len: the number of elements to prepend
  *
  * Adds @len elements onto the start of the array.
@@ -9256,6 +9279,16 @@
 
 
 /**
+ * g_assertion_message_expr: (skip)
+ * @domain: (nullable):
+ * @file:
+ * @line:
+ * @func:
+ * @expr: (nullable):
+ */
+
+
+/**
  * g_async_queue_length:
  * @queue: a #GAsyncQueue.
  *
@@ -9901,7 +9934,7 @@
 
 /**
  * g_atomic_pointer_add:
- * @atomic: a pointer to a #gpointer-sized value
+ * @atomic: (not nullable): a pointer to a #gpointer-sized value
  * @val: the value to add
  *
  * Atomically adds @val to the value of @atomic.
@@ -9918,7 +9951,7 @@
 
 /**
  * g_atomic_pointer_and:
- * @atomic: a pointer to a #gpointer-sized value
+ * @atomic: (not nullable): a pointer to a #gpointer-sized value
  * @val: the value to 'and'
  *
  * Performs an atomic bitwise 'and' of the value of @atomic and @val,
@@ -9936,7 +9969,7 @@
 
 /**
  * g_atomic_pointer_compare_and_exchange:
- * @atomic: a pointer to a #gpointer-sized value
+ * @atomic: (not nullable): a pointer to a #gpointer-sized value
  * @oldval: the value to compare with
  * @newval: the value to conditionally replace with
  *
@@ -9957,7 +9990,7 @@
 
 /**
  * g_atomic_pointer_get:
- * @atomic: a pointer to a #gpointer-sized value
+ * @atomic: (not nullable): a pointer to a #gpointer-sized value
  *
  * Gets the current value of @atomic.
  *
@@ -9971,7 +10004,7 @@
 
 /**
  * g_atomic_pointer_or:
- * @atomic: a pointer to a #gpointer-sized value
+ * @atomic: (not nullable): a pointer to a #gpointer-sized value
  * @val: the value to 'or'
  *
  * Performs an atomic bitwise 'or' of the value of @atomic and @val,
@@ -9989,7 +10022,7 @@
 
 /**
  * g_atomic_pointer_set:
- * @atomic: a pointer to a #gpointer-sized value
+ * @atomic: (not nullable): a pointer to a #gpointer-sized value
  * @newval: a new value to store
  *
  * Sets the value of @atomic to @newval.
@@ -10003,7 +10036,7 @@
 
 /**
  * g_atomic_pointer_xor:
- * @atomic: a pointer to a #gpointer-sized value
+ * @atomic: (not nullable): a pointer to a #gpointer-sized value
  * @val: the value to 'xor'
  *
  * Performs an atomic bitwise 'xor' of the value of @atomic and @val,
@@ -11618,8 +11651,8 @@
  * g_bytes_new_take() or g_byte_array_free_to_bytes(). In all other cases the
  * data is copied.
  *
- * Returns: (transfer full) (array length=size) (element-type guint8):
- *          a pointer to the same byte data, which should be freed with g_free()
+ * Returns: (transfer full) (array length=size) (element-type guint8) (not nullable): a pointer to the same byte data, which should be
+ *          freed with g_free()
  * Since: 2.32
  */
 
@@ -11892,7 +11925,8 @@
 
 /**
  * g_clear_pointer: (skip)
- * @pp: a pointer to a variable, struct member etc. holding a pointer
+ * @pp: (not nullable): a pointer to a variable, struct member etc. holding a
+ *    pointer
  * @destroy: a function to which a gpointer can be passed, to destroy *@pp
  *
  * Clears a reference to a variable.
@@ -12604,7 +12638,7 @@
 
 /**
  * g_dataset_destroy:
- * @dataset_location: the location identifying the dataset.
+ * @dataset_location: (not nullable): the location identifying the dataset.
  *
  * Destroys the dataset, freeing all memory allocated, and calling any
  * destroy functions set for data elements.
@@ -12613,7 +12647,7 @@
 
 /**
  * g_dataset_foreach:
- * @dataset_location: the location identifying the dataset.
+ * @dataset_location: (not nullable): the location identifying the dataset.
  * @func: the function to call for each data element.
  * @user_data: user data to pass to the function.
  *
@@ -12638,7 +12672,7 @@
 
 /**
  * g_dataset_id_get_data:
- * @dataset_location: the location identifying the dataset.
+ * @dataset_location: (not nullable): the location identifying the dataset.
  * @key_id: the #GQuark id to identify the data element.
  *
  * Gets the data element corresponding to a #GQuark.
@@ -12660,7 +12694,7 @@
 
 /**
  * g_dataset_id_remove_no_notify:
- * @dataset_location: the location identifying the dataset.
+ * @dataset_location: (not nullable): the location identifying the dataset.
  * @key_id: the #GQuark ID identifying the data element.
  *
  * Removes an element, without calling its destroy notification
@@ -12684,7 +12718,7 @@
 
 /**
  * g_dataset_id_set_data_full:
- * @dataset_location: the location identifying the dataset.
+ * @dataset_location: (not nullable): the location identifying the dataset.
  * @key_id: the #GQuark id to identify the data element.
  * @data: the data element.
  * @destroy_func: the function to call when the data element is
@@ -13377,8 +13411,8 @@
 
 /**
  * g_date_time_compare:
- * @dt1: first #GDateTime to compare
- * @dt2: second #GDateTime to compare
+ * @dt1: (not nullable): first #GDateTime to compare
+ * @dt2: (not nullable): second #GDateTime to compare
  *
  * A comparison function for #GDateTimes that is suitable
  * as a #GCompareFunc. Both #GDateTimes must be non-%NULL.
@@ -13406,8 +13440,8 @@
 
 /**
  * g_date_time_equal:
- * @dt1: a #GDateTime
- * @dt2: a #GDateTime
+ * @dt1: (not nullable): a #GDateTime
+ * @dt2: (not nullable): a #GDateTime
  *
  * Checks to see if @dt1 and @dt2 are equal.
  *
@@ -13752,7 +13786,7 @@
 
 /**
  * g_date_time_hash:
- * @datetime: a #GDateTime
+ * @datetime: (not nullable): a #GDateTime
  *
  * Hashes @datetime into a #guint, suitable for use within #GHashTable.
  *
@@ -14103,7 +14137,7 @@
 /**
  * g_date_to_struct_tm:
  * @date: a #GDate to set the struct tm from
- * @tm: struct tm to fill
+ * @tm: (not nullable): struct tm to fill
  *
  * Fills in the date-related bits of a struct tm using the @date value.
  * Initializes the non-date parts with something sane but meaningless.
@@ -14425,8 +14459,8 @@
 
 /**
  * g_double_equal:
- * @v1: a pointer to a #gdouble key
- * @v2: a pointer to a #gdouble key to compare with @v1
+ * @v1: (not nullable): a pointer to a #gdouble key
+ * @v2: (not nullable): a pointer to a #gdouble key to compare with @v1
  *
  * Compares the two #gdouble values being pointed to and returns
  * %TRUE if they are equal.
@@ -14441,7 +14475,7 @@
 
 /**
  * g_double_hash:
- * @v: a pointer to a #gdouble key
+ * @v: (not nullable): a pointer to a #gdouble key
  *
  * Converts a pointer to a #gdouble to a hash value.
  * It can be passed to g_hash_table_new() as the @hash_func parameter,
@@ -14599,7 +14633,7 @@
 
 /**
  * g_error_matches:
- * @error: (allow-none): a #GError or %NULL
+ * @error: (nullable): a #GError
  * @domain: an error domain
  * @code: an error code
  *
@@ -14895,7 +14929,8 @@
 /**
  * g_filename_from_uri:
  * @uri: a uri describing a filename (escaped, encoded in ASCII).
- * @hostname: (out) (allow-none): Location to store hostname for the URI, or %NULL.
+ * @hostname: (out) (optional) (nullable): Location to store hostname for the
+ *            URI.
  *            If there is no hostname in the URI, %NULL will be
  *            stored in this location.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -14914,7 +14949,7 @@
  * @utf8string: a UTF-8 encoded string.
  * @len: the length of the string, or -1 if the string is
  *                 nul-terminated.
- * @bytes_read: (out) (allow-none): location to store the number of bytes in
+ * @bytes_read: (out) (optional): location to store the number of bytes in
  *                 the input string that were successfully converted, or %NULL.
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
@@ -14961,7 +14996,7 @@
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
- * @bytes_read: location to store the number of bytes in the
+ * @bytes_read: (out) (optional): location to store the number of bytes in the
  *                 input string that were successfully converted, or %NULL.
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
@@ -14969,8 +15004,8 @@
  *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will the byte offset after the last valid
  *                 input sequence.
- * @bytes_written: the number of bytes stored in the output buffer (not
- *                 including the terminating nul).
+ * @bytes_written: (out) (optional): the number of bytes stored in the output
+ *                 buffer (not including the terminating nul).
  * @error: location to store the error occurring, or %NULL to ignore
  *                 errors. Any of the errors in #GConvertError may occur.
  *
@@ -15094,7 +15129,7 @@
 
 /**
  * g_fprintf:
- * @file: the stream to write to.
+ * @file: (not nullable): the stream to write to.
  * @format: a standard printf() format string, but notice
  *          [string precision pitfalls][string-precision]
  * @...: the arguments to insert in the output.
@@ -15924,8 +15959,8 @@
 /**
  * g_hash_table_iter_next:
  * @iter: an initialized #GHashTableIter
- * @key: (allow-none): a location to store the key, or %NULL
- * @value: (allow-none): a location to store the value, or %NULL
+ * @key: (out) (optional): a location to store the key
+ * @value: (out) (nullable) (optional): a location to store the value
  *
  * Advances @iter and retrieves the key and/or value that are now
  * pointed to as a result of this advancement. If %FALSE is returned,
@@ -16011,8 +16046,9 @@
  * g_hash_table_lookup_extended:
  * @hash_table: a #GHashTable
  * @lookup_key: the key to look up
- * @orig_key: (allow-none): return location for the original key, or %NULL
- * @value: (allow-none): return location for the value associated with the key, or %NULL
+ * @orig_key: (allow-none): return location for the original key
+ * @value: (out) (optional) (nullable): return location for the value associated
+ * with the key
  *
  * Looks up a key in the #GHashTable, returning the original key and the
  * associated value and a #gboolean which is %TRUE if the key was found. This
@@ -16415,7 +16451,7 @@
  * @hook_list: a #GHookList
  * @need_valids: %TRUE if #GHook elements which have been destroyed
  *     should be skipped
- * @func: the function to find
+ * @func: (not nullable): the function to find
  * @data: the data to find
  *
  * Finds a #GHook in a #GHookList with the given function and data.
@@ -16465,7 +16501,7 @@
 /**
  * g_hook_insert_before:
  * @hook_list: a #GHookList
- * @sibling: the #GHook to insert the new #GHook before
+ * @sibling: (nullable): the #GHook to insert the new #GHook before
  * @hook: the #GHook to insert
  *
  * Inserts a #GHook into a #GHookList, before a given #GHook.
@@ -16846,8 +16882,8 @@
 
 /**
  * g_int64_equal:
- * @v1: a pointer to a #gint64 key
- * @v2: a pointer to a #gint64 key to compare with @v1
+ * @v1: (not nullable): a pointer to a #gint64 key
+ * @v2: (not nullable): a pointer to a #gint64 key to compare with @v1
  *
  * Compares the two #gint64 values being pointed to and returns
  * %TRUE if they are equal.
@@ -16862,7 +16898,7 @@
 
 /**
  * g_int64_hash:
- * @v: a pointer to a #gint64 key
+ * @v: (not nullable): a pointer to a #gint64 key
  *
  * Converts a pointer to a #gint64 to a hash value.
  *
@@ -16877,8 +16913,8 @@
 
 /**
  * g_int_equal:
- * @v1: a pointer to a #gint key
- * @v2: a pointer to a #gint key to compare with @v1
+ * @v1: (not nullable): a pointer to a #gint key
+ * @v2: (not nullable): a pointer to a #gint key to compare with @v1
  *
  * Compares the two #gint values being pointed to and returns
  * %TRUE if they are equal.
@@ -16896,7 +16932,7 @@
 
 /**
  * g_int_hash:
- * @v: a pointer to a #gint key
+ * @v: (not nullable): a pointer to a #gint key
  *
  * Converts a pointer to a #gint to a hash value.
  * It can be passed to g_hash_table_new() as the @hash_func parameter,
@@ -18964,7 +19000,7 @@
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
- * @bytes_read: location to store the number of bytes in the
+ * @bytes_read: (out) (optional): location to store the number of bytes in the
  *                 input string that were successfully converted, or %NULL.
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
@@ -18972,8 +19008,8 @@
  *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will the byte offset after the last valid
  *                 input sequence.
- * @bytes_written: the number of bytes stored in the output buffer (not
- *                 including the terminating nul).
+ * @bytes_written: (out) (optional): the number of bytes stored in the output
+ *                 buffer (not including the terminating nul).
  * @error: location to store the error occurring, or %NULL to ignore
  *                 errors. Any of the errors in #GConvertError may occur.
  *
@@ -18995,7 +19031,7 @@
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
  *                 for the @len parameter is unsafe)
- * @bytes_read: location to store the number of bytes in the
+ * @bytes_read: (out) (optional): location to store the number of bytes in the
  *                 input string that were successfully converted, or %NULL.
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
@@ -19003,8 +19039,8 @@
  *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will the byte offset after the last valid
  *                 input sequence.
- * @bytes_written: the number of bytes stored in the output buffer (not
- *                 including the terminating nul).
+ * @bytes_written: (out) (optional): the number of bytes stored in the output
+ *                 buffer (not including the terminating nul).
  * @error: location to store the error occurring, or %NULL to ignore
  *                 errors. Any of the errors in #GConvertError may occur.
  *
@@ -19019,7 +19055,8 @@
 
 /**
  * g_log:
- * @log_domain: the log domain, usually #G_LOG_DOMAIN
+ * @log_domain: (nullable): the log domain, usually #G_LOG_DOMAIN, or %NULL
+ * for the default
  * @log_level: the log level, either from #GLogLevelFlags
  *     or a user-defined level
  * @format: the message format. See the printf() documentation
@@ -19038,10 +19075,11 @@
 
 /**
  * g_log_default_handler:
- * @log_domain: the log domain of the message
+ * @log_domain: (nullable): the log domain of the message, or %NULL for the
+ * default "" application domain
  * @log_level: the level of the message
- * @message: the message
- * @unused_data: data passed from g_log() which is unused
+ * @message: (nullable): the message
+ * @unused_data: (nullable): data passed from g_log() which is unused
  *
  * The default log handler set up by GLib; g_log_set_default_handler()
  * allows to install an alternate default log handler.
@@ -19187,7 +19225,8 @@
 
 /**
  * g_logv:
- * @log_domain: the log domain
+ * @log_domain: (nullable): the log domain, or %NULL for the default ""
+ * application domain
  * @log_level: the log level
  * @format: the message format. See the printf() documentation
  * @args: the parameters to insert into the format string
@@ -21439,7 +21478,7 @@
 
 /**
  * g_nullify_pointer:
- * @nullify_location: the memory address of the pointer.
+ * @nullify_location: (not nullable): the memory address of the pointer.
  *
  * Set the pointer at the specified location to %NULL.
  */
@@ -21551,7 +21590,8 @@
 
 /**
  * g_once_init_enter:
- * @location: location of a static initializable variable containing 0
+ * @location: (not nullable): location of a static initializable variable
+ *    containing 0
  *
  * Function to be called when starting a critical initialization
  * section. The argument @location must point to a static
@@ -21584,7 +21624,8 @@
 
 /**
  * g_once_init_leave:
- * @location: location of a static initializable variable containing 0
+ * @location: (not nullable): location of a static initializable variable
+ *    containing 0
  * @result: new non-0 value for *@value_location
  *
  * Counterpart to g_once_init_enter(). Expects a location of a static
@@ -22326,7 +22367,7 @@
 
 /**
  * g_pointer_bit_lock:
- * @address: a pointer to a #gpointer-sized value
+ * @address: (not nullable): a pointer to a #gpointer-sized value
  * @lock_bit: a bit value between 0 and 31
  *
  * This is equivalent to g_bit_lock, but working on pointers (or other
@@ -22341,7 +22382,7 @@
 
 /**
  * g_pointer_bit_trylock:
- * @address: a pointer to a #gpointer-sized value
+ * @address: (not nullable): a pointer to a #gpointer-sized value
  * @lock_bit: a bit value between 0 and 31
  *
  * This is equivalent to g_bit_trylock, but working on pointers (or
@@ -22357,7 +22398,7 @@
 
 /**
  * g_pointer_bit_unlock:
- * @address: a pointer to a #gpointer-sized value
+ * @address: (not nullable): a pointer to a #gpointer-sized value
  * @lock_bit: a bit value between 0 and 31
  *
  * This is equivalent to g_bit_unlock, but working on pointers (or other
@@ -22403,7 +22444,7 @@
 
 /**
  * g_prefix_error:
- * @err: (allow-none): a return location for a #GError, or %NULL
+ * @err: (inout) (optional) (nullable): a return location for a #GError
  * @format: printf()-style format string
  * @...: arguments to @format
  *
@@ -22852,7 +22893,7 @@
 
 /**
  * g_qsort_with_data:
- * @pbase: start of array to sort
+ * @pbase: (not nullable): start of array to sort
  * @total_elems: elements in the array
  * @size: size of each element
  * @compare_func: function to compare elements
@@ -24448,6 +24489,14 @@
 
 
 /**
+ * g_return_if_fail_warning: (skip)
+ * @log_domain: (nullable):
+ * @pretty_function:
+ * @expression: (nullable):
+ */
+
+
+/**
  * g_rmdir:
  * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
  *
@@ -25014,7 +25063,9 @@
  * g_sequence_get_length:
  * @seq: a #GSequence
  *
- * Returns the length of @seq
+ * Returns the length of @seq. Note that this method is O(h) where `h' is the
+ * height of the tree. It is thus more efficient to use g_sequence_is_empty()
+ * when comparing the length to zero.
  *
  * Returns: the length of @seq
  * Since: 2.14
@@ -25542,7 +25593,7 @@
 
 /**
  * g_set_error:
- * @err: (allow-none): a return location for a #GError, or %NULL
+ * @err: (out callee-allocates) (optional): a return location for a #GError
  * @domain: error domain
  * @code: error code
  * @format: printf()-style format
@@ -25555,7 +25606,7 @@
 
 /**
  * g_set_error_literal:
- * @err: (allow-none): a return location for a #GError, or %NULL
+ * @err: (out callee-allocates) (optional): a return location for a #GError
  * @domain: error domain
  * @code: error code
  * @message: error message
@@ -25647,10 +25698,10 @@
 /**
  * g_shell_parse_argv:
  * @command_line: command line to parse
- * @argcp: (out) (optional): return location for number of args, or %NULL
+ * @argcp: (out) (optional): return location for number of args
  * @argvp: (out) (optional) (array length=argcp zero-terminated=1): return
- *   location for array of args, or %NULL
- * @error: (optional): return location for error, or %NULL
+ *   location for array of args
+ * @error: (optional): return location for error
  *
  * Parses a command line into an argument vector, in much the same way
  * the shell would, but without many of the expansions the shell would
@@ -25713,6 +25764,42 @@
 
 
 /**
+ * g_size_checked_add:
+ * @dest: a pointer to the #gsize destination
+ * @a: the #gsize left operand
+ * @b: the #gsize right operand
+ *
+ * Performs a checked addition of @a and @b, storing the result in
+ * @dest.
+ *
+ * If the operation is successful, %TRUE is returned.  If the operation
+ * overflows then the state of @dest is undefined and %FALSE is
+ * returned.
+ *
+ * Returns: %TRUE if there was no overflow
+ * Since: 2.48
+ */
+
+
+/**
+ * g_size_checked_mul:
+ * @dest: a pointer to the #gsize destination
+ * @a: the #gsize left operand
+ * @b: the #gsize right operand
+ *
+ * Performs a checked multiplication of @a and @b, storing the result in
+ * @dest.
+ *
+ * If the operation is successful, %TRUE is returned.  If the operation
+ * overflows then the state of @dest is undefined and %FALSE is
+ * returned.
+ *
+ * Returns: %TRUE if there was no overflow
+ * Since: 2.48
+ */
+
+
+/**
  * g_slice_alloc:
  * @block_size: the number of bytes to allocate
  *
@@ -25726,7 +25813,8 @@
  * be changed with the [`G_SLICE=always-malloc`][G_SLICE]
  * environment variable.
  *
- * Returns: a pointer to the allocated memory block
+ * Returns: a pointer to the allocated memory block, which will be %NULL if and
+ *    only if @mem_size is 0
  * Since: 2.10
  */
 
@@ -25740,7 +25828,8 @@
  * mechanism can be changed with the [`G_SLICE=always-malloc`][G_SLICE]
  * environment variable.
  *
- * Returns: a pointer to the allocated block
+ * Returns: a pointer to the allocated block, which will be %NULL if and only
+ *    if @mem_size is 0
  * Since: 2.10
  */
 
@@ -25753,7 +25842,10 @@
  * Allocates a block of memory from the slice allocator
  * and copies @block_size bytes into it from @mem_block.
  *
- * Returns: a pointer to the allocated memory block
+ * @mem_block must be non-%NULL if @block_size is non-zero.
+ *
+ * Returns: a pointer to the allocated memory block, which will be %NULL if and
+ *    only if @mem_size is 0
  * Since: 2.14
  */
 
@@ -25761,7 +25853,7 @@
 /**
  * g_slice_dup:
  * @type: the type to duplicate, typically a structure name
- * @mem: the memory to copy into the allocated block
+ * @mem: (not nullable): the memory to copy into the allocated block
  *
  * A convenience macro to duplicate a block of memory using
  * the slice allocator.
@@ -25773,7 +25865,10 @@
  * be changed with the [`G_SLICE=always-malloc`][G_SLICE]
  * environment variable.
  *
- * Returns: a pointer to the allocated block, cast to a pointer to @type
+ * This can never return %NULL.
+ *
+ * Returns: (not nullable): a pointer to the allocated block, cast to a pointer
+ *    to @type
  * Since: 2.14
  */
 
@@ -25792,6 +25887,8 @@
  * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable, also see
  * [`G_SLICE`][G_SLICE] for related debugging options.
  *
+ * If @mem is %NULL, this macro does nothing.
+ *
  * Since: 2.10
  */
 
@@ -25808,6 +25905,8 @@
  * specified upon allocation. Note that the exact release behaviour
  * can be changed with the [`G_DEBUG=gc-friendly`][G_DEBUG] environment
  * variable, also see [`G_SLICE`][G_SLICE] for related debugging options.
+ *
+ * If @mem_block is %NULL, this function does nothing.
  *
  * Since: 2.10
  */
@@ -25827,6 +25926,8 @@
  * Note that the exact release behaviour can be changed with the
  * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable, also see
  * [`G_SLICE`][G_SLICE] for related debugging options.
+ *
+ * If @mem_chain is %NULL, this function does nothing.
  *
  * Since: 2.10
  */
@@ -25848,6 +25949,8 @@
  * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable, also see
  * [`G_SLICE`][G_SLICE] for related debugging options.
  *
+ * If @mem_chain is %NULL, this function does nothing.
+ *
  * Since: 2.10
  */
 
@@ -25865,7 +25968,11 @@
  * mechanism can be changed with the [`G_SLICE=always-malloc`][G_SLICE]
  * environment variable.
  *
- * Returns: a pointer to the allocated block, cast to a pointer to @type
+ * This can never return %NULL as the minimum allocation size from
+ * `sizeof (@type)` is 1 byte.
+ *
+ * Returns: (not nullable): a pointer to the allocated block, cast to a pointer
+ *    to @type
  * Since: 2.10
  */
 
@@ -25884,6 +25991,11 @@
  * be changed with the [`G_SLICE=always-malloc`][G_SLICE]
  * environment variable.
  *
+ * This can never return %NULL as the minimum allocation size from
+ * `sizeof (@type)` is 1 byte.
+ *
+ * Returns: (not nullable): a pointer to the allocated block, cast to a pointer
+ *    to @type
  * Since: 2.10
  */
 
@@ -26443,7 +26555,7 @@
  *
  * As the name suggests, this function is not available on Windows.
  *
- * Returns: an opaque tag
+ * Returns: (not nullable): an opaque tag
  * Since: 2.36
  */
 
@@ -26653,7 +26765,7 @@
 /**
  * g_source_modify_unix_fd:
  * @source: a #GSource
- * @tag: the tag from g_source_add_unix_fd()
+ * @tag: (not nullable): the tag from g_source_add_unix_fd()
  * @new_events: the new event mask to watch
  *
  * Updates the event mask to watch for the fd identified by @tag.
@@ -26694,7 +26806,7 @@
 /**
  * g_source_query_unix_fd:
  * @source: a #GSource
- * @tag: the tag from g_source_add_unix_fd()
+ * @tag: (not nullable): the tag from g_source_add_unix_fd()
  *
  * Queries the events reported for the fd corresponding to @tag on
  * @source during the last poll.
@@ -26808,7 +26920,7 @@
 /**
  * g_source_remove_unix_fd:
  * @source: a #GSource
- * @tag: the tag from g_source_add_unix_fd()
+ * @tag: (not nullable): the tag from g_source_add_unix_fd()
  *
  * Reverses the effect of a previous call to g_source_add_unix_fd().
  *
@@ -27429,8 +27541,8 @@
 
 /**
  * g_str_equal:
- * @v1: a key
- * @v2: a key to compare with @v1
+ * @v1: (not nullable): a key
+ * @v2: (not nullable): a key to compare with @v1
  *
  * Compares two strings for byte-by-byte equality and returns %TRUE
  * if they are equal. It can be passed to g_hash_table_new() as the
@@ -27471,7 +27583,7 @@
 
 /**
  * g_str_hash:
- * @v: a string key
+ * @v: (not nullable): a string key
  *
  * Converts a string to a hash value.
  *
@@ -27746,7 +27858,7 @@
 
 /**
  * g_strdup:
- * @str: the string to duplicate
+ * @str: (nullable): the string to duplicate
  *
  * Duplicates a string. If @str is %NULL it returns %NULL.
  * The returned string should be freed with g_free()
@@ -27791,14 +27903,14 @@
 
 /**
  * g_strdupv:
- * @str_array: a %NULL-terminated array of strings
+ * @str_array: (nullable): a %NULL-terminated array of strings
  *
  * Copies %NULL-terminated array of strings. The copy is a deep copy;
  * the new array should be freed by first freeing each string, then
  * the array itself. g_strfreev() does this for you. If called
  * on a %NULL value, g_strdupv() simply returns %NULL.
  *
- * Returns: a new %NULL-terminated array of strings.
+ * Returns: (nullable): a new %NULL-terminated array of strings.
  */
 
 
@@ -27824,7 +27936,7 @@
 /**
  * g_strescape:
  * @source: a string to escape
- * @exceptions: a string of characters not to escape in @source
+ * @exceptions: (nullable): a string of characters not to escape in @source
  *
  * Escapes the special characters '\b', '\f', '\n', '\r', '\t', '\v', '\'
  * and '&quot;' in the string @source by inserting a '\' before
@@ -27842,7 +27954,7 @@
 
 /**
  * g_strfreev:
- * @str_array: a %NULL-terminated array of strings to free
+ * @str_array: (nullable): a %NULL-terminated array of strings to free
  *
  * Frees a %NULL-terminated array of strings, as well as each
  * string it contains.
@@ -28235,8 +28347,8 @@
 
 /**
  * g_string_new:
- * @init: (allow-none): the initial text to copy into the string, or %NULL to
- * start with an empty string.
+ * @init: (nullable): the initial text to copy into the string, or %NULL to
+ * start with an empty string
  *
  * Creates a new #GString, initialized with the given string.
  *
@@ -30899,7 +31011,7 @@
 /**
  * g_trash_stack_push:
  * @stack_p: a #GTrashStack
- * @data_p: the piece of memory to push on the stack
+ * @data_p: (not nullable): the piece of memory to push on the stack
  *
  * Pushes a piece of memory onto a #GTrashStack.
  */
@@ -30987,8 +31099,8 @@
  * g_tree_lookup_extended:
  * @tree: a #GTree
  * @lookup_key: the key to look up
- * @orig_key: returns the original key
- * @value: returns the value associated with the key
+ * @orig_key: (optional) (nullable): returns the original key
+ * @value: (optional) (nullable): returns the value associated with the key
  *
  * Looks up a key in the #GTree, returning the original key and the
  * associated value. This is useful if you need to free the memory
@@ -31254,12 +31366,12 @@
  * @str: a UCS-4 encoded string
  * @len: the maximum length (number of characters) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
- * @items_read: (allow-none): location to store number of bytes read,
- *     or %NULL. If an error occurs then the index of the invalid input
- *     is stored here.
- * @items_written: (allow-none): location to store number of #gunichar2
- *     written, or %NULL. The value stored here does not include the
- *     trailing 0.
+ * @items_read: (out caller-allocates) (optional): location to store number of
+ *     bytes read, or %NULL. If an error occurs then the index of the invalid
+ *     input is stored here.
+ * @items_written: (out caller-allocates) (optional): location to store number
+ *     of #gunichar2  written, or %NULL. The value stored here does not include
+ *     the trailing 0.
  * @error: location to store the error occurring, or %NULL to ignore
  *     errors. Any of the errors in #GConvertError other than
  *     %G_CONVERT_ERROR_NO_CONVERSION may occur.
@@ -31278,10 +31390,10 @@
  * @str: a UCS-4 encoded string
  * @len: the maximum length (number of characters) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
- * @items_read: (allow-none): location to store number of characters
- *     read, or %NULL.
- * @items_written: (allow-none): location to store number of bytes
- *     written or %NULL. The value here stored does not include the
+ * @items_read: (out caller-allocates) (optional): location to store number of
+ *     characters read, or %NULL.
+ * @items_written: (out caller-allocates) (optioanl): location to store number
+ *     of bytes written or %NULL. The value here stored does not include the
  *     trailing 0 byte.
  * @error: location to store the error occurring, or %NULL to ignore
  *         errors. Any of the errors in #GConvertError other than
@@ -31294,6 +31406,78 @@
  *     This value must be freed with g_free(). If an error occurs,
  *     %NULL will be returned and @error set. In that case, @items_read
  *     will be set to the position of the first invalid input character.
+ */
+
+
+/**
+ * g_uint64_checked_add:
+ * @dest: a pointer to the #guint64 destination
+ * @a: the #guint64 left operand
+ * @b: the #guint64 right operand
+ *
+ * Performs a checked addition of @a and @b, storing the result in
+ * @dest.
+ *
+ * If the operation is successful, %TRUE is returned.  If the operation
+ * overflows then the state of @dest is undefined and %FALSE is
+ * returned.
+ *
+ * Returns: %TRUE if there was no overflow
+ * Since: 2.48
+ */
+
+
+/**
+ * g_uint64_checked_mul:
+ * @dest: a pointer to the #guint64 destination
+ * @a: the #guint64 left operand
+ * @b: the #guint64 right operand
+ *
+ * Performs a checked multiplication of @a and @b, storing the result in
+ * @dest.
+ *
+ * If the operation is successful, %TRUE is returned.  If the operation
+ * overflows then the state of @dest is undefined and %FALSE is
+ * returned.
+ *
+ * Returns: %TRUE if there was no overflow
+ * Since: 2.48
+ */
+
+
+/**
+ * g_uint_checked_add:
+ * @dest: a pointer to the #guint destination
+ * @a: the #guint left operand
+ * @b: the #guint right operand
+ *
+ * Performs a checked addition of @a and @b, storing the result in
+ * @dest.
+ *
+ * If the operation is successful, %TRUE is returned.  If the operation
+ * overflows then the state of @dest is undefined and %FALSE is
+ * returned.
+ *
+ * Returns: %TRUE if there was no overflow
+ * Since: 2.48
+ */
+
+
+/**
+ * g_uint_checked_mul:
+ * @dest: a pointer to the #guint destination
+ * @a: the #guint left operand
+ * @b: the #guint right operand
+ *
+ * Performs a checked multiplication of @a and @b, storing the result in
+ * @dest.
+ *
+ * If the operation is successful, %TRUE is returned.  If the operation
+ * overflows then the state of @dest is undefined and %FALSE is
+ * returned.
+ *
+ * Returns: %TRUE if there was no overflow
+ * Since: 2.48
  */
 
 
@@ -31700,9 +31884,9 @@
 /**
  * g_unichar_to_utf8:
  * @c: a Unicode character code
- * @outbuf: output buffer, must have at least 6 bytes of space.
- *       If %NULL, the length will be computed and returned
- *       and nothing will be written to @outbuf.
+ * @outbuf: (out caller-allocates) (optional): output buffer, must have at
+ *       least 6 bytes of space. If %NULL, the length will be computed and
+ *       returned and nothing will be written to @outbuf.
  *
  * Converts a single character to UTF-8.
  *
@@ -32169,13 +32353,13 @@
  * @str: a UTF-16 encoded string
  * @len: the maximum length (number of #gunichar2) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
- * @items_read: (allow-none): location to store number of words read,
- *     or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will be
- *     returned in case @str contains a trailing partial character. If
+ * @items_read: (out caller-allocates) (optional): location to store number of
+ *     words read, or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will
+ *     be returned in case @str contains a trailing partial character. If
  *     an error occurs then the index of the invalid input is stored here.
- * @items_written: (allow-none): location to store number of characters
- *     written, or %NULL. The value stored here does not include the trailing
- *     0 character.
+ * @items_written: (out caller-allocates) (optional): location to store number
+ *     of characters written, or %NULL. The value stored here does not include
+ *     the trailing 0 character.
  * @error: location to store the error occurring, or %NULL to ignore
  *     errors. Any of the errors in #GConvertError other than
  *     %G_CONVERT_ERROR_NO_CONVERSION may occur.
@@ -32194,12 +32378,13 @@
  * @str: a UTF-16 encoded string
  * @len: the maximum length (number of #gunichar2) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
- * @items_read: (allow-none): location to store number of words read,
- *     or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will be
- *     returned in case @str contains a trailing partial character. If
+ * @items_read: (out caller-allocates) (optional): location to store number of
+ *     words read, or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will
+ *     be returned in case @str contains a trailing partial character. If
  *     an error occurs then the index of the invalid input is stored here.
- * @items_written: (allow-none): location to store number of bytes written,
- *     or %NULL. The value stored here does not include the trailing 0 byte.
+ * @items_written: (out caller-allocates) (optional): location to store number
+ *     of bytes written, or %NULL. The value stored here does not include the
+ *     trailing 0 byte.
  * @error: location to store the error occurring, or %NULL to ignore
  *     errors. Any of the errors in #GConvertError other than
  *     %G_CONVERT_ERROR_NO_CONVERSION may occur.
@@ -32309,7 +32494,7 @@
 /**
  * g_utf8_find_next_char:
  * @p: a pointer to a position within a UTF-8 encoded string
- * @end: a pointer to the byte following the end of the string,
+ * @end: (nullable): a pointer to the byte following the end of the string,
  *     or %NULL to indicate that the string is nul-terminated
  *
  * Finds the start of the next UTF-8 character in the string after @p.
@@ -32604,14 +32789,15 @@
  * @str: a UTF-8 encoded string
  * @len: the maximum length of @str to use, in bytes. If @len < 0,
  *     then the string is nul-terminated.
- * @items_read: (allow-none): location to store number of bytes read, or %NULL.
+ * @items_read: (out caller-allocates) (optional): location to store number of
+ *    bytes read, or %NULL.
  *     If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will be
  *     returned in case @str contains a trailing partial
  *     character. If an error occurs then the index of the
  *     invalid input is stored here.
- * @items_written: (allow-none): location to store number of characters
- *     written or %NULL. The value here stored does not include the
- *     trailing 0 character.
+ * @items_written: (out caller-allocates) (optional): location to store number
+ *     of characters written or %NULL. The value here stored does not include
+ *     the trailing 0 character.
  * @error: location to store the error occurring, or %NULL to ignore
  *     errors. Any of the errors in #GConvertError other than
  *     %G_CONVERT_ERROR_NO_CONVERSION may occur.
@@ -32631,8 +32817,8 @@
  * @str: a UTF-8 encoded string
  * @len: the maximum length of @str to use, in bytes. If @len < 0,
  *     then the string is nul-terminated.
- * @items_written: (allow-none): location to store the number of
- *     characters in the result, or %NULL.
+ * @items_written: (out caller-allocates) (optional): location to store the
+ *     number of characters in the result, or %NULL.
  *
  * Convert a string from UTF-8 to a 32-bit fixed width
  * representation as UCS-4, assuming valid UTF-8 input.
@@ -32650,13 +32836,13 @@
  * @str: a UTF-8 encoded string
  * @len: the maximum length (number of bytes) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
- * @items_read: (allow-none): location to store number of bytes read,
- *     or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will be
- *     returned in case @str contains a trailing partial character. If
+ * @items_read: (out caller-allocates) (optional): location to store number of
+ *     bytes read, or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will
+ *     be returned in case @str contains a trailing partial character. If
  *     an error occurs then the index of the invalid input is stored here.
- * @items_written: (allow-none): location to store number of #gunichar2
- *     written, or %NULL. The value stored here does not include the
- *     trailing 0.
+ * @items_written: (out caller-allocates) (optional): location to store number
+ *     of #gunichar2 written, or %NULL. The value stored here does not include
+ *     the trailing 0.
  * @error: location to store the error occurring, or %NULL to ignore
  *     errors. Any of the errors in #GConvertError other than
  *     %G_CONVERT_ERROR_NO_CONVERSION may occur.
@@ -35167,7 +35353,7 @@
 /**
  * g_variant_store:
  * @value: the #GVariant to store
- * @data: the location to store the serialised data at
+ * @data: (not nullable): the location to store the serialised data at
  *
  * Stores the serialised form of @value at @data.  @data should be
  * large enough.  See g_variant_get_size().
@@ -35755,7 +35941,7 @@
 
 /**
  * g_vfprintf:
- * @file: the stream to write to.
+ * @file: (not nullable): the stream to write to.
  * @format: a standard printf() format string, but notice
  *          [string precision pitfalls][string-precision]
  * @args: the list of arguments to insert in the output.
@@ -35895,6 +36081,16 @@
  * This function is safe to call from a UNIX signal handler.
  *
  * Since: 2.30
+ */
+
+
+/**
+ * g_warn_message: (skip)
+ * @domain: (nullable):
+ * @file:
+ * @line:
+ * @func:
+ * @warnexpr: (nullable):
  */
 
 
@@ -36385,6 +36581,9 @@
 
 /**
  * glib_mem_profiler_table:
+ *
+ * Used to be a #GMemVTable containing profiling variants of the memory
+ * allocation functions, but this variable shouldn't be modified anymore.
  *
  * Deprecated: 2.46: Use other memory profiling tools instead
  */

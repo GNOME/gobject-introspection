@@ -3423,7 +3423,7 @@
  * GTlsConnection:database:
  *
  * The certificate database to use when verifying this TLS connection.
- * If no cerificate database is set, then the default database will be
+ * If no certificate database is set, then the default database will be
  * used. See g_tls_backend_get_default_database().
  *
  * Since: 2.30
@@ -8270,7 +8270,7 @@
  *       g_object_unref (task);
  *     }
  *
- *     static void
+ *     static gboolean
  *     decorator_ready (gpointer user_data)
  *     {
  *       GTask *task = user_data;
@@ -8279,6 +8279,8 @@
  *       cake_decorate_async (bd->cake, bd->frosting, bd->message,
  *                            g_task_get_cancellable (task),
  *                            decorated_cb, task);
+ *
+ *       return G_SOURCE_REMOVE;
  *     }
  *
  *     static void
@@ -8315,8 +8317,7 @@
  *           source = cake_decorator_wait_source_new (cake);
  *           // Attach @source to @task's GMainContext and have it call
  *           // decorator_ready() when it is ready.
- *           g_task_attach_source (task, source,
- *                                 G_CALLBACK (decorator_ready));
+ *           g_task_attach_source (task, source, decorator_ready);
  *           g_source_unref (source);
  *         }
  *     }
@@ -14418,7 +14419,8 @@
  * @inbuf: (array length=inbuf_size) (element-type guint8): the buffer
  *         containing the data to convert.
  * @inbuf_size: the number of bytes in @inbuf
- * @outbuf: a buffer to write converted data in.
+ * @outbuf: (element-type guint8) (array length=outbuf_size): a buffer to write
+ *    converted data in.
  * @outbuf_size: the number of bytes in @outbuf, must be at least one
  * @flags: a #GConverterFlags controlling the conversion details
  * @bytes_read: (out): will be set to the number of bytes read from @inbuf on success
@@ -14655,7 +14657,7 @@
  * g_credentials_set_native:
  * @credentials: A #GCredentials.
  * @native_type: The type of native credentials to set.
- * @native: A pointer to native credentials.
+ * @native: (not nullable): A pointer to native credentials.
  *
  * Copies the native credentials of type @native_type from @native
  * into @credentials.
@@ -21998,9 +22000,10 @@
  * g_file_info_get_attribute_data:
  * @info: a #GFileInfo
  * @attribute: a file attribute key
- * @type: (out) (allow-none): return location for the attribute type, or %NULL
- * @value_pp: (out) (allow-none): return location for the attribute value, or %NULL
- * @status: (out) (allow-none): return location for the attribute status, or %NULL
+ * @type: (out) (optional): return location for the attribute type, or %NULL
+ * @value_pp: (out) (optional) (not nullable): return location for the
+ *    attribute value, or %NULL; the attribute value will not be %NULL
+ * @status: (out) (optional): return location for the attribute status, or %NULL
  *
  * Gets the attribute type, value and status for an attribute key.
  *
@@ -22354,7 +22357,7 @@
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
  * @type: a #GFileAttributeType
- * @value_p: pointer to the value
+ * @value_p: (not nullable): pointer to the value
  *
  * Sets the @attribute to contain the given value, if possible. To unset the
  * attribute, use %G_ATTRIBUTE_TYPE_INVALID for @type.
@@ -23130,6 +23133,23 @@
  * Returns: (transfer full): a #GFileMonitor for the given @file,
  *     or %NULL on error.
  *     Free the returned object with g_object_unref().
+ */
+
+
+/**
+ * g_file_monitor_emit_event:
+ * @monitor: a #GFileMonitor.
+ * @child: a #GFile.
+ * @other_file: a #GFile.
+ * @event_type: a set of #GFileMonitorEvent flags.
+ *
+ * Emits the #GFileMonitor::changed signal if a change
+ * has taken place. Should be called from file monitor
+ * implementations only.
+ *
+ * Implementations are responsible to call this method from the
+ * [thread-default main context][g-main-context-push-thread-default] of the
+ * thread that the monitor was created in.
  */
 
 
@@ -24889,7 +24909,7 @@
 
 /**
  * g_icon_hash: (virtual hash)
- * @icon: #gconstpointer to an icon object.
+ * @icon: (not nullable): #gconstpointer to an icon object.
  *
  * Gets a hash for an icon.
  *
@@ -26858,7 +26878,8 @@
  * Note that the returned pointer may become invalid on the next
  * write or truncate operation on the stream.
  *
- * Returns: (transfer none): pointer to the stream's data
+ * Returns: (transfer none): pointer to the stream's data, or %NULL if the data
+ *    has been stolen
  */
 
 
@@ -26986,7 +27007,8 @@
  *
  * @ostream must be closed before calling this function.
  *
- * Returns: (transfer full): the stream's data
+ * Returns: (transfer full): the stream's data, or %NULL if it has previously
+ *    been stolen
  * Since: 2.26
  */
 
@@ -33396,7 +33418,7 @@
 
 /**
  * g_socket_address_new_from_native:
- * @native: a pointer to a struct sockaddr
+ * @native: (not nullable): a pointer to a struct sockaddr
  * @len: the size of the memory location pointed to by @native
  *
  * Creates a #GSocketAddress subclass corresponding to the native
@@ -34455,7 +34477,7 @@
 /**
  * g_socket_control_message_serialize:
  * @message: a #GSocketControlMessage
- * @data: A buffer to write data to
+ * @data: (not nullable): A buffer to write data to
  *
  * Converts the data in the message to bytes placed in the
  * message.
