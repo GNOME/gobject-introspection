@@ -18,7 +18,7 @@ EXTRA_DIST = \
 	g-ir-compiler.vcprojin	\
 	g-ir-generate.vcproj	\
 	glib-print.vcproj	\
-	install.vcproj	\
+	gi-install.vcproj	\
 	_giscanner.vcproj	\
 	README.txt	\
 	$(GENERATED_ITEMS)

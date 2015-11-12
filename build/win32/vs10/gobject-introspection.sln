@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "g-ir-generate", "g-ir-gener
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "g-ir-compiler", "g-ir-compiler.vcxproj", "{5DCB55CE-F32C-4C77-8BF4-B4DAD3EC7774}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "install", "install.vcxproj", "{2093D218-190E-4194-9421-3BA7CBF33B10}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gi-install", "gi-install.vcxproj", "{2093D218-190E-4194-9421-3BA7CBF33B10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

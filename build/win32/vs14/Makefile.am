@@ -20,7 +20,7 @@ EXTRA_DIST = \
 	glib-print.vcxproj.filters	\
 	_giscanner.vcxproj	\
 	_giscanner.vcxproj.filters	\
-	install.vcxproj	\
+	gi-install.vcxproj	\
 	README.txt
 
 DISTCLEANFILES = $(EXTRA_DIST)
