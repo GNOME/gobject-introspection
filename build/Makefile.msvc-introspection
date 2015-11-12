@@ -94,7 +94,7 @@ $(top_builddir)/build/win32/$(1).msvc.introspect:
 # Assemble the Command to Run g-ir-scanner
 	echo $(1)': '$(_gir_name)'_list '$($(_gir_name)_MSVC_GIR_DEPS)>>$(top_builddir)/build/win32/$(1).msvc.introspect
 	echo '	@-echo Generating $$$$@...'>>$(top_builddir)/build/win32/$(1).msvc.introspect
-	echo '	$$$$(PYTHON2) $$$$(G_IR_SCANNER)	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
+	echo '	$$$$(PYTHON) $$$$(G_IR_SCANNER)	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
 	echo '	--verbose -no-libtool	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
 	echo '	--namespace='$(_gir_namespace_msvc)'	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
 	echo '	--nsversion='$(_gir_version_msvc)'	\'>>$(top_builddir)/build/win32/$(1).msvc.introspect
