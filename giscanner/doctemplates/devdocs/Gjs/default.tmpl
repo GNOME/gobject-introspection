@@ -1,0 +1,6 @@
+<%inherit file="base.tmpl"/>
+% if isinstance(node, ast.Constant):
+  <code>
+    const ${formatter.format_page_name(node)} = ${node.value};
+  </code>
+% endif

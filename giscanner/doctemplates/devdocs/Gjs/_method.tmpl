@@ -1,0 +1,48 @@
+<%def name="describe_parameters(m, static=False, virtual=False)">
+  <dl>
+    % if static:
+      <dt>Type:</dt>
+      <dd>Static</dd>
+    % elif virtual:
+      <dt>Type:</dt>
+      <dd>Virtual</dd>
+    % endif
+    % if m.parameters:
+      <dt>Parameters:</dt>
+      <dd>
+        <ul>
+          % for p in m.parameters:
+            <li>
+              <strong>${p.argname}</strong>
+              (<code>${formatter.format_type(p.type)}</code>)
+              % if p.doc:
+                &mdash; ${formatter.format_inline(m, p.doc)}
+              % endif
+            </li>
+          % endfor
+        </ul>
+      </dd>
+    % endif
+    % if m.retval.type != ast.TYPE_NONE:
+      <dt>Returns:</dt>
+      <dd>
+        (<code>${formatter.format_type(m.retval.type)}</code>)
+        % if m.retval.doc:
+          ${formatter.format_inline(m, m.retval.doc)}
+        % endif
+      </dd>
+    % endif
+  </dl>
+</%def>
+
+<%def name="method(m, static=False, virtual=False)">
+  <% invocation = ", ".join(map(lambda p: p.argname, m.parameters)) %>
+  <h3>
+    <span class="entry ${get_node_kind(m)}" id="${formatter.make_anchor(m)}">
+    ${formatter.format_function_name(m)}<!-- no space
+    --></span><!-- no space
+    -->(${formatter.format_in_parameters(m)})
+  </h3>
+  ${describe_parameters(m, static, virtual)}
+  ${formatter.format(m, m.doc)}
+</%def>

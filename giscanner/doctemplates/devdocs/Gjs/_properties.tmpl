@@ -1,0 +1,34 @@
+<%!
+  def dash_to_underscore(string):
+    return '_'.join(string.split('-'))
+
+  def dash_to_camel(string):
+    words = string.split('-')
+    return ''.join([words[0]] + [word.title() for word in words[1:]])
+%>
+% if getattr(node, 'properties', []):
+  <h2>Property Details</h2>
+  % for p in node.properties:
+    <h3 class="entry property" id="${formatter.make_anchor(p)}">
+      ${p.name | dash_to_underscore}
+    </h3>
+    <dl>
+      % if p.name.lower() != p.name:
+        <dt>Names</dt>
+        <dd>
+          <code>${p.name}</code>, <code>${p.name | dash_to_underscore}</code>,
+          <code>${p.name | dash_to_camel}</code>
+        </dd>
+      % endif
+      <dt>Type</dt>
+      <dd><code>${formatter.format_type(p.type)}</code></dd>
+      ##<dt>Default value</dt>
+      ##<dd>Not currently stored in GIR</dd>
+      <dt>Flags</dt>
+      <dd>${formatter.format_property_flags(p)}</dd>
+    </dl>
+    % if p.doc:
+      ${formatter.format(node, p.doc)}
+    % endif
+  % endfor
+% endif

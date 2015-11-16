@@ -47,6 +47,7 @@ pkgpyexec_PYTHON = 			\
 	giscanner/introspectablepass.py	\
 	giscanner/libtoolimporter.py	\
 	giscanner/maintransformer.py	\
+	giscanner/mdextensions.py	\
 	giscanner/message.py		\
 	giscanner/msvccompiler.py	\
 	giscanner/pkgconfig.py		\
@@ -105,7 +106,21 @@ nobase_dist_template_DATA =		\
 	giscanner/doctemplates/mallard/Gjs/property.tmpl	\
 	giscanner/doctemplates/mallard/Gjs/record.tmpl		\
 	giscanner/doctemplates/mallard/Gjs/signal.tmpl		\
-	giscanner/doctemplates/mallard/Gjs/vfunc.tmpl
+	giscanner/doctemplates/mallard/Gjs/vfunc.tmpl		\
+	giscanner/doctemplates/devdocs/Gjs/_method.tmpl		\
+	giscanner/doctemplates/devdocs/Gjs/_methods.tmpl	\
+	giscanner/doctemplates/devdocs/Gjs/_properties.tmpl	\
+	giscanner/doctemplates/devdocs/Gjs/_signals.tmpl	\
+	giscanner/doctemplates/devdocs/Gjs/_staticmethods.tmpl	\
+	giscanner/doctemplates/devdocs/Gjs/_vfuncs.tmpl		\
+	giscanner/doctemplates/devdocs/Gjs/base.tmpl		\
+	giscanner/doctemplates/devdocs/Gjs/callback.tmpl	\
+	giscanner/doctemplates/devdocs/Gjs/class.tmpl		\
+	giscanner/doctemplates/devdocs/Gjs/default.tmpl		\
+	giscanner/doctemplates/devdocs/Gjs/enum.tmpl		\
+	giscanner/doctemplates/devdocs/Gjs/function.tmpl	\
+	giscanner/doctemplates/devdocs/Gjs/interface.tmpl	\
+	giscanner/doctemplates/devdocs/Gjs/namespace.tmpl
 
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \

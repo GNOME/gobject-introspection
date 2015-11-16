@@ -1,0 +1,14 @@
+<html>
+<body>
+  <section>
+    <h1 class="namespace">${node.name}</h1>
+  </section>
+  <ul>
+  % for n in node.values():
+    % if formatter.should_render_node(n):
+      <li>${formatter.format_inline(n, formatter.format_xref(n))}</li>
+    % endif
+  % endfor
+  </ul>
+</body>
+</html>

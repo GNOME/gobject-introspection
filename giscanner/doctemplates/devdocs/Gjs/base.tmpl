@@ -1,0 +1,15 @@
+<html>
+<body>
+  <section>
+    <h1 class="${page_kind}">${formatter.format_page_name(node)}</h1>
+    <h2>Details</h2>
+    ${formatter.format(node, node.doc)}
+    <%include file="_staticmethods.tmpl"/>
+    <%include file="_methods.tmpl"/>
+    <%include file="_vfuncs.tmpl"/>
+    <%include file="_signals.tmpl"/>
+    <%include file="_properties.tmpl"/>
+    ${self.body()}
+  </section>
+</body>
+</html>

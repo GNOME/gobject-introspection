@@ -32,9 +32,11 @@ import tempfile
 
 from xml.sax import saxutils
 from mako.lookup import TemplateLookup
+import markdown
 
 from . import ast, xmlwriter
 from .utils import to_underscores
+from .mdextensions import InlineMarkdown
 
 # Freely inspired from
 # https://github.com/GNOME/yelp-xsl/blob/master/js/syntax.html
@@ -466,6 +468,20 @@ class DocFormatter(object):
             if property_.construct_only:
                 flags.append("Construct Only")
 
+        return " / ".join(flags)
+
+    def format_signal_flags(self, signal):
+        flags = []
+        if signal.action:
+            flags.append("Action")
+        if signal.detailed:
+            flags.append("Detailed")
+        if signal.no_hooks:
+            flags.append("No Hooks")
+        if signal.no_recurse:
+            flags.append("No Recurse")
+        if signal.when:
+            flags.append("Run " + signal.when.capitalize())
         return " / ".join(flags)
 
     def to_underscores(self, node):
@@ -963,7 +979,135 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             return ', '.join(('%s: %s' % (p.argname, self.format_type(p.type)))
                              for p in construct_params)
 
+
+class DevDocsFormatterGjs(DocFormatterGjs):
+    def _is_static_method(self, node):
+        if not hasattr(node.parent, "static_methods"):
+            return False
+        return node in node.parent.static_methods
+
+    def should_render_node(self, node):
+        # For DevDocs, we only want to render the top-level nodes.
+        if isinstance(node, (ast.Compound, ast.Boxed)):
+            self.resolve_gboxed_constructor(node)
+
+        if not super(DevDocsFormatterGjs, self).should_render_node(node):
+            return False
+
+        if isinstance(node, ast.Function) and not node.is_method and \
+           not node.is_constructor and not self._is_static_method(node):
+            return True  # module-level function
+        toplevel_types = [ast.Alias, ast.Bitfield, ast.Boxed, ast.Callback,
+            ast.Class, ast.Constant, ast.Enum, ast.Interface, ast.Namespace,
+            ast.Record, ast.Union]
+        for ast_type in toplevel_types:
+            if isinstance(node, ast_type):
+                return True
+
+        return False
+
+    def format_fundamental_type(self, name):
+        # Don't specify the C type after Number as the Mallard docs do; it's
+        # confusing to GJS newbies.
+        if name in ["gint8", "guint8", "gint16", "guint16", "gint32", "guint32",
+                    "gchar", "guchar", "gshort", "gint", "guint", "gfloat",
+                    "gdouble", "gsize", "gssize", "gintptr", "guintptr",
+                    "glong", "gulong", "gint64", "guint64", "long double",
+                    "long long", "unsigned long long"]:
+            return "Number"  # gsize and up cannot fully be represented in GJS
+        if name in ["none", "gpointer"]:
+            return "void"
+        if name in ["utf8", "gunichar", "filename"]:
+            return "String"
+        if name == "gboolean":
+            return "Boolean"
+        if name == "GType":
+            return "GObject.Type"
+        if name == "GVariant":
+            return "GLib.Variant"
+        return name
+
+    def format(self, node, doc):
+        if doc is None:
+            return ''
+
+        cleaned_up_gtkdoc = super(DevDocsFormatterGjs, self).format_inline(node, doc)
+        return markdown.markdown(cleaned_up_gtkdoc)
+
+    def format_function_name(self, func):
+        name = func.name
+        if func.shadows:
+            name = func.shadows
+
+        if isinstance(func, ast.VFunction):
+            return 'vfunc_' + name
+        return name
+
+    def format_page_name(self, node):
+        if isinstance(node, ast.Function) and node.parent is not None:
+            return node.parent.name + "." + self.format_function_name(node)
+        return super(DevDocsFormatterGjs, self).format_page_name(node)
+
+    def _write_xref_markdown(self, target, anchor=None, display_name=None, pluralize=False):
+        if display_name is None:
+            display_name = target
+        link = target + ".html"
+        if anchor is not None:
+            link += "#" + anchor
+        return "[{}]({}){}".format(display_name, link, 's' if pluralize else '')
+
+    def make_anchor(self, node):
+        style_class = get_node_kind(node)
+        return "{}-{}".format(style_class, self.to_underscores(node))
+
+    def _process_parameter(self, node, match, props):
+        # Display the instance parameter as "this" instead of whatever name it
+        # has in C.
+        if hasattr(node, 'instance_parameter') and \
+           node.instance_parameter is not None and \
+           props['param_name'] == node.instance_parameter.argname:
+            return '<code>this</code>'
+        return super(DevDocsFormatterGjs, self)._process_parameter(node, match, props)
+
+    def format_xref(self, node, pluralize=False, **attrdict):
+        if node is None or not hasattr(node, 'namespace'):
+            return self._write_xref_markdown('index')
+        if node.namespace is self._transformer.namespace:
+            return self.format_internal_xref(node, attrdict, pluralize=pluralize)
+        return self.format_external_xref(node, attrdict, pluralize=pluralize)
+
+    def format_internal_xref(self, node, attrdict, pluralize=False):
+        if not self.should_render_node(node):
+            # Non-toplevel nodes are linked to the main page.
+            page = make_page_id(node.parent)
+            return self._write_xref_markdown(page, self.make_anchor(node),
+                                             page + "." + node.name,
+                                             pluralize=pluralize)
+        return self._write_xref_markdown(make_page_id(node), pluralize=pluralize)
+
+    def format_external_xref(self, node, attrdict, pluralize=False):
+        ns = node.namespace
+        if not self.should_render_node(node):
+            target = '../%s-%s/%s' % (ns.name, str(ns.version), make_page_id(node.parent))
+            return self._write_xref_markdown(target, self.make_anchor(node),
+                                             self.format_page_name(node.parent),
+                                             pluralize=pluralize)
+        target = '../%s-%s/%s' % (ns.name, str(ns.version), make_page_id(node))
+        return self._write_xref_markdown(target, None,
+                                         self.format_page_name(node),
+                                         pluralize=pluralize)
+
+    def format_inline(self, node, para):
+        cleaned_up_gtkdoc = super(DevDocsFormatterGjs, self).format_inline(node, para)
+        return markdown.markdown(cleaned_up_gtkdoc, extensions=[InlineMarkdown()])
+
+    def format_in_parameters(self, node):
+        return ', '.join(p.argname for p in self.get_in_parameters(node))
+
 LANGUAGES = {
+    "devdocs": {
+        "gjs": DevDocsFormatterGjs,
+    },
     "mallard": {
         "c": DocFormatterC,
         "python": DocFormatterPython,
@@ -1043,6 +1187,7 @@ class DocWriter(object):
                                  node=node,
                                  page_id=page_id,
                                  page_kind=page_kind,
+                                 get_node_kind=get_node_kind,
                                  formatter=self._formatter,
                                  ast=ast)
 
