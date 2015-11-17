@@ -12,8 +12,9 @@ This VS9 solution and the projects it includes are intented to be used
 in a gobject-introspection source tree unpacked from a tarball. In a git checkout you
 first need to use some Unix-like environment, which will do the work for you.
 
-The required dependencies are Python 2.6 or later, GLib and LibFFI.  It is recommended
-that GLib is built with Visual C++ 2008 to avoid problems cause by usage of different CRTs
+The required dependencies are Python 2.7 (2.7) or 3.3 (3.x) or later, GLib and LibFFI.
+It is recommended that GLib is built with Visual C++ 2008 to avoid problems cause by
+usage of different CRTs.
 
 Please refer to the README.txt file in $(GLib_src_root)\build\win32\vs9 on how to build
 GLib using Visual C++ 2008
@@ -24,9 +25,12 @@ comes with the LibFFI source package for more details on how to build LibFFI
 on Visual C++-please note that the mozilla-build package from Mozilla is needed
 in order to build LibFFI on Windows.
 
-For Python, retrieving the official Windows binaries for 2.6 or later from
-http://www.python.org will do the job-be sure that the Python version that
-you downloaded matches the configuration of your build (win32 or x64/amd64).
+For Python, retrieving the official Windows binaries for 2.7 (2.x) or 3.3 (3.x) or later
+from http://www.python.org will do the job-be sure that the Python version that
+you downloaded matches the configuration of your build (win32 or x64/amd64).  Ensure that
+the correct path for your Python interpretor is set in gi-extra-paths.vsprops prior to
+opening the project files, or close the project files and delete all the *.user, *.ncb and
+*.suo files and reopening the project files.
 
 For building the Regress test project, cairo (and possibly cairo-gobject support)
 is needed.
@@ -68,13 +72,13 @@ variables, but the following environmental variables are needed (either by using
 or by nmake -f gi-introspection-msvc.mak xxx=yyy) for building the introspection files (which
 should be done after successfully building the Project Files):
 
-PYTHON2: Full path to your Python 2.6.x/2.7.x interpretor (python.exe) if it is
-         not in your PATH.  Please note that only 2.6.x and 2.7.x works at this time.
-         You need to use an x64/amd64 version of Python for x64 builds, and a Win32/x86
-         version of Python for Win32/x86 builds
+PYTHON: Full path to your Python 2.7.x/3.3.x+ interpretor (python.exe) if it is
+        not in your PATH.  Please note that only 2.7.x and 3.3.x and later works.
+        You need to use an x64/amd64 version of Python for x64 builds, and a Win32/x86
+        version of Python for Win32/x86 builds
 PKG_CONFIG_PATH: Location of the .pc (pkg-config) files, especially for the GLib .pc files.
 
-Please see $(srcroot)\build\gi-introspection-msvc.mak for more details.  Doing
+Please see $(srcroot)\build\win32\gi-introspection-msvc.mak for more details.  Doing
 "nmake -f gi-introspection-msvc.mak (options omitted)" will build the various introspection files,
 and "nmake -f gi-introspection-msvc.mak (options omitted) install-introspection" will copy the introspection
 files to <root>\vs9\<PlatformName>\share\gir-1.0 (.gir files) and <root>\vs9\<PlatformName>\lib\girepository-1.0

@@ -7,16 +7,14 @@
 	>
 	<UserMacro
 		Name="CopyConfigH"
-		Value="
-copy ..\..\..\config.h.win32 ..\..\..\config.h
-			  "
+		Value="copy ..\..\..\config.h.win32 ..\..\..\config.h"
 	/>
 	<UserMacro
 		Name="GenToolsScripts"
-		Value="$(PythonDir)\python ..\..\..\build\gen-win32-g-ir-tools.py"
+		Value="$(PythonDir)\python ..\gen-win32-g-ir-tools.py"
 	/>
 	<UserMacro
 		Name="GenToolsScriptsX64"
-		Value="$(PythonDirX64)\python ..\..\..\build\gen-win32-g-ir-tools.py"
+		Value="$(PythonDirX64)\python ..\gen-win32-g-ir-tools.py"
 	/>
 </VisualStudioPropertySheet>

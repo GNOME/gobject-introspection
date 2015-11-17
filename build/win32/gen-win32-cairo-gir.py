@@ -25,7 +25,7 @@ def main(argv):
     args = parser.parse_args()
 
     # Get the srcroot and the path where the bundled .gir files reside in the package
-    srcroot = parent_dir(__file__)
+    srcroot = parent_dir(parent_dir(__file__))
     preset_gir_path = os.path.join(srcroot, 'gir')
 
     # Set up variables in cairo-1.0.gir.in to produce cairo-1.0.gir

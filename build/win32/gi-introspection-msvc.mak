@@ -50,7 +50,7 @@ built_install_typelibs =	\
 	GIRepository-$(GLIB_APIVERSION).typelib
 
 !if "$(BUILD_INTROSPECTION)" == "TRUE"
-all: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) $(bundled_typelibs) msg_cairo
+all: setgirbuildenv $(built_install_girs) $(built_install_typelibs) $(bundled_girs) $(bundled_typelibs) msg_cairo
 
 !include gi-setenv-msvc.mak
 
@@ -59,35 +59,35 @@ glib_list:
 	@-echo $(BASEDIR)\lib\glib-2.0\include\glibconfig.h> $@
 	@-for /f %%a in ('dir /b $(BASEDIR)\include\glib-2.0\glib\*.h') do @echo $(BASEDIR)\include\glib-2.0\glib\%%a>> $@
 	@-echo $(BASEDIR)\include\glib-2.0\gobject\glib-types.h>> $@
-	@-echo ..\gir\glib-2.0.c>> $@
+	@-echo $(TOP_SRCDIR)\gir\glib-2.0.c>> $@
 
 gobject_list:
 	@-echo Generating file list for GObject...
 	@-type NUL > $@
 	@-for /f %%a in ('dir /b $(BASEDIR)\include\glib-2.0\gobject\*.h') do @if not %%a == glib-types.h @echo $(BASEDIR)\include\glib-2.0\gobject\%%a>> $@
-	@-echo ..\gir\gobject-2.0.c>> $@
+	@-echo $(TOP_SRCDIR)\gir\gobject-2.0.c>> $@
 
 gio_list:
 	@-echo Generating file list for GIO...
 	@-type NUL > $@
 	@-for /f %%a in ('dir /b $(BASEDIR)\include\gio-win32-2.0\gio\*.h') do @echo $(BASEDIR)\include\gio-win32-2.0\gio\%%a>> $@
 	@-for /f %%a in ('dir /b $(BASEDIR)\include\glib-2.0\gio\*.h') do @if not %%a == gsettingsbackend.h @echo $(BASEDIR)\include\glib-2.0\gio\%%a>> $@
-	@-echo ..\gir\gio-2.0.c>> $@
+	@-echo $(TOP_SRCDIR)\gir\gio-2.0.c>> $@
 
 gi_list:
 	@-echo Generating file list for girepository...
-	@-echo ..\girepository\girepository.h > $@
-	@-echo ..\girepository\girepository.c >> $@
-	@-for /f %%a in ('dir /b ..\girepository\gi*info.c') do @echo ..\girepository\%%a >> $@
-	@-for /f %%a in ('dir /b ..\girepository\gi*info.h') do @echo ..\girepository\%%a >> $@
-	@-echo ..\girepository\gitypelib.h >> $@
-	@-echo ..\girepository\gitypes.h >> $@
+	@-echo $(TOP_SRCDIR)\girepository\girepository.h > $@
+	@-echo $(TOP_SRCDIR)\girepository\girepository.c >> $@
+	@-for /f %%a in ('dir /b $(TOP_SRCDIR)\girepository\gi*info.c') do @echo $(TOP_SRCDIR)\girepository\%%a >> $@
+	@-for /f %%a in ('dir /b $(TOP_SRCDIR)\girepository\gi*info.h') do @echo $(TOP_SRCDIR)\girepository\%%a >> $@
+	@-echo $(TOP_SRCDIR)\girepository\gitypelib.h >> $@
+	@-echo $(TOP_SRCDIR)\girepository\gitypes.h >> $@
 
 # Generated .gir files for GLib/GModule/GObject/Gio/GIRepository
 GLib-$(GLIB_APIVERSION).gir: glib_list
 	@-echo Generating $@...
-	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose -I.. --add-include-path=..	\
-	--add-include-path=..\gir --add-include-path=. --namespace=GLib --nsversion=$(GLIB_APIVERSION)	\
+	$(PYTHON) $(G_IR_SCANNER_CURRENT) --verbose -I$(TOP_SRCDIR) --add-include-path=$(TOP_SRCDIR)	\
+	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GLib --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --pkg=glib-$(GLIB_APIVERSION) --include=win32-$(GI_APIVERSION) --library=glib-2.0 --library=gobject-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --symbol-prefix=g	\
 	--symbol-prefix=glib --c-include="glib.h" -I$(BASEDIR)\include\glib-$(GLIB_APIVERSION)	\
@@ -96,17 +96,17 @@ GLib-$(GLIB_APIVERSION).gir: glib_list
 
 GModule-$(GLIB_APIVERSION).gir: GLib-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
-	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose -I.. --add-include-path=..	\
-	--add-include-path=..\gir --add-include-path=. --namespace=GModule --nsversion=2.0	\
+	$(PYTHON) $(G_IR_SCANNER_CURRENT) --verbose -I$(TOP_SRCDIR) --add-include-path=$(TOP_SRCDIR)	\
+	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GModule --nsversion=2.0	\
 	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gmodule-$(GLIB_APIVERSION) --library=gmodule-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --c-include="gmodule.h"	\
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include -I$(BASEDIR)\include	\
-	$(BASEDIR)\include\glib-2.0\gmodule.h ..\gir\gmodule-2.0.c -o $@
+	$(BASEDIR)\include\glib-2.0\gmodule.h $(TOP_SRCDIR)\gir\gmodule-2.0.c -o $@
 
 GObject-$(GLIB_APIVERSION).gir: gobject_list GModule-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
-	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose -I.. --add-include-path=..	\
-	--add-include-path=..\gir --add-include-path=. --namespace=GObject --nsversion=$(GLIB_APIVERSION)	\
+	$(PYTHON) $(G_IR_SCANNER_CURRENT) --verbose -I$(TOP_SRCDIR) --add-include-path=$(TOP_SRCDIR)	\
+	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GObject --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gobject-$(GLIB_APIVERSION) --library=gobject-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --c-include="glib-gobject.h"	\
 	-I$(BASEDIR)/include/glib-2.0 -I$(BASEDIR)/lib/glib-2.0/include -I$(BASEDIR)/include	\
@@ -114,8 +114,8 @@ GObject-$(GLIB_APIVERSION).gir: gobject_list GModule-$(GLIB_APIVERSION).gir
 
 Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
-	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose -I.. --add-include-path=..	\
-	--add-include-path=..\gir --add-include-path=. --namespace=Gio --nsversion=$(GLIB_APIVERSION)	\
+	$(PYTHON) $(G_IR_SCANNER_CURRENT) --verbose -I$(TOP_SRCDIR) --add-include-path=$(TOP_SRCDIR)	\
+	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=Gio --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --pkg=gio-$(GLIB_APIVERSION) --pkg=gio-windows-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
 	--library=gio-2.0 --external-library --reparse-validate --warn-all	\
 	--identifier-prefix=G --include=GLib-$(GLIB_APIVERSION) --c-include="gio/gio.h" -DGIO_COMPILATION	\
@@ -124,23 +124,23 @@ Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
 
 GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
-	$(PYTHON2) $(G_IR_SCANNER_CURRENT) --verbose --warn-all	\
-	--add-include-path=..\gir --add-include-path=. --namespace=GIRepository --nsversion=$(GLIB_APIVERSION)	\
+	$(PYTHON) $(G_IR_SCANNER_CURRENT) --verbose --warn-all	\
+	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GIRepository --nsversion=$(GLIB_APIVERSION)	\
 	--identifier-prefix=GI --symbol-prefix=g --c-include="girepository.h" --add-include-path=.	\
 	--no-libtool --pkg=gobject-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
-	--library=girepository-1.0 -I..\girepository -I.. -I$(BASEDIR)\include 	\
+	--library=girepository-1.0 -I$(TOP_SRCDIR)\girepository -I$(TOP_SRCDIR) -I$(BASEDIR)\include 	\
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include --filelist=gi_list	\
 	-DGI_COMPILATION -o $@
 
 # Bundled cairo-1.0.gir.in processing
-cairo-1.0.gir: ..\gir\cairo-1.0.gir.in
+cairo-1.0.gir: $(TOP_SRCDIR)\gir\cairo-1.0.gir.in
 	@-echo Generating $@ from $*.gir.in...
-	@-$(PYTHON2) gen-win32-cairo-gir.py --dllname=$(CAIROGOBJECT_DLLNAME)
+	@-$(PYTHON) gen-win32-cairo-gir.py --dllname=$(CAIROGOBJECT_DLLNAME)
 
 # Copy the .gir's bundled with G-I to this folder
-$(bundled_girs): ..\gir\win32-1.0.gir ..\gir\fontconfig-2.0.gir ..\gir\freetype2-2.0.gir ..\gir\GL-1.0.gir ..\gir\libxml2-2.0.gir
+$(bundled_girs): $(TOP_SRCDIR)\gir\win32-1.0.gir $(TOP_SRCDIR)\gir\fontconfig-2.0.gir $(TOP_SRCDIR)\gir\freetype2-2.0.gir $(TOP_SRCDIR)\gir\GL-1.0.gir $(TOP_SRCDIR)\gir\libxml2-2.0.gir
 	@-echo Copying the bundled $*.gir that came with the GobjectIntrospection package...
-	@-copy ..\gir\$*.gir $@
+	@-copy $(TOP_SRCDIR)\gir\$*.gir $@
 
 # Generate .typelib's from generated .gir's
 $(built_install_typelibs): $(bundled_girs) $(built_install_girs)
@@ -166,7 +166,7 @@ msg_cairo:
 	@-echo CAIROGOBJECT_DLLNAME^=^<your DLL full filename^> when
 	@-echo invoking this NMake Makefile
 
-install-introspection: setgirbuildnev $(built_install_girs) $(built_install_typelibs) $(bundled_girs) cairo-1.0.gir $(bundled_typelibs)
+install-introspection: all
 	@-mkdir $(G_IR_INCLUDEDIR)
 	@-mkdir $(G_IR_TYPELIBDIR)
 	@-copy cairo-1.0.gir $(G_IR_INCLUDEDIR)

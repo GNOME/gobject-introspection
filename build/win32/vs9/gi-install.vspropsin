@@ -43,7 +43,7 @@ copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\girepository-$(ApiVe
 
 echo Please note that building GObject-Introspection with Visual Studio is now a 2-step process&#x0D;&#x0A;
 echo Please open the appropriate Visual Studio (or Windows SDK) command prompt and use the NMake Makefile&#x0D;&#x0A;
-echo in SRC_ROOT\build\gi-introspection-msvc.mak to build the introspection files&#x0D;&#x0A;
+echo in SRC_ROOT\build\win32\gi-introspection-msvc.mak to build the introspection files&#x0D;&#x0A;
 		"
 	/>
 </VisualStudioPropertySheet>

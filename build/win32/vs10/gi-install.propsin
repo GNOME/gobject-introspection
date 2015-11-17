@@ -5,8 +5,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
-    <InstalledDlls>$(BinDir)\$(LibGIDllPrefix)girepository$(LibGIDllSuffix).dll;$(BinDir)\_giscanner.pyd</InstalledDlls>
-    <InstalledBins>$(BinDir)\g-ir-compiler.exe;$(BinDir)\g-ir-generate.exe;..\..\..\tools\g-ir-annotation-tool;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-scanner</InstalledBins>
     <GIDoInstall>
 mkdir $(CopyDir)
 mkdir $(CopyDir)\bin
@@ -40,7 +38,7 @@ copy $(BinDir)\girepository-$(ApiVersion).lib $(CopyDir)\lib
 
 echo Please note that building GObject-Introspection with Visual Studio is now a 2-step process
 echo Please open the appropriate Visual Studio (or Windows SDK) command prompt and use the NMake Makefile
-echo in SRC_ROOT\build\gi-introspection-msvc.mak to build the introspection files
+echo in SRC_ROOT\build\win32\gi-introspection-msvc.mak to build the introspection files
 </GIDoInstall>
   </PropertyGroup>
   <PropertyGroup>
@@ -49,12 +47,6 @@ echo in SRC_ROOT\build\gi-introspection-msvc.mak to build the introspection file
   <ItemGroup>
     <BuildMacro Include="BinDir">
       <Value>$(BinDir)</Value>
-    </BuildMacro>
-    <BuildMacro Include="InstalledDlls">
-      <Value>$(InstalledDlls)</Value>
-    </BuildMacro>
-    <BuildMacro Include="InstalledBins">
-      <Value>$(InstalledBins)</Value>
     </BuildMacro>
     <BuildMacro Include="GIDoInstall">
       <Value>$(GIDoInstall)</Value>

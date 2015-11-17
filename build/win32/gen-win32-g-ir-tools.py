@@ -42,7 +42,7 @@ def main(argv):
     funcs = ['scanner_main','annotation_main','doc_main']
     tools = ['g-ir-scanner','g-ir-annotation-tool','g-ir-doc-tool']
 
-    srcroot = parent_dir(__file__)
+    srcroot = parent_dir(parent_dir(__file__))
     preset_tools_path = os.path.join(srcroot, 'tools')
     src = os.path.join(preset_tools_path, 'g-ir-tool-template.in')
 
