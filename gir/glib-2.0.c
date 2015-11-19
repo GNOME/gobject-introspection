@@ -2180,6 +2180,8 @@
  *
  * Each piece of memory that is pushed onto the stack
  * is cast to a GTrashStack*.
+ *
+ * Deprecated: 2.48: #GTrashStack is deprecated without replacement
  */
 
 
@@ -3732,16 +3734,15 @@
 /**
  * G_INLINE_FUNC:
  *
- * This macro is used to export function prototypes so they can be linked
- * with an external version when no inlining is performed. The file which
- * implements the functions should define %G_IMPLEMENTS_INLINES
- * before including the headers which contain %G_INLINE_FUNC declarations.
- * Since inlining is very compiler-dependent using these macros correctly
- * is very difficult. Their use is strongly discouraged.
+ * This macro used to be used to conditionally define inline functions
+ * in a compatible way before this feature was supported in all
+ * compilers.  These days, GLib requires inlining support from the
+ * compiler, so your GLib-using programs can safely assume that the
+ * "inline" keywork works properly.
  *
- * This macro is often mistaken for a replacement for the inline keyword;
- * inline is already declared in a portable manner in the GLib headers
- * and can be used normally.
+ * Never use this macro anymore.  Just say "static inline".
+ *
+ * Deprecated: 2.48: Use "static inline" instead
  */
 
 
@@ -7999,6 +8000,11 @@
  *
  * There is no function to create a #GTrashStack. A %NULL #GTrashStack*
  * is a perfectly valid empty stack.
+ *
+ * There is no longer any good reason to use #GTrashStack.  If you have
+ * extra pieces of memory, free() them and allocate them again later.
+ *
+ * Deprecated: 2.48: #GTrashStack is deprecated without replacement
  */
 
 
@@ -14392,8 +14398,8 @@
 
 /**
  * g_direct_equal:
- * @v1: (allow-none): a key
- * @v2: (allow-none): a key to compare with @v1
+ * @v1: (nullable): a key
+ * @v2: (nullable): a key to compare with @v1
  *
  * Compares two #gpointer arguments and returns %TRUE if they are equal.
  * It can be passed to g_hash_table_new() as the @key_equal_func
@@ -14409,7 +14415,7 @@
 
 /**
  * g_direct_hash:
- * @v: (allow-none): a #gpointer key
+ * @v: (nullable): a #gpointer key
  *
  * Converts a gpointer to a hash value.
  * It can be passed to g_hash_table_new() as the @hash_func parameter,
@@ -15765,7 +15771,7 @@
  * (keep in mind that an O(n) find/foreach operation issued for all n
  * values in a hash table ends up needing O(n*n) operations).
  *
- * Returns: (allow-none): The value of the first key/value pair is returned,
+ * Returns: (nullable): The value of the first key/value pair is returned,
  *     for which @predicate evaluates to %TRUE. If no pair with the
  *     requested property is found, %NULL is returned.
  * Since: 2.4
@@ -15847,10 +15853,10 @@
  * To iterate over the entries in a #GHashTable more efficiently, use a
  * #GHashTableIter.
  *
- * Returns: a #GList containing all the keys inside the hash
- *     table. The content of the list is owned by the hash table and
- *     should not be modified or freed. Use g_list_free() when done
- *     using the list.
+ * Returns: (transfer container): a #GList containing all the keys
+ *     inside the hash table. The content of the list is owned by the
+ *     hash table and should not be modified or freed. Use g_list_free()
+ *     when done using the list.
  * Since: 2.14
  */
 
@@ -15895,10 +15901,10 @@
  * To iterate over the entries in a #GHashTable more efficiently, use a
  * #GHashTableIter.
  *
- * Returns: a #GList containing all the values inside the hash
- *     table. The content of the list is owned by the hash table and
- *     should not be modified or freed. Use g_list_free() when done
- *     using the list.
+ * Returns: (transfer container): a #GList containing all the values
+ *     inside the hash table. The content of the list is owned by the
+ *     hash table and should not be modified or freed. Use g_list_free()
+ *     when done using the list.
  * Since: 2.14
  */
 
@@ -16038,7 +16044,7 @@
  * and has the value %NULL. If you need this distinction, use
  * g_hash_table_lookup_extended().
  *
- * Returns: (allow-none): the associated value, or %NULL if the key is not found
+ * Returns: (nullable): the associated value, or %NULL if the key is not found
  */
 
 
@@ -16046,7 +16052,7 @@
  * g_hash_table_lookup_extended:
  * @hash_table: a #GHashTable
  * @lookup_key: the key to look up
- * @orig_key: (allow-none): return location for the original key
+ * @orig_key: (out) (optional) (nullable): return location for the original key
  * @value: (out) (optional) (nullable): return location for the value associated
  * with the key
  *
@@ -16091,10 +16097,10 @@
  * g_hash_table_new_full:
  * @hash_func: a function to create a hash value from a key
  * @key_equal_func: a function to check two keys for equality
- * @key_destroy_func: (allow-none): a function to free the memory allocated for the key
+ * @key_destroy_func: (nullable): a function to free the memory allocated for the key
  *     used when removing the entry from the #GHashTable, or %NULL
  *     if you don't want to supply such a function.
- * @value_destroy_func: (allow-none): a function to free the memory allocated for the
+ * @value_destroy_func: (nullable): a function to free the memory allocated for the
  *     value used when removing the entry from the #GHashTable, or %NULL
  *     if you don't want to supply such a function.
  *
@@ -29929,7 +29935,7 @@
  *
  * |[<!-- language="C" -->
  *   static void
- *   test_create_large_object_subprocess (void)
+ *   test_create_large_object (void)
  *   {
  *     if (g_test_subprocess ())
  *       {
@@ -30984,6 +30990,7 @@
  * where N denotes the number of items on the stack.
  *
  * Returns: the height of the stack
+ * Deprecated: 2.48: #GTrashStack is deprecated without replacement
  */
 
 
@@ -30995,6 +31002,7 @@
  * which may be %NULL.
  *
  * Returns: the element at the top of the stack
+ * Deprecated: 2.48: #GTrashStack is deprecated without replacement
  */
 
 
@@ -31005,6 +31013,7 @@
  * Pops a piece of memory off a #GTrashStack.
  *
  * Returns: the element at the top of the stack
+ * Deprecated: 2.48: #GTrashStack is deprecated without replacement
  */
 
 
@@ -31014,6 +31023,8 @@
  * @data_p: (not nullable): the piece of memory to push on the stack
  *
  * Pushes a piece of memory onto a #GTrashStack.
+ *
+ * Deprecated: 2.48: #GTrashStack is deprecated without replacement
  */
 
 
