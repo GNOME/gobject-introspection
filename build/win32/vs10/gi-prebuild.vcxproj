@@ -100,10 +100,10 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenToolsScripts)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating Tools Scripts...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenToolsScripts)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GenToolsScriptsX64)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating Tools Scripts...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenToolsScriptsX64)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenToolsScripts)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\tools\g-ir-scanner;..\..\..\tools\g-ir-doc-tool;..\..\..\tools\g-ir-annotation-tool;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating Tools Scripts...</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GenToolsScriptsX64)</Command>
