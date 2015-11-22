@@ -454,7 +454,7 @@ class DocFormatter(object):
     def field_is_writable(self, field):
         return True
 
-    def format_property_flags(self, property_, construct_only=False):
+    def format_property_flags(self, property_, construct_only=False, abbrev=False):
         flags = []
 
         if property_.readable and not construct_only:
@@ -468,6 +468,9 @@ class DocFormatter(object):
             if property_.construct_only:
                 flags.append("Construct Only")
 
+        if abbrev:
+            return "/".join([''.join([word[0] for word in flag.lower().split()])
+                for flag in flags])
         return " / ".join(flags)
 
     def format_signal_flags(self, signal):
@@ -511,6 +514,20 @@ class DocFormatter(object):
 
         parent_chain.reverse()
         return parent_chain
+
+    def get_inheritable_types(self, node):
+        """Return an ast.Node object for each type (ast.Class and ast.Interface
+        types) from which an ast.Class @node might inherit methods, properties,
+        and signals."""
+
+        assert isinstance(node, ast.Class)
+
+        parent_chain = self.get_class_hierarchy(node)
+        types = []
+        for p in parent_chain:
+            types += [self._transformer.lookup_typenode(t) for t in p.interfaces]
+        types += [t for t in parent_chain if t is not node]
+        return types
 
     def format_prerequisites(self, node):
         assert isinstance(node, ast.Interface)
