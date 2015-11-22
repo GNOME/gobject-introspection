@@ -341,27 +341,41 @@ class DocFormatter(object):
 
         return self.format_xref(func)
 
+    # FIXME: the four spaces after newlines in the following functions are to
+    # keep Markdown happy. We pass the documentation string first through this
+    # templated scanner, which converts |[ ]| to <pre></pre>. Then in the case
+    # of DevDocs output, we pass the resulting string through Markdown; but
+    # Markdown will not respect the <pre> element and will treat the code as
+    # markup, converting asterisks into <em> etc. Putting four spaces at the
+    # start of each line makes Markdown recognize the code as code without
+    # affecting the normal HTML output too much.
+    #
+    # A better solution would be to replace DocstringScanner by Markdown
+    # entirely, implementing the custom markup with Markdown extensions.
+
     def _process_code_start(self, node, match, props):
         self._processing_code = True
-        return "</p><code>"
+        return '</p><pre>\n    '
 
     def _process_code_start_with_language(self, node, match, props):
         mime = language_mimes[props["language_name"].lower()]
         self._processing_code = True
         if not mime:
-            return "</p><code>"
-        return '</p><code mime="' + mime + '">'
+            return '</p><pre>\n    '
+        return '</p><pre data-mime="' + mime + '">\n    '
 
     def _process_code_end(self, node, match, props):
         self._processing_code = False
-        return "</code><p>"
+        return '\n</pre><p>'
 
     def _process_new_line(self, node, match, props):
+        if self._processing_code:
+            return '\n    '
         return '\n'
 
     def _process_new_paragraph(self, node, match, props):
         if self._processing_code:
-            return '\n\n'
+            return '\n\n    '
         return "</p><p>"
 
     def _process_token(self, node, tok):
