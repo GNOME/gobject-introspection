@@ -16,8 +16,8 @@ TESTS_CFLAGS_ADD = /MDd /Od /Zi /DG_ENABLE_DEBUG
 
 BASE_GLIB_LIBS = gio-$(GLIB_APIVERSION).lib gobject-$(GLIB_APIVERSION).lib gmodule-$(GLIB_APIVERSION).lib glib-$(GLIB_APIVERSION).lib
 CFLAGS = $(TESTS_CFLAGS_ADD) /I$(TOP_SRCDIR) /W3 /we4013 /FImsvc_recommended_pragmas.h /DHAVE_CONFIG_H
-LDFLAGS = /link $(LDFLAGS_ARCH) $(BASE_GLIB_LIBS)
-LDFLAGS_DLL = /link $(LDFLAGS_ARCH) /DLL /out:$@ /implib:$*-$(GI_APIVERSION).lib $(BASE_GLIB_LIBS)
+LDFLAGS = /link $(LDFLAGS_ARCH) $(BASE_GLIB_LIBS) /DEBUG /opt:noref
+LDFLAGS_DLL = /link $(LDFLAGS_ARCH) /DLL /out:$@ /implib:$*-$(GI_APIVERSION).lib $(BASE_GLIB_LIBS) /DEBUG /opt:noref
 
 # Special CFLAGS for Regress test
 REGRESS_CFLAGS = -DREGRESS_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f" -DREGRESS_SOME_CHAR='c'
@@ -249,6 +249,7 @@ warn_tests_log.txt:
 	@-echo Runinng warn tests...
 	@-copy GObject-$(GLIB_APIVERSION).gir $(TOP_SRCDIR)\gir
 	@-copy GLib-$(GLIB_APIVERSION).gir $(TOP_SRCDIR)\gir
+	@-set TOP_BUILDDIR=../..
 	@-for %a in ($(TOP_SRCDIR)\tests\warn\*.h) do if not "%a" == "$(TOP_SRCDIR)\tests\warn\common.h" $(PYTHON) $(TOP_SRCDIR)\tests\warn\warningtester.py %a >> $@
 	@-del $(TOP_SRCDIR)\gir\GObject-$(GLIB_APIVERSION).gir
 	@-del $(TOP_SRCDIR)\gir\GLib-$(GLIB_APIVERSION).gir
@@ -285,6 +286,7 @@ clean:
 	@-rmdir /s /q Regress-$(GI_APIVERSION)-C
 	@-for %a in ($(built_test_typelibs)) do @del %a
 	@-for %a in ($(built_test_girs)) do @del %a
+	@-del /f/q *.ilk
 	@-del /f/q *.lib
 	@-del /f/q *.exp
 	@-del /f/q *.dll
