@@ -1,7 +1,9 @@
-# Common Utility NMake Makefile Template
-# Used to Generate Introspection files for various Projects
+# Common NMake Makefile module for checking the build environment is sane
+# for building introspection files under MSVC/NMake.
+# This can be copied from $(gi_srcroot)\build\win32 for GNOME items
+# that support MSVC builds and introspection under MSVC.
 
-# Can Override with env vars as needed
+# Can override with env vars as needed
 # You will need to have built gobject-introspection for this to work.
 # Change or pass in or set the following to suit your environment
 

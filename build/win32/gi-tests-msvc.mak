@@ -4,8 +4,18 @@
 
 !include gi-build-common-msvc.mak
 
+!if "$(CFG)" == "release"
+!if "$(VSVER)" == "9" && "$(PLAT)" == "x64"
+TESTS_CFLAGS_ADD = /MD /O1 /Oi
+!else
+TESTS_CFLAGS_ADD = $(CFLAGS_ADD)
+!endif
+!else
+TESTS_CFLAGS_ADD = /MDd /Od /Zi /DG_ENABLE_DEBUG
+!endif
+
 BASE_GLIB_LIBS = gio-$(GLIB_APIVERSION).lib gobject-$(GLIB_APIVERSION).lib gmodule-$(GLIB_APIVERSION).lib glib-$(GLIB_APIVERSION).lib
-CFLAGS = $(CFLAGS_ADD) /I$(TOP_SRCDIR) /W3 /we4013 /FImsvc_recommended_pragmas.h /DHAVE_CONFIG_H
+CFLAGS = $(TESTS_CFLAGS_ADD) /I$(TOP_SRCDIR) /W3 /we4013 /FImsvc_recommended_pragmas.h /DHAVE_CONFIG_H
 LDFLAGS = /link $(LDFLAGS_ARCH) $(BASE_GLIB_LIBS)
 LDFLAGS_DLL = /link $(LDFLAGS_ARCH) /DLL /out:$@ /implib:$*-$(GI_APIVERSION).lib $(BASE_GLIB_LIBS)
 
