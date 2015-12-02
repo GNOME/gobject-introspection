@@ -267,6 +267,7 @@ currently-scanned namespace is first."""
                 raise ValueError('filter: "%s" exited: %d with error: %s' %
                                  (self._symbol_filter_cmd, proc.returncode, err))
             name = proc_name.decode('ascii')
+            name = name.strip()
 
         matches = []  # Namespaces which might contain this name
         unprefixed_namespaces = []  # Namespaces with no prefix, last resort
@@ -331,7 +332,7 @@ raise ValueError."""
             if proc.returncode:
                 raise ValueError('filter: "%s" exited: %d with error: %s' %
                                  (self._identifier_filter_cmd, proc.returncode, err))
-            ident = proc_ident.decode('ascii')
+            ident = proc_ident.decode('ascii').strip()
 
         hidden = ident.startswith('_')
         if hidden:
