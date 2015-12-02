@@ -7,8 +7,8 @@
 # You will need to have built gobject-introspection for this to work.
 # Change or pass in or set the following to suit your environment
 
-!if "$(BASEDIR)" == ""
-BASEDIR = ..\..\..\vs$(VSVER)\$(PLAT)
+!if "$(PREFIX)" == ""
+PREFIX = ..\..\..\vs$(VSVER)\$(PLAT)
 !endif
 
 # Note: The PYTHON must be the Python release series that was used to build
@@ -26,10 +26,10 @@ PYTHON=python
 
 GIR_SUBDIR = share\gir-1.0
 GIR_TYPELIBDIR = lib\girepository-1.0
-G_IR_SCANNER = $(BASEDIR)\bin\g-ir-scanner
-G_IR_COMPILER = $(BASEDIR)\bin\g-ir-compiler.exe
-G_IR_INCLUDEDIR = $(BASEDIR)\$(GIR_SUBDIR)
-G_IR_TYPELIBDIR = $(BASEDIR)\$(GIR_TYPELIBDIR)
+G_IR_SCANNER = $(PREFIX)\bin\g-ir-scanner
+G_IR_COMPILER = $(PREFIX)\bin\g-ir-compiler.exe
+G_IR_INCLUDEDIR = $(PREFIX)\$(GIR_SUBDIR)
+G_IR_TYPELIBDIR = $(PREFIX)\$(GIR_TYPELIBDIR)
 
 VALID_PKG_CONFIG_PATH = FALSE
 

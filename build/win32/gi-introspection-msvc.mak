@@ -56,22 +56,22 @@ all: setgirbuildenv $(built_install_girs) $(built_install_typelibs) $(bundled_gi
 
 glib_list:
 	@-echo Generating file list for GLib...
-	@-echo $(BASEDIR)\lib\glib-2.0\include\glibconfig.h> $@
-	@-for /f %%a in ('dir /b $(BASEDIR)\include\glib-2.0\glib\*.h') do @echo $(BASEDIR)\include\glib-2.0\glib\%%a>> $@
-	@-echo $(BASEDIR)\include\glib-2.0\gobject\glib-types.h>> $@
+	@-echo $(PREFIX)\lib\glib-2.0\include\glibconfig.h> $@
+	@-for /f %%a in ('dir /b $(PREFIX)\include\glib-2.0\glib\*.h') do @echo $(PREFIX)\include\glib-2.0\glib\%%a>> $@
+	@-echo $(PREFIX)\include\glib-2.0\gobject\glib-types.h>> $@
 	@-echo $(TOP_SRCDIR)\gir\glib-2.0.c>> $@
 
 gobject_list:
 	@-echo Generating file list for GObject...
 	@-type NUL > $@
-	@-for /f %%a in ('dir /b $(BASEDIR)\include\glib-2.0\gobject\*.h') do @if not %%a == glib-types.h @echo $(BASEDIR)\include\glib-2.0\gobject\%%a>> $@
+	@-for /f %%a in ('dir /b $(PREFIX)\include\glib-2.0\gobject\*.h') do @if not %%a == glib-types.h @echo $(PREFIX)\include\glib-2.0\gobject\%%a>> $@
 	@-echo $(TOP_SRCDIR)\gir\gobject-2.0.c>> $@
 
 gio_list:
 	@-echo Generating file list for GIO...
 	@-type NUL > $@
-	@-for /f %%a in ('dir /b $(BASEDIR)\include\gio-win32-2.0\gio\*.h') do @echo $(BASEDIR)\include\gio-win32-2.0\gio\%%a>> $@
-	@-for /f %%a in ('dir /b $(BASEDIR)\include\glib-2.0\gio\*.h') do @if not %%a == gsettingsbackend.h @echo $(BASEDIR)\include\glib-2.0\gio\%%a>> $@
+	@-for /f %%a in ('dir /b $(PREFIX)\include\gio-win32-2.0\gio\*.h') do @echo $(PREFIX)\include\gio-win32-2.0\gio\%%a>> $@
+	@-for /f %%a in ('dir /b $(PREFIX)\include\glib-2.0\gio\*.h') do @if not %%a == gsettingsbackend.h @echo $(PREFIX)\include\glib-2.0\gio\%%a>> $@
 	@-echo $(TOP_SRCDIR)\gir\gio-2.0.c>> $@
 
 gi_list:
@@ -90,8 +90,8 @@ GLib-$(GLIB_APIVERSION).gir: glib_list
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GLib --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --pkg=glib-$(GLIB_APIVERSION) --include=win32-$(GI_APIVERSION) --library=glib-2.0 --library=gobject-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --symbol-prefix=g	\
-	--symbol-prefix=glib --c-include="glib.h" -I$(BASEDIR)\include\glib-$(GLIB_APIVERSION)	\
-	-I$(BASEDIR)\lib\glib-2.0\include -I$(BASEDIR)\include -DGETTEXT_PACKAGE=Dummy	\
+	--symbol-prefix=glib --c-include="glib.h" -I$(PREFIX)\include\glib-$(GLIB_APIVERSION)	\
+	-I$(PREFIX)\lib\glib-2.0\include -I$(PREFIX)\include -DGETTEXT_PACKAGE=Dummy	\
 	-DGLIB_COMPILATION -D__G_I18N_LIB_H__ --filelist=glib_list -o $@
 
 GModule-$(GLIB_APIVERSION).gir: GLib-$(GLIB_APIVERSION).gir
@@ -100,8 +100,8 @@ GModule-$(GLIB_APIVERSION).gir: GLib-$(GLIB_APIVERSION).gir
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GModule --nsversion=2.0	\
 	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gmodule-$(GLIB_APIVERSION) --library=gmodule-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --c-include="gmodule.h"	\
-	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include -I$(BASEDIR)\include	\
-	$(BASEDIR)\include\glib-2.0\gmodule.h $(TOP_SRCDIR)\gir\gmodule-2.0.c -o $@
+	-I$(PREFIX)\include\glib-2.0 -I$(PREFIX)\lib\glib-2.0\include -I$(PREFIX)\include	\
+	$(PREFIX)\include\glib-2.0\gmodule.h $(TOP_SRCDIR)\gir\gmodule-2.0.c -o $@
 
 GObject-$(GLIB_APIVERSION).gir: gobject_list GModule-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
@@ -109,7 +109,7 @@ GObject-$(GLIB_APIVERSION).gir: gobject_list GModule-$(GLIB_APIVERSION).gir
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GObject --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gobject-$(GLIB_APIVERSION) --library=gobject-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --c-include="glib-gobject.h"	\
-	-I$(BASEDIR)/include/glib-2.0 -I$(BASEDIR)/lib/glib-2.0/include -I$(BASEDIR)/include	\
+	-I$(PREFIX)/include/glib-2.0 -I$(PREFIX)/lib/glib-2.0/include -I$(PREFIX)/include	\
 	-DGOBJECT_COMPILATION --filelist=gobject_list -o $@
 
 Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
@@ -119,8 +119,8 @@ Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
 	--no-libtool --pkg=gio-$(GLIB_APIVERSION) --pkg=gio-windows-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
 	--library=gio-2.0 --external-library --reparse-validate --warn-all	\
 	--identifier-prefix=G --include=GLib-$(GLIB_APIVERSION) --c-include="gio/gio.h" -DGIO_COMPILATION	\
-	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include	\
-	-I$(BASEDIR)\include --filelist=gio_list -o $@
+	-I$(PREFIX)\include\glib-2.0 -I$(PREFIX)\lib\glib-2.0\include	\
+	-I$(PREFIX)\include --filelist=gio_list -o $@
 
 GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir
 	@-echo Generating $@...
@@ -128,8 +128,8 @@ GIRepository-$(GLIB_APIVERSION).gir: gi_list GObject-$(GLIB_APIVERSION).gir
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GIRepository --nsversion=$(GLIB_APIVERSION)	\
 	--identifier-prefix=GI --symbol-prefix=g --c-include="girepository.h" --add-include-path=.	\
 	--no-libtool --pkg=gobject-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
-	--library=girepository-1.0 -I$(TOP_SRCDIR)\girepository -I$(TOP_SRCDIR) -I$(BASEDIR)\include 	\
-	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include --filelist=gi_list	\
+	--library=girepository-1.0 -I$(TOP_SRCDIR)\girepository -I$(TOP_SRCDIR) -I$(PREFIX)\include 	\
+	-I$(PREFIX)\include\glib-2.0 -I$(PREFIX)\lib\glib-2.0\include --filelist=gi_list	\
 	-DGI_COMPILATION -o $@
 
 # Bundled cairo-1.0.gir.in processing
