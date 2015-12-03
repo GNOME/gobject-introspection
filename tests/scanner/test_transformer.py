@@ -46,12 +46,20 @@ def load_namespace_from_source_string(namespace, source):
 
 
 class TestIdentifierFilter(unittest.TestCase):
-    def test_underscore_t_sed_filter(self):
-        cmd = r"sed " \
-              r"-e 's/^test_t$/TestContext/' " \
-              r"-e 's/\(.*\)_t$/\1/' " \
-              r"-e 's/^test_/Test_/' " \
-              r"-e 's/_\([a-z]\)/" + '\\u' + r"\1/g'"
+    def test_underscore_t_identifier_filter(self):
+        cmd = r"""awk '{""" \
+              r"""  sub(/^test_t$/, "TestContext"); """ \
+              r"""  sub(/_t$/, ""); """ \
+              r"""  sub(/^test_/, "Test_"); """ \
+              r"""  head = ""; """ \
+              r"""  tail = $0; """ \
+              r"""  while(match(tail,/_[[:lower:]]/)) { """ \
+              r"""    tgt = toupper(substr(tail,RSTART+1,1)); """ \
+              r"""    head = head substr(tail,1,RSTART-1) tgt; """\
+              r"""    tail = substr(tail,RSTART+2); """\
+              r"""  } """ \
+              r"""  print head tail """ \
+              r"""}'"""
 
         namespace = ast.Namespace('Test', '1.0')
         xformer = Transformer(namespace, identifier_filter_cmd=cmd)
