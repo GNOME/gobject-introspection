@@ -7,6 +7,7 @@ import unittest
 import tempfile
 import os
 import sys
+import textwrap
 
 if sys.version_info.major < 3:
     import __builtin__ as builtins
@@ -46,12 +47,17 @@ def load_namespace_from_source_string(namespace, source):
 
 
 class TestIdentifierFilter(unittest.TestCase):
-    def test_underscore_t_sed_filter(self):
-        cmd = r"sed " \
-              r"-e 's/^test_t$/TestContext/' " \
-              r"-e 's/\(.*\)_t$/\1/' " \
-              r"-e 's/^test_/Test_/' " \
-              r"-e 's/_\([a-z]\)/" + '\\u' + r"\1/g'"
+    def test_underscore_t_identifier_filter(self):
+        cmd = textwrap.dedent(r"""
+              python -c '
+              import sys, re
+              for line in sys.stdin:
+                  line = re.sub(r"^test_t$", "TestContext", line)
+                  line = re.sub(r"_t$", "", line)
+                  line = re.sub(r"^test_", "Test_", line)
+                  line = re.sub(r"_([a-z])", lambda m: m.group(1).title(),
+                                line)
+                  sys.stdout.write(line)'""")
 
         namespace = ast.Namespace('Test', '1.0')
         xformer = Transformer(namespace, identifier_filter_cmd=cmd)
