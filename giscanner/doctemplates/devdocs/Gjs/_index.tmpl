@@ -1,3 +1,5 @@
+<%namespace name="doc" file="_doc.tmpl"/>
+
 <%
   ancestors = []
   if isinstance(node, ast.Class):
@@ -45,6 +47,15 @@
   % endif
 </%def>
 
+<%def name="format_function_cell(m)">
+  <td class="${doc.deprecated_class(m)}">
+    <a href="#${formatter.make_anchor(m)}">
+      ${formatter.format_function_name(m)}<!-- no space
+    --></a><!-- no space
+    -->(${formatter.format_in_parameters(m)})
+  </td>
+</%def>
+
 % if should_render('static_methods', 'constructors', 'methods'):
   <h2 id="index-methods">Methods</h2>
   ${inherited('static_methods', 'constructors', 'methods')}
@@ -53,7 +64,7 @@
     methods = static_methods + getattr(node, 'methods', [])
   %>
   % if methods:
-    <table>
+    <table class="index">
       <tbody>
       % for m in methods:
         <tr>
@@ -62,12 +73,7 @@
           % else:
             <td></td>
           % endif
-          <td>
-            <a href="#${formatter.make_anchor(m)}">
-              ${formatter.format_function_name(m)}<!-- no space
-            --></a><!-- no space
-            -->(${formatter.format_in_parameters(m)})
-          </td>
+          ${format_function_cell(m)}
         </tr>
       % endfor
       </tbody>
@@ -83,12 +89,7 @@
       <tbody>
       % for m in node.virtual_methods:
         <tr>
-          <td>
-            <a href="#${formatter.make_anchor(m)}">
-              ${formatter.format_function_name(m)}<!-- no space
-            --></a><!-- no space
-            -->(${formatter.format_in_parameters(m)})
-          </td>
+          ${format_function_cell(m)}
         </tr>
       % endfor
       </tbody>
@@ -111,7 +112,9 @@
       <tbody>
       % for p in node.properties:
         <tr>
-          <td><a href="#${formatter.make_anchor(p)}">${p.name}</a></td>
+          <td class="${doc.deprecated_class(p)}">
+            <a href="#${formatter.make_anchor(p)}">${p.name}</a>
+          </td>
           <td>${formatter.format_type(p.type)}</td>
           <td>${formatter.format_property_flags(p, abbrev=True)}</td>
         </tr>
@@ -129,7 +132,7 @@
       <tbody>
       % for s in node.signals:
         <tr>
-          <td>
+          <td class="${doc.deprecated_class(s)}">
             <a href="#${formatter.make_anchor(s)}">${s.name}</a><!-- no space
             -->(${formatter.format_in_parameters(s)})
           </td>
@@ -156,7 +159,11 @@
       <tbody>
       % for f in non_private_fields:
         <tr>
-          <td><span class="entry" href="#${formatter.make_anchor(f)}">${f.name}</span></td>
+          <td class="${doc.deprecated_class(f)}">
+            <span class="entry" href="#${formatter.make_anchor(f)}">
+              ${f.name}
+            </span>
+          </td>
           <td>${formatter.format_type(f.type)}</td>
           <td>${formatter.format_property_flags(f, abbrev=True)}</td>
           ## Fields almost never warrant a detailed entry, we'll just make this

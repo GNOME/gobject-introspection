@@ -4,7 +4,8 @@
   <h2>Signal Details</h2>
   % for s in node.signals:
     <h3>
-      <span class="entry signal" id="${formatter.make_anchor(s)}">
+      <span class="entry signal ${doc.deprecated_class(s)}"
+            id="${formatter.make_anchor(s)}">
         ${s.name}<!-- no space
       --></span><!--
       -->(${formatter.format_in_parameters(s)})

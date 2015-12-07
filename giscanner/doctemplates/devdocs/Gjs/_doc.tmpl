@@ -23,3 +23,9 @@
     ${formatter.format(node, node.doc)}
   % endif
 </%def>
+
+<%def name="deprecated_class(node)">
+  % if node.deprecated:
+    deprecated
+  % endif
+</%def>

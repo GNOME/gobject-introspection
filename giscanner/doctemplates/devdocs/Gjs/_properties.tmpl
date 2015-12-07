@@ -10,7 +10,8 @@
 % if getattr(node, 'properties', []):
   <h2>Property Details</h2>
   % for p in node.properties:
-    <h3 class="entry property" id="${formatter.make_anchor(p)}">
+    <h3 class="entry property ${doc.deprecated_class(p)}"
+        id="${formatter.make_anchor(p)}">
       ${p.name | dash_to_underscore}
     </h3>
     <dl>

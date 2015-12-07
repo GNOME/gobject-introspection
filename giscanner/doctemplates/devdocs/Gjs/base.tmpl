@@ -2,7 +2,9 @@
 <html>
 <body>
   <section>
-    <h1 class="${page_kind}">${formatter.format_page_name(node)}</h1>
+    <h1 class="${page_kind} ${doc.deprecated_class(node)}">
+      ${formatter.format_page_name(node)}
+    </h1>
     <%include file="_index.tmpl"/>
     <h2>Details</h2>
     ${doc.format_documentation(node)}
