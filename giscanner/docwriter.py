@@ -506,6 +506,8 @@ class DocFormatter(object):
             return node.name.replace('-', '_')
         elif node.name:
             return to_underscores(node.name)
+        elif isinstance(node, ast.Function) and node.moved_to:
+            return to_underscores(node.moved_to)
         elif isinstance(node, ast.Callback):
             return 'callback'
         elif isinstance(node, ast.Union):
