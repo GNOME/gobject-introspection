@@ -418,6 +418,9 @@ class DocFormatter(object):
     def format_type(self, type_, link=False):
         raise NotImplementedError
 
+    def format_value(self, node):
+        raise NotImplementedError
+
     def format_page_name(self, node):
         if isinstance(node, ast.Namespace):
             return node.name
@@ -1090,6 +1093,14 @@ class DevDocsFormatterGjs(DocFormatterGjs):
         if name == "GVariant":
             return "GLib.Variant"
         return name
+
+    def format_value(self, node):
+        # Constants only have fundamental types?
+        type_ = node.value_type.target_fundamental
+        if type_ in ["utf8", "gunichar", "filename"]:
+            return repr(node.value)
+            # escapes quotes in the string; ought to be the same in Javascript
+        return node.value
 
     def format(self, node, doc):
         if doc is None:
