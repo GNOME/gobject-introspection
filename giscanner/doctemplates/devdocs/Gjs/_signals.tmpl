@@ -1,3 +1,4 @@
+<%namespace name="doc" file="_doc.tmpl"/>
 <%namespace name="method" file="_method.tmpl"/>
 % if getattr(node, 'signals', []):
   <h2>Signal Details</h2>
@@ -13,8 +14,6 @@
       <dd>${formatter.format_signal_flags(s)}</dd>
       ${method.describe_parameters(s)}
     </dl>
-    % if s.doc:
-      ${formatter.format(node, s.doc)}
-    % endif
+    ${doc.format_documentation(s)}
   % endfor
 % endif

@@ -1,3 +1,5 @@
+<%namespace name="doc" file="_doc.tmpl"/>
+
 <%def name="describe_parameters(m, static=False, virtual=False)">
   <dl>
     % if static:
@@ -44,5 +46,5 @@
     -->(${formatter.format_in_parameters(m)})
   </h3>
   ${describe_parameters(m, static, virtual)}
-  ${formatter.format(m, m.doc)}
+  ${doc.format_documentation(m)}
 </%def>

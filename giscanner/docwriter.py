@@ -1160,6 +1160,8 @@ class DevDocsFormatterGjs(DocFormatterGjs):
                                          pluralize=pluralize)
 
     def format_inline(self, node, para):
+        if para is None:
+            return ''
         cleaned_up_gtkdoc = super(DevDocsFormatterGjs, self).format_inline(node, para)
         return markdown.markdown(cleaned_up_gtkdoc, extensions=[InlineMarkdown()])
 

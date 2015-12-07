@@ -1,10 +1,11 @@
+<%namespace name="doc" file="_doc.tmpl"/>
 <html>
 <body>
   <section>
     <h1 class="${page_kind}">${formatter.format_page_name(node)}</h1>
     <%include file="_index.tmpl"/>
     <h2>Details</h2>
-    ${formatter.format(node, node.doc)}
+    ${doc.format_documentation(node)}
     <%include file="_staticmethods.tmpl"/>
     <%include file="_methods.tmpl"/>
     <%include file="_vfuncs.tmpl"/>

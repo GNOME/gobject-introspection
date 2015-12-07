@@ -107,6 +107,7 @@ nobase_dist_template_DATA =		\
 	giscanner/doctemplates/mallard/Gjs/record.tmpl		\
 	giscanner/doctemplates/mallard/Gjs/signal.tmpl		\
 	giscanner/doctemplates/mallard/Gjs/vfunc.tmpl		\
+	giscanner/doctemplates/devdocs/Gjs/_doc.tmpl		\
 	giscanner/doctemplates/devdocs/Gjs/_index.tmpl		\
 	giscanner/doctemplates/devdocs/Gjs/_method.tmpl		\
 	giscanner/doctemplates/devdocs/Gjs/_methods.tmpl	\
