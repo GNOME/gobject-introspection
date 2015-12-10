@@ -50,6 +50,7 @@ dist_make_DATA = Makefile.introspection
 EXTRA_DIST += 			\
 	COPYING.LGPL		\
 	COPYING.GPL		\
+	autogen.sh		\
 	CONTRIBUTORS		\
 	$(pkgconfig_DATA)	\
 	$(man_MANS)		\
