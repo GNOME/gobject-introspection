@@ -3,16 +3,34 @@
   if isinstance(node, ast.Class):
     ancestors = formatter.get_inheritable_types(node)
 
+  fields = getattr(node, 'fields', [])
+  extra_fields = [getattr(f.anonymous_node, 'fields', []) for f in fields
+    if f.anonymous_node is not None]
+  extra_fields = [field for sublist in extra_fields for field in sublist]
+  non_private_fields = [f for f in fields + extra_fields
+      if not formatter.is_private_field(node, f)]
+
   def get_ancestor_counts(*kinds):
     counts = {}
     for a in ancestors:
-      count = sum([len(getattr(a, kind, [])) for kind in kinds])
+      count = 0
+      for kind in kinds:
+        if kind == 'fields':
+          count += len(non_private_fields)
+        else:
+          count += len(getattr(a, kind, []))
       if count:
         counts[a] = count
     return counts
 
   def should_render(*kinds):
-    has_nonempty = any([getattr(node, kind, []) for kind in kinds])
+    has_nonempty = False
+    for kind in kinds:
+      if kind == 'fields':
+        if non_private_fields:
+          has_nonempty = True
+      elif getattr(node, kind, []):
+        has_nonempty = True
     return has_nonempty or get_ancestor_counts(*kinds)
 %>
 
@@ -125,7 +143,7 @@
 % if should_render('fields'):
   <h2 id="index-fields">Fields</h2>
   ${inherited('fields')}
-  % if getattr(node, 'fields', []):
+  % if non_private_fields:
     <table>
       <thead>
         <tr>
@@ -136,7 +154,7 @@
         </tr>
       </thead>
       <tbody>
-      % for f in node.fields:
+      % for f in non_private_fields:
         <tr>
           <td><span class="entry" href="#${formatter.make_anchor(f)}">${f.name}</span></td>
           <td>${formatter.format_type(f.type)}</td>

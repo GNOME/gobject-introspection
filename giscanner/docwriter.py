@@ -543,6 +543,37 @@ class DocFormatter(object):
         types += [t for t in parent_chain if t is not node]
         return types
 
+    def is_private_field(self, node, f):
+        """Returns whether @f is a private field of @node (including a heuristic
+        that tries to determine whether the field is the parent instance field
+        or a private pointer but not marked as such.)"""
+
+        if f.private:
+            return True
+        if f.anonymous_node:
+            return True
+        if f.name == 'g_type_instance':
+            return True  # this field on GObject is not exposed
+
+        field_typenode = self._transformer.lookup_typenode(f.type)
+        if not field_typenode:
+            return False
+
+        if getattr(field_typenode, 'disguised', False):
+            return True  # guess that it's a pointer to a private struct
+            # this also catches fields of type GdkAtom, since that is disguised
+            # as well. Not sure whether that's correct or not.
+
+        if not isinstance(node, ast.Class):
+            return False  # parent instance heuristics only apply to classes
+
+        if node.parent_type:
+            parent_typenode = self._transformer.lookup_typenode(node.parent_type)
+            if field_typenode == parent_typenode:
+                return True  # guess that it's a parent instance field
+
+        return False
+
     def format_prerequisites(self, node):
         assert isinstance(node, ast.Interface)
 
