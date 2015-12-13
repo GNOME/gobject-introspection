@@ -1164,11 +1164,11 @@ class DevDocsFormatterGjs(DocFormatterGjs):
         ns = node.namespace
         slug = ns.name.lower() + str(ns.version).replace('.', '')
         if not self.should_render_node(node):
-            target = '../%s/%s' % (slug, make_page_id(node.parent))
+            target = 'gir:///%s/%s' % (slug, make_page_id(node.parent))
             return self._write_xref_markdown(target, self.make_anchor(node),
                                              self.format_page_name(node.parent),
                                              pluralize=pluralize)
-        target = '../%s/%s' % (slug, make_page_id(node))
+        target = 'gir:///%s/%s' % (slug, make_page_id(node))
         return self._write_xref_markdown(target, None,
                                          self.format_page_name(node),
                                          pluralize=pluralize)
