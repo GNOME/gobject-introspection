@@ -2,7 +2,7 @@
 <html>
 <body>
   <section>
-    <h1 class="${page_kind} ${doc.deprecated_class(node)}">
+    <h1 class="${page_kind} ${doc.deprecated_class(node)} ${self.extra_class()}">
       ${formatter.format_page_name(node)}
     </h1>
     <%include file="_index.tmpl"/>
@@ -17,3 +17,5 @@
   </section>
 </body>
 </html>
+
+<%def name="extra_class()"/>

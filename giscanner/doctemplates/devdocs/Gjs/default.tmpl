@@ -8,3 +8,11 @@
     </dd>
   </dl>
 % endif
+
+## This should belong in get_node_kind(), but we don't want to change the way
+## all the other templates work.
+<%def name="extra_class()">
+  % if isinstance(node, ast.Constant):
+    constant
+  % endif
+</%def>
