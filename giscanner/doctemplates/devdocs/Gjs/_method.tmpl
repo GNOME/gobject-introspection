@@ -9,11 +9,15 @@
       <dt>Type:</dt>
       <dd>Virtual</dd>
     % endif
-    % if m.parameters:
+    <%
+      in_params = formatter.get_in_parameters(m)
+      out_params = formatter.get_out_parameters(m)
+    %>
+    % if in_params:
       <dt>Parameters:</dt>
       <dd>
         <ul>
-          % for p in m.parameters:
+          % for p in in_params:
             <li>
               <strong>${p.argname}</strong>
               (<code>${formatter.format_type(p.type)}</code>)
@@ -25,13 +29,22 @@
         </ul>
       </dd>
     % endif
-    % if m.retval.type != ast.TYPE_NONE:
+    % if out_params:
       <dt>Returns:</dt>
       <dd>
-        (<code>${formatter.format_type(m.retval.type)}</code>)
-        % if m.retval.doc:
-          ${formatter.format_inline(m, m.retval.doc)}
-        % endif
+        <ul>
+          % for p in out_params:
+            <li>
+              % if len(out_params) > 1:
+                <strong>${p.argname}</strong>
+              % endif
+              (<code>${formatter.format_type(p.type)}</code>)
+              % if p.doc:
+                &mdash; ${formatter.format_inline(m, p.doc)}
+              % endif
+            </li>
+          % endfor
+        </ul>
       </dd>
     % endif
   </dl>
