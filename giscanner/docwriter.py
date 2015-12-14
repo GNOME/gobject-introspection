@@ -1155,8 +1155,11 @@ class DevDocsFormatterGjs(DocFormatterGjs):
         if not self.should_render_node(node):
             # Non-toplevel nodes are linked to the main page.
             page = make_page_id(node.parent)
+            name = node.name
+            if isinstance(node, ast.Member):
+                name = name.upper()
             return self._write_xref_markdown(page, self.make_anchor(node),
-                                             page + "." + node.name,
+                                             page + "." + name,
                                              pluralize=pluralize)
         return self._write_xref_markdown(make_page_id(node), pluralize=pluralize)
 
