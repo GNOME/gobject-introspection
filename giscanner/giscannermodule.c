@@ -454,7 +454,9 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 #ifdef _WIN32
   /* The file descriptor passed to us is from the C library Python
    * uses. That is msvcr71.dll for Python 2.5 and msvcr90.dll for
-   * Python 2.6, 2.7, 3.2 etc; and msvcr100.dll for Python 3.3 and later.
+   * Python 2.6, 2.7, 3.2 etc; and msvcr100.dll for Python 3.3 and 3.4.
+   * Python 3.5 and later is built with Visual Studio 2015, which uses
+   * the universal CRT, so we need to deal with urtbase.dll here instead.
    * This code, at least if compiled with mingw, uses
    * msvcrt.dll, so we cannot use the file descriptor directly. So
    * perform appropriate magic.
@@ -465,7 +467,12 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
    * (Not if a build using WDK is used):
    * Python 2.6.x/2.7.x with Visual C++ 2008
    * Python 3.1.x/3.2.x with Visual C++ 2008
-   * Python 3.3+ with Visual C++ 2010
+   * Python 3.3.x/3.4.x with Visual C++ 2010
+   */
+
+  /* XXX: Somehow we cannot use the FD directly on Python 3.5+ even when
+   *      using Visual Studio 2015, so we currently need to use _get_osfhandle() when
+   *      in all cases on Python 3.5+
    */
 
 #if (defined(_MSC_VER) && !defined(USE_WIN_DDK))
@@ -473,7 +480,7 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 #define MSVC_USE_FD_DIRECTLY 1
 #elif (PY_MAJOR_VERSION==3 && PY_MINOR_VERSION<=2 && (_MSC_VER >= 1500 && _MSC_VER < 1600))
 #define MSVC_USE_FD_DIRECTLY 1
-#elif (PY_MAJOR_VERSION==3 && PY_MINOR_VERSION>=3 && (_MSC_VER >= 1600 && _MSC_VER < 1700))
+#elif (PY_MAJOR_VERSION==3 && PY_MINOR_VERSION<=4 && (_MSC_VER >= 1600 && _MSC_VER < 1700))
 #define MSVC_USE_FD_DIRECTLY 1
 #endif
 #endif
@@ -482,14 +489,14 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
   {
 #if defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==5
 #define PYTHON_MSVCRXX_DLL "msvcr71.dll"
-#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==6
-#define PYTHON_MSVCRXX_DLL "msvcr90.dll"
 #elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==7
 #define PYTHON_MSVCRXX_DLL "msvcr90.dll"
-#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 && PY_MINOR_VERSION==2
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 && PY_MINOR_VERSION<=2
 #define PYTHON_MSVCRXX_DLL "msvcr90.dll"
-#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 && PY_MINOR_VERSION>=3
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 &&  PY_MINOR_VERSION<=4
 #define PYTHON_MSVCRXX_DLL "msvcr100.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 && PY_MINOR_VERSION>=5
+#define PYTHON_MSVCRXX_DLL "ucrtbase.dll"
 #else
 #error This Python version not handled
 #endif
