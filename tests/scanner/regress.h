@@ -1044,6 +1044,10 @@ _GI_TEST_EXTERN
 RegressTestFundamentalSubObject *
 regress_test_fundamental_sub_object_new (const char *data);
 
+_GI_TEST_EXTERN
+RegressTestFundamentalObject *
+regress_test_create_fundamental_hidden_class_instance (void);
+
 /* callback */
 typedef void (*RegressTestSimpleCallback) (void);
 typedef void RegressTestNoPtrCallback (void);

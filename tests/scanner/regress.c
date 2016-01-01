@@ -3442,6 +3442,43 @@ regress_test_fundamental_sub_object_new (const char * data)
   return object;
 }
 
+/**/
+
+#define regress_test_fundamental_hidden_sub_object_get_type \
+  _regress_test_fundamental_hidden_sub_object_get_type
+
+typedef struct _RegressTestFundamentalHiddenSubObject RegressTestFundamentalHiddenSubObject;
+typedef struct _GObjectClass                   RegressTestFundamentalHiddenSubObjectClass;
+struct _RegressTestFundamentalHiddenSubObject {
+  RegressTestFundamentalObject parent_instance;
+};
+
+G_DEFINE_TYPE (RegressTestFundamentalHiddenSubObject,
+               regress_test_fundamental_hidden_sub_object,
+               REGRESS_TEST_TYPE_FUNDAMENTAL_OBJECT);
+
+static void
+regress_test_fundamental_hidden_sub_object_init (RegressTestFundamentalHiddenSubObject *object)
+{
+}
+
+static void
+regress_test_fundamental_hidden_sub_object_class_init (RegressTestFundamentalHiddenSubObjectClass *klass)
+{
+}
+
+/**
+ * regress_test_create_fundamental_hidden_class_instance:
+ *
+ * Return value: (transfer full):
+ */
+RegressTestFundamentalObject *
+regress_test_create_fundamental_hidden_class_instance (void)
+{
+  return (RegressTestFundamentalObject *) g_type_create_instance (_regress_test_fundamental_hidden_sub_object_get_type());
+}
+
+
 
 /**
  * regress_test_callback:
