@@ -27,6 +27,7 @@ mkdir $(CopyDir)\include\gobject-introspection-1.0\girepository
 #include "giscanner.vs10.scripts"
 
 mkdir $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\..\tests\gitestmacros.h $(CopyDir)\share\gobject-introspection-1.0\tests
 copy ..\..\..\tests\gimarshallingtests.c $(CopyDir)\share\gobject-introspection-1.0\tests
 copy ..\..\..\tests\gimarshallingtests.h $(CopyDir)\share\gobject-introspection-1.0\tests
 copy ..\..\..\tests\scanner\regress.c $(CopyDir)\share\gobject-introspection-1.0\tests
