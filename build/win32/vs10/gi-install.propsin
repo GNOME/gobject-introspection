@@ -26,6 +26,12 @@ mkdir $(CopyDir)\include\gobject-introspection-1.0\girepository
 #include "girepository.vs10.headers"
 #include "giscanner.vs10.scripts"
 
+mkdir $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\..\tests\gimarshallingtests.c $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\..\tests\gimarshallingtests.h $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\..\tests\scanner\regress.c $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\..\tests\scanner\regress.h $(CopyDir)\share\gobject-introspection-1.0\tests
+
 copy $(BinDir)\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner
 copy $(BinDir)\_giscanner.pdb $(CopyDir)\lib\gobject-introspection\giscanner
 
