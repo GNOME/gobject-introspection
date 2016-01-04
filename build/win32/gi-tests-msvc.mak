@@ -56,6 +56,7 @@ built_test_typelibs =	\
 test_programs =	\
 	gitestrepo.exe	\
 	gitestthrows.exe	\
+	giteststructinfo.exe	\
 	gitypelibtest.exe	\
 	gitestoffsets.exe
 
@@ -83,8 +84,8 @@ offsets.dll: $(TOP_SRCDIR)\tests\offsets\offsets.c
 	$(CC) $(CFLAGS) /I$(TOP_SRCDIR)\tests /I$(TOP_SRCDIR)\tests\offsets $(TOP_SRCDIR)\tests\offsets\offsets.c $(LDFLAGS_DLL)
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;2
 
-sletter.dll utility.dll gtkfrob.dll gettype.dll warnlib.dll typedefs.dll:
-	$(CC) $(CFLAGS) /I$(TOP_SRCDIR)\tests $(TOP_SRCDIR)\tests\scanner\$*.c $(LDFLAGS_DLL)
+{$(TOP_SRCDIR)\tests\scanner\}.c{}.dll:
+	$(CC) $(CFLAGS) /I$(TOP_SRCDIR)\tests $< $(LDFLAGS_DLL)
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;2
 
 regress.dll:
@@ -98,12 +99,12 @@ regress.dll:
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;2
 
 # Rules for test programs
-gitestrepo.exe gitestthrows.exe gitypelibtest.exe:
-	$(CC) $(CFLAGS) /I$(TOP_SRCDIR)\girepository $(TOP_SRCDIR)\tests\repository\$*.c $(LDFLAGS) girepository-$(GI_APIVERSION).lib
+{$(TOP_SRCDIR)\tests\repository\}.c{}.exe:
+	$(CC) $(CFLAGS) /I$(TOP_SRCDIR)\girepository $< $(LDFLAGS) girepository-$(GI_APIVERSION).lib
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;1
 
-barapp.exe:
-	$(CC) $(CFLAGS) /I$(TOP_SRCDIR)\girepository -I$(TOP_SRCDIR)\tests $(TOP_SRCDIR)\tests\scanner\$*.c $(LDFLAGS) girepository-$(GI_APIVERSION).lib
+{$(TOP_SRCDIR)\tests\scanner\}.c{}.exe:
+	$(CC) $(CFLAGS) /I$(TOP_SRCDIR)\girepository -I$(TOP_SRCDIR)\tests $< $(LDFLAGS) girepository-$(GI_APIVERSION).lib
 	@-if exist $@.manifest @mt /manifest $@.manifest /outputresource:$@;1
 
 gitestoffsets.exe: gitestoffsets.c

@@ -189,4 +189,5 @@ clean:
 	@-del /f/q gio_list
 	@-del /f/q gobject_list
 	@-del /f/q glib_list
+	@ if exist __pycache__ rmdir /s /q __pycache__
 	@-del /f/q *.pyc
