@@ -262,10 +262,11 @@ currently-scanned namespace is first."""
                                     stderr=subprocess.PIPE,
                                     shell=True)
             _name = name
-            name, err = proc.communicate(name)
+            proc_name, err = proc.communicate(name.encode())
             if proc.returncode:
                 raise ValueError('filter: "%s" exited: %d with error: %s' %
                                  (self._symbol_filter_cmd, proc.returncode, err))
+            name = proc_name.decode('ascii')
 
         matches = []  # Namespaces which might contain this name
         unprefixed_namespaces = []  # Namespaces with no prefix, last resort
