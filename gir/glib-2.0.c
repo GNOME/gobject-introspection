@@ -3201,6 +3201,22 @@
 
 
 /**
+ * G_GNUC_CHECK_VERSION:
+ *
+ * Expands to a a check for a compiler with __GNUC__ defined and a version
+ * greater than or equal to the major and minor numbers provided. For example,
+ * the following would only match on compilers such as GCC 4.8 or newer.
+ *
+ * |[<!-- language="C" -->
+ * #if G_GNUC_CHECK_VERSION(4, 8)
+ * #endif
+ * ]|
+ *
+ * Since: 2.42
+ */
+
+
+/**
  * G_GNUC_CONST:
  *
  * Expands to the GNU C const function attribute if the compiler is gcc.
@@ -24021,7 +24037,7 @@
  * @regex: a #GRegex structure from g_regex_new()
  * @string: (array length=string_len): the string to scan for matches
  * @string_len: the length of @string, or -1 if @string is nul-terminated
- * @start_position: starting index of the string to match
+ * @start_position: starting index of the string to match, in bytes
  * @match_options: match options
  * @match_info: (out) (allow-none): pointer to location where to store
  *     the #GMatchInfo, or %NULL if you do not need it
@@ -24074,7 +24090,7 @@
  * @regex: a #GRegex structure from g_regex_new()
  * @string: (array length=string_len): the string to scan for matches
  * @string_len: the length of @string, or -1 if @string is nul-terminated
- * @start_position: starting index of the string to match
+ * @start_position: starting index of the string to match, in bytes
  * @match_options: match options
  * @match_info: (out) (allow-none): pointer to location where to store
  *     the #GMatchInfo, or %NULL if you do not need it
@@ -24168,8 +24184,8 @@
  * Compiles the regular expression to an internal form, and does
  * the initial setup of the #GRegex structure.
  *
- * Returns: a #GRegex structure. Call g_regex_unref() when you
- *   are done with it
+ * Returns: (nullable): a #GRegex structure or %NULL if an error occured. Call
+ *   g_regex_unref() when you are done with it
  * Since: 2.14
  */
 
@@ -24190,7 +24206,7 @@
  * @regex: a #GRegex structure
  * @string: (array length=string_len): the string to perform matches against
  * @string_len: the length of @string, or -1 if @string is nul-terminated
- * @start_position: starting index of the string to match
+ * @start_position: starting index of the string to match, in bytes
  * @replacement: text to replace each match with
  * @match_options: options for the match
  * @error: location to store the error occurring, or %NULL to ignore errors
@@ -24232,7 +24248,7 @@
  * @regex: a #GRegex structure from g_regex_new()
  * @string: (array length=string_len): string to perform matches against
  * @string_len: the length of @string, or -1 if @string is nul-terminated
- * @start_position: starting index of the string to match
+ * @start_position: starting index of the string to match, in bytes
  * @match_options: options for the match
  * @eval: a function to call for each match
  * @user_data: user data to pass to the function
@@ -24294,7 +24310,7 @@
  * @regex: a #GRegex structure
  * @string: (array length=string_len): the string to perform matches against
  * @string_len: the length of @string, or -1 if @string is nul-terminated
- * @start_position: starting index of the string to match
+ * @start_position: starting index of the string to match, in bytes
  * @replacement: text to replace each match with
  * @match_options: options for the match
  * @error: location to store the error occurring, or %NULL to ignore errors
@@ -24348,7 +24364,7 @@
  * @regex: a #GRegex structure
  * @string: (array length=string_len): the string to split with the pattern
  * @string_len: the length of @string, or -1 if @string is nul-terminated
- * @start_position: starting index of the string to match
+ * @start_position: starting index of the string to match, in bytes
  * @match_options: match time option flags
  * @max_tokens: the maximum number of tokens to split @string into.
  *   If this is less than 1, the string is split completely
@@ -27681,6 +27697,7 @@
  * @from_locale.
  *
  * Returns: a string in plain ASCII
+ * Since: 2.40
  */
 
 
@@ -27977,7 +27994,7 @@
  * Adds a string onto the end of a #GString, expanding
  * it if necessary.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -27989,7 +28006,7 @@
  * Adds a byte onto the end of a #GString, expanding
  * it if necessary.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28007,7 +28024,7 @@
  * the caller's responsibility to ensure that @val has at
  * least @len addressable bytes.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28031,7 +28048,7 @@
  * Converts a Unicode character into UTF-8, and appends it
  * to the string.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28046,7 +28063,7 @@
  * Appends @unescaped to @string, escaped any characters that
  * are reserved in URIs using URI-style escape sequences.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  * Since: 2.16
  */
 
@@ -28072,7 +28089,7 @@
  *
  * Converts all uppercase ASCII letters to lowercase ASCII letters.
  *
- * Returns: passed-in @string pointer, with all the
+ * Returns: (transfer none): passed-in @string pointer, with all the
  *     uppercase characters converted to lowercase in place,
  *     with semantics that exactly match g_ascii_tolower().
  */
@@ -28084,7 +28101,7 @@
  *
  * Converts all lowercase ASCII letters to uppercase ASCII letters.
  *
- * Returns: passed-in @string pointer, with all the
+ * Returns: (transfer none): passed-in @string pointer, with all the
  *     lowercase characters converted to uppercase in place,
  *     with semantics that exactly match g_ascii_toupper().
  */
@@ -28101,7 +28118,7 @@
  * the standard strcpy() function, except that you do not
  * have to worry about having enough space to copy the string.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28214,7 +28231,7 @@
  *
  * Converts a #GString to lowercase.
  *
- * Returns: the #GString
+ * Returns: (transfer none): the #GString
  * Deprecated: 2.2: This function uses the locale-specific
  *     tolower() function, which is almost never the right thing.
  *     Use g_string_ascii_down() or g_utf8_strdown() instead.
@@ -28244,7 +28261,7 @@
  * Removes @len bytes from a #GString, starting at position @pos.
  * The rest of the #GString is shifted down to fill the gap.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28276,7 +28293,7 @@
  * #GBytes does not include this extra nul; i.e. it has length exactly
  * equal to the "len" member.
  *
- * Returns: A newly allocated #GBytes containing contents of @string; @string itself is freed
+ * Returns: (transfer full): A newly allocated #GBytes containing contents of @string; @string itself is freed
  * Since: 2.34
  */
 
@@ -28300,7 +28317,7 @@
  * Inserts a copy of a string into a #GString,
  * expanding it if necessary.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28312,7 +28329,7 @@
  *
  * Inserts a byte into a #GString, expanding it if necessary.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28333,7 +28350,7 @@
  * the caller's responsibility to ensure that @val has at
  * least @len addressable bytes.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28347,7 +28364,7 @@
  * Converts a Unicode character into UTF-8, and insert it
  * into the string at the given position.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28387,7 +28404,7 @@
  *
  * Overwrites part of a string, lengthening it if necessary.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  * Since: 2.14
  */
 
@@ -28402,7 +28419,7 @@
  * Overwrites part of a string, lengthening it if necessary.
  * This function will work with embedded nuls.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  * Since: 2.14
  */
 
@@ -28415,7 +28432,7 @@
  * Adds a string on to the start of a #GString,
  * expanding it if necessary.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28427,7 +28444,7 @@
  * Adds a byte onto the start of a #GString,
  * expanding it if necessary.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28445,7 +28462,7 @@
  * it is the caller's responsibility to ensure that
  * @val has at least @len addressable bytes.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28457,7 +28474,7 @@
  * Converts a Unicode character into UTF-8, and prepends it
  * to the string.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28486,7 +28503,7 @@
  * of the newly added area are undefined. (However, as
  * always, string->str[string->len] will be a nul byte.)
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28541,7 +28558,7 @@
  *
  * Cuts off the end of the GString, leaving the first @len bytes.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  */
 
 
@@ -28551,7 +28568,7 @@
  *
  * Converts a #GString to uppercase.
  *
- * Returns: @string
+ * Returns: (transfer none): @string
  * Deprecated: 2.2: This function uses the locale-specific
  *     toupper() function, which is almost never the right thing.
  *     Use g_string_ascii_up() or g_utf8_strup() instead.
@@ -31403,7 +31420,7 @@
  *     If @len < 0, then the string is nul-terminated.
  * @items_read: (out caller-allocates) (optional): location to store number of
  *     characters read, or %NULL.
- * @items_written: (out caller-allocates) (optioanl): location to store number
+ * @items_written: (out caller-allocates) (optional): location to store number
  *     of bytes written or %NULL. The value here stored does not include the
  *     trailing 0 byte.
  * @error: location to store the error occurring, or %NULL to ignore
