@@ -229,12 +229,6 @@ class CCompiler(object):
             extra_postargs.append('-Wall')
         extra_postargs.append(self._cflags_no_deprecation_warnings)
 
-        # Disable warnings from combining _FORTIFY_SOURCE (from
-        # distutils.sysconfig) and -O0 (potentially provided in CFLAGS by the
-        # user).
-        if isinstance(self.compiler, UnixCCompiler):
-            extra_postargs.append('-Wno-cpp')
-
         includes.extend(include_paths)
         extra_postargs.extend(extra_args)
 
