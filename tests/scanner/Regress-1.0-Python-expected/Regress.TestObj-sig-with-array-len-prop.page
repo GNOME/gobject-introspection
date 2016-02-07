@@ -13,7 +13,9 @@
   <synopsis><code mime="text/x-python">
 def callback(test_obj, arr, len, user_param1, ...)
   </code></synopsis>
-  <p>This test signal similar to GSettings::change-event</p>
+<p>This test signal similar to GSettings::change-event.
+You can use this with <link xref="Regress.TestObj.emit_sig_with_array_len_prop"/>, or
+raise from the introspection client language.</p>
 
 <terms>
 <item>

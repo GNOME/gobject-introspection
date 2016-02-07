@@ -3056,6 +3056,17 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="emit_sig_with_array_len_prop"
+              c:identifier="regress_test_obj_emit_sig_with_array_len_prop">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="emit_sig_with_foreign_struct"
               c:identifier="regress_test_obj_emit_sig_with_foreign_struct">
         <return-value transfer-ownership="none">
@@ -3628,7 +3639,9 @@ raise an error.</doc>
         </return-value>
       </glib:signal>
       <glib:signal name="sig-with-array-len-prop" when="last">
-        <doc xml:space="preserve">This test signal similar to GSettings::change-event</doc>
+        <doc xml:space="preserve">This test signal similar to GSettings::change-event.
+You can use this with regress_test_obj_emit_sig_with_array_len_prop(), or
+raise from the introspection client language.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>

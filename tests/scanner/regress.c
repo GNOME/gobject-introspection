@@ -2329,7 +2329,9 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
    * @arr: (array length=len) (element-type uint) (allow-none): numbers, or %NULL
    * @len: length of @arr, or 0
    *
-   * This test signal similar to GSettings::change-event
+   * This test signal similar to GSettings::change-event.
+   * You can use this with regress_test_obj_emit_sig_with_array_len_prop(), or
+   * raise from the introspection client language.
    */
   regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_LEN_PROP] =
     g_signal_new ("sig-with-array-len-prop",
@@ -2754,6 +2756,16 @@ regress_test_obj_emit_sig_with_uint64 (RegressTestObj *obj)
   g_signal_emit_by_name (obj, "sig-with-uint64-prop", G_MAXUINT64, &ret);
   g_object_unref (obj_param);
   g_assert (ret == G_MAXUINT64);
+}
+
+/**
+ * regress_test_obj_emit_sig_with_array_len_prop:
+ */
+void
+regress_test_obj_emit_sig_with_array_len_prop (RegressTestObj *obj)
+{
+  int arr[] = { 0, 1, 2, 3, 4 };
+  g_signal_emit_by_name (obj, "sig-with-array-len-prop", &arr, 5);
 }
 
 int
