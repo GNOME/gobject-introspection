@@ -73,6 +73,7 @@ regress_test_array_int_none_out
 regress_test_array_int_null_in
 regress_test_array_int_null_out
 regress_test_array_int_out
+regress_test_array_struct_out
 regress_test_async_ready_callback
 regress_test_boolean
 regress_test_boolean_false

@@ -5291,6 +5291,29 @@ libgnome-keyring.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_struct_out"
+              c:identifier="regress_test_array_struct_out">
+      <doc xml:space="preserve">This is similar to gdk_keymap_get_entries_for_keyval().</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <array length="1" zero-terminated="0" c:type="RegressTestStructA**">
+            <type name="TestStructA" c:type="RegressTestStructA*"/>
+          </array>
+        </parameter>
+        <parameter name="len"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <type name="gint" c:type="int*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_async_ready_callback"
               c:identifier="regress_test_async_ready_callback">
       <return-value transfer-ownership="none">

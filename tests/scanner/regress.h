@@ -541,6 +541,9 @@ void regress_test_struct_a_clone (RegressTestStructA *a,
 _GI_TEST_EXTERN
 void regress_test_struct_a_parse (RegressTestStructA *a_out, const gchar *string);
 
+_GI_TEST_EXTERN
+void regress_test_array_struct_out (RegressTestStructA **arr, int *len);
+
 struct _RegressTestStructB
 {
   gint8 some_int8;

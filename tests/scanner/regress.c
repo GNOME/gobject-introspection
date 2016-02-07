@@ -1740,6 +1740,23 @@ regress_test_struct_a_parse (RegressTestStructA *a_out,
 }
 
 /**
+ * regress_test_array_struct_out:
+ * @arr: (out) (array length=len) (transfer full):
+ * @len: (out)
+ *
+ * This is similar to gdk_keymap_get_entries_for_keyval().
+ */
+void
+regress_test_array_struct_out (RegressTestStructA **arr, int *len)
+{
+  *arr = g_new0(RegressTestStructA, 3);
+  (*arr)[0].some_int = 22;
+  (*arr)[1].some_int = 33;
+  (*arr)[2].some_int = 44;
+  *len = 3;
+}
+
+/**
  * regress_test_struct_b_clone:
  * @b: the structure
  * @b_out: (out): the cloned structure
