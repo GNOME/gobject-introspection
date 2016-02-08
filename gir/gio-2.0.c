@@ -15926,7 +15926,7 @@
 /**
  * g_dbus_address_get_stream_finish:
  * @res: A #GAsyncResult obtained from the GAsyncReadyCallback passed to g_dbus_address_get_stream().
- * @out_guid: %NULL or return location to store the GUID extracted from @address, if any.
+ * @out_guid: (optional) (out): %NULL or return location to store the GUID extracted from @address, if any.
  * @error: Return location for error or %NULL.
  *
  * Finishes an operation started with g_dbus_address_get_stream().
@@ -15939,7 +15939,7 @@
 /**
  * g_dbus_address_get_stream_sync:
  * @address: A valid D-Bus address.
- * @out_guid: %NULL or return location to store the GUID extracted from @address, if any.
+ * @out_guid: (optional) (out): %NULL or return location to store the GUID extracted from @address, if any.
  * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *

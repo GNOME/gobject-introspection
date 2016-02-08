@@ -1947,7 +1947,7 @@
 /**
  * g_closure_invoke:
  * @closure: a #GClosure
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (optional) (out): a #GValue to store the return
  *                value. May be %NULL if the callback of @closure
  *                doesn't return a value.
  * @n_param_values: the length of the @param_values array
@@ -3141,7 +3141,7 @@
  * @oldval: (allow-none): the old value to compare against
  * @newval: (allow-none): the new value
  * @destroy: (allow-none): a destroy notify for the new value
- * @old_destroy: (allow-none): destroy notify for the existing value
+ * @old_destroy: (optional) (out): destroy notify for the existing value
  *
  * Compares the user data for the key @quark on @object with
  * @oldval, and if they are the same, replaces @oldval with
@@ -4633,7 +4633,7 @@
  * created. Further information about the signals can be acquired through
  * g_signal_query().
  *
- * Returns: (array length=n_ids): Newly allocated array of signal IDs.
+ * Returns: (array length=n_ids) (transfer full): Newly allocated array of signal IDs.
  */
 
 
@@ -6799,7 +6799,7 @@
 /**
  * g_value_take_variant:
  * @value: a valid #GValue of type %G_TYPE_VARIANT
- * @variant: (allow-none): a #GVariant, or %NULL
+ * @variant: (nullable) (transfer full): a #GVariant, or %NULL
  *
  * Set the contents of a variant #GValue to @variant, and takes over
  * the ownership of the caller's reference to @variant;

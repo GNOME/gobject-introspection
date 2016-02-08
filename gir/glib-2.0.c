@@ -12514,7 +12514,7 @@
  * @oldval: (allow-none): the old value to compare against
  * @newval: (allow-none): the new value to replace it with
  * @destroy: (allow-none): destroy notify for the new value
- * @old_destroy: (allow-none): destroy notify for the existing value
+ * @old_destroy: (optional) (out): destroy notify for the existing value
  *
  * Compares the member that is associated with @key_id in
  * @datalist to @oldval, and if they are the same, replace
