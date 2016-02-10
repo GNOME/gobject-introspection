@@ -28,6 +28,7 @@ from __future__ import unicode_literals
 
 import os
 import re
+import sys
 import tempfile
 
 from xml.sax import saxutils
@@ -1130,6 +1131,15 @@ class DevDocsFormatterGjs(DocFormatterGjs):
         if anchor is not None:
             link += "#" + anchor
         return "[{}]({}){}".format(display_name, link, 's' if pluralize else '')
+
+    def to_underscores(self, node):
+        try:
+            return super(DevDocsFormatterGjs, self).to_underscores(node)
+        except Exception as e:
+            if e.message == 'invalid node':
+                print('warning: invalid node in', node.parent.name,
+                    file=sys.stderr)
+                return node.parent.name + '_invalid_node'
 
     def make_anchor(self, node):
         style_class = get_node_kind(node)
