@@ -85,7 +85,7 @@ _gir_silent_compiler = $(_gir_silent_compiler_$(V))
 _gir_silent_compiler_ = $(_gir_silent_compiler_$(_gir_verbosity))
 _gir_silent_compiler_0 = @echo "  GICOMP   $(1)";
 
-_gir_default_scanner_env = CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" PKG_CONFIG="$(PKG_CONFIG)" DLLTOOL="$(DLLTOOL)"
+_gir_default_scanner_env = CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" CC="$(CC)" PKG_CONFIG="$(PKG_CONFIG)" GI_HOST_OS="$(GI_HOST_OS)" DLLTOOL="$(DLLTOOL)"
 
 #
 # Creates a GIR by scanning C headers/sources

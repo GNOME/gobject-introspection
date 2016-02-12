@@ -184,6 +184,10 @@ def cflag_real_include_path(cflag):
     return "-I" + os.path.realpath(cflag[2:])
 
 
+def host_os():
+    return os.environ.get("GI_HOST_OS", os.name)
+
+
 def which(program):
     def is_exe(fpath):
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
