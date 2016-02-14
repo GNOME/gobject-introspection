@@ -30,8 +30,6 @@ struct _OffsetsBasic {
   gdouble field_double;
   char dummy8;
   gsize field_size;
-  char dummy9;
-  time_t field_time;
 };
 
 typedef enum {
