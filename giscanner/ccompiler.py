@@ -277,7 +277,8 @@ class CCompiler(object):
         else:
             libtool = utils.get_libtool_command(options)
             if libtool:
-                args.append(utils.which(os.environ.get('SHELL', 'sh.exe')))
+                if os.name == 'nt':
+                    args.append(utils.which(os.environ.get('SHELL', 'sh.exe')))
                 args.extend(libtool)
                 args.append('--mode=execute')
             # FIXME: it could have prefix (i686-w64-mingw32-dlltool.exe)
