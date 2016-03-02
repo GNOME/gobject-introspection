@@ -88,7 +88,8 @@ GLib-$(GLIB_APIVERSION).gir: glib_list
 	@-echo Generating $@...
 	$(PYTHON) $(G_IR_SCANNER_CURRENT) --verbose -I$(TOP_SRCDIR) --add-include-path=$(TOP_SRCDIR)	\
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GLib --nsversion=$(GLIB_APIVERSION)	\
-	--no-libtool --pkg=glib-$(GLIB_APIVERSION) --include=win32-$(GI_APIVERSION) --library=glib-2.0 --library=gobject-2.0	\
+	--no-libtool --pkg=gio-windows-$(GLIB_APIVERSION) --pkg=glib-$(GLIB_APIVERSION)	\
+	--include=win32-$(GI_APIVERSION) --library=glib-2.0 --library=gobject-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --symbol-prefix=g	\
 	--symbol-prefix=glib --c-include="glib.h" -I$(PREFIX)\include\glib-$(GLIB_APIVERSION)	\
 	-I$(PREFIX)\lib\glib-2.0\include -I$(PREFIX)\include -DGETTEXT_PACKAGE=Dummy	\
