@@ -631,6 +631,12 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self)
       if (comment->comment)
         {
           comment_obj = PyUnicode_FromString (comment->comment);
+          if (!comment_obj)
+            {
+              g_print ("Comment is not valid Unicode in %s line %d\n", comment->filename, comment->line);
+              Py_INCREF (Py_None);
+              comment_obj = Py_None;
+            }
         }
       else
         {
