@@ -9,12 +9,13 @@
 
 !if "$(PREFIX)" == ""
 PREFIX = ..\..\..\vs$(VSVER)\$(PLAT)
-!if ![setlocal]	&& \
-    ![set PFX=$(PREFIX)] && \
+!endif
+
+!if ![setlocal]		&& \
+    ![set PFX=$(PREFIX)]	&& \
     ![for %P in (%PFX%) do @echo PREFIX_FULL=%~dpnfP > pfx.x]
 !endif
 !include pfx.x
-!endif
 
 !if "$(PKG_CONFIG_PATH)" == ""
 PKG_CONFIG_PATH=$(PREFIX_FULL)\lib\pkgconfig
