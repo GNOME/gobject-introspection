@@ -9,6 +9,20 @@
 
 !if "$(PREFIX)" == ""
 PREFIX = ..\..\..\vs$(VSVER)\$(PLAT)
+!if ![setlocal]	&& \
+    ![set PFX=$(PREFIX)] && \
+    ![for %P in (%PFX%) do @echo PREFIX_FULL=%~dpnfP > pfx.x]
+!endif
+!include pfx.x
+!endif
+
+!if "$(PKG_CONFIG_PATH)" == ""
+PKG_CONFIG_PATH=$(PREFIX_FULL)\lib\pkgconfig
+!else
+PKG_CONFIG_PATH=$(PREFIX_FULL)\lib\pkgconfig;$(PKG_CONFIG_PATH)
+!endif
+
+!if ![del $(ERRNUL) /q/f pfx.x]
 !endif
 
 # Note: The PYTHON must be the Python release series that was used to build
@@ -40,7 +54,8 @@ ERROR_MSG =
 
 BUILD_INTROSPECTION = TRUE
 
-!if ![pkg-config --print-errors --errors-to-stdout $(CHECK_PACKAGE) > pkgconfig.x]	\
+!if ![set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)]	\
+	&& ![pkg-config --print-errors --errors-to-stdout $(CHECK_PACKAGE) > pkgconfig.x]	\
 	&& ![setlocal]	\
 	&& ![set file="pkgconfig.x"]	\
 	&& ![FOR %A IN (%file%) DO @echo PKG_CHECK_SIZE=%~zA > pkgconfig.chksize]	\
