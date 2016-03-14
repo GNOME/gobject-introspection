@@ -74,7 +74,7 @@ VALID_PKG_CONFIG_PATH = FALSE
 !endif
 
 VALID_CFGSET = FALSE
-!if "$(CFG)" == "release" || "$(CFG)" == "debug"
+!if "$(CFG)" == "release" || "$(CFG)" == "debug" || "$(CFG)" == "Release" || "$(CFG)" == "Debug"
 VALID_CFGSET = TRUE
 !endif
 
