@@ -20,6 +20,7 @@
 
 import os
 import subprocess
+import tempfile
 
 import sys
 import distutils
@@ -269,7 +270,11 @@ class CCompiler(object):
 
             # Use the dumpbin utility that's included in
             # every Visual C++ installation to find out which
-            # DLL the library gets linked to
+            # DLL the .lib gets linked to.
+            # dumpbin -symbols something.lib gives the
+            # filename of DLL without the '.dll' extension that something.lib
+            # links to, in the line that contains
+            # __IMPORT_DESCRIPTOR_<dll_filename_that_something.lib_links_to>
             args.append('dumpbin.exe')
             args.append('-symbols')
 
@@ -310,26 +315,36 @@ class CCompiler(object):
                         break
                     implib = os.path.join(l, c)
                     if os.path.exists(implib):
-                        proc = subprocess.Popen(args + [implib],
-                                                stdout=subprocess.PIPE)
-                        o, e = proc.communicate()
-                        for line in o.decode('ascii').splitlines():
-                            if self.check_is_msvc():
-                                # On Visual Studio, dumpbin -symbols something.lib gives the
-                                # filename of DLL without the '.dll' extension that something.lib
-                                # links to, in the line that contains
-                                # __IMPORT_DESCRIPTOR_<dll_filename_that_something.lib_links_to>
+                        if self.check_is_msvc():
+                            tmp_fd, tmp_filename = \
+                                tempfile.mkstemp(prefix='g-ir-win32-resolve-lib-')
 
-                                if '__IMPORT_DESCRIPTOR_' in line:
-                                    line_tokens = line.split()
-                                    for item in line_tokens:
-                                        if item.startswith('__IMPORT_DESCRIPTOR_'):
-                                            shlibs.append(item[20:] + '.dll')
-                                            found = True
-                                            break
-                                if found:
-                                    break
-                            else:
+                            # This is dumb, but it is life... Windows does not like one
+                            # trying to write to a file when its FD is not closed first,
+                            # when we use a flag in a program to do so.  So, close,
+                            # write to temp file with dumpbin and *then* re-open the
+                            # file for reading.
+                            os.close(tmp_fd)
+                            output_flag = ['-out:' + tmp_filename]
+                            proc = subprocess.call(args + [implib] + output_flag,
+                                                   stdout=subprocess.PIPE)
+                            with open(tmp_filename, 'rb') as tmp_fileobj:
+                                for line in tmp_fileobj.read().splitlines():
+
+                                    if '__IMPORT_DESCRIPTOR_' in line:
+                                        line_tokens = line.split()
+                                        for item in line_tokens:
+                                            if item.startswith('__IMPORT_DESCRIPTOR_'):
+                                                shlibs.append(item[20:] + '.dll')
+                                                found = True
+                                                break
+                            tmp_fileobj.close()
+                            os.unlink(tmp_filename)
+                        else:
+                            proc = subprocess.Popen(args + [implib],
+                                                    stdout=subprocess.PIPE)
+                            o, e = proc.communicate()
+                            for line in o.decode('ascii').splitlines():
                                 shlibs.append(line)
                                 found = True
                                 break
