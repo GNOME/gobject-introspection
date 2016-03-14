@@ -5974,22 +5974,19 @@
  *   g_set_error() will complain if you pile up errors.
  *
  * - By convention, if you return a boolean value indicating success
- *   then %TRUE means success and %FALSE means failure.
- *   <footnote><para>Avoid creating functions which have a boolean
- *   return value and a GError parameter, but where the boolean does
- *   something other than signal whether the GError is set.  Among other
- *   problems, it requires C callers to allocate a temporary error.  Instead,
- *   provide a "gboolean *" out parameter. There are functions in GLib
- *   itself such as g_key_file_has_key() that are deprecated because of this.
- *   </para></footnote>
- *   If %FALSE is
- *   returned, the error must be set to a non-%NULL value.
- *   <footnote><para>One exception to this is that in situations that are
- *   already considered to be undefined behaviour (such as when a
+ *   then %TRUE means success and %FALSE means failure. Avoid creating
+ *   functions which have a boolean return value and a GError parameter,
+ *   but where the boolean does something other than signal whether the
+ *   GError is set.  Among other problems, it requires C callers to allocate
+ *   a temporary error.  Instead, provide a "gboolean *" out parameter.
+ *   There are functions in GLib itself such as g_key_file_has_key() that
+ *   are deprecated because of this. If %FALSE is returned, the error must
+ *   be set to a non-%NULL value.  One exception to this is that in situations
+ *   that are already considered to be undefined behaviour (such as when a
  *   g_return_val_if_fail() check fails), the error need not be set.
  *   Instead of checking separately whether the error is set, callers
  *   should ensure that they do not provoke undefined behaviour, then
- *   assume that the error will be set on failure.</para></footnote>
+ *   assume that the error will be set on failure.
  *
  * - A %NULL return value is also frequently used to mean that an error
  *   occurred. You should make clear in your documentation whether %NULL
@@ -11940,7 +11937,7 @@
  * g_clear_error:
  * @err: a #GError return location
  *
- * If @err is %NULL, does nothing. If @err is non-%NULL,
+ * If @err or *@err is %NULL, does nothing. Otherwise,
  * calls g_error_free() on *@err and sets *@err to %NULL.
  */
 
@@ -12514,7 +12511,7 @@
  * @oldval: (allow-none): the old value to compare against
  * @newval: (allow-none): the new value to replace it with
  * @destroy: (allow-none): destroy notify for the new value
- * @old_destroy: (optional) (out): destroy notify for the existing value
+ * @old_destroy: (allow-none): destroy notify for the existing value
  *
  * Compares the member that is associated with @key_id in
  * @datalist to @oldval, and if they are the same, replace
@@ -15670,8 +15667,8 @@
  * [XDG Base Directory Specification](http://www.freedesktop.org/Standards/basedir-spec).
  * This is the directory
  * specified in the `XDG_RUNTIME_DIR` environment variable.
- * In the case that this variable is not set, GLib will issue a warning
- * message to stderr and return the value of g_get_user_cache_dir().
+ * In the case that this variable is not set, we return the value of
+ * g_get_user_cache_dir(), after verifying that it exists.
  *
  * On Windows this is the folder to use for local (as opposed to
  * roaming) application data. See documentation for

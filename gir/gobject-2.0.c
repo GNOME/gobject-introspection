@@ -3141,7 +3141,7 @@
  * @oldval: (allow-none): the old value to compare against
  * @newval: (allow-none): the new value
  * @destroy: (allow-none): a destroy notify for the new value
- * @old_destroy: (optional) (out): destroy notify for the existing value
+ * @old_destroy: (allow-none): destroy notify for the existing value
  *
  * Compares the user data for the key @quark on @object with
  * @oldval, and if they are the same, replaces @oldval with
