@@ -328,7 +328,7 @@ class CCompiler(object):
                             output_flag = ['-out:' + tmp_filename]
                             proc = subprocess.call(args + [implib] + output_flag,
                                                    stdout=subprocess.PIPE)
-                            with open(tmp_filename, 'rb') as tmp_fileobj:
+                            with open(tmp_filename, 'r') as tmp_fileobj:
                                 for line in tmp_fileobj.read().splitlines():
 
                                     if '__IMPORT_DESCRIPTOR_' in line:
