@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="gigensrcsprops"
-	InheritedPropertySheets=".\gi-extra-paths.vsprops"
+	InheritedPropertySheets=".\gi-build-defines.vsprops"
 	>
 	<UserMacro
 		Name="CopyConfigH"

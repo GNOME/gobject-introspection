@@ -117,6 +117,10 @@
       <Project>{8311394f-9114-4c97-80f2-51bcaba054c9}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="gi-introspect.vcxproj">
+      <Project>{7a36674c-379d-4989-a978-07124e5f852c}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

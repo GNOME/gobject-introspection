@@ -10,7 +10,6 @@ GENERATED_ITEMS = \
 EXTRA_DIST = \
 	gobject-introspection.sln	\
 	gi-build-defines.props	\
-	gi-extra-paths.props	\
 	gi-gen-srcs.props	\
 	gi-install.propsin	\
 	gi-version-paths.props	\
@@ -30,6 +29,7 @@ EXTRA_DIST = \
 	_giscanner.vcxproj	\
 	_giscanner.vcxproj.filters	\
 	gi-install.vcxproj	\
+	gi-introspect.vcxproj	\
 	README.txt	\
 	$(GENERATED_ITEMS)
 

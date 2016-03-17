@@ -13,20 +13,34 @@
 		Value="$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(PlatformName)"
 	/>
 	<UserMacro
+		Name="CopyDir"
+		Value="$(GlibEtcInstallRoot)"
+	/>
+	<!-- PythonDir needs to point to a 32-bit/x86 Python 2.7/3.3+ installation -->
+	<UserMacro
+		Name="PythonDir"
+		Value="c:\\python27"
+	/>
+	<!-- PythonDirX64 needs to point to an x86-64/x64 Python 2.7/3.3+ installation -->
+	<UserMacro
+		Name="PythonDirX64"
+		Value="$(PythonDir).x64"
+	/>
+	<UserMacro
+		Name="IntrospectPythonParam"
+		Value="PYTHON=$(PythonDir)\python.exe"
+	/>
+	<UserMacro
+		Name="IntrospectPythonParamX64"
+		Value="PYTHON=$(PythonDirX64)\python.exe"
+	/>
+	<UserMacro
 		Name="BASE_GI_DIR"
 		Value="$(SolutionDir)\..\..\.."
 	/>
 	<UserMacro
-		Name="CopyDir"
-		Value="$(GlibEtcInstallRoot)"
-	/>
-	<UserMacro
 		Name="ApiVersion"
 		Value="1.0"
-	/>
-	<UserMacro
-		Name="DefDir"
-		Value="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj\$(ProjectName)"
 	/>
 	<UserMacro
 		Name="LibGILibtoolCompatibleDllPrefix"

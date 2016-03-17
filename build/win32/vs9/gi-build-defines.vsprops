@@ -27,4 +27,12 @@
 		Name="GIRepositoryBuildDefines"
 		Value="G_IREPOSITORY_COMPILATION;$(FFIDefines);DLL_EXPORT"
 	/>
+	<UserMacro
+		Name="GIIntrospectNMakeCmd"
+		Value="cd ..&#x0D;&#x0A;set VCInstallDir=$(VCInstallDir)&#x0D;&#x0A;nmake -f gi-introspection-msvc.mak CFG=$(ConfigurationName) PREFIX=$(GlibEtcInstallRoot)"
+	/>
+	<UserMacro
+		Name="GIIntrospectBuiltFiles"
+		Value="$(SolutionDir)\..\GLib-2.0.gir;$(SolutionDir)\..\GObject-2.0.gir;$(SolutionDir)\..\GModule-2.0.gir;$(SolutionDir)\..\Gio-2.0.gir;$(SolutionDir)\..\GIRepository-2.0.gir;$(SolutionDir)\..\cairo-1.0.gir;$(SolutionDir)\..\win32-1.0.gir;$(SolutionDir)\..\fontconfig-2.0.gir;$(SolutionDir)\..\freetype-2.0.gir;$(SolutionDir)\..\libxml2-2.0.gir;$(SolutionDir)\..\GL-1.0.gir;$(SolutionDir)\..\GLib-2.0.typelib;$(SolutionDir)\..\GObject-2.0.typelib;$(SolutionDir)\..\GModule-2.0.typelib;$(SolutionDir)\..\Gio-2.0.typelib;$(SolutionDir)\..\GIRepository-2.0.typelib;$(SolutionDir)\..\cairo-1.0.typelib;$(SolutionDir)\..\win32-1.0.typelib;$(SolutionDir)\..\fontconfig-2.0.typelib;$(SolutionDir)\..\freetype-2.0.typelib;$(SolutionDir)\..\libxml2-2.0.typelib;$(SolutionDir)\..\GL-1.0.typelib"
+	/>
 </VisualStudioPropertySheet>

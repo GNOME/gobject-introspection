@@ -37,7 +37,6 @@ copy ..\..\..\tests\scanner\regress.h $(CopyDir)\share\gobject-introspection-1.0
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\_giscanner.pdb $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 
-mkdir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
 
 mkdir $(CopyDir)\share\gobject-introspection-$(ApiVersion)&#x0D;&#x0A;
 
@@ -47,9 +46,31 @@ mkdir $(CopyDir)\lib&#x0D;&#x0A;
 
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\girepository-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 
-echo Please note that building GObject-Introspection with Visual Studio is now a 2-step process&#x0D;&#x0A;
-echo Please open the appropriate Visual Studio (or Windows SDK) command prompt and use the NMake Makefile&#x0D;&#x0A;
-echo in SRC_ROOT\build\win32\gi-introspection-msvc.mak to build the introspection files&#x0D;&#x0A;
+mkdir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\cairo-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\fontconfig-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\freetype2-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\Gio-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GIRepository-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GL-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GLib-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GModule-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GObject-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\libxml2-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+copy ..\win32-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)&#x0D;&#x0A;
+
+mkdir $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\cairo-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\fontconfig-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\freetype2-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\Gio-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GIRepository-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GL-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GLib-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GModule-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\GObject-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\libxml2-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
+copy ..\win32-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)&#x0D;&#x0A;
 		"
 	/>
 </VisualStudioPropertySheet>

@@ -7,7 +7,6 @@ GENERATED_ITEMS = \
 EXTRA_DIST = \
 	gobject-introspection.sln	\
 	gi-build-defines.vsprops	\
-	gi-extra-paths.vsprops	\
 	gi-gen-srcs.vsprops	\
 	gi-install.vspropsin	\
 	gi-version-paths.vsprops	\
@@ -19,6 +18,7 @@ EXTRA_DIST = \
 	g-ir-generate.vcproj	\
 	glib-print.vcproj	\
 	gi-install.vcproj	\
+	gi-introspect.vcproj	\
 	_giscanner.vcproj	\
 	README.txt	\
 	$(GENERATED_ITEMS)
