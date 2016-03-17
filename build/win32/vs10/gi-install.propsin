@@ -36,16 +36,39 @@ copy ..\..\..\tests\scanner\regress.h $(CopyDir)\share\gobject-introspection-1.0
 copy $(BinDir)\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner
 copy $(BinDir)\_giscanner.pdb $(CopyDir)\lib\gobject-introspection\giscanner
 
-mkdir $(CopyDir)\share\gir-$(ApiVersion)
 mkdir $(CopyDir)\share\gobject-introspection-$(ApiVersion)
+
 copy ..\..\..\girepository\gdump.c $(CopyDir)\share\gobject-introspection-$(ApiVersion)
 
-mkdir $(CopyDir)\lib\girepository-$(ApiVersion)
-copy $(BinDir)\girepository-$(ApiVersion).lib $(CopyDir)\lib
+mkdir $(CopyDir)\lib
 
-echo Please note that building GObject-Introspection with Visual Studio is now a 2-step process
-echo Please open the appropriate Visual Studio (or Windows SDK) command prompt and use the NMake Makefile
-echo in SRC_ROOT\build\win32\gi-introspection-msvc.mak to build the introspection files
+copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\girepository-$(ApiVersion).lib $(CopyDir)\lib
+
+mkdir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\cairo-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\fontconfig-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\freetype2-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\Gio-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GIRepository-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GL-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GLib-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GModule-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GObject-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\libxml2-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\win32-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+
+mkdir $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\cairo-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\fontconfig-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\freetype2-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\Gio-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GIRepository-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GL-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GLib-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GModule-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GObject-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\libxml2-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\win32-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
 </GIDoInstall>
   </PropertyGroup>
   <PropertyGroup>
