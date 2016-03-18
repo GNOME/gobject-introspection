@@ -14,6 +14,8 @@ EXTRA_DIST =	\
 	gi_msvc_build_utils.py		\
 	gi-setenv-msvc.mak		\
 	gi-tests-msvc.mak		\
+	gipc.py				\
 	introspection-msvc.mak		\
+	pc_base.py			\
 	replace.py
 

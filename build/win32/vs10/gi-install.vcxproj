@@ -87,17 +87,35 @@
   <ItemGroup>
     <CustomBuild Include="..\..\..\config.h.win32">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Installing Build Results...</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GIPCFiles)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GIDoInstall)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">some_random_file;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Installing Build Results...</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GIPCFiles)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GIDoInstall)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">some_random_file;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Installing Build Results...</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GIPCFiles)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GIDoInstall)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">some_random_file;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Installing Build Results...</Message>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GIPCFiles)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GIDoInstall)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">some_random_file;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\gipc.py">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating .pc files...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GIGenPC)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GIPCFiles);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating .pc files...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GIGenPCX64)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GIPCFiles);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating .pc files...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GIGenPC)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GIPCFiles);%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating .pc files...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GIGenPCX64)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GIPCFiles);%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

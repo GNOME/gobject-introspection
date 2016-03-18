@@ -69,7 +69,14 @@ copy ..\GModule-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
 copy ..\GObject-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
 copy ..\libxml2-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
 copy ..\win32-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
-</GIDoInstall>
+
+mkdir $(CopyDir)\lib\pkgconfig
+copy ..\gobject-introspection-1.0.pc $(CopyDir)\lib\pkgconfig
+copy ..\gobject-introspection-no-export-1.0.pc $(CopyDir)\lib\pkgconfig
+    </GIDoInstall>
+    <GIPCFiles>..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc</GIPCFiles>
+    <GIGenPC>$(PythonDir)\python.exe ..\gipc.py --version=$(GIVersion) --prefix=$(CopyDir)</GIGenPC>
+    <GIGenPCX64>$(PythonDirX64)\python.exe ..\gipc.py --version=$(GIVersion) --prefix=$(CopyDir)</GIGenPCX64>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>giinstallprops</_PropertySheetDisplayName>
@@ -80,6 +87,15 @@ copy ..\win32-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
     </BuildMacro>
     <BuildMacro Include="GIDoInstall">
       <Value>$(GIDoInstall)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIPCFiles">
+      <Value>$(GIPCFiles)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIGenPC">
+      <Value>$(GIGenPC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIGenPCX64">
+      <Value>$(GIGenPCX64)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
