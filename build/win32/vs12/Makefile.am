@@ -20,6 +20,7 @@ EXTRA_DIST = \
 	_giscanner.vcxproj	\
 	_giscanner.vcxproj.filters	\
 	gi-install.vcxproj	\
+	gi-install.vcxproj.filters	\
 	gi-introspect.vcxproj	\
 	README.txt
 
