@@ -35,6 +35,10 @@
 		Value="PYTHON=$(PythonDirX64)\python.exe"
 	/>
 	<UserMacro
+		Name="GIVersion"
+		Value="@PACKAGE_VERSION@"
+	/>
+	<UserMacro
 		Name="BASE_GI_DIR"
 		Value="$(SolutionDir)\..\..\.."
 	/>
