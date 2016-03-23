@@ -156,12 +156,6 @@ blob containing data gleaned from GObject's primitive introspection."""
         out_path = os.path.join(self._binary.tmpdir, 'dump.xml')
 
         args = []
-
-        # Prepend the launcher command and arguments, if defined
-        launcher = os.environ.get('GI_CROSS_LAUNCHER')
-        if launcher:
-            args.extend(launcher.split())
-
         args.extend(self._binary.args)
         args.append('--introspect-dump=%s,%s' % (in_path, out_path))
 
