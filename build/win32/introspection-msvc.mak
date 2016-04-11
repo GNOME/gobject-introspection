@@ -37,6 +37,11 @@ PKG_CONFIG_PATH=$(PREFIX_FULL)\lib\pkgconfig;$(PKG_CONFIG_PATH)
 PYTHON=python
 !endif
 
+# Path to the pkg-config tool, if not already in the PATH
+!if "$(PKG_CONFIG)" == ""
+PKG_CONFIG=pkg-config
+!endif
+
 # Don't change anything following this line!
 
 GIR_SUBDIR = share\gir-1.0
@@ -56,7 +61,7 @@ ERROR_MSG =
 BUILD_INTROSPECTION = TRUE
 
 !if ![set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)]	\
-	&& ![pkg-config --print-errors --errors-to-stdout $(CHECK_PACKAGE) > pkgconfig.x]	\
+	&& ![$(PKG_CONFIG) --print-errors --errors-to-stdout $(CHECK_PACKAGE) > pkgconfig.x]	\
 	&& ![setlocal]	\
 	&& ![set file="pkgconfig.x"]	\
 	&& ![FOR %A IN (%file%) DO @echo PKG_CHECK_SIZE=%~zA > pkgconfig.chksize]	\
