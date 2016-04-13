@@ -38,5 +38,55 @@ def main(argv):
                   base_pc.srcdir + '/gobject-introspection-no-export-1.0.pc',
                   pkg_replace_items)
 
+    # Generate a generic .pc file for Cairo, that is just sufficient for our purposes
+    cairo_version = '1.14.6' # Use the latest stable version, for now.
+    cairo_pc = open(base_pc.srcdir + '/cairo.pc', 'w')
+    cairo_pc.write('prefix=' + base_pc.prefix + '\n')
+    cairo_pc.write('exec_prefix=${prefix}\n')
+    cairo_pc.write('libdir=${prefix}/lib\n')
+    cairo_pc.write('includedir=${prefix}/include\n\n')
+    cairo_pc.write('Name: cairo\n')
+    cairo_pc.write('Description: generic cairo pkg-config file\n')
+    cairo_pc.write('Version: ' + cairo_version + '\n\n')
+    cairo_pc.write('Requires.private:\n')
+    cairo_pc.write('Libs: -L${libdir} -lcairo\n')
+    cairo_pc.write('Libs.private:\n')
+    cairo_pc.write('Cflags: -I${includedir}\n')
+    cairo_pc.close()
+
+    # Generate a generic .pc file for Cairo-GObject, that is just sufficient for our
+    # purposes
+    # Just make a copy of the cairo.pc we just generated and replace the items as needed
+    cairo_gobject_replace_items = \
+	    {'Requires.private:': 'Requires.private: gobject-2.0,glib-2.0',
+         'generic cairo pkg-config file': 'generic cairo-gobject pkg-config file',
+		 '-lcairo': '-lcairo-gobject'}
+    replace_multi(base_pc.srcdir + '/cairo.pc',
+                  base_pc.srcdir + '/cairo-gobject.pc',
+                  cairo_gobject_replace_items)
+
+    # Generate a generic .pc file for libxml2, that is just sufficient for our purposes
+    libxml2_version = '2.9.3' # Use the latest stable version, for now.
+    libxml2_replace_items = \
+	    {'Name: cairo': 'Name: libXML',
+         'Version: ' + cairo_version: 'Version: ' + libxml2_version,
+         'generic cairo pkg-config file': 'generic libXML2 pkg-config file',
+         '-lcairo': '-llibxml2',
+         'Cflags: -I${includedir}': 'Cflags: -I${includedir}/libxml2'}
+    replace_multi(base_pc.srcdir + '/cairo.pc',
+                  base_pc.srcdir + '/libxml-2.0.pc',
+                  libxml2_replace_items)
+
+    # Generate a generic .pc file for freetype2, that is just sufficient for our purposes
+    ft2_version = '2.6.3' # Use the latest stable version, for now.
+    ft2_replace_items = \
+	    {'Name: cairo': 'Name: FreeType 2',
+         'Version: ' + cairo_version: 'Version: ' + ft2_version,
+         'generic cairo pkg-config file': 'generic FreeType2 pkg-config file',
+         '-lcairo': '-lfreetype'}
+    replace_multi(base_pc.srcdir + '/cairo.pc',
+                  base_pc.srcdir + '/freetype2.pc',
+                  ft2_replace_items)
+
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
