@@ -1029,7 +1029,7 @@
  *            various functions such as g_io_channel_write_chars() to
  *            write raw bytes to the channel.  Encoding and buffering
  *            issues are dealt with at a higher level.
- * @io_seek: &lpar;optional&rpar; seeks the channel.  This is called from
+ * @io_seek: (optional): seeks the channel.  This is called from
  *           g_io_channel_seek() on channels that support it.
  * @io_close: closes the channel.  This is called from
  *            g_io_channel_close() after flushing the buffers.
@@ -5418,13 +5418,13 @@
  * "Presentaci&oacute;n.sxi". If the application which created it uses
  * ISO-8859-1 for its encoding,
  * |[
- * Character:  P  r  e  s  e  n  t  a  c  i  &oacute;  n  .  s  x  i
+ * Character:  P  r  e  s  e  n  t  a  c  i  ó  n  .  s  x  i
  * Hex code:   50 72 65 73 65 6e 74 61 63 69 f3 6e 2e 73 78 69
  * ]|
  * However, if the application use UTF-8, the actual file name on
  * disk would look like this:
  * |[
- * Character:  P  r  e  s  e  n  t  a  c  i  &oacute;     n  .  s  x  i
+ * Character:  P  r  e  s  e  n  t  a  c  i  ó     n  .  s  x  i
  * Hex code:   50 72 65 73 65 6e 74 61 63 69 c3 b3 6e 2e 73 78 69
  * ]|
  * Glib uses UTF-8 for its strings, and GUI toolkits like GTK+ that use
@@ -6076,7 +6076,7 @@
  * Note that, unless you set the #G_REGEX_RAW flag, all the strings passed
  * to these functions must be encoded in UTF-8. The lengths and the positions
  * inside the strings are in bytes and not in characters, so, for instance,
- * "\xc3\xa0" (i.e. "&agrave;") is two bytes long but it is treated as a
+ * "\xc3\xa0" (i.e. "à") is two bytes long but it is treated as a
  * single character. If you set #G_REGEX_RAW the strings can be non-valid
  * UTF-8 strings and a byte is treated as a character, so "\xc3\xa0" is two
  * bytes and two characters long.
@@ -6159,10 +6159,36 @@
  * @short_description: strongly typed value datatype
  * @see_also: GVariantType
  *
- * #GVariant is a variant datatype; it stores a value along with
- * information about the type of that value.  The range of possible
- * values is determined by the type.  The type system used by #GVariant
- * is #GVariantType.
+ * #GVariant is a variant datatype; it can contain one or more values
+ * along with information about the type of the values.
+ *
+ * A #GVariant may contain simple types, like an integer, or a boolean value;
+ * or complex types, like an array of two strings, or a dictionary of key
+ * value pairs. A #GVariant is also immutable: once it's been created neither
+ * its type nor its content can be modified further.
+ *
+ * GVariant is useful whenever data needs to be serialized, for example when
+ * sending method parameters in DBus, or when saving settings using GSettings.
+ *
+ * When creating a new #GVariant, you pass the data you want to store in it
+ * along with a string representing the type of data you wish to pass to it.
+ *
+ * For instance, if you want to create a #GVariant holding an integer value you
+ * can use:
+ *
+ * |[<!-- language="C" -->
+ *   GVariant *v = g_variant_new ('u', 40);
+ * ]|
+ *
+ * The string 'u' in the first argument tells #GVariant that the data passed to
+ * the constructor (40) is going to be an unsigned integer.
+ *
+ * More advanced examples of #GVariant in use can be found in documentation for
+ * [GVariant format strings][gvariant-format-strings-pointers].
+ *
+ * The range of possible values is determined by the type.
+ *
+ * The type system used by #GVariant is #GVariantType.
  *
  * #GVariant instances always have a type and a value (which are given
  * at construction time).  The type and value of a #GVariant instance
@@ -12993,7 +13019,7 @@
  * @date: a #GDate
  *
  * Returns the week of the year during which this date falls, if
- * weeks are understood to being on Sunday. The date must be valid.
+ * weeks are understood to begin on Sunday. The date must be valid.
  * Can return 0 if the day is before the first Sunday of the year.
  *
  * Returns: week number
@@ -15305,7 +15331,7 @@
  * and said environment variables have no effect.
  *
  * `G_FILENAME_ENCODING` may be set to a comma-separated list of
- * character set names. The special token "&commat;locale" is taken
+ * character set names. The special token "\@locale" is taken
  * to  mean the character set for the [current locale][setlocale].
  * If `G_FILENAME_ENCODING` is not set, but `G_BROKEN_FILENAMES` is,
  * the character set of the current locale is taken as the filename
@@ -27960,7 +27986,7 @@
  * @exceptions: (nullable): a string of characters not to escape in @source
  *
  * Escapes the special characters '\b', '\f', '\n', '\r', '\t', '\v', '\'
- * and '&quot;' in the string @source by inserting a '\' before
+ * and '"' in the string @source by inserting a '\' before
  * them. Additionally all characters in the range 0x01-0x1F (everything
  * below SPACE) and in the range 0x7F-0xFF (all non-ASCII chars) are
  * replaced with a '\' followed by their octal representation.
@@ -28625,6 +28651,10 @@
  * Joins a number of strings together to form one long string, with the
  * optional @separator inserted between each of them. The returned string
  * should be freed with g_free().
+ *
+ * If @str_array has no items, the return value will be an
+ * empty string. If @str_array contains a single item, @separator will not
+ * appear in the resulting string.
  *
  * Returns: a newly-allocated string containing all of the strings joined
  *     together, with @separator between them
