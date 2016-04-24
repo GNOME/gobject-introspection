@@ -181,6 +181,8 @@ stringtext				([^\\\"])|(\\.)
 "__signed__"				{ return SIGNED; }
 "__restrict"				{ return RESTRICT; }
 "__restrict__"				{ return RESTRICT; }
+"thread_local"				{ return THREAD_LOCAL; }
+"_Thread_local"				{ return THREAD_LOCAL; }
 "__typeof"				{ if (!parse_ignored_macro()) REJECT; }
 "__volatile"	        	        { return VOLATILE; }
 "__volatile__"	        	        { return VOLATILE; }

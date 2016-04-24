@@ -69,7 +69,8 @@ typedef enum
   STORAGE_CLASS_EXTERN = 1 << 2,
   STORAGE_CLASS_STATIC = 1 << 3,
   STORAGE_CLASS_AUTO = 1 << 4,
-  STORAGE_CLASS_REGISTER = 1 << 5
+  STORAGE_CLASS_REGISTER = 1 << 5,
+  STORAGE_CLASS_THREAD_LOCAL = 1 << 6
 } StorageClassSpecifier;
 
 typedef enum
