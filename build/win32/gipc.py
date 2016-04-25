@@ -54,6 +54,15 @@ def main(argv):
     cairo_pc.write('Cflags: -I${includedir}\n')
     cairo_pc.close()
 
+    # Generate a generic .pc file for Cairo-Win32, that is just sufficient for our
+    # purposes
+    # Just make a copy of the cairo.pc we just generated and replace the items as needed
+    cairo_win32_replace_items = \
+	    {'generic cairo pkg-config file': 'generic cairo-win32 pkg-config file'}
+    replace_multi(base_pc.srcdir + '/cairo.pc',
+                  base_pc.srcdir + '/cairo-win32.pc',
+                  cairo_win32_replace_items)
+
     # Generate a generic .pc file for Cairo-GObject, that is just sufficient for our
     # purposes
     # Just make a copy of the cairo.pc we just generated and replace the items as needed

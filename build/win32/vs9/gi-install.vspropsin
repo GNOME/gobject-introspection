@@ -76,6 +76,7 @@ mkdir $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
 copy ..\gobject-introspection-1.0.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
 copy ..\gobject-introspection-no-export-1.0.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
 copy ..\cairo.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+copy ..\cairo-win32.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
 copy ..\cairo-gobject.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
 copy ..\libxml-2.0.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
 copy ..\freetype2.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;

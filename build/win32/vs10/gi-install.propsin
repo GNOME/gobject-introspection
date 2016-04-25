@@ -74,11 +74,12 @@ mkdir $(CopyDir)\lib\pkgconfig
 copy ..\gobject-introspection-1.0.pc $(CopyDir)\lib\pkgconfig
 copy ..\gobject-introspection-no-export-1.0.pc $(CopyDir)\lib\pkgconfig
 copy ..\cairo.pc $(CopyDir)\lib\pkgconfig
+copy ..\cairo-win32.pc $(CopyDir)\lib\pkgconfig
 copy ..\cairo-gobject.pc $(CopyDir)\lib\pkgconfig
 copy ..\libxml-2.0.pc $(CopyDir)\lib\pkgconfig
 copy ..\freetype2.pc $(CopyDir)\lib\pkgconfig
     </GIDoInstall>
-    <GIPCFiles>..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc</GIPCFiles>
+    <GIPCFiles>..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-win32.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc</GIPCFiles>
     <GIGenPC>$(PythonDir)\python.exe ..\gipc.py --version=$(GIVersion) --prefix=$(CopyDir)</GIGenPC>
     <GIGenPCX64>$(PythonDirX64)\python.exe ..\gipc.py --version=$(GIVersion) --prefix=$(CopyDir)</GIGenPCX64>
   </PropertyGroup>

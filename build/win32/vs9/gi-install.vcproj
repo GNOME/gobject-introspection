@@ -86,7 +86,7 @@
 						Name="VCCustomBuildTool"
 						Description="Generating .pc files..."
 						CommandLine="$(GIGenPC)"
-						Outputs="..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc"
+						Outputs="..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-win32.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|Win32">
@@ -94,7 +94,7 @@
 						Name="VCCustomBuildTool"
 						Description="Generating .pc files..."
 						CommandLine="$(GIGenPC)"
-						Outputs="..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc"
+						Outputs="..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-win32.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Debug|x64">
@@ -102,7 +102,7 @@
 						Name="VCCustomBuildTool"
 						Description="Generating .pc files..."
 						CommandLine="$(GIGenPCX64)"
-						Outputs="..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc"
+						Outputs="..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-win32.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|x64">
@@ -110,7 +110,7 @@
 						Name="VCCustomBuildTool"
 						Description="Generating .pc files..."
 						CommandLine="$(GIGenPCX64)"
-						Outputs="..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc"
+						Outputs="..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-win32.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc"
 					/>
 				</FileConfiguration>
 			</File>
