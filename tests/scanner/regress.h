@@ -1449,6 +1449,19 @@ typedef struct {
   };
 } RegressAnAnonymousUnion;
 
+typedef struct {
+  int x;
+
+  union {
+    struct {
+      RegressLikeGnomeKeyringPasswordSchema *a;
+      RegressLikeXklConfigItem *b;
+    };
+
+    guint padding[4];
+  };
+} RegressAnonymousUnionAndStruct;
+
 GVariant *
 regress_get_variant (void);
 

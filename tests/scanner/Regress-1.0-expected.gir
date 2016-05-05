@@ -910,6 +910,28 @@ it says it's pointer but it's actually a string.</doc>
         </array>
       </field>
     </record>
+    <record name="AnonymousUnionAndStruct"
+            c:type="RegressAnonymousUnionAndStruct">
+      <field name="x" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <union>
+        <record>
+          <field name="a" writable="1">
+            <type name="LikeGnomeKeyringPasswordSchema"
+                  c:type="RegressLikeGnomeKeyringPasswordSchema*"/>
+          </field>
+          <field name="b" writable="1">
+            <type name="LikeXklConfigItem" c:type="RegressLikeXklConfigItem*"/>
+          </field>
+        </record>
+        <field name="padding" writable="1">
+          <array zero-terminated="0" c:type="guint" fixed-size="4">
+            <type name="guint" c:type="guint"/>
+          </array>
+        </field>
+      </union>
+    </record>
     <constant name="BOOL_CONSTANT" value="true" c:type="REGRESS_BOOL_CONSTANT">
       <type name="gboolean" c:type="gboolean"/>
     </constant>
