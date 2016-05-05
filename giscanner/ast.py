@@ -569,7 +569,8 @@ class Node(Annotated):
 (namespace, name) pair.  When combined with a ., this is called a
 GIName.  It's possible for nodes to contain or point to other nodes."""
 
-    c_name = property(lambda self: self.namespace.name + self.name)
+    c_name = property(lambda self: self.namespace.name + self.name if self.namespace else
+                      self.name)
     gi_name = property(lambda self: '%s.%s' % (self.namespace.name, self.name))
 
     def __init__(self, name=None):
