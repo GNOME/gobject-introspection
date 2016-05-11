@@ -1,0 +1,231 @@
+namespace core = "http://www.gtk.org/introspection/core/1.0"
+namespace c = "http://www.gtk.org/introspection/c/1.0"
+namespace glib = "http://www.gtk.org/introspection/glib/1.0"
+
+grammar {
+  start = Repository
+
+  Repository =
+    element repository {
+      Include*
+      & Package*
+      & Alias*
+      & Class*
+      & Record*
+      & Enum*
+      & Function*
+    }
+
+  Include =
+    element \include {
+      attribute name { xsd:string }
+      attribute version { xsd:string }
+      empty
+    }
+
+  Package =
+    element package {
+      attribute name { xsd:string }
+      empty
+    }
+
+  Alias =
+    element alias {
+      attribute name { xsd:string }
+      attribute c:type { xsd:string }
+      attribute introspectable { string "0" }?
+
+      Doc?
+      & Type
+    }
+
+  Class =
+    element class {
+      attribute name { xsd:string }
+      attribute c:symbol-prefix { xsd:string }
+      attribute c:type { xsd:string }
+      attribute parent { xsd:string }
+      attribute glib:type-name { xsd:string }
+      attribute glib:get-type { xsd:string }
+      attribute glib:type-struct { xsd:string }
+      attribute introspectable { string "0" }?
+
+      Doc?
+      & DocDeprecated?
+      & Implements*
+      & Constructor?
+      & Method*
+      & Field*
+      & Property*
+      & Signal*
+    }
+
+  Record =
+    element record {
+      attribute name { xsd:string }
+      attribute version { xsd:string }?
+      attribute c:type { xsd:string }
+      attribute disguised { xsd:string }?
+      attribute glib:is-gtype-struct-for { xsd:string }?
+      attribute introspectable { string "0" }?
+
+      Field*
+    }
+
+  Property =
+    element property {
+      attribute name { xsd:string }
+      attribute version { xsd:string }?
+      attribute writable { string "0" | string "1" }?
+      attribute readable { string "0" | string "1" }?
+
+      Doc?
+      & DocDeprecated?
+      & Type
+    }
+
+  Signal =
+    element glib:signal {
+      attribute name { xsd:string }
+      attribute version { xsd:string }?
+      attribute when { string "first" | string "last" }
+      attribute no-recurse { xsd:string }?
+
+      Doc?
+      & DocDeprecated
+      & Callable.params?
+      & Callable.return?
+    }
+
+  Field =
+    element field {
+      attribute name { xsd:string }
+      attribute introspectable { xsd:string }?
+
+      Type
+      | Callback
+    }
+
+  Callback =
+    element callback {
+      attribute name { xsd:string }
+      attribute introspectable { xsd:string }
+
+      Callable.params?
+      & Callable.return?
+
+  Doc =
+    element doc { text }
+
+  DocDeprecated =
+    element doc-deprecated { text }
+
+  Implements  =
+    element implements { attribute name { xsd:string } }
+
+  Type =
+    element type {
+      attribute name { xsd:string }
+      attribute c:type { xsd:string }
+      attribute introspectable { xsd:string }?
+      empty
+    }
+
+  ArrayType =
+    element array {
+      attribute c:type { xsd:string }
+      attribute zero-terminated { string "0" | string "1" }?
+      attribute fixed-size { xsd:string }?
+      attribute introspectable { xsd:string }?
+      Type
+    }
+
+  TransferOwnership =
+    attribute transfer-ownership { string "none" | string "container" | string "full" }
+
+  Constructor =
+    element constructor {
+      Callable.attrs
+      & Callable.params?
+      & Callable.return?
+      & Doc?
+      & DocDeprecated?
+    }
+
+  Callable.attrs &= attribute name { xsd:string }
+  Callable.attrs &= attribute version { xsd:string }?
+  Callable.attrs &= attribute c:identifier { xsd:string }
+  Callable.attrs &= attribute deprecated { xsd:string }?
+  Callable.attrs &= attribute deprecation-version { xsd:string }?
+  Callable.attrs &= attribute introspectable { xsd:string }?
+
+  Callable.params =
+    element parameters {
+      element parameter {
+        attribute name { xsd:string }
+        attribute nullable { xsd:string }?
+        attribute allow-none { xsd:string }?
+        attribute introspectable { xsd:string }
+        TransferOwnership?
+
+        Doc?
+        & DocDeprecated?
+        & (Type | ArrayType)
+      }*
+
+      & element instance-parameter {
+        attribute name { xsd:string }
+        TransferOwnership?
+      }?
+    }
+
+  Callable.return =
+    element return-value {
+      attribute introspectable { xsd:string }
+      TransferOwnership?
+      & Doc?
+      & (Type | ArrayType)
+    }
+
+  Function =
+    element function {
+      Callable.attrs
+      & Callable.params?
+      & Callable.return?
+      & Doc?
+      & DocDeprecated?
+    }
+
+  Method =
+    element method {
+      Callable.attrs
+      & Callable.params
+      & Callable.return?
+      & Doc?
+      & DocDeprecated?
+    }
+
+  Enum =
+    element enumeration {
+      attribute name { xsd:string }
+      attribute glib:type-name { xsd:string }?
+      attribute glib:get-type { xsd:string }?
+      attribute c:type { xsd:string }
+
+      Doc?
+      & DocDeprecated?
+
+      EnumMember+
+    }
+
+  EnumMember =
+    element member {
+      attribute name { xsd:string }
+      attribute value { xsd:string }
+      attribute c:identifier { xsd:string }
+      attribute glib:nick { xsd:string }?
+
+      Doc?
+      & DocDeprecated?
+    }
+}
