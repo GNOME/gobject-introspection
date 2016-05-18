@@ -7322,6 +7322,34 @@
  * when the library is unloaded. However, in practice this is not generally a problem, since most resource accesses
  * is for your own resources, and resource data is often used once, during parsing, and then released.
  *
+ * When debugging a program or testing a change to an installed version, it is often useful to be able to
+ * replace resources in the program or library, without recompiling, for debugging or quick hacking and testing
+ * purposes.
+ *
+ * Since GLib 2.50, it is possible to use the `G_RESOURCE_OVERLAYS` environment variable to selectively overlay
+ * resources with replacements from the filesystem.  It is a colon-separated list of substitutions to perform
+ * during resource lookups.
+ *
+ * A substitution has the form
+ *
+ * |[
+ *    /org/gtk/libgtk=/home/desrt/gtk-overlay
+ * ]|
+ *
+ * The part before the `=` is the resource subpath for which the overlay applies.  The part after is a
+ * filesystem path which contains files and subdirectories as you would like to be loaded as resources with the
+ * equivalent names.
+ *
+ * In the example above, if an application tried to load a resource with the resource path
+ * `/org/gtk/libgtk/ui/gtkdialog.ui` then GResource would check the filesystem path
+ * `/home/desrt/gtk-overlay/ui/gtkdialog.ui`.  If a file was found there, it would be used instead.  This is an
+ * overlay, not an outright replacement, which means that if a file is not found at that path, the built-in
+ * version will be used instead.  Whiteouts are not currently supported.
+ *
+ * Substitutions must start with a slash, and must not contain a trailing slash before the '='.  The path after
+ * the slash should ideally be absolute, but this is not strictly required.  It is possible to overlay the
+ * location of a single resource with an individual file.
+ *
  * Since: 2.32
  */
 
@@ -32523,6 +32551,23 @@
 
 
 /**
+ * g_settings_get_int64:
+ * @settings: a #GSettings object
+ * @key: the key to get the value for
+ *
+ * Gets the value that is stored at @key in @settings.
+ *
+ * A convenience variant of g_settings_get() for 64-bit integers.
+ *
+ * It is a programmer error to give a @key that isn't specified as
+ * having a int64 type in the schema for @settings.
+ *
+ * Returns: a 64-bit integer
+ * Since: 2.50
+ */
+
+
+/**
  * g_settings_get_mapped:
  * @settings: a #GSettings object
  * @key: the key to get the value for
@@ -32623,6 +32668,24 @@
  *
  * Returns: an unsigned integer
  * Since: 2.30
+ */
+
+
+/**
+ * g_settings_get_uint64:
+ * @settings: a #GSettings object
+ * @key: the key to get the value for
+ *
+ * Gets the value that is stored at @key in @settings.
+ *
+ * A convenience variant of g_settings_get() for 64-bit unsigned
+ * integers.
+ *
+ * It is a programmer error to give a @key that isn't specified as
+ * having a uint64 type in the schema for @settings.
+ *
+ * Returns: a 64-bit unsigned integer
+ * Since: 2.50
  */
 
 
@@ -33436,6 +33499,25 @@
 
 
 /**
+ * g_settings_set_int64:
+ * @settings: a #GSettings object
+ * @key: the name of the key to set
+ * @value: the value to set it to
+ *
+ * Sets @key in @settings to @value.
+ *
+ * A convenience variant of g_settings_set() for 64-bit integers.
+ *
+ * It is a programmer error to give a @key that isn't specified as
+ * having a int64 type in the schema for @settings.
+ *
+ * Returns: %TRUE if setting the key succeeded,
+ *     %FALSE if the key was not writable
+ * Since: 2.50
+ */
+
+
+/**
  * g_settings_set_string:
  * @settings: a #GSettings object
  * @key: the name of the key to set
@@ -33491,6 +33573,26 @@
  * Returns: %TRUE if setting the key succeeded,
  *     %FALSE if the key was not writable
  * Since: 2.30
+ */
+
+
+/**
+ * g_settings_set_uint64:
+ * @settings: a #GSettings object
+ * @key: the name of the key to set
+ * @value: the value to set it to
+ *
+ * Sets @key in @settings to @value.
+ *
+ * A convenience variant of g_settings_set() for 64-bit unsigned
+ * integers.
+ *
+ * It is a programmer error to give a @key that isn't specified as
+ * having a uint64 type in the schema for @settings.
+ *
+ * Returns: %TRUE if setting the key succeeded,
+ *     %FALSE if the key was not writable
+ * Since: 2.50
  */
 
 
