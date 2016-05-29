@@ -20752,6 +20752,18 @@
 
 
 /**
+ * g_drive_is_removable:
+ * @drive: a #GDrive.
+ *
+ * Checks if the #GDrive and/or its media is considered removable by the user.
+ * See g_drive_is_media_removable().
+ *
+ * Returns: %TRUE if @drive and/or its media is considered removable, %FALSE otherwise.
+ * Since: 2.50
+ */
+
+
+/**
  * g_drive_poll_for_media:
  * @drive: a #GDrive.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
