@@ -5692,7 +5692,8 @@
  * manager should typically be exported at `/net/example/ExampleService1`, or
  * below (to allow for multiple object managers in a service).
  *
- * It is not supported to export an object manager at the root path, `/`.
+ * It is supported, but not recommended, to export an object manager at the root
+ * path, `/`.
  *
  * See #GDBusObjectManagerClient for the client-side code that is
  * intended to be used with #GDBusObjectManagerServer or any D-Bus
@@ -12027,7 +12028,7 @@
  * Gets the commandline with which the application will be
  * started.
  *
- * Returns: a string containing the @appinfo's commandline,
+ * Returns: (type filename): a string containing the @appinfo's commandline,
  *     or %NULL if this information is not available
  * Since: 2.20
  */
@@ -12089,7 +12090,7 @@
  *
  * Gets the executable's name for the installed application.
  *
- * Returns: a string containing the @appinfo's application
+ * Returns: (type filename): a string containing the @appinfo's application
  * binaries name
  */
 
@@ -12302,7 +12303,8 @@
 /**
  * g_app_info_set_as_default_for_extension:
  * @appinfo: a #GAppInfo.
- * @extension: a string containing the file extension (without the dot).
+ * @extension: (type filename): a string containing the file extension
+ *     (without the dot).
  * @error: a #GError.
  *
  * Sets the application as the default handler for the given file extension.
@@ -12674,7 +12676,7 @@
  * The return value should not be modified or freed and is valid for as
  * long as @cmdline exists.
  *
- * Returns: the current directory, or %NULL
+ * Returns: (nullable) (type filename): the current directory, or %NULL
  * Since: 2.28
  */
 
@@ -19322,8 +19324,7 @@
 
 /**
  * g_dbus_object_manager_server_new:
- * @object_path: The object path to export the manager object at, which should
- * not be `/`.
+ * @object_path: The object path to export the manager object at.
  *
  * Creates a new #GDBusObjectManagerServer object.
  *
@@ -20192,7 +20193,8 @@
  * situations such as the #GDesktopAppInfo returned from
  * g_desktop_app_info_new_from_keyfile(), this function will return %NULL.
  *
- * Returns: The full path to the file for @info, or %NULL if not known.
+ * Returns: (type filename): The full path to the file for @info,
+ *     or %NULL if not known.
  * Since: 2.24
  */
 
@@ -20438,7 +20440,8 @@
 
 /**
  * g_desktop_app_info_new_from_filename:
- * @filename: the path of a desktop file, in the GLib filename encoding
+ * @filename: (type filename): the path of a desktop file, in the GLib
+ *      filename encoding
  *
  * Creates a new #GDesktopAppInfo.
  *
@@ -22380,7 +22383,7 @@
  * requires allocation of a temporary #GError.
  *
  * In contrast, with this function, a %FALSE return from
- * gs_file_enumerator_iterate() *always* means
+ * g_file_enumerator_iterate() *always* means
  * "error".  End of iteration is signaled by @out_info or @out_child being %NULL.
  *
  * Another crucial difference is that the references for @out_info and
@@ -22589,16 +22592,16 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: (nullable): string containing the #GFile's base name, or
- *     %NULL if given #GFile is invalid. The returned string should be
- *     freed with g_free() when no longer needed.
+ * Returns: (type filename) (nullable): string containing the #GFile's
+ *     base name, or %NULL if given #GFile is invalid. The returned string
+ *     should be freed with g_free() when no longer needed.
  */
 
 
 /**
  * g_file_get_child:
  * @file: input #GFile
- * @name: string containing the child's basename
+ * @name: (type filename): string containing the child's basename
  *
  * Gets a child of @file with basename equal to @name.
  *
@@ -22684,8 +22687,8 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: (nullable): string containing the #GFile's path, or %NULL
- *     if no such path exists. The returned string should be freed
+ * Returns: (type filename) (nullable): string containing the #GFile's path,
+ *     or %NULL if no such path exists. The returned string should be freed
  *     with g_free() when no longer needed.
  */
 
@@ -22699,8 +22702,8 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: (nullable): string with the relative path from @descendant
- *     to @parent, or %NULL if @descendant doesn't have @parent as
+ * Returns: (type filename) (nullable): string with the relative path from
+ *     @descendant to @parent, or %NULL if @descendant doesn't have @parent as
  *     prefix. The returned string should be freed with g_free() when
  *     no longer needed.
  */
@@ -23152,7 +23155,7 @@
  *
  * Gets the name for a file.
  *
- * Returns: a string containing the file name.
+ * Returns: (type filename): a string containing the file name.
  */
 
 
@@ -23479,7 +23482,7 @@
 /**
  * g_file_info_set_name:
  * @info: a #GFileInfo.
- * @name: a string containing a name.
+ * @name: (type filename): a string containing a name.
  *
  * Sets the name attribute for the current #GFileInfo.
  * See %G_FILE_ATTRIBUTE_STANDARD_NAME.
@@ -23889,7 +23892,8 @@
 /**
  * g_file_make_symbolic_link:
  * @file: a #GFile with the name of the symlink to create
- * @symlink_value: a string with the path for the target of the new symlink
+ * @symlink_value: (type filename): a string with the path for the target
+ *     of the new symlink
  * @cancellable: (allow-none): optional #GCancellable object,
  *     %NULL to ignore
  * @error: a #GError
@@ -24270,7 +24274,7 @@
 /**
  * g_file_new_for_commandline_arg_and_cwd:
  * @arg: a command line string
- * @cwd: the current working directory of the commandline
+ * @cwd: (type filename): the current working directory of the commandline
  *
  * Creates a #GFile with the given argument from the command line.
  *
@@ -24291,7 +24295,7 @@
 
 /**
  * g_file_new_for_path:
- * @path: a string containing a relative or absolute path.
+ * @path: (type filename): a string containing a relative or absolute path.
  *     The string must be encoded in the glib filename encoding.
  *
  * Constructs a #GFile for a given path. This operation never
@@ -25155,7 +25159,7 @@
 /**
  * g_file_resolve_relative_path:
  * @file: input #GFile
- * @relative_path: a given relative path string
+ * @relative_path: (type filename): a given relative path string
  *
  * Resolves a relative path for @file to an absolute path.
  *
@@ -26991,7 +26995,7 @@
 
 /**
  * g_io_module_new:
- * @filename: filename of the shared library module.
+ * @filename: (type filename): filename of the shared library module.
  *
  * Creates a new GIOModule that will load the specific
  * shared library when in use.
@@ -27042,7 +27046,8 @@
 
 /**
  * g_io_modules_load_all_in_directory:
- * @dirname: pathname for a directory containing modules to load.
+ * @dirname: (type filename): pathname for a directory containing modules
+ *     to load.
  *
  * Loads all the modules in the specified directory.
  *
@@ -27061,7 +27066,8 @@
 
 /**
  * g_io_modules_load_all_in_directory_with_scope:
- * @dirname: pathname for a directory containing modules to load.
+ * @dirname: (type filename): pathname for a directory containing modules
+ *     to load.
  * @scope: a scope to use when scanning the modules.
  *
  * Loads all the modules in the specified directory.
@@ -27082,7 +27088,8 @@
 
 /**
  * g_io_modules_scan_all_in_directory:
- * @dirname: pathname for a directory containing modules to scan.
+ * @dirname: (type filename): pathname for a directory containing modules
+ *     to scan.
  *
  * Scans all the modules in the specified directory, ensuring that
  * any extension point implemented by a module is registered.
@@ -27102,7 +27109,8 @@
 
 /**
  * g_io_modules_scan_all_in_directory_with_scope:
- * @dirname: pathname for a directory containing modules to scan.
+ * @dirname: (type filename): pathname for a directory containing modules
+ *     to scan.
  * @scope: a scope to use when scanning the modules
  *
  * Scans all the modules in the specified directory, ensuring that
@@ -33319,7 +33327,7 @@
 
 /**
  * g_settings_schema_source_new_from_directory:
- * @directory: the filename of a directory
+ * @directory: (type filename): the filename of a directory
  * @parent: (allow-none): a #GSettingsSchemaSource, or %NULL
  * @trusted: %TRUE, if the directory is trusted
  * @error: a pointer to a #GError pointer set to %NULL, or %NULL
@@ -37339,7 +37347,7 @@
 /**
  * g_subprocess_launcher_set_cwd:
  * @self: a #GSubprocess
- * @cwd: the cwd for launched processes
+ * @cwd: (type filename): the cwd for launched processes
  *
  * Sets the current working directory that processes will be launched
  * with.
@@ -37398,7 +37406,7 @@
 /**
  * g_subprocess_launcher_set_stderr_file_path:
  * @self: a #GSubprocessLauncher
- * @path: a filename or %NULL
+ * @path: (type filename) (nullable): a filename or %NULL
  *
  * Sets the file path to use as the stderr for spawned processes.
  *
@@ -37422,7 +37430,7 @@
 /**
  * g_subprocess_launcher_set_stdin_file_path:
  * @self: a #GSubprocessLauncher
- * @path: a filename or %NULL
+ * @path:
  *
  * Sets the file path to use as the stdin for spawned processes.
  *
@@ -37442,7 +37450,7 @@
 /**
  * g_subprocess_launcher_set_stdout_file_path:
  * @self: a #GSubprocessLauncher
- * @path: a filename or %NULL
+ * @path: (type filename) (nullable): a filename or %NULL
  *
  * Sets the file path to use as the stdout for spawned processes.
  *
@@ -38716,7 +38724,7 @@
 
 /**
  * g_tls_certificate_list_new_from_file:
- * @file: file containing PEM-encoded certificates to import
+ * @file: (type filename): file containing PEM-encoded certificates to import
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Creates one or more #GTlsCertificates from the PEM-encoded
@@ -38734,7 +38742,7 @@
 
 /**
  * g_tls_certificate_new_from_file:
- * @file: file containing a PEM-encoded certificate to import
+ * @file: (type filename): file containing a PEM-encoded certificate to import
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Creates a #GTlsCertificate from the PEM-encoded data in @file. The
@@ -38758,9 +38766,10 @@
 
 /**
  * g_tls_certificate_new_from_files:
- * @cert_file: file containing one or more PEM-encoded certificates to
- * import
- * @key_file: file containing a PEM-encoded private key to import
+ * @cert_file: (type filename): file containing one or more PEM-encoded
+ *     certificates to import
+ * @key_file: (type filename): file containing a PEM-encoded private key
+ *     to import
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Creates a #GTlsCertificate from the PEM-encoded data in @cert_file
@@ -39584,7 +39593,7 @@
 
 /**
  * g_tls_file_database_new:
- * @anchors: filename of anchor certificate authorities.
+ * @anchors: (type filename): filename of anchor certificate authorities.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Creates a new #GTlsFileDatabase which uses anchor certificate authorities
@@ -40445,7 +40454,7 @@
 
 /**
  * g_unix_is_mount_path_system_internal:
- * @mount_path: a mount path, e.g. `/media/disk` or `/usr`
+ * @mount_path: (type filename): a mount path, e.g. `/media/disk` or `/usr`
  *
  * Determines if @mount_path is considered an implementation of the
  * OS. This is primarily used for hiding mountable and mounted volumes
@@ -40496,7 +40505,7 @@
  *
  * Gets the device path for a unix mount.
  *
- * Returns: a string containing the device path.
+ * Returns: (type filename): a string containing the device path.
  */
 
 
@@ -40516,7 +40525,7 @@
  *
  * Gets the mount path for a unix mount.
  *
- * Returns: the mount path for @mount_entry.
+ * Returns: (type filename): the mount path for @mount_entry.
  */
 
 
@@ -40680,7 +40689,7 @@
  *
  * Gets the device path for a unix mount point.
  *
- * Returns: a string containing the device path.
+ * Returns: (type filename): a string containing the device path.
  */
 
 
@@ -40700,7 +40709,7 @@
  *
  * Gets the mount path for a unix mount point.
  *
- * Returns: a string containing the mount path.
+ * Returns: (type filename): a string containing the mount path.
  */
 
 

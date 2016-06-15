@@ -8307,7 +8307,8 @@
 
 /**
  * g_access:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @mode: as in access()
  *
  * A wrapper for the POSIX access() function. This function is used to
@@ -10379,13 +10380,13 @@
 
 /**
  * g_basename:
- * @file_name: the name of the file
+ * @file_name: (type filename): the name of the file
  *
  * Gets the name of the file without any leading directory
  * components. It returns a pointer into the given file name
  * string.
  *
- * Returns: the name of the file without any leading
+ * Returns: (type filename): the name of the file without any leading
  *     directory components
  * Deprecated: 2.2: Use g_path_get_basename() instead, but notice
  *     that g_path_get_basename() allocates new memory for the
@@ -10861,9 +10862,9 @@
 /**
  * g_bookmark_file_load_from_data_dirs:
  * @bookmark: a #GBookmarkFile
- * @file: a relative path to a filename to open and parse
- * @full_path: (allow-none): return location for a string containing the full path
- *   of the file, or %NULL
+ * @file: (type filename): a relative path to a filename to open and parse
+ * @full_path: (type filename) (allow-none): return location for a string
+ *    containing the full path of the file, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * This function looks for a desktop bookmark file named @file in the
@@ -10880,7 +10881,8 @@
 /**
  * g_bookmark_file_load_from_file:
  * @bookmark: an empty #GBookmarkFile struct
- * @filename: the path of a filename to load, in the GLib file name encoding
+ * @filename: (type filename): the path of a filename to load, in the
+ *     GLib file name encoding
  * @error: return location for a #GError, or %NULL
  *
  * Loads a desktop bookmark file into an empty #GBookmarkFile structure.
@@ -11188,7 +11190,7 @@
 /**
  * g_bookmark_file_to_file:
  * @bookmark: a #GBookmarkFile
- * @filename: path of the output file
+ * @filename: (type filename): path of the output file
  * @error: return location for a #GError, or %NULL
  *
  * This function outputs @bookmark into a file.  The write process is
@@ -11201,7 +11203,7 @@
 
 /**
  * g_build_filename:
- * @first_element: the first element in the path
+ * @first_element: (type filename): the first element in the path
  * @...: remaining elements in path, terminated by %NULL
  *
  * Creates a filename from a series of elements using the correct
@@ -11220,27 +11222,30 @@
  * path. If the first element is a relative path, the result will
  * be a relative path.
  *
- * Returns: a newly-allocated string that must be freed with g_free().
+ * Returns: (type filename): a newly-allocated string that must be freed with
+ *     g_free().
  */
 
 
 /**
  * g_build_filenamev:
- * @args: (array zero-terminated=1): %NULL-terminated array of strings containing the path elements.
+ * @args: (array zero-terminated=1) (element-type filename): %NULL-terminated
+ *     array of strings containing the path elements.
  *
  * Behaves exactly like g_build_filename(), but takes the path elements
  * as a string array, instead of varargs. This function is mainly
  * meant for language bindings.
  *
- * Returns: a newly-allocated string that must be freed with g_free().
+ * Returns: (type filename): a newly-allocated string that must be freed
+ *     with g_free().
  * Since: 2.8
  */
 
 
 /**
  * g_build_path:
- * @separator: a string used to separator the elements of the path.
- * @first_element: the first element in the path
+ * @separator: (type filename): a string used to separator the elements of the path.
+ * @first_element: (type filename): the first element in the path
  * @...: remaining elements in path, terminated by %NULL
  *
  * Creates a path from a series of elements using @separator as the
@@ -11270,20 +11275,23 @@
  * copies of the separator, elements consisting only of copies
  * of the separator are ignored.
  *
- * Returns: a newly-allocated string that must be freed with g_free().
+ * Returns: (type filename): a newly-allocated string that must be freed with
+ *     g_free().
  */
 
 
 /**
  * g_build_pathv:
  * @separator: a string used to separator the elements of the path.
- * @args: (array zero-terminated=1): %NULL-terminated array of strings containing the path elements.
+ * @args: (array zero-terminated=1) (element-type filename): %NULL-terminated
+ *     array of strings containing the path elements.
  *
  * Behaves exactly like g_build_path(), but takes the path elements
  * as a string array, instead of varargs. This function is mainly
  * meant for language bindings.
  *
- * Returns: a newly-allocated string that must be freed with g_free().
+ * Returns: (type filename): a newly-allocated string that must be freed
+ *     with g_free().
  * Since: 2.8
  */
 
@@ -11720,7 +11728,8 @@
 
 /**
  * g_chdir:
- * @path: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @path: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  *
  * A wrapper for the POSIX chdir() function. The function changes the
  * current directory of the process to @path.
@@ -11956,7 +11965,8 @@
 
 /**
  * g_chmod:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @mode: as in chmod()
  *
  * A wrapper for the POSIX chmod() function. The chmod() function is
@@ -12385,7 +12395,8 @@
 
 /**
  * g_creat:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @mode: as in creat()
  *
  * A wrapper for the POSIX creat() function. The creat() function is
@@ -14436,7 +14447,7 @@
  * On Windows, as is true of all GLib functions which operate on
  * filenames, the returned name is in UTF-8.
  *
- * Returns: The entry's name or %NULL if there are no
+ * Returns: (type filename): The entry's name or %NULL if there are no
  *   more entries. The return value is owned by GLib and
  *   must not be modified or freed.
  */
@@ -14486,14 +14497,14 @@
 
 /**
  * g_dirname:
- * @file_name: the name of the file
+ * @file_name: (type filename): the name of the file
  *
  * Gets the directory components of a file name.
  *
  * If the file name has no directory components "." is returned.
  * The returned string should be freed when no longer needed.
  *
- * Returns: the directory components of the file
+ * Returns: (type filename): the directory components of the file
  * Deprecated: use g_path_get_dirname() instead
  */
 
@@ -14831,15 +14842,15 @@
 
 /**
  * g_file_read_link:
- * @filename: the symbolic link
+ * @filename: (type filename): the symbolic link
  * @error: return location for a #GError
  *
  * Reads the contents of the symbolic link @filename like the POSIX
  * readlink() function.  The returned string is in the encoding used
  * for filenames. Use g_filename_to_utf8() to convert it to UTF-8.
  *
- * Returns: A newly-allocated string with the contents of the symbolic link,
- *          or %NULL if an error occurred.
+ * Returns: (type filename): A newly-allocated string with the contents of
+ *     the symbolic link, or %NULL if an error occurred.
  * Since: 2.4
  */
 
@@ -14885,7 +14896,8 @@
 
 /**
  * g_file_test:
- * @filename: a filename to test in the GLib file name encoding
+ * @filename: (type filename): a filename to test in the
+ *     GLib file name encoding
  * @test: bitfield of #GFileTest flags
  *
  * Returns %TRUE if any of the tests in the bitfield @test are
@@ -14936,7 +14948,8 @@
 
 /**
  * g_filename_display_basename:
- * @filename: an absolute pathname in the GLib file name encoding
+ * @filename: (type filename): an absolute pathname in the
+ *     GLib file name encoding
  *
  * Returns the display basename for the particular filename, guaranteed
  * to be valid UTF-8. The display name might not be identical to the filename,
@@ -14963,7 +14976,8 @@
 
 /**
  * g_filename_display_name:
- * @filename: a pathname hopefully in the GLib file name encoding
+ * @filename: (type filename): a pathname hopefully in the
+ *     GLib file name encoding
  *
  * Converts a filename into a valid UTF-8 string. The conversion is
  * not necessarily reversible, so you should keep the original around
@@ -15035,9 +15049,9 @@
 
 /**
  * g_filename_to_uri:
- * @filename: an absolute filename specified in the GLib file name encoding,
- *            which is the on-disk file name bytes on Unix, and UTF-8 on
- *            Windows
+ * @filename: (type filename): an absolute filename specified in the GLib file
+ *     name encoding, which is the on-disk file name bytes on Unix, and UTF-8
+ *     on Windows
  * @hostname: (allow-none): A UTF-8 encoded hostname, or %NULL for none.
  * @error: location to store the error occurring, or %NULL to ignore
  *         errors. Any of the errors in #GConvertError may occur.
@@ -15052,7 +15066,7 @@
 
 /**
  * g_filename_to_utf8:
- * @opsysstring: a string in the encoding for filenames
+ * @opsysstring: (type filename): a string in the encoding for filenames
  * @len: the length of the string, or -1 if the string is
  *                 nul-terminated (Note that some encodings may allow nul
  *                 bytes to occur inside strings. In that case, using -1
@@ -15081,7 +15095,7 @@
 
 /**
  * g_find_program_in_path:
- * @program: a program name in the GLib file name encoding
+ * @program: (type filename): a program name in the GLib file name encoding
  *
  * Locates the first executable named @program in the user's path, in the
  * same way that execvp() would locate it. Returns an allocated string
@@ -15101,13 +15115,15 @@
  * the program is found, the return value contains the full name
  * including the type suffix.
  *
- * Returns: a newly-allocated string with the absolute path, or %NULL
+ * Returns: (type filename): a newly-allocated string with the absolute path,
+ *     or %NULL
  */
 
 
 /**
  * g_fopen:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @mode: a string describing the mode in which the file should be opened
  *
  * A wrapper for the stdio fopen() function. The fopen() function
@@ -15216,7 +15232,8 @@
 
 /**
  * g_freopen:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @mode: a string describing the mode in which the file should be  opened
  * @stream: (allow-none): an existing stream which will be reused, or %NULL
  *
@@ -15297,7 +15314,7 @@
  * the current directory.  This can make a difference in the case that
  * the current directory is the target of a symbolic link.
  *
- * Returns: the current directory
+ * Returns: (type filename): the current directory
  */
 
 
@@ -15389,7 +15406,7 @@
  * should either directly check the `HOME` environment variable yourself
  * or unset it before calling any functions in GLib.
  *
- * Returns: the current user's home directory
+ * Returns: (type filename): the current user's home directory
  */
 
 
@@ -15513,7 +15530,7 @@
  * real user name cannot be determined, the string "Unknown" is
  * returned.
  *
- * Returns: the user's real name.
+ * Returns: (type filename): the user's real name.
  */
 
 
@@ -15553,8 +15570,9 @@
  * of clip art, or a log file in the CSIDL_COMMON_APPDATA folder.
  * This information will not roam and is available to anyone using the computer.
  *
- * Returns: (array zero-terminated=1) (transfer none): a %NULL-terminated array of strings owned by GLib that must
- *               not be modified or freed.
+ * Returns: (array zero-terminated=1) (element-type filename) (transfer none):
+ *     a %NULL-terminated array of strings owned by GLib that must not be
+ *     modified or freed.
  * Since: 2.6
  */
 
@@ -15592,8 +15610,9 @@
  * Note that on Windows the returned list can vary depending on where
  * this function is called.
  *
- * Returns: (array zero-terminated=1) (transfer none): a %NULL-terminated array of strings owned by GLib that must
- *               not be modified or freed.
+ * Returns: (array zero-terminated=1) (element-type filename) (transfer none):
+ *     a %NULL-terminated array of strings owned by GLib that must not be
+ *     modified or freed.
  * Since: 2.6
  */
 
@@ -15616,7 +15635,7 @@
  * it is always UTF-8. The return value is never %NULL or the empty
  * string.
  *
- * Returns: the directory to use for temporary files.
+ * Returns: (type filename): the directory to use for temporary files.
  */
 
 
@@ -15636,7 +15655,7 @@
  * C:\Documents and Settings\username\Local Settings\Temporary Internet Files.
  * See documentation for CSIDL_INTERNET_CACHE.
  *
- * Returns: a string owned by GLib that must not be modified
+ * Returns: (type filename): a string owned by GLib that must not be modified
  *               or freed.
  * Since: 2.6
  */
@@ -15658,7 +15677,7 @@
  * CSIDL_LOCAL_APPDATA. Note that on Windows it thus is the same as
  * what g_get_user_data_dir() returns.
  *
- * Returns: a string owned by GLib that must not be modified
+ * Returns: (type filename): a string owned by GLib that must not be modified
  *               or freed.
  * Since: 2.6
  */
@@ -15680,7 +15699,7 @@
  * CSIDL_LOCAL_APPDATA. Note that on Windows it thus is the same as
  * what g_get_user_config_dir() returns.
  *
- * Returns: a string owned by GLib that must not be modified
+ * Returns: (type filename): a string owned by GLib that must not be modified
  *               or freed.
  * Since: 2.6
  */
@@ -15694,7 +15713,7 @@
  * encoding, or something else, and there is no guarantee that it is even
  * consistent on a machine. On Windows, it is always UTF-8.
  *
- * Returns: the user name of the current user.
+ * Returns: (type filename): the user name of the current user.
  */
 
 
@@ -15717,7 +15736,8 @@
  * CSIDL_LOCAL_APPDATA.  Note that on Windows it thus is the same as
  * what g_get_user_config_dir() returns.
  *
- * Returns: a string owned by GLib that must not be modified or freed.
+ * Returns: (type filename): a string owned by GLib that must not be
+ *     modified or freed.
  * Since: 2.28
  */
 
@@ -15737,8 +15757,8 @@
  * of the special directory without requiring the session to restart; GLib
  * will not reflect any change once the special directories are loaded.
  *
- * Returns: the path to the specified special directory, or %NULL
- *   if the logical id was not found. The returned string is owned by
+ * Returns: (type filename): the path to the specified special directory, or
+ *   %NULL if the logical id was not found. The returned string is owned by
  *   GLib and should not be modified or freed.
  * Since: 2.14
  */
@@ -17209,7 +17229,7 @@
 
 /**
  * g_io_channel_new_file:
- * @filename: A string containing the name of a file
+ * @filename: (type filename): A string containing the name of a file
  * @mode: One of "r", "w", "a", "r+", "w+", "a+". These have
  *        the same meaning as in fopen()
  * @error: A location to return an error of type %G_FILE_ERROR
@@ -19305,7 +19325,8 @@
 
 /**
  * g_lstat:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @buf: a pointer to a stat struct, which will be filled with the file
  *     information
  *
@@ -20102,7 +20123,8 @@
 
 /**
  * g_mapped_file_new:
- * @filename: The path of the file to load, in the GLib filename encoding
+ * @filename: (type filename): The path of the file to load, in the GLib
+ *     filename encoding
  * @writable: whether the mapping should be writable
  * @error: return location for a #GError, or %NULL
  *
@@ -20993,7 +21015,8 @@
 
 /**
  * g_mkdir:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @mode: permissions to use for the newly created directory
  *
  * A wrapper for the POSIX mkdir() function. The mkdir() function
@@ -21010,7 +21033,7 @@
 
 /**
  * g_mkdir_with_parents:
- * @pathname: a pathname in the GLib file name encoding
+ * @pathname: (type filename): a pathname in the GLib file name encoding
  * @mode: permissions to use for newly created directories
  *
  * Create a directory if it doesn't already exist. Create intermediate
@@ -21038,8 +21061,8 @@
  * The string should be in the GLib file name encoding. Most importantly,
  * on Windows it should be in UTF-8.
  *
- * Returns: A pointer to @tmpl, which has been modified
- *     to hold the directory name.  In case of errors, %NULL is
+ * Returns: (nullable) (type filename): A pointer to @tmpl, which has been
+ *     modified to hold the directory name.  In case of errors, %NULL is
  *     returned and %errno will be set.
  * Since: 2.30
  */
@@ -21062,8 +21085,8 @@
  * in the GLib file name encoding. Most importantly, on Windows it
  * should be in UTF-8.
  *
- * Returns: A pointer to @tmpl, which has been modified
- *     to hold the directory name. In case of errors, %NULL is
+ * Returns: (nullable) (type filename): A pointer to @tmpl, which has been
+ *     modified to hold the directory name. In case of errors, %NULL is
  *     returned, and %errno will be set.
  * Since: 2.30
  */
@@ -21712,7 +21735,8 @@
 
 /**
  * g_open:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @flags: as in open()
  * @mode: as in open()
  *
@@ -22278,7 +22302,7 @@
 
 /**
  * g_path_get_basename:
- * @file_name: the name of the file
+ * @file_name: (type filename): the name of the file
  *
  * Gets the last component of the filename.
  *
@@ -22287,27 +22311,27 @@
  * separators (and on Windows, possibly a drive letter), a single
  * separator is returned. If @file_name is empty, it gets ".".
  *
- * Returns: a newly allocated string containing the last
+ * Returns: (type filename): a newly allocated string containing the last
  *    component of the filename
  */
 
 
 /**
  * g_path_get_dirname:
- * @file_name: the name of the file
+ * @file_name: (type filename): the name of the file
  *
  * Gets the directory components of a file name.
  *
  * If the file name has no directory components "." is returned.
  * The returned string should be freed when no longer needed.
  *
- * Returns: the directory components of the file
+ * Returns: (type filename): the directory components of the file
  */
 
 
 /**
  * g_path_is_absolute:
- * @file_name: a file name
+ * @file_name: (type filename): a file name
  *
  * Returns %TRUE if the given @file_name is an absolute file name.
  * Note that this is a somewhat vague concept on Windows.
@@ -22340,13 +22364,14 @@
 
 /**
  * g_path_skip_root:
- * @file_name: a file name
+ * @file_name: (type filename): a file name
  *
  * Returns a pointer into @file_name after the root component,
  * i.e. after the "/" in UNIX or "C:\" under Windows. If @file_name
  * is not an absolute path it returns %NULL.
  *
- * Returns: (nullable): a pointer into @file_name after the root component
+ * Returns: (type filename) (nullable): a pointer into @file_name after the
+ *     root component
  */
 
 
@@ -24518,7 +24543,8 @@
 
 /**
  * g_remove:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  *
  * A wrapper for the POSIX remove() function. The remove() function
  * deletes a name from the filesystem.
@@ -24545,8 +24571,9 @@
 
 /**
  * g_rename:
- * @oldfilename: a pathname in the GLib file name encoding (UTF-8 on Windows)
- * @newfilename: a pathname in the GLib file name encoding
+ * @oldfilename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
+ * @newfilename: (type filename): a pathname in the GLib file name encoding
  *
  * A wrapper for the POSIX rename() function. The rename() function
  * renames a file, moving it between directories if required.
@@ -24570,7 +24597,8 @@
 
 /**
  * g_rmdir:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  *
  * A wrapper for the POSIX rmdir() function. The rmdir() function
  * deletes a directory from the filesystem.
@@ -27197,7 +27225,7 @@
 
 /**
  * g_spawn_async:
- * @working_directory: (allow-none): child's current working directory, or %NULL to inherit parent's
+ * @working_directory: (type filename) (allow-none): child's current working directory, or %NULL to inherit parent's
  * @argv: (array zero-terminated=1): child's argument vector
  * @envp: (array zero-terminated=1) (allow-none): child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
@@ -27227,7 +27255,7 @@
 
 /**
  * g_spawn_async_with_pipes:
- * @working_directory: (allow-none): child's current working directory, or %NULL to inherit parent's, in the GLib file name encoding
+ * @working_directory: (type filename) (allow-none): child's current working directory, or %NULL to inherit parent's, in the GLib file name encoding
  * @argv: (array zero-terminated=1): child's argument vector, in the GLib file name encoding
  * @envp: (array zero-terminated=1) (allow-none): child's environment, or %NULL to inherit parent's, in the GLib file name encoding
  * @flags: flags from #GSpawnFlags
@@ -27508,7 +27536,7 @@
 
 /**
  * g_spawn_sync:
- * @working_directory: (allow-none): child's current working directory, or %NULL to inherit parent's
+ * @working_directory: (type filename) (allow-none): child's current working directory, or %NULL to inherit parent's
  * @argv: (array zero-terminated=1): child's argument vector
  * @envp: (array zero-terminated=1) (allow-none): child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
@@ -27566,7 +27594,8 @@
 
 /**
  * g_stat:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @buf: a pointer to a stat struct, which will be filled with the file
  *     information
  *
@@ -29293,7 +29322,7 @@
  * This is approximately the same as calling g_test_build_filename("."),
  * but you don't need to free the return value.
  *
- * Returns: the path of the directory, owned by GLib
+ * Returns: (type filename): the path of the directory, owned by GLib
  * Since: 2.38
  */
 
@@ -32279,7 +32308,8 @@
 
 /**
  * g_unlink:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  *
  * A wrapper for the POSIX unlink() function. The unlink() function
  * deletes a name from the filesystem. If this was the last link to the
@@ -32966,7 +32996,8 @@
 
 /**
  * g_utime:
- * @filename: a pathname in the GLib file name encoding (UTF-8 on Windows)
+ * @filename: (type filename): a pathname in the GLib file name encoding
+ *     (UTF-8 on Windows)
  * @utb: a pointer to a struct utimbuf.
  *
  * A wrapper for the POSIX utime() function. The utime() function
