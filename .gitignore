@@ -53,6 +53,7 @@ g-ir-annotation-tool
 g-ir-compiler
 g-ir-doc-tool
 g-ir-generate
+g-ir-inspect
 g-ir-scanner
 gir/cairo-1.0.gir
 glib-print
@@ -108,10 +109,12 @@ build/win32/vs10/g-ir-compiler.vcxproj
 build/win32/vs10/g-ir-compiler.vcxproj.filters
 build/win32/vs10/girepository.vcxproj
 build/win32/vs10/girepository.vcxproj.filters
+build/win32/vs10/gi-version-paths.props
 build/win32/vs9/cmph.vcproj
 build/win32/vs9/gir.vsprops
 build/win32/vs9/g-ir-compiler.vcproj
 build/win32/vs9/girepository.vcproj
+build/win32/vs9/gi-version-paths.vsprops
 
 #yelp-build
 *.html
