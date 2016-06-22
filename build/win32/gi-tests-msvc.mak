@@ -20,7 +20,7 @@ LDFLAGS = /link $(LDFLAGS_ARCH) $(BASE_GLIB_LIBS) /DEBUG /opt:noref
 LDFLAGS_DLL = /link $(LDFLAGS_ARCH) /DLL /out:$@ /implib:$*-$(GI_APIVERSION).lib $(BASE_GLIB_LIBS) /DEBUG /opt:noref
 
 # Special CFLAGS for Regress test
-REGRESS_CFLAGS = -DREGRESS_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f" -DREGRESS_SOME_CHAR='c'
+REGRESS_CFLAGS = /I$(PREFIX)\include\cairo /DREGRESS_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f" /DREGRESS_SOME_CHAR='c'
 
 # The test .gir's for G-I that are built
 built_test_girs = 	\
