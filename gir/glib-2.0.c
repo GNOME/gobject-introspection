@@ -18111,6 +18111,21 @@
 
 
 /**
+ * g_key_file_load_from_bytes:
+ * @key_file: an empty #GKeyFile struct
+ * @bytes: a #GBytes
+ * @flags: flags from #GKeyFileFlags
+ * @error: return location for a #GError, or %NULL
+ *
+ * Loads a key file from the data in @bytes into an empty #GKeyFile structure.
+ * If the object cannot be created then %error is set to a #GKeyFileError.
+ *
+ * Returns: %TRUE if a key file could be loaded, %FALSE otherwise
+ * Since: 2.50
+ */
+
+
+/**
  * g_key_file_load_from_data:
  * @key_file: an empty #GKeyFile struct
  * @data: key file loaded in memory

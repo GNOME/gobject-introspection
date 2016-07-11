@@ -1746,7 +1746,7 @@
  *
  * Emitted when @file has been changed.
  *
- * If using %G_FILE_MONITOR_WATCH_RENAMES on a directory monitor, and
+ * If using %G_FILE_MONITOR_WATCH_MOVES on a directory monitor, and
  * the information is available (and if supported by the backend),
  * @event_type may be %G_FILE_MONITOR_EVENT_RENAMED,
  * %G_FILE_MONITOR_EVENT_MOVED_IN or %G_FILE_MONITOR_EVENT_MOVED_OUT.
@@ -1765,7 +1765,7 @@
  * %G_FILE_MONITOR_EVENT_DELETED, with extra information.
  * %G_FILE_MONITOR_EVENT_RENAMED is equivalent to a delete/create
  * pair.  This is exactly how the events will be reported in the case
- * that the %G_FILE_MONITOR_WATCH_RENAMES flag is not in use.
+ * that the %G_FILE_MONITOR_WATCH_MOVES flag is not in use.
  *
  * If using the deprecated flag %G_FILE_MONITOR_SEND_MOVED flag and @event_type is
  * #G_FILE_MONITOR_EVENT_MOVED, @file will be set to a #GFile containing the
@@ -4170,6 +4170,153 @@
 
 
 /**
+ * GXdpNetworkMonitor:
+ *
+ * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link>.
+ */
+
+
+/**
+ * GXdpNetworkMonitor::changed:
+ * @object: A #GXdpNetworkMonitor.
+ * @arg_available: Argument.
+ *
+ * On the client-side, this signal is emitted whenever the D-Bus signal <link linkend="gdbus-signal-org-freedesktop-portal-NetworkMonitor.changed">"changed"</link> is received.
+ *
+ * On the service-side, this signal can be used with e.g. g_signal_emit_by_name() to make the object emit the D-Bus signal.
+ */
+
+
+/**
+ * GXdpNetworkMonitor:available:
+ *
+ * Represents the D-Bus property <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.available">"available"</link>.
+ *
+ * Since the D-Bus property for this #GObject property is readable but not writable, it is meaningful to read from it on both the client- and service-side. It is only meaningful, however, to write to it on the service-side.
+ */
+
+
+/**
+ * GXdpNetworkMonitor:connectivity:
+ *
+ * Represents the D-Bus property <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.connectivity">"connectivity"</link>.
+ *
+ * Since the D-Bus property for this #GObject property is readable but not writable, it is meaningful to read from it on both the client- and service-side. It is only meaningful, however, to write to it on the service-side.
+ */
+
+
+/**
+ * GXdpNetworkMonitor:metered:
+ *
+ * Represents the D-Bus property <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.metered">"metered"</link>.
+ *
+ * Since the D-Bus property for this #GObject property is readable but not writable, it is meaningful to read from it on both the client- and service-side. It is only meaningful, however, to write to it on the service-side.
+ */
+
+
+/**
+ * GXdpNetworkMonitorIface:
+ * @parent_iface: The parent interface.
+ * @get_available: Getter for the #GXdpNetworkMonitor:available property.
+ * @get_connectivity: Getter for the #GXdpNetworkMonitor:connectivity property.
+ * @get_metered: Getter for the #GXdpNetworkMonitor:metered property.
+ * @changed: Handler for the #GXdpNetworkMonitor::changed signal.
+ *
+ * Virtual table for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link>.
+ */
+
+
+/**
+ * GXdpNetworkMonitorProxy:
+ *
+ * The #GXdpNetworkMonitorProxy structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * GXdpNetworkMonitorProxyClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #GXdpNetworkMonitorProxy.
+ */
+
+
+/**
+ * GXdpNetworkMonitorSkeleton:
+ *
+ * The #GXdpNetworkMonitorSkeleton structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * GXdpNetworkMonitorSkeletonClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #GXdpNetworkMonitorSkeleton.
+ */
+
+
+/**
+ * GXdpProxyResolver:
+ *
+ * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-ProxyResolver.top_of_page">org.freedesktop.portal.ProxyResolver</link>.
+ */
+
+
+/**
+ * GXdpProxyResolver::handle-lookup:
+ * @object: A #GXdpProxyResolver.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_uri: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-ProxyResolver.Lookup">Lookup()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_proxy_resolver_complete_lookup() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpProxyResolverIface:
+ * @parent_iface: The parent interface.
+ * @handle_lookup: Handler for the #GXdpProxyResolver::handle-lookup signal.
+ *
+ * Virtual table for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-ProxyResolver.top_of_page">org.freedesktop.portal.ProxyResolver</link>.
+ */
+
+
+/**
+ * GXdpProxyResolverProxy:
+ *
+ * The #GXdpProxyResolverProxy structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * GXdpProxyResolverProxyClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #GXdpProxyResolverProxy.
+ */
+
+
+/**
+ * GXdpProxyResolverSkeleton:
+ *
+ * The #GXdpProxyResolverSkeleton structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * GXdpProxyResolverSkeletonClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #GXdpProxyResolverSkeleton.
+ */
+
+
+/**
  * GZlibCompressor:
  *
  * Zlib decompression
@@ -4237,6 +4384,24 @@
  * A boxed #GType corresponding to #GSettingsSchemaSource.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * SECTION:GXdpNetworkMonitor
+ * @title: GXdpNetworkMonitor
+ * @short_description: Generated C code for the org.freedesktop.portal.NetworkMonitor D-Bus interface
+ *
+ * This section contains code for working with the <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link> D-Bus interface in C.
+ */
+
+
+/**
+ * SECTION:GXdpProxyResolver
+ * @title: GXdpProxyResolver
+ * @short_description: Generated C code for the org.freedesktop.portal.ProxyResolver D-Bus interface
+ *
+ * This section contains code for working with the <link linkend="gdbus-interface-org-freedesktop-portal-ProxyResolver.top_of_page">org.freedesktop.portal.ProxyResolver</link> D-Bus interface in C.
  */
 
 
@@ -41122,6 +41287,63 @@
 
 
 /**
+ * g_vfs_register_uri_scheme:
+ * @vfs: a #GVfs
+ * @scheme: an URI scheme, e.g. "http"
+ * @uri_func: (scope notified) (nullable): a #GVfsFileLookupFunc
+ * @uri_data: (nullable): custom data passed to be passed to @uri_func, or %NULL
+ * @uri_destroy: (nullable): function to be called when unregistering the
+ *     URI scheme, or when @vfs is disposed, to free the resources used
+ *     by the URI lookup function
+ * @parse_name_func: (scope notified) (nullable): a #GVfsFileLookupFunc
+ * @parse_name_data: (nullable): custom data passed to be passed to
+ *     @parse_name_func, or %NULL
+ * @parse_name_destroy: (nullable): function to be called when unregistering the
+ *     URI scheme, or when @vfs is disposed, to free the resources used
+ *     by the parse name lookup function
+ *
+ * Registers @uri_func and @parse_name_func as the #GFile URI and parse name
+ * lookup functions for URIs with a scheme matching @scheme.
+ * Note that @scheme is registered only within the running application, as
+ * opposed to desktop-wide as it happens with GVfs backends.
+ *
+ * When a #GFile is requested with an URI containing @scheme (e.g. through
+ * g_file_new_for_uri()), @uri_func will be called to allow a custom
+ * constructor. The implementation of @uri_func should not be blocking, and
+ * must not call g_vfs_register_uri_scheme() or g_vfs_unregister_uri_scheme().
+ *
+ * When g_file_parse_name() is called with a parse name obtained from such file,
+ * @parse_name_func will be called to allow the #GFile to be created again. In
+ * that case, it's responsibility of @parse_name_func to make sure the parse
+ * name matches what the custom #GFile implementation returned when
+ * g_file_get_parse_name() was previously called. The implementation of
+ * @parse_name_func should not be blocking, and must not call
+ * g_vfs_register_uri_scheme() or g_vfs_unregister_uri_scheme().
+ *
+ * It's an error to call this function twice with the same scheme. To unregister
+ * a custom URI scheme, use g_vfs_unregister_uri_scheme().
+ *
+ * Returns: %TRUE if @scheme was successfully registered, or %FALSE if a handler
+ *     for @scheme already exists.
+ * Since: 2.50
+ */
+
+
+/**
+ * g_vfs_unregister_uri_scheme:
+ * @vfs: a #GVfs
+ * @scheme: an URI scheme, e.g. "http"
+ *
+ * Unregisters the URI handler for @scheme previously registered with
+ * g_vfs_register_uri_scheme().
+ *
+ * Returns: %TRUE if @scheme was successfully unregistered, or %FALSE if a
+ *     handler for @scheme does not exist.
+ * Since: 2.50
+ */
+
+
+/**
  * g_volume_can_eject:
  * @volume: a #GVolume
  *
@@ -42281,6 +42503,397 @@
  * GetLogicalDrives() is returned.
  *
  * Returns: bitmask with same meaning as returned by GetLogicalDrives()
+ */
+
+
+/**
+ * gxdp_network_monitor_emit_changed:
+ * @object: A #GXdpNetworkMonitor.
+ * @arg_available: Argument to pass with the signal.
+ *
+ * Emits the <link linkend="gdbus-signal-org-freedesktop-portal-NetworkMonitor.changed">"changed"</link> D-Bus signal.
+ */
+
+
+/**
+ * gxdp_network_monitor_get_available: (skip)
+ * @object: A #GXdpNetworkMonitor.
+ *
+ * Gets the value of the <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.available">"available"</link> D-Bus property.
+ *
+ * Since this D-Bus property is readable, it is meaningful to use this function on both the client- and service-side.
+ *
+ * Returns: The property value.
+ */
+
+
+/**
+ * gxdp_network_monitor_get_connectivity: (skip)
+ * @object: A #GXdpNetworkMonitor.
+ *
+ * Gets the value of the <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.connectivity">"connectivity"</link> D-Bus property.
+ *
+ * Since this D-Bus property is readable, it is meaningful to use this function on both the client- and service-side.
+ *
+ * Returns: The property value.
+ */
+
+
+/**
+ * gxdp_network_monitor_get_metered: (skip)
+ * @object: A #GXdpNetworkMonitor.
+ *
+ * Gets the value of the <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.metered">"metered"</link> D-Bus property.
+ *
+ * Since this D-Bus property is readable, it is meaningful to use this function on both the client- and service-side.
+ *
+ * Returns: The property value.
+ */
+
+
+/**
+ * gxdp_network_monitor_interface_info:
+ *
+ * Gets a machine-readable description of the <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link> D-Bus interface.
+ *
+ * Returns: (transfer none): A #GDBusInterfaceInfo. Do not free.
+ */
+
+
+/**
+ * gxdp_network_monitor_override_properties:
+ * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @property_id_begin: The property id to assign to the first overridden property.
+ *
+ * Overrides all #GObject properties in the #GXdpNetworkMonitor interface for a concrete class.
+ * The properties are overridden in the order they are defined.
+ *
+ * Returns: The last property id.
+ */
+
+
+/**
+ * gxdp_network_monitor_proxy_new:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link>. See g_dbus_proxy_new() for more details.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_network_monitor_proxy_new_finish() to get the result of the operation.
+ *
+ * See gxdp_network_monitor_proxy_new_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * gxdp_network_monitor_proxy_new_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_network_monitor_proxy_new().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with gxdp_network_monitor_proxy_new().
+ *
+ * Returns: (transfer full) (type GXdpNetworkMonitorProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_network_monitor_proxy_new_for_bus:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Like gxdp_network_monitor_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_network_monitor_proxy_new_for_bus_finish() to get the result of the operation.
+ *
+ * See gxdp_network_monitor_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * gxdp_network_monitor_proxy_new_for_bus_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_network_monitor_proxy_new_for_bus().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with gxdp_network_monitor_proxy_new_for_bus().
+ *
+ * Returns: (transfer full) (type GXdpNetworkMonitorProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_network_monitor_proxy_new_for_bus_sync:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Like gxdp_network_monitor_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_network_monitor_proxy_new_for_bus() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type GXdpNetworkMonitorProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_network_monitor_proxy_new_sync:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link>. See g_dbus_proxy_new_sync() for more details.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_network_monitor_proxy_new() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type GXdpNetworkMonitorProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_network_monitor_set_available: (skip)
+ * @object: A #GXdpNetworkMonitor.
+ * @value: The value to set.
+ *
+ * Sets the <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.available">"available"</link> D-Bus property to @value.
+ *
+ * Since this D-Bus property is not writable, it is only meaningful to use this function on the service-side.
+ */
+
+
+/**
+ * gxdp_network_monitor_set_connectivity: (skip)
+ * @object: A #GXdpNetworkMonitor.
+ * @value: The value to set.
+ *
+ * Sets the <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.connectivity">"connectivity"</link> D-Bus property to @value.
+ *
+ * Since this D-Bus property is not writable, it is only meaningful to use this function on the service-side.
+ */
+
+
+/**
+ * gxdp_network_monitor_set_metered: (skip)
+ * @object: A #GXdpNetworkMonitor.
+ * @value: The value to set.
+ *
+ * Sets the <link linkend="gdbus-property-org-freedesktop-portal-NetworkMonitor.metered">"metered"</link> D-Bus property to @value.
+ *
+ * Since this D-Bus property is not writable, it is only meaningful to use this function on the service-side.
+ */
+
+
+/**
+ * gxdp_network_monitor_skeleton_new:
+ *
+ * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link>.
+ *
+ * Returns: (transfer full) (type GXdpNetworkMonitorSkeleton): The skeleton object.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_call_lookup:
+ * @proxy: A #GXdpProxyResolverProxy.
+ * @arg_uri: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-ProxyResolver.Lookup">Lookup()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_proxy_resolver_call_lookup_finish() to get the result of the operation.
+ *
+ * See gxdp_proxy_resolver_call_lookup_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_call_lookup_finish:
+ * @proxy: A #GXdpProxyResolverProxy.
+ * @out_proxies: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_proxy_resolver_call_lookup().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_proxy_resolver_call_lookup().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_call_lookup_sync:
+ * @proxy: A #GXdpProxyResolverProxy.
+ * @arg_uri: Argument to pass with the method invocation.
+ * @out_proxies: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-ProxyResolver.Lookup">Lookup()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_proxy_resolver_call_lookup() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_complete_lookup:
+ * @object: A #GXdpProxyResolver.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @proxies: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-ProxyResolver.Lookup">Lookup()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_interface_info:
+ *
+ * Gets a machine-readable description of the <link linkend="gdbus-interface-org-freedesktop-portal-ProxyResolver.top_of_page">org.freedesktop.portal.ProxyResolver</link> D-Bus interface.
+ *
+ * Returns: (transfer none): A #GDBusInterfaceInfo. Do not free.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_override_properties:
+ * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @property_id_begin: The property id to assign to the first overridden property.
+ *
+ * Overrides all #GObject properties in the #GXdpProxyResolver interface for a concrete class.
+ * The properties are overridden in the order they are defined.
+ *
+ * Returns: The last property id.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_proxy_new:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-ProxyResolver.top_of_page">org.freedesktop.portal.ProxyResolver</link>. See g_dbus_proxy_new() for more details.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_proxy_resolver_proxy_new_finish() to get the result of the operation.
+ *
+ * See gxdp_proxy_resolver_proxy_new_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_proxy_new_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_proxy_resolver_proxy_new().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with gxdp_proxy_resolver_proxy_new().
+ *
+ * Returns: (transfer full) (type GXdpProxyResolverProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_proxy_new_for_bus:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Like gxdp_proxy_resolver_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_proxy_resolver_proxy_new_for_bus_finish() to get the result of the operation.
+ *
+ * See gxdp_proxy_resolver_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_proxy_new_for_bus_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_proxy_resolver_proxy_new_for_bus().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with gxdp_proxy_resolver_proxy_new_for_bus().
+ *
+ * Returns: (transfer full) (type GXdpProxyResolverProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_proxy_new_for_bus_sync:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Like gxdp_proxy_resolver_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_proxy_resolver_proxy_new_for_bus() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type GXdpProxyResolverProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_proxy_new_sync:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-ProxyResolver.top_of_page">org.freedesktop.portal.ProxyResolver</link>. See g_dbus_proxy_new_sync() for more details.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_proxy_resolver_proxy_new() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type GXdpProxyResolverProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_proxy_resolver_skeleton_new:
+ *
+ * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-ProxyResolver.top_of_page">org.freedesktop.portal.ProxyResolver</link>.
+ *
+ * Returns: (transfer full) (type GXdpProxyResolverSkeleton): The skeleton object.
  */
 
 
