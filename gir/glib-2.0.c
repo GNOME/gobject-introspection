@@ -8248,6 +8248,47 @@
  * generally considered undefined after one of these checks fails.
  * They are not intended for normal control flow, only to give a
  * perhaps-helpful warning before giving up.
+ *
+ * Structured logging output is supported using g_log_structured(). This differs
+ * from the traditional g_log() API in that log messages are handled as a
+ * collection of key–value pairs representing individual pieces of information,
+ * rather than as a single string containing all the information in an arbitrary
+ * format.
+ *
+ * The support for structured logging was motivated by the following needs (some
+ * of which were supported previously; others weren’t):
+ *  * Support for multiple logging levels.
+ *  * Structured log support with the ability to add `MESSAGE_ID`s (see
+ *    g_log_structured()).
+ *  * Moving the responsibility for filtering log messages from the program to
+ *    the log viewer — instead of libraries and programs installing log handlers
+ *    (with g_log_set_handler()) which filter messages before output, all log
+ *    messages are outputted, and the log viewer program (such as `journalctl`)
+ *    must filter them. This is based on the idea that bugs are sometimes hard
+ *    to reproduce, so it is better to log everything possible and then use
+ *    tools to analyse the logs than it is to not be able to reproduce a bug to
+ *    get additional log data. Code which uses logging in performance-critical
+ *    sections should compile out the g_log_structured() calls in
+ *    release builds, and compile them in in debugging builds.
+ *  * A single writer function which handles all log messages in a process, from
+ *    all libraries and program code; rather than multiple log handlers with
+ *    poorly defined interactions between them. This allows a program to easily
+ *    change its logging policy by changing the writer function, for example to
+ *    log to an additional location or to change what logging output fallbacks
+ *    are used. The log writer functions provided by GLib are exposed publicly
+ *    so they can be used from programs’ log writers. This allows log writer
+ *    policy and implementation to be kept separate.
+ *  * If a library wants to add standard information to all of its log messages
+ *    (such as library state) or to redact private data (such as passwords or
+ *    network credentials), it should use a wrapper function around its
+ *    g_log_structured() calls or implement that in the single log writer
+ *    function.
+ *  * If a program wants to pass context data from a g_log_structured() call to
+ *    its log writer function so that, for example, it can use the correct
+ *    server connection to submit logs to, that user data can be passed as a
+ *    zero-length #GLogField to g_log_structured_array().
+ *  * Color output needed to be supported on the terminal, to make reading
+ *    through logs easier.
  */
 
 
@@ -12085,11 +12126,29 @@
 
 
 /**
+ * g_compute_hmac_for_bytes:
+ * @digest_type: a #GChecksumType to use for the HMAC
+ * @key: the key to use in the HMAC
+ * @data: binary blob to compute the HMAC of
+ *
+ * Computes the HMAC for a binary @data. This is a
+ * convenience wrapper for g_hmac_new(), g_hmac_get_string()
+ * and g_hmac_unref().
+ *
+ * The hexadecimal string returned will be in lower case.
+ *
+ * Returns: the HMAC of the binary data as a string in hexadecimal.
+ *   The returned string should be freed with g_free() when done using it.
+ * Since: 2.50
+ */
+
+
+/**
  * g_compute_hmac_for_data:
  * @digest_type: a #GChecksumType to use for the HMAC
  * @key: (array length=key_len): the key to use in the HMAC
  * @key_len: the length of the key
- * @data: binary blob to compute the HMAC of
+ * @data: (array length=length): binary blob to compute the HMAC of
  * @length: length of @data
  *
  * Computes the HMAC for a binary @data of @length. This is a
@@ -19226,6 +19285,14 @@
  * the `G_DEBUG` environment variable (see
  * [Running GLib Applications](glib-running.html)).
  *
+ * Libraries should not call this function, as it affects all messages logged
+ * by a process, including those from other libraries.
+ *
+ * Structured log messages (using g_log_structured() and
+ * g_log_structured_array()) are fatal only if the default log writer is used;
+ * otherwise it is up to the writer function to determine which log messages
+ * are fatal.
+ *
  * Returns: the old fatal mask
  */
 
@@ -19252,6 +19319,11 @@
  *
  * Sets the log levels which are fatal in the given domain.
  * %G_LOG_LEVEL_ERROR is always fatal.
+ *
+ * This has no effect on structured log messages (using g_log_structured() or
+ * g_log_structured_array()). To change the fatal behaviour for specific log
+ * messages, programs must install a custom log writer function using
+ * g_log_set_writer_func().
  *
  * Returns: the old fatal mask for the log domain
  */
@@ -19316,6 +19388,263 @@
  *
  * Returns: the id of the new handler
  * Since: 2.46
+ */
+
+
+/**
+ * g_log_set_writer_func:
+ * @func: log writer function, which must not be %NULL
+ * @user_data: (closure func): user data to pass to @func
+ * @user_data_free: (destroy func): function to free @user_data once it’s
+ *    finished with, if non-%NULL
+ *
+ * Set a writer function which will be called to format and write out each log
+ * message. Each program should set a writer function, or the default writer
+ * (g_log_writer_default()) will be used.
+ *
+ * Libraries **must not** call this function — only programs are allowed to
+ * install a writer function, as there must be a single, central point where
+ * log messages are formatted and outputted.
+ *
+ * There can only be one writer function. It is an error to set more than one.
+ *
+ * Since: 2.50
+ */
+
+
+/**
+ * g_log_structured:
+ * @log_domain: log domain, usually %G_LOG_DOMAIN
+ * @log_level: log level, either from #GLogLevelFlags, or a user-defined
+ *    level
+ * @format: message format, in printf() style
+ * @...: parameters to insert into the format string, followed by key–value
+ *    pairs of structured data to add to the log message, terminated with a
+ *    %NULL
+ *
+ * Log a message with structured data. The message will be passed through to the
+ * log writer set by the application using g_log_set_writer_func(). If the
+ * message is fatal (i.e. its log level is %G_LOG_LEVEL_ERROR), the program will
+ * be aborted at the end of this function.
+ *
+ * The structured data is provided as key–value pairs, where keys are UTF-8
+ * strings, and values are arbitrary pointers — typically pointing to UTF-8
+ * strings, but that is not a requirement. To pass binary (non-nul-terminated)
+ * structured data, use g_log_structured_array(). The keys for structured data
+ * should follow the [systemd journal
+ * fields](https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html)
+ * specification. It is suggested that custom keys are namespaced according to
+ * the code which sets them. For example, custom keys from GLib all have a
+ * `GLIB_` prefix.
+ *
+ * The @log_domain will be converted into a `GLIB_DOMAIN` field. @log_level will
+ * be converted into a `PRIORITY` field. @format will have its placeholders
+ * substituted for the provided values and be converted into a `MESSAGE` field.
+ *
+ * Other fields you may commonly want to pass into this function:
+ *
+ *  * [`MESSAGE_ID`](https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#MESSAGE_ID=)
+ *  * [`CODE_FILE`](https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#CODE_FILE=)
+ *  * [`CODE_LINE`](https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#CODE_LINE=)
+ *  * [`CODE_FUNC`](https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#CODE_FUNC=)
+ *  * [`ERRNO`](https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#ERRNO=)
+ *
+ * Note that `CODE_FILE`, `CODE_LINE` and `CODE_FUNC` are automatically set by
+ * the logging macros, g_debug_structured(), G_DEBUG_HERE(),
+ * g_message_structured(), g_warning_structured(), g_critical_structured() and
+ * g_error_structured().
+ *
+ * For example:
+ * ```
+ * g_log_structured (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
+ *                   "This is a debug message about pointer %p and integer %u.",
+ *                   some_pointer, some_integer,
+ *                   "MESSAGE_ID", "06d4df59e6c24647bfe69d2c27ef0b4e",
+ *                   "MY_APPLICATION_CUSTOM_FIELD", "some debug string",
+ *                   NULL);
+ * ```
+ *
+ * Note that each `MESSAGE_ID` **must** be [uniquely and randomly
+ * generated](https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#MESSAGE_ID=).
+ * If adding a `MESSAGE_ID`, consider shipping a [message
+ * catalog](https://www.freedesktop.org/wiki/Software/systemd/catalog/) with
+ * your software.
+ *
+ * To pass a user data pointer to the log writer function which is specific to
+ * this logging call, you must use g_log_structured_array() and pass the pointer
+ * as a field with #GLogField.length set to zero, otherwise it will be
+ * interpreted as a string.
+ *
+ * For example:
+ * ```
+ * const GLogField fields[] = {
+ *   { "MESSAGE", "This is a debug message.", -1 },
+ *   { "MESSAGE_ID", "fcfb2e1e65c3494386b74878f1abf893", -1 },
+ *   { "MY_APPLICATION_CUSTOM_FIELD", "some debug string", -1 },
+ *   { "MY_APPLICATION_STATE", state_object, 0 },
+ * };
+ * g_log_structured_array (G_LOG_LEVEL_DEBUG, fields, G_N_ELEMENTS (fields));
+ * ```
+ *
+ * Note also that, even if no structured fields are specified, the argument list
+ * **must** be %NULL-terminated.
+ *
+ * The default writer function for `stdout` and `stderr` will automatically
+ * append a new-line character to the @format, so you should not add one
+ * manually.
+ *
+ * Since: 2.50
+ */
+
+
+/**
+ * g_log_structured_array:
+ * @log_level: log level, either from #GLogLevelFlags, or a user-defined
+ *    level
+ * @fields: (array length=n_fields): key–value pairs of structured data to add
+ *    to the log message
+ * @n_fields: number of elements in the @fields array
+ *
+ * Log a message with structured data. The message will be passed through to the
+ * log writer set by the application using g_log_set_writer_func(). If the
+ * message is fatal (i.e. its log level is %G_LOG_LEVEL_ERROR), the program will
+ * be aborted at the end of this function.
+ *
+ * See g_log_structured() for more documentation.
+ *
+ * This assumes that @log_level is already present in @fields (typically as the
+ * `PRIORITY` field).
+ *
+ * Since: 2.50
+ */
+
+
+/**
+ * g_log_writer_default:
+ * @log_level: log level, either from #GLogLevelFlags, or a user-defined
+ *    level
+ * @fields: (array length=n_fields): key–value pairs of structured data forming
+ *    the log message
+ * @n_fields: number of elements in the @fields array
+ * @user_data: user data passed to g_log_set_writer_func()
+ *
+ * Format a structured log message and output it to the default log destination
+ * for the platform. On Linux, this is typically the systemd journal, falling
+ * back to `stdout` or `stderr` if running from the terminal or if output is
+ * being redirected to a file.
+ *
+ * Support for other platform-specific logging mechanisms may be added in
+ * future. Distributors of GLib may modify this function to impose their own
+ * (documented) platform-specific log writing policies.
+ *
+ * This is suitable for use as a #GLogWriterFunc, and is the default writer used
+ * if no other is set using g_log_set_writer_func().
+ *
+ * Returns: %G_LOG_WRITER_HANDLED on success, %G_LOG_WRITER_UNHANDLED otherwise
+ * Since: 2.50
+ */
+
+
+/**
+ * g_log_writer_format_fields:
+ * @log_level: log level, either from #GLogLevelFlags, or a user-defined
+ *    level
+ * @fields: (array length=n_fields): key–value pairs of structured data forming
+ *    the log message
+ * @n_fields: number of elements in the @fields array
+ * @use_color: %TRUE to use ANSI color escape sequences when formatting the
+ *    message, %FALSE to not
+ *
+ * Format a structured log message as a string suitable for outputting to the
+ * terminal (or elsewhere). This will include the values of all fields it knows
+ * how to interpret, which includes `MESSAGE` and `GLIB_DOMAIN` (see the
+ * documentation for g_log_structured()). It does not include values from
+ * unknown fields.
+ *
+ * The returned string does **not** have a trailing new-line character. It is
+ * encoded in the character set of the current locale, which is not necessarily
+ * UTF-8.
+ *
+ * Returns: (transfer full): string containing the formatted log message, in
+ *    the character set of the current locale
+ * Since: 2.50
+ */
+
+
+/**
+ * g_log_writer_is_journald:
+ * @output_fd: output file descriptor to check
+ *
+ * Check whether the given @output_fd file descriptor is a connection to the
+ * systemd journal, or something else (like a log file or `stdout` or
+ * `stderr`).
+ *
+ * Returns: %TRUE if @output_fd points to the journal, %FALSE otherwise
+ * Since: 2.50
+ */
+
+
+/**
+ * g_log_writer_journald:
+ * @log_level: log level, either from #GLogLevelFlags, or a user-defined
+ *    level
+ * @fields: (array length=n_fields): key–value pairs of structured data forming
+ *    the log message
+ * @n_fields: number of elements in the @fields array
+ * @user_data: user data passed to g_log_set_writer_func()
+ *
+ * Format a structured log message and send it to the systemd journal as a set
+ * of key–value pairs. All fields are sent to the journal, but if a field has
+ * length zero (indicating program-specific data) then only its key will be
+ * sent.
+ *
+ * This is suitable for use as a #GLogWriterFunc.
+ *
+ * If GLib has been compiled without systemd support, this function is still
+ * defined, but will always return %G_LOG_WRITER_UNHANDLED.
+ *
+ * Returns: %G_LOG_WRITER_HANDLED on success, %G_LOG_WRITER_UNHANDLED otherwise
+ * Since: 2.50
+ */
+
+
+/**
+ * g_log_writer_standard_streams:
+ * @log_level: log level, either from #GLogLevelFlags, or a user-defined
+ *    level
+ * @fields: (array length=n_fields): key–value pairs of structured data forming
+ *    the log message
+ * @n_fields: number of elements in the @fields array
+ * @user_data: user data passed to g_log_set_writer_func()
+ *
+ * Format a structured log message and print it to either `stdout` or `stderr`,
+ * depending on its log level. %G_LOG_LEVEL_INFO and %G_LOG_LEVEL_DEBUG messages
+ * are sent to `stdout`; all other log levels are sent to `stderr`. Only fields
+ * which are understood by this function are included in the formatted string
+ * which is printed.
+ *
+ * If the output stream supports ANSI color escape sequences, they will be used
+ * in the output.
+ *
+ * A trailing new-line character is added to the log message when it is printed.
+ *
+ * This is suitable for use as a #GLogWriterFunc.
+ *
+ * Returns: %G_LOG_WRITER_HANDLED on success, %G_LOG_WRITER_UNHANDLED otherwise
+ * Since: 2.50
+ */
+
+
+/**
+ * g_log_writer_supports_color:
+ * @output_fd: output file descriptor to check
+ *
+ * Check whether the given @output_fd file descriptor supports ANSI color
+ * escape sequences. If so, they can safely be used when formatting log
+ * messages.
+ *
+ * Returns: %TRUE if ANSI color escapes are supported, %FALSE otherwise
+ * Since: 2.50
  */
 
 
@@ -29505,6 +29834,11 @@
  *
  * This handler has no effect on g_error messages.
  *
+ * This handler also has no effect on structured log messages (using
+ * g_log_structured() or g_log_structured_array()). To change the fatal
+ * behaviour for specific log messages, programs must install a custom log
+ * writer function using g_log_set_writer_func().
+ *
  * Since: 2.22
  */
 
@@ -33781,6 +34115,9 @@
  * If the array contains a nul terminator character somewhere other than
  * the last byte then the returned string is the string, up to the first
  * such nul character.
+ *
+ * g_variant_get_fixed_array() should be used instead if the array contains
+ * arbitrary data that could not be nul-terminated or could contain nul bytes.
  *
  * It is an error to call this function with a @value that is not an
  * array of bytes.

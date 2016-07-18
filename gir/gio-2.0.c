@@ -2734,6 +2734,9 @@
  * This signal supports detailed connections.  You can connect to the
  * detailed signal "changed::x" in order to only receive callbacks
  * when key "x" changes.
+ *
+ * Note that @settings only emits this signal if you have read @key at
+ * least once while a signal handler was already connected for @key.
  */
 
 
@@ -4170,6 +4173,196 @@
 
 
 /**
+ * GXdpDocuments:
+ *
+ * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link>.
+ */
+
+
+/**
+ * GXdpDocuments::handle-add:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @arg_o_path_fd: Argument passed by remote caller.
+ * @arg_reuse_existing: Argument passed by remote caller.
+ * @arg_persistent: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Add">Add()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_add() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocuments::handle-add-named:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @arg_o_path_parent_fd: Argument passed by remote caller.
+ * @arg_filename: Argument passed by remote caller.
+ * @arg_reuse_existing: Argument passed by remote caller.
+ * @arg_persistent: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddNamed">AddNamed()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_add_named() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocuments::handle-delete:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_doc_id: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Delete">Delete()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_delete() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocuments::handle-get-mount-point:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GetMountPoint">GetMountPoint()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_get_mount_point() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocuments::handle-grant-permissions:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_doc_id: Argument passed by remote caller.
+ * @arg_app_id: Argument passed by remote caller.
+ * @arg_permissions: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GrantPermissions">GrantPermissions()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_grant_permissions() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocuments::handle-info:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_doc_id: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Info">Info()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_info() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocuments::handle-list:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_app_id: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.List">List()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_list() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocuments::handle-lookup:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_filename: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Lookup">Lookup()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_lookup() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocuments::handle-revoke-permissions:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_doc_id: Argument passed by remote caller.
+ * @arg_app_id: Argument passed by remote caller.
+ * @arg_permissions: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.RevokePermissions">RevokePermissions()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_revoke_permissions() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpDocumentsIface:
+ * @parent_iface: The parent interface.
+ * @handle_add: Handler for the #GXdpDocuments::handle-add signal.
+ * @handle_add_named: Handler for the #GXdpDocuments::handle-add-named signal.
+ * @handle_delete: Handler for the #GXdpDocuments::handle-delete signal.
+ * @handle_get_mount_point: Handler for the #GXdpDocuments::handle-get-mount-point signal.
+ * @handle_grant_permissions: Handler for the #GXdpDocuments::handle-grant-permissions signal.
+ * @handle_info: Handler for the #GXdpDocuments::handle-info signal.
+ * @handle_list: Handler for the #GXdpDocuments::handle-list signal.
+ * @handle_lookup: Handler for the #GXdpDocuments::handle-lookup signal.
+ * @handle_revoke_permissions: Handler for the #GXdpDocuments::handle-revoke-permissions signal.
+ *
+ * Virtual table for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link>.
+ */
+
+
+/**
+ * GXdpDocumentsProxy:
+ *
+ * The #GXdpDocumentsProxy structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * GXdpDocumentsProxyClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #GXdpDocumentsProxy.
+ */
+
+
+/**
+ * GXdpDocumentsSkeleton:
+ *
+ * The #GXdpDocumentsSkeleton structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * GXdpDocumentsSkeletonClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #GXdpDocumentsSkeleton.
+ */
+
+
+/**
  * GXdpNetworkMonitor:
  *
  * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link>.
@@ -4384,6 +4577,15 @@
  * A boxed #GType corresponding to #GSettingsSchemaSource.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * SECTION:GXdpDocuments
+ * @title: GXdpDocuments
+ * @short_description: Generated C code for the org.freedesktop.portal.Documents D-Bus interface
+ *
+ * This section contains code for working with the <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link> D-Bus interface in C.
  */
 
 
@@ -36762,6 +36964,10 @@
  * New listeners can be added with e.g. g_socket_listener_add_address()
  * or g_socket_listener_add_inet_port().
  *
+ * New services are created active, there is no need to call
+ * g_socket_service_start(), unless g_socket_service_stop() has been
+ * called before.
+ *
  * Returns: a new #GSocketService.
  * Since: 2.22
  */
@@ -36771,8 +36977,10 @@
  * g_socket_service_start:
  * @service: a #GSocketService
  *
- * Starts the service, i.e. start accepting connections
- * from the added sockets when the mainloop runs.
+ * Restarts the service, i.e. start accepting connections
+ * from the added sockets when the mainloop runs. This only needs
+ * to be called after the service has been stopped from
+ * g_socket_service_stop().
  *
  * This call is thread-safe, so it may be called from a thread
  * handling an incoming client request.
@@ -36796,6 +37004,10 @@
  * g_socket_service_start() again later to begin listening again. To
  * close the listening sockets, call g_socket_listener_close(). (This
  * will happen automatically when the #GSocketService is finalized.)
+ *
+ * This must be called before calling g_socket_listener_close() as
+ * the socket service will start accepting connections immediately
+ * when a new socket is added.
  *
  * Since: 2.22
  */
@@ -42503,6 +42715,667 @@
  * GetLogicalDrives() is returned.
  *
  * Returns: bitmask with same meaning as returned by GetLogicalDrives()
+ */
+
+
+/**
+ * gxdp_documents_call_add:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_o_path_fd: Argument to pass with the method invocation.
+ * @arg_reuse_existing: Argument to pass with the method invocation.
+ * @arg_persistent: Argument to pass with the method invocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Add">Add()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_add_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_add_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_add_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_add().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_add().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_add_named:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_o_path_parent_fd: Argument to pass with the method invocation.
+ * @arg_filename: Argument to pass with the method invocation.
+ * @arg_reuse_existing: Argument to pass with the method invocation.
+ * @arg_persistent: Argument to pass with the method invocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddNamed">AddNamed()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_add_named_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_add_named_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_add_named_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_add_named().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_add_named().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_add_named_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_o_path_parent_fd: Argument to pass with the method invocation.
+ * @arg_filename: Argument to pass with the method invocation.
+ * @arg_reuse_existing: Argument to pass with the method invocation.
+ * @arg_persistent: Argument to pass with the method invocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddNamed">AddNamed()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_add_named() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_add_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_o_path_fd: Argument to pass with the method invocation.
+ * @arg_reuse_existing: Argument to pass with the method invocation.
+ * @arg_persistent: Argument to pass with the method invocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Add">Add()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_add() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_delete:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_doc_id: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Delete">Delete()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_delete_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_delete_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_delete_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_delete().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_delete().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_delete_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_doc_id: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Delete">Delete()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_delete() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_get_mount_point:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GetMountPoint">GetMountPoint()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_get_mount_point_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_get_mount_point_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_get_mount_point_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @out_path: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_get_mount_point().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_get_mount_point().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_get_mount_point_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @out_path: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GetMountPoint">GetMountPoint()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_get_mount_point() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_grant_permissions:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_doc_id: Argument to pass with the method invocation.
+ * @arg_app_id: Argument to pass with the method invocation.
+ * @arg_permissions: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GrantPermissions">GrantPermissions()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_grant_permissions_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_grant_permissions_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_grant_permissions_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_grant_permissions().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_grant_permissions().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_grant_permissions_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_doc_id: Argument to pass with the method invocation.
+ * @arg_app_id: Argument to pass with the method invocation.
+ * @arg_permissions: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GrantPermissions">GrantPermissions()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_grant_permissions() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_info:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_doc_id: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Info">Info()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_info_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_info_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_info_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @out_path: (out): Return location for return parameter or %NULL to ignore.
+ * @out_apps: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_info().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_info().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_info_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_doc_id: Argument to pass with the method invocation.
+ * @out_path: (out): Return location for return parameter or %NULL to ignore.
+ * @out_apps: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Info">Info()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_info() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_list:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_app_id: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.List">List()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_list_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_list_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_list_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @out_docs: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_list().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_list().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_list_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_app_id: Argument to pass with the method invocation.
+ * @out_docs: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.List">List()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_list() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_lookup:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_filename: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Lookup">Lookup()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_lookup_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_lookup_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_lookup_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_lookup().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_lookup().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_lookup_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_filename: Argument to pass with the method invocation.
+ * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Lookup">Lookup()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_lookup() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_revoke_permissions:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_doc_id: Argument to pass with the method invocation.
+ * @arg_app_id: Argument to pass with the method invocation.
+ * @arg_permissions: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.RevokePermissions">RevokePermissions()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_revoke_permissions_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_revoke_permissions_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_revoke_permissions_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_revoke_permissions().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_revoke_permissions().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_revoke_permissions_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_doc_id: Argument to pass with the method invocation.
+ * @arg_app_id: Argument to pass with the method invocation.
+ * @arg_permissions: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.RevokePermissions">RevokePermissions()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_revoke_permissions() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_complete_add:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @doc_id: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Add">Add()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_complete_add_named:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @doc_id: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddNamed">AddNamed()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_complete_delete:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Delete">Delete()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_complete_get_mount_point:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @path: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GetMountPoint">GetMountPoint()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_complete_grant_permissions:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GrantPermissions">GrantPermissions()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_complete_info:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @path: Parameter to return.
+ * @apps: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Info">Info()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_complete_list:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @docs: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.List">List()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_complete_lookup:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @doc_id: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Lookup">Lookup()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_complete_revoke_permissions:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.RevokePermissions">RevokePermissions()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_interface_info:
+ *
+ * Gets a machine-readable description of the <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link> D-Bus interface.
+ *
+ * Returns: (transfer none): A #GDBusInterfaceInfo. Do not free.
+ */
+
+
+/**
+ * gxdp_documents_override_properties:
+ * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @property_id_begin: The property id to assign to the first overridden property.
+ *
+ * Overrides all #GObject properties in the #GXdpDocuments interface for a concrete class.
+ * The properties are overridden in the order they are defined.
+ *
+ * Returns: The last property id.
+ */
+
+
+/**
+ * gxdp_documents_proxy_new:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link>. See g_dbus_proxy_new() for more details.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_proxy_new_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_proxy_new_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * gxdp_documents_proxy_new_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_proxy_new().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with gxdp_documents_proxy_new().
+ *
+ * Returns: (transfer full) (type GXdpDocumentsProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_proxy_new_for_bus:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Like gxdp_documents_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_proxy_new_for_bus_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * gxdp_documents_proxy_new_for_bus_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_proxy_new_for_bus().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with gxdp_documents_proxy_new_for_bus().
+ *
+ * Returns: (transfer full) (type GXdpDocumentsProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_proxy_new_for_bus_sync:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Like gxdp_documents_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_proxy_new_for_bus() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type GXdpDocumentsProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_proxy_new_sync:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link>. See g_dbus_proxy_new_sync() for more details.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_proxy_new() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type GXdpDocumentsProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_skeleton_new:
+ *
+ * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link>.
+ *
+ * Returns: (transfer full) (type GXdpDocumentsSkeleton): The skeleton object.
  */
 
 
