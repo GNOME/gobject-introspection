@@ -8255,6 +8255,15 @@
  * rather than as a single string containing all the information in an arbitrary
  * format.
  *
+ * The convenience macros g_info(), g_message(), g_debug(), g_warning() and g_error()
+ * will use the traditional g_log() API unless you define the symbol
+ * `G_LOG_USE_STRUCTURED` before including `glib.h`. But note that even messages
+ * logged through the traditional g_log() API are ultimatively passed to
+ * g_log_structured(), so that all log messages end up in same destination.
+ * If `G_LOG_USE_STRUCTURED` is defined, g_test_expect_message() will become
+ * will become ineffective for the wrapper macros g_warning() and friends (see
+ * [Testing for Messages][testing-for-messages]).
+ *
  * The support for structured logging was motivated by the following needs (some
  * of which were supported previously; others weren’t):
  *  * Support for multiple logging levels.
@@ -8289,6 +8298,66 @@
  *    zero-length #GLogField to g_log_structured_array().
  *  * Color output needed to be supported on the terminal, to make reading
  *    through logs easier.
+ *
+ * ## Log Domains
+ *
+ * Log domains may be used to broadly split up the origins of log messages.
+ * Typically, there are one or a few log domains per application or library.
+ * %G_LOG_DOMAIN should be used to define the default log domain for the current
+ * compilation unit — it is typically defined at the top of a source file, or in
+ * the preprocessor flags for a group of source files.
+ *
+ * Log domains must be unique, and it is recommended that they are the
+ * application or library name, optionally followed by a hyphen and a sub-domain
+ * name. For example, `bloatpad` or `bloatpad-io`.
+ *
+ * ## Debug Message Output
+ *
+ * The default log functions (g_log_default_handler() for the old-style API and
+ * g_log_writer_default() for the structured API) both drop debug and
+ * informational messages by default, unless the log domains of those messages
+ * are listed in the `G_MESSAGES_DEBUG` environment variable (or it is set to
+ * `all`).
+ *
+ * It is recommended that custom log writer functions re-use the
+ * `G_MESSAGES_DEBUG` environment variable, rather than inventing a custom one,
+ * so that developers can re-use the same debugging techniques and tools across
+ * projects.
+ *
+ * ## Testing for Messages
+ *
+ * With the old g_log() API, g_test_expect_message() and
+ * g_test_assert_expected_messages() could be used in simple cases to check
+ * whether some code under test had emitted a given log message. These
+ * functions have been deprecated with the structured logging API, for several
+ * reasons:
+ *  * They relied on an internal queue which was too inflexible for many use
+ *    cases, where messages might be emitted in several orders, some
+ *    messages might not be emitted deterministically, or messages might be
+ *    emitted by unrelated log domains.
+ *  * They do not support structured log fields.
+ *  * Examining the log output of code is a bad approach to testing it, and
+ *    while it might be necessary for legacy code which uses g_log(), it should
+ *    be avoided for new code using g_log_structured().
+ *
+ * They will continue to work as before if g_log() is in use (and
+ * %G_LOG_USE_STRUCTURED is not defined). They will do nothing if used with the
+ * structured logging API.
+ *
+ * Examining the log output of code is discouraged: libraries should not emit to
+ * `stderr` during defined behaviour, and hence this should not be tested. If
+ * the log emissions of a library during undefined behaviour need to be tested,
+ * they should be limited to asserting that the library aborts and prints a
+ * suitable error message before aborting. This should be done with
+ * g_test_trap_assert_stderr().
+ *
+ * If it is really necessary to test the structured log messages emitted by a
+ * particular piece of code – and the code cannot be restructured to be more
+ * suitable to more conventional unit testing – you should write a custom log
+ * writer function (see g_log_set_writer_func()) which appends all log messages
+ * to a queue. When you want to check the log messages, examine and clear the
+ * queue, ignoring irrelevant log messages (for example, from log domains other
+ * than the one under test).
  */
 
 
@@ -14384,8 +14453,9 @@
  * character will automatically be appended to @..., and need not be entered
  * manually.
  *
- * Such messages are suppressed by the g_log_default_handler() unless
- * the G_MESSAGES_DEBUG environment variable is set appropriately.
+ * Such messages are suppressed by the g_log_default_handler() and
+ * g_log_writer_default() unless the `G_MESSAGES_DEBUG` environment variable is
+ * set appropriately.
  *
  * Since: 2.6
  */
@@ -17013,8 +17083,9 @@
  * character will automatically be appended to @..., and need not be entered
  * manually.
  *
- * Such messages are suppressed by the g_log_default_handler() unless
- * the G_MESSAGES_DEBUG environment variable is set appropriately.
+ * Such messages are suppressed by the g_log_default_handler() and
+ * g_log_writer_default() unless the `G_MESSAGES_DEBUG` environment variable is
+ * set appropriately.
  *
  * Since: 2.40
  */
@@ -19488,8 +19559,10 @@
  * g_log_structured_array (G_LOG_LEVEL_DEBUG, fields, G_N_ELEMENTS (fields));
  * ]|
  *
- * Note also that, even if no structured fields are specified, the key-value
- * part of the argument list must be %NULL-terminated.
+ * Note also that, even if no other structured fields are specified, there
+ * must always be a "MESSAGE" key before the format string. The "MESSAGE"-format
+ * pair has to be the last of the key-value pairs, and "MESSAGE" is the only
+ * field for which printf()-style formatting is supported.
  *
  * The default writer function for `stdout` and `stderr` will automatically
  * append a new-line character after the message, so you should not add one
@@ -19541,6 +19614,10 @@
  *
  * This is suitable for use as a #GLogWriterFunc, and is the default writer used
  * if no other is set using g_log_set_writer_func().
+ *
+ * As with g_log_default_handler(), this function drops debug and informational
+ * messages unless their log domain (or `all`) is listed in the space-separated
+ * `G_MESSAGES_DEBUG` environment variable.
  *
  * Returns: %G_LOG_WRITER_HANDLED on success, %G_LOG_WRITER_UNHANDLED otherwise
  * Since: 2.50
@@ -29463,6 +29540,10 @@
  * Asserts that all messages previously indicated via
  * g_test_expect_message() have been seen and suppressed.
  *
+ * This API may only be used with the old logging API (g_log() without
+ * %G_LOG_USE_STRUCTURED defined). It will not work with the structured logging
+ * API. See [Testing for Messages][testing-for-messages].
+ *
  * If messages at %G_LOG_LEVEL_DEBUG are emitted, but not explicitly
  * expected via g_test_expect_message() then they will be ignored.
  *
@@ -29587,6 +29668,10 @@
  * with text matching @pattern, is expected to be logged. When this
  * message is logged, it will not be printed, and the test case will
  * not abort.
+ *
+ * This API may only be used with the old logging API (g_log() without
+ * %G_LOG_USE_STRUCTURED defined). It will not work with the structured logging
+ * API. See [Testing for Messages][testing-for-messages].
  *
  * Use g_test_assert_expected_messages() to assert that all
  * previously-expected messages have been seen and suppressed.
@@ -29759,7 +29844,7 @@
  *   `quick`: Quick tests, should run really quickly and give good coverage.
  *
  *   `undefined`: Tests for undefined behaviour, may provoke programming errors
- *   under g_test_trap_subprocess() or g_test_expect_messages() to check
+ *   under g_test_trap_subprocess() or g_test_expect_message() to check
  *   that appropriate assertions or warnings are given
  *
  *   `no-undefined`: Avoid tests for undefined behaviour

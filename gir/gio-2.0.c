@@ -5592,12 +5592,13 @@
  * instance, on Windows a socket is always seen as writable until a write
  * returns %G_IO_ERROR_WOULD_BLOCK.
  *
- * As with #GSocket, #GDatagramBaseds can be either connection oriented or
- * connectionless. The interface does not cover connection establishment — use
- * methods on the underlying type to establish a connection before sending and
- * receiving data through the #GDatagramBased API. For connectionless socket
- * types the target/source address is specified or received in each I/O
- * operation.
+ * As with #GSocket, #GDatagramBaseds can be either connection oriented (for
+ * example, SCTP) or connectionless (for example, UDP). #GDatagramBaseds must be
+ * datagram-based, not stream-based. The interface does not cover connection
+ * establishment — use methods on the underlying type to establish a connection
+ * before sending and receiving data through the #GDatagramBased API. For
+ * connectionless socket types the target/source address is specified or
+ * received in each I/O operation.
  *
  * Like most other APIs in GLib, #GDatagramBased is not inherently thread safe.
  * To use a #GDatagramBased concurrently from multiple threads, you must
@@ -12589,8 +12590,8 @@
 /**
  * g_app_info_launch_default_for_uri:
  * @uri: the uri to show
- * @launch_context: (allow-none): an optional #GAppLaunchContext.
- * @error: a #GError.
+ * @launch_context: (allow-none): an optional #GAppLaunchContext
+ * @error: (nullable): return location for an error, or %NULL
  *
  * Utility function that launches the default application
  * registered to handle the specified uri. Synchronous I/O
@@ -12598,6 +12599,37 @@
  * required.
  *
  * Returns: %TRUE on success, %FALSE on error.
+ */
+
+
+/**
+ * g_app_info_launch_default_for_uri_async:
+ * @uri: the uri to show
+ * @context: (allow-none): an optional #GAppLaunchContext
+ * cancellable: (allow-none): a #GCancellable
+ * @callback: (allow-none): a #GASyncReadyCallback to call when the request is done
+ * @user_data: (allow-none): data to pass to @callback
+ *
+ * Async version of g_app_info_launch_default_for_uri().
+ *
+ * This version is useful if you are interested in receiving
+ * error information in the case where the application is
+ * sandboxed and the portal may present an application chooser
+ * dialog to the user.
+ *
+ * Since: 2.50
+ */
+
+
+/**
+ * g_app_info_launch_default_for_uri_finish:
+ * @result: a #GAsyncResult
+ * @error: (nullable): return location for an error, or %NULL
+ *
+ * Finishes an asynchronous launch-default-for-uri operation.
+ *
+ * Returns: %TRUE if the launch was successful, %FALSE if @error is set
+ * Since: 2.50
  */
 
 
