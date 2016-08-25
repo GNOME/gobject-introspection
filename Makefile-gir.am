@@ -157,7 +157,7 @@ GIO_LIBRARY=gio-2.0
 
 if HAVE_GIO_UNIX
 GIO_UNIX_INCLUDEDIR = $(shell "${PKG_CONFIG}" --variable=includedir gio-unix-2.0)/gio-unix-2.0
-GIO_UNIX_HDRS = $(GIO_UNIX_INCLUDEDIR)/gio/*.h
+GIO_UNIX_HDRS = $(wildcard $(GIO_UNIX_INCLUDEDIR)/gio/*.h)
 GIO_UNIX_PACKAGES = gio-unix-2.0
 else
 GIO_UNIX_INCLUDEDIR =
@@ -210,11 +210,11 @@ GIRepository_2_0_gir_CFLAGS = \
     -I$(top_srcdir)/girepository -I$(top_srcdir) \
     -DGI_COMPILATION
 GIRepository_2_0_gir_FILES = \
-        $(top_srcdir)/girepository/girepository.h   \
-        $(top_srcdir)/girepository/girepository.c   \
-        $(top_srcdir)/girepository/gi*info.c	    \
-        $(top_srcdir)/girepository/gi*info.h	    \
-        $(top_srcdir)/girepository/gitypelib.h	    \
+        $(top_srcdir)/girepository/girepository.h               \
+        $(top_srcdir)/girepository/girepository.c               \
+        $(wildcard $(top_srcdir)/girepository/gi*info.c)        \
+        $(wildcard $(top_srcdir)/girepository/gi*info.h)        \
+        $(top_srcdir)/girepository/gitypelib.h                  \
         $(top_srcdir)/girepository/gitypes.h
 
 BUILT_GIRSOURCES += GIRepository-2.0.gir
