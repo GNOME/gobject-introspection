@@ -19639,6 +19639,33 @@
 
 
 /**
+ * g_log_variant:
+ * @log_domain: log domain, usually %G_LOG_DOMAIN
+ * @log_level: log level, either from #GLogLevelFlags, or a user-defined
+ *    level
+ * @fields: a dictionary (#GVariant of the type %G_VARIANT_TYPE_VARDICT)
+ * containing the key-value pairs of message data.
+ *
+ * Log a message with structured data, accepting the data within a #GVariant. This
+ * version is especially useful for use in other languages, via introspection.
+ *
+ * The only mandatory item in the @fields dictionary is the "MESSAGE" which must
+ * contain the text shown to the user.
+ *
+ * The values in the @fields dictionary are likely to be of type String
+ * (#G_VARIANT_TYPE_STRING). Array of bytes (#G_VARIANT_TYPE_BYTESTRING) is also
+ * supported. In this case the message is handled as binary and will be forwarded
+ * to the log writer as such. The size of the array should not be higher than
+ * %G_MAXSSIZE. Otherwise it will be truncated to this size. For other types
+ * g_variant_print() will be used to convert the value into a string.
+ *
+ * For more details on its usage and about the parameters, see g_log_structured().
+ *
+ * Since: 2.50
+ */
+
+
+/**
  * g_log_writer_default:
  * @log_level: log level, either from #GLogLevelFlags, or a user-defined
  *    level
