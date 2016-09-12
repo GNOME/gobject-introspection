@@ -78,7 +78,7 @@ GLib_2_0_gir_CFLAGS = \
             -D__G_I18N_LIB_H__
 GLib_2_0_gir_FILES =  \
                 $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
-		$(GLIB_INCLUDEDIR)/glib/*.h \
+		$(filter-out $(GLIB_INCLUDEDIR)/glib/glib-autocleanups.h,$(wildcard $(GLIB_INCLUDEDIR)/glib/*.h)) \
 		$(GLIB_INCLUDEDIR)/gobject/glib-types.h \
                 gir/glib-2.0.c
 if HAVE_GIO_UNIX
