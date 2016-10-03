@@ -179,10 +179,11 @@ Gio_2_0_gir_PACKAGES = gio-2.0 $(GIO_UNIX_PACKAGES)
 Gio_2_0_gir_INCLUDES = GObject-2.0
 Gio_2_0_gir_CFLAGS = \
             -DGIO_COMPILATION \
+            -DG_SETTINGS_ENABLE_BACKEND \
             -I$(GIO_LIBDIR)/glib-2.0/include
 Gio_2_0_gir_FILES = \
             $(GIO_UNIX_HDRS) \
-            $(filter-out %/gsettingsbackend.h, $(shell echo $(GIO_INCLUDEDIR)/gio/*.h)) \
+            $(shell echo $(GIO_INCLUDEDIR)/gio/*.h) \
             gir/gio-2.0.c
 
 BUILT_GIRSOURCES += Gio-2.0.gir

@@ -88,7 +88,7 @@ if __name__ == '__main__':
                {'name':         'gio',
                 'srcname':      '../gir/gio-2.0.c',
                 'includes':     ['glib', 'gmodule', 'gobject', 'gio'],
-                'defines':      ['-DGOBJECT_COMPILATION', '-DGIO_COMPILATION']}]
+                'defines':      ['-DGOBJECT_COMPILATION', '-DGIO_COMPILATION', '-DG_SETTINGS_ENABLE_BACKEND']}]
 
     for module in modules:
         srcname = module['srcname']
