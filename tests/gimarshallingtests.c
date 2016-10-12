@@ -1376,6 +1376,66 @@ gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length)
 }
 
 /**
+ * gi_marshalling_tests_array_int64_in:
+ * @ints: (array length=length):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_int64_in (const gint64 *ints, gint length)
+{
+  g_assert_cmpint (length, ==, 4);
+  g_assert_cmpint (ints[0], ==, -1);
+  g_assert_cmpint (ints[1], ==, 0);
+  g_assert_cmpint (ints[2], ==, 1);
+  g_assert_cmpint (ints[3], ==, 2);
+}
+
+/**
+ * gi_marshalling_tests_array_uint64_in:
+ * @ints: (array length=length):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_uint64_in (const guint64 *ints, gint length)
+{
+  g_assert_cmpint (length, ==, 4);
+  g_assert_cmpint (ints[0], ==, -1);
+  g_assert_cmpint (ints[1], ==, 0);
+  g_assert_cmpint (ints[2], ==, 1);
+  g_assert_cmpint (ints[3], ==, 2);
+}
+
+/**
+ * gi_marshalling_tests_array_unichar_in:
+ * @chars: (array length=length):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_unichar_in (const gunichar *chars, gint length)
+{
+  unsigned ix;
+  static const gunichar expected[] = GI_MARSHALLING_TESTS_CONSTANT_UCS4;
+  g_assert_cmpint (length, ==, 12);
+  for (ix = 0; ix < length; ix++)
+    g_assert_cmpuint (chars[ix], ==, expected[ix]);
+}
+
+/**
+ * gi_marshalling_tests_array_bool_in:
+ * @bools: (array length=length):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_bool_in (const gboolean *bools, gint length)
+{
+  g_assert_cmpint (length, ==, 4);
+  g_assert_true (bools[0]);
+  g_assert_false (bools[1]);
+  g_assert_true (bools[2]);
+  g_assert_true (bools[3]);
+}
+
+/**
  * gi_marshalling_tests_array_struct_in:
  * @structs: (array length=length):
  */
@@ -1522,6 +1582,31 @@ gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, gint 
 }
 
 /**
+ * gi_marshalling_tests_array_bool_out:
+ * @bools: (out) (array length=length) (transfer none):
+ */
+void
+gi_marshalling_tests_array_bool_out (gboolean **bools, gint *length)
+{
+  static const gboolean values[] = { TRUE, FALSE, TRUE, TRUE };
+
+  *length = 4;
+  *bools = values;
+}
+
+/**
+ * gi_marshalling_tests_array_unichar_out:
+ * @chars: (out) (array length=length) (transfer none):
+ */
+void
+gi_marshalling_tests_array_unichar_out (gunichar **chars, gint *length)
+{
+  static const gunichar values[] = GI_MARSHALLING_TESTS_CONSTANT_UCS4;
+  *length = 12;
+  *chars = values;
+}
+
+/**
  * gi_marshalling_tests_array_inout:
  * @ints: (inout) (array length=length) (transfer none):
  * @length: (inout):
@@ -1626,6 +1711,21 @@ gi_marshalling_tests_array_zero_terminated_return_struct (void)
   ret[3] = NULL;
 
   return ret;
+}
+
+/**
+ * gi_marshalling_tests_array_zero_terminated_return_unichar:
+ *
+ * Returns: (array zero-terminated) (transfer full):
+ */
+gunichar *
+gi_marshalling_tests_array_zero_terminated_return_unichar (void)
+{
+  static const gunichar value[] = GI_MARSHALLING_TESTS_CONSTANT_UCS4;
+  unsigned ix;
+  gunichar *retval = g_new0(gunichar, 13);
+  memcpy (retval, value, 12 * sizeof (gunichar));
+  return retval;
 }
 
 /**
@@ -2052,6 +2152,34 @@ gi_marshalling_tests_garray_utf8_full_inout (GArray **array_)
 
   g_array_unref (*array_);
   *array_ = result;
+}
+
+/**
+ * gi_marshalling_tests_garray_bool_none_in:
+ * @array_: (element-type gboolean) (transfer none):
+ */
+void
+gi_marshalling_tests_garray_bool_none_in (GArray *array_)
+{
+  g_assert_cmpint (array_->len, ==, 4);
+  g_assert_true (g_array_index (array_, gboolean, 0));
+  g_assert_false (g_array_index (array_, gboolean, 1));
+  g_assert_true (g_array_index (array_, gboolean, 2));
+  g_assert_true (g_array_index (array_, gboolean, 3));
+}
+
+/**
+ * gi_marshalling_tests_garray_unichar_none_in:
+ * @array_: (element-type gunichar) (transfer none):
+ */
+void
+gi_marshalling_tests_garray_unichar_none_in (GArray *array_)
+{
+  unsigned ix;
+  static const gunichar expected[] = GI_MARSHALLING_TESTS_CONSTANT_UCS4;
+  g_assert_cmpint (array_->len, ==, 12);
+  for (ix = 0; ix < array_->len; ix++)
+    g_assert_cmpuint (g_array_index (array_, gunichar, ix), ==, expected[ix]);
 }
 
 /**

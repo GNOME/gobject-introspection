@@ -16,7 +16,9 @@ typedef struct _GIMarshallingTestsBoxedStruct GIMarshallingTestsBoxedStruct;
 
 #define GI_MARSHALLING_TESTS_CONSTANT_NUMBER 42
 #define GI_MARSHALLING_TESTS_CONSTANT_UTF8   "const \xe2\x99\xa5 utf8"
-
+#define GI_MARSHALLING_TESTS_CONSTANT_UCS4   { 0x63, 0x6f, 0x6e, 0x73, 0x74, \
+                                               0x20, 0x2665, 0x20, 0x75, 0x74, \
+                                               0x66, 0x38 }
 
 /* Booleans */
 
@@ -717,6 +719,18 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length);
 
 _GI_TEST_EXTERN
+void gi_marshalling_tests_array_int64_in (const gint64 *ints, gint length);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_array_uint64_in (const guint64 *ints, gint length);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_array_unichar_in (const gunichar *chars, gint length);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_array_bool_in (const gboolean *bools, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, gint length);
 
 _GI_TEST_EXTERN
@@ -747,6 +761,11 @@ void gi_marshalling_tests_array_out (gint **ints, gint *length);
 _GI_TEST_EXTERN
 void gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, gint last, gint *sum);
 
+_GI_TEST_EXTERN
+void gi_marshalling_tests_array_bool_out (gboolean **bools, gint *length);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_array_unichar_out (gunichar **chars, gint *length);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_array_inout (gint **ints, gint *length);
@@ -769,6 +788,9 @@ gchar **gi_marshalling_tests_array_zero_terminated_return_null (void);
 
 _GI_TEST_EXTERN
 GIMarshallingTestsBoxedStruct **gi_marshalling_tests_array_zero_terminated_return_struct (void);
+
+_GI_TEST_EXTERN
+gunichar *gi_marshalling_tests_array_zero_terminated_return_unichar (void);
 
 
 _GI_TEST_EXTERN
@@ -844,6 +866,12 @@ void gi_marshalling_tests_garray_utf8_container_inout (GArray **array_);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_garray_utf8_full_inout (GArray **array_);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_garray_bool_none_in (GArray *array_);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_garray_unichar_none_in (GArray *array_);
 
 /* GPtrArray */
 
