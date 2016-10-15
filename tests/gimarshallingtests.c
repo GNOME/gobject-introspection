@@ -1586,7 +1586,7 @@ gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, gint 
  * @bools: (out) (array length=length) (transfer none):
  */
 void
-gi_marshalling_tests_array_bool_out (gboolean **bools, gint *length)
+gi_marshalling_tests_array_bool_out (const gboolean **bools, gint *length)
 {
   static const gboolean values[] = { TRUE, FALSE, TRUE, TRUE };
 
@@ -1599,7 +1599,7 @@ gi_marshalling_tests_array_bool_out (gboolean **bools, gint *length)
  * @chars: (out) (array length=length) (transfer none):
  */
 void
-gi_marshalling_tests_array_unichar_out (gunichar **chars, gint *length)
+gi_marshalling_tests_array_unichar_out (const gunichar **chars, gint *length)
 {
   static const gunichar values[] = GI_MARSHALLING_TESTS_CONSTANT_UCS4;
   *length = 12;

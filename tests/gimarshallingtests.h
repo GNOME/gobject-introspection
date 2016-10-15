@@ -762,10 +762,10 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, gint last, gint *sum);
 
 _GI_TEST_EXTERN
-void gi_marshalling_tests_array_bool_out (gboolean **bools, gint *length);
+void gi_marshalling_tests_array_bool_out (const gboolean **bools, gint *length);
 
 _GI_TEST_EXTERN
-void gi_marshalling_tests_array_unichar_out (gunichar **chars, gint *length);
+void gi_marshalling_tests_array_unichar_out (const gunichar **chars, gint *length);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_array_inout (gint **ints, gint *length);
