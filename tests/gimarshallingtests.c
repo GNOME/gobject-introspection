@@ -1429,10 +1429,10 @@ void
 gi_marshalling_tests_array_bool_in (const gboolean *bools, gint length)
 {
   g_assert_cmpint (length, ==, 4);
-  g_assert_true (bools[0]);
-  g_assert_false (bools[1]);
-  g_assert_true (bools[2]);
-  g_assert_true (bools[3]);
+  g_assert_cmpint (bools[0], ==, TRUE);
+  g_assert_cmpint (bools[1], ==, FALSE);
+  g_assert_cmpint (bools[2], ==, TRUE);
+  g_assert_cmpint (bools[3], ==, TRUE);
 }
 
 /**
@@ -2162,10 +2162,10 @@ void
 gi_marshalling_tests_garray_bool_none_in (GArray *array_)
 {
   g_assert_cmpint (array_->len, ==, 4);
-  g_assert_true (g_array_index (array_, gboolean, 0));
-  g_assert_false (g_array_index (array_, gboolean, 1));
-  g_assert_true (g_array_index (array_, gboolean, 2));
-  g_assert_true (g_array_index (array_, gboolean, 3));
+  g_assert_cmpint (g_array_index (array_, gboolean, 0), ==, TRUE);
+  g_assert_cmpint (g_array_index (array_, gboolean, 1), ==, FALSE);
+  g_assert_cmpint (g_array_index (array_, gboolean, 2), ==, TRUE);
+  g_assert_cmpint (g_array_index (array_, gboolean, 3), ==, TRUE);
 }
 
 /**
