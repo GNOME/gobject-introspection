@@ -2674,6 +2674,9 @@
  *
  * The object that handles DNS resolution. Use g_resolver_get_default()
  * to get the default resolver.
+ *
+ * This is an abstract type; subclasses of it implement different resolvers for
+ * different platforms and situations.
  */
 
 
@@ -40897,6 +40900,20 @@
  *
  * Returns: 1, 0 or -1 if @mount1 is greater than, equal to,
  * or less than @mount2, respectively.
+ */
+
+
+/**
+ * g_unix_mount_for: (skip)
+ * @file_path: file path on some unix mount.
+ * @time_read: (out) (allow-none): guint64 to contain a timestamp.
+ *
+ * Gets a #GUnixMountEntry for a given file path. If @time_read
+ * is set, it will be filled with a unix timestamp for checking
+ * if the mounts have changed since with g_unix_mounts_changed_since().
+ *
+ * Returns: (transfer full): a #GUnixMountEntry.
+ * Since: 2.52
  */
 
 
