@@ -1722,7 +1722,6 @@ gunichar *
 gi_marshalling_tests_array_zero_terminated_return_unichar (void)
 {
   static const gunichar value[] = GI_MARSHALLING_TESTS_CONSTANT_UCS4;
-  unsigned ix;
   gunichar *retval = g_new0(gunichar, 13);
   memcpy (retval, value, 12 * sizeof (gunichar));
   return retval;
