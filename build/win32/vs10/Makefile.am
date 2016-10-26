@@ -35,8 +35,11 @@ EXTRA_DIST = \
 	$(GENERATED_ITEMS)
 
 gi-install.props: $(top_srcdir)/build/win32/vs10/gi-install.propsin girepository.vs10.headers giscanner.vs10.scripts
+	-$(RM) $(top_builddir)/build/win32/vs11/gi-install.props
+	-$(RM) $(top_builddir)/build/win32/vs12/gi-install.props
+	-$(RM) $(top_builddir)/build/win32/vs14/gi-install.props
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gi-install.propsin >$@
-	rm girepository.vs10.headers
-	rm giscanner.vs10.scripts
+	$(RM) girepository.vs10.headers
+	$(RM) giscanner.vs10.scripts
 
 DISTCLEANFILES = $(GENERATED_ITEMS)
