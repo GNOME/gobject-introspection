@@ -119,6 +119,10 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="g-ir-inspect.vcxproj">
+      <Project>{f4e6621f-a7dd-4863-8ccf-ca04dfc601e3}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="g-ir-compiler.vcxproj">
       <Project>{5dcb55ce-f32c-4c77-8bf4-b4dad3ec7774}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

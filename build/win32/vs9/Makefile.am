@@ -16,6 +16,7 @@ EXTRA_DIST = \
 	cmph.vcprojin		\
 	g-ir-compiler.vcprojin	\
 	g-ir-generate.vcproj	\
+	g-ir-inspect.vcproj	\
 	glib-print.vcproj	\
 	gi-install.vcproj	\
 	gi-introspect.vcproj	\

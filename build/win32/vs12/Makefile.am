@@ -15,6 +15,8 @@ EXTRA_DIST = \
 	g-ir-compiler.vcxproj.filters	\
 	g-ir-generate.vcxproj	\
 	g-ir-generate.vcxproj.filters	\
+	g-ir-inspect.vcxproj	\
+	g-ir-inspect.vcxproj.filters	\
 	glib-print.vcxproj	\
 	glib-print.vcxproj.filters	\
 	_giscanner.vcxproj	\

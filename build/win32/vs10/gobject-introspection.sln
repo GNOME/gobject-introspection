@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "g-ir-generate", "g-ir-gener
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "g-ir-compiler", "g-ir-compiler.vcxproj", "{5DCB55CE-F32C-4C77-8BF4-B4DAD3EC7774}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "g-ir-inspect", "g-ir-inspect.vcxproj", "{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gi-introspect", "gi-introspect.vcxproj", "{7A36674C-379D-4989-A978-07124E5F852C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gi-install", "gi-install.vcxproj", "{2093D218-190E-4194-9421-3BA7CBF33B10}"
@@ -85,6 +87,14 @@ Global
 		{F4E6621F-A7DD-4863-8CCF-BA04DFC601E3}.Release|Win32.Build.0 = Release|Win32
 		{F4E6621F-A7DD-4863-8CCF-BA04DFC601E3}.Release|x64.ActiveCfg = Release|x64
 		{F4E6621F-A7DD-4863-8CCF-BA04DFC601E3}.Release|x64.Build.0 = Release|x64
+		{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}.Debug|Win32.Build.0 = Debug|Win32
+		{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}.Debug|x64.ActiveCfg = Debug|x64
+		{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}.Debug|x64.Build.0 = Debug|x64
+		{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}.Release|Win32.ActiveCfg = Release|Win32
+		{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}.Release|Win32.Build.0 = Release|Win32
+		{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}.Release|x64.ActiveCfg = Release|x64
+		{F4E6621F-A7DD-4863-8CCF-CA04DFC601E3}.Release|x64.Build.0 = Release|x64
 		{5DCB55CE-F32C-4C77-8BF4-B4DAD3EC7774}.Debug|Win32.ActiveCfg = Debug|Win32
 		{5DCB55CE-F32C-4C77-8BF4-B4DAD3EC7774}.Debug|Win32.Build.0 = Debug|Win32
 		{5DCB55CE-F32C-4C77-8BF4-B4DAD3EC7774}.Debug|x64.ActiveCfg = Debug|x64
