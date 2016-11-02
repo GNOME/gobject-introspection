@@ -155,7 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\tools\inspect.c" />
+    <ClCompile Include="..\..\..\tools\g-ir-inspect.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="girepository.vcxproj">
