@@ -71,7 +71,7 @@ gio_list:
 	@-echo Generating file list for GIO...
 	@-type NUL > $@
 	@-for /f %%a in ('dir /b $(PREFIX)\include\gio-win32-2.0\gio\*.h') do @echo $(PREFIX)\include\gio-win32-2.0\gio\%%a>> $@
-	@-for /f %%a in ('dir /b $(PREFIX)\include\glib-2.0\gio\*.h') do @if not %%a == gsettingsbackend.h @echo $(PREFIX)\include\glib-2.0\gio\%%a>> $@
+	@-for /f %%a in ('dir /b $(PREFIX)\include\glib-2.0\gio\*.h') do @echo $(PREFIX)\include\glib-2.0\gio\%%a>> $@
 	@-echo $(TOP_SRCDIR)\gir\gio-2.0.c>> $@
 
 gi_list:
@@ -119,7 +119,7 @@ Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=Gio --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --pkg=gio-$(GLIB_APIVERSION) --pkg=gio-windows-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
 	--library=gio-2.0 --external-library --reparse-validate --warn-all	\
-	--identifier-prefix=G --include=GLib-$(GLIB_APIVERSION) --c-include="gio/gio.h" -DGIO_COMPILATION	\
+	--identifier-prefix=G --include=GLib-$(GLIB_APIVERSION) --c-include="gio/gio.h" -DGIO_COMPILATION -DG_SETTINGS_ENABLE_BACKEND	\
 	-I$(PREFIX)\include\glib-2.0 -I$(PREFIX)\lib\glib-2.0\include	\
 	-I$(PREFIX)\include --filelist=gio_list -o $@
 
