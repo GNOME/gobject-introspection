@@ -1050,6 +1050,19 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_none_in (GHashTable *hash_table);
 
 _GI_TEST_EXTERN
+void gi_marshalling_tests_ghashtable_double_in (GHashTable *hash_table);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_ghashtable_float_in (GHashTable *hash_table);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_ghashtable_int64_in (GHashTable *hash_table);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_ghashtable_uint64_in (GHashTable *hash_table);
+
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_ghashtable_utf8_container_in (GHashTable *hash_table);
 
 _GI_TEST_EXTERN

@@ -3109,6 +3109,90 @@ gi_marshalling_tests_ghashtable_utf8_none_in (GHashTable *hash_table)
 }
 
 /**
+ * gi_marshalling_tests_ghashtable_double_in:
+ * @hash_table: (element-type utf8 double) (transfer none):
+ *
+ * Meant to test a value type that doesn't fit inside a pointer.
+ */
+void
+gi_marshalling_tests_ghashtable_double_in (GHashTable *hash_table)
+{
+  double *value;
+
+  value = g_hash_table_lookup (hash_table, "-1");
+  g_assert_cmpfloat (*value, ==, -0.1);
+  value = g_hash_table_lookup (hash_table, "0");
+  g_assert_cmpfloat (*value, ==, 0.0);
+  value = g_hash_table_lookup (hash_table, "1");
+  g_assert_cmpfloat (*value, ==, 0.1);
+  value = g_hash_table_lookup (hash_table, "2");
+  g_assert_cmpfloat (*value, ==, 0.2);
+}
+
+/**
+ * gi_marshalling_tests_ghashtable_float_in:
+ * @hash_table: (element-type utf8 float) (transfer none):
+ *
+ * Meant to test a value type that doesn't fit inside a pointer.
+ */
+void
+gi_marshalling_tests_ghashtable_float_in (GHashTable *hash_table)
+{
+  float *value;
+
+  value = g_hash_table_lookup (hash_table, "-1");
+  g_assert_cmpfloat (*value, ==, -0.1f);
+  value = g_hash_table_lookup (hash_table, "0");
+  g_assert_cmpfloat (*value, ==, 0.0f);
+  value = g_hash_table_lookup (hash_table, "1");
+  g_assert_cmpfloat (*value, ==, 0.1f);
+  value = g_hash_table_lookup (hash_table, "2");
+  g_assert_cmpfloat (*value, ==, 0.2f);
+}
+
+/**
+ * gi_marshalling_tests_ghashtable_int64_in:
+ * @hash_table: (element-type utf8 gint64) (transfer none):
+ *
+ * Meant to test a value type that doesn't fit inside a pointer.
+ */
+void
+gi_marshalling_tests_ghashtable_int64_in (GHashTable *hash_table)
+{
+  gint64 *value;
+
+  value = g_hash_table_lookup (hash_table, "-1");
+  g_assert_cmpint (*value, ==, -1);
+  value = g_hash_table_lookup (hash_table, "0");
+  g_assert_cmpint (*value, ==, 0);
+  value = g_hash_table_lookup (hash_table, "1");
+  g_assert_cmpint (*value, ==, 1);
+  value = g_hash_table_lookup (hash_table, "2");
+  g_assert_cmpint (*value, ==, (gint64) G_MAXUINT32 + 1);
+}
+
+/**
+ * gi_marshalling_tests_ghashtable_uint64_in:
+ * @hash_table: (element-type utf8 guint64) (transfer none):
+ *
+ * Meant to test a value type that doesn't fit inside a pointer.
+ */
+void
+gi_marshalling_tests_ghashtable_uint64_in (GHashTable *hash_table)
+{
+  guint64 *value;
+
+  value = g_hash_table_lookup (hash_table, "-1");
+  g_assert_cmpuint (*value, ==, (guint64) G_MAXUINT32 + 1);
+  value = g_hash_table_lookup (hash_table, "0");
+  g_assert_cmpuint (*value, ==, 0);
+  value = g_hash_table_lookup (hash_table, "1");
+  g_assert_cmpuint (*value, ==, 1);
+  value = g_hash_table_lookup (hash_table, "2");
+  g_assert_cmpuint (*value, ==, 2);
+}
+
+/**
  * gi_marshalling_tests_ghashtable_utf8_none_out:
  * @hash_table: (out) (element-type utf8 utf8) (transfer none):
  */
