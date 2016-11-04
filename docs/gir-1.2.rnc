@@ -41,8 +41,8 @@ grammar {
     }
 
   Annotation =
-    element annotation {
-      attribute key { xsd:string },
+    element attribute {
+      attribute name { xsd:string },
       attribute value { xsd:string }
     }
 
