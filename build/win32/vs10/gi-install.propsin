@@ -44,7 +44,7 @@ copy ..\..\..\girepository\gdump.c $(CopyDir)\share\gobject-introspection-$(ApiV
 
 mkdir $(CopyDir)\lib
 
-copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\girepository-$(ApiVersion).lib $(CopyDir)\lib
+copy $(BinDir)\bin\girepository-$(ApiVersion).lib $(CopyDir)\lib
 
 mkdir $(CopyDir)\share\gir-$(ApiVersion)
 copy ..\cairo-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)
