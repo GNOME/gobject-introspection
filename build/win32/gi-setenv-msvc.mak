@@ -9,4 +9,4 @@ setgirbuildenv:
 	@set PYTHONPATH=$(TOP_SRCDIR);$(BINDIR)
 	@set PATH=$(BINDIR);$(PREFIX)\bin;$(PATH)
 	@set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
-	@set LIB=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(PREFIX)\lib;$(LIB)
+	@set LIB=vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(PREFIX)\lib;$(LIB)
