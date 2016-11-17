@@ -259,6 +259,7 @@ class DumpCompiler(object):
             self._compiler.get_internal_link_flags(args,
                                                    libtool,
                                                    self._options.libraries,
+                                                   self._options.extra_libraries,
                                                    self._options.library_paths)
             args.extend(pkg_config_libs)
 

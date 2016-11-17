@@ -108,14 +108,14 @@ class CCompiler(object):
 
             self._cflags_no_deprecation_warnings = "-Wno-deprecated-declarations"
 
-    def get_internal_link_flags(self, args, libtool, libraries, libpaths):
+    def get_internal_link_flags(self, args, libtool, libraries, extra_libraries, libpaths):
         # An "internal" link is where the library to be introspected
         # is being built in the current directory.
 
         if not libtool:
             # non-libtool case: prepare distutils use
             if self.check_is_msvc():
-                for library in libraries:
+                for library in libraries + extra_libraries:
                     # MSVC Builds don't use libtool, so no .la libraries,
                     # so just add the library directly.
                     self.compiler.add_library(library)
@@ -136,7 +136,7 @@ class CCompiler(object):
                 if sys.platform != 'darwin':
                     args.append('-Wl,--no-as-needed')
 
-            for library in libraries:
+            for library in libraries + extra_libraries:
                 self.compiler.add_library(library)
             if not self.check_is_msvc():
                 for library_path in libpaths:
