@@ -4295,7 +4295,7 @@
  *
  * Connects a closure to a signal for a particular object.
  *
- * Returns: the handler id (always greater than 0 for successful connections)
+ * Returns: the handler ID (always greater than 0 for successful connections)
  */
 
 
@@ -4310,7 +4310,7 @@
  *
  * Connects a closure to a signal for a particular object.
  *
- * Returns: the handler id (always greater than 0 for successful connections)
+ * Returns: the handler ID (always greater than 0 for successful connections)
  */
 
 
@@ -4329,7 +4329,7 @@
  * used. Specify @connect_flags if you need `..._after()` or
  * `..._swapped()` variants of this function.
  *
- * Returns: the handler id (always greater than 0 for successful connections)
+ * Returns: the handler ID (always greater than 0 for successful connections)
  */
 
 
@@ -4485,9 +4485,9 @@
 /**
  * g_signal_handler_is_connected:
  * @instance: (type GObject.Object): The instance where a signal handler is sought.
- * @handler_id: the handler id.
+ * @handler_id: the handler ID.
  *
- * Returns whether @handler_id is the id of a handler connected to @instance.
+ * Returns whether @handler_id is the ID of a handler connected to @instance.
  *
  * Returns: whether @handler_id identifies a handler connected to @instance.
  */
