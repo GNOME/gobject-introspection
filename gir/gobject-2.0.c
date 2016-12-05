@@ -884,12 +884,12 @@
 /**
  * g_cclosure_marshal_BOOLEAN__BOXED_BOXEDv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -924,12 +924,12 @@
 /**
  * g_cclosure_marshal_BOOLEAN__FLAGSv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1016,12 +1016,12 @@
 /**
  * g_cclosure_marshal_STRING__OBJECT_POINTERv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1054,12 +1054,12 @@
 /**
  * g_cclosure_marshal_VOID__BOOLEANv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1092,12 +1092,12 @@
 /**
  * g_cclosure_marshal_VOID__BOXEDv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1130,12 +1130,12 @@
 /**
  * g_cclosure_marshal_VOID__CHARv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1168,12 +1168,12 @@
 /**
  * g_cclosure_marshal_VOID__DOUBLEv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1206,12 +1206,12 @@
 /**
  * g_cclosure_marshal_VOID__ENUMv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1244,12 +1244,12 @@
 /**
  * g_cclosure_marshal_VOID__FLAGSv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1282,12 +1282,12 @@
 /**
  * g_cclosure_marshal_VOID__FLOATv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1320,12 +1320,12 @@
 /**
  * g_cclosure_marshal_VOID__INTv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1358,12 +1358,12 @@
 /**
  * g_cclosure_marshal_VOID__LONGv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1396,12 +1396,12 @@
 /**
  * g_cclosure_marshal_VOID__OBJECTv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1434,12 +1434,12 @@
 /**
  * g_cclosure_marshal_VOID__PARAMv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1476,12 +1476,12 @@
 /**
  * g_cclosure_marshal_VOID__POINTERv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1514,12 +1514,12 @@
 /**
  * g_cclosure_marshal_VOID__STRINGv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1552,12 +1552,12 @@
 /**
  * g_cclosure_marshal_VOID__UCHARv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1609,12 +1609,12 @@
 /**
  * g_cclosure_marshal_VOID__UINT_POINTERv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1628,12 +1628,12 @@
 /**
  * g_cclosure_marshal_VOID__UINTv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1666,12 +1666,12 @@
 /**
  * g_cclosure_marshal_VOID__ULONGv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1704,12 +1704,12 @@
 /**
  * g_cclosure_marshal_VOID__VARIANTv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1741,12 +1741,12 @@
 /**
  * g_cclosure_marshal_VOID__VOIDv:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is invoked.
  * @args: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1784,13 +1784,13 @@
 /**
  * g_cclosure_marshal_generic_va:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: (allow-none): a #GValue to store the return
+ * @return_value: (nullable): a #GValue to store the return
  *  value. May be %NULL if the callback of @closure doesn't return a
  *  value.
  * @instance: (type GObject.TypeInstance): the instance on which the closure is
  *  invoked.
  * @args_list: va_list of arguments to be passed to the closure.
- * @marshal_data: (allow-none): additional data specified when
+ * @marshal_data: (nullable): additional data specified when
  *  registering the marshaller, see g_closure_set_marshal() and
  *  g_closure_set_meta_marshal()
  * @n_params: the length of the @param_types array
@@ -1954,7 +1954,7 @@
  * @param_values: (array length=n_param_values): an array of
  *                #GValues holding the arguments on which to
  *                invoke the callback of @closure
- * @invocation_hint: (allow-none): a context-dependent invocation hint
+ * @invocation_hint: (nullable): a context-dependent invocation hint
  *
  * Invokes the closure, i.e. executes the callback represented by the @closure.
  */
@@ -2354,7 +2354,7 @@
 /**
  * g_object_add_weak_pointer: (skip)
  * @object: The object that should be weak referenced.
- * @weak_pointer_location: (inout) (not optional) (nullable): The memory address
+ * @weak_pointer_location: (inout) (not optional): The memory address
  *    of a pointer.
  *
  * Adds a weak reference from weak_pointer to @object to indicate that
@@ -2414,9 +2414,9 @@
  * @target: (type GObject.Object): the target #GObject
  * @target_property: the property on @target to bind
  * @flags: flags to pass to #GBinding
- * @transform_to: (scope notified) (allow-none): the transformation function
+ * @transform_to: (scope notified) (nullable): the transformation function
  *     from the @source to the @target, or %NULL to use the default
- * @transform_from: (scope notified) (allow-none): the transformation function
+ * @transform_from: (scope notified) (nullable): the transformation function
  *     from the @target to the @source, or %NULL to use the default
  * @user_data: custom data to be passed to the transformation functions,
  *     or %NULL
@@ -2682,8 +2682,8 @@
  * g_object_dup_data:
  * @object: the #GObject to store user data on
  * @key: a string, naming the user data pointer
- * @dup_func: (allow-none): function to dup the value
- * @user_data: (allow-none): passed as user_data to @dup_func
+ * @dup_func: (nullable): function to dup the value
+ * @user_data: (nullable): passed as user_data to @dup_func
  *
  * This is a variant of g_object_get_data() which returns
  * a 'duplicate' of the value. @dup_func defines the
@@ -2712,8 +2712,8 @@
  * g_object_dup_qdata:
  * @object: the #GObject to store user data on
  * @quark: a #GQuark, naming the user data pointer
- * @dup_func: (allow-none): function to dup the value
- * @user_data: (allow-none): passed as user_data to @dup_func
+ * @dup_func: (nullable): function to dup the value
+ * @user_data: (nullable): passed as user_data to @dup_func
  *
  * This is a variant of g_object_get_qdata() which returns
  * a 'duplicate' of the value. @dup_func defines the
@@ -3096,7 +3096,7 @@
 /**
  * g_object_remove_weak_pointer: (skip)
  * @object: The object that is weak referenced.
- * @weak_pointer_location: (inout) (not optional) (nullable): The memory address
+ * @weak_pointer_location: (inout) (not optional): The memory address
  *    of a pointer.
  *
  * Removes a weak reference from @object that was previously added
@@ -3109,10 +3109,10 @@
  * g_object_replace_data:
  * @object: the #GObject to store user data on
  * @key: a string, naming the user data pointer
- * @oldval: (allow-none): the old value to compare against
- * @newval: (allow-none): the new value
- * @destroy: (allow-none): a destroy notify for the new value
- * @old_destroy: (allow-none): destroy notify for the existing value
+ * @oldval: (nullable): the old value to compare against
+ * @newval: (nullable): the new value
+ * @destroy: (nullable): a destroy notify for the new value
+ * @old_destroy: (nullable): destroy notify for the existing value
  *
  * Compares the user data for the key @key on @object with
  * @oldval, and if they are the same, replaces @oldval with
@@ -3138,10 +3138,10 @@
  * g_object_replace_qdata:
  * @object: the #GObject to store user data on
  * @quark: a #GQuark, naming the user data pointer
- * @oldval: (allow-none): the old value to compare against
- * @newval: (allow-none): the new value
- * @destroy: (allow-none): a destroy notify for the new value
- * @old_destroy: (allow-none): destroy notify for the existing value
+ * @oldval: (nullable): the old value to compare against
+ * @newval: (nullable): the new value
+ * @destroy: (nullable): a destroy notify for the new value
+ * @old_destroy: (nullable): destroy notify for the existing value
  *
  * Compares the user data for the key @quark on @object with
  * @oldval, and if they are the same, replaces @oldval with
@@ -4083,7 +4083,7 @@
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
  * @type: a #GVariantType
- * @default_value: (allow-none) (transfer full): a #GVariant of type @type to
+ * @default_value: (nullable) (transfer full): a #GVariant of type @type to
  *                 use as the default value, or %NULL
  * @flags: flags for the property specified
  *
@@ -4468,7 +4468,7 @@
  *  and/or @data the handler has to match.
  * @signal_id: Signal the handler has to be connected to.
  * @detail: Signal detail the handler has to be connected to.
- * @closure: (allow-none): The closure the handler will invoke.
+ * @closure: (nullable): The closure the handler will invoke.
  * @func: The C closure callback of the handler (useless for non-C closures).
  * @data: The closure data of the handler's closure.
  *
@@ -4521,7 +4521,7 @@
  *  and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
- * @closure: (allow-none): The closure the handlers will invoke.
+ * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
  *
@@ -4554,7 +4554,7 @@
  *  and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
- * @closure: (allow-none): The closure the handlers will invoke.
+ * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
  *
@@ -4578,7 +4578,7 @@
  *  and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
- * @closure: (allow-none): The closure the handlers will invoke.
+ * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
  *
@@ -4679,7 +4679,7 @@
  *  not associate a class method slot with this signal.
  * @accumulator: the accumulator for this signal; may be %NULL.
  * @accu_data: user data for the @accumulator.
- * @c_marshaller: (allow-none): the function to translate arrays of parameter
+ * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
  *  without a return value.
@@ -4720,7 +4720,7 @@
  *  not associate a class method with this signal.
  * @accumulator: the accumulator for this signal; may be %NULL.
  * @accu_data: user data for the @accumulator.
- * @c_marshaller: (allow-none): the function to translate arrays of parameter
+ * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
  *  without a return value.
@@ -4760,7 +4760,7 @@
  * @class_closure: The closure to invoke on signal emission; may be %NULL.
  * @accumulator: the accumulator for this signal; may be %NULL.
  * @accu_data: user data for the @accumulator.
- * @c_marshaller: (allow-none): the function to translate arrays of parameter
+ * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
  *  without a return value.
@@ -4786,11 +4786,11 @@
  * @signal_flags: a combination of #GSignalFlags specifying detail of when
  *     the default handler is to be invoked. You should at least specify
  *     %G_SIGNAL_RUN_FIRST or %G_SIGNAL_RUN_LAST
- * @class_closure: (allow-none): The closure to invoke on signal emission;
+ * @class_closure: (nullable): The closure to invoke on signal emission;
  *     may be %NULL
- * @accumulator: (allow-none): the accumulator for this signal; may be %NULL
+ * @accumulator: (nullable): the accumulator for this signal; may be %NULL
  * @accu_data: user data for the @accumulator
- * @c_marshaller: (allow-none): the function to translate arrays of
+ * @c_marshaller: (nullable): the function to translate arrays of
  *     parameter values to signal emissions into C language callback
  *     invocations or %NULL
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
@@ -5081,7 +5081,7 @@
 /**
  * g_type_children:
  * @type: the parent type
- * @n_children: (out) (allow-none): location to store the length of
+ * @n_children: (out) (optional): location to store the length of
  *     the returned array, or %NULL
  *
  * Return a newly allocated and 0-terminated array of type IDs, listing
@@ -5569,7 +5569,7 @@
 /**
  * g_type_interface_prerequisites:
  * @interface_type: an interface type
- * @n_prerequisites: (out) (allow-none): location to return the number
+ * @n_prerequisites: (out) (optional): location to return the number
  *     of prerequisites, or %NULL
  *
  * Returns the prerequisites of an interfaces type.
@@ -5584,7 +5584,7 @@
 /**
  * g_type_interfaces:
  * @type: the type to list interface types for
- * @n_interfaces: (out) (allow-none): location to store the length of
+ * @n_interfaces: (out) (optional): location to store the length of
  *     the returned array, or %NULL
  *
  * Return a newly allocated and 0-terminated array of type IDs, listing
@@ -5967,7 +5967,7 @@
 /**
  * g_value_array_append:
  * @value_array: #GValueArray to add an element to
- * @value: (allow-none): #GValue to copy into #GValueArray, or %NULL
+ * @value: (nullable): #GValue to copy into #GValueArray, or %NULL
  *
  * Insert a copy of @value as last element of @value_array. If @value is
  * %NULL, an uninitialized value is appended.
@@ -6015,7 +6015,7 @@
  * g_value_array_insert:
  * @value_array: #GValueArray to add an element to
  * @index_: insertion position, must be <= value_array->;n_values
- * @value: (allow-none): #GValue to copy into #GValueArray, or %NULL
+ * @value: (nullable): #GValue to copy into #GValueArray, or %NULL
  *
  * Insert a copy of @value at specified position into @value_array. If @value
  * is %NULL, an uninitialized value is inserted.
@@ -6041,7 +6041,7 @@
 /**
  * g_value_array_prepend:
  * @value_array: #GValueArray to add an element to
- * @value: (allow-none): #GValue to copy into #GValueArray, or %NULL
+ * @value: (nullable): #GValue to copy into #GValueArray, or %NULL
  *
  * Insert a copy of @value as first element of @value_array. If @value is
  * %NULL, an uninitialized value is prepended.
@@ -6470,7 +6470,7 @@
 /**
  * g_value_set_boxed:
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
- * @v_boxed: (allow-none): boxed value to be set
+ * @v_boxed: (nullable): boxed value to be set
  *
  * Set the contents of a %G_TYPE_BOXED derived #GValue to @v_boxed.
  */
@@ -6479,7 +6479,7 @@
 /**
  * g_value_set_boxed_take_ownership:
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
- * @v_boxed: (allow-none): duplicated unowned boxed value to be set
+ * @v_boxed: (nullable): duplicated unowned boxed value to be set
  *
  * This is an internal function introduced mainly for C marshallers.
  *
@@ -6548,7 +6548,7 @@
 /**
  * g_value_set_instance:
  * @value: An initialized #GValue structure.
- * @instance: (allow-none): the instance
+ * @instance: (nullable): the instance
  *
  * Sets @value from an instantiatable type via the
  * value_table's collect_value() function.
@@ -6585,7 +6585,7 @@
 /**
  * g_value_set_object:
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
- * @v_object: (type GObject.Object) (allow-none): object value to be set
+ * @v_object: (type GObject.Object) (nullable): object value to be set
  *
  * Set the contents of a %G_TYPE_OBJECT derived #GValue to @v_object.
  *
@@ -6604,7 +6604,7 @@
 /**
  * g_value_set_object_take_ownership: (skip)
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
- * @v_object: (allow-none): object value to be set
+ * @v_object: (nullable): object value to be set
  *
  * This is an internal function introduced mainly for C marshallers.
  *
@@ -6615,7 +6615,7 @@
 /**
  * g_value_set_param:
  * @value: a valid #GValue of type %G_TYPE_PARAM
- * @param: (allow-none): the #GParamSpec to be set
+ * @param: (nullable): the #GParamSpec to be set
  *
  * Set the contents of a %G_TYPE_PARAM #GValue to @param.
  */
@@ -6624,7 +6624,7 @@
 /**
  * g_value_set_param_take_ownership: (skip)
  * @value: a valid #GValue of type %G_TYPE_PARAM
- * @param: (allow-none): the #GParamSpec to be set
+ * @param: (nullable): the #GParamSpec to be set
  *
  * This is an internal function introduced mainly for C marshallers.
  *
@@ -6655,7 +6655,7 @@
 /**
  * g_value_set_static_boxed:
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
- * @v_boxed: (allow-none): static boxed value to be set
+ * @v_boxed: (nullable): static boxed value to be set
  *
  * Set the contents of a %G_TYPE_BOXED derived #GValue to @v_boxed.
  * The boxed value is assumed to be static, and is thus not duplicated
@@ -6666,7 +6666,7 @@
 /**
  * g_value_set_static_string:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: (allow-none): static string to be set
+ * @v_string: (nullable): static string to be set
  *
  * Set the contents of a %G_TYPE_STRING #GValue to @v_string.
  * The string is assumed to be static, and is thus not duplicated
@@ -6677,7 +6677,7 @@
 /**
  * g_value_set_string:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: (allow-none): caller-owned string to be duplicated for the #GValue
+ * @v_string: (nullable): caller-owned string to be duplicated for the #GValue
  *
  * Set the contents of a %G_TYPE_STRING #GValue to @v_string.
  */
@@ -6686,7 +6686,7 @@
 /**
  * g_value_set_string_take_ownership:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: (allow-none): duplicated unowned string to be set
+ * @v_string: (nullable): duplicated unowned string to be set
  *
  * This is an internal function introduced mainly for C marshallers.
  *
@@ -6733,7 +6733,7 @@
 /**
  * g_value_set_variant:
  * @value: a valid #GValue of type %G_TYPE_VARIANT
- * @variant: (allow-none): a #GVariant, or %NULL
+ * @variant: (nullable): a #GVariant, or %NULL
  *
  * Set the contents of a variant #GValue to @variant.
  * If the variant is floating, it is consumed.
@@ -6745,7 +6745,7 @@
 /**
  * g_value_take_boxed:
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
- * @v_boxed: (allow-none): duplicated unowned boxed value to be set
+ * @v_boxed: (nullable): duplicated unowned boxed value to be set
  *
  * Sets the contents of a %G_TYPE_BOXED derived #GValue to @v_boxed
  * and takes over the ownership of the callers reference to @v_boxed;
@@ -6758,7 +6758,7 @@
 /**
  * g_value_take_object: (skip)
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
- * @v_object: (allow-none): object value to be set
+ * @v_object: (nullable): object value to be set
  *
  * Sets the contents of a %G_TYPE_OBJECT derived #GValue to @v_object
  * and takes over the ownership of the callers reference to @v_object;
@@ -6775,7 +6775,7 @@
 /**
  * g_value_take_param: (skip)
  * @value: a valid #GValue of type %G_TYPE_PARAM
- * @param: (allow-none): the #GParamSpec to be set
+ * @param: (nullable): the #GParamSpec to be set
  *
  * Sets the contents of a %G_TYPE_PARAM #GValue to @param and takes
  * over the ownership of the callers reference to @param; the caller
@@ -6788,7 +6788,7 @@
 /**
  * g_value_take_string:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: (allow-none): string to take ownership of
+ * @v_string: (nullable): string to take ownership of
  *
  * Sets the contents of a %G_TYPE_STRING #GValue to @v_string.
  *

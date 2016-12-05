@@ -159,7 +159,7 @@
 
 /**
  * g_module_build_path:
- * @directory: (allow-none): the directory where the module is. This can be
+ * @directory: (nullable): the directory where the module is. This can be
  *     %NULL or the empty string to indicate that the standard platform-specific
  *     directories will be used, though that is not recommended
  * @module_name: the name of the module
@@ -225,7 +225,7 @@
 
 /**
  * g_module_open:
- * @file_name: (allow-none): the name of the file containing the module, or %NULL
+ * @file_name: (nullable): the name of the file containing the module, or %NULL
  *     to obtain a #GModule representing the main program itself
  * @flags: the flags used for opening the module. This can be the
  *     logical OR of any of the #GModuleFlags
