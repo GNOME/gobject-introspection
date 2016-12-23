@@ -2153,6 +2153,7 @@ regress_test_obj_set_property (GObject      *object,
       break;
 
     case PROP_TEST_OBJ_STRING:
+      g_clear_pointer (&self->string, g_free);
       self->string = g_value_dup_string (value);
       break;
 
@@ -2249,6 +2250,15 @@ regress_test_obj_dispose (GObject *gobject)
       regress_test_boxed_free (self->boxed);
       self->boxed = NULL;
     }
+
+  if (self->list)
+    {
+      g_list_free_full (self->list, g_free);
+      self->list = NULL;
+    }
+
+  g_clear_pointer (&self->hash_table, g_hash_table_unref);
+  g_clear_pointer (&self->string, g_free);
 
   /* Chain up to the parent class */
   G_OBJECT_CLASS (regress_test_obj_parent_class)->dispose (gobject);
