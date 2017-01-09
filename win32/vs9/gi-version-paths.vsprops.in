@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="giversionpaths"
+	>
+	<UserMacro
+		Name="VSVer"
+		Value="9"
+	/>
+	<UserMacro
+		Name="GlibEtcInstallRoot"
+		Value="$(SolutionDir)\..\..\..\vs$(VSVer)\$(PlatformName)"
+	/>
+	<UserMacro
+		Name="CopyDir"
+		Value="$(GlibEtcInstallRoot)"
+	/>
+	<!-- PythonDir needs to point to a 32-bit/x86 Python 2.7/3.3+ installation -->
+	<UserMacro
+		Name="PythonDir"
+		Value="c:\\python27"
+	/>
+	<!-- PythonDirX64 needs to point to an x86-64/x64 Python 2.7/3.3+ installation -->
+	<UserMacro
+		Name="PythonDirX64"
+		Value="$(PythonDir).x64"
+	/>
+	<UserMacro
+		Name="IntrospectPythonParam"
+		Value="PYTHON=$(PythonDir)\python.exe"
+	/>
+	<UserMacro
+		Name="IntrospectPythonParamX64"
+		Value="PYTHON=$(PythonDirX64)\python.exe"
+	/>
+	<UserMacro
+		Name="GIVersion"
+		Value="@PACKAGE_VERSION@"
+	/>
+	<UserMacro
+		Name="BASE_GI_DIR"
+		Value="$(SolutionDir)\..\.."
+	/>
+	<UserMacro
+		Name="ApiVersion"
+		Value="1.0"
+	/>
+	<UserMacro
+		Name="LibGILibtoolCompatibleDllPrefix"
+		Value="lib"
+	/>
+	<UserMacro
+		Name="LibGILibtoolCompatibleDllSuffix"
+		Value="-$(ApiVersion)-0"
+	/>
+	<UserMacro
+		Name="LibGISeparateVSDllPrefix"
+		Value=""
+	/>
+	<UserMacro
+		Name="LibGISeparateVSDllSuffix"
+		Value="-1-vs$(VSVer)"
+	/>
+	<!-- Change these two to LibGILibtoolCompatibleDllPrefix and
+	LibGILibtoolCompatibleDllSuffix if that is what you want -->
+	<UserMacro
+		Name="LibGIDllPrefix"
+		Value="$(LibGISeparateVSDllPrefix)"
+	/>
+	<UserMacro
+		Name="LibGIDllSuffix"
+		Value="$(LibGISeparateVSDllSuffix)"
+	/>
+</VisualStudioPropertySheet>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gi-build-defines.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
+    <GIDoInstall>
+mkdir $(CopyDir)
+mkdir $(CopyDir)\bin
+
+copy $(BinDir)\$(LibGIDllPrefix)girepository$(LibGIDllSuffix).dll $(CopyDir)\bin
+copy $(BinDir)\$(LibGIDllPrefix)girepository$(LibGIDllSuffix).pdb $(CopyDir)\bin
+copy $(BinDir)\g-ir-compiler.exe $(CopyDir)\bin
+copy $(BinDir)\g-ir-compiler.pdb $(CopyDir)\bin
+copy $(BinDir)\g-ir-generate.exe $(CopyDir)\bin
+copy $(BinDir)\g-ir-generate.pdb $(CopyDir)\bin
+copy $(BinDir)\g-ir-inspect.exe $(CopyDir)\bin
+copy $(BinDir)\g-ir-inspect.pdb $(CopyDir)\bin
+copy ..\..\tools\g-ir-annotation-tool $(CopyDir)\bin
+copy ..\..\tools\g-ir-doc-tool $(CopyDir)\bin
+copy ..\..\tools\g-ir-scanner $(CopyDir)\bin
+
+copy $(BinDir)\glib-print.exe $(CopyDir)\bin
+copy $(BinDir)\glib-print.pdb $(CopyDir)\bin
+
+mkdir $(CopyDir)\include\gobject-introspection-1.0\girepository
+#include "girepository.vs10.headers"
+#include "giscanner.vs10.scripts"
+
+mkdir $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\tests\gitestmacros.h $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\tests\gimarshallingtests.c $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\tests\gimarshallingtests.h $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\tests\scanner\regress.c $(CopyDir)\share\gobject-introspection-1.0\tests
+copy ..\..\tests\scanner\regress.h $(CopyDir)\share\gobject-introspection-1.0\tests
+
+copy $(BinDir)\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner
+copy $(BinDir)\_giscanner.pdb $(CopyDir)\lib\gobject-introspection\giscanner
+
+mkdir $(CopyDir)\share\gobject-introspection-$(ApiVersion)
+
+copy ..\..\girepository\gdump.c $(CopyDir)\share\gobject-introspection-$(ApiVersion)
+
+mkdir $(CopyDir)\lib
+
+copy $(BinDir)\bin\girepository-$(ApiVersion).lib $(CopyDir)\lib
+
+mkdir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\cairo-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\fontconfig-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\freetype2-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\Gio-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GIRepository-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GL-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GLib-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GModule-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\GObject-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\libxml2-2.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+copy ..\win32-1.0.gir $(CopyDir)\share\gir-$(ApiVersion)
+
+mkdir $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\cairo-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\fontconfig-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\freetype2-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\Gio-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GIRepository-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GL-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GLib-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GModule-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\GObject-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\libxml2-2.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+copy ..\win32-1.0.typelib $(CopyDir)\lib\girepository-$(ApiVersion)
+
+mkdir $(CopyDir)\lib\pkgconfig
+copy ..\gobject-introspection-1.0.pc $(CopyDir)\lib\pkgconfig
+copy ..\gobject-introspection-no-export-1.0.pc $(CopyDir)\lib\pkgconfig
+copy ..\cairo.pc $(CopyDir)\lib\pkgconfig
+copy ..\cairo-win32.pc $(CopyDir)\lib\pkgconfig
+copy ..\cairo-gobject.pc $(CopyDir)\lib\pkgconfig
+copy ..\libxml-2.0.pc $(CopyDir)\lib\pkgconfig
+copy ..\freetype2.pc $(CopyDir)\lib\pkgconfig
+    </GIDoInstall>
+    <GIPCFiles>..\gobject-introspection-1.0.pc;..\gobject-introspection-no-export-1.0.pc;..\cairo.pc;..\cairo-win32.pc;..\cairo-gobject.pc;..\libxml-2.0.pc;..\freetype2.pc</GIPCFiles>
+    <GIGenPC>$(PythonDir)\python.exe ..\gipc.py --version=$(GIVersion) --prefix=$(CopyDir)</GIGenPC>
+    <GIGenPCX64>$(PythonDirX64)\python.exe ..\gipc.py --version=$(GIVersion) --prefix=$(CopyDir)</GIGenPCX64>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>giinstallprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="BinDir">
+      <Value>$(BinDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIDoInstall">
+      <Value>$(GIDoInstall)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIPCFiles">
+      <Value>$(GIPCFiles)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIGenPC">
+      <Value>$(GIGenPC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIGenPCX64">
+      <Value>$(GIGenPCX64)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

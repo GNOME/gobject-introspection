@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gi-version-paths.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <FFIDefines>FFI_BUILDING</FFIDefines>
+    <GIRepositoryBuildDefines>G_IREPOSITORY_COMPILATION;$(FFIDefines);DLL_EXPORT</GIRepositoryBuildDefines>
+    <GIIntrospectNMakeCmd>cd ..
+set VCInstallDir=$(VCInstallDir)
+nmake -f gi-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstallRoot)</GIIntrospectNMakeCmd>
+    <GIIntrospectBuiltFiles>$(SolutionDir)\..\GIRepository-2.0.typelib;$(SolutionDir)\..\cairo-1.0.typelib</GIIntrospectBuiltFiles>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gibuilddefinesprops</_PropertySheetDisplayName>
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformName)\bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(PlatformName)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..;..\..\girepository;$(GlibEtcInstallRoot)\include\gio-win32-2.0;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/d2Zi+ %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>gio-2.0.lib;gobject-2.0.lib;gmodule-2.0.lib;gthread-2.0.lib;glib-2.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(GlibEtcInstallRoot)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="FFIDefines">
+      <Value>$(FFIDefines)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIRepositoryBuildDefines">
+      <Value>$(GIRepositoryBuildDefines)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIIntrospectNMakeCmd">
+      <Value>$(GIIntrospectNMakeCmd)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIIntrospectBuiltFiles">
+      <Value>$(GIIntrospectBuiltFiles)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

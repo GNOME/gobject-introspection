@@ -15,67 +15,67 @@ girepository_HEADERS_EXCLUDES = gidummy
 g_ir_compiler_FILES = $(libgirepository_gthash_la_SOURCES) $(libgirepository_internals_la_SOURCES)
 g_ir_compiler_EXCLUDES = gidummy
 
-$(top_builddir)/build/win32/vs9/giscanner.scripts:
-	echo '' >>$(top_builddir)/build/win32/vs9/giscanner.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;' >>$(top_builddir)/build/win32/vs9/giscanner.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\collections&#x0D;&#x0A;' >>$(top_builddir)/build/win32/vs9/giscanner.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates&#x0D;&#x0A;' >>$(top_builddir)/build/win32/vs9/giscanner.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C&#x0D;&#x0A;' >>$(top_builddir)/build/win32/vs9/giscanner.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs&#x0D;&#x0A;' >>$(top_builddir)/build/win32/vs9/giscanner.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python&#x0D;&#x0A;' >>$(top_builddir)/build/win32/vs9/giscanner.scripts
-	echo '' >>$(top_builddir)/build/win32/vs9/giscanner.scripts
+$(top_builddir)/win32/vs9/giscanner.scripts:
+	echo '' >>$(top_builddir)/win32/vs9/giscanner.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;' >>$(top_builddir)/win32/vs9/giscanner.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\collections&#x0D;&#x0A;' >>$(top_builddir)/win32/vs9/giscanner.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates&#x0D;&#x0A;' >>$(top_builddir)/win32/vs9/giscanner.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C&#x0D;&#x0A;' >>$(top_builddir)/win32/vs9/giscanner.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs&#x0D;&#x0A;' >>$(top_builddir)/win32/vs9/giscanner.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python&#x0D;&#x0A;' >>$(top_builddir)/win32/vs9/giscanner.scripts
+	echo '' >>$(top_builddir)/win32/vs9/giscanner.scripts
 
-	echo '' >>$(top_builddir)/build/win32/vs10/giscanner.vs10.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner' >>$(top_builddir)/build/win32/vs10/giscanner.vs10.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\collections' >>$(top_builddir)/build/win32/vs10/giscanner.vs10.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates' >>$(top_builddir)/build/win32/vs10/giscanner.vs10.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C' >>$(top_builddir)/build/win32/vs10/giscanner.vs10.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs' >>$(top_builddir)/build/win32/vs10/giscanner.vs10.scripts
-	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python' >>$(top_builddir)/build/win32/vs10/giscanner.vs10.scripts
-
-	for F in `echo $(pkgpyexec_PYTHON) $(collections_PYTHON) $(nobase_dist_template_DATA) | tr '/' '\\\\'`; do \
-		case $$F in \
-		giscanner\\doctemplates\\C\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C&#x0D;&#x0A;' \
-			;; \
-		giscanner\\doctemplates\\Gjs\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs&#x0D;&#x0A;' \
-			;; \
-		giscanner\\doctemplates\\Python\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python&#x0D;&#x0A;' \
-			;; \
-		giscanner\\doctemplates\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates&#x0D;&#x0A;' \
-			;; \
-		giscanner\\collections\\*.py) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\collections&#x0D;&#x0A;' \
-			;; \
-		giscanner\\*.py) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;' \
-			;; \
-		esac; \
-	done >>$(top_builddir)/build/win32/vs9/giscanner.scripts
+	echo '' >>$(top_builddir)/win32/vs10/giscanner.vs10.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner' >>$(top_builddir)/win32/vs10/giscanner.vs10.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\collections' >>$(top_builddir)/win32/vs10/giscanner.vs10.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates' >>$(top_builddir)/win32/vs10/giscanner.vs10.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C' >>$(top_builddir)/win32/vs10/giscanner.vs10.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs' >>$(top_builddir)/win32/vs10/giscanner.vs10.scripts
+	echo 'mkdir $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python' >>$(top_builddir)/win32/vs10/giscanner.vs10.scripts
 
 	for F in `echo $(pkgpyexec_PYTHON) $(collections_PYTHON) $(nobase_dist_template_DATA) | tr '/' '\\\\'`; do \
 		case $$F in \
-		giscanner\\doctemplates\\C\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C' \
+		giscanner\\doctemplates\\C\\*.tmpl) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C&#x0D;&#x0A;' \
 			;; \
-		giscanner\\doctemplates\\Gjs\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs' \
+		giscanner\\doctemplates\\Gjs\\*.tmpl) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs&#x0D;&#x0A;' \
 			;; \
-		giscanner\\doctemplates\\Python\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python' \
+		giscanner\\doctemplates\\Python\\*.tmpl) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python&#x0D;&#x0A;' \
 			;; \
-		giscanner\\doctemplates\\*.tmpl) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates' \
+		giscanner\\doctemplates\\*.tmpl) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates&#x0D;&#x0A;' \
 			;; \
-		giscanner\\collections\\*.py) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\collections' \
+		giscanner\\collections\\*.py) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\collections&#x0D;&#x0A;' \
 			;; \
-		giscanner\\*.py) echo 'copy ..\..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner' \
+		giscanner\\*.py) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;' \
 			;; \
 		esac; \
-	done >>$(top_builddir)/build/win32/vs10/giscanner.vs10.scripts
+	done >>$(top_builddir)/win32/vs9/giscanner.scripts
 
-include $(top_srcdir)/build/Makefile.msvcproj
+	for F in `echo $(pkgpyexec_PYTHON) $(collections_PYTHON) $(nobase_dist_template_DATA) | tr '/' '\\\\'`; do \
+		case $$F in \
+		giscanner\\doctemplates\\C\\*.tmpl) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\C' \
+			;; \
+		giscanner\\doctemplates\\Gjs\\*.tmpl) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Gjs' \
+			;; \
+		giscanner\\doctemplates\\Python\\*.tmpl) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates\Python' \
+			;; \
+		giscanner\\doctemplates\\*.tmpl) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\doctemplates' \
+			;; \
+		giscanner\\collections\\*.py) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner\collections' \
+			;; \
+		giscanner\\*.py) echo 'copy ..\..\'$$F' $$(CopyDir)\lib\gobject-introspection\giscanner' \
+			;; \
+		esac; \
+	done >>$(top_builddir)/win32/vs10/giscanner.vs10.scripts
+
+include $(top_srcdir)/win32/Makefile.msvcproj
 
 # Autotools: Why must we do this instead of 'dist-hook'?
 MSVCPROJ_GENERATED = \
-	$(top_builddir)/build/win32/vs9/cmph.vcproj	\
-	$(top_builddir)/build/win32/vs9/girepository.vcproj	\
-	$(top_builddir)/build/win32/vs9/g-ir-compiler.vcproj
+	$(top_builddir)/win32/vs9/cmph.vcproj	\
+	$(top_builddir)/win32/vs9/girepository.vcproj	\
+	$(top_builddir)/win32/vs9/g-ir-compiler.vcproj
 
-$(MSVCPROJ_GENERATED): $(top_builddir)/build/win32/vs9/girepository.headers $(top_builddir)/build/win32/vs9/giscanner.scripts
+$(MSVCPROJ_GENERATED): $(top_builddir)/win32/vs9/girepository.headers $(top_builddir)/win32/vs9/giscanner.scripts
 
 EXTRA_DIST += $(MSVCPROJ_GENERATED) config.h.win32
 
