@@ -5641,6 +5641,13 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_create_fundamental_hidden_class_instance"
+              c:identifier="regress_test_create_fundamental_hidden_class_instance">
+      <return-value transfer-ownership="full">
+        <type name="TestFundamentalObject"
+              c:type="RegressTestFundamentalObject*"/>
+      </return-value>
+    </function>
     <function name="test_date_in_gvalue"
               c:identifier="regress_test_date_in_gvalue">
       <return-value transfer-ownership="full">

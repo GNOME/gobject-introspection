@@ -14,7 +14,7 @@
 void sig-with-array-len-prop (guint* arr,
                               gint len);
   </code></synopsis>
-<p>This test signal similar to GSettings::change-event.
+  <p>This test signal similar to GSettings::change-event.
 You can use this with <link xref="Regress.TestObj.emit_sig_with_array_len_prop"/>, or
 raise from the introspection client language.</p>
 

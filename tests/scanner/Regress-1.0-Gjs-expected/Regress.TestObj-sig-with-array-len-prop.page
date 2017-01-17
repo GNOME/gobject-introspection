@@ -13,7 +13,7 @@
   <synopsis><code mime="text/x-gjs">
 connect('sig-with-array-len-prop', function (testObj, arr: Array(Number(guint)), ): void);
   </code></synopsis>
-<p>This test signal similar to GSettings::change-event.
+  <p>This test signal similar to GSettings::change-event.
 You can use this with <link xref="Regress.TestObj.emit_sig_with_array_len_prop"/>, or
 raise from the introspection client language.</p>
 

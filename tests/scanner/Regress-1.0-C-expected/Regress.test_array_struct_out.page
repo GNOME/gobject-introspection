@@ -27,7 +27,7 @@
 void regress_test_array_struct_out (RegressTestStructA** arr,
                                     int* len);
   </code></synopsis>
-<p>This is similar to gdk_keymap_get_entries_for_keyval().</p>
+  <p>This is similar to gdk_keymap_get_entries_for_keyval().</p>
 
 <terms>
 <item>

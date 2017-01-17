@@ -97,6 +97,7 @@ regress_test_callback_user_data
 regress_test_closure
 regress_test_closure_one_arg
 regress_test_closure_variant
+regress_test_create_fundamental_hidden_class_instance
 regress_test_date_in_gvalue
 regress_test_def_error_quark
 regress_test_double

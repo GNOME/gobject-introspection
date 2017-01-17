@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<page id="Regress.test_array_struct_out"
+<page id="Regress.test_create_fundamental_hidden_class_instance"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
@@ -9,18 +9,16 @@
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>void</api:type>
+        <api:type>RegressTestFundamentalObject*</api:type>
       </api:returns>
-      <api:name>regress_test_array_struct_out</api:name>
+      <api:name>regress_test_create_fundamental_hidden_class_instance</api:name>
     </api:function>
   </info>
-  <title>Regress.test_array_struct_out</title>
-  <synopsis><code mime="text/x-gjs">
-function test_array_struct_out(): Array(<link xref="Regress.TestStructA">Regress.TestStructA</link>) {
-    // Gjs wrapper for regress_test_array_struct_out()
-}
+  <title>regress_test_create_fundamental_hidden_class_instance</title>
+  <synopsis><code mime="text/x-csrc">
+RegressTestFundamentalObject* regress_test_create_fundamental_hidden_class_instance (void);
   </code></synopsis>
-  <p>This is similar to gdk_keymap_get_entries_for_keyval().</p>
+
 
 <terms>
 <item>

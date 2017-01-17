@@ -29,7 +29,7 @@
 def test_array_struct_out(arr, len):
     # Python wrapper for regress_test_array_struct_out()
   </code></synopsis>
-<p>This is similar to gdk_keymap_get_entries_for_keyval().</p>
+  <p>This is similar to gdk_keymap_get_entries_for_keyval().</p>
 
 <terms>
 <item>
