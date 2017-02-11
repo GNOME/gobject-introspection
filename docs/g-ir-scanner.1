@@ -136,6 +136,10 @@ set on a distribution so you shouldn't need to set it yourself.
 
 The variable GI_SCANNER_DISABLE_CACHE ensures that the scanner will
 not write cache data to $HOME.
+
+The variable GI_SCANNER_DEBUG can be used to debug issues in the build-system that
+involve g-ir-scanner. When it is set to 'save-temps', then g-ir-scanner will not remove
+temporary files and directories after it terminates.
 .SH BUGS
 Report bugs at http://bugzilla.gnome.org/ in the gobject-introspection product.
 .SH HOMEPAGE and CONTACT
