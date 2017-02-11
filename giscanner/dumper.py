@@ -237,8 +237,6 @@ class DumpCompiler(object):
                 args.append(cppflag)
             for cflag in shlex.split(os.environ.get('CFLAGS', '')):
                 args.append(cflag)
-            for ldflag in shlex.split(os.environ.get('LDFLAGS', '')):
-                args.append(ldflag)
 
         # Make sure to list the library to be introspected first since it's
         # likely to be uninstalled yet and we want the uninstalled RPATHs have
@@ -266,6 +264,10 @@ class DumpCompiler(object):
             self._compiler.get_external_link_flags(args,
                                                    libtool,
                                                    self._options.libraries)
+
+        if not self._compiler.check_is_msvc():
+            for ldflag in shlex.split(os.environ.get('LDFLAGS', '')):
+                args.append(ldflag)
 
         if not libtool:
             # non-libtool: prepare distutils for linking the introspection
