@@ -8347,6 +8347,29 @@
 
 
 /**
+ * SECTION:uuid
+ * @title: GUuid
+ * @short_description: a universally unique identifier
+ *
+ * A UUID, or Universally unique identifier, is intended to uniquely
+ * identify information in a distributed environment. For the
+ * definition of UUID, see [RFC 4122](https://tools.ietf.org/html/rfc4122.html).
+ *
+ * The creation of UUIDs does not require a centralized authority.
+ *
+ * UUIDs are of relatively small size (128 bits, or 16 bytes). The
+ * common string representation (ex:
+ * 1d6c0810-2bd6-45f3-9890-0268422a6f14) needs 37 bytes.
+ *
+ * The UUID specification defines 5 versions, and calling
+ * g_uuid_string_random() will generate a unique (or rather random)
+ * UUID of the most common version, version 4.
+ *
+ * Since: 2.52
+ */
+
+
+/**
  * SECTION:version
  * @Title: Version Information
  * @Short_description: variables and functions to check the GLib version
@@ -18040,7 +18063,8 @@
  *
  * If @key cannot be found then 0 is returned and @error is set to
  * #G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the value associated
- * with @key cannot be interpreted as an integer then 0 is returned
+ * with @key cannot be interpreted as an integer, or is out of range
+ * for a #gint, then 0 is returned
  * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: the value associated with the key as an integer, or
@@ -18062,7 +18086,8 @@
  *
  * If @key cannot be found then %NULL is returned and @error is set to
  * #G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
- * with @key cannot be interpreted as integers then %NULL is returned
+ * with @key cannot be interpreted as integers, or are out of range for
+ * #gint, then %NULL is returned
  * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: (array length=length) (element-type gint) (transfer container):
@@ -18334,9 +18359,13 @@
  *
  * This function looks for a key file named @file in the paths
  * specified in @search_dirs, loads the file into @key_file and
- * returns the file's full path in @full_path.  If the file could not
- * be loaded then an %error is set to either a #GFileError or
- * #GKeyFileError.
+ * returns the file's full path in @full_path.
+ *
+ * If the file could not be found in any of the @search_dirs,
+ * %G_KEY_FILE_ERROR_NOT_FOUND is returned. If
+ * the file is found but the OS returns an error when opening or reading the
+ * file, a %G_FILE_ERROR is returned. If there is a problem parsing the file, a
+ * %G_KEY_FILE_ERROR is returned.
  *
  * Returns: %TRUE if a key file could be loaded, %FALSE otherwise
  * Since: 2.14
@@ -18351,8 +18380,13 @@
  * @error: return location for a #GError, or %NULL
  *
  * Loads a key file into an empty #GKeyFile structure.
- * If the file could not be loaded then @error is set to
- * either a #GFileError or #GKeyFileError.
+ *
+ * If the OS returns an error when opening or reading the file, a
+ * %G_FILE_ERROR is returned. If there is a problem parsing the file, a
+ * %G_KEY_FILE_ERROR is returned.
+ *
+ * This function will never return a %G_KEY_FILE_ERROR_NOT_FOUND error. If the
+ * @file is not found, %G_FILE_ERROR_NOENT is returned.
  *
  * Returns: %TRUE if a key file could be loaded, %FALSE otherwise
  * Since: 2.6
@@ -21553,7 +21587,7 @@
 
 
 /**
- * g_mkdtemp:
+ * g_mkdtemp: (skip)
  * @tmpl: (type filename): template directory name
  *
  * Creates a temporary directory. See the mkdtemp() documentation
@@ -21562,11 +21596,15 @@
  * The parameter is a string that should follow the rules for
  * mkdtemp() templates, i.e. contain the string "XXXXXX".
  * g_mkdtemp() is slightly more flexible than mkdtemp() in that the
- * sequence does not have to occur at the very end of the template
- * and you can pass a @mode and additional @flags. The X string will
- * be modified to form the name of a directory that didn't exist.
+ * sequence does not have to occur at the very end of the template.
+ * The X string will be modified to form the name of a directory that
+ * didn't exist.
  * The string should be in the GLib file name encoding. Most importantly,
  * on Windows it should be in UTF-8.
+ *
+ * If you are going to be creating a temporary directory inside the
+ * directory returned by g_get_tmp_dir(), you might want to use
+ * g_dir_make_tmp() instead.
  *
  * Returns: (nullable) (type filename): A pointer to @tmpl, which has been
  *     modified to hold the directory name.  In case of errors, %NULL is
@@ -21576,7 +21614,7 @@
 
 
 /**
- * g_mkdtemp_full:
+ * g_mkdtemp_full: (skip)
  * @tmpl: (type filename): template directory name
  * @mode: permissions to create the temporary directory with
  *
@@ -21585,12 +21623,16 @@
  *
  * The parameter is a string that should follow the rules for
  * mkdtemp() templates, i.e. contain the string "XXXXXX".
- * g_mkdtemp() is slightly more flexible than mkdtemp() in that the
+ * g_mkdtemp_full() is slightly more flexible than mkdtemp() in that the
  * sequence does not have to occur at the very end of the template
  * and you can pass a @mode. The X string will be modified to form
  * the name of a directory that didn't exist. The string should be
  * in the GLib file name encoding. Most importantly, on Windows it
  * should be in UTF-8.
+ *
+ * If you are going to be creating a temporary directory inside the
+ * directory returned by g_get_tmp_dir(), you might want to use
+ * g_dir_make_tmp() instead.
  *
  * Returns: (nullable) (type filename): A pointer to @tmpl, which has been
  *     modified to hold the directory name. In case of errors, %NULL is
@@ -21600,7 +21642,7 @@
 
 
 /**
- * g_mkstemp:
+ * g_mkstemp: (skip)
  * @tmpl: (type filename): template filename
  *
  * Opens a temporary file. See the mkstemp() documentation
@@ -21623,7 +21665,7 @@
 
 
 /**
- * g_mkstemp_full:
+ * g_mkstemp_full: (skip)
  * @tmpl: (type filename): template filename
  * @flags: flags to pass to an open() call in addition to O_EXCL
  *     and O_CREAT, which are passed automatically
@@ -33559,6 +33601,34 @@
 
 
 /**
+ * g_uuid_string_is_valid:
+ * @str: a string representing a UUID
+ *
+ * Parses the string @str and verify if it is a UUID.
+ *
+ * The function accepts the following syntax:
+ *
+ * - simple forms (e.g. `f81d4fae-7dec-11d0-a765-00a0c91e6bf6`)
+ *
+ * Note that hyphens are required within the UUID string itself,
+ * as per the aforementioned RFC.
+ *
+ * Returns: %TRUE if @str is a valid UUID, %FALSE otherwise.
+ * Since: 2.52
+ */
+
+
+/**
+ * g_uuid_string_random:
+ *
+ * Generates a random UUID (RFC 4122 version 4) as a string.
+ *
+ * Returns: (transfer full): A string that should be freed with g_free().
+ * Since: 2.52
+ */
+
+
+/**
  * g_variant_builder_add: (skip)
  * @builder: a #GVariantBuilder
  * @format_string: a #GVariant varargs format string
@@ -33782,14 +33852,44 @@
 /**
  * g_variant_builder_open:
  * @builder: a #GVariantBuilder
- * @type: a #GVariantType
+ * @type: the #GVariantType of the container
  *
  * Opens a subcontainer inside the given @builder.  When done adding
- * items to the subcontainer, g_variant_builder_close() must be called.
+ * items to the subcontainer, g_variant_builder_close() must be called. @type
+ * is the type of the container: so to build a tuple of several values, @type
+ * must include the tuple itself.
  *
  * It is an error to call this function in any way that would cause an
  * inconsistent value to be constructed (ie: adding too many values or
  * a value of an incorrect type).
+ *
+ * Example of building a nested variant:
+ * |[<!-- language="C" -->
+ * GVariantBuilder builder;
+ * guint32 some_number = get_number ();
+ * g_autoptr (GHashTable) some_dict = get_dict ();
+ * GHashTableIter iter;
+ * const gchar *key;
+ * const GVariant *value;
+ * g_autoptr (GVariant) output = NULL;
+ *
+ * g_variant_builder_init (&builder, G_VARIANT_TYPE ("(ua{sv})"));
+ * g_variant_builder_add (&builder, "u", some_number);
+ * g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
+ *
+ * g_hash_table_iter_init (&iter, some_dict);
+ * while (g_hash_table_iter_next (&iter, (gpointer *) &key, (gpointer *) &value))
+ *   {
+ *     g_variant_builder_open (&builder, G_VARIANT_TYPE ("{sv}"));
+ *     g_variant_builder_add (&builder, "s", key);
+ *     g_variant_builder_add (&builder, "v", value);
+ *     g_variant_builder_close (&builder);
+ *   }
+ *
+ * g_variant_builder_close (&builder);
+ *
+ * output = g_variant_builder_end (&builder);
+ * ]|
  *
  * Since: 2.24
  */

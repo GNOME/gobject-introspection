@@ -5653,8 +5653,9 @@
  * @include: gio/gio.h
  *
  * Routines for working with D-Bus addresses. A D-Bus address is a string
- * like "unix:tmpdir=/tmp/my-app-name". The exact format of addresses
- * is explained in detail in the [D-Bus specification](http://dbus.freedesktop.org/doc/dbus-specification.html\#addresses).
+ * like `unix:tmpdir=/tmp/my-app-name`. The exact format of addresses
+ * is explained in detail in the
+ * [D-Bus specification](http://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
  */
 
 
@@ -16326,6 +16327,9 @@
  * bus instance specified by @bus_type. This may involve using various
  * platform specific mechanisms.
  *
+ * The returned address will be in the
+ * [D-Bus address format](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
+ *
  * Returns: a valid D-Bus address string for @bus_type or %NULL if
  *     @error is set
  * Since: 2.26
@@ -16341,7 +16345,8 @@
  *
  * Asynchronously connects to an endpoint specified by @address and
  * sets up the connection so it is in a state to run the client-side
- * of the D-Bus authentication conversation.
+ * of the D-Bus authentication conversation. @address must be in the
+ * [D-Bus address format](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
  *
  * When the operation is finished, @callback will be invoked. You can
  * then call g_dbus_address_get_stream_finish() to get the result of
@@ -16376,7 +16381,8 @@
  *
  * Synchronously connects to an endpoint specified by @address and
  * sets up the connection so it is in a state to run the client-side
- * of the D-Bus authentication conversation.
+ * of the D-Bus authentication conversation. @address must be in the
+ * [D-Bus address format](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
  *
  * This is a synchronous failable function. See
  * g_dbus_address_get_stream() for the asynchronous version.
@@ -17122,7 +17128,8 @@
  *
  * Asynchronously connects and sets up a D-Bus client connection for
  * exchanging D-Bus messages with an endpoint specified by @address
- * which must be in the D-Bus address format.
+ * which must be in the
+ * [D-Bus address format](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
  *
  * This constructor can only be used to initiate client-side
  * connections - use g_dbus_connection_new() if you need to act as the
@@ -17169,7 +17176,8 @@
  *
  * Synchronously connects and sets up a D-Bus client connection for
  * exchanging D-Bus messages with an endpoint specified by @address
- * which must be in the D-Bus address format.
+ * which must be in the
+ * [D-Bus address format](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
  *
  * This constructor can only be used to initiate client-side
  * connections - use g_dbus_connection_new_sync() if you need to act
@@ -18270,7 +18278,8 @@
  * g_dbus_is_address:
  * @string: A string.
  *
- * Checks if @string is a D-Bus address.
+ * Checks if @string is a
+ * [D-Bus address](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
  *
  * This doesn't check if @string is actually supported by #GDBusServer
  * or #GDBusConnection - use g_dbus_is_supported_address() to do more
@@ -18333,9 +18342,10 @@
  * @string: A string.
  * @error: Return location for error or %NULL.
  *
- * Like g_dbus_is_address() but also checks if the library suppors the
+ * Like g_dbus_is_address() but also checks if the library supports the
  * transports in @string and that key/value pairs for each transport
- * are valid.
+ * are valid. See the specification of the
+ * [D-Bus address format](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
  *
  * Returns: %TRUE if @string is a valid D-Bus address that is
  * supported by this library, %FALSE if @error is set.
@@ -19284,7 +19294,26 @@
  * Finishes handling a D-Bus method call by returning @parameters.
  * If the @parameters GVariant is floating, it is consumed.
  *
- * It is an error if @parameters is not of the right format.
+ * It is an error if @parameters is not of the right format: it must be a tuple
+ * containing the out-parameters of the D-Bus method. Even if the method has a
+ * single out-parameter, it must be contained in a tuple. If the method has no
+ * out-parameters, @parameters may be %NULL or an empty tuple.
+ *
+ * |[<!-- language="C" -->
+ * GDBusMethodInvocation *invocation = some_invocation;
+ * g_autofree gchar *result_string = NULL;
+ * g_autoptr (GError) error = NULL;
+ *
+ * result_string = calculate_result (&error);
+ *
+ * if (error != NULL)
+ *   g_dbus_method_invocation_return_gerror (invocation, error);
+ * else
+ *   g_dbus_method_invocation_return_value (invocation,
+ *                                          g_variant_new ("(s)", result_string));
+ *
+ * /<!-- -->* Do not free @invocation here; returning a value does that *<!-- -->/
+ * ]|
  *
  * This method will take ownership of @invocation. See
  * #GDBusInterfaceVTable for more information about the ownership of
@@ -20442,8 +20471,9 @@
  * g_dbus_server_get_client_address:
  * @server: A #GDBusServer.
  *
- * Gets a D-Bus address string that can be used by clients to connect
- * to @server.
+ * Gets a
+ * [D-Bus address](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses)
+ * string that can be used by clients to connect to @server.
  *
  * Returns: A D-Bus address string. Do not free, the string is owned
  * by @server.
@@ -30540,7 +30570,7 @@
  *
  * For behaviour details see g_output_stream_close().
  *
- * The asyncronous methods have a default fallback that uses threads
+ * The asynchronous methods have a default fallback that uses threads
  * to implement asynchronicity, so they are optional for inheriting
  * classes. However, if you override one you must override all.
  */
@@ -30614,7 +30644,7 @@
  * g_output_stream_has_pending:
  * @stream: a #GOutputStream.
  *
- * Checks if an ouput stream has pending actions.
+ * Checks if an output stream has pending actions.
  *
  * Returns: %TRUE if @stream has pending actions.
  */
@@ -30923,7 +30953,7 @@
  * value) will be executed before an outstanding request with lower
  * priority. Default priority is %G_PRIORITY_DEFAULT.
  *
- * The asyncronous methods have a default fallback that uses threads
+ * The asynchronous methods have a default fallback that uses threads
  * to implement asynchronicity, so they are optional for inheriting
  * classes. However, if you override one you must override all.
  *
