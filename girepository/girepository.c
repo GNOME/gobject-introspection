@@ -177,7 +177,7 @@ init_globals (void)
             }
 
           /* ownership of the array content was passed to the list */
-          g_free (custom_dirs);
+          g_strfreev (custom_dirs);
         }
 
       libdir = GOBJECT_INTROSPECTION_LIBDIR;
