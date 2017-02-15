@@ -360,6 +360,12 @@ fi
 
 AC_SUBST(EXTRA_LINK_FLAGS)
 
+dnl
+dnl Check whether MSVC toolset is explicitly set
+dnl
+AM_CONDITIONAL(MSVC_BASE_NO_TOOLSET_SET, [test x$MSVC_BASE_TOOLSET = x])
+AM_CONDITIONAL(MSVC_NO_TOOLSET_SET, [test x$MSVC_TOOLSET = x])
+
 AC_CONFIG_FILES([
 Makefile
 tests/Makefile
@@ -381,5 +387,6 @@ win32/vs10/Makefile
 win32/vs10/gi-version-paths.props
 win32/vs11/Makefile
 win32/vs12/Makefile
-win32/vs14/Makefile])
+win32/vs14/Makefile
+win32/vs15/Makefile])
 AC_OUTPUT

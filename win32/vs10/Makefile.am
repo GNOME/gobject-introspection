@@ -40,6 +40,7 @@ gi-install.props: $(top_srcdir)/win32/vs10/gi-install.propsin girepository.vs10.
 	-$(RM) $(top_builddir)/win32/vs11/gi-install.props
 	-$(RM) $(top_builddir)/win32/vs12/gi-install.props
 	-$(RM) $(top_builddir)/win32/vs14/gi-install.props
+	-$(RM) $(top_builddir)/win32/vs15/gi-install.props
 	$(CPP) -P - <$(top_srcdir)/win32/vs10/gi-install.propsin >$@
 	$(RM) girepository.vs10.headers
 	$(RM) giscanner.vs10.scripts
