@@ -255,14 +255,6 @@ warn_tests_log.txt:
 	@-del $(TOP_SRCDIR)\gir\GObject-$(GLIB_APIVERSION).gir
 	@-del $(TOP_SRCDIR)\gir\GLib-$(GLIB_APIVERSION).gir
 
-# Rules for source code generation
-everything.c everything.h:
-	$(PYTHON) $(G_IR_SCANNER_CURRENT) -I$(TOP_SRCDIR) \
-	--generate-typelib-tests=Everything,everything.h,everything.c	\
-	--function-decoration=_GI_TEST_EXTERN	\
-	--include-first-in-src=config.h	\
-	--include-last-in-header=gitestmacros.h
-
 gitestoffsets.c: Offsets-$(GI_APIVERSION).typelib
 	$(PYTHON) $(TOP_SRCDIR)\tests\offsets\gen-gitestoffsets $(TOP_SRCDIR)\tests\offsets\offsets.h > $@
 
@@ -295,6 +287,6 @@ clean:
 	@-for %a in (*.manifest) do @del /f/q %a
 	@-del /f/q *.pdb
 	@-del /f/q *.obj
-	@-del /f/q everything.c everything.h gitestoffsets.c
+	@-del /f/q gitestoffsets.c
 	@-del offsets.compiled offsets.introspected
 	@-del /f/q *.pyc

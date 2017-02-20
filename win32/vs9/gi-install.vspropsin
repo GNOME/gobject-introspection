@@ -35,6 +35,18 @@ copy ..\..\tests\gimarshallingtests.c $(CopyDir)\share\gobject-introspection-1.0
 copy ..\..\tests\gimarshallingtests.h $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
 copy ..\..\tests\scanner\regress.c $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
 copy ..\..\tests\scanner\regress.h $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\annotation.c $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\annotation.h $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\foo.c $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\foo.h $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\drawable.c $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\drawable.h $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\warnlib.c $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\warnlib.h $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\utility.c $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\..\tests\scanner\utility.h $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\everything.c $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
+copy ..\everything.h $(CopyDir)\share\gobject-introspection-1.0\tests&#x0D;&#x0A;
 
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\_giscanner.pdb $(CopyDir)\lib\gobject-introspection\giscanner&#x0D;&#x0A;

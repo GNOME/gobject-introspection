@@ -49,8 +49,16 @@ built_install_typelibs =	\
 	Gio-$(GLIB_APIVERSION).typelib	\
 	GIRepository-$(GLIB_APIVERSION).typelib
 
+generarated_test_srcs = everything.c everything.h
+
 !if "$(BUILD_INTROSPECTION)" == "TRUE"
-all: setgirbuildenv $(built_install_girs) $(built_install_typelibs) $(bundled_girs) $(bundled_typelibs) msg_cairo
+all: setgirbuildenv			\
+	$(generarated_test_srcs)	\
+	$(built_install_girs)		\
+	$(built_install_typelibs)	\
+	$(bundled_girs)			\
+	$(bundled_typelibs)		\
+	msg_cairo
 
 !include gi-setenv-msvc.mak
 
@@ -153,6 +161,14 @@ $(bundled_typelibs): cairo-1.0.gir $(bundled_girs)
 	@-echo Compiling the bundled $*.gir that came with the GobjectIntrospection package...
 	@-$(G_IR_COMPILER_CURRENT) --includedir=. --debug --verbose $*.gir -o $@
 
+# Rules for source code generation
+$(generarated_test_srcs):
+	$(PYTHON) $(G_IR_SCANNER_CURRENT) -I$(TOP_SRCDIR) \
+	--generate-typelib-tests=Everything,everything.h,everything.c	\
+	--function-decoration=_GI_TEST_EXTERN	\
+	--include-first-in-src=config.h	\
+	--include-last-in-header=gitestmacros.h
+
 msg_cairo:
 	@-echo.
 	@-echo ************* Note ***********************************
@@ -190,5 +206,6 @@ clean:
 	@-del /f/q gio_list
 	@-del /f/q gobject_list
 	@-del /f/q glib_list
+	@-del /f/q $(generarated_test_srcs)
 	@ if exist __pycache__ rmdir /s /q __pycache__
 	@-del /f/q *.pyc
