@@ -19,6 +19,7 @@
 #
 
 import os
+import shlex
 import subprocess
 import tempfile
 
@@ -213,7 +214,7 @@ class CCompiler(object):
             # This is to handle the case where macros are defined in CFLAGS
             cflags = os.environ.get('CFLAGS')
             if cflags:
-                for i, cflag in enumerate(cflags.split()):
+                for i, cflag in enumerate(shlex.split(cflags)):
                     if cflag.startswith('-D'):
                         stridx = cflag.find('=')
                         if stridx > -1:

@@ -26,6 +26,7 @@ from __future__ import unicode_literals
 
 import os
 import sys
+import shlex
 import subprocess
 import shutil
 import tempfile
@@ -232,14 +233,11 @@ class DumpCompiler(object):
             # MSVC Builds use the INCLUDE, LIB envvars,
             # which are automatically picked up during
             # compilation and linking
-            cppflags = os.environ.get('CPPFLAGS', '')
-            for cppflag in cppflags.split():
+            for cppflag in shlex.split(os.environ.get('CPPFLAGS', '')):
                 args.append(cppflag)
-            cflags = os.environ.get('CFLAGS', '')
-            for cflag in cflags.split():
+            for cflag in shlex.split(os.environ.get('CFLAGS', '')):
                 args.append(cflag)
-            ldflags = os.environ.get('LDFLAGS', '')
-            for ldflag in ldflags.split():
+            for ldflag in shlex.split(os.environ.get('LDFLAGS', '')):
                 args.append(ldflag)
 
         # Make sure to list the library to be introspected first since it's
