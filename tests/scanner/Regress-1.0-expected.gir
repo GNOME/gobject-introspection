@@ -6358,6 +6358,12 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
         </parameter>
       </parameters>
     </function>
+    <function name="test_null_strv_in_gvalue"
+              c:identifier="regress_test_null_strv_in_gvalue">
+      <return-value transfer-ownership="full">
+        <type name="GObject.Value" c:type="GValue*"/>
+      </return-value>
+    </function>
     <function name="test_owned_gerror_callback"
               c:identifier="regress_test_owned_gerror_callback">
       <return-value transfer-ownership="none">

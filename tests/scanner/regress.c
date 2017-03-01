@@ -4122,6 +4122,23 @@ regress_test_strv_in_gvalue (void)
 }
 
 /**
+ * regress_test_null_strv_in_gvalue:
+ *
+ * Returns: (transfer full):
+ */
+GValue *
+regress_test_null_strv_in_gvalue (void)
+{
+  GValue *value = g_new0 (GValue, 1);
+  const char **strv = NULL;
+
+  g_value_init (value, G_TYPE_STRV);
+  g_value_set_boxed (value, strv);
+
+  return value;
+}
+
+/**
  * regress_test_multiline_doc_comments:
  *
  * This is a function.
