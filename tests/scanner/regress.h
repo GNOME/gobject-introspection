@@ -1278,6 +1278,9 @@ GValue *regress_test_date_in_gvalue (void);
 _GI_TEST_EXTERN
 GValue *regress_test_strv_in_gvalue (void);
 
+_GI_TEST_EXTERN
+GValue *regress_test_null_strv_in_gvalue (void);
+
 
 _GI_TEST_EXTERN
 GObject * _regress_this_is_a_private_symbol (void);
