@@ -80,7 +80,7 @@ def main(argv):
 	    {'Name: cairo': 'Name: libXML',
          'Version: ' + cairo_version: 'Version: ' + libxml2_version,
          'generic cairo pkg-config file': 'generic libXML2 pkg-config file',
-         '-lcairo': '-llibxml2',
+         '-lcairo': 'libxml2.lib',
          'Cflags: -I${includedir}': 'Cflags: -I${includedir}/libxml2'}
     replace_multi(base_pc.srcdir + '/cairo.pc',
                   base_pc.srcdir + '/libxml-2.0.pc',
