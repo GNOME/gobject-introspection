@@ -6638,7 +6638,7 @@
  * Both the key and data are arbitrary byte arrays of bytes or characters.
  *
  * Support for HMAC Digests has been added in GLib 2.30, and support for SHA-512
- * in GLib 2.42.
+ * in GLib 2.42. Support for SHA-384 was added in GLib 2.52.
  */
 
 
@@ -16560,6 +16560,7 @@
  * on it anymore.
  *
  * Support for digests of type %G_CHECKSUM_SHA512 has been added in GLib 2.42.
+ * Support for %G_CHECKSUM_SHA384 was added in GLib 2.52.
  *
  * Returns: the newly created #GHmac, or %NULL.
  *   Use g_hmac_unref() to free the memory allocated by it.
@@ -30121,7 +30122,7 @@
  *
  * This function enqueus a callback @destroy_func to be executed
  * during the next test case teardown phase. This is most useful
- * to auto destruct allocted test resources at the end of a test run.
+ * to auto destruct allocated test resources at the end of a test run.
  * Resources are released in reverse queue order, that means enqueueing
  * callback A before callback B will cause B() to be called before
  * A() during teardown.
@@ -33243,6 +33244,8 @@
 /**
  * g_utf8_make_valid:
  * @str: string to coerce into UTF-8
+ * @len: the maximum length of @str to use, in bytes. If @len < 0,
+ *     then the string is nul-terminated.
  *
  * If the provided string is valid UTF-8, return a copy of it. If not,
  * return a copy in which bytes that could not be interpreted as valid Unicode
