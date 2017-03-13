@@ -613,12 +613,7 @@ raise ValueError."""
                        CTYPE_BASIC_TYPE,
                        CTYPE_VOID):
             name = self.strip_identifier(symbol.ident)
-            if symbol.base_type.name:
-                complete_ctype = self._create_complete_source_type(symbol.base_type)
-                target = self.create_type_from_ctype_string(symbol.base_type.name,
-                                                            complete_ctype=complete_ctype)
-            else:
-                target = ast.TYPE_ANY
+            target = self._create_type_from_base(symbol.base_type)
             if name in ast.type_names:
                 return None
             # https://bugzilla.gnome.org/show_bug.cgi?id=755882

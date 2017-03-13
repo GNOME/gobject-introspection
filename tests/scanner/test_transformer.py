@@ -243,8 +243,6 @@ class TestStructTypedefs(unittest.TestCase):
         self.assertTrue(ptr is not None)
         self.assertTrue(isinstance(ptr, ast.Alias))
         self.assertEqual(ptr.ctype, 'TestStructPtr')
-        # This loses type information about the struct which seems broken.
-        self.assertEqual(ptr.target, ast.TYPE_ANY)
 
     def test_struct_tag_pointer(self):
         load_namespace_from_source_string(self.namespace, """

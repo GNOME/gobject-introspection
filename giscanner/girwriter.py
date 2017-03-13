@@ -276,7 +276,7 @@ class GIRWriter(XMLWriter):
         assert isinstance(ntype, ast.Type), ntype
         attrs = []
         if ntype.ctype:
-            attrs.append(('c:type', ntype.ctype))
+            attrs.append(('c:type', ntype.complete_ctype or ntype.ctype))
         if isinstance(ntype, ast.Array):
             if ntype.array_type != ast.Array.C:
                 attrs.insert(0, ('name', ntype.array_type))
