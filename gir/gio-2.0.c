@@ -2455,6 +2455,13 @@
 
 
 /**
+ * GOsxAppInfo:
+ *
+ * Information about an installed application from a NSBundle.
+ */
+
+
+/**
  * GPermission:
  *
  * #GPermission is an opaque data structure and can only be accessed
@@ -5466,6 +5473,8 @@
  * On Win32 it is an extension string like ".doc", ".txt" or a perceived
  * string like "audio". Such strings can be looked up in the registry at
  * HKEY_CLASSES_ROOT.
+ * On OSX it is a [Uniform Type Identifier](https://en.wikipedia.org/wiki/Uniform_Type_Identifier)
+ * such as "com.apple.application".
  */
 
 
@@ -7370,6 +7379,18 @@
  * A notification can be sent with g_application_send_notification().
  *
  * Since: 2.40
+ */
+
+
+/**
+ * SECTION:gosxappinfo
+ * @title: GOsxAppInfo
+ * @short_description: Application information from NSBundles
+ * @include: gio/gosxappinfo.h
+ *
+ * #GOsxAppInfo is an implementation of #GAppInfo based on NSBundle information.
+ *
+ * Note that `<gio/gosxappinfo.h>` is unique to OSX.
  */
 
 
@@ -15160,12 +15181,27 @@
 
 
 /**
+ * g_content_type_is_mime_type:
+ * @type: a content type string
+ * @mime_type: a mime type string
+ *
+ * Determines if @type is a subset of @mime_type.
+ * Convenience wrapper around g_content_type_is_a().
+ *
+ * Returns: %TRUE if @type is a kind of @mime_type,
+ *     %FALSE otherwise.
+ * Since: 2.52
+ */
+
+
+/**
  * g_content_type_is_unknown:
  * @type: a content type string
  *
  * Checks if the content type is the generic "unknown" type.
  * On UNIX this is the "application/octet-stream" mimetype,
- * while on win32 it is "*".
+ * while on win32 it is "*" and on OSX it is a dynamic type
+ * or octet-stream.
  *
  * Returns: %TRUE if the type is the unknown type.
  */
