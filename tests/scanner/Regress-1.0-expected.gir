@@ -23,7 +23,7 @@ and/or use gtk-doc annotations.  -->
       <type name="gpointer" c:type="gpointer"/>
     </alias>
     <alias name="FooXEvent" c:type="RegressFooXEvent">
-      <type name="gpointer" c:type="gpointer"/>
+      <type name="none" c:type="void"/>
     </alias>
     <alias name="IntsetAlias" c:type="RegressIntsetAlias" introspectable="0">
       <doc xml:space="preserve">Compatibility typedef, like telepathy-glib's TpIntSet</doc>
