@@ -3,8 +3,8 @@
 
 dnl the gi version number
 m4_define(gi_major_version, 1)
-m4_define(gi_minor_version, 51)
-m4_define(gi_micro_version, 5)
+m4_define(gi_minor_version, 52)
+m4_define(gi_micro_version, 0)
 m4_define(gi_version, gi_major_version.gi_minor_version.gi_micro_version)
 
 AC_PREREQ([2.63])
@@ -128,7 +128,7 @@ GIR_DIR="$EXPANDED_DATADIR/$GIR_SUFFIX"
 AC_SUBST(GIR_DIR)
 AC_DEFINE_UNQUOTED(GIR_DIR, "$GIR_DIR", [Director prefix for gir installation])
 
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.51.5])
+PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.52.0])
 PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
 PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
 PKG_CHECK_MODULES(GIO, [gio-2.0])
