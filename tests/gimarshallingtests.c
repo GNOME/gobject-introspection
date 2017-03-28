@@ -5352,6 +5352,8 @@ enum
   SOME_VARIANT_PROPERTY,
   SOME_BOXED_GLIST_PROPERTY,
   SOME_OBJECT_PROPERTY,
+  SOME_FLAGS_PROPERTY,
+  SOME_ENUM_PROPERTY,
 };
 
 G_DEFINE_TYPE (GIMarshallingTestsPropertiesObject, gi_marshalling_tests_properties_object, G_TYPE_OBJECT);
@@ -5430,6 +5432,12 @@ gi_marshalling_tests_properties_object_get_property (GObject *object,
     case SOME_OBJECT_PROPERTY:
       g_value_set_object (value, self->some_object);
       break;
+    case SOME_FLAGS_PROPERTY:
+      g_value_set_flags (value, self->some_flags);
+      break;
+    case SOME_ENUM_PROPERTY:
+      g_value_set_enum (value, self->some_enum);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -5500,6 +5508,12 @@ gi_marshalling_tests_properties_object_set_property (GObject *object,
       if (self->some_object != NULL)
         g_object_unref (self->some_object);
       self->some_object = g_value_dup_object (value);
+      break;
+    case SOME_FLAGS_PROPERTY:
+      self->some_flags = g_value_get_flags (value);
+      break;
+    case SOME_ENUM_PROPERTY:
+      self->some_enum = g_value_get_enum (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -5631,6 +5645,22 @@ static void gi_marshalling_tests_properties_object_class_init (GIMarshallingTest
                                                         "some-object",
                                                         G_TYPE_OBJECT,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (object_class, SOME_FLAGS_PROPERTY,
+                                   g_param_spec_flags ("some-flags",
+                                                       "some-flags",
+                                                       "some-flags",
+                                                       GI_MARSHALLING_TESTS_TYPE_FLAGS,
+                                                       GI_MARSHALLING_TESTS_FLAGS_VALUE1,
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (object_class, SOME_ENUM_PROPERTY,
+                                   g_param_spec_enum ("some-enum",
+                                                      "some-enum",
+                                                      "some-enum",
+                                                      GI_MARSHALLING_TESTS_TYPE_GENUM,
+                                                      GI_MARSHALLING_TESTS_GENUM_VALUE1,
+                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 }
 
 GIMarshallingTestsPropertiesObject *

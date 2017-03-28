@@ -1972,6 +1972,8 @@ struct _GIMarshallingTestsPropertiesObject {
     GList* some_boxed_glist;
     GVariant *some_variant;
     GObject *some_object;
+    GIMarshallingTestsFlags some_flags;
+    GIMarshallingTestsGEnum some_enum;
 };
 
 struct _GIMarshallingTestsPropertiesObjectClass {
