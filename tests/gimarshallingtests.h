@@ -1970,6 +1970,7 @@ struct _GIMarshallingTestsPropertiesObject {
     gchar **some_strv;
     GIMarshallingTestsBoxedStruct* some_boxed_struct;
     GList* some_boxed_glist;
+    GValue *some_gvalue;
     GVariant *some_variant;
     GObject *some_object;
     GIMarshallingTestsFlags some_flags;

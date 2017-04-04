@@ -5351,6 +5351,7 @@ enum
   SOME_BOXED_STRUCT_PROPERTY,
   SOME_VARIANT_PROPERTY,
   SOME_BOXED_GLIST_PROPERTY,
+  SOME_GVALUE_PROPERTY,
   SOME_OBJECT_PROPERTY,
   SOME_FLAGS_PROPERTY,
   SOME_ENUM_PROPERTY,
@@ -5371,6 +5372,11 @@ gi_marshalling_tests_properties_object_finalize (GObject *obj)
   if (self->some_strv != NULL) {
     g_strfreev (self->some_strv);
     self->some_strv = NULL;
+  }
+
+  if (self->some_gvalue) {
+    g_boxed_free (G_TYPE_VALUE, self->some_gvalue);
+    self->some_gvalue = NULL;
   }
 
   G_OBJECT_CLASS (gi_marshalling_tests_properties_object_parent_class)->finalize (obj);
@@ -5425,6 +5431,9 @@ gi_marshalling_tests_properties_object_get_property (GObject *object,
       break;
     case SOME_BOXED_GLIST_PROPERTY:
       g_value_set_boxed (value, self->some_boxed_glist);
+      break;
+    case SOME_GVALUE_PROPERTY:
+      g_value_set_boxed (value, self->some_gvalue);
       break;
     case SOME_VARIANT_PROPERTY:
       g_value_set_variant (value, self->some_variant);
@@ -5496,6 +5505,11 @@ gi_marshalling_tests_properties_object_set_property (GObject *object,
     case SOME_BOXED_GLIST_PROPERTY:
       g_list_free (self->some_boxed_glist);
       self->some_boxed_glist = g_list_copy (g_value_get_boxed (value));
+      break;
+    case SOME_GVALUE_PROPERTY:
+      if (self->some_gvalue)
+        g_boxed_free (G_TYPE_VALUE, self->some_gvalue);
+      self->some_gvalue = g_value_dup_boxed (value);
       break;
     case SOME_VARIANT_PROPERTY:
       if (self->some_variant != NULL)
@@ -5630,6 +5644,13 @@ static void gi_marshalling_tests_properties_object_class_init (GIMarshallingTest
                                                        "some-boxed-glist",
                                                        gi_marshalling_tests_boxed_glist_get_type
                                                        (), G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (object_class, SOME_GVALUE_PROPERTY,
+                                   g_param_spec_boxed ("some-gvalue",
+                                                       "some-gvalue",
+                                                       "some-gvalue",
+                                                       G_TYPE_VALUE,
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (object_class, SOME_VARIANT_PROPERTY,
                                    g_param_spec_variant ("some-variant",
