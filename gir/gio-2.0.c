@@ -13957,6 +13957,9 @@
  * initial construction. If the object also implements #GInitable you can
  * optionally call g_initable_init() instead.
  *
+ * This method is intended for language bindings. If writing in C,
+ * g_async_initable_new_async() should typically be used instead.
+ *
  * When the initialization is finished, @callback will be called. You can
  * then call g_async_initable_init_finish() to get the result of the
  * initialization.
@@ -13974,11 +13977,11 @@
  * have undefined behaviour. They will often fail with g_critical() or
  * g_warning(), but this must not be relied on.
  *
- * Implementations of this method must be idempotent: i.e. multiple calls
- * to this function with the same argument should return the same results.
- * Only the first call initializes the object; further calls return the result
- * of the first call. This is so that it's safe to implement the singleton
- * pattern in the GObject constructor function.
+ * Callers should not assume that a class which implements #GAsyncInitable can
+ * be initialized multiple times; for more information, see g_initable_init().
+ * If a class explicitly supports being initialized multiple times,
+ * implementation requires yielding all subsequent calls to init_async() on the
+ * results of the first call.
  *
  * For classes that also support the #GInitable interface, the default
  * implementation of this method will run the g_initable_init() function
@@ -14088,6 +14091,8 @@
  * for any errors.
  *
  * Since: 2.22
+ * Deprecated: 2.54: Use g_object_new_with_properties() and
+ * g_async_initable_init_async() instead. See #GParameter for more information.
  */
 
 
@@ -26787,6 +26792,9 @@
  *
  * Initializes the object implementing the interface.
  *
+ * This method is intended for language bindings. If writing in C,
+ * g_initable_new() should typically be used instead.
+ *
  * The object must be initialized before any real use after initial
  * construction, either with this function or g_async_initable_init_async().
  *
@@ -26802,11 +26810,24 @@
  * g_object_unref() are considered to be invalid, and have undefined
  * behaviour. See the [introduction][ginitable] for more details.
  *
- * Implementations of this method must be idempotent, i.e. multiple calls
- * to this function with the same argument should return the same results.
- * Only the first call initializes the object, further calls return the result
- * of the first call. This is so that it's safe to implement the singleton
- * pattern in the GObject constructor function.
+ * Callers should not assume that a class which implements #GInitable can be
+ * initialized multiple times, unless the class explicitly documents itself as
+ * supporting this. Generally, a class’ implementation of init() can assume
+ * (and assert) that it will only be called once. Previously, this documentation
+ * recommended all #GInitable implementations should be idempotent; that
+ * recommendation was relaxed in GLib 2.54.
+ *
+ * If a class explicitly supports being initialized multiple times, it is
+ * recommended that the method is idempotent: multiple calls with the same
+ * arguments should return the same results. Only the first call initializes
+ * the object; further calls return the result of the first call.
+ *
+ * One reason why a class might need to support idempotent initialization is if
+ * it is designed to be used via the singleton pattern, with a
+ * #GObjectClass.constructor that sometimes returns an existing instance.
+ * In this pattern, a caller would expect to be able to call g_initable_init()
+ * on the result of g_object_new(), regardless of whether it is in fact a new
+ * instance.
  *
  * Returns: %TRUE if successful. If an error has occurred, this function will
  *     return %FALSE and set @error appropriately if present.
@@ -26871,6 +26892,8 @@
  * Returns: (type GObject.Object) (transfer full): a newly allocated
  *      #GObject, or %NULL on error
  * Since: 2.22
+ * Deprecated: 2.54: Use g_object_new_with_properties() and
+ * g_initable_init() instead. See #GParameter for more information.
  */
 
 
@@ -40986,8 +41009,8 @@
 
 
 /**
- * g_unix_mount_at: (skip)
- * @mount_path: path for a possible unix mount.
+ * g_unix_mount_at:
+ * @mount_path: (type filename): path for a possible unix mount.
  * @time_read: (out) (optional): guint64 to contain a timestamp.
  *
  * Gets a #GUnixMountEntry for a given mount path. If @time_read
@@ -41011,8 +41034,19 @@
 
 
 /**
- * g_unix_mount_for: (skip)
- * @file_path: file path on some unix mount.
+ * g_unix_mount_copy:
+ * @mount_entry: a #GUnixMountEntry.
+ *
+ * Makes a copy of @mount_entry.
+ *
+ * Returns: (transfer full): a new #GUnixMountEntry
+ * Since: 2.54
+ */
+
+
+/**
+ * g_unix_mount_for:
+ * @file_path: (type filename): file path on some unix mount.
  * @time_read: (out) (optional): guint64 to contain a timestamp.
  *
  * Gets a #GUnixMountEntry for a given file path. If @time_read
@@ -41209,6 +41243,17 @@
 
 
 /**
+ * g_unix_mount_point_copy:
+ * @mount_point: a #GUnixMountPoint.
+ *
+ * Makes a copy of @mount_point.
+ *
+ * Returns: (transfer full): a new #GUnixMountPoint
+ * Since: 2.54
+ */
+
+
+/**
  * g_unix_mount_point_free:
  * @mount_point: unix mount point to free.
  *
@@ -41353,7 +41398,7 @@
 
 
 /**
- * g_unix_mount_points_get: (skip)
+ * g_unix_mount_points_get:
  * @time_read: (out) (optional): guint64 to contain a timestamp.
  *
  * Gets a #GList of #GUnixMountPoint containing the unix mount points.
@@ -41377,7 +41422,7 @@
 
 
 /**
- * g_unix_mounts_get: (skip)
+ * g_unix_mounts_get:
  * @time_read: (out) (optional): guint64 to contain a timestamp, or %NULL
  *
  * Gets a #GList of #GUnixMountEntry containing the unix mounts.

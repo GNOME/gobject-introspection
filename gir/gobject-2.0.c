@@ -2244,6 +2244,21 @@
 
 
 /**
+ * g_enum_to_string:
+ * @g_enum_type: the type identifier of a #GEnumClass type
+ * @value: the value
+ *
+ * Pretty-prints @value in the form of the enum’s name.
+ *
+ * This is intended to be used for debugging purposes. The format of the output
+ * may change in the future.
+ *
+ * Returns: (transfer full): a newly-allocated text string
+ * Since: 2.54
+ */
+
+
+/**
  * g_flags_complete_type_info:
  * @g_flags_type: the type identifier of the type being completed
  * @info: (out callee-allocates): the #GTypeInfo struct to be filled in
@@ -2307,6 +2322,22 @@
  * definition than to write one yourself using g_flags_register_static().
  *
  * Returns: The new type identifier.
+ */
+
+
+/**
+ * g_flags_to_string:
+ * @flags_type: the type identifier of a #GFlagsClass type
+ * @value: the value
+ *
+ * Pretty-prints @value in the form of the flag names separated by ` | ` and
+ * sorted. Any extra bits will be shown at the end as a hexadecimal number.
+ *
+ * This is intended to be used for debugging purposes. The format of the output
+ * may change in the future.
+ *
+ * Returns: (transfer full): a newly-allocated text string
+ * Since: 2.54
  */
 
 
@@ -2860,6 +2891,22 @@
 
 
 /**
+ * g_object_getv:
+ * @object: a #GObject
+ * @n_properties: the number of properties
+ * @names: (array length=n_properties): the names of each property to get
+ * @values: (array length=n_properties): the values of each property to get
+ *
+ * Gets @n_properties properties for an @object.
+ * Obtained properties will be set to @values. All properties must be valid.
+ * Warnings will be emitted and undefined behaviour may result if invalid
+ * properties are passed in.
+ *
+ * Since: 2.54
+ */
+
+
+/**
  * g_object_interface_find_property:
  * @g_iface: (type GObject.TypeInterface): any interface vtable for the
  *  interface, or the default vtable for the interface
@@ -2969,7 +3016,27 @@
 
 
 /**
- * g_object_newv: (rename-to g_object_new)
+ * g_object_new_with_properties: (rename-to g_object_new)
+ * @object_type: the object type to instantiate
+ * @n_properties: the number of properties
+ * @names: (array length=n_properties): the names of each property to be set
+ * @values: (array length=n_properties): the values of each property to be set
+ *
+ * Creates a new instance of a #GObject subtype and sets its properties using
+ * the provided arrays. Both arrays must have exactly @n_properties elements,
+ * and the names and values correspond by index.
+ *
+ * Construction parameters (see %G_PARAM_CONSTRUCT, %G_PARAM_CONSTRUCT_ONLY)
+ * which are not explicitly specified are set to their default values.
+ *
+ * Returns: (type GObject.Object) (transfer full): a new instance of
+ * @object_type
+ * Since: 2.54
+ */
+
+
+/**
+ * g_object_newv:
  * @object_type: the type id of the #GObject subtype to instantiate
  * @n_parameters: the length of the @parameters array
  * @parameters: (array length=n_parameters): an array of #GParameter
@@ -2981,6 +3048,8 @@
  *
  * Returns: (type GObject.Object) (transfer full): a new instance of
  * @object_type
+ * Deprecated: 2.54: Use g_object_new_with_properties() instead.
+ * deprecated. See #GParameter for more information.
  */
 
 
@@ -3269,6 +3338,22 @@
  *  name/value pairs, followed by %NULL
  *
  * Sets properties on an object.
+ */
+
+
+/**
+ * g_object_setv: (skip)
+ * @object: a #GObject
+ * @n_properties: the number of properties
+ * @names: (array length=n_properties): the names of each property to be set
+ * @values: (array length=n_properties): the values of each property to be set
+ *
+ * Sets @n_properties properties for an @object.
+ * Properties to be set will be taken from @values. All properties must be
+ * valid. Warnings will be emitted and undefined behaviour may result if invalid
+ * properties are passed in.
+ *
+ * Since: 2.54
  */
 
 
