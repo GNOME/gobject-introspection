@@ -16343,7 +16343,9 @@
  * and g_str_equal() functions are provided for the most common types
  * of keys. If @key_equal_func is %NULL, keys are compared directly in
  * a similar fashion to g_direct_equal(), but without the overhead of
- * a function call.
+ * a function call. @key_equal_func is called with the key from the hash table
+ * as its first parameter, and the user-provided key to check against as
+ * its second.
  *
  * Returns: a new #GHashTable
  */
@@ -16369,7 +16371,7 @@
  * recursively remove further items from the hash table. This is only
  * permissible if the application still holds a reference to the hash table.
  * This means that you may need to ensure that the hash table is empty by
- * calling g_hash_table_remove_all before releasing the last reference using
+ * calling g_hash_table_remove_all() before releasing the last reference using
  * g_hash_table_unref().
  *
  * Returns: a new #GHashTable
@@ -27413,6 +27415,12 @@
  * }
  * ]|
  *
+ * Calls to this function from a thread other than the one acquired by the
+ * #GMainContext the #GSource is attached to are typically redundant, as the
+ * source could be destroyed immediately after this function returns. However,
+ * once a source is destroyed it cannot be un-destroyed, so this function can be
+ * used for opportunistic checks from any thread.
+ *
  * Returns: %TRUE if the source has been destroyed
  * Since: 2.12
  */
@@ -27745,6 +27753,9 @@
  * other suggests that it would be delivered first, and the ready time
  * for both sources is reached during the same main context iteration
  * then the order of dispatch is undefined.
+ *
+ * It is a no-op to call this function on a #GSource which has already been
+ * destroyed with g_source_destroy().
  *
  * This API is only intended to be used by implementations of #GSource.
  * Do not call this API on a #GSource that you did not create.
@@ -34586,11 +34597,11 @@
  * - %G_VARIANT_TYPE_DOUBLE: #gdouble
  *
  * For example, if calling this function for an array of 32-bit integers,
- * you might say sizeof(gint32). This value isn't used except for the purpose
+ * you might say `sizeof(gint32)`. This value isn't used except for the purpose
  * of a double-check that the form of the serialised data matches the caller's
  * expectation.
  *
- * @n_elements, which must be non-%NULL is set equal to the number of
+ * @n_elements, which must be non-%NULL, is set equal to the number of
  * items in the array.
  *
  * Returns: (array length=n_elements) (transfer none): a pointer to
