@@ -113,22 +113,18 @@ class CCompiler(object):
         # An "internal" link is where the library to be introspected
         # is being built in the current directory.
 
-        if not libtool:
-            # non-libtool case: prepare distutils use
-            if self.check_is_msvc():
-                for library in libraries + extra_libraries:
-                    # MSVC Builds don't use libtool, so no .la libraries,
-                    # so just add the library directly.
-                    self.compiler.add_library(library)
-                    for libpath in libpaths:
-                        self.compiler.add_library_dir(libpath)
-            else:
-                # Search the current directory first
-                # (This flag is not supported nor needed for Visual C++)
-                self.compiler.add_library_dir('.')
-                if os.name != 'nt':
-                    self.compiler.add_runtime_library_dir('.')
+        runtime_path_envvar = []
+        runtime_paths = []
 
+        if self.check_is_msvc():
+            runtime_path_envvar = ['LIB', 'PATH']
+        else:
+            runtime_path_envvar = ['LD_LIBRARY_PATH']
+            # Search the current directory first
+            # (This flag is not supported nor needed for Visual C++)
+            args.append('-L.')
+
+            if not libtool:
                 # https://bugzilla.gnome.org/show_bug.cgi?id=625195
                 args.append('-Wl,-rpath,.')
 
@@ -137,37 +133,51 @@ class CCompiler(object):
                 if sys.platform != 'darwin':
                     args.append('-Wl,--no-as-needed')
 
-            for library in libraries + extra_libraries:
-                self.compiler.add_library(library)
-            if not self.check_is_msvc():
-                for library_path in libpaths:
-                    args.append('-L' + library_path)
-                    if os.path.isabs(library_path):
-                        args.append('-Wl,-rpath,' + library_path)
-
-        else:
-            # libtool case: assemble linker command arguments, like we did before
-            args.append('-L.')
-            for library in libraries:
+        for library in libraries + extra_libraries:
+            if self.check_is_msvc():
+                # Note that Visual Studio builds do not use libtool!
+                if library != 'm':
+                    args.append(library + '.lib')
+            else:
                 if library.endswith(".la"):  # explicitly specified libtool library
                     args.append(library)
                 else:
                     args.append('-l' + library)
 
-            for library_path in libpaths:
+        for library_path in libpaths:
+            # The dumper program needs to look for dynamic libraries
+            # in the library paths first
+            if self.check_is_msvc():
+                library_path = library_path.replace('/', '\\')
+                args.append('-libpath:' + library_path)
+            else:
                 args.append('-L' + library_path)
                 if os.path.isabs(library_path):
-                    args.append('-rpath')
-                    args.append(library_path)
+                    if libtool:
+                        args.append('-rpath')
+                        args.append(library_path)
+                    else:
+                        args.append('-Wl,-rpath=' + library_path)
 
-    def get_external_link_flags(self, args, libtool, libraries):
+            runtime_paths.append(library_path)
+
+        for envvar in runtime_path_envvar:
+            if envvar in os.environ:
+                os.environ[envvar] = \
+                    os.pathsep.join(runtime_paths + [os.environ[envvar]])
+            else:
+                os.environ[envvar] = os.pathsep.join(runtime_paths)
+
+    def get_external_link_flags(self, args, libraries):
         # An "external" link is where the library to be introspected
         # is installed on the system; this case is used for the scanning
         # of GLib in gobject-introspection itself.
 
         for library in libraries:
-            if not libtool:
-                self.compiler.add_library(library)
+            if self.check_is_msvc():
+                # Visual Studio: don't attempt to link to m.lib
+                if library != 'm':
+                    args.append(library + ".lib")
             else:
                 if library.endswith(".la"):  # explicitly specified libtool library
                     args.append(library)
@@ -240,22 +250,6 @@ class CCompiler(object):
                                      extra_postargs=extra_postargs,
                                      output_dir=os.path.abspath(os.sep))
 
-    def link(self, output, objects, lib_args):
-        # Note: This is used for non-libtool builds only!
-        extra_preargs = []
-        extra_postargs = []
-        library_dirs = []
-        libraries = []
-
-        for arg in lib_args:
-            extra_postargs.append(arg)
-
-        self.compiler.link(target_desc=self.compiler.EXECUTABLE,
-                           objects=objects,
-                           output_filename=output,
-                           extra_preargs=extra_preargs,
-                           extra_postargs=extra_postargs)
-
     def resolve_windows_libs(self, libraries, options):
         args = []
         libsearch = []
@@ -277,6 +271,10 @@ class CCompiler(object):
             # __IMPORT_DESCRIPTOR_<dll_filename_that_something.lib_links_to>
             args.append('dumpbin.exe')
             args.append('-symbols')
+
+            # Work around the attempt to resolve m.lib on Python 2.x
+            if sys.version_info.major < 3:
+                libraries[:] = [lib for lib in libraries if lib != 'm']
 
         # When we are not using Visual C++ (i.e. we are using GCC)...
         else:

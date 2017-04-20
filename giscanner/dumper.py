@@ -99,10 +99,10 @@ class DumpCompiler(object):
         self._uninst_srcdir = os.environ.get('UNINSTALLED_INTROSPECTION_SRCDIR')
         self._packages = ['gio-2.0 gmodule-2.0']
         self._packages.extend(options.packages)
-        if hasattr(self._compiler.compiler, 'linker_exe'):
-            self._linker_cmd = self._compiler.compiler.linker_exe
+        if self._compiler.check_is_msvc():
+            self._linker_cmd = ['link.exe']
         else:
-            self._linker_cmd = []
+            self._linker_cmd = shlex.split(os.environ.get('CC', 'cc'))
 
     # Public API
 
@@ -212,21 +212,25 @@ class DumpCompiler(object):
         libtool = utils.get_libtool_command(self._options)
         if libtool:
             # Note: MSVC Builds do not use libtool!
-            # In the libtool case, put together the linker command, as we did before.
-            # We aren't using distutils to link in this case.
             args.extend(libtool)
             args.append('--mode=link')
             args.append('--tag=CC')
             if self._options.quiet:
                 args.append('--silent')
 
-            args.extend(self._linker_cmd)
+        args.extend(self._linker_cmd)
 
+        # We can use -o for the Microsoft compiler/linker,
+        # but it is considered deprecated usage
+        if self._compiler.check_is_msvc():
+            args.extend(['-out:' + output])
+        else:
             args.extend(['-o', output])
-            if os.name == 'nt':
-                args.append('-Wl,--export-all-symbols')
-            else:
-                args.append('-export-dynamic')
+            if libtool:
+                if os.name == 'nt':
+                    args.append('-Wl,--export-all-symbols')
+                else:
+                    args.append('-export-dynamic')
 
         if not self._compiler.check_is_msvc():
             # These envvars are not used for MSVC Builds!
@@ -246,8 +250,7 @@ class DumpCompiler(object):
                 raise CompilerError(
                     "Could not find object file: %s" % (source, ))
 
-        if libtool:
-            args.extend(sources)
+        args.extend(sources)
 
         pkg_config_libs = self._run_pkgconfig('--libs')
 
@@ -261,66 +264,36 @@ class DumpCompiler(object):
 
         else:
             args.extend(pkg_config_libs)
-            self._compiler.get_external_link_flags(args,
-                                                   libtool,
-                                                   self._options.libraries)
+            self._compiler.get_external_link_flags(args, self._options.libraries)
 
         if not self._compiler.check_is_msvc():
             for ldflag in shlex.split(os.environ.get('LDFLAGS', '')):
                 args.append(ldflag)
 
-        if not libtool:
-            # non-libtool: prepare distutils for linking the introspection
-            # dumper program...
-            try:
-                self._compiler.link(output,
-                                    sources,
-                                    args)
+        if not self._options.quiet:
+            print("g-ir-scanner: link: %s" % (
+                subprocess.list2cmdline(args), ))
+            sys.stdout.flush()
 
-            # Ignore failing to embed the manifest files, when the manifest
-            # file does not exist, especially for MSVC 2010 and later builds.
-            # If we are on Visual C++ 2005/2008, where
-            # this embedding is required, the build will fail anyway, as
-            # the dumper program will likely fail to run, and this means
-            # something went wrong with the build.
-            except LinkError as e:
-                if self._compiler.check_is_msvc():
-                    msg = str(e)
-
-                    if msg[msg.rfind('mt.exe'):] == 'mt.exe\' failed with exit status 31':
-                        if sys.version_info < (3, 0):
-                            sys.exc_clear()
-                        pass
-                    else:
-                        raise LinkError(e)
-                else:
-                    raise LinkError(e)
-        else:
-            # libtool: Run the assembled link command, we don't use distutils
-            # for linking here.
-            if not self._options.quiet:
-                print("g-ir-scanner: link: %s" % (
-                    subprocess.list2cmdline(args), ))
-                sys.stdout.flush()
-            msys = os.environ.get('MSYSTEM', None)
+        msys = os.environ.get('MSYSTEM', None)
+        if msys:
+            shell = os.environ.get('SHELL', 'sh.exe')
+            # Create a temporary script file that
+            # runs the command we want
+            tf, tf_name = tempfile.mkstemp()
+            with os.fdopen(tf, 'wb') as f:
+                shellcontents = ' '.join([x.replace('\\', '/') for x in args])
+                fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
+                f.write(fcontents)
+            shell = utils.which(shell)
+            args = [shell, tf_name.replace('\\', '/')]
+        try:
+            subprocess.check_call(args)
+        except subprocess.CalledProcessError as e:
+            raise LinkerError(e)
+        finally:
             if msys:
-                shell = os.environ.get('SHELL', 'sh.exe')
-                # Create a temporary script file that
-                # runs the command we want
-                tf, tf_name = tempfile.mkstemp()
-                with os.fdopen(tf, 'wb') as f:
-                    shellcontents = ' '.join([x.replace('\\', '/') for x in args])
-                    fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
-                    f.write(fcontents)
-                shell = utils.which(shell)
-                args = [shell, tf_name.replace('\\', '/')]
-            try:
-                subprocess.check_call(args)
-            except subprocess.CalledProcessError as e:
-                raise LinkerError(e)
-            finally:
-                if msys:
-                    os.remove(tf_name)
+                os.remove(tf_name)
 
 
 def compile_introspection_binary(options, get_type_functions,
