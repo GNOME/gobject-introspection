@@ -238,8 +238,7 @@ class CCompiler(object):
                                      macros=macros,
                                      include_dirs=includes,
                                      extra_postargs=extra_postargs,
-                                     output_dir=str(source_str[tmpdir_idx + 1:
-                                                    source_str.rfind(os.sep)]))
+                                     output_dir=os.path.abspath(os.sep))
 
     def link(self, output, objects, lib_args):
         # Note: This is used for non-libtool builds only!
