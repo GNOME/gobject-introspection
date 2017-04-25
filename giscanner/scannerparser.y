@@ -1617,7 +1617,6 @@ gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
     fdopen (g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error),
             "w+");
   GList *l;
-  g_unlink (tmp_name);
 
   for (l = filenames; l != NULL; l = l->next)
     {
@@ -1756,6 +1755,8 @@ gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
 
   rewind (fmacros);
   gi_source_scanner_parse_file (scanner, fmacros);
+  fclose (fmacros);
+  g_unlink (tmp_name);
 }
 
 gboolean
