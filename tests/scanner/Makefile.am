@@ -184,7 +184,7 @@ CHECKGIRS += Identfilter-1.0.gir
 Identfilter-1.0.gir: identfilter.h
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
 		--namespace=Identfilter --accept-unprefixed --nsversion=1.0 --header-only \
-		--identifier-filter-cmd="$(PYTHON) $(srcdir)/identfilter.py" \
+		--identifier-filter-cmd="$(PYTHON) identfilter.py" \
 		--output=$@ $<
 
 EXTRA_DIST += \
