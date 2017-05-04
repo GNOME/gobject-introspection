@@ -24,7 +24,7 @@ Offsets-1.0.gir: liboffsets.la offsets.h
 Offsets_1_0_gir_INCLUDES = GObject-2.0
 Offsets_1_0_gir_LIBS = liboffsets.la
 Offsets_1_0_gir_PACKAGES = gobject-2.0
-Offsets_1_0_gir_FILES = offsets.h offsets.c
+Offsets_1_0_gir_FILES = $(srcdir)/offsets.h $(srcdir)/offsets.c
 Offsets_1_0_gir_SCANNERFLAGS = $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error  -I$(top_srcdir)/tests
 INTROSPECTION_GIRS += Offsets-1.0.gir
 
@@ -39,7 +39,7 @@ gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository -I$(top_s
 gitestoffsets_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
 gitestoffsets.c: gen-gitestoffsets offsets.h Offsets-1.0.typelib
-	$(AM_V_GEN) $(PYTHON) gen-gitestoffsets offsets.h > $@ || ( rm -f $@ && false )
+	$(AM_V_GEN) $(PYTHON) $(srcdir)/gen-gitestoffsets $(srcdir)/offsets.h > $@ || ( rm -f $@ && false )
 
 EXTRA_DIST += gen-gitestoffsets
 BUILT_SOURCES += gitestoffsets.c
