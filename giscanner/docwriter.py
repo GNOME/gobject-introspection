@@ -57,6 +57,7 @@ language_mimes = {
     "pascal": "text/x-pascal",
     "perl": "application/x-perl",
     "php": "application/x-php",
+    "plain": "text/plain",
     "python": "text/x-python",
     "ruby": "application/x-ruby",
     "sql": "text/x-sql",
@@ -359,11 +360,12 @@ class DocFormatter(object):
         return '</p><pre>\n    '
 
     def _process_code_start_with_language(self, node, match, props):
-        mime = language_mimes[props["language_name"].lower()]
         self._processing_code = True
-        if not mime:
+        try:
+            mime = language_mimes[props["language_name"].lower()]
+            return '</p><pre data-mime="' + mime + '">\n    '
+        except KeyError:
             return '</p><pre>\n    '
-        return '</p><pre data-mime="' + mime + '">\n    '
 
     def _process_code_end(self, node, match, props):
         self._processing_code = False
