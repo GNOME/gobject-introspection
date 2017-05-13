@@ -7329,8 +7329,11 @@
  * @include: gio/gio.h
  *
  * #GNetworkMonitor provides an easy-to-use cross-platform API
- * for monitoring network connectivity. On Linux, the implementation
- * is based on the kernel's netlink interface.
+ * for monitoring network connectivity. On Linux, the available
+ * implementations are based on the kernel's netlink interface and
+ * on NetworkManager.
+ *
+ * There is also an implementation for use inside Flatpak sandboxes.
  */
 
 
@@ -7573,6 +7576,10 @@
  * #GProxyResolver provides synchronous and asynchronous network proxy
  * resolution. #GProxyResolver is used within #GSocketClient through
  * the method g_socket_connectable_proxy_enumerate().
+ *
+ * Implementations of #GProxyResolver based on libproxy and GNOME settings can
+ * be found in glib-networking. GIO comes with an implementation for use inside
+ * Flatpak portals.
  */
 
 
@@ -26996,8 +27003,8 @@
 /**
  * g_input_stream_read:
  * @stream: a #GInputStream.
- * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
- *     a buffer to read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *     read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -27031,8 +27038,8 @@
 /**
  * g_input_stream_read_all:
  * @stream: a #GInputStream.
- * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
- *     a buffer to read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *     read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @bytes_read: (out): location to store the number of bytes that was read from the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
@@ -27065,8 +27072,8 @@
 /**
  * g_input_stream_read_all_async:
  * @stream: A #GInputStream
- * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
- *     a buffer to read data into (which should be at least count bytes long)
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *     read data into (which should be at least count bytes long)
  * @count: the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore
@@ -27113,8 +27120,8 @@
 /**
  * g_input_stream_read_async:
  * @stream: A #GInputStream.
- * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
- *     a buffer to read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8): a buffer to
+ *     read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority]
  * of the request.
@@ -34150,8 +34157,7 @@
 /**
  * g_settings_sync:
  *
- * Ensures that all pending operations for the given are complete for
- * the default backend.
+ * Ensures that all pending operations are complete for the default backend.
  *
  * Writes made to a #GSettings are handled asynchronously.  For this
  * reason, it is very unlikely that the changes have it to disk by the
@@ -36370,7 +36376,7 @@
 /**
  * g_socket_listener_accept:
  * @listener: a #GSocketListener
- * @source_object: (out) (transfer none) (optional): location where #GObject pointer will be stored, or %NULL
+ * @source_object: (out) (transfer none) (optional) (nullable): location where #GObject pointer will be stored, or %NULL
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -36412,7 +36418,7 @@
  * g_socket_listener_accept_finish:
  * @listener: a #GSocketListener
  * @result: a #GAsyncResult.
- * @source_object: (out) (transfer none) (optional): Optional #GObject identifying this source
+ * @source_object: (out) (transfer none) (optional) (nullable): Optional #GObject identifying this source
  * @error: a #GError location to store the error occurring, or %NULL to
  * ignore.
  *
@@ -36426,7 +36432,7 @@
 /**
  * g_socket_listener_accept_socket:
  * @listener: a #GSocketListener
- * @source_object: (out) (transfer none) (optional): location where #GObject pointer will be stored, or %NULL.
+ * @source_object: (out) (transfer none) (optional) (nullable): location where #GObject pointer will be stored, or %NULL.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -36471,7 +36477,7 @@
  * g_socket_listener_accept_socket_finish:
  * @listener: a #GSocketListener
  * @result: a #GAsyncResult.
- * @source_object: (out) (transfer none) (optional): Optional #GObject identifying this source
+ * @source_object: (out) (transfer none) (optional) (nullable): Optional #GObject identifying this source
  * @error: a #GError location to store the error occurring, or %NULL to
  * ignore.
  *
@@ -36745,8 +36751,8 @@
  *     pointer, or %NULL
  * @vectors: (array length=num_vectors): an array of #GInputVector structs
  * @num_vectors: the number of elements in @vectors, or -1
- * @messages: (array length=num_messages) (out) (optional): a pointer which
- *    may be filled with an array of #GSocketControlMessages, or %NULL
+ * @messages: (array length=num_messages) (out) (optional) (nullable): a pointer
+ *    which may be filled with an array of #GSocketControlMessages, or %NULL
  * @num_messages: (out): a pointer which will be filled with the number of
  *    elements in @messages, or %NULL
  * @flags: (inout): a pointer to an int containing #GSocketMsgFlags flags
@@ -42267,7 +42273,7 @@
  * g_win32_registry_key_get_child:
  * @key: (in) (transfer none): a parent #GWin32RegistryKey
  * @subkey: (in) (transfer none): name of a child key to open (in UTF-8), relative to @key
- * @error: (inout) (optional): a pointer to a %NULL #GError, or %NULL
+ * @error: (inout) (optional) (nullable): a pointer to a %NULL #GError, or %NULL
  *
  * Opens a @subkey of the @key.
  *
@@ -42280,7 +42286,7 @@
  * g_win32_registry_key_get_child_w:
  * @key: (in) (transfer none): a parent #GWin32RegistryKey
  * @subkey: (in) (transfer none): name of a child key to open (in UTF-8), relative to @key
- * @error: (inout) (optional): a pointer to a %NULL #GError, or %NULL
+ * @error: (inout) (optional) (nullable): a pointer to a %NULL #GError, or %NULL
  *
  * Opens a @subkey of the @key.
  *
@@ -42400,7 +42406,7 @@
 /**
  * g_win32_registry_key_new_w:
  * @path: (in) (transfer none): absolute full name of a key to open (in UTF-16)
- * @error: (inout) (optional): a pointer to a %NULL #GError, or %NULL
+ * @error: (inout) (optional) (nullable): a pointer to a %NULL #GError, or %NULL
  *
  * Creates an object that represents a registry key specified by @path.
  * @path must start with one of the following pre-defined names:
@@ -42543,7 +42549,7 @@
  * g_win32_registry_subkey_iter_init:
  * @iter: (in) (transfer none): a pointer to a #GWin32RegistrySubkeyIter
  * @key: (in) (transfer none): a #GWin32RegistryKey to iterate over
- * @error: (inout) (optional): a pointer to %NULL #GError, or %NULL
+ * @error: (inout) (optional) (nullable): a pointer to %NULL #GError, or %NULL
  *
  * Initialises (without allocating) a #GWin32RegistrySubkeyIter.  @iter may be
  * completely uninitialised prior to this call; its old value is

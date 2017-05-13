@@ -6189,10 +6189,10 @@
  * can use:
  *
  * |[<!-- language="C" -->
- *   GVariant *v = g_variant_new ('u', 40);
+ *   GVariant *v = g_variant_new ("u", 40);
  * ]|
  *
- * The string 'u' in the first argument tells #GVariant that the data passed to
+ * The string "u" in the first argument tells #GVariant that the data passed to
  * the constructor (40) is going to be an unsigned integer.
  *
  * More advanced examples of #GVariant in use can be found in documentation for
@@ -6521,7 +6521,7 @@
  * - `s`: the type string of %G_VARIANT_TYPE_STRING; a string.
  * - `o`: the type string of %G_VARIANT_TYPE_OBJECT_PATH; a string in the form
  *   of a D-Bus object path.
- * - `g`: the type string of %G_VARIANT_TYPE_STRING; a string in the form of
+ * - `g`: the type string of %G_VARIANT_TYPE_SIGNATURE; a string in the form of
  *   a D-Bus type signature.
  * - `?`: the type string of %G_VARIANT_TYPE_BASIC; an indefinite type that
  *   is a supertype of any of the basic types.
@@ -6619,6 +6619,10 @@
  * space saving, if your set is large. The functions
  * g_hash_table_add() and g_hash_table_contains() are designed to be
  * used when using #GHashTable this way.
+ *
+ * #GHashTable is not designed to be statically initialised with keys and
+ * values known at compile time. To build a static hash table, use a tool such
+ * as [gperf](https://www.gnu.org/software/gperf/).
  */
 
 
@@ -7787,6 +7791,49 @@
  *
  * See #GSubprocess in GIO for a higher-level API that provides
  * stream interfaces for communication with child processes.
+ *
+ * An example of using g_spawn_async_with_pipes():
+ * |[<!-- language="C" -->
+ * const gchar * const argv[] = { "my-favourite-program", "--args", NULL };
+ * gint child_stdout, child_stderr;
+ * GPid child_pid;
+ * g_autoptr(GError) error = NULL;
+ *
+ * // Spawn child process.
+ * g_spawn_async_with_pipes (NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD, NULL,
+ *                           NULL, &child_pid, NULL, &child_stdout,
+ *                           &child_stderr, &error);
+ * if (error != NULL)
+ *   {
+ *     g_error ("Spawning child failed: %s", error->message);
+ *     return;
+ *   }
+ *
+ * // Add a child watch function which will be called when the child process
+ * // exits.
+ * g_child_watch_add (child_pid, child_watch_cb, NULL);
+ *
+ * // You could watch for output on @child_stdout and @child_stderr using
+ * // #GUnixInputStream or #GIOChannel here.
+ *
+ * static void
+ * child_watch_cb (GPid     pid,
+ *                 gint     status,
+ *                 gpointer user_data)
+ * {
+ *   g_message ("Child %" G_PID_FORMAT " exited %s", pid,
+ *              g_spawn_check_exit_status (status, NULL) ? "normally" : "abnormally");
+ *
+ *   // Free any resources associated with the child here, such as I/O channels
+ *   // on its stdout and stderr FDs. If you have no code to put in the
+ *   // child_watch_cb() callback, you can remove it and the g_child_watch_add()
+ *   // call, but you must also remove the G_SPAWN_DO_NOT_REAP_CHILD flag,
+ *   // otherwise the child process will stay around as a zombie until this
+ *   // process exits.
+ *
+ *   g_spawn_close_pid (pid);
+ * }
+ * ]|
  */
 
 
@@ -9050,6 +9097,78 @@
  *     characters in @str converted to lower case, with semantics that
  *     exactly match g_ascii_tolower(). (Note that this is unlike the
  *     old g_strdown(), which modified the string in place.)
+ */
+
+
+/**
+ * g_ascii_string_to_signed:
+ * @str: a string
+ * @base: base of a parsed number
+ * @min: a lower bound (inclusive)
+ * @max: an upper bound (inclusive)
+ * @out_num: (out) (optional): a return location for a number
+ * @error: a return location for #GError
+ *
+ * A convenience function for converting a string to a signed number.
+ *
+ * This function assumes that @str contains only a number of the given
+ * @base that is within inclusive bounds limited by @min and @max. If
+ * this is true, then the converted number is stored in @out_num. An
+ * empty string is not a valid input. A string with leading or
+ * trailing whitespace is also an invalid input.
+ *
+ * @base can be between 2 and 36 inclusive. Hexadecimal numbers must
+ * not be prefixed with "0x" or "0X". Such a problem does not exist
+ * for octal numbers, since they were usually prefixed with a zero
+ * which does not change the value of the parsed number.
+ *
+ * Parsing failures result in an error with the %G_NUMBER_PARSER_ERROR
+ * domain. If the input is invalid, the error code will be
+ * %G_NUMBER_PARSER_ERROR_INVALID. If the parsed number is out of
+ * bounds - %G_NUMBER_PARSER_ERROR_OUT_OF_BOUNDS.
+ *
+ * See g_ascii_strtoll() if you have more complex needs such as
+ * parsing a string which starts with a number, but then has other
+ * characters.
+ *
+ * Returns: %TRUE if @str was a number, otherwise %FALSE.
+ * Since: 2.54
+ */
+
+
+/**
+ * g_ascii_string_to_unsigned:
+ * @str: a string
+ * @base: base of a parsed number
+ * @min: a lower bound (inclusive)
+ * @max: an upper bound (inclusive)
+ * @out_num: (out) (optional): a return location for a number
+ * @error: a return location for #GError
+ *
+ * A convenience function for converting a string to an unsigned number.
+ *
+ * This function assumes that @str contains only a number of the given
+ * @base that is within inclusive bounds limited by @min and @max. If
+ * this is true, then the converted number is stored in @out_num. An
+ * empty string is not a valid input. A string with leading or
+ * trailing whitespace is also an invalid input.
+ *
+ * @base can be between 2 and 36 inclusive. Hexadecimal numbers must
+ * not be prefixed with "0x" or "0X". Such a problem does not exist
+ * for octal numbers, since they were usually prefixed with a zero
+ * which does not change the value of the parsed number.
+ *
+ * Parsing failures result in an error with the %G_NUMBER_PARSER_ERROR
+ * domain. If the input is invalid, the error code will be
+ * %G_NUMBER_PARSER_ERROR_INVALID. If the parsed number is out of
+ * bounds - %G_NUMBER_PARSER_ERROR_OUT_OF_BOUNDS.
+ *
+ * See g_ascii_strtoull() if you have more complex needs such as
+ * parsing a string which starts with a number, but then has other
+ * characters.
+ *
+ * Returns: %TRUE if @str was a number, otherwise %FALSE.
+ * Since: 2.54
  */
 
 
@@ -15186,7 +15305,7 @@
 /**
  * g_filename_from_uri:
  * @uri: a uri describing a filename (escaped, encoded in ASCII).
- * @hostname: (out) (optional): Location to store hostname for the URI.
+ * @hostname: (out) (optional) (nullable): Location to store hostname for the URI.
  *            If there is no hostname in the URI, %NULL will be
  *            stored in this location.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -16222,7 +16341,7 @@
  * g_hash_table_iter_next:
  * @iter: an initialized #GHashTableIter
  * @key: (out) (optional): a location to store the key
- * @value: (out) (optional): a location to store the value
+ * @value: (out) (optional) (nullable): a location to store the value
  *
  * Advances @iter and retrieves the key and/or value that are now
  * pointed to as a result of this advancement. If %FALSE is returned,
@@ -16309,7 +16428,7 @@
  * @hash_table: a #GHashTable
  * @lookup_key: the key to look up
  * @orig_key: (out) (optional): return location for the original key
- * @value: (out) (optional): return location for the value associated
+ * @value: (out) (optional) (nullable): return location for the value associated
  * with the key
  *
  * Looks up a key in the #GHashTable, returning the original key and the
@@ -23095,7 +23214,7 @@
 
 /**
  * g_prefix_error:
- * @err: (inout) (optional): a return location for a #GError
+ * @err: (inout) (optional) (nullable): a return location for a #GError
  * @format: printf()-style format string
  * @...: arguments to @format
  *
@@ -23256,6 +23375,51 @@
  *
  * Adds a pointer to the end of the pointer array. The array will grow
  * in size automatically if necessary.
+ */
+
+
+/**
+ * g_ptr_array_find: (skip)
+ * @haystack: pointer array to be searched
+ * @needle: pointer to look for
+ * @index_: (optional) (out caller-allocates): return location for the index of
+ *    the element, if found
+ *
+ * Checks whether @needle exists in @haystack. If the element is found, %TRUE is
+ * returned and the element’s index is returned in @index_ (if non-%NULL).
+ * Otherwise, %FALSE is returned and @index_ is undefined. If @needle exists
+ * multiple times in @haystack, the index of the first instance is returned.
+ *
+ * This does pointer comparisons only. If you want to use more complex equality
+ * checks, such as string comparisons, use g_ptr_array_find_with_equal_func().
+ *
+ * Returns: %TRUE if @needle is one of the elements of @haystack
+ * Since: 2.54
+ */
+
+
+/**
+ * g_ptr_array_find_with_equal_func: (skip)
+ * @haystack: pointer array to be searched
+ * @needle: pointer to look for
+ * @equal_func: (nullable): the function to call for each element, which should
+ *    return %TRUE when the desired element is found; or %NULL to use pointer
+ *    equality
+ * @index_: (optional) (out caller-allocates): return location for the index of
+ *    the element, if found
+ *
+ * Checks whether @needle exists in @haystack, using the given @equal_func.
+ * If the element is found, %TRUE is returned and the element’s index is
+ * returned in @index_ (if non-%NULL). Otherwise, %FALSE is returned and @index_
+ * is undefined. If @needle exists multiple times in @haystack, the index of
+ * the first instance is returned.
+ *
+ * @equal_func is called with the element from the array as its first parameter,
+ * and @needle as its second parameter. If @equal_func is %NULL, pointer
+ * equality is used.
+ *
+ * Returns: %TRUE if @needle is one of the elements of @haystack
+ * Since: 2.54
  */
 
 
@@ -27892,10 +28056,11 @@
  *
  * @flags should be the bitwise OR of any flags you want to affect the
  * function's behaviour. The %G_SPAWN_DO_NOT_REAP_CHILD means that the
- * child will not automatically be reaped; you must use a child watch to
- * be notified about the death of the child process. Eventually you must
- * call g_spawn_close_pid() on the @child_pid, in order to free
- * resources which may be associated with the child process. (On Unix,
+ * child will not automatically be reaped; you must use a child watch
+ * (g_child_watch_add()) to be notified about the death of the child process,
+ * otherwise it will stay around as a zombie process until this process exits.
+ * Eventually you must call g_spawn_close_pid() on the @child_pid, in order to
+ * free resources which may be associated with the child process. (On Unix,
  * using a child watch is equivalent to calling waitpid() or handling
  * the %SIGCHLD signal manually. On Windows, calling g_spawn_close_pid()
  * is equivalent to calling CloseHandle() on the process handle returned
@@ -31147,7 +31312,14 @@
  * Use g_date_time_format() or g_strdup_printf() if a different
  * variation of ISO 8601 format is required.
  *
- * Returns: a newly allocated string containing an ISO 8601 date
+ * If @time_ represents a date which is too large to fit into a `struct tm`,
+ * %NULL will be returned. This is platform dependent, but it is safe to assume
+ * years up to 3000 are supported. The return value of g_time_val_to_iso8601()
+ * has been nullable since GLib 2.54; before then, GLib would crash under the
+ * same conditions.
+ *
+ * Returns: (nullable): a newly allocated string containing an ISO 8601 date,
+ *    or %NULL if @time_ was too large
  * Since: 2.12
  */
 
@@ -35513,10 +35685,10 @@
  * @n_elements: the number of elements
  * @element_size: the size of each element
  *
- * Provides access to the serialised data for an array of fixed-sized
- * items.
+ * Constructs a new array #GVariant instance, where the elements are
+ * of @element_type type.
  *
- * @value must be an array with fixed-sized elements.  Numeric types are
+ * @elements must be an array with fixed-sized elements.  Numeric types are
  * fixed-size as are tuples containing only other fixed-sized types.
  *
  * @element_size must be the size of a single element in the array.
@@ -35525,8 +35697,7 @@
  * of a double-check that the form of the serialised data matches the caller's
  * expectation.
  *
- * @n_elements, which must be non-%NULL is set equal to the number of
- * items in the array.
+ * @n_elements must be the length of the @elements array.
  *
  * Returns: (transfer none): a floating reference to a new array #GVariant instance
  * Since: 2.32
@@ -35921,7 +36092,7 @@
  *
  * Note that the arguments in @app must be of the correct width for their
  * types specified in @format_string when collected into the #va_list.
- * See the [GVariant varargs documentation][gvariant-varargs.
+ * See the [GVariant varargs documentation][gvariant-varargs].
  *
  * These two generalisations allow mixing of multiple calls to
  * g_variant_new_va() and g_variant_get_va() within a single actual
