@@ -157,7 +157,7 @@ class CCompiler(object):
                         args.append('-rpath')
                         args.append(library_path)
                     else:
-                        args.append('-Wl,-rpath=' + library_path)
+                        args.append('-Wl,-rpath,' + library_path)
 
             runtime_paths.append(library_path)
 
