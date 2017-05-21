@@ -79,6 +79,40 @@ _g_ir_module_free (GIrModule *module)
   g_slice_free (GIrModule, module);
 }
 
+void
+_g_ir_module_merge (GIrModule  *left,
+                    GIrModule *right)
+{
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_assert (strcmp (left->name, right->name) == 0);
+  g_assert (strcmp (left->version, right->version) == 0);
+  g_assert (strcmp (left->shared_library, right->shared_library) == 0);
+  g_assert (strcmp (left->c_prefix, right->c_prefix) == 0);
+
+  /* FIXME: dedup */
+  left->dependencies = g_list_concat (left->dependencies, right->dependencies);
+
+  left->entries = g_list_concat (left->entries, right->entries);
+
+  left->include_modules = g_list_concat (left->include_modules, right->include_modules);
+
+  g_hash_table_iter_init (&iter, right->aliases);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      /* FIXME: check for conflicts */
+      g_hash_table_insert (left->aliases, key, value);
+    }
+
+  g_hash_table_iter_init (&iter, right->disguised_structures);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      /* FIXME: check for conflicts */
+      g_hash_table_insert (left->disguised_structures, key, value);
+    }
+}
+
 /**
  * _g_ir_module_fatal:
  * @build: Current build

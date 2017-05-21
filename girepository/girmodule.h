@@ -66,6 +66,8 @@ GIrModule *_g_ir_module_new            (const gchar *name,
 					const gchar *c_prefix);
 void       _g_ir_module_free           (GIrModule  *module);
 
+void       _g_ir_module_merge          (GIrModule  *left, GIrModule *right);
+
 void       _g_ir_module_add_include_module (GIrModule  *module,
 					   GIrModule  *include_module);
 

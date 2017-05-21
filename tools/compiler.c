@@ -45,6 +45,71 @@ gboolean include_cwd = FALSE;
 gboolean debug = FALSE;
 gboolean verbose = FALSE;
 
+static GIrModule *
+parse_modules () {
+  GIrParser *parser;
+  GIrModule *current_module, *first_module = NULL;
+  gchar **module_filename_ptr;
+  gint i;
+  GError *error = NULL;
+
+  if (includedirs != NULL)
+    for (i = 0; includedirs[i]; i++)
+      g_irepository_prepend_search_path (includedirs[i]);
+
+  parser = _g_ir_parser_new ();
+  _g_ir_parser_set_includes (parser, (const char*const*) includedirs);
+
+  for (module_filename_ptr = input; *module_filename_ptr != NULL; module_filename_ptr ++)
+    {
+      current_module = _g_ir_parser_parse_file (parser, *module_filename_ptr, &error);
+
+      if (current_module == NULL) 
+        {
+          g_fprintf (stderr, "error parsing file %s: %s\n",
+                     *module_filename_ptr, error->message);
+          return NULL;
+        }
+
+      if (first_module == NULL)
+        {
+          first_module = current_module;
+        }
+      else
+        {
+          if (strcmp (current_module->name, first_module->name) != 0)
+            {
+              g_fprintf (stderr, "All current_modules must have the same namespace name. "
+                                 "Got %s and %s.", first_module->name, current_module->name);
+              return NULL;
+            }
+          if (strcmp (current_module->version, first_module->version) != 0)
+            {
+              g_fprintf (stderr, "All current_modules must have the same namespace version. "
+                                 "Got %s and %s.", first_module->version, current_module->version);
+              return NULL;
+            }
+          if (strcmp (current_module->shared_library, first_module->shared_library) != 0)
+            {
+              g_fprintf (stderr, "All current_modules must be in the same shared library. "
+                                 "Got %s and %s.", first_module->shared_library, current_module->shared_library);
+              return NULL;
+            }
+          if (strcmp (current_module->c_prefix, first_module->c_prefix) != 0)
+            {
+              g_fprintf (stderr, "All current_modules must be in the same C prefix. "
+                                 "Got %s and %s.", first_module->c_prefix, current_module->c_prefix);
+              return NULL;
+            }
+
+          _g_ir_module_merge (first_module, current_module);
+          _g_ir_module_free (current_module);
+        }
+    }
+
+  return first_module;
+};
+
 static gboolean
 write_out_typelib (gchar *prefix,
 		   GITypelib *typelib)
@@ -143,9 +208,7 @@ main (int argc, char ** argv)
 {
   GOptionContext *context;
   GError *error = NULL;
-  GIrParser *parser;
   GIrModule *module;
-  gint i;
   g_typelib_check_sanity ();
 
   context = g_option_context_new ("");
@@ -181,22 +244,9 @@ main (int argc, char ** argv)
   g_debug ("[parsing] start, %d includes", 
 	   includedirs ? g_strv_length (includedirs) : 0);
 
-  if (includedirs != NULL)
-    for (i = 0; includedirs[i]; i++)
-      g_irepository_prepend_search_path (includedirs[i]);
-
-  parser = _g_ir_parser_new ();
-
-  _g_ir_parser_set_includes (parser, (const char*const*) includedirs);
-
-  module = _g_ir_parser_parse_file (parser, input[0], &error);
-  if (module == NULL) 
-    {
-      g_fprintf (stderr, "error parsing file %s: %s\n", 
-		 input[0], error->message);
-      
-      return 1;
-    }
+  module = parse_modules ();
+  if (!module)
+    return 1;
 
   g_debug ("[parsing] done");
 
