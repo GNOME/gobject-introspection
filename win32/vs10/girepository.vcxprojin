@@ -86,7 +86,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll</OutputFile>
       <ImportLibrary>$(TargetDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -109,7 +109,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll</OutputFile>
       <ImportLibrary>$(TargetDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -137,7 +137,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll</OutputFile>
       <ImportLibrary>$(TargetDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -163,7 +163,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(LibGIDllPrefix)$(ProjectName)$(LibGIDllSuffix).dll</OutputFile>
       <ImportLibrary>$(TargetDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
       <GenerateDebugInformation>true</GenerateDebugInformation>

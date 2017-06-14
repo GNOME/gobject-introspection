@@ -75,7 +75,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;$(FFIDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -85,7 +85,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -97,7 +97,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;$(FFIDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -107,7 +107,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <DataExecutionPrevention>
@@ -119,7 +119,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>$(FFIDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -128,7 +128,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -143,7 +143,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>$(FFIDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -152,7 +152,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ffi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

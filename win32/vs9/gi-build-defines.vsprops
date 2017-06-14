@@ -20,12 +20,8 @@
 		AdditionalLibraryDirectories="$(GlibEtcInstallRoot)\lib"
 	/>
 	<UserMacro
-		Name="FFIDefines"
-		Value="FFI_BUILDING"
-	/>
-	<UserMacro
 		Name="GIRepositoryBuildDefines"
-		Value="G_IREPOSITORY_COMPILATION;$(FFIDefines);DLL_EXPORT"
+		Value="G_IREPOSITORY_COMPILATION;DLL_EXPORT"
 	/>
 	<UserMacro
 		Name="GIIntrospectNMakeCmd"

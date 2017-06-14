@@ -4,8 +4,7 @@
     <Import Project="gi-version-paths.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <FFIDefines>FFI_BUILDING</FFIDefines>
-    <GIRepositoryBuildDefines>G_IREPOSITORY_COMPILATION;$(FFIDefines);DLL_EXPORT</GIRepositoryBuildDefines>
+    <GIRepositoryBuildDefines>G_IREPOSITORY_COMPILATION;DLL_EXPORT</GIRepositoryBuildDefines>
     <GIIntrospectNMakeCmd>cd ..
 set VCInstallDir=$(VCInstallDir)
 nmake -f gi-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstallRoot)</GIIntrospectNMakeCmd>
@@ -30,9 +29,6 @@ nmake -f gi-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstallR
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <BuildMacro Include="FFIDefines">
-      <Value>$(FFIDefines)</Value>
-    </BuildMacro>
     <BuildMacro Include="GIRepositoryBuildDefines">
       <Value>$(GIRepositoryBuildDefines)</Value>
     </BuildMacro>

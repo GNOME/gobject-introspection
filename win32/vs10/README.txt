@@ -19,11 +19,11 @@ usage of different CRTs.
 Please refer to the README.txt file in $(GLib_src_root)\build\win32\vs10 on how to build
 GLib using Visual C++ 2010
 
-For LibFFI, please get version 3.0.10 or later, as Visual C++ build support
-was added in the 3.0.10 release series.  Please see the README file that
-comes with the LibFFI source package for more details on how to build LibFFI
-on Visual C++-please note that the mozilla-build package from Mozilla is needed
-in order to build LibFFI on Windows.
+For LibFFI, please use the Centricular fork of it, which can be found at
+https://github.com/centricular/libffi.  Please refer there on building--please
+note that this will involve the use of the Meson build system and possible the
+Ninja build tool, if the Visual Studio project generation is not used or is
+unavailable.
 
 For Python, retrieving the official Windows binaries for 2.7 (2.x) or 3.3 (3.x) or later
 from http://www.python.org will do the job-be sure that the Python version that
