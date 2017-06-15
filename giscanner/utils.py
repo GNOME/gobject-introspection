@@ -159,7 +159,7 @@ def get_libtool_command(options):
         libtool_cmd = 'glibtool'
     try:
         subprocess.check_call([libtool_cmd, '--version'],
-                              stdout=open('/dev/null', 'w'))
+                              stdout=open(os.devnull, 'w'))
     except (subprocess.CalledProcessError, OSError):
         # If libtool's not installed, assume we don't need it
         return None
