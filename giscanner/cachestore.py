@@ -76,7 +76,7 @@ class CacheStore(object):
         try:
             with open(version, 'r') as version_file:
                 cache_hash = version_file.read()
-        except IOError as e:
+        except (IOError, OSError) as e:
             # File does not exist
             if e.errno == errno.ENOENT:
                 cache_hash = 0
@@ -96,7 +96,7 @@ class CacheStore(object):
             # On Unix, this would just be os.rename() but Windows
             # doesn't allow that.
             shutil.move(tmp_filename, version)
-        except IOError as e:
+        except (IOError, OSError) as e:
             # Permission denied
             if e.errno == errno.EACCES:
                 return
@@ -121,15 +121,9 @@ class CacheStore(object):
     def _remove_filename(self, filename):
         try:
             os.unlink(filename)
-        except IOError as e:
-            # Permission denied
-            if e.errno == errno.EACCES:
-                return
-            else:
-                raise
-        except OSError as e:
-            # File does not exist
-            if e.errno == errno.ENOENT:
+        except (IOError, OSError) as e:
+            # Ignore "permission denied", "file does not exist"
+            if e.errno in (errno.EACCES, errno.ENOENT):
                 return
             else:
                 raise
@@ -152,7 +146,7 @@ class CacheStore(object):
         try:
             with os.fdopen(tmp_fd, 'wb') as tmp_file:
                 pickle.dump(data, tmp_file)
-        except IOError as e:
+        except (IOError, OSError) as e:
             # No space left on device
             if e.errno == errno.ENOSPC:
                 self._remove_filename(tmp_filename)
@@ -162,7 +156,7 @@ class CacheStore(object):
 
         try:
             shutil.move(tmp_filename, store_filename)
-        except IOError as e:
+        except (IOError, OSError) as e:
             # Permission denied
             if e.errno == errno.EACCES:
                 self._remove_filename(tmp_filename)
@@ -175,7 +169,7 @@ class CacheStore(object):
             return
         try:
             fd = open(store_filename, 'rb')
-        except IOError as e:
+        except (IOError, OSError) as e:
             if e.errno == errno.ENOENT:
                 return None
             else:
