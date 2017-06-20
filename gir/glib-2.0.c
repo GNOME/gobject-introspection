@@ -15812,9 +15812,11 @@
  * Gets the name of the program. This name should not be localized,
  * in contrast to g_get_application_name().
  *
- * If you are using GDK or GTK+ the program name is set in gdk_init(),
- * which is called by gtk_init(). The program name is found by taking
- * the last component of @argv[0].
+ * If you are using #GApplication the program name is set in
+ * g_application_run(). In case of GDK or GTK+ it is set in
+ * gdk_init(), which is called by gtk_init() and the
+ * #GtkApplication::startup handler. The program name is found by
+ * taking the last component of @argv[0].
  *
  * Returns: the name of the program. The returned string belongs
  *     to GLib and must not be modified or freed.
@@ -19703,7 +19705,10 @@
  * Log a message with structured data. The message will be passed through to
  * the log writer set by the application using g_log_set_writer_func(). If the
  * message is fatal (i.e. its log level is %G_LOG_LEVEL_ERROR), the program will
- * be aborted at the end of this function.
+ * be aborted at the end of this function. If the log writer returns
+ * %G_LOG_WRITER_UNHANDLED (failure), no other fallback writers will be tried.
+ * See the documentation for #GLogWriterFunc for information on chaining
+ * writers.
  *
  * The structured data is provided as key–value pairs, where keys are UTF-8
  * strings, and values are arbitrary pointers — typically pointing to UTF-8
@@ -26449,6 +26454,12 @@
  *
  * Sets the name of the program. This name should not be localized,
  * in contrast to g_set_application_name().
+ *
+ * If you are using #GApplication the program name is set in
+ * g_application_run(). In case of GDK or GTK+ it is set in
+ * gdk_init(), which is called by gtk_init() and the
+ * #GtkApplication::startup handler. The program name is found by
+ * taking the last component of @argv[0].
  *
  * Note that for thread-safety reasons this function can only be called once.
  */
@@ -33924,7 +33935,7 @@
  * #GVariantBuilder if you want to abort building the value part-way
  * through.  This function need not be called if you call
  * g_variant_builder_end() and it also doesn't need to be called on
- * builders allocated with g_variant_builder_new (see
+ * builders allocated with g_variant_builder_new() (see
  * g_variant_builder_unref() for that).
  *
  * This function leaves the #GVariantBuilder structure set to all-zeros.

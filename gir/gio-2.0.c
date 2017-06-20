@@ -4207,6 +4207,24 @@
 
 
 /**
+ * GXdpDocuments::handle-add-full:
+ * @object: A #GXdpDocuments.
+ * @invocation: A #GDBusMethodInvocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @arg_o_path_fds: Argument passed by remote caller.
+ * @arg_flags: Argument passed by remote caller.
+ * @arg_app_id: Argument passed by remote caller.
+ * @arg_permissions: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddFull">AddFull()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_documents_complete_add_full() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
  * GXdpDocuments::handle-add-named:
  * @object: A #GXdpDocuments.
  * @invocation: A #GDBusMethodInvocation.
@@ -4326,9 +4344,19 @@
 
 
 /**
+ * GXdpDocuments:version:
+ *
+ * Represents the D-Bus property <link linkend="gdbus-property-org-freedesktop-portal-Documents.version">"version"</link>.
+ *
+ * Since the D-Bus property for this #GObject property is readable but not writable, it is meaningful to read from it on both the client- and service-side. It is only meaningful, however, to write to it on the service-side.
+ */
+
+
+/**
  * GXdpDocumentsIface:
  * @parent_iface: The parent interface.
  * @handle_add: Handler for the #GXdpDocuments::handle-add signal.
+ * @handle_add_full: Handler for the #GXdpDocuments::handle-add-full signal.
  * @handle_add_named: Handler for the #GXdpDocuments::handle-add-named signal.
  * @handle_delete: Handler for the #GXdpDocuments::handle-delete signal.
  * @handle_get_mount_point: Handler for the #GXdpDocuments::handle-get-mount-point signal.
@@ -4337,6 +4365,7 @@
  * @handle_list: Handler for the #GXdpDocuments::handle-list signal.
  * @handle_lookup: Handler for the #GXdpDocuments::handle-lookup signal.
  * @handle_revoke_permissions: Handler for the #GXdpDocuments::handle-revoke-permissions signal.
+ * @get_version: Getter for the #GXdpDocuments:version property.
  *
  * Virtual table for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link>.
  */
@@ -4456,6 +4485,96 @@
  * @parent_class: The parent class.
  *
  * Class structure for #GXdpNetworkMonitorSkeleton.
+ */
+
+
+/**
+ * GXdpOpenURI:
+ *
+ * Abstract interface type for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-OpenURI.top_of_page">org.freedesktop.portal.OpenURI</link>.
+ */
+
+
+/**
+ * GXdpOpenURI::handle-open-file:
+ * @object: A #GXdpOpenURI.
+ * @invocation: A #GDBusMethodInvocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @arg_parent_window: Argument passed by remote caller.
+ * @arg_fd: Argument passed by remote caller.
+ * @arg_options: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenFile">OpenFile()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_open_uri_complete_open_file() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpOpenURI::handle-open-uri:
+ * @object: A #GXdpOpenURI.
+ * @invocation: A #GDBusMethodInvocation.
+ * @arg_parent_window: Argument passed by remote caller.
+ * @arg_uri: Argument passed by remote caller.
+ * @arg_options: Argument passed by remote caller.
+ *
+ * Signal emitted when a remote caller is invoking the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenURI">OpenURI()</link> D-Bus method.
+ *
+ * If a signal handler returns %TRUE, it means the signal handler will handle the invocation (e.g. take a reference to @invocation and eventually call gxdp_open_uri_complete_open_uri() or e.g. g_dbus_method_invocation_return_error() on it) and no order signal handlers will run. If no signal handler handles the invocation, the %G_DBUS_ERROR_UNKNOWN_METHOD error is returned.
+ *
+ * Returns: %TRUE if the invocation was handled, %FALSE to let other signal handlers run.
+ */
+
+
+/**
+ * GXdpOpenURI:version:
+ *
+ * Represents the D-Bus property <link linkend="gdbus-property-org-freedesktop-portal-OpenURI.version">"version"</link>.
+ *
+ * Since the D-Bus property for this #GObject property is readable but not writable, it is meaningful to read from it on both the client- and service-side. It is only meaningful, however, to write to it on the service-side.
+ */
+
+
+/**
+ * GXdpOpenURIIface:
+ * @parent_iface: The parent interface.
+ * @handle_open_file: Handler for the #GXdpOpenURI::handle-open-file signal.
+ * @handle_open_uri: Handler for the #GXdpOpenURI::handle-open-uri signal.
+ * @get_version: Getter for the #GXdpOpenURI:version property.
+ *
+ * Virtual table for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-OpenURI.top_of_page">org.freedesktop.portal.OpenURI</link>.
+ */
+
+
+/**
+ * GXdpOpenURIProxy:
+ *
+ * The #GXdpOpenURIProxy structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * GXdpOpenURIProxyClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #GXdpOpenURIProxy.
+ */
+
+
+/**
+ * GXdpOpenURISkeleton:
+ *
+ * The #GXdpOpenURISkeleton structure contains only private data and should only be accessed using the provided API.
+ */
+
+
+/**
+ * GXdpOpenURISkeletonClass:
+ * @parent_class: The parent class.
+ *
+ * Class structure for #GXdpOpenURISkeleton.
  */
 
 
@@ -4605,6 +4724,15 @@
  * @short_description: Generated C code for the org.freedesktop.portal.NetworkMonitor D-Bus interface
  *
  * This section contains code for working with the <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link> D-Bus interface in C.
+ */
+
+
+/**
+ * SECTION:GXdpOpenURI
+ * @title: GXdpOpenURI
+ * @short_description: Generated C code for the org.freedesktop.portal.OpenURI D-Bus interface
+ *
+ * This section contains code for working with the <link linkend="gdbus-interface-org-freedesktop-portal-OpenURI.top_of_page">org.freedesktop.portal.OpenURI</link> D-Bus interface in C.
  */
 
 
@@ -7671,6 +7799,13 @@
  * set to the full path to the gdk-pixbuf-pixdata executable; otherwise the resource compiler will
  * abort.
  *
+ * Resource files will be exported in the GResource namespace using the
+ * combination of the given `prefix` and the filename from the `file` element.
+ * The `alias` attribute can be used to alter the filename to expose them at a
+ * different location in the resource namespace. Typically, this is used to
+ * include files from a different source directory without exposing the source
+ * directory in the resource namespace, as in the example below.
+ *
  * Resource bundles are created by the [glib-compile-resources][glib-compile-resources] program
  * which takes an XML file that describes the bundle, and a set of files that the XML references. These
  * are combined into a binary resource bundle.
@@ -7683,6 +7818,7 @@
  *     <file>data/splashscreen.png</file>
  *     <file compressed="true">dialog.ui</file>
  *     <file preprocess="xml-stripblanks">menumarkup.xml</file>
+ *     <file alias="example.css">data/example.css</file>
  *   </gresource>
  * </gresources>
  * ]|
@@ -7692,6 +7828,7 @@
  * /org/gtk/Example/data/splashscreen.png
  * /org/gtk/Example/dialog.ui
  * /org/gtk/Example/menumarkup.xml
+ * /org/gtk/Example/example.css
  * ]|
  *
  * Note that all resources in the process share the same namespace, so use Java-style
@@ -7712,22 +7849,24 @@
  * to the data. You can also use URIs like "resource:///org/gtk/Example/data/splashscreen.png" with #GFile to access
  * the resource data.
  *
+ * Some higher-level APIs, such as #GtkApplication, will automatically load
+ * resources from certain well-known paths in the resource namespace as a
+ * convenience. See the documentation for those APIs for details.
+ *
  * There are two forms of the generated source, the default version uses the compiler support for constructor
  * and destructor functions (where available) to automatically create and register the #GResource on startup
- * or library load time. If you pass --manual-register two functions to register/unregister the resource is instead
- * created. This requires an explicit initialization call in your application/library, but it works on all platforms,
- * even on the minor ones where this is not available. (Constructor support is available for at least Win32, Mac OS and Linux.)
+ * or library load time. If you pass `--manual-register`, two functions to register/unregister the resource are created
+ * instead. This requires an explicit initialization call in your application/library, but it works on all platforms,
+ * even on the minor ones where constructors are not supported. (Constructor support is available for at least Win32, Mac OS and Linux.)
  *
  * Note that resource data can point directly into the data segment of e.g. a library, so if you are unloading libraries
  * during runtime you need to be very careful with keeping around pointers to data from a resource, as this goes away
  * when the library is unloaded. However, in practice this is not generally a problem, since most resource accesses
- * is for your own resources, and resource data is often used once, during parsing, and then released.
+ * are for your own resources, and resource data is often used once, during parsing, and then released.
  *
  * When debugging a program or testing a change to an installed version, it is often useful to be able to
  * replace resources in the program or library, without recompiling, for debugging or quick hacking and testing
- * purposes.
- *
- * Since GLib 2.50, it is possible to use the `G_RESOURCE_OVERLAYS` environment variable to selectively overlay
+ * purposes. Since GLib 2.50, it is possible to use the `G_RESOURCE_OVERLAYS` environment variable to selectively overlay
  * resources with replacements from the filesystem.  It is a colon-separated list of substitutions to perform
  * during resource lookups.
  *
@@ -15626,7 +15765,7 @@
 /**
  * g_data_input_stream_read_line:
  * @stream: a given #GDataInputStream.
- * @length: (out): a #gsize to get the length of the data read in.
+ * @length: (out) (optional): a #gsize to get the length of the data read in.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting.
  *
@@ -15670,7 +15809,7 @@
  * g_data_input_stream_read_line_finish:
  * @stream: a given #GDataInputStream.
  * @result: the #GAsyncResult that was provided to the callback.
- * @length: (out): a #gsize to get the length of the data read in.
+ * @length: (out) (optional): a #gsize to get the length of the data read in.
  * @error: #GError for error reporting.
  *
  * Finish an asynchronous call started by
@@ -15692,7 +15831,7 @@
  * g_data_input_stream_read_line_finish_utf8:
  * @stream: a given #GDataInputStream.
  * @result: the #GAsyncResult that was provided to the callback.
- * @length: (out): a #gsize to get the length of the data read in.
+ * @length: (out) (optional): a #gsize to get the length of the data read in.
  * @error: #GError for error reporting.
  *
  * Finish an asynchronous call started by
@@ -15711,7 +15850,7 @@
 /**
  * g_data_input_stream_read_line_utf8:
  * @stream: a given #GDataInputStream.
- * @length: (out): a #gsize to get the length of the data read in.
+ * @length: (out) (optional): a #gsize to get the length of the data read in.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting.
  *
@@ -15792,7 +15931,7 @@
  * g_data_input_stream_read_until:
  * @stream: a given #GDataInputStream.
  * @stop_chars: characters to terminate the read.
- * @length: (out): a #gsize to get the length of the data read in.
+ * @length: (out) (optional): a #gsize to get the length of the data read in.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting.
  *
@@ -15848,7 +15987,7 @@
  * g_data_input_stream_read_until_finish:
  * @stream: a given #GDataInputStream.
  * @result: the #GAsyncResult that was provided to the callback.
- * @length: (out): a #gsize to get the length of the data read in.
+ * @length: (out) (optional): a #gsize to get the length of the data read in.
  * @error: #GError for error reporting.
  *
  * Finish an asynchronous call started by
@@ -15868,7 +16007,7 @@
  * @stop_chars: characters to terminate the read
  * @stop_chars_len: length of @stop_chars. May be -1 if @stop_chars is
  *     nul-terminated
- * @length: (out): a #gsize to get the length of the data read in
+ * @length: (out) (optional): a #gsize to get the length of the data read in
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore
  * @error: #GError for error reporting
  *
@@ -15925,7 +16064,7 @@
  * g_data_input_stream_read_upto_finish:
  * @stream: a #GDataInputStream
  * @result: the #GAsyncResult that was provided to the callback
- * @length: (out): a #gsize to get the length of the data read in
+ * @length: (out) (optional): a #gsize to get the length of the data read in
  * @error: #GError for error reporting
  *
  * Finish an asynchronous call started by
@@ -18055,7 +18194,7 @@
  * g_dbus_interface_info_generate_xml:
  * @info: A #GDBusNodeInfo
  * @indent: Indentation level.
- * @string_builder: (out): A #GString to to append XML data to.
+ * @string_builder: A #GString to to append XML data to.
  *
  * Appends an XML representation of @info (and its children) to @string_builder.
  *
@@ -19418,7 +19557,7 @@
  * g_dbus_node_info_generate_xml:
  * @info: A #GDBusNodeInfo.
  * @indent: Indentation level.
- * @string_builder: (out): A #GString to to append XML data to.
+ * @string_builder: A #GString to to append XML data to.
  *
  * Appends an XML representation of @info (and its children) to @string_builder.
  *
@@ -22317,18 +22456,18 @@
 
 
 /**
- * g_file_copy_async: (skip)
+ * g_file_copy_async:
  * @source: input #GFile
  * @destination: destination #GFile
  * @flags: set of #GFileCopyFlags
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *     %NULL to ignore
- * @progress_callback: (nullable): function to callback with progress
+ * @progress_callback: (nullable) (scope notified): function to callback with progress
  *     information, or %NULL if progress information is not needed
- * @progress_callback_data: (closure): user data to pass to @progress_callback
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @progress_callback_data: (closure progress_callback) (nullable): user data to pass to @progress_callback
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure callback): the data to pass to callback function
  *
  * Copies the file @source to the location specified by @destination
  * asynchronously. For details of the behaviour, see g_file_copy().
@@ -37901,8 +38040,12 @@
  * As an alternative, you can use g_subprocess_launcher_setenv(),
  * g_subprocess_launcher_unsetenv(), etc.
  *
- * Pass %NULL to inherit the parent  process' environment. Pass an
- * empty array to set an empty environment.
+ * Pass an empty array to set an empty environment. Pass %NULL to inherit the
+ * parent process’ environment. As of GLib 2.54, the parent process’ environment
+ * will be copied when g_subprocess_launcher_set_environ() is called.
+ * Previously, it was copied when the subprocess was executed. This means the
+ * copied environment may now be modified (using g_subprocess_launcher_setenv(),
+ * etc.) before launching the subprocess.
  *
  * On UNIX, all strings in this array can be arbitrary byte strings.
  * On Windows, they should be in UTF-8.
@@ -42959,6 +43102,63 @@
 
 
 /**
+ * gxdp_documents_call_add_full:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_o_path_fds: Argument to pass with the method invocation.
+ * @arg_flags: Argument to pass with the method invocation.
+ * @arg_app_id: Argument to pass with the method invocation.
+ * @arg_permissions: Argument to pass with the method invocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddFull">AddFull()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_documents_call_add_full_finish() to get the result of the operation.
+ *
+ * See gxdp_documents_call_add_full_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_documents_call_add_full_finish:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @out_doc_ids: (out): Return location for return parameter or %NULL to ignore.
+ * @out_extra_out: (out): Return location for return parameter or %NULL to ignore.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_add_full().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_documents_call_add_full().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_call_add_full_sync:
+ * @proxy: A #GXdpDocumentsProxy.
+ * @arg_o_path_fds: Argument to pass with the method invocation.
+ * @arg_flags: Argument to pass with the method invocation.
+ * @arg_app_id: Argument to pass with the method invocation.
+ * @arg_permissions: Argument to pass with the method invocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @out_doc_ids: (out): Return location for return parameter or %NULL to ignore.
+ * @out_extra_out: (out): Return location for return parameter or %NULL to ignore.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddFull">AddFull()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_documents_call_add_full() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
  * gxdp_documents_call_add_named:
  * @proxy: A #GXdpDocumentsProxy.
  * @arg_o_path_parent_fd: Argument to pass with the method invocation.
@@ -43364,6 +43564,20 @@
 
 
 /**
+ * gxdp_documents_complete_add_full:
+ * @object: A #GXdpDocuments.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @doc_ids: Parameter to return.
+ * @extra_out: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddFull">AddFull()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
  * gxdp_documents_complete_add_named:
  * @object: A #GXdpDocuments.
  * @invocation: (transfer full): A #GDBusMethodInvocation.
@@ -43455,6 +43669,18 @@
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.RevokePermissions">RevokePermissions()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
  *
  * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_documents_get_version: (skip)
+ * @object: A #GXdpDocuments.
+ *
+ * Gets the value of the <link linkend="gdbus-property-org-freedesktop-portal-Documents.version">"version"</link> D-Bus property.
+ *
+ * Since this D-Bus property is readable, it is meaningful to use this function on both the client- and service-side.
+ *
+ * Returns: The property value.
  */
 
 
@@ -43574,6 +43800,17 @@
  * See gxdp_documents_proxy_new() for the asynchronous version of this constructor.
  *
  * Returns: (transfer full) (type GXdpDocumentsProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_documents_set_version: (skip)
+ * @object: A #GXdpDocuments.
+ * @value: The value to set.
+ *
+ * Sets the <link linkend="gdbus-property-org-freedesktop-portal-Documents.version">"version"</link> D-Bus property to @value.
+ *
+ * Since this D-Bus property is not writable, it is only meaningful to use this function on the service-side.
  */
 
 
@@ -43789,6 +44026,284 @@
  * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-NetworkMonitor.top_of_page">org.freedesktop.portal.NetworkMonitor</link>.
  *
  * Returns: (transfer full) (type GXdpNetworkMonitorSkeleton): The skeleton object.
+ */
+
+
+/**
+ * gxdp_open_uri_call_open_file:
+ * @proxy: A #GXdpOpenURIProxy.
+ * @arg_parent_window: Argument to pass with the method invocation.
+ * @arg_fd: Argument to pass with the method invocation.
+ * @arg_options: Argument to pass with the method invocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenFile">OpenFile()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_open_uri_call_open_file_finish() to get the result of the operation.
+ *
+ * See gxdp_open_uri_call_open_file_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_open_uri_call_open_file_finish:
+ * @proxy: A #GXdpOpenURIProxy.
+ * @out_handle: (out): Return location for return parameter or %NULL to ignore.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_open_uri_call_open_file().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_open_uri_call_open_file().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_open_uri_call_open_file_sync:
+ * @proxy: A #GXdpOpenURIProxy.
+ * @arg_parent_window: Argument to pass with the method invocation.
+ * @arg_fd: Argument to pass with the method invocation.
+ * @arg_options: Argument to pass with the method invocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @out_handle: (out): Return location for return parameter or %NULL to ignore.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenFile">OpenFile()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_open_uri_call_open_file() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_open_uri_call_open_uri:
+ * @proxy: A #GXdpOpenURIProxy.
+ * @arg_parent_window: Argument to pass with the method invocation.
+ * @arg_uri: Argument to pass with the method invocation.
+ * @arg_options: Argument to pass with the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenURI">OpenURI()</link> D-Bus method on @proxy.
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_open_uri_call_open_uri_finish() to get the result of the operation.
+ *
+ * See gxdp_open_uri_call_open_uri_sync() for the synchronous, blocking version of this method.
+ */
+
+
+/**
+ * gxdp_open_uri_call_open_uri_finish:
+ * @proxy: A #GXdpOpenURIProxy.
+ * @out_handle: (out): Return location for return parameter or %NULL to ignore.
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_open_uri_call_open_uri().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with gxdp_open_uri_call_open_uri().
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_open_uri_call_open_uri_sync:
+ * @proxy: A #GXdpOpenURIProxy.
+ * @arg_parent_window: Argument to pass with the method invocation.
+ * @arg_uri: Argument to pass with the method invocation.
+ * @arg_options: Argument to pass with the method invocation.
+ * @out_handle: (out): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenURI">OpenURI()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_open_uri_call_open_uri() for the asynchronous version of this method.
+ *
+ * Returns: (skip): %TRUE if the call succeded, %FALSE if @error is set.
+ */
+
+
+/**
+ * gxdp_open_uri_complete_open_file:
+ * @object: A #GXdpOpenURI.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @handle: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenFile">OpenFile()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_open_uri_complete_open_uri:
+ * @object: A #GXdpOpenURI.
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @handle: Parameter to return.
+ *
+ * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenURI">OpenURI()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
+ *
+ * This method will free @invocation, you cannot use it afterwards.
+ */
+
+
+/**
+ * gxdp_open_uri_get_version: (skip)
+ * @object: A #GXdpOpenURI.
+ *
+ * Gets the value of the <link linkend="gdbus-property-org-freedesktop-portal-OpenURI.version">"version"</link> D-Bus property.
+ *
+ * Since this D-Bus property is readable, it is meaningful to use this function on both the client- and service-side.
+ *
+ * Returns: The property value.
+ */
+
+
+/**
+ * gxdp_open_uri_interface_info:
+ *
+ * Gets a machine-readable description of the <link linkend="gdbus-interface-org-freedesktop-portal-OpenURI.top_of_page">org.freedesktop.portal.OpenURI</link> D-Bus interface.
+ *
+ * Returns: (transfer none): A #GDBusInterfaceInfo. Do not free.
+ */
+
+
+/**
+ * gxdp_open_uri_override_properties:
+ * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @property_id_begin: The property id to assign to the first overridden property.
+ *
+ * Overrides all #GObject properties in the #GXdpOpenURI interface for a concrete class.
+ * The properties are overridden in the order they are defined.
+ *
+ * Returns: The last property id.
+ */
+
+
+/**
+ * gxdp_open_uri_proxy_new:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Asynchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-OpenURI.top_of_page">org.freedesktop.portal.OpenURI</link>. See g_dbus_proxy_new() for more details.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_open_uri_proxy_new_finish() to get the result of the operation.
+ *
+ * See gxdp_open_uri_proxy_new_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * gxdp_open_uri_proxy_new_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_open_uri_proxy_new().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with gxdp_open_uri_proxy_new().
+ *
+ * Returns: (transfer full) (type GXdpOpenURIProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_open_uri_proxy_new_for_bus:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
+ * @user_data: User data to pass to @callback.
+ *
+ * Like gxdp_open_uri_proxy_new() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * When the operation is finished, @callback will be invoked in the <link linkend="g-main-context-push-thread-default">thread-default main loop</link> of the thread you are calling this method from.
+ * You can then call gxdp_open_uri_proxy_new_for_bus_finish() to get the result of the operation.
+ *
+ * See gxdp_open_uri_proxy_new_for_bus_sync() for the synchronous, blocking version of this constructor.
+ */
+
+
+/**
+ * gxdp_open_uri_proxy_new_for_bus_finish:
+ * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_open_uri_proxy_new_for_bus().
+ * @error: Return location for error or %NULL
+ *
+ * Finishes an operation started with gxdp_open_uri_proxy_new_for_bus().
+ *
+ * Returns: (transfer full) (type GXdpOpenURIProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_open_uri_proxy_new_for_bus_sync:
+ * @bus_type: A #GBusType.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: A bus name (well-known or unique).
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Like gxdp_open_uri_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_open_uri_proxy_new_for_bus() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type GXdpOpenURIProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_open_uri_proxy_new_sync:
+ * @connection: A #GDBusConnection.
+ * @flags: Flags from the #GDBusProxyFlags enumeration.
+ * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @object_path: An object path.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL
+ *
+ * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-OpenURI.top_of_page">org.freedesktop.portal.OpenURI</link>. See g_dbus_proxy_new_sync() for more details.
+ *
+ * The calling thread is blocked until a reply is received.
+ *
+ * See gxdp_open_uri_proxy_new() for the asynchronous version of this constructor.
+ *
+ * Returns: (transfer full) (type GXdpOpenURIProxy): The constructed proxy object or %NULL if @error is set.
+ */
+
+
+/**
+ * gxdp_open_uri_set_version: (skip)
+ * @object: A #GXdpOpenURI.
+ * @value: The value to set.
+ *
+ * Sets the <link linkend="gdbus-property-org-freedesktop-portal-OpenURI.version">"version"</link> D-Bus property to @value.
+ *
+ * Since this D-Bus property is not writable, it is only meaningful to use this function on the service-side.
+ */
+
+
+/**
+ * gxdp_open_uri_skeleton_new:
+ *
+ * Creates a skeleton object for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-OpenURI.top_of_page">org.freedesktop.portal.OpenURI</link>.
+ *
+ * Returns: (transfer full) (type GXdpOpenURISkeleton): The skeleton object.
  */
 
 
