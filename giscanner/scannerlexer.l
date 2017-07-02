@@ -164,6 +164,9 @@ stringtext				([^\\\"])|(\\.)
 "__inline__"                            { return INLINE; }
 "__inline"				{ return INLINE; }
 "__nonnull" 			        { if (!parse_ignored_macro()) REJECT; }
+"_Nonnull"				{ /* Ignore */ }
+"_Nullable"				{ /* Ignore */ }
+"_Null_unspecified"			{ /* Ignore */ }
 "_Noreturn" 			        { /* Ignore */ }
 "__signed"                              { return SIGNED; }
 "__signed__"				{ return SIGNED; }
