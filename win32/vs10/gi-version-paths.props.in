@@ -5,7 +5,11 @@
     <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
     <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
     <!-- PythonDir needs to point to a 32-bit/x86 Python 2.7/3.3+ installation -->
-    <PythonDir>c:\\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '10.0'">c:\\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '11.0'">c:\\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '12.0'">c:\\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '14.0'">c:\\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '15.0'">c:\\python36</PythonDir>
     <!-- PythonDirX64 needs to point to an x86-64/x64 Python 2.7/3.3+ installation -->
     <PythonDirX64>$(PythonDir).x64</PythonDirX64>
     <IntrospectPythonParam>PYTHON=$(PythonDir)\python.exe</IntrospectPythonParam>
