@@ -18110,7 +18110,11 @@
  * Converts a #GVariant to a #GValue. If @value is floating, it is consumed.
  *
  * The rules specified in the g_dbus_gvalue_to_gvariant() function are
- * used - this function is essentially its reverse form.
+ * used - this function is essentially its reverse form. So, a #GVariant
+ * containing any basic or string array type will be converted to a #GValue
+ * containing a basic value or string array. Any other #GVariant (handle,
+ * variant, tuple, dict entry) will be converted to a #GValue containing that
+ * #GVariant.
  *
  * The conversion never fails - a valid #GValue is always returned in
  * @out_gvalue.
@@ -22423,6 +22427,10 @@
  * If the flag #G_FILE_COPY_NOFOLLOW_SYMLINKS is specified then symlinks
  * will be copied as symlinks, otherwise the target of the
  * @source symlink will be copied.
+ *
+ * If the flag #G_FILE_COPY_ALL_METADATA is specified then all the metadata
+ * that is possible to copy is copied, not just the default subset (which,
+ * for instance, does not include the owner, see #GFileInfo).
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -32570,8 +32578,8 @@
  * @lookup_flags: A #GResourceLookupFlags
  * @size: (out) (optional): a location to place the length of the contents of the file,
  *    or %NULL if the length is not needed
- * @flags: (out) (optional): a location to place the flags about the file,
- *    or %NULL if the length is not needed
+ * @flags: (out) (optional): a location to place the #GResourceFlags about the file,
+ *    or %NULL if the flags are not needed
  * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of

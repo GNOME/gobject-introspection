@@ -6404,7 +6404,7 @@
  *
  * To put the entire example together, for our dictionary mapping
  * strings to variants (with two entries, as given above), we are
- * using 91 bytes of memory for type information, 29 byes of memory
+ * using 91 bytes of memory for type information, 29 bytes of memory
  * for the serialised data, 16 bytes for buffer management and 24
  * bytes for the #GVariant instance, or a total of 160 bytes, plus
  * malloc overhead.  If we were to use g_variant_get_child_value() to
@@ -18154,7 +18154,7 @@
  * The array of returned groups will be %NULL-terminated, so
  * @length may optionally be %NULL.
  *
- * Returns: (array zero-terminated=1) (transfer full): a newly-allocated %NULL-terminated array of strings.
+ * Returns: (array zero-terminated=1 length=length) (transfer full): a newly-allocated %NULL-terminated array of strings.
  *   Use g_strfreev() to free it.
  * Since: 2.6
  */
@@ -18237,7 +18237,7 @@
  * be found, %NULL is returned and @error is set to
  * #G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
  *
- * Returns: (array zero-terminated=1) (transfer full): a newly-allocated %NULL-terminated array of strings.
+ * Returns: (array zero-terminated=1 length=length) (transfer full): a newly-allocated %NULL-terminated array of strings.
  *     Use g_strfreev() to free it.
  * Since: 2.6
  */
@@ -18851,7 +18851,7 @@
  * Note that this function never reports an error,
  * so it is safe to pass %NULL as @error.
  *
- * Returns: a newly allocated string holding
+ * Returns: (array length=length): a newly allocated string holding
  *   the contents of the #GKeyFile
  * Since: 2.6
  */
@@ -33382,7 +33382,13 @@
  * is made to see if the character found is actually valid other than
  * it starts with an appropriate byte.
  *
- * Returns: a pointer to the found character or %NULL
+ * If @end is %NULL, the return value will never be %NULL: if the end of the
+ * string is reached, a pointer to the terminating nul byte is returned. If
+ * @end is non-%NULL, the return value will be %NULL if the end of the string
+ * is reached.
+ *
+ * Returns: (nullable): a pointer to the found character or %NULL if @end is
+ *    set and is reached
  */
 
 
@@ -33427,6 +33433,10 @@
  * This function checks for incomplete characters, for invalid characters
  * such as characters that are out of the range of Unicode, and for
  * overlong encodings of valid characters.
+ *
+ * Note that g_utf8_get_char_validated() returns (gunichar)-2 if
+ * @max_len is positive and any of the bytes in the first UTF-8 character
+ * sequence are nul.
  *
  * Returns: the resulting character. If @p points to a partial
  *     sequence at the end of a string that could begin a valid
