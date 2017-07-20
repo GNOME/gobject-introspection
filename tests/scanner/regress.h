@@ -771,6 +771,7 @@ struct _RegressTestObj
   double some_double;
   char* string;
   GType gtype;
+  gint name_conflict;
 
   /* < private > */
   void (*function_ptr) (void);
@@ -939,6 +940,9 @@ void regress_test_obj_not_nullable_typed_gpointer_in (RegressTestObj *obj,
 void regress_test_obj_not_nullable_element_typed_gpointer_in (RegressTestObj *obj,
                                                               gpointer        input,
                                                               guint           count);
+
+_GI_TEST_EXTERN
+void regress_test_obj_name_conflict (RegressTestObj *obj);
 
 /* inheritance */
 #define REGRESS_TEST_TYPE_SUB_OBJ           (regress_test_sub_obj_get_type ())

@@ -13,6 +13,7 @@
 const Regress = imports.gi.Regress;
 
 let testObj = new Regress.TestObj({
+    <link xref='Regress.TestObj-name-conflict'>name_conflict</link>: value,
 });
   </code></synopsis>
 

@@ -2097,7 +2097,8 @@ enum
   PROP_TEST_OBJ_FLOAT,
   PROP_TEST_OBJ_DOUBLE,
   PROP_TEST_OBJ_STRING,
-  PROP_TEST_OBJ_GTYPE
+  PROP_TEST_OBJ_GTYPE,
+  PROP_TEST_OBJ_NAME_CONFLICT
 };
 
 static void
@@ -2161,6 +2162,10 @@ regress_test_obj_set_property (GObject      *object,
       self->gtype = g_value_get_gtype (value);
       break;
 
+    case PROP_TEST_OBJ_NAME_CONFLICT:
+      self->name_conflict = g_value_get_int (value);
+      break;
+
     default:
       /* We don't have any other property... */
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -2216,6 +2221,10 @@ regress_test_obj_get_property (GObject    *object,
 
     case PROP_TEST_OBJ_GTYPE:
       g_value_set_gtype (value, self->gtype);
+      break;
+
+    case PROP_TEST_OBJ_NAME_CONFLICT:
+      g_value_set_int (value, self->name_conflict);
       break;
 
     default:
@@ -2664,6 +2673,20 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    PROP_TEST_OBJ_GTYPE,
                                    pspec);
 
+  /**
+   * TestObj:name-conflict:
+   */
+  pspec = g_param_spec_int ("name-conflict",
+                            "name-conflict property",
+                            "A property name that conflicts with a method",
+                            G_MININT,
+                            G_MAXINT,
+                            42,
+                            G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_NAME_CONFLICT,
+                                   pspec);
+
   klass->matrix = regress_test_obj_default_matrix;
 }
 
@@ -3091,6 +3114,15 @@ void
 regress_test_obj_not_nullable_element_typed_gpointer_in (RegressTestObj *obj,
                                                          gpointer        input,
                                                          guint           count)
+{
+}
+
+/**
+ * regress_test_obj_name_conflict:
+ * @obj: A #RegressTestObj
+ */
+void
+regress_test_obj_name_conflict (RegressTestObj *obj)
 {
 }
 

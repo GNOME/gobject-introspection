@@ -3184,6 +3184,18 @@ case.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="name_conflict"
+              c:identifier="regress_test_obj_name_conflict">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:space="preserve">A #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="not_nullable_element_typed_gpointer_in"
               c:identifier="regress_test_obj_not_nullable_element_typed_gpointer_in">
         <return-value transfer-ownership="none">
@@ -3590,6 +3602,12 @@ raise an error.</doc>
           <type name="utf8"/>
         </type>
       </property>
+      <property name="name-conflict"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
+        <type name="gint" c:type="gint"/>
+      </property>
       <property name="pptrarray" writable="1" transfer-ownership="none">
         <array name="GLib.PtrArray" c:type="gpointer">
           <type name="utf8"/>
@@ -3632,6 +3650,9 @@ raise an error.</doc>
       </field>
       <field name="gtype">
         <type name="GType" c:type="GType"/>
+      </field>
+      <field name="name_conflict">
+        <type name="gint" c:type="gint"/>
       </field>
       <field name="function_ptr">
         <callback name="function_ptr">
