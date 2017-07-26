@@ -4183,8 +4183,7 @@
  *
  * Defines the log domain.
  *
- * For applications, this is typically left as the default %NULL
- * (or "") domain. Libraries should define this so that any messages
+ * Libraries should define this so that any messages
  * which they log can be differentiated from messages from other
  * libraries and application code. But be careful not to define
  * it in any public header files.
@@ -4193,6 +4192,10 @@
  * |[
  * AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Gtk\"
  * ]|
+ *
+ * Applications can choose to leave it as the default %NULL (or "")
+ * domain. However, defining the domain offers the same advantages as
+ * above.
  */
 
 
@@ -18154,7 +18157,7 @@
  * The array of returned groups will be %NULL-terminated, so
  * @length may optionally be %NULL.
  *
- * Returns: (array zero-terminated=1 length=length) (transfer full): a newly-allocated %NULL-terminated array of strings.
+ * Returns: (array zero-terminated=1) (transfer full): a newly-allocated %NULL-terminated array of strings.
  *   Use g_strfreev() to free it.
  * Since: 2.6
  */
@@ -18237,7 +18240,7 @@
  * be found, %NULL is returned and @error is set to
  * #G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
  *
- * Returns: (array zero-terminated=1 length=length) (transfer full): a newly-allocated %NULL-terminated array of strings.
+ * Returns: (array zero-terminated=1) (transfer full): a newly-allocated %NULL-terminated array of strings.
  *     Use g_strfreev() to free it.
  * Since: 2.6
  */
@@ -18851,7 +18854,7 @@
  * Note that this function never reports an error,
  * so it is safe to pass %NULL as @error.
  *
- * Returns: (array length=length): a newly allocated string holding
+ * Returns: a newly allocated string holding
  *   the contents of the #GKeyFile
  * Since: 2.6
  */
