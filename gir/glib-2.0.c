@@ -5773,8 +5773,10 @@
  * foo_open_file (GError **error)
  * {
  *   gint fd;
+ *   int saved_errno;
  *
  *   fd = open ("file.txt", O_RDONLY);
+ *   saved_errno = errno;
  *
  *   if (fd < 0)
  *     {
@@ -5782,7 +5784,7 @@
  *                    FOO_ERROR,                 // error domain
  *                    FOO_ERROR_BLAH,            // error code
  *                    "Failed to open file: %s", // error message format string
- *                    g_strerror (errno));
+ *                    g_strerror (saved_errno));
  *       return -1;
  *     }
  *   else
@@ -19299,7 +19301,7 @@
  *
  * A convenience macro to get the previous element in a #GList.
  * Note that it is considered perfectly acceptable to access
- * @list->previous directly.
+ * @list->prev directly.
  *
  * Returns: the previous element, or %NULL if there are no previous
  *          elements
@@ -27144,6 +27146,8 @@
  * @slist: an element in a #GSList.
  *
  * A convenience macro to get the next element in a #GSList.
+ * Note that it is considered perfectly acceptable to access
+ * @slist->next directly.
  *
  * Returns: the next element, or %NULL if there are no more elements.
  */
@@ -27985,10 +27989,10 @@
  * You should call g_spawn_close_pid() on the returned child process
  * reference when you don't need it any more.
  *
- * If you are writing a GTK+ application, and the program you are
- * spawning is a graphical application, too, then you may want to
- * use gdk_spawn_on_screen() instead to ensure that the spawned program
- * opens its windows on the right screen.
+ * If you are writing a GTK+ application, and the program you are spawning is a
+ * graphical application too, then to ensure that the spawned program opens its
+ * windows on the right screen, you may want to use #GdkAppLaunchContext,
+ * #GAppLaunchcontext, or set the %DISPLAY environment variable.
  *
  * Note that the returned @child_pid on Windows is a handle to the child
  * process and not its identifier. Process handles and process identifiers
@@ -28158,10 +28162,10 @@
  * If @child_pid is not %NULL and an error does not occur then the returned
  * process reference must be closed using g_spawn_close_pid().
  *
- * If you are writing a GTK+ application, and the program you
- * are spawning is a graphical application, too, then you may
- * want to use gdk_spawn_on_screen_with_pipes() instead to ensure that
- * the spawned program opens its windows on the right screen.
+ * If you are writing a GTK+ application, and the program you are spawning is a
+ * graphical application too, then to ensure that the spawned program opens its
+ * windows on the right screen, you may want to use #GdkAppLaunchContext,
+ * #GAppLaunchcontext, or set the %DISPLAY environment variable.
  *
  * Returns: %TRUE on success, %FALSE if an error was set
  */
@@ -28774,7 +28778,17 @@
  *
  * Note that the string may be translated according to the current locale.
  *
- * The value of %errno will not be changed by this function.
+ * The value of %errno will not be changed by this function. However, it may
+ * be changed by intermediate function calls, so you should save its value
+ * as soon as the call returns:
+ * |[
+ *   int saved_errno;
+ *
+ *   ret = read (blah);
+ *   saved_errno = errno;
+ *
+ *   g_strerror (saved_errno);
+ * ]|
  *
  * Returns: a UTF-8 string describing the error code. If the error code
  *     is unknown, it returns a string like "unknown error (<code>)".
