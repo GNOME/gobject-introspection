@@ -15870,12 +15870,15 @@
  * [XDG Base Directory Specification](http://www.freedesktop.org/Standards/basedir-spec).
  * In this case the list of directories retrieved will be `XDG_CONFIG_DIRS`.
  *
- * On Windows is the directory that contains application data for all users.
- * A typical path is C:\Documents and Settings\All Users\Application Data.
- * This folder is used for application data that is not user specific.
- * For example, an application can store a spell-check dictionary, a database
- * of clip art, or a log file in the CSIDL_COMMON_APPDATA folder.
- * This information will not roam and is available to anyone using the computer.
+ * On Windows it follows XDG Base Directory Specification if `XDG_CONFIG_DIRS` is defined.
+ * If `XDG_CONFIG_DIRS` is undefined, the directory that contains application
+ * data for all users is used instead. A typical path is
+ * `C:\Documents and Settings\All Users\Application Data`.
+ * This folder is used for application data
+ * that is not user specific. For example, an application can store
+ * a spell-check dictionary, a database of clip art, or a log file in the
+ * CSIDL_COMMON_APPDATA folder. This information will not roam and is available
+ * to anyone using the computer.
  *
  * Returns: (array zero-terminated=1) (element-type filename) (transfer none):
  *     a %NULL-terminated array of strings owned by GLib that must not be
@@ -15893,9 +15896,11 @@
  * On UNIX platforms this is determined using the mechanisms described
  * in the
  * [XDG Base Directory Specification](http://www.freedesktop.org/Standards/basedir-spec)
- * In this case the list of directories retrieved will be XDG_DATA_DIRS.
+ * In this case the list of directories retrieved will be `XDG_DATA_DIRS`.
  *
- * On Windows the first elements in the list are the Application Data
+ * On Windows it follows XDG Base Directory Specification if `XDG_DATA_DIRS` is defined.
+ * If `XDG_DATA_DIRS` is undefined,
+ * the first elements in the list are the Application Data
  * and Documents folders for All Users. (These can be determined only
  * on Windows 2000 or later and are not present in the list on other
  * Windows versions.) See documentation for CSIDL_COMMON_APPDATA and
@@ -15955,12 +15960,13 @@
  * On UNIX platforms this is determined using the mechanisms described
  * in the
  * [XDG Base Directory Specification](http://www.freedesktop.org/Standards/basedir-spec).
- * In this case the directory retrieved will be XDG_CACHE_HOME.
+ * In this case the directory retrieved will be `XDG_CACHE_HOME`.
  *
- * On Windows is the directory that serves as a common repository for
- * temporary Internet files. A typical path is
- * C:\Documents and Settings\username\Local Settings\Temporary Internet Files.
- * See documentation for CSIDL_INTERNET_CACHE.
+ * On Windows it follows XDG Base Directory Specification if `XDG_CACHE_HOME` is defined.
+ * If `XDG_CACHE_HOME` is undefined, the directory that serves as a common
+ * repository for temporary Internet files is used instead. A typical path is
+ * `C:\Documents and Settings\username\Local Settings\Temporary Internet Files`.
+ * See the [documentation for `CSIDL_INTERNET_CACHE`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb762494%28v=vs.85%29.aspx#csidl_internet_cache).
  *
  * Returns: (type filename): a string owned by GLib that must not be modified
  *               or freed.
@@ -15979,10 +15985,12 @@
  * [XDG Base Directory Specification](http://www.freedesktop.org/Standards/basedir-spec).
  * In this case the directory retrieved will be `XDG_CONFIG_HOME`.
  *
- * On Windows this is the folder to use for local (as opposed to
- * roaming) application data. See documentation for
- * CSIDL_LOCAL_APPDATA. Note that on Windows it thus is the same as
- * what g_get_user_data_dir() returns.
+ * On Windows it follows XDG Base Directory Specification if `XDG_CONFIG_HOME` is defined.
+ * If `XDG_CONFIG_HOME` is undefined, the folder to use for local (as opposed
+ * to roaming) application data is used instead. See the
+ * [documentation for `CSIDL_LOCAL_APPDATA`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb762494%28v=vs.85%29.aspx#csidl_local_appdata).
+ * Note that in this case on Windows it will be  the same
+ * as what g_get_user_data_dir() returns.
  *
  * Returns: (type filename): a string owned by GLib that must not be modified
  *               or freed.
@@ -16001,10 +16009,12 @@
  * [XDG Base Directory Specification](http://www.freedesktop.org/Standards/basedir-spec).
  * In this case the directory retrieved will be `XDG_DATA_HOME`.
  *
- * On Windows this is the folder to use for local (as opposed to
- * roaming) application data. See documentation for
- * CSIDL_LOCAL_APPDATA. Note that on Windows it thus is the same as
- * what g_get_user_config_dir() returns.
+ * On Windows it follows XDG Base Directory Specification if `XDG_DATA_HOME`
+ * is defined. If `XDG_DATA_HOME` is undefined, the folder to use for local (as
+ * opposed to roaming) application data is used instead. See the
+ * [documentation for `CSIDL_LOCAL_APPDATA`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb762494%28v=vs.85%29.aspx#csidl_local_appdata).
+ * Note that in this case on Windows it will be the same
+ * as what g_get_user_config_dir() returns.
  *
  * Returns: (type filename): a string owned by GLib that must not be modified
  *               or freed.
@@ -16030,18 +16040,13 @@
  * Returns a directory that is unique to the current user on the local
  * system.
  *
- * On UNIX platforms this is determined using the mechanisms described
+ * This is determined using the mechanisms described
  * in the
  * [XDG Base Directory Specification](http://www.freedesktop.org/Standards/basedir-spec).
  * This is the directory
  * specified in the `XDG_RUNTIME_DIR` environment variable.
  * In the case that this variable is not set, we return the value of
  * g_get_user_cache_dir(), after verifying that it exists.
- *
- * On Windows this is the folder to use for local (as opposed to
- * roaming) application data. See documentation for
- * CSIDL_LOCAL_APPDATA.  Note that on Windows it thus is the same as
- * what g_get_user_config_dir() returns.
  *
  * Returns: (type filename): a string owned by GLib that must not be
  *     modified or freed.
@@ -19902,6 +19907,12 @@
  * Check whether the given @output_fd file descriptor is a connection to the
  * systemd journal, or something else (like a log file or `stdout` or
  * `stderr`).
+ *
+ * Invalid file descriptors are accepted and return %FALSE, which allows for
+ * the following construct without needing any additional error handling:
+ * |[<!-- language="C" -->
+ *   is_journald = g_log_writer_is_journald (fileno (stderr));
+ * ]|
  *
  * Returns: %TRUE if @output_fd points to the journal, %FALSE otherwise
  * Since: 2.50
@@ -25801,7 +25812,7 @@
  *
  * Adds a new item to the end of @seq.
  *
- * Returns: an iterator pointing to the new item
+ * Returns: (transfer none): an iterator pointing to the new item
  * Since: 2.14
  */
 
@@ -25851,7 +25862,7 @@
  *
  * Returns the data that @iter points to.
  *
- * Returns: the data that @iter points to
+ * Returns: (transfer none): the data that @iter points to
  * Since: 2.14
  */
 
@@ -25862,7 +25873,7 @@
  *
  * Returns the begin iterator for @seq.
  *
- * Returns: the begin iterator for @seq.
+ * Returns: (transfer none): the begin iterator for @seq.
  * Since: 2.14
  */
 
@@ -25873,7 +25884,7 @@
  *
  * Returns the end iterator for @seg
  *
- * Returns: the end iterator for @seq
+ * Returns: (transfer none): the end iterator for @seq
  * Since: 2.14
  */
 
@@ -25886,7 +25897,7 @@
  * Returns the iterator at position @pos. If @pos is negative or larger
  * than the number of items in @seq, the end iterator is returned.
  *
- * Returns: The #GSequenceIter at position @pos
+ * Returns: (transfer none): The #GSequenceIter at position @pos
  * Since: 2.14
  */
 
@@ -25911,7 +25922,7 @@
  *
  * Inserts a new item just before the item pointed to by @iter.
  *
- * Returns: an iterator pointing to the new item
+ * Returns: (transfer none): an iterator pointing to the new item
  * Since: 2.14
  */
 
@@ -25932,7 +25943,7 @@
  * if the first item comes before the second, and a positive value
  * if the second  item comes before the first.
  *
- * Returns: a #GSequenceIter pointing to the new item.
+ * Returns: (transfer none): a #GSequenceIter pointing to the new item.
  * Since: 2.14
  */
 
@@ -25958,7 +25969,7 @@
  * first iterator comes before the second, and a positive value
  * if the second iterator comes before the first.
  *
- * Returns: a #GSequenceIter pointing to the new item
+ * Returns: (transfer none): a #GSequenceIter pointing to the new item
  * Since: 2.14
  */
 
@@ -26011,7 +26022,7 @@
  *
  * Returns the #GSequence that @iter points into.
  *
- * Returns: the #GSequence that @iter points into
+ * Returns: (transfer none): the #GSequence that @iter points into
  * Since: 2.14
  */
 
@@ -26049,7 +26060,7 @@
  * the begin iterator is returned. If @iter is closer than @delta positions
  * to the end of the sequence, the end iterator is returned.
  *
- * Returns: a #GSequenceIter which is @delta positions away from @iter
+ * Returns: (transfer none): a #GSequenceIter which is @delta positions away from @iter
  * Since: 2.14
  */
 
@@ -26061,7 +26072,7 @@
  * Returns an iterator pointing to the next position after @iter.
  * If @iter is the end iterator, the end iterator is returned.
  *
- * Returns: a #GSequenceIter pointing to the next position after @iter
+ * Returns: (transfer none): a #GSequenceIter pointing to the next position after @iter
  * Since: 2.14
  */
 
@@ -26073,7 +26084,7 @@
  * Returns an iterator pointing to the previous position before @iter.
  * If @iter is the begin iterator, the begin iterator is returned.
  *
- * Returns: a #GSequenceIter pointing to the previous position
+ * Returns: (transfer none): a #GSequenceIter pointing to the previous position
  *     before @iter
  * Since: 2.14
  */
@@ -26103,7 +26114,7 @@
  * you want to add a large amount of data, call g_sequence_sort() after
  * doing unsorted insertions.
  *
- * Returns: an #GSequenceIter pointing to the position of the
+ * Returns: (transfer none) (nullable): an #GSequenceIter pointing to the position of the
  *     first item found equal to @data according to @cmp_func and
  *     @cmp_data, or %NULL if no such item exists
  * Since: 2.28
@@ -26131,7 +26142,7 @@
  * you want to add a large amount of data, call g_sequence_sort() after
  * doing unsorted insertions.
  *
- * Returns: an #GSequenceIter pointing to the position of
+ * Returns: (transfer none) (nullable): an #GSequenceIter pointing to the position of
  *     the first item found equal to @data according to @cmp_func
  *     and @cmp_data, or %NULL if no such item exists
  * Since: 2.28
@@ -26180,7 +26191,7 @@
  * be called on all items when the sequence is destroyed and on items that
  * are removed from the sequence.
  *
- * Returns: a new #GSequence
+ * Returns: (transfer full): a new #GSequence
  * Since: 2.14
  */
 
@@ -26192,7 +26203,7 @@
  *
  * Adds a new item to the front of @seq
  *
- * Returns: an iterator pointing to the new item
+ * Returns: (transfer none): an iterator pointing to the new item
  * Since: 2.14
  */
 
@@ -26209,7 +26220,7 @@
  * The @begin and @end iterators must both point to the same sequence
  * and @begin must come before or be equal to @end in the sequence.
  *
- * Returns: a #GSequenceIter pointing somewhere in the
+ * Returns: (transfer none): a #GSequenceIter pointing somewhere in the
  *    (@begin, @end) range
  * Since: 2.14
  */
@@ -26267,7 +26278,7 @@
  * you want to add a large amount of data, call g_sequence_sort() after
  * doing unsorted insertions.
  *
- * Returns: an #GSequenceIter pointing to the position where @data
+ * Returns: (transfer none): an #GSequenceIter pointing to the position where @data
  *     would have been inserted according to @cmp_func and @cmp_data
  * Since: 2.14
  */
@@ -26297,7 +26308,7 @@
  * you want to add a large amount of data, call g_sequence_sort() after
  * doing unsorted insertions.
  *
- * Returns: a #GSequenceIter pointing to the position in @seq
+ * Returns: (transfer none): a #GSequenceIter pointing to the position in @seq
  *     where @data would have been inserted according to @iter_cmp
  *     and @cmp_data
  * Since: 2.14
