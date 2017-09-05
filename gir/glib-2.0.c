@@ -8568,6 +8568,10 @@
  * If array elements contain dynamically-allocated memory, they should
  * be freed separately.
  *
+ * This function is not thread-safe. If using a #GArray from multiple
+ * threads, use only the atomic g_array_ref() and g_array_unref()
+ * functions.
+ *
  * Returns: the element data if @free_segment is %FALSE, otherwise
  *     %NULL. The element data should be freed using g_free().
  */
@@ -8689,7 +8693,7 @@
  * @array: A #GArray
  *
  * Atomically increments the reference count of @array by one.
- * This function is MT-safe and may be called from any thread.
+ * This function is thread-safe and may be called from any thread.
  *
  * Returns: The passed in #GArray
  * Since: 2.22
@@ -8822,7 +8826,7 @@
  *
  * Atomically decrements the reference count of @array by one. If the
  * reference count drops to 0, all memory allocated by the array is
- * released. This function is MT-safe and may be called from any
+ * released. This function is thread-safe and may be called from any
  * thread.
  *
  * Since: 2.22
@@ -23472,6 +23476,10 @@
  * be freed separately if @free_seg is %TRUE and no #GDestroyNotify
  * function has been set for @array.
  *
+ * This function is not thread-safe. If using a #GPtrArray from multiple
+ * threads, use only the atomic g_ptr_array_ref() and g_ptr_array_unref()
+ * functions.
+ *
  * Returns: the pointer array if @free_seg is %FALSE, otherwise %NULL.
  *     The pointer array should be freed using g_free().
  */
@@ -23721,7 +23729,7 @@
  * Atomically decrements the reference count of @array by one. If the
  * reference count drops to 0, the effect is the same as calling
  * g_ptr_array_free() with @free_segment set to %TRUE. This function
- * is MT-safe and may be called from any thread.
+ * is thread-safe and may be called from any thread.
  *
  * Since: 2.22
  */
