@@ -242,7 +242,7 @@
  * GDataForeachFunc:
  * @key_id: the #GQuark id to identifying the data element.
  * @data: the data element.
- * @user_data: user data passed to g_dataset_foreach().
+ * @user_data: (closure): user data passed to g_dataset_foreach().
  *
  * Specifies the type of function passed to g_dataset_foreach(). It is
  * called with each #GQuark id and associated data element, together
@@ -371,7 +371,8 @@
 /**
  * GDuplicateFunc:
  * @data: the data to duplicate
- * @user_data: user data that was specified in g_datalist_id_dup_data()
+ * @user_data: (closure): user data that was specified in
+ *             g_datalist_id_dup_data()
  *
  * The type of functions that are used to 'duplicate' an object.
  * What this means depends on the context, it could just be
@@ -6024,12 +6025,21 @@
  * @title: File Utilities
  * @short_description: various file-related functions
  *
+ * Do not use these APIs unless you are porting a POSIX application to Windows.
+ * A more high-level file access API is provided as GIO — see the documentation
+ * for #GFile.
+ *
  * There is a group of functions which wrap the common POSIX functions
  * dealing with filenames (g_open(), g_rename(), g_mkdir(), g_stat(),
  * g_unlink(), g_remove(), g_fopen(), g_freopen()). The point of these
  * wrappers is to make it possible to handle file names with any Unicode
  * characters in them on Windows without having to use ifdefs and the
  * wide character API in the application code.
+ *
+ * On some Unix systems, these APIs may be defined as identical to their POSIX
+ * counterparts. For this reason, you must check for and include the necessary
+ * header files (such as `fcntl.h`) before using functions like g_creat(). You
+ * must also define the relevant feature test macros.
  *
  * The pathname argument should be in the GLib file name encoding.
  * On POSIX this is the actual on-disk encoding which might correspond
@@ -7322,7 +7332,7 @@
  *  * Color output needed to be supported on the terminal, to make reading
  *    through logs easier.
  *
- * ## Using Structured Logging
+ * ## Using Structured Logging ## {#using-structured-logging}
  *
  * To use structured logging (rather than the old-style logging), either use
  * the g_log_structured() and g_log_structured_array() functions; or define
@@ -7332,7 +7342,7 @@
  * You do not need to define `G_LOG_USE_STRUCTURED` to use g_log_structured(),
  * but it is a good idea to avoid confusion.
  *
- * ## Log Domains
+ * ## Log Domains ## {#log-domains}
  *
  * Log domains may be used to broadly split up the origins of log messages.
  * Typically, there are one or a few log domains per application or library.
@@ -7344,7 +7354,7 @@
  * application or library name, optionally followed by a hyphen and a sub-domain
  * name. For example, `bloatpad` or `bloatpad-io`.
  *
- * ## Debug Message Output
+ * ## Debug Message Output ## {#debug-message-output}
  *
  * The default log functions (g_log_default_handler() for the old-style API and
  * g_log_writer_default() for the structured API) both drop debug and
@@ -7357,7 +7367,7 @@
  * so that developers can re-use the same debugging techniques and tools across
  * projects.
  *
- * ## Testing for Messages
+ * ## Testing for Messages ## {#testing-for-messages}
  *
  * With the old g_log() API, g_test_expect_message() and
  * g_test_assert_expected_messages() could be used in simple cases to check
@@ -10567,10 +10577,10 @@
 
 
 /**
- * g_base64_decode_step:
+ * g_base64_decode_step: (skip)
  * @in: (array length=len) (element-type guint8): binary input data
  * @len: max length of @in data to decode
- * @out: (out) (array) (element-type guint8): output buffer
+ * @out: (out caller-allocates) (array) (element-type guint8): output buffer
  * @state: (inout): Saved state between steps, initialize to 0
  * @save: (inout): Saved state between steps, initialize to 0
  *
@@ -11193,7 +11203,7 @@
 
 
 /**
- * g_bookmark_file_new:
+ * g_bookmark_file_new: (constructor)
  *
  * Creates a new empty #GBookmarkFile object.
  *
@@ -12652,7 +12662,7 @@
 
 
 /**
- * g_convert_with_iconv:
+ * g_convert_with_iconv: (skip)
  * @str: the string to convert
  * @len: the length of the string in bytes, or -1 if the string is
  *                 nul-terminated (Note that some encodings may allow nul
@@ -12750,7 +12760,7 @@
 
 
 /**
- * g_datalist_clear:
+ * g_datalist_clear: (skip)
  * @datalist: a datalist.
  *
  * Frees all the data elements of the datalist.
@@ -12762,8 +12772,8 @@
 /**
  * g_datalist_foreach:
  * @datalist: a datalist.
- * @func: the function to call for each data element.
- * @user_data: user data to pass to the function.
+ * @func: (scope call): the function to call for each data element.
+ * @user_data: (closure): user data to pass to the function.
  *
  * Calls the given function for each data element of the datalist. The
  * function is called with each data element's #GQuark id and data,
@@ -12782,7 +12792,8 @@
  * Gets a data element, using its string identifier. This is slower than
  * g_datalist_id_get_data() because it compares strings.
  *
- * Returns: the data element, or %NULL if it is not found.
+ * Returns: (transfer none) (nullable): the data element, or %NULL if it
+ *          is not found.
  */
 
 
@@ -12799,11 +12810,11 @@
 
 
 /**
- * g_datalist_id_dup_data:
+ * g_datalist_id_dup_data: (skip)
  * @datalist: location of a datalist
  * @key_id: the #GQuark identifying a data element
- * @dup_func: (nullable): function to duplicate the old value
- * @user_data: (nullable): passed as user_data to @dup_func
+ * @dup_func: (nullable) (scope call): function to duplicate the old value
+ * @user_data: (closure): passed as user_data to @dup_func
  *
  * This is a variant of g_datalist_id_get_data() which
  * returns a 'duplicate' of the value. @dup_func defines the
@@ -12819,7 +12830,7 @@
  * This function can be useful to avoid races when multiple
  * threads are using the same datalist and the same key.
  *
- * Returns: the result of calling @dup_func on the value
+ * Returns: (nullable): the result of calling @dup_func on the value
  *     associated with @key_id in @datalist, or %NULL if not set.
  *     If @dup_func is %NULL, the value is returned unmodified.
  * Since: 2.34
@@ -12833,7 +12844,8 @@
  *
  * Retrieves the data element corresponding to @key_id.
  *
- * Returns: the data element, or %NULL if it is not found.
+ * Returns: (transfer none) (nullable): the data element, or %NULL if
+ *          it is not found.
  */
 
 
@@ -12847,25 +12859,26 @@
 
 
 /**
- * g_datalist_id_remove_no_notify:
+ * g_datalist_id_remove_no_notify: (skip)
  * @datalist: a datalist.
  * @key_id: the #GQuark identifying a data element.
  *
  * Removes an element, without calling its destroy notification
  * function.
  *
- * Returns: the data previously stored at @key_id, or %NULL if none.
+ * Returns: (nullable): the data previously stored at @key_id,
+ *          or %NULL if none.
  */
 
 
 /**
- * g_datalist_id_replace_data:
+ * g_datalist_id_replace_data: (skip)
  * @datalist: location of a datalist
  * @key_id: the #GQuark identifying a data element
  * @oldval: (nullable): the old value to compare against
  * @newval: (nullable): the new value to replace it with
  * @destroy: (nullable): destroy notify for the new value
- * @old_destroy: (nullable): destroy notify for the existing value
+ * @old_destroy: (out) (optional): destroy notify for the existing value
  *
  * Compares the member that is associated with @key_id in
  * @datalist to @oldval, and if they are the same, replace
@@ -12901,12 +12914,12 @@
 
 
 /**
- * g_datalist_id_set_data_full:
+ * g_datalist_id_set_data_full: (skip)
  * @datalist: a datalist.
  * @key_id: the #GQuark to identify the data element.
  * @data: (nullable): the data element or %NULL to remove any previous element
  *        corresponding to @key_id.
- * @destroy_func: the function to call when the data element is
+ * @destroy_func: (nullable): the function to call when the data element is
  *                removed. This function will be called with the data
  *                element and can be used to free any memory allocated
  *                for it. If @data is %NULL, then @destroy_func must
@@ -12920,7 +12933,7 @@
 
 
 /**
- * g_datalist_init:
+ * g_datalist_init: (skip)
  * @datalist: a pointer to a pointer to a datalist.
  *
  * Resets the datalist to %NULL. It does not free any memory or call
@@ -12939,7 +12952,7 @@
 
 
 /**
- * g_datalist_remove_no_notify:
+ * g_datalist_remove_no_notify: (skip)
  * @dl: a datalist.
  * @k: the string identifying the data element.
  *
@@ -12959,13 +12972,13 @@
 
 
 /**
- * g_datalist_set_data_full:
+ * g_datalist_set_data_full: (skip)
  * @dl: a datalist.
  * @k: the string to identify the data element.
  * @d: (nullable): the data element, or %NULL to remove any previous element
  *     corresponding to @k.
- * @f: the function to call when the data element is removed. This
- *     function will be called with the data element and can be used to
+ * @f: (nullable): the function to call when the data element is removed.
+ *     This function will be called with the data element and can be used to
  *     free any memory allocated for it. If @d is %NULL, then @f must
  *     also be %NULL.
  *
@@ -13021,8 +13034,8 @@
 /**
  * g_dataset_foreach:
  * @dataset_location: (not nullable): the location identifying the dataset.
- * @func: the function to call for each data element.
- * @user_data: user data to pass to the function.
+ * @func: (scope call): the function to call for each data element.
+ * @user_data: (closure): user data to pass to the function.
  *
  * Calls the given function for each data element which is associated
  * with the given location. Note that this function is NOT thread-safe.
@@ -13038,8 +13051,8 @@
  *
  * Gets the data element corresponding to a string.
  *
- * Returns: the data element corresponding to the string, or %NULL if
- *          it is not found.
+ * Returns: (transfer none) (nullable): the data element corresponding to
+ *          the string, or %NULL if it is not found.
  */
 
 
@@ -13050,8 +13063,8 @@
  *
  * Gets the data element corresponding to a #GQuark.
  *
- * Returns: the data element corresponding to the #GQuark, or %NULL if
- *          it is not found.
+ * Returns: (transfer none) (nullable): the data element corresponding to
+ *          the #GQuark, or %NULL if it is not found.
  */
 
 
@@ -13066,14 +13079,15 @@
 
 
 /**
- * g_dataset_id_remove_no_notify:
+ * g_dataset_id_remove_no_notify: (skip)
  * @dataset_location: (not nullable): the location identifying the dataset.
  * @key_id: the #GQuark ID identifying the data element.
  *
  * Removes an element, without calling its destroy notification
  * function.
  *
- * Returns: the data previously stored at @key_id, or %NULL if none.
+ * Returns: (nullable): the data previously stored at @key_id,
+ *          or %NULL if none.
  */
 
 
@@ -13090,7 +13104,7 @@
 
 
 /**
- * g_dataset_id_set_data_full:
+ * g_dataset_id_set_data_full: (skip)
  * @dataset_location: (not nullable): the location identifying the dataset.
  * @key_id: the #GQuark id to identify the data element.
  * @data: the data element.
@@ -13117,7 +13131,7 @@
 
 
 /**
- * g_dataset_remove_no_notify:
+ * g_dataset_remove_no_notify: (skip)
  * @l: the location identifying the dataset.
  * @k: the string identifying the data element.
  *
@@ -13136,7 +13150,7 @@
 
 
 /**
- * g_dataset_set_data_full:
+ * g_dataset_set_data_full: (skip)
  * @l: the location identifying the dataset.
  * @k: the string to identify the data element.
  * @d: the data element.
@@ -14221,6 +14235,53 @@
  *
  * Returns: a new #GDateTime, or %NULL
  * Since: 2.26
+ */
+
+
+/**
+ * g_date_time_new_from_iso8601:
+ * @text: an ISO 8601 formatted time string.
+ * @default_tz: (nullable): a #GTimeZone to use if the text doesn't contain a
+ *                          timezone, or %NULL.
+ *
+ * Creates a #GDateTime corresponding to the given
+ * [ISO 8601 formatted string](https://en.wikipedia.org/wiki/ISO_8601)
+ * @text. ISO 8601 strings of the form <date><sep><time><tz> are supported.
+ *
+ * <sep> is the separator and can be either 'T', 't' or ' '.
+ *
+ * <date> is in the form:
+ *
+ * - `YYYY-MM-DD` - Year/month/day, e.g. 2016-08-24.
+ * - `YYYYMMDD` - Same as above without dividers.
+ * - `YYYY-DDD` - Ordinal day where DDD is from 001 to 366, e.g. 2016-237.
+ * - `YYYYDDD` - Same as above without dividers.
+ * - `YYYY-Www-D` - Week day where ww is from 01 to 52 and D from 1-7,
+ *   e.g. 2016-W34-3.
+ * - `YYYYWwwD` - Same as above without dividers.
+ *
+ * <time> is in the form:
+ *
+ * - `hh:mm:ss(.sss)` - Hours, minutes, seconds (subseconds), e.g. 22:10:42.123.
+ * - `hhmmss(.sss)` - Same as above without dividers.
+ *
+ * <tz> is an optional timezone suffix of the form:
+ *
+ * - `Z` - UTC.
+ * - `+hh:mm` or `-hh:mm` - Offset from UTC in hours and minutes, e.g. +12:00.
+ * - `+hh` or `-hh` - Offset from UTC in hours, e.g. +12.
+ *
+ * If the timezone is not provided in @text it must be provided in @default_tz
+ * (this field is otherwise ignored).
+ *
+ * This call can fail (returning %NULL) if @text is not a valid ISO 8601
+ * formatted string.
+ *
+ * You should release the return value by calling g_date_time_unref()
+ * when you are done with it.
+ *
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
+ * Since: 2.56
  */
 
 
@@ -17136,7 +17197,7 @@
 
 
 /**
- * g_iconv:
+ * g_iconv: (skip)
  * @converter: conversion descriptor from g_iconv_open()
  * @inbuf: bytes to convert
  * @inbytes_left: inout parameter, bytes remaining to convert in @inbuf
@@ -17155,7 +17216,7 @@
 
 
 /**
- * g_iconv_close:
+ * g_iconv_close: (skip)
  * @converter: a conversion descriptor from g_iconv_open()
  *
  * Same as the standard UNIX routine iconv_close(), but
@@ -17172,7 +17233,7 @@
 
 
 /**
- * g_iconv_open:
+ * g_iconv_open: (skip)
  * @to_codeset: destination codeset
  * @from_codeset: source codeset
  *
@@ -19679,7 +19740,7 @@
  * @user_data: data passed to the log handler
  * @destroy: destroy notify for @user_data, or %NULL
  *
- * Like g_log_sets_handler(), but takes a destroy notify for the @user_data.
+ * Like g_log_set_handler(), but takes a destroy notify for the @user_data.
  *
  * This has no effect if structured logging is enabled; see
  * [Using Structured Logging][using-structured-logging].
@@ -20232,7 +20293,7 @@
  * invocation of @function.
  *
  * This function is the same as g_main_context_invoke() except that it
- * lets you specify the priority incase @function ends up being
+ * lets you specify the priority in case @function ends up being
  * scheduled as an idle and also lets you give a #GDestroyNotify for @data.
  *
  * @notify should not assume that it is called from any particular
@@ -21659,7 +21720,8 @@
  * in GLib and GIO, because those use the GLib allocators before main is
  * reached. Therefore this function is now deprecated and is just a stub.
  *
- * Deprecated: 2.46: Use other memory profiling tools instead
+ * Deprecated: 2.46: This function now does nothing. Use other memory
+ * profiling tools instead
  */
 
 

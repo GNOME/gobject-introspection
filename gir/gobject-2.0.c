@@ -2710,7 +2710,7 @@
 
 
 /**
- * g_object_dup_data:
+ * g_object_dup_data: (skip)
  * @object: the #GObject to store user data on
  * @key: a string, naming the user data pointer
  * @dup_func: (nullable): function to dup the value
@@ -2740,7 +2740,7 @@
 
 
 /**
- * g_object_dup_qdata:
+ * g_object_dup_qdata: (skip)
  * @object: the #GObject to store user data on
  * @quark: a #GQuark, naming the user data pointer
  * @dup_func: (nullable): function to dup the value
@@ -2839,7 +2839,8 @@
  *
  * Gets a named field from the objects table of associations (see g_object_set_data()).
  *
- * Returns: (transfer none): the data if found, or %NULL if no such data exists.
+ * Returns: (transfer none) (nullable): the data if found,
+ *          or %NULL if no such data exists.
  */
 
 
@@ -2869,7 +2870,7 @@
  * This function gets back user data pointers stored via
  * g_object_set_qdata().
  *
- * Returns: (transfer none): The user data pointer set, or %NULL
+ * Returns: (transfer none) (nullable): The user data pointer set, or %NULL
  */
 
 
@@ -3175,13 +3176,13 @@
 
 
 /**
- * g_object_replace_data:
+ * g_object_replace_data: (skip)
  * @object: the #GObject to store user data on
  * @key: a string, naming the user data pointer
  * @oldval: (nullable): the old value to compare against
  * @newval: (nullable): the new value
  * @destroy: (nullable): a destroy notify for the new value
- * @old_destroy: (nullable): destroy notify for the existing value
+ * @old_destroy: (out) (optional): destroy notify for the existing value
  *
  * Compares the user data for the key @key on @object with
  * @oldval, and if they are the same, replaces @oldval with
@@ -3204,13 +3205,13 @@
 
 
 /**
- * g_object_replace_qdata:
+ * g_object_replace_qdata: (skip)
  * @object: the #GObject to store user data on
  * @quark: a #GQuark, naming the user data pointer
  * @oldval: (nullable): the old value to compare against
  * @newval: (nullable): the new value
  * @destroy: (nullable): a destroy notify for the new value
- * @old_destroy: (nullable): destroy notify for the existing value
+ * @old_destroy: (out) (optional): destroy notify for the existing value
  *
  * Compares the user data for the key @quark on @object with
  * @oldval, and if they are the same, replaces @oldval with
@@ -3262,7 +3263,7 @@
  * g_object_set_data:
  * @object: #GObject containing the associations.
  * @key: name of the key
- * @data: data to associate with that key
+ * @data: (nullable): data to associate with that key
  *
  * Each object carries around a table of associations from
  * strings to pointers.  This function lets you set an association.
@@ -3276,8 +3277,8 @@
  * g_object_set_data_full: (skip)
  * @object: #GObject containing the associations
  * @key: name of the key
- * @data: data to associate with that key
- * @destroy: function to call when the association is destroyed
+ * @data: (nullable): data to associate with that key
+ * @destroy: (nullable): function to call when the association is destroyed
  *
  * Like g_object_set_data() except it adds notification
  * for when the association is destroyed, either by setting it
@@ -3301,7 +3302,7 @@
  * g_object_set_qdata: (skip)
  * @object: The GObject to set store a user data pointer
  * @quark: A #GQuark, naming the user data pointer
- * @data: An opaque user data pointer
+ * @data: (nullable): An opaque user data pointer
  *
  * This sets an opaque, named pointer on an object.
  * The name is specified through a #GQuark (retrived e.g. via
@@ -3318,8 +3319,8 @@
  * g_object_set_qdata_full: (skip)
  * @object: The GObject to set store a user data pointer
  * @quark: A #GQuark, naming the user data pointer
- * @data: An opaque user data pointer
- * @destroy: Function to invoke with @data as argument, when @data
+ * @data: (nullable): An opaque user data pointer
+ * @destroy: (nullable): Function to invoke with @data as argument, when @data
  *           needs to be freed
  *
  * This function works like g_object_set_qdata(), but in addition,
@@ -3365,7 +3366,8 @@
  * Remove a specified datum from the object's data associations,
  * without invoking the association's destroy handler.
  *
- * Returns: (transfer full): the data if found, or %NULL if no such data exists.
+ * Returns: (transfer full) (nullable): the data if found, or %NULL
+ *          if no such data exists.
  */
 
 
@@ -3410,7 +3412,7 @@
  * and thus the partial string list would have been freed upon
  * g_object_set_qdata_full().
  *
- * Returns: (transfer full): The user data pointer set, or %NULL
+ * Returns: (transfer full) (nullable): The user data pointer set, or %NULL
  */
 
 
@@ -6075,7 +6077,7 @@
 
 
 /**
- * g_value_array_free:
+ * g_value_array_free: (skip)
  * @value_array: #GValueArray to free
  *
  * Free a #GValueArray including its contents.

@@ -974,7 +974,8 @@
  * @object_proxy: The #GDBusObjectProxy on which an interface has properties that are changing.
  * @interface_proxy: The #GDBusProxy that has properties that are changing.
  * @changed_properties: A #GVariant containing the properties that changed.
- * @invalidated_properties: A %NULL terminated array of properties that was invalidated.
+ * @invalidated_properties: (array zero-terminated=1) (element-type utf8): A %NULL terminated
+ *   array of properties that were invalidated.
  *
  * Emitted when one or more D-Bus properties on proxy changes. The
  * local cache has already been updated when this signal fires. Note
@@ -1991,6 +1992,22 @@
 
 
 /**
+ * GListModelInterface::get_item:
+ * @list: a #GListModel
+ * @position: the position of the item to fetch
+ *
+ * Get the item at @position. If @position is greater than the number of
+ * items in @list, %NULL is returned.
+ *
+ * %NULL is never returned for an index that is smaller than the length
+ * of the list.  See g_list_model_get_n_items().
+ *
+ * Returns: (type GObject) (transfer full) (nullable): the object at @position.
+ * Since: 2.44
+ */
+
+
+/**
  * GListStore:
  *
  * #GListStore is an opaque data structure and can only be accessed
@@ -2795,7 +2812,7 @@
 
 
 /**
- * GSettings:context:
+ * GSettings:backend:
  *
  * The name of the context that the settings are stored in.
  */
@@ -13724,6 +13741,10 @@
  * calling only the 'shutdown' function before doing so.
  *
  * The hold count is ignored.
+ * Take care if your code has called g_application_hold() on the application and
+ * is therefore still expecting it to exist.
+ * (Note that you may have called g_application_hold() indirectly, for example
+ * through gtk_application_add_window().)
  *
  * The result of calling g_application_run() again after it returns is
  * unspecified.
@@ -17979,7 +18000,7 @@
  * g_dbus_error_register_error_domain:
  * @error_domain_quark_name: The error domain name.
  * @quark_volatile: A pointer where to store the #GQuark.
- * @entries: A pointer to @num_entries #GDBusErrorEntry struct items.
+ * @entries: (array length=num_entries): A pointer to @num_entries #GDBusErrorEntry struct items.
  * @num_entries: Number of items to register.
  *
  * Helper function for associating a #GError error domain with D-Bus error names.
@@ -21001,7 +21022,7 @@
  * @uris: (element-type utf8): List of URIs
  * @launch_context: (nullable): a #GAppLaunchContext
  * @spawn_flags: #GSpawnFlags, used for each process
- * @user_setup: (scope call) (nullable): a #GSpawnChildSetupFunc, used once
+ * @user_setup: (scope async) (nullable): a #GSpawnChildSetupFunc, used once
  *     for each process.
  * @user_setup_data: (closure user_setup) (nullable): User data for @user_setup
  * @pid_callback: (scope call) (nullable): Callback for child processes
@@ -28127,7 +28148,7 @@
  * %NULL is never returned for an index that is smaller than the length
  * of the list.  See g_list_model_get_n_items().
  *
- * Returns: (transfer full) (nullable) (type GObject): the item at @position.
+ * Returns: (transfer full) (nullable): the item at @position.
  * Since: 2.44
  */
 
@@ -30897,7 +30918,7 @@
 /**
  * g_output_stream_printf:
  * @stream: a #GOutputStream.
- * @bytes_written: (out): location to store the number of bytes that was
+ * @bytes_written: (out) (optional): location to store the number of bytes that was
  *     written to the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -30994,7 +31015,7 @@
 /**
  * g_output_stream_vprintf:
  * @stream: a #GOutputStream.
- * @bytes_written: (out): location to store the number of bytes that was
+ * @bytes_written: (out) (optional): location to store the number of bytes that was
  *     written to the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -31057,7 +31078,7 @@
  * @stream: a #GOutputStream.
  * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
- * @bytes_written: (out): location to store the number of bytes that was
+ * @bytes_written: (out) (optional): location to store the number of bytes that was
  *     written to the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -31120,7 +31141,7 @@
  * g_output_stream_write_all_finish:
  * @stream: a #GOutputStream
  * @result: a #GAsyncResult
- * @bytes_written: (out): location to store the number of bytes that was written to the stream
+ * @bytes_written: (out) (optional): location to store the number of bytes that was written to the stream
  * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes an asynchronous stream write operation started with
@@ -37997,7 +38018,7 @@
 
 
 /**
- * g_subprocess_launcher_set_child_setup:
+ * g_subprocess_launcher_set_child_setup: (skip)
  * @self: a #GSubprocessLauncher
  * @child_setup: a #GSpawnChildSetupFunc to use as the child setup function
  * @user_data: user data for @child_setup
@@ -38039,7 +38060,7 @@
 /**
  * g_subprocess_launcher_set_environ:
  * @self: a #GSubprocess
- * @env: (array zero-terminated=1): the replacement environment
+ * @env: (array zero-terminated=1) (transfer none): the replacement environment
  *
  * Replace the entire environment of processes launched from this
  * launcher with the given 'environ' variable.
@@ -39313,7 +39334,7 @@
  * Gets the #GType of @backend’s #GDtlsClientConnection implementation.
  *
  * Returns: the #GType of @backend’s #GDtlsClientConnection
- *   implementation.
+ *   implementation, or %G_TYPE_INVALID if this backend doesn’t support DTLS.
  * Since: 2.48
  */
 
@@ -39325,7 +39346,7 @@
  * Gets the #GType of @backend’s #GDtlsServerConnection implementation.
  *
  * Returns: the #GType of @backend’s #GDtlsServerConnection
- *   implementation.
+ *   implementation, or %G_TYPE_INVALID if this backend doesn’t support DTLS.
  * Since: 2.48
  */
 
@@ -40611,7 +40632,7 @@
 /**
  * g_tls_password_set_value:
  * @password: a #GTlsPassword object
- * @value: the new password value
+ * @value: (array length=length): the new password value
  * @length: the length of the password, or -1
  *
  * Set the value for this password. The @value will be copied by the password
@@ -40629,7 +40650,7 @@
 /**
  * g_tls_password_set_value_full: (virtual set_value)
  * @password: a #GTlsPassword object
- * @value: the value for the password
+ * @value: (array length=length): the value for the password
  * @length: the length of the password, or -1
  * @destroy: (nullable): a function to use to free the password.
  *
