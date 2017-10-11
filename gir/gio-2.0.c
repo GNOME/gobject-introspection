@@ -2162,8 +2162,11 @@
  * GMount::pre-unmount:
  * @mount: the object on which the signal is emitted
  *
- * This signal is emitted when the #GMount is about to be
+ * This signal may be emitted when the #GMount is about to be
  * unmounted.
+ *
+ * This signal depends on the backend and is only emitted if
+ * GIO was used to unmount.
  *
  * Since: 2.22
  */
@@ -4105,7 +4108,10 @@
  * @volume_monitor: The volume monitor emitting the signal.
  * @mount: a #GMount that is being unmounted.
  *
- * Emitted when a mount is about to be removed.
+ * May be emitted when a mount is about to be removed.
+ *
+ * This signal depends on the backend and is only emitted if
+ * GIO was used to unmount.
  */
 
 
@@ -8298,7 +8304,7 @@
  *   ...
  *
  *   plugin->schema_source =
- *     g_settings_new_schema_source_from_directory (dir,
+ *     g_settings_schema_source_new_from_directory (dir,
  *       g_settings_schema_source_get_default (), FALSE, NULL);
  *
  *   ...
@@ -14269,8 +14275,8 @@
  *
  * Gets the source object from a #GAsyncResult.
  *
- * Returns: (transfer full): a new reference to the source object for the @res,
- *    or %NULL if there is none.
+ * Returns: (transfer full) (nullable): a new reference to the source
+ *    object for the @res, or %NULL if there is none.
  */
 
 
@@ -24433,9 +24439,11 @@
  * g_file_load_partial_contents_async: (skip)
  * @file: input #GFile
  * @cancellable: optional #GCancellable object, %NULL to ignore
- * @read_more_callback: a #GFileReadMoreCallback to receive partial data
+ * @read_more_callback: (scope call) (closure user_data): a
+ *     #GFileReadMoreCallback to receive partial data
  *     and to specify whether further data should be read
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback to call
+ *     when the request is satisfied
  * @user_data: the data to pass to the callback functions
  *
  * Reads the partial contents of a file. A #GFileReadMoreCallback should
@@ -25853,7 +25861,7 @@
  *
  * Sets an attribute in the file with attribute name @attribute to @value.
  *
- * Some attributes can be unset by setting @attribute to
+ * Some attributes can be unset by setting @type to
  * %G_FILE_ATTRIBUTE_TYPE_INVALID and @value_p to %NULL.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
@@ -33961,7 +33969,7 @@
  * lookups performed against the default source should probably be done
  * recursively.
  *
- * Returns: (transfer none): the default schema source
+ * Returns: (transfer none) (nullable): the default schema source
  * Since: 2.32
  */
 
@@ -36408,7 +36416,7 @@
  * @socket: a #GSocket.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Try to get the remove address of a connected socket. This is only
+ * Try to get the remote address of a connected socket. This is only
  * useful for connection oriented sockets that have been connected.
  *
  * Returns: (transfer full): a #GSocketAddress or %NULL on error.
@@ -38582,7 +38590,7 @@
  * Gets the source object from @task. Like
  * g_async_result_get_source_object(), but does not ref the object.
  *
- * Returns: (transfer none) (type GObject): @task's source object, or %NULL
+ * Returns: (transfer none) (nullable) (type GObject): @task's source object, or %NULL
  * Since: 2.36
  */
 

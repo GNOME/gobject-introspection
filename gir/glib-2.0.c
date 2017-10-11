@@ -4182,19 +4182,27 @@
 /**
  * G_LOG_DOMAIN:
  *
- * Defines the log domain.
+ * Defines the log domain. See [Log Domains](#log-domains).
  *
  * Libraries should define this so that any messages
  * which they log can be differentiated from messages from other
  * libraries and application code. But be careful not to define
  * it in any public header files.
  *
- * For example, GTK+ uses this in its Makefile.am:
+ * Log domains must be unique, and it is recommended that they are the
+ * application or library name, optionally followed by a hyphen and a sub-domain
+ * name. For example, `bloatpad` or `bloatpad-io`.
+ *
+ * If undefined, it defaults to the default %NULL (or `""`) log domain; this is
+ * not advisable, as it cannot be filtered against using the `G_MESSAGES_DEBUG`
+ * environment variable.
+ *
+ * For example, GTK+ uses this in its `Makefile.am`:
  * |[
  * AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Gtk\"
  * ]|
  *
- * Applications can choose to leave it as the default %NULL (or "")
+ * Applications can choose to leave it as the default %NULL (or `""`)
  * domain. However, defining the domain offers the same advantages as
  * above.
  */
@@ -6820,7 +6828,7 @@
  * are optional.
  * Space before and after the '=' character are ignored. Newline, tab,
  * carriage return and backslash characters in value are escaped as \n,
- * \t, \r, and \\, respectively. To preserve leading spaces in values,
+ * \t, \r, and \\\\, respectively. To preserve leading spaces in values,
  * these can also be escaped as \s.
  *
  * Key files can store strings (possibly with localized variants), integers,
@@ -7891,7 +7899,7 @@
  * duplicating, and manipulating strings.
  *
  * Note that the functions g_printf(), g_fprintf(), g_sprintf(),
- * g_snprintf(), g_vprintf(), g_vfprintf(), g_vsprintf() and g_vsnprintf()
+ * g_vprintf(), g_vfprintf(), g_vsprintf() and g_vasprintf()
  * are declared in the header `gprintf.h` which is not included in `glib.h`
  * (otherwise using `glib.h` would drag in `stdio.h`), so you'll have to
  * explicitly include `<glib/gprintf.h>` in order to use the GLib
@@ -7980,10 +7988,6 @@
  * variants over plain g_assert() is that the assertion messages can be
  * more elaborate, and include the values of the compared entities.
  *
- * GLib ships with two utilities called [gtester][gtester] and
- * [gtester-report][gtester-report] to facilitate running tests and producing
- * nicely formatted test reports.
- *
  * A full example of creating a test suite with two tests using fixtures:
  * |[<!-- language="C" -->
  * #include <glib.h>
@@ -8047,6 +8051,78 @@
  *   return g_test_run ();
  * }
  * ]|
+ *
+ * ### Integrating GTest in your project
+ *
+ * If you are using the [Meson](http://mesonbuild.com) build system, you will
+ * typically use the provided `test()` primitive to call the test binaries,
+ * e.g.:
+ *
+ * |[<!-- language="plain" -->
+ *   test(
+ *     'foo',
+ *     executable('foo', 'foo.c', dependencies: deps),
+ *     env: [
+ *       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+ *       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+ *     ],
+ *   )
+ *
+ *   test(
+ *     'bar',
+ *     executable('bar', 'bar.c', dependencies: deps),
+ *     env: [
+ *       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+ *       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+ *     ],
+ *   )
+ * ]|
+ *
+ * If you are using Autotools, you're strongly encouraged to use the Automake
+ * [TAP](https://testanything.org/) harness; GLib provides template files for
+ * easily integrating with it:
+ *
+ *   - [glib-tap.mk](https://git.gnome.org/browse/glib/tree/glib-tap.mk)
+ *   - [tap-test](https://git.gnome.org/browse/glib/tree/tap-test)
+ *   - [tap-driver.sh](https://git.gnome.org/browse/glib/tree/tap-driver.sh)
+ *
+ * You can copy these files in your own project's root directory, and then
+ * set up your `Makefile.am` file to reference them, for instance:
+ *
+ * |[<!-- language="plain" -->
+ * include $(top_srcdir)/glib-tap.mk
+ *
+ * # test binaries
+ * test_programs = \
+ *   foo \
+ *   bar
+ *
+ * # data distributed in the tarball
+ * dist_test_data = \
+ *   foo.data.txt \
+ *   bar.data.txt
+ *
+ * # data not distributed in the tarball
+ * test_data = \
+ *   blah.data.txt
+ * ]|
+ *
+ * Make sure to distribute the TAP files, using something like the following
+ * in your top-level `Makefile.am`:
+ *
+ * |[<!-- language="plain" -->
+ * EXTRA_DIST += \
+ *   tap-driver.sh \
+ *   tap-test
+ * ]|
+ *
+ * `glib-tap.mk` will be distributed implicitly due to being included in a
+ * `Makefile.am`. All three files should be added to version control.
+ *
+ * If you don't have access to the Autotools TAP harness, you can use the
+ * [gtester][gtester] and [gtester-report][gtester-report] tools, and use
+ * the [glib.mk](https://git.gnome.org/browse/glib/tree/glib.mk) Automake
+ * template provided by GLib.
  */
 
 
@@ -8365,18 +8441,20 @@
  *     and portability
  *
  * GLib defines a number of commonly used types, which can be divided
- * into 4 groups:
+ * into several groups:
  * - New types which are not part of standard C (but are defined in
- *   various C standard library header files) - #gboolean, #gsize,
- *   #gssize, #goffset, #gintptr, #guintptr.
+ *   various C standard library header files) — #gboolean, #gssize.
  * - Integer types which are guaranteed to be the same size across
- *   all platforms - #gint8, #guint8, #gint16, #guint16, #gint32,
+ *   all platforms — #gint8, #guint8, #gint16, #guint16, #gint32,
  *   #guint32, #gint64, #guint64.
  * - Types which are easier to use than their standard C counterparts -
  *   #gpointer, #gconstpointer, #guchar, #guint, #gushort, #gulong.
  * - Types which correspond exactly to standard C types, but are
- *   included for completeness - #gchar, #gint, #gshort, #glong,
+ *   included for completeness — #gchar, #gint, #gshort, #glong,
  *   #gfloat, #gdouble.
+ * - Types which correspond exactly to standard C99 types, but are available
+ *   to use even if your compiler does not support C99 — #gsize, #goffset,
+ *   #gintptr, #guintptr.
  *
  * GLib also defines macros for the limits of some of the standard
  * integer and floating point types, as well as macros for suitable
@@ -12749,6 +12827,9 @@
  * setting the `G_DEBUG` environment variable (see
  * [Running GLib Applications](glib-running.html)).
  *
+ * The message should typically *not* be translated to the
+ * user's language.
+ *
  * If g_log_default_handler() is used as the log handler function, a new-line
  * character will automatically be appended to @..., and need not be entered
  * manually.
@@ -13235,6 +13316,19 @@
  *
  * Returns: 0 for equal, less than zero if @lhs is less than @rhs,
  *     greater than zero if @lhs is greater than @rhs
+ */
+
+
+/**
+ * g_date_copy:
+ * @date: a #GDate to copy
+ *
+ * Copies a GDate to a newly-allocated GDate. If the input was invalid
+ * (as determined by g_date_valid()), the invalid state will be copied
+ * as is into the new object.
+ *
+ * Returns: (transfer full): a newly-allocated #GDate initialized from @date
+ * Since: 2.56
  */
 
 
@@ -14681,7 +14775,8 @@
  * @...: format string, followed by parameters to insert
  *     into the format string (as with printf())
  *
- * A convenience function/macro to log a debug message.
+ * A convenience function/macro to log a debug message. The message should
+ * typically *not* be translated to the user's language.
  *
  * If g_log_default_handler() is used as the log handler function, a new-line
  * character will automatically be appended to @..., and need not be entered
@@ -15034,7 +15129,8 @@
  * @...: format string, followed by parameters to insert
  *     into the format string (as with printf())
  *
- * A convenience function/macro to log an error message.
+ * A convenience function/macro to log an error message. The message should
+ * typically *not* be translated to the user's language.
  *
  * This is not intended for end user error reporting. Use of #GError is
  * preferred for that instead, as it allows calling functions to perform actions
@@ -15583,6 +15679,8 @@
  *
  * An implementation of the standard fprintf() function which supports
  * positional parameters, as specified in the Single Unix Specification.
+ *
+ * `glib/gprintf.h` must be explicitly included in order to use this function.
  *
  * Returns: the number of bytes printed.
  * Since: 2.2
@@ -17980,8 +18078,8 @@
  * same C runtime as GLib uses, which is msvcrt.dll. Note that in
  * current Microsoft compilers it is near impossible to convince it to
  * build code that would use msvcrt.dll. The last Microsoft compiler
- * version that supported using msvcrt.dll as the C runtime was version
- * 6. The GNU compiler and toolchain for Windows, also known as Mingw,
+ * version that supported using msvcrt.dll as the C runtime was version 6.
+ * The GNU compiler and toolchain for Windows, also known as Mingw,
  * fully supports msvcrt.dll.
  *
  * If you have created a #GIOChannel for a file descriptor and started
@@ -23107,7 +23205,7 @@
  * an absolute file name one that either begins with a directory
  * separator such as "\Users\tml" or begins with the root on a drive,
  * for example "C:\Windows". The first case also includes UNC paths
- * such as "\\myserver\docs\foo". In all cases, either slashes or
+ * such as "\\\\myserver\docs\foo". In all cases, either slashes or
  * backslashes are accepted.
  *
  * Note that a file name relative to the current drive root does not
@@ -23366,6 +23464,8 @@
  * As with the standard printf(), this does not automatically append a trailing
  * new-line character to the message, so typically @format should end with its
  * own new-line character.
+ *
+ * `glib/gprintf.h` must be explicitly included in order to use this function.
  *
  * Returns: the number of bytes printed.
  * Since: 2.2
@@ -25109,7 +25209,7 @@
  * to the captured subexpression with the given name. '\0' refers
  * to the complete match, but '\0' followed by a number is the octal
  * representation of a character. To include a literal '\' in the
- * replacement, write '\\'.
+ * replacement, write '\\\\'.
  *
  * There are also escapes that changes the case of the following text:
  *
@@ -26726,7 +26826,7 @@
  * @block_size: the number of bytes to allocate
  *
  * Allocates a block of memory from the slice allocator.
- * The block adress handed out can be expected to be aligned
+ * The block address handed out can be expected to be aligned
  * to at least 1 * sizeof (void*),
  * though in general slices are 2 * sizeof (void*) bytes aligned,
  * if a malloc() fallback implementation is used instead,
@@ -28418,6 +28518,8 @@
  *
  * Note that it is usually better to use g_snprintf(), to avoid the
  * risk of buffer overflow.
+ *
+ * `glib/gprintf.h` must be explicitly included in order to use this function.
  *
  * See also g_strdup_printf().
  *
@@ -37008,6 +37110,8 @@
  * string to hold the output, instead of putting the output in a buffer
  * you allocate in advance.
  *
+ * `glib/gprintf.h` must be explicitly included in order to use this function.
+ *
  * Returns: the number of bytes printed.
  * Since: 2.4
  */
@@ -37023,6 +37127,8 @@
  * An implementation of the standard fprintf() function which supports
  * positional parameters, as specified in the Single Unix Specification.
  *
+ * `glib/gprintf.h` must be explicitly included in order to use this function.
+ *
  * Returns: the number of bytes printed.
  * Since: 2.2
  */
@@ -37036,6 +37142,8 @@
  *
  * An implementation of the standard vprintf() function which supports
  * positional parameters, as specified in the Single Unix Specification.
+ *
+ * `glib/gprintf.h` must be explicitly included in order to use this function.
  *
  * Returns: the number of bytes printed.
  * Since: 2.2
@@ -37083,6 +37191,8 @@
  *
  * An implementation of the standard vsprintf() function which supports
  * positional parameters, as specified in the Single Unix Specification.
+ *
+ * `glib/gprintf.h` must be explicitly included in order to use this function.
  *
  * Returns: the number of bytes printed.
  * Since: 2.2
@@ -37173,7 +37283,8 @@
  * @...: format string, followed by parameters to insert
  *     into the format string (as with printf())
  *
- * A convenience function/macro to log a warning message.
+ * A convenience function/macro to log a warning message. The message should
+ * typically *not* be translated to the user's language.
  *
  * This is not intended for end user error reporting. Use of #GError is
  * preferred for that instead, as it allows calling functions to perform actions

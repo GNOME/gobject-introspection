@@ -1813,7 +1813,7 @@
  * Creates a new closure which invokes @callback_func with @user_data as
  * the last parameter.
  *
- * Returns: a new #GCClosure
+ * Returns: (transfer none): a floating reference to a new #GCClosure
  */
 
 
@@ -1856,7 +1856,7 @@
  * Creates a new closure which invokes @callback_func with @user_data as
  * the first parameter.
  *
- * Returns: (transfer full): a new #GCClosure
+ * Returns: (transfer none): a floating reference to a new #GCClosure
  */
 
 
@@ -2019,7 +2019,7 @@
  * }
  * ]|
  *
- * Returns: (transfer full): a newly allocated #GClosure
+ * Returns: (transfer none): a floating reference to a new #GClosure
  */
 
 
@@ -5027,7 +5027,7 @@
  * @struct_offset in the class structure of the interface or classed type
  * identified by @itype.
  *
- * Returns: a new #GCClosure
+ * Returns: (transfer none): a floating reference to a new #GCClosure
  */
 
 
