@@ -26,6 +26,10 @@ nmake -f gi-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstallR
     <Link>
       <AdditionalDependencies>gio-2.0.lib;gobject-2.0.lib;gmodule-2.0.lib;gthread-2.0.lib;glib-2.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(GlibEtcInstallRoot)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)|$(Platform)'=='11.0|x64'">/HIGHENTROPYVA %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)|$(Platform)'=='12.0|x64'">/HIGHENTROPYVA %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)|$(Platform)'=='14.0|x64'">/HIGHENTROPYVA %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(VisualStudioVersion)|$(Platform)'=='15.0|x64'">/HIGHENTROPYVA %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
