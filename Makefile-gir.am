@@ -18,8 +18,8 @@ EXTRA_DIST += $(STATIC_GIRSOURCES)
 gir/cairo-1.0.gir: gir/cairo-1.0.gir.in Makefile
 	[ -d $(@D) ] || $(mkdir_p) $(@D) ; \
 	sed \
-	-e s,%CAIRO_SHARED_LIBRARY%,$(CAIRO_SHARED_LIBRARY), \
-	-e s,%CAIRO_GIR_PACKAGE%,$(CAIRO_GIR_PACKAGE), \
+	-e s,\@CAIRO_SHARED_LIBRARY\@,$(CAIRO_SHARED_LIBRARY), \
+	-e s,\@CAIRO_GIR_PACKAGE\@,$(CAIRO_GIR_PACKAGE), \
 	< $< > $@.tmp && mv $@.tmp $@
 BUILT_SOURCES += gir/cairo-1.0.gir
 SUBSTITUTED_GIRSOURCES += gir/cairo-1.0.gir
@@ -47,10 +47,10 @@ if WITH_GLIBSRC
      GModule_2_0_gir_DOCSRC = $(GLIBSRC)/gmodule/*.c
      Gio_2_0_gir_DOCSRC = $(GLIBSRC)/gio/*.c
 else
-    GLib_2_0_gir_DOCSRC = 
-    GObject_2_0_gir_DOCSRC = 
-    GModule_2_0_gir_DOCSRC = 
-    Gio_2_0_gir_DOCSRC = 
+    GLib_2_0_gir_DOCSRC =
+    GObject_2_0_gir_DOCSRC =
+    GModule_2_0_gir_DOCSRC =
+    Gio_2_0_gir_DOCSRC =
 
 endif
 
