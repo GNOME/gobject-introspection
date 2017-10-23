@@ -62,5 +62,9 @@ if srcdir is not None:
 
 sys.path.insert(0, pylibdir)
 
+builddir = os.getenv('UNINSTALLED_INTROSPECTION_BUILDDIR', None)
+if builddir is not None:
+    sys.path.insert(0, os.path.join(builddir, 'giscanner'))
+
 from giscanner.@TOOL_MODULE@ import @TOOL_FUNCTION@
 sys.exit(@TOOL_FUNCTION@(sys.argv))

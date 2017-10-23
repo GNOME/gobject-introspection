@@ -1,0 +1,11 @@
+option('cairo', type: 'boolean',
+  description: 'Use cairo for tests'
+)
+
+option('doctool', type: 'boolean',
+  description: 'Install g-ir-doc-tool'
+)
+
+option('glib-src-dir', type: 'string',
+  description: 'Source directory for glib - needed to add docs to gir'
+)
