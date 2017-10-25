@@ -53,12 +53,18 @@ scannerlexer = custom_target('scannerlexer',
   command: [flex, '-o', '@OUTPUT@', '@INPUT@']
 )
 
+giscanner_args = []
+if not cc.has_header('unistd.h')
+  giscanner_args += '-DYY_NO_UNISTD_H'
+endif
+
 giscanner_lib = static_library('giscanner',
   sources: [
     'sourcescanner.c',
     scannerparser,
     scannerlexer,
   ],
+  c_args: giscanner_args,
   dependencies: gio_dep,
 )
 
