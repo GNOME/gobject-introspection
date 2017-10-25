@@ -31,7 +31,7 @@ configure_file(
 add_project_arguments([
     '-I' + meson.build_root(),
     '-DHAVE_CONFIG_H',
-  ] language: 'c',
+  ], language: 'c',
 )
 
 gi_hidden_visibility_cflags = []
