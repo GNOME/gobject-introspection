@@ -9,3 +9,7 @@ option('doctool', type: 'boolean',
 option('glib-src-dir', type: 'string',
   description: 'Source directory for glib - needed to add docs to gir'
 )
+
+option('gir_build', type: 'boolean',
+  description: 'Windows: post build (gir) stuff'
+)

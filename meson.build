@@ -40,21 +40,30 @@ if cc.has_argument('-fvisibility=hidden')
     '-D_GI_EXTERN=__attribute__((visibility("default"))) extern',
     '-fvisibility=hidden',
   ]
+elif cc.get_id() == 'msvc'
+  gi_hidden_visibility_cflags = [
+        '-D_GI_EXTERN=__declspec (dllexport) extern',
+  ]
 endif
 
-gobject_dep = dependency('gobject-2.0', version: '>= 2.55.0')
+gobject_dep = dependency('gobject-2.0', version: '>= 2.52.0')
 gio_dep = dependency('gio-2.0')
 giounix_dep = dependency('gio-unix-2.0', required: false)
 gmodule_dep = dependency('gmodule-2.0')
 libffi_dep = dependency('libffi')
 
+gir_build = get_option('gir_build')
 subdir('girepository')
 subdir('tools')
 subdir('giscanner')
-subdir('gir')
+if gir_build
+  ### To do in a second time
+  subdir('gir')
+endif
 subdir('examples')
 subdir('docs')
-subdir('tests')
+### Missing meson.build file
+### subdir('tests')
 
 install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
 install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
