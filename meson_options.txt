@@ -14,6 +14,10 @@ option('gtk-doc', type: 'boolean', value: false,
   description: 'Build and install documentation'
 )
 
+option('cairo-libname', type: 'string',
+  description: 'Custom name for the cairo-gobject library name'
+)
+
 option('gir_build', type: 'boolean',
   description: 'Windows: post build (gir) stuff'
 )
