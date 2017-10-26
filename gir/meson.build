@@ -1,12 +1,12 @@
 cairo_conf = configuration_data()
-if host_machine.system() == 'win32'
-  # TODO: Might not use libtool name
+if get_option('cairo-libname') != ''
+  cairo_library_name = get_option('cairo-libname')
+elif host_machine.system() == 'win32'
   cairo_library_name = 'libcairo-gobject-2.dll'
 elif host_machine.system() == 'darwin'
   cairo_library_name = 'libcairo-gobject.2.dylib'
 else
   cairo_library_name = 'libcairo-gobject.so.2'
-# TODO: OpenBSD = libcairo-gobject.so
 endif
 
 cairo_conf.set('CAIRO_SHARED_LIBRARY', cairo_library_name)
