@@ -69,7 +69,7 @@ giscanner_lib = static_library('giscanner',
 )
 
 # TODO: -export-symbols-regex "init_giscanner|PyInit__giscanner"
-py3.extension_module('_giscanner', 'giscannermodule.c',
+giscanner_pymod = py3.extension_module('_giscanner', 'giscannermodule.c',
   link_with: giscanner_lib,
   dependencies: [
     gobject_dep,
