@@ -26,7 +26,7 @@ main (void)
 
   in_args[0].v_pointer = "domain";
   in_args[1].v_pointer = "glib-print.c";
-  in_args[2].v_pointer = "30";
+  in_args[2].v_int = 42;
   in_args[3].v_pointer = "main";
   in_args[4].v_pointer = "hello world";
 
