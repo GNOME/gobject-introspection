@@ -43,6 +43,8 @@ scanner_command = [
   '--output=@OUTPUT@',
   '--no-libtool',
   '--reparse-validate',
+  '--add-include-path', join_paths(meson.current_build_dir()),
+  '--add-include-path', join_paths(meson.current_source_dir()),
 ]
 
 # Take a glob and print to newlines
@@ -359,7 +361,10 @@ foreach gir : gir_files
   custom_target('generate-typelib-@0@'.format(gir).underscorify(),
     input: gir,
     output: '@BASENAME@.typelib',
-    command: [gircompiler, '-o', '@OUTPUT@', '@INPUT@'],
+    command: [gircompiler, '-o', '@OUTPUT@', '@INPUT@',
+              '--includedir', meson.current_build_dir(),
+              '--includedir', meson.current_source_dir(),
+    ],
     install: true,
     install_dir: typelibdir,
   )
