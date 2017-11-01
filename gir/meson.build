@@ -361,6 +361,7 @@ foreach gir : gir_files
   custom_target('generate-typelib-@0@'.format(gir).underscorify(),
     input: gir,
     output: '@BASENAME@.typelib',
+    depends: [gobject_gir, ],
     command: [gircompiler, '-o', '@OUTPUT@', '@INPUT@',
               '--includedir', meson.current_build_dir(),
               '--includedir', meson.current_source_dir(),
