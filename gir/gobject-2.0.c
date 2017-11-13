@@ -671,7 +671,7 @@
  * 4. Invocation of user provided signal handlers (where the @after flag is set)
  *
  * 5. Invocation of the object method handler for %G_SIGNAL_RUN_CLEANUP signals
- *  
+ *
  * The user-provided signal handlers are called in the order they were
  * connected in.
  *
@@ -3634,7 +3634,7 @@
  *
  * Gets the default value of @pspec as a pointer to a #GValue.
  *
- * The #GValue will remain value for the life of @pspec.
+ * The #GValue will remain valid for the life of @pspec.
  *
  * Returns: a pointer to a #GValue which must not be modified
  * Since: 2.38

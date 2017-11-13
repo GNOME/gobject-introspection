@@ -1654,7 +1654,7 @@
  *
  * The certificate database to use when verifying this TLS connection.
  * If no certificate database is set, then the default database will be
- * used. See g_dtls_backend_get_default_database().
+ * used. See g_tls_backend_get_default_database().
  *
  * Since: 2.48
  */
@@ -5454,13 +5454,16 @@
  * which are chained together by a #GAsyncReadyCallback. To begin
  * an asynchronous operation, provide a #GAsyncReadyCallback to the
  * asynchronous function. This callback will be triggered when the
- * operation has completed, and will be passed a #GAsyncResult instance
- * filled with the details of the operation's success or failure, the
- * object the asynchronous function was started for and any error codes
- * returned. The asynchronous callback function is then expected to call
- * the corresponding "_finish()" function, passing the object the
- * function was called for, the #GAsyncResult instance, and (optionally)
- * an @error to grab any error conditions that may have occurred.
+ * operation has completed, and must be run in a later iteration of
+ * the [thread-default main context][g-main-context-push-thread-default]
+ * from where the operation was initiated. It will be passed a
+ * #GAsyncResult instance filled with the details of the operation's
+ * success or failure, the object the asynchronous function was
+ * started for and any error codes returned. The asynchronous callback
+ * function is then expected to call the corresponding "_finish()"
+ * function, passing the object the function was called for, the
+ * #GAsyncResult instance, and (optionally) an @error to grab any
+ * error conditions that may have occurred.
  *
  * The "_finish()" function for an operation takes the generic result
  * (of type #GAsyncResult) and returns the specific result that the
@@ -6487,6 +6490,7 @@
  * - g_file_new_for_commandline_arg() for a command line argument.
  * - g_file_new_tmp() to create a temporary file from a template.
  * - g_file_parse_name() from a UTF-8 string gotten from g_file_get_parse_name().
+ * - g_file_new_build_filename() to create a file from path elements.
  *
  * One way to think of a #GFile is as an abstraction of a pathname. For
  * normal files the system pathname is what is stored internally, but as
@@ -7393,9 +7397,9 @@
  * g_mount_unmount_with_operation() with (at least) the #GMount instance and a
  * #GAsyncReadyCallback.  The callback will be fired when the
  * operation has resolved (either with success or failure), and a
- * #GAsyncReady structure will be passed to the callback.  That
+ * #GAsyncResult structure will be passed to the callback.  That
  * callback should then call g_mount_unmount_with_operation_finish() with the #GMount
- * and the #GAsyncReady data to see if the operation was completed
+ * and the #GAsyncResult data to see if the operation was completed
  * successfully.  If an @error is present when g_mount_unmount_with_operation_finish()
  * is called, then it will be filled with any error information.
  */
@@ -8251,12 +8255,12 @@
  * implementations must carefully adhere to the expectations of
  * callers that are documented on each of the interface methods.
  *
- * Some of the GSettingsBackend functions accept or return a #GTree.
+ * Some of the #GSettingsBackend functions accept or return a #GTree.
  * These trees always have strings as keys and #GVariant as values.
  * g_settings_backend_create_tree() is a convenience function to create
  * suitable trees.
  *
- * The GSettingsBackend API is exported to allow third-party
+ * The #GSettingsBackend API is exported to allow third-party
  * implementations, but does not carry the same stability guarantees
  * as the public GIO API. For this reason, you have to define the
  * C preprocessor symbol %G_SETTINGS_ENABLE_BACKEND before including
@@ -8444,9 +8448,10 @@
  * from the point where it is called. g_simple_async_result_complete_in_idle()
  * will finish it from an idle handler in the
  * [thread-default main context][g-main-context-push-thread-default]
- * . g_simple_async_result_run_in_thread() will run the
- * job in a separate thread and then deliver the result to the
- * thread-default main context.
+ * where the #GSimpleAsyncResult was created.
+ * g_simple_async_result_run_in_thread() will run the job in a
+ * separate thread and then use
+ * g_simple_async_result_complete_in_idle() to deliver the result.
  *
  * To set the results of an asynchronous function,
  * g_simple_async_result_set_op_res_gpointer(),
@@ -9021,11 +9026,13 @@
  * Eventually, you will call a method such as
  * g_task_return_pointer() or g_task_return_error(), which will
  * save the value you give it and then invoke the task's callback
- * function (waiting until the next iteration of the main
- * loop first, if necessary). The caller will pass the #GTask back
- * to the operation's finish function (as a #GAsyncResult), and
- * you can use g_task_propagate_pointer() or the like to extract
- * the return value.
+ * function in the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * where it was created (waiting until the next iteration of the main
+ * loop first, if necessary). The caller will pass the #GTask back to
+ * the operation's finish function (as a #GAsyncResult), and you can
+ * can use g_task_propagate_pointer() or the like to extract the
+ * return value.
  *
  * Here is an example for using GTask as a GAsyncResult:
  * |[<!-- language="C" -->
@@ -9264,9 +9271,10 @@
  * ## Asynchronous operations from synchronous ones
  *
  * You can use g_task_run_in_thread() to turn a synchronous
- * operation into an asynchronous one, by running it in a thread
- * which will then dispatch the result back to the caller's
- * #GMainContext when it completes.
+ * operation into an asynchronous one, by running it in a thread.
+ * When it completes, the result will be dispatched to the
+ * [thread-default main context][g-main-context-push-thread-default]
+ * where the #GTask was created.
  *
  * Running a task in a thread:
  *   |[<!-- language="C" -->
@@ -9478,7 +9486,7 @@
  *   whether the task's callback can be invoked directly, or
  *   if it needs to be sent to another #GMainContext, or delayed
  *   until the next iteration of the current #GMainContext.)
- * - The "finish" functions for #GTask-based operations are generally
+ * - The "finish" functions for #GTask based operations are generally
  *   much simpler than #GSimpleAsyncResult ones, normally consisting
  *   of only a single call to g_task_propagate_pointer() or the like.
  *   Since g_task_propagate_pointer() "steals" the return value from
@@ -12500,7 +12508,7 @@
 
 /**
  * g_app_info_create_from_commandline:
- * @commandline: the commandline to use
+ * @commandline: (type filename): the commandline to use
  * @application_name: (nullable): the application name, or %NULL to use @commandline
  * @flags: flags that can specify details of the created #GAppInfo
  * @error: a #GError location to store the error occurring, %NULL to ignore.
@@ -12549,9 +12557,9 @@
  *
  * Checks if two #GAppInfos are equal.
  *
- * Note that the check <em>may not</em> compare each individual field, and
- * only does an identity check. In case detecting changes in the contents
- * is needed, program code must additionally compare relevant fields.
+ * Note that the check <emphasis>may not</emphasis> compare each individual
+ * field, and only does an identity check. In case detecting changes in the
+ * contents is needed, program code must additionally compare relevant fields.
  *
  * Returns: %TRUE if @appinfo1 is equal to @appinfo2. %FALSE otherwise.
  */
@@ -12750,11 +12758,11 @@
  * g_app_info_launch:
  * @appinfo: a #GAppInfo
  * @files: (nullable) (element-type GFile): a #GList of #GFile objects
- * @launch_context: (nullable): a #GAppLaunchContext or %NULL
+ * @context: (nullable): a #GAppLaunchContext or %NULL
  * @error: a #GError
  *
  * Launches the application. Passes @files to the launched application
- * as arguments, using the optional @launch_context to get information
+ * as arguments, using the optional @context to get information
  * about the details of the launcher (like what screen it is on).
  * On error, @error will be set accordingly.
  *
@@ -12779,7 +12787,7 @@
  * process. This can be used to ignore `GIO_LAUNCHED_DESKTOP_FILE`,
  * should it be inherited by further processes. The `DISPLAY` and
  * `DESKTOP_STARTUP_ID` environment variables are also set, based
- * on information provided in @launch_context.
+ * on information provided in @context.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
  */
@@ -12788,7 +12796,7 @@
 /**
  * g_app_info_launch_default_for_uri:
  * @uri: the uri to show
- * @launch_context: (nullable): an optional #GAppLaunchContext
+ * @context: (nullable): an optional #GAppLaunchContext
  * @error: (nullable): return location for an error, or %NULL
  *
  * Utility function that launches the default application
@@ -12804,7 +12812,7 @@
  * g_app_info_launch_default_for_uri_async:
  * @uri: the uri to show
  * @context: (nullable): an optional #GAppLaunchContext
- * cancellable: (nullable): a #GCancellable
+ * @cancellable: (nullable): a #GCancellable
  * @callback: (nullable): a #GASyncReadyCallback to call when the request is done
  * @user_data: (nullable): data to pass to @callback
  *
@@ -12835,11 +12843,11 @@
  * g_app_info_launch_uris:
  * @appinfo: a #GAppInfo
  * @uris: (nullable) (element-type utf8): a #GList containing URIs to launch.
- * @launch_context: (nullable): a #GAppLaunchContext or %NULL
+ * @context: (nullable): a #GAppLaunchContext or %NULL
  * @error: a #GError
  *
  * Launches the application. This passes the @uris to the launched application
- * as arguments, using the optional @launch_context to get information
+ * as arguments, using the optional @context to get information
  * about the details of the launcher (like what screen it is on).
  * On error, @error will be set accordingly.
  *
@@ -12991,8 +12999,8 @@
  * This is a %NULL-terminated array of strings, where each string has
  * the form `KEY=VALUE`.
  *
- * Returns: (array zero-terminated=1) (transfer full): the
- *     child's environment
+ * Returns: (array zero-terminated=1) (element-type filename) (transfer full):
+ *     the child's environment
  * Since: 2.32
  */
 
@@ -13037,8 +13045,8 @@
 /**
  * g_app_launch_context_setenv:
  * @context: a #GAppLaunchContext
- * @variable: the environment variable to set
- * @value: the value for to set the variable to.
+ * @variable: (type filename): the environment variable to set
+ * @value: (type filename): the value for to set the variable to.
  *
  * Arranges for @variable to be set to @value in the child's
  * environment when @context is used to launch an application.
@@ -13050,7 +13058,7 @@
 /**
  * g_app_launch_context_unsetenv:
  * @context: a #GAppLaunchContext
- * @variable: the environment variable to remove
+ * @variable: (type filename): the environment variable to remove
  *
  * Arranges for @variable to be unset in the child's environment
  * when @context is used to launch an application.
@@ -13223,7 +13231,7 @@
 /**
  * g_application_command_line_create_file_for_arg:
  * @cmdline: a #GApplicationCommandLine
- * @arg: an argument from @cmdline
+ * @arg: (type filename): an argument from @cmdline
  *
  * Creates a #GFile corresponding to a filename that was given as part
  * of the invocation of @cmdline.
@@ -13254,8 +13262,8 @@
  * The return value is %NULL-terminated and should be freed using
  * g_strfreev().
  *
- * Returns: (array length=argc) (transfer full): the string array
- * containing the arguments (the argv)
+ * Returns: (array length=argc) (element-type filename) (transfer full):
+ *      the string array containing the arguments (the argv)
  * Since: 2.28
  */
 
@@ -13298,8 +13306,8 @@
  * See g_application_command_line_getenv() if you are only interested
  * in the value of a single environment variable.
  *
- * Returns: (array zero-terminated=1) (transfer none): the environment
- * strings, or %NULL if they were not sent
+ * Returns: (array zero-terminated=1) (element-type filename) (transfer none):
+ *     the environment strings, or %NULL if they were not sent
  * Since: 2.28
  */
 
@@ -13387,7 +13395,7 @@
 /**
  * g_application_command_line_getenv:
  * @cmdline: a #GApplicationCommandLine
- * @name: the environment variable to get
+ * @name: (type filename): the environment variable to get
  *
  * Gets the value of a particular environment variable of the command
  * line invocation, as would be returned by g_getenv().  The strings may
@@ -13818,7 +13826,8 @@
  * g_application_run:
  * @application: a #GApplication
  * @argc: the argc from main() (or 0 if @argv is %NULL)
- * @argv: (array length=argc) (nullable): the argv from main(), or %NULL
+ * @argv: (array length=argc) (element-type filename) (nullable):
+ *     the argv from main(), or %NULL
  *
  * Runs the application.
  *
@@ -14389,7 +14398,7 @@
  *
  * Finishes an asynchronous read.
  *
- * Returns: a #gssize of the read stream, or %-1 on an error.
+ * Returns: a #gssize of the read stream, or `-1` on an error.
  */
 
 
@@ -14964,7 +14973,7 @@
 /**
  * g_cancellable_disconnect:
  * @cancellable: (nullable): A #GCancellable or %NULL.
- * @handler_id: Handler id of the handler to be disconnected, or %0.
+ * @handler_id: Handler id of the handler to be disconnected, or `0`.
  *
  * Disconnects a handler from a cancellable instance similar to
  * g_signal_handler_disconnect().  Additionally, in the event that a
@@ -14978,7 +14987,7 @@
  * signal handler is removed. See #GCancellable::cancelled for
  * details on how to use this.
  *
- * If @cancellable is %NULL or @handler_id is %0 this function does
+ * If @cancellable is %NULL or @handler_id is `0` this function does
  * nothing.
  *
  * Since: 2.22
@@ -16524,10 +16533,10 @@
  * Escape @string so it can appear in a D-Bus address as the value
  * part of a key-value pair.
  *
- * For instance, if @string is "/run/bus-for-:0",
- * this function would return "/run/bus-for-%3A0",
+ * For instance, if @string is `/run/bus-for-:0`,
+ * this function would return `/run/bus-for-%3A0`,
  * which could be used in a D-Bus address like
- * "unix:nonce-tcp:host=127.0.0.1,port=42,noncefile=/run/bus-for-%3A0".
+ * `unix:nonce-tcp:host=127.0.0.1,port=42,noncefile=/run/bus-for-%3A0`.
  *
  * Returns: (transfer full): a copy of @string with all
  *     non-optionally-escaped bytes escaped
@@ -21880,7 +21889,7 @@
  *
  * Sets the certificate database that is used to verify peer certificates.
  * This is set to the default database by default. See
- * g_dtls_backend_get_default_database(). If set to %NULL, then
+ * g_tls_backend_get_default_database(). If set to %NULL, then
  * peer certificate validation will always set the
  * %G_TLS_CERTIFICATE_UNKNOWN_CA error (meaning
  * #GDtlsConnection::accept-certificate will always be emitted on
@@ -24924,8 +24933,24 @@
 
 
 /**
+ * g_file_new_build_filename:
+ * @first_element: (type filename): the first element in the path
+ * @...: remaining elements in path, terminated by %NULL
+ *
+ * Constructs a #GFile from a series of elements using the correct
+ * separator for filenames.
+ *
+ * Using this function is equivalent to calling g_build_filename(),
+ * followed by g_file_new_for_path() on the result.
+ *
+ * Returns: (transfer full): a new #GFile
+ * Since: 2.56
+ */
+
+
+/**
  * g_file_new_for_commandline_arg:
- * @arg: a command line string
+ * @arg: (type filename): a command line string
  *
  * Creates a #GFile with the given argument from the command line.
  * The value of @arg can be either a URI, an absolute path or a
@@ -24949,7 +24974,7 @@
 
 /**
  * g_file_new_for_commandline_arg_and_cwd:
- * @arg: a command line string
+ * @arg: (type filename): a command line string
  * @cwd: (type filename): the current working directory of the commandline
  *
  * Creates a #GFile with the given argument from the command line.
@@ -32705,7 +32730,8 @@
  * g_seekable_can_truncate:
  * @seekable: a #GSeekable.
  *
- * Tests if the stream can be truncated.
+ * Tests if the length of the stream can be adjusted with
+ * g_seekable_truncate().
  *
  * Returns: %TRUE if the stream can be truncated, %FALSE otherwise.
  */
@@ -32754,12 +32780,14 @@
 /**
  * g_seekable_truncate: (virtual truncate_fn)
  * @seekable: a #GSeekable.
- * @offset: a #goffset.
+ * @offset: new length for @seekable, in bytes.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occurring, or %NULL to
  * ignore.
  *
- * Truncates a stream with a given #offset.
+ * Sets the length of the stream to @offset. If the stream was previously
+ * larger than @offset, the extra data is discarded. If the stream was
+ * previouly shorter than @offset, it is extended with NUL ('\0') bytes.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -32984,7 +33012,7 @@
  * a boolean property by that name). See g_settings_bind_writable()
  * for more details about writable bindings.
  *
- * Note that the lifecycle of the binding is tied to the object,
+ * Note that the lifecycle of the binding is tied to @object,
  * and that you can have only one binding per object property.
  * If you bind the same property twice on the same object, the second
  * binding overrides the first one.
@@ -33013,7 +33041,7 @@
  * The binding uses the provided mapping functions to map between
  * settings and property values.
  *
- * Note that the lifecycle of the binding is tied to the object,
+ * Note that the lifecycle of the binding is tied to @object,
  * and that you can have only one binding per object property.
  * If you bind the same property twice on the same object, the second
  * binding overrides the first one.
@@ -33043,7 +33071,7 @@
  * value as it passes from the setting to the object, i.e. @property
  * will be set to %TRUE if the key is not writable.
  *
- * Note that the lifecycle of the binding is tied to the object,
+ * Note that the lifecycle of the binding is tied to @object,
  * and that you can have only one binding per object property.
  * If you bind the same property twice on the same object, the second
  * binding overrides the first one.
@@ -36508,8 +36536,41 @@
  * in RFC 4604 is used. Note that on older platforms this may fail
  * with a %G_IO_ERROR_NOT_SUPPORTED error.
  *
+ * To bind to a given source-specific multicast address, use
+ * g_socket_join_multicast_group_ssm() instead.
+ *
  * Returns: %TRUE on success, %FALSE on error.
  * Since: 2.32
+ */
+
+
+/**
+ * g_socket_join_multicast_group_ssm:
+ * @socket: a #GSocket.
+ * @group: a #GInetAddress specifying the group address to join.
+ * @source_specific: (nullable): a #GInetAddress specifying the
+ * source-specific multicast address or %NULL to ignore.
+ * @iface: (nullable): Name of the interface to use, or %NULL
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Registers @socket to receive multicast messages sent to @group.
+ * @socket must be a %G_SOCKET_TYPE_DATAGRAM socket, and must have
+ * been bound to an appropriate interface and port with
+ * g_socket_bind().
+ *
+ * If @iface is %NULL, the system will automatically pick an interface
+ * to bind to based on @group.
+ *
+ * If @source_specific is not %NULL, use source-specific multicast as
+ * defined in RFC 4604. Note that on older platforms this may fail
+ * with a %G_IO_ERROR_NOT_SUPPORTED error.
+ *
+ * Note that this function can be called multiple times for the same
+ * @group with different @source_specific in order to receive multicast
+ * packets from more than one source.
+ *
+ * Returns: %TRUE on success, %FALSE on error.
+ * Since: 2.56
  */
 
 
@@ -36528,8 +36589,32 @@
  * @socket remains bound to its address and port, and can still receive
  * unicast messages after calling this.
  *
+ * To unbind to a given source-specific multicast address, use
+ * g_socket_leave_multicast_group_ssm() instead.
+ *
  * Returns: %TRUE on success, %FALSE on error.
  * Since: 2.32
+ */
+
+
+/**
+ * g_socket_leave_multicast_group_ssm:
+ * @socket: a #GSocket.
+ * @group: a #GInetAddress specifying the group address to leave.
+ * @source_specific: (nullable): a #GInetAddress specifying the
+ * source-specific multicast address or %NULL to ignore.
+ * @iface: (nullable): Name of the interface to use, or %NULL
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Removes @socket from the multicast group defined by @group, @iface,
+ * and @source_specific (which must all have the same values they had
+ * when you joined the group).
+ *
+ * @socket remains bound to its address and port, and can still receive
+ * unicast messages after calling this.
+ *
+ * Returns: %TRUE on success, %FALSE on error.
+ * Since: 2.56
  */
 
 
@@ -37998,7 +38083,7 @@
 /**
  * g_subprocess_launcher_getenv:
  * @self: a #GSubprocess
- * @variable: the environment variable to get
+ * @variable: (type filename): the environment variable to get
  *
  * Returns the value of the environment variable @variable in the
  * environment of processes launched from this launcher.
@@ -38006,7 +38091,8 @@
  * On UNIX, the returned string can be an arbitrary byte string.
  * On Windows, it will be UTF-8.
  *
- * Returns: the value of the environment variable, %NULL if unset
+ * Returns: (type filename): the value of the environment variable,
+ *     %NULL if unset
  * Since: 2.40
  */
 
@@ -38068,7 +38154,8 @@
 /**
  * g_subprocess_launcher_set_environ:
  * @self: a #GSubprocess
- * @env: (array zero-terminated=1) (transfer none): the replacement environment
+ * @env: (array zero-terminated=1) (element-type filename) (transfer none):
+ *     the replacement environment
  *
  * Replace the entire environment of processes launched from this
  * launcher with the given 'environ' variable.
@@ -38184,8 +38271,9 @@
 /**
  * g_subprocess_launcher_setenv:
  * @self: a #GSubprocess
- * @variable: the environment variable to set, must not contain '='
- * @value: the new value for the variable
+ * @variable: (type filename): the environment variable to set,
+ *     must not contain '='
+ * @value: (type filename): the new value for the variable
  * @overwrite: whether to change the variable if it already exists
  *
  * Sets the environment variable @variable in the environment of
@@ -38216,7 +38304,7 @@
 /**
  * g_subprocess_launcher_spawnv:
  * @self: a #GSubprocessLauncher
- * @argv: (array zero-terminated=1) (element-type utf8): Command line arguments
+ * @argv: (array zero-terminated=1) (element-type filename): Command line arguments
  * @error: Error
  *
  * Creates a #GSubprocess given a provided array of arguments.
@@ -38331,7 +38419,8 @@
 /**
  * g_subprocess_launcher_unsetenv:
  * @self: a #GSubprocess
- * @variable: the environment variable to unset, must not contain '='
+ * @variable: (type filename): the environment variable to unset,
+ *     must not contain '='
  *
  * Removes the environment variable @variable from the environment of
  * processes launched from this launcher.
@@ -38366,7 +38455,7 @@
 
 /**
  * g_subprocess_newv: (rename-to g_subprocess_new)
- * @argv: (array zero-terminated=1) (element-type utf8): commandline arguments for the subprocess
+ * @argv: (array zero-terminated=1) (element-type filename): commandline arguments for the subprocess
  * @flags: flags that define the behaviour of the subprocess
  * @error: (nullable): return location for an error, or %NULL
  *
@@ -40094,7 +40183,7 @@
  * @error: a #GError pointer, or %NULL
  *
  * Finish an asynchronous lookup of a certificate by its handle. See
- * g_tls_database_lookup_certificate_handle() for more information.
+ * g_tls_database_lookup_certificate_by_handle() for more information.
  *
  * If the handle is no longer valid, or does not point to a certificate in
  * this database, then %NULL will be returned.
@@ -40232,7 +40321,7 @@
  * adding any missing certificates to the chain.
  *
  * @chain is a chain of #GTlsCertificate objects each pointing to the next
- * certificate in the chain by its %issuer property. The chain may initially
+ * certificate in the chain by its #GTlsCertificate:issuer property. The chain may initially
  * consist of one or more certificates. After the verification process is
  * complete, @chain may be modified by adding missing certificates, or removing
  * extra certificates. If a certificate anchor was found, then it is added to
@@ -41198,6 +41287,41 @@
 
 
 /**
+ * g_unix_is_system_device_path:
+ * @device_path: a device path, e.g. `/dev/loop0` or `nfsd`
+ *
+ * Determines if @device_path is considered a block device path which is only
+ * used in implementation of the OS. This is primarily used for hiding
+ * mounted volumes that are intended as APIs for programs to read, and system
+ * administrators at a shell; rather than something that should, for example,
+ * appear in a GUI. For example, the Linux `/proc` filesystem.
+ *
+ * The list of device paths considered ‘system’ ones may change over time.
+ *
+ * Returns: %TRUE if @device_path is considered an implementation detail of
+ *    the OS.
+ * Since: 2.56
+ */
+
+
+/**
+ * g_unix_is_system_fs_type:
+ * @fs_type: a file system type, e.g. `procfs` or `tmpfs`
+ *
+ * Determines if @fs_type is considered a type of file system which is only
+ * used in implementation of the OS. This is primarily used for hiding
+ * mounted volumes that are intended as APIs for programs to read, and system
+ * administrators at a shell; rather than something that should, for example,
+ * appear in a GUI. For example, the Linux `/proc` filesystem.
+ *
+ * The list of file system types considered ‘system’ ones may change over time.
+ *
+ * Returns: %TRUE if @fs_type is considered an implementation detail of the OS.
+ * Since: 2.56
+ */
+
+
+/**
  * g_unix_mount_at:
  * @mount_path: (type filename): path for a possible unix mount.
  * @time_read: (out) (optional): guint64 to contain a timestamp.
@@ -41363,7 +41487,12 @@
  * g_unix_mount_is_system_internal:
  * @mount_entry: a #GUnixMount.
  *
- * Checks if a unix mount is a system path.
+ * Checks if a Unix mount is a system mount. This is the Boolean OR of
+ * g_unix_is_system_fs_type(), g_unix_is_system_device_path() and
+ * g_unix_is_mount_path_system_internal() on @mount_entry’s properties.
+ *
+ * The definition of what a ‘system’ mount entry is may change over time as new
+ * file system types and device paths are ignored.
  *
  * Returns: %TRUE if the unix mount is for a system path.
  */
@@ -42062,7 +42191,7 @@
  * then the expression
  * |[<!-- language="C" -->
  *   (g_file_has_prefix (volume_activation_root, mount_root) ||
- *       g_file_equal (volume_activation_root, mount_root))
+ *    g_file_equal (volume_activation_root, mount_root))
  * ]|
  * will always be %TRUE.
  *

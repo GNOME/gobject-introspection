@@ -532,6 +532,8 @@
  *     suffixes. IEC units should only be used for reporting things with
  *     a strong "power of 2" basis, like RAM sizes or RAID stripe sizes.
  *     Network and storage sizes should be reported in the normal SI units.
+ * @G_FORMAT_SIZE_BITS: set the size as a quantity in bits, rather than
+ *     bytes, and return units in bits. For example, ‘Mb’ rather than ‘MB’.
  *
  * Flags to modify the format of the string returned by g_format_size_full().
  */
@@ -2016,7 +2018,7 @@
  *
  * Deprecated: #GTestTrapFlags is used only with g_test_trap_fork(),
  * which is deprecated. g_test_trap_subprocess() uses
- * #GTestTrapSubprocessFlags.
+ * #GTestSubprocessFlags.
  */
 
 
@@ -3207,6 +3209,8 @@
 
 /**
  * G_GNUC_CHECK_VERSION:
+ * @major: major version to check against
+ * @minor: minor version to check against
  *
  * Expands to a a check for a compiler with __GNUC__ defined and a version
  * greater than or equal to the major and minor numbers provided. For example,
@@ -4569,7 +4573,7 @@
  * A macro to assist with the static initialisation of a #GPrivate.
  *
  * This macro is useful for the case that a #GDestroyNotify function
- * should be associated the key.  This is needed when the key will be
+ * should be associated with the key.  This is needed when the key will be
  * used to point at memory that should be deallocated when the thread
  * exits.
  *
@@ -5491,7 +5495,6 @@
  * ## Checklist for Application Writers
  *
  * This section is a practical summary of the detailed
- *  
  * things to do to make sure your applications process file
  * name encodings correctly.
  *
@@ -6861,6 +6864,58 @@
  * multiple groups with the same name; they are merged together.
  * Another difference is that keys and group names in key files are not
  * restricted to ASCII characters.
+ *
+ * Here is an example of loading a key file and reading a value:
+ * |[<!-- language="C" -->
+ * g_autoptr(GError) error = NULL;
+ * g_autoptr(GKeyFile) key_file = g_key_file_new ();
+ *
+ * if (!g_key_file_load_from_file (key_file, "key-file.ini", flags, &error))
+ *   {
+ *     if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+ *       g_warning ("Error loading key file: %s", error->message);
+ *     return;
+ *   }
+ *
+ * g_autofree gchar *val = g_key_file_get_string (key_file, "Group Name", "SomeKey", &error);
+ * if (val == NULL &&
+ *     !g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+ *   {
+ *     g_warning ("Error finding key in key file: %s", error->message);
+ *     return;
+ *   }
+ * else if (val == NULL)
+ *   {
+ *     // Fall back to a default value.
+ *     val = g_strdup ("default-value");
+ *   }
+ * ]|
+ *
+ * Here is an example of creating and saving a key file:
+ * |[<!-- language="C" -->
+ * g_autoptr(GKeyFile) key_file = g_key_file_new ();
+ * const gchar *val = …;
+ * g_autoptr(GError) error = NULL;
+ *
+ * g_key_file_set_string (key_file, "Group Name", "SomeKey", val);
+ *
+ * // Save as a file.
+ * if (!g_key_file_save_to_file (key_file, "key-file.ini", &error))
+ *   {
+ *     g_warning ("Error saving key file: %s", error->message);
+ *     return;
+ *   }
+ *
+ * // Or store to a GBytes for use elsewhere.
+ * gsize data_len;
+ * g_autofree guint8 *data = (guint8 *) g_key_file_to_data (key_file, &data_len, &error);
+ * if (data == NULL)
+ *   {
+ *     g_warning ("Error saving key file: %s", error->message);
+ *     return;
+ *   }
+ * g_autoptr(GBytes) bytes = g_bytes_new_take (g_steal_pointer (&data), data_len);
+ * ]|
  */
 
 
@@ -11595,6 +11650,20 @@
 
 
 /**
+ * g_build_filename_valist:
+ * @first_element: (type filename): the first element in the path
+ * @args: va_list of remaining elements in path
+ *
+ * Behaves exactly like g_build_filename(), but takes the path elements
+ * as a va_list. This function is mainly meant for language bindings.
+ *
+ * Returns: (type filename): a newly-allocated string that must be freed
+ *     with g_free().
+ * Since: 2.56
+ */
+
+
+/**
  * g_build_filenamev:
  * @args: (array zero-terminated=1) (element-type filename): %NULL-terminated
  *     array of strings containing the path elements.
@@ -11975,7 +12044,7 @@
 /**
  * g_bytes_new_static: (skip)
  * @data: (transfer full) (array length=size) (element-type guint8) (nullable):
- *           the data to be used for the bytes
+ *        the data to be used for the bytes
  * @size: the size of @data
  *
  * Creates a new #GBytes from static data.
@@ -11991,7 +12060,7 @@
 /**
  * g_bytes_new_take:
  * @data: (transfer full) (array length=size) (element-type guint8) (nullable):
- *           the data to be used for the bytes
+ *        the data to be used for the bytes
  * @size: the size of @data
  *
  * Creates a new #GBytes from @data.
@@ -12015,7 +12084,7 @@
 /**
  * g_bytes_new_with_free_func: (skip)
  * @data: (array length=size) (element-type guint8) (nullable):
- *           the data to be used for the bytes
+ *        the data to be used for the bytes
  * @size: the size of @data
  * @free_func: the function to call to release the data
  * @user_data: data to pass to @free_func
@@ -12248,6 +12317,8 @@
  * g_spawn_close_pid() in the callback function for the source.
  *
  * GLib supports only a single callback per process id.
+ * On POSIX platforms, the same restrictions mentioned for
+ * g_child_watch_source_new() apply to this function.
  *
  * This internally creates a main loop source using
  * g_child_watch_source_new() and attaches it to the main loop context
@@ -12286,6 +12357,8 @@
  * in the callback function for the source.
  *
  * GLib supports only a single callback per process id.
+ * On POSIX platforms, the same restrictions mentioned for
+ * g_child_watch_source_new() apply to this function.
  *
  * This internally creates a main loop source using
  * g_child_watch_source_new() and attaches it to the main loop context
@@ -12316,14 +12389,24 @@
  * source is still active. Typically, you will want to call
  * g_spawn_close_pid() in the callback function for the source.
  *
- * Note further that using g_child_watch_source_new() is not
- * compatible with calling `waitpid` with a nonpositive first
- * argument in the application. Calling waitpid() for individual
- * pids will still work fine.
+ * On POSIX platforms, the following restrictions apply to this API
+ * due to limitations in POSIX process interfaces:
  *
- * Similarly, on POSIX platforms, the @pid passed to this function must
- * be greater than 0 (i.e. this function must wait for a specific child,
- * and cannot wait for one of many children by using a nonpositive argument).
+ * * @pid must be a child of this process
+ * * @pid must be positive
+ * * the application must not call `waitpid` with a non-positive
+ *   first argument, for instance in another thread
+ * * the application must not wait for @pid to exit by any other
+ *   mechanism, including `waitpid(pid, ...)` or a second child-watch
+ *   source for the same @pid
+ * * the application must not ignore SIGCHILD
+ *
+ * If any of those conditions are not met, this and related APIs will
+ * not work correctly. This can often be diagnosed via a GLib warning
+ * stating that `ECHILD` was received by `waitpid`.
+ *
+ * Calling `waitpid` for specific processes other than @pid remains a
+ * valid thing to do.
  *
  * Returns: the newly-created child watch source
  * Since: 2.4
@@ -12358,6 +12441,26 @@
  *
  * If @err or *@err is %NULL, does nothing. Otherwise,
  * calls g_error_free() on *@err and sets *@err to %NULL.
+ */
+
+
+/**
+ * g_clear_handle_id: (skip)
+ * @tag_ptr: (not nullable): a pointer to the handler ID
+ * @clear_func: (not nullable): the function to call to clear the handler
+ *
+ * Clears a numeric handler, such as a #GSource ID.
+ *
+ * @tag_ptr must be a valid pointer to the variable holding the handler.
+ *
+ * If the ID is zero then this function does nothing.
+ * Otherwise, clear_func() is called with the ID as a parameter, and the tag is
+ * set to zero.
+ *
+ * A macro is also included that allows this function to be used without
+ * pointer casts.
+ *
+ * Since: 2.56
  */
 
 
@@ -12703,8 +12806,8 @@
  * @fallback: UTF-8 string to use in place of character not
  *                present in the target encoding. (The string must be
  *                representable in the target encoding).
- *                   If %NULL, characters not in the target encoding will
- *                   be represented as Unicode escapes \uxxxx or \Uxxxxyyyy.
+ *                If %NULL, characters not in the target encoding will
+ *                be represented as Unicode escapes \uxxxx or \Uxxxxyyyy.
  * @bytes_read: location to store the number of bytes in the
  *                input string that were successfully converted, or %NULL.
  *                Even if the conversion was successful, this may be
@@ -12825,7 +12928,14 @@
  *
  * You can also make critical warnings fatal at runtime by
  * setting the `G_DEBUG` environment variable (see
- * [Running GLib Applications](glib-running.html)).
+ * [Running GLib Applications](glib-running.html)):
+ *
+ * |[
+ *   G_DEBUG=fatal-warnings gdb ./my-program
+ * ]|
+ *
+ * Any unrelated failures can be skipped over in
+ * [gdb](https://www.gnu.org/software/gdb/) using the `continue` command.
  *
  * The message should typically *not* be translated to the
  * user's language.
@@ -15073,15 +15183,15 @@
 
 /**
  * g_environ_getenv:
- * @envp: (nullable) (array zero-terminated=1) (transfer none): an environment
- *     list (eg, as returned from g_get_environ()), or %NULL
+ * @envp: (nullable) (array zero-terminated=1) (transfer none) (element-type filename):
+ *     an environment list (eg, as returned from g_get_environ()), or %NULL
  *     for an empty environment list
- * @variable: the environment variable to get
+ * @variable: (type filename): the environment variable to get
  *
  * Returns the value of the environment variable @variable in the
  * provided list @envp.
  *
- * Returns: the value of the environment variable, or %NULL if
+ * Returns: (type filename): the value of the environment variable, or %NULL if
  *     the environment variable is not set in @envp. The returned
  *     string is owned by @envp, and will be freed if @variable is
  *     set or unset again.
@@ -15091,35 +15201,37 @@
 
 /**
  * g_environ_setenv:
- * @envp: (nullable) (array zero-terminated=1) (transfer full): an
- *     environment list that can be freed using g_strfreev() (e.g., as
+ * @envp: (nullable) (array zero-terminated=1) (element-type filename) (transfer full):
+ *     an environment list that can be freed using g_strfreev() (e.g., as
  *     returned from g_get_environ()), or %NULL for an empty
  *     environment list
- * @variable: the environment variable to set, must not contain '='
- * @value: the value for to set the variable to
+ * @variable: (type filename): the environment variable to set, must not
+ *     contain '='
+ * @value: (type filename): the value for to set the variable to
  * @overwrite: whether to change the variable if it already exists
  *
  * Sets the environment variable @variable in the provided list
  * @envp to @value.
  *
- * Returns: (array zero-terminated=1) (transfer full): the
- *     updated environment list. Free it using g_strfreev().
+ * Returns: (array zero-terminated=1) (element-type filename) (transfer full):
+ *     the updated environment list. Free it using g_strfreev().
  * Since: 2.32
  */
 
 
 /**
  * g_environ_unsetenv:
- * @envp: (nullable) (array zero-terminated=1) (transfer full): an environment
- *     list that can be freed using g_strfreev() (e.g., as returned from g_get_environ()),
- *     or %NULL for an empty environment list
- * @variable: the environment variable to remove, must not contain '='
+ * @envp: (nullable) (array zero-terminated=1) (element-type filename) (transfer full):
+ *     an environment list that can be freed using g_strfreev() (e.g., as
+ *     returned from g_get_environ()), or %NULL for an empty environment list
+ * @variable: (type filename): the environment variable to remove, must not
+ *     contain '='
  *
  * Removes the environment variable @variable from the provided
  * environment @envp.
  *
- * Returns: (array zero-terminated=1) (transfer full): the
- *     updated environment list. Free it using g_strfreev().
+ * Returns: (array zero-terminated=1) (element-type filename) (transfer full):
+ *     the updated environment list. Free it using g_strfreev().
  * Since: 2.32
  */
 
@@ -15810,8 +15922,8 @@
  * The return value is freshly allocated and it should be freed with
  * g_strfreev() when it is no longer needed.
  *
- * Returns: (array zero-terminated=1) (transfer full): the list of
- *     environment variables
+ * Returns: (array zero-terminated=1) (element-type filename) (transfer full):
+ *     the list of environment variables
  * Since: 2.28
  */
 
@@ -15893,6 +16005,8 @@
  * string is owned by GLib and should not be modified or freed. If no
  * name can be determined, a default fixed string "localhost" is
  * returned.
+ *
+ * The encoding of the returned string is UTF-8.
  *
  * Returns: the host name of the machine.
  * Since: 2.8
@@ -16241,7 +16355,7 @@
 
 /**
  * g_getenv:
- * @variable: the environment variable to get
+ * @variable: (type filename): the environment variable to get
  *
  * Returns the value of an environment variable.
  *
@@ -16251,7 +16365,7 @@
  * On Windows, in case the environment variable's value contains
  * references to other environment variables, they are expanded.
  *
- * Returns: the value of the environment variable, or %NULL if
+ * Returns: (type filename): the value of the environment variable, or %NULL if
  *     the environment variable is not found. The returned string
  *     may be overwritten by the next call to g_getenv(), g_setenv()
  *     or g_unsetenv().
@@ -19580,8 +19694,9 @@
  * use cases for environment variables in GLib-using programs you want
  * the UTF-8 encoding that this function and g_getenv() provide.
  *
- * Returns: (array zero-terminated=1) (transfer full): a %NULL-terminated
- *     list of strings which must be freed with g_strfreev().
+ * Returns: (array zero-terminated=1) (element-type filename) (transfer full):
+ *     a %NULL-terminated list of strings which must be freed with
+ *     g_strfreev().
  * Since: 2.8
  */
 
@@ -22738,7 +22853,7 @@
 
 /**
  * g_option_context_get_strict_posix:
- * @context: a #GoptionContext
+ * @context: a #GOptionContext
  *
  * Returns whether strict POSIX code is enabled.
  *
@@ -22921,7 +23036,7 @@
 
 /**
  * g_option_context_set_strict_posix:
- * @context: a #GoptionContext
+ * @context: a #GOptionContext
  * @strict_posix: the new value
  *
  * Sets strict POSIX mode.
@@ -23382,9 +23497,9 @@
  * don't want to run the full main loop.
  *
  * Each element of @fds is a #GPollFD describing a single file
- * descriptor to poll. The %fd field indicates the file descriptor,
- * and the %events field indicates the events to poll for. On return,
- * the %revents fields will be filled with the events that actually
+ * descriptor to poll. The @fd field indicates the file descriptor,
+ * and the @events field indicates the events to poll for. On return,
+ * the @revents fields will be filled with the events that actually
  * occurred.
  *
  * On POSIX systems, the file descriptors in @fds can be any sort of
@@ -23393,7 +23508,7 @@
  * Windows, the easiest solution is to construct all of your
  * #GPollFDs with g_io_channel_win32_make_pollfd().
  *
- * Returns: the number of entries in @fds whose %revents fields
+ * Returns: the number of entries in @fds whose @revents fields
  * were filled in, or 0 if the operation timed out, or -1 on error or
  * if the call was interrupted.
  * Since: 2.20
@@ -25586,7 +25701,8 @@
  * thread will block. Read locks can be taken recursively.
  *
  * It is implementation-defined how many threads are allowed to
- * hold read locks on the same lock simultaneously.
+ * hold read locks on the same lock simultaneously. If the limit is hit,
+ * or if a deadlock is detected, a critical warning will be emitted.
  *
  * Since: 2.32
  */
@@ -26688,8 +26804,9 @@
 
 /**
  * g_setenv:
- * @variable: the environment variable to set, must not contain '='.
- * @value: the value for to set the variable to.
+ * @variable: (type filename): the environment variable to set, must not
+ *     contain '='.
+ * @value: (type filename): the value for to set the variable to.
  * @overwrite: whether to change the variable if it already exists.
  *
  * Sets an environment variable. On UNIX, both the variable's name and
@@ -26719,10 +26836,10 @@
 
 /**
  * g_shell_parse_argv:
- * @command_line: command line to parse
+ * @command_line: (type filename): command line to parse
  * @argcp: (out) (optional): return location for number of args
- * @argvp: (out) (optional) (array length=argcp zero-terminated=1): return
- *   location for array of args
+ * @argvp: (out) (optional) (array length=argcp zero-terminated=1) (element-type filename):
+ *   return location for array of args
  * @error: (optional): return location for error
  *
  * Parses a command line into an argument vector, in much the same way
@@ -26741,7 +26858,7 @@
 
 /**
  * g_shell_quote:
- * @unquoted_string: a literal string
+ * @unquoted_string: (type filename): a literal string
  *
  * Quotes a string so that the shell (/bin/sh) will interpret the
  * quoted string to mean @unquoted_string. If you pass a filename to
@@ -26750,13 +26867,13 @@
  * quoting style used is undefined (single or double quotes may be
  * used).
  *
- * Returns: quoted string
+ * Returns: (type filename): quoted string
  */
 
 
 /**
  * g_shell_unquote:
- * @quoted_string: shell-quoted string
+ * @quoted_string: (type filename): shell-quoted string
  * @error: error return location or NULL
  *
  * Unquotes a string as the shell (/bin/sh) would. Only handles
@@ -26781,7 +26898,7 @@
  * be escaped with backslash. Otherwise double quotes preserve things
  * literally.
  *
- * Returns: an unquoted string
+ * Returns: (type filename): an unquoted string
  */
 
 
@@ -28158,9 +28275,12 @@
 
 /**
  * g_spawn_async:
- * @working_directory: (type filename) (nullable): child's current working directory, or %NULL to inherit parent's
- * @argv: (array zero-terminated=1): child's argument vector
- * @envp: (array zero-terminated=1) (nullable): child's environment, or %NULL to inherit parent's
+ * @working_directory: (type filename) (nullable): child's current working
+ *     directory, or %NULL to inherit parent's
+ * @argv: (array zero-terminated=1) (element-type filename):
+ *     child's argument vector
+ * @envp: (array zero-terminated=1) (element-type filename) (nullable):
+ *     child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
  * @child_setup: (scope async) (nullable): function to run in the child just before exec()
  * @user_data: (closure): user data for @child_setup
@@ -28176,7 +28296,7 @@
  * If you are writing a GTK+ application, and the program you are spawning is a
  * graphical application too, then to ensure that the spawned program opens its
  * windows on the right screen, you may want to use #GdkAppLaunchContext,
- * #GAppLaunchcontext, or set the %DISPLAY environment variable.
+ * #GAppLaunchContext, or set the %DISPLAY environment variable.
  *
  * Note that the returned @child_pid on Windows is a handle to the child
  * process and not its identifier. Process handles and process identifiers
@@ -28188,9 +28308,13 @@
 
 /**
  * g_spawn_async_with_pipes:
- * @working_directory: (type filename) (nullable): child's current working directory, or %NULL to inherit parent's, in the GLib file name encoding
- * @argv: (array zero-terminated=1): child's argument vector, in the GLib file name encoding
- * @envp: (array zero-terminated=1) (nullable): child's environment, or %NULL to inherit parent's, in the GLib file name encoding
+ * @working_directory: (type filename) (nullable): child's current working
+ *     directory, or %NULL to inherit parent's, in the GLib file name encoding
+ * @argv: (array zero-terminated=1) (element-type filename): child's argument
+ *     vector, in the GLib file name encoding
+ * @envp: (array zero-terminated=1) (element-type filename) (nullable):
+ *     child's environment, or %NULL to inherit parent's, in the GLib file
+ *     name encoding
  * @flags: flags from #GSpawnFlags
  * @child_setup: (scope async) (nullable): function to run in the child just before exec()
  * @user_data: (closure): user data for @child_setup
@@ -28349,7 +28473,7 @@
  * If you are writing a GTK+ application, and the program you are spawning is a
  * graphical application too, then to ensure that the spawned program opens its
  * windows on the right screen, you may want to use #GdkAppLaunchContext,
- * #GAppLaunchcontext, or set the %DISPLAY environment variable.
+ * #GAppLaunchContext, or set the %DISPLAY environment variable.
  *
  * Returns: %TRUE on success, %FALSE if an error was set
  */
@@ -28416,7 +28540,7 @@
 
 /**
  * g_spawn_command_line_async:
- * @command_line: a command line
+ * @command_line: (type filename): a command line
  * @error: return location for errors
  *
  * A simple version of g_spawn_async() that parses a command line with
@@ -28435,7 +28559,7 @@
 
 /**
  * g_spawn_command_line_sync:
- * @command_line: a command line
+ * @command_line: (type filename): a command line
  * @standard_output: (out) (array zero-terminated=1) (element-type guint8) (optional): return location for child output
  * @standard_error: (out) (array zero-terminated=1) (element-type guint8) (optional): return location for child errors
  * @exit_status: (out) (optional): return location for child exit status, as returned by waitpid()
@@ -28470,9 +28594,12 @@
 
 /**
  * g_spawn_sync:
- * @working_directory: (type filename) (nullable): child's current working directory, or %NULL to inherit parent's
- * @argv: (array zero-terminated=1): child's argument vector
- * @envp: (array zero-terminated=1) (nullable): child's environment, or %NULL to inherit parent's
+ * @working_directory: (type filename) (nullable): child's current working
+ *     directory, or %NULL to inherit parent's
+ * @argv: (array zero-terminated=1) (element-type filename):
+ *     child's argument vector
+ * @envp: (array zero-terminated=1) (element-type filename) (nullable):
+ *     child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
  * @child_setup: (scope async) (nullable): function to run in the child just before exec()
  * @user_data: (closure): user data for @child_setup
@@ -28491,7 +28618,8 @@
  * the child is stored there; see the documentation of
  * g_spawn_check_exit_status() for how to use and interpret this.
  * Note that it is invalid to pass %G_SPAWN_DO_NOT_REAP_CHILD in
- * @flags.
+ * @flags, and on POSIX platforms, the same restrictions as for
+ * g_child_watch_source_new() apply.
  *
  * If an error occurs, no data is returned in @standard_output,
  * @standard_error, or @exit_status.
@@ -30683,7 +30811,6 @@
  * test path arguments (`-p testpath` and `-s testpath`) as parsed by
  * g_test_init(). See the g_test_run() documentation for more
  * information on the order that tests are run in.
- *
  *
  * g_test_run_suite() or g_test_run() may only be called once
  * in a program.
@@ -33117,7 +33244,7 @@
  * g_unix_fd_add:
  * @fd: a file descriptor
  * @condition: IO conditions to watch for on @fd
- * @function: a #GPollFDFunc
+ * @function: a #GUnixFDSourceFunc
  * @user_data: data to pass to @function
  *
  * Sets a function to be called when the IO condition, as specified by
@@ -33298,7 +33425,8 @@
 
 /**
  * g_unsetenv:
- * @variable: the environment variable to remove, must not contain '='
+ * @variable: (type filename): the environment variable to remove, must
+ *     not contain '='
  *
  * Removes an environment variable from the environment.
  *
@@ -37292,7 +37420,14 @@
  *
  * You can make warnings fatal at runtime by setting the `G_DEBUG`
  * environment variable (see
- * [Running GLib Applications](glib-running.html)).
+ * [Running GLib Applications](glib-running.html)):
+ *
+ * |[
+ *   G_DEBUG=fatal-warnings gdb ./my-program
+ * ]|
+ *
+ * Any unrelated failures can be skipped over in
+ * [gdb](https://www.gnu.org/software/gdb/) using the `continue` command.
  *
  * If g_log_default_handler() is used as the log handler function,
  * a newline character will automatically be appended to @..., and
