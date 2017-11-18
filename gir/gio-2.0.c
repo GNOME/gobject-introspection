@@ -16503,7 +16503,8 @@
 /**
  * g_dbus_action_group_get:
  * @connection: A #GDBusConnection
- * @bus_name: the bus name which exports the action group
+ * @bus_name: (nullable): the bus name which exports the action
+ *     group or %NULL if @connection is not a message bus connection
  * @object_path: the object path at which the action group is exported
  *
  * Obtains a #GDBusActionGroup for the action group which is exported at
@@ -18598,7 +18599,8 @@
 /**
  * g_dbus_menu_model_get:
  * @connection: a #GDBusConnection
- * @bus_name: the bus name which exports the menu model
+ * @bus_name: (nullable): the bus name which exports the menu model
+ *     or %NULL if @connection is not a message bus connection
  * @object_path: the object path at which the menu model is exported
  *
  * Obtains a #GDBusMenuModel for the menu model which is exported
@@ -24371,6 +24373,77 @@
  * This call does no blocking I/O.
  *
  * Returns: %TRUE if @file is native
+ */
+
+
+/**
+ * g_file_load_bytes:
+ * @file: a #GFile
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @etag_out: (out) (nullable) (optional): a location to place the current
+ *     entity tag for the file, or %NULL if the entity tag is not needed
+ * @error: a location for a #GError or %NULL
+ *
+ * Loads the contents of @file and returns it as #GBytes.
+ *
+ * If @file is a resource:// based URI, the resulting bytes will reference the
+ * embedded resource instead of a copy. Otherwise, this is equivalent to calling
+ * g_file_load_contents() and g_bytes_new_take().
+ *
+ * For resources, @etag_out will be set to %NULL.
+ *
+ * The data contained in the resulting #GBytes is always zero-terminated, but
+ * this is not included in the #GBytes length. The resulting #GBytes should be
+ * freed with g_bytes_unref() when no longer in use.
+ *
+ * Returns: (transfer full): a #GBytes or %NULL and @error is set
+ * Since: 2.56
+ */
+
+
+/**
+ * g_file_load_bytes_async:
+ * @file: a #GFile
+ * @cancellable: (nullable): a #GCancellable or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the
+ *     request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously loads the contents of @file as #GBytes.
+ *
+ * If @file is a resource:// based URI, the resulting bytes will reference the
+ * embedded resource instead of a copy. Otherwise, this is equivalent to calling
+ * g_file_load_contents_async() and g_bytes_new_take().
+ *
+ * @callback should call g_file_load_bytes_finish() to get the result of this
+ * asynchronous operation.
+ *
+ * See g_file_load_bytes() for more information.
+ *
+ * Since: 2.56
+ */
+
+
+/**
+ * g_file_load_bytes_finish:
+ * @file: a #GFile
+ * @result: a #GAsyncResult provided to the callback
+ * @etag_out: (out) (nullable) (optional): a location to place the current
+ *     entity tag for the file, or %NULL if the entity tag is not needed
+ * @error: a location for a #GError, or %NULL
+ *
+ * Completes an asynchronous request to g_file_load_bytes_async().
+ *
+ * For resources, @etag_out will be set to %NULL.
+ *
+ * The data contained in the resulting #GBytes is always zero-terminated, but
+ * this is not included in the #GBytes length. The resulting #GBytes should be
+ * freed with g_bytes_unref() when no longer in use.
+ *
+ * See g_file_load_bytes() for more information.
+ *
+ * Returns: (transfer full): a #GBytes or %NULL and @error is set
+ * Since: 2.56
  */
 
 
@@ -32562,6 +32635,10 @@
  *
  * If you want to use this resource in the global resource namespace you need
  * to register it with g_resources_register().
+ *
+ * Note: @data must be backed by memory that is at least pointer aligned.
+ * Otherwise this function will internally create a copy of the memory since
+ * GLib 2.56, or in older versions fail and exit the process.
  *
  * Returns: (transfer full): a new #GResource, or %NULL on error
  * Since: 2.32

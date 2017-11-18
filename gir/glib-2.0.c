@@ -12972,6 +12972,10 @@
  * function is NOT thread-safe. So unless @datalist can be protected
  * from any modifications during invocation of this function, it should
  * not be called.
+ *
+ * @func can make changes to @datalist, but the iteration will not
+ * reflect changes made during the g_datalist_foreach() call, other
+ * than skipping over elements that are removed.
  */
 
 
@@ -13230,8 +13234,12 @@
  *
  * Calls the given function for each data element which is associated
  * with the given location. Note that this function is NOT thread-safe.
- * So unless @datalist can be protected from any modifications during
- * invocation of this function, it should not be called.
+ * So unless @dataset_location can be protected from any modifications
+ * during invocation of this function, it should not be called.
+ *
+ * @func can make changes to the dataset, but the iteration will not
+ * reflect changes made during the g_dataset_foreach() call, other
+ * than skipping over elements that are removed.
  */
 
 
@@ -19329,6 +19337,9 @@
  * @user_data: user data to pass to the function
  *
  * Calls a function for each element of a #GList.
+ *
+ * It is safe for @func to remove the element from @list, but it must
+ * not modify any part of the list after that element.
  */
 
 
@@ -19370,6 +19381,9 @@
  *
  * Convenience method, which frees all the memory used by a #GList,
  * and calls @free_func on every element's data.
+ *
+ * @free_func must not modify the list (eg, by removing the freed
+ * element from it).
  *
  * Since: 2.28
  */
@@ -22245,8 +22259,9 @@
  * @func: the function to call for each visited node
  * @data: user data to pass to the function
  *
- * Calls a function for each of the children of a #GNode.
- * Note that it doesn't descend beneath the child nodes.
+ * Calls a function for each of the children of a #GNode. Note that it
+ * doesn't descend beneath the child nodes. @func must not do anything
+ * that would modify the structure of the tree.
  */
 
 
@@ -22516,6 +22531,7 @@
  * Traverses a tree starting at the given root #GNode.
  * It calls the given function for each node visited.
  * The traversal can be halted at any point by returning %TRUE from @func.
+ * @func must not do anything that would modify the structure of the tree.
  */
 
 
@@ -23734,7 +23750,8 @@
  * @func: the function to call for each array element
  * @user_data: user data to pass to the function
  *
- * Calls a function for each element of a #GPtrArray.
+ * Calls a function for each element of a #GPtrArray. @func must not
+ * add elements to or remove elements from the array.
  *
  * Since: 2.4
  */
@@ -24164,6 +24181,9 @@
  * Calls @func for each element in the queue passing @user_data to the
  * function.
  *
+ * It is safe for @func to remove the element from @queue, but it must
+ * not modify any part of the queue after that element.
+ *
  * Since: 2.4
  */
 
@@ -24188,6 +24208,9 @@
  *
  * Convenience method, which frees all the memory used by a #GQueue,
  * and calls the specified destroy function on every element's data.
+ *
+ * @free_func should not modify the queue (eg, by removing the freed
+ * element from it).
  *
  * Since: 2.32
  */
@@ -26113,7 +26136,7 @@
  * @user_data: user data passed to @func
  *
  * Calls @func for each item in the sequence passing @user_data
- * to the function.
+ * to the function. @func must not modify the sequence itself.
  *
  * Since: 2.14
  */
@@ -26127,7 +26150,8 @@
  * @user_data: user data passed to @func
  *
  * Calls @func for each item in the range (@begin, @end) passing
- * @user_data to the function.
+ * @user_data to the function. @func must not modify the sequence
+ * itself.
  *
  * Since: 2.14
  */
@@ -27297,6 +27321,9 @@
  * @user_data: user data to pass to the function
  *
  * Calls a function for each element of a #GSList.
+ *
+ * It is safe for @func to remove the element from @list, but it must
+ * not modify any part of the list after that element.
  */
 
 
@@ -27338,6 +27365,9 @@
  *
  * Convenience method, which frees all the memory used by a #GSList, and
  * calls the specified destroy function on every element's data.
+ *
+ * @free_func must not modify the list (eg, by removing the freed
+ * element from it).
  *
  * Since: 2.28
  */
@@ -28804,11 +28834,11 @@
  * call g_str_tokenize_and_fold() on the search term and
  * perform lookups into that index.
  *
- * As some examples, searching for "fred" would match the potential hit
- * "Smith, Fred" and also "Frédéric".  Searching for "Fréd" would match
- * "Frédéric" but not "Frederic" (due to the one-directional nature of
- * accent matching).  Searching "fo" would match "Foo" and "Bar Foo
- * Baz", but not "SFO" (because no word as "fo" as a prefix).
+ * As some examples, searching for ‘fred’ would match the potential hit
+ * ‘Smith, Fred’ and also ‘Frédéric’.  Searching for ‘Fréd’ would match
+ * ‘Frédéric’ but not ‘Frederic’ (due to the one-directional nature of
+ * accent matching).  Searching ‘fo’ would match ‘Foo’ and ‘Bar Foo
+ * Baz’, but not ‘SFO’ (because no word has ‘fo’ as a prefix).
  *
  * Returns: %TRUE if @potential_hit is a hit
  * Since: 2.40
