@@ -7,6 +7,8 @@ project('gobject-introspection', 'c',
   ],
 )
 
+host_system = host_machine.system()
+
 py3 = import('python3')
 
 cc = meson.get_compiler('c')
@@ -77,7 +79,11 @@ pkgconfig_conf.set('libdir', join_paths(prefix, get_option('libdir')))
 pkgconfig_conf.set('datarootdir', join_paths(prefix, get_option('datadir')))
 pkgconfig_conf.set('datadir', '${datarootdir}')
 pkgconfig_conf.set('includedir', join_paths(prefix, get_option('includedir')))
-pkgconfig_conf.set('EXEEXT', '') # TODO?
+if host_system == 'windows' or host_system == 'cygwin'
+  pkgconfig_conf.set('EXEEXT', '.exe')
+else
+  pkgconfig_conf.set('EXEEXT', '')
+endif
 pkgconfig_conf.set('VERSION', meson.project_version())
 pkgconfig_conf.set('FFI_PC_CFLAGS', libffi_dep.get_pkgconfig_variable('Cflags'))
 pkgconfig_conf.set('FFI_PC_PACKAGES', 'libffi')
