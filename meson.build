@@ -52,11 +52,16 @@ endif
 # Always bumped to match our version
 glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
 
-gobject_dep = dependency('gobject-2.0', version : glib_version)
-gio_dep = dependency('gio-2.0', version : glib_version)
-gmodule_dep = dependency('gmodule-2.0', version : glib_version)
-giounix_dep = dependency('gio-unix-2.0', version : glib_version, required: false)
-libffi_dep = dependency('libffi')
+gobject_dep = dependency('gobject-2.0', version : glib_version,
+  fallback: ['glib', 'libgobject_dep'])
+gio_dep = dependency('gio-2.0', version : glib_version,
+  fallback: ['glib', 'libgio_dep'])
+gmodule_dep = dependency('gmodule-2.0', version : glib_version,
+  fallback: ['glib', 'libgmodule_dep'])
+giounix_dep = dependency('gio-unix-2.0', version : glib_version,
+  fallback: ['glib', 'libgio_dep'], required: false)
+libffi_dep = dependency('libffi',
+  fallback : ['libffi', 'ffi_dep'])
 
 gir_build = get_option('gir_build')
 subdir('girepository')
