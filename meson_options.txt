@@ -1,8 +1,8 @@
-option('cairo', type: 'boolean',
+option('cairo', type: 'boolean', value : false,
   description: 'Use cairo for tests'
 )
 
-option('doctool', type: 'boolean',
+option('doctool', type: 'boolean', value : true,
   description: 'Install g-ir-doc-tool'
 )
 
@@ -18,6 +18,6 @@ option('cairo-libname', type: 'string',
   description: 'Custom name for the cairo-gobject library name'
 )
 
-option('gir_build', type: 'boolean',
+option('gir_build', type: 'boolean', value : true,
   description: 'Windows: post build (gir) stuff'
 )
