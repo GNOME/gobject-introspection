@@ -8,6 +8,7 @@ project('gobject-introspection', 'c',
 )
 
 host_system = host_machine.system()
+gi_versions = meson.project_version().split('.')
 
 py3 = import('python3')
 
@@ -48,10 +49,13 @@ elif cc.get_id() == 'msvc'
   ]
 endif
 
-gobject_dep = dependency('gobject-2.0', version: '>= 2.52.0')
-gio_dep = dependency('gio-2.0')
-giounix_dep = dependency('gio-unix-2.0', required: false)
-gmodule_dep = dependency('gmodule-2.0')
+# Always bumped to match our version
+glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
+
+gobject_dep = dependency('gobject-2.0', version : glib_version)
+gio_dep = dependency('gio-2.0', version : glib_version)
+gmodule_dep = dependency('gmodule-2.0', version : glib_version)
+giounix_dep = dependency('gio-unix-2.0', version : glib_version, required: false)
 libffi_dep = dependency('libffi')
 
 gir_build = get_option('gir_build')
