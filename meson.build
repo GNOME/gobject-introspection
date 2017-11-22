@@ -29,11 +29,6 @@ foreach type : ['char', 'short', 'int', 'long']
   config.set('SIZEOF_@0@'.format(type.to_upper()), size)
 endforeach
 
-configure_file(
-  configuration: config,
-  output: 'config.h'
-)
-
 add_project_arguments([
     '-I' + meson.build_root(),
     '-DHAVE_CONFIG_H',
@@ -41,16 +36,21 @@ add_project_arguments([
 )
 
 gi_hidden_visibility_cflags = []
-if cc.has_argument('-fvisibility=hidden')
-  gi_hidden_visibility_cflags = [
-    '-D_GI_EXTERN=__attribute__((visibility("default"))) extern',
-    '-fvisibility=hidden',
-  ]
-elif cc.get_id() == 'msvc'
-  gi_hidden_visibility_cflags = [
-        '-D_GI_EXTERN=__declspec (dllexport) extern',
-  ]
+if host_machine.system() == 'windows'
+  config.set('DLL_EXPORT', true)
+  config.set('_GI_EXTERN', '__declspec(dllexport) extern')
+  if cc.get_id() != 'msvc'
+    gi_hidden_visibility_cflags += '-fvisibility=hidden'
+  endif
+else
+  config.set('_GI_EXTERN', '__attribute__((visibility("default"))) extern')
+  gi_hidden_visibility_cflags += '-fvisibility=hidden'
 endif
+
+configure_file(
+  configuration: config,
+  output: 'config.h'
+)
 
 # Always bumped to match our version
 glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
