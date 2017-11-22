@@ -53,7 +53,7 @@
 #endif
 
 /* forward declaration */
-MOD_INIT(_giscanner);
+_GI_EXTERN MOD_INIT(_giscanner);
 
 #define NEW_CLASS(ctype, name, cname, num_methods)	      \
 static const PyMethodDef _Py##cname##_methods[num_methods];    \

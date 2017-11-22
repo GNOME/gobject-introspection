@@ -68,9 +68,9 @@ giscanner_lib = static_library('giscanner',
   dependencies: gio_dep,
 )
 
-# TODO: -export-symbols-regex "init_giscanner|PyInit__giscanner"
 giscanner_pymod = py3.extension_module('_giscanner', 'giscannermodule.c',
   link_with: giscanner_lib,
+  c_args: [ gi_hidden_visibility_cflags ],
   dependencies: [
     gobject_dep,
     dependency('python3'),
