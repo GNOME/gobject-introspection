@@ -51,7 +51,7 @@ scanner_command = [
 
 # GLib
 glib_includedir = join_paths(gobject_dep.get_pkgconfig_variable('includedir'), 'glib-2.0')
-glib_libincludedir = join_paths(gobject_dep.get_pkgconfig_variable('libdir'), 'glib-2.0/include')
+glib_libincludedir = join_paths(gobject_dep.get_pkgconfig_variable('libdir'), 'glib-2.0', 'include')
 glib_srcdir = get_option('glib-src-dir')
 
 glib_glob = glib_includedir + '/glib/*.h'

@@ -1,5 +1,3 @@
-libdir_abs = join_paths(get_option('prefix'), get_option('libdir'))
-datadir_abs = join_paths(get_option('prefix'), get_option('datadir'))
 python_path = py3.find_python().path()
 
 tools = [
@@ -13,8 +11,8 @@ endif
 tool_output = []
 foreach tool : tools
   tools_conf = configuration_data()
-  tools_conf.set('libdir', libdir_abs)
-  tools_conf.set('datarootdir', datadir_abs)
+  tools_conf.set('libdir', gi_libdir)
+  tools_conf.set('datarootdir', gi_datadir)
   tools_conf.set('PYTHON', python_path)
 
   tools_conf.set('TOOL_MODULE', tool[1])

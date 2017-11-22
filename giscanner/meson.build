@@ -1,4 +1,4 @@
-pkglibdir = join_paths(get_option('libdir'), meson.project_name())
+pkglibdir = join_paths(gi_libdir, meson.project_name())
 giscannerdir = join_paths(pkglibdir, 'giscanner')
 install_data([
   '__init__.py',

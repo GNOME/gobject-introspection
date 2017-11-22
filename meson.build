@@ -9,11 +9,17 @@ project('gobject-introspection', 'c',
 
 py3 = import('python3')
 
+gi_prefix = get_option('prefix')
+gi_bindir = join_paths(gi_prefix, get_option('bindir'))
+gi_libdir = join_paths(gi_prefix, get_option('libdir'))
+gi_datadir = join_paths(gi_prefix, get_option('datadir'))
+gi_includedir = join_paths(gi_prefix, get_option('includedir'))
+
 cc = meson.get_compiler('c')
 config = configuration_data()
 config.set_quoted('GIR_SUFFIX', 'gir-1.0')
-config.set_quoted('GIR_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'gir-1.0'))
-config.set_quoted('GOBJECT_INTROSPECTION_LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
+config.set_quoted('GIR_DIR', join_paths(gi_datadir, 'gir-1.0'))
+config.set_quoted('GOBJECT_INTROSPECTION_LIBDIR', gi_libdir)
 
 foreach type : ['char', 'short', 'int', 'long']
   size = cc.sizeof(type)
@@ -62,39 +68,31 @@ if gir_build
 endif
 subdir('examples')
 subdir('docs')
+
 ### Missing meson.build file
 ### subdir('tests')
 
-install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
-install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
+install_data('Makefile.introspection', install_dir: join_paths(gi_datadir, 'gobject-introspection-1.0'))
+install_data('m4/introspection.m4', install_dir: join_paths(gi_datadir, 'aclocal'))
 
-prefix = get_option('prefix')
 pkgconfig_conf = configuration_data()
 pkgconfig_conf.set('prefix', prefix)
 pkgconfig_conf.set('exec_prefix', '${prefix}')
-pkgconfig_conf.set('bindir', join_paths(prefix, get_option('bindir')))
-pkgconfig_conf.set('libdir', join_paths(prefix, get_option('libdir')))
-pkgconfig_conf.set('datarootdir', join_paths(prefix, get_option('datadir')))
+pkgconfig_conf.set('bindir', gi_bindir)
+pkgconfig_conf.set('libdir', gi_libdir)
+pkgconfig_conf.set('datarootdir', gi_datadir)
 pkgconfig_conf.set('datadir', '${datarootdir}')
-pkgconfig_conf.set('includedir', join_paths(prefix, get_option('includedir')))
+pkgconfig_conf.set('includedir', gi_includedir)
 pkgconfig_conf.set('EXEEXT', '') # TODO?
 pkgconfig_conf.set('VERSION', meson.project_version())
 pkgconfig_conf.set('FFI_PC_CFLAGS', libffi_dep.get_pkgconfig_variable('Cflags'))
-pkgconfig_conf.set('FFI_PC_PACKAGES', 'libffi')
 pkgconfig_conf.set('FFI_PC_LIBS', libffi_dep.get_pkgconfig_variable('Libs'))
-
-configure_file(
-  input: 'gobject-introspection-no-export-1.0.pc.in',
-  output: 'gobject-introspection-no-export-1.0.pc',
-  configuration: pkgconfig_conf,
-  install: true,
-  install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
-)
+pkgconfig_conf.set('FFI_PC_PACKAGES', 'libffi')
 
 configure_file(
   input: 'gobject-introspection-1.0.pc.in',
   output: 'gobject-introspection-1.0.pc',
   configuration: pkgconfig_conf,
   install: true,
-  install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
+  install_dir: join_paths(gi_libdir, 'pkgconfig'),
 )
