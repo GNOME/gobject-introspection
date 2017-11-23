@@ -47,24 +47,45 @@ if debug:
             pdb.pm()
         sys.excepthook = on_exception
 
-if os.name == 'nt':
-    datadir = os.path.join(os.path.dirname(__file__), '..', 'share')
-    pylibdir = os.path.join(os.path.dirname(__file__), '..', 'lib', 'gobject-introspection')
-else:
+# Detect and set datadir, pylibdir, etc as applicable
+# Similar to the method used in gdbus-codegen
+filedir = os.path.dirname(__file__)
+
+# Try using relative paths first so that the installation prefix is relocatable
+datadir = os.path.abspath(os.path.join(filedir, '..', 'share'))
+# Fallback to hard-coded paths if the relocatable paths are wrong
+if not os.path.isdir(os.path.join(datadir, 'gir-1.0')):
     datadir = "@datarootdir@"
-    pylibdir = os.path.join('@libdir@', 'gobject-introspection')
 
 builtins.__dict__['DATADIR'] = datadir
 
-srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
-if srcdir is not None:
-    pylibdir = srcdir
+# Again, relative paths first so that the installation prefix is relocatable
+pylibdir = os.path.abspath(os.path.join(filedir, '..', 'lib', 'gobject-introspection'))
+if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner.so')):
+    # Running uninstalled?
+    builddir = os.getenv('UNINSTALLED_INTROSPECTION_BUILDDIR', None)
+    if builddir is not None:
+        # Autotools, most likely
+        builddir = os.path.abspath(builddir)
+        # For _giscanner.so
+        sys.path.insert(0, os.path.join(builddir, 'giscanner'))
+        srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
+        if srcdir:
+            # For the giscanner python files
+            pylibdir = srcdir
+    elif os.path.isdir(os.path.join(filedir, '..', 'giscanner')):
+        # We're running uninstalled inside meson
+        builddir = os.path.abspath(os.path.join(filedir, '..'))
+        pylibdir = builddir
+        gdump_path = os.path.join(builddir, 'girepository', 'gdump.c')
+        if os.path.isfile(gdump_path):
+            builtins.__dict__['GDUMP_PATH'] = gdump_path
+    else:
+        # Okay, we're not running uninstalled and the prefix is not
+        # relocatable. Use hard-coded libdir.
+        pylibdir = os.path.join('@libdir@', 'gobject-introspection')
 
 sys.path.insert(0, pylibdir)
-
-builddir = os.getenv('UNINSTALLED_INTROSPECTION_BUILDDIR', None)
-if builddir is not None:
-    sys.path.insert(0, os.path.join(builddir, 'giscanner'))
 
 from giscanner.@TOOL_MODULE@ import @TOOL_FUNCTION@
 sys.exit(@TOOL_FUNCTION@(sys.argv))

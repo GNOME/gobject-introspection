@@ -116,8 +116,11 @@ class DumpCompiler(object):
         if self._uninst_srcdir is not None:
             gdump_path = os.path.join(self._uninst_srcdir, 'girepository', 'gdump.c')
         else:
-            gdump_path = os.path.join(os.path.join(DATADIR), 'gobject-introspection-1.0',
-                                      'gdump.c')
+            try:
+                gdump_path = GDUMP_PATH
+            except NameError:
+                gdump_path = os.path.join(os.path.join(DATADIR),
+                                          'gobject-introspection-1.0', 'gdump.c')
         if not os.path.isfile(gdump_path):
             raise SystemExit("Couldn't find %r" % (gdump_path, ))
         with open(gdump_path) as gdump_file:
