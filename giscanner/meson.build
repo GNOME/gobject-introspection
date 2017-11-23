@@ -41,8 +41,8 @@ endforeach
 
 install_subdir('doctemplates', install_dir: giscannerdir)
 
-flex = find_program('flex')
-bison = find_program('bison')
+flex = find_program('flex', 'win_flex')
+bison = find_program('bison', 'win_bison')
 
 scannerparser = custom_target('scannerparser',
     input: 'scannerparser.y',
