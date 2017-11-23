@@ -1,6 +1,6 @@
 libdir_abs = join_paths(get_option('prefix'), get_option('libdir'))
 datadir_abs = join_paths(get_option('prefix'), get_option('datadir'))
-python_path = py3.find_python().path()
+python_path = python3.path()
 
 tools = [
   ['g-ir-scanner', 'scannermain', 'scanner_main'],

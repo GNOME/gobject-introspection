@@ -13,6 +13,7 @@ gi_versions = meson.project_version().split('.')
 configinc = include_directories('.')
 
 py3 = import('python3')
+python3 = py3.find_python()
 
 cc = meson.get_compiler('c')
 config = configuration_data()
