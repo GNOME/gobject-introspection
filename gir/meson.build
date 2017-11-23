@@ -43,199 +43,289 @@ scanner_command = [
   'UNINSTALLED_INTROSPECTION_BUILDDIR=' + meson.build_root(),
   girscanner,
   '--output=@OUTPUT@',
-  '--warn-all',
   '--no-libtool',
-  '--external-library',
   '--reparse-validate',
 ]
 
-# GLib
-glib_includedir = join_paths(gobject_dep.get_pkgconfig_variable('includedir'), 'glib-2.0')
-glib_libincludedir = join_paths(gobject_dep.get_pkgconfig_variable('libdir'), 'glib-2.0/include')
-glib_srcdir = get_option('glib-src-dir')
+# Take a glob and print to newlines
+globber = '''
+from glob import glob
 
-glib_glob = glib_includedir + '/glib/*.h'
-if glib_srcdir != ''
-  glib_glob += ',' + glib_srcdir + '/glib/*.c'
+for f in glob('@0@'):
+  print(f)
+'''
+
+# GLib
+glib_files = files('glib-2.0.c')
+glib_command = scanner_command + [
+  '--identifier-prefix=G',
+  '--symbol-prefix=g',
+  '--symbol-prefix=glib',
+  '--c-include=glib.h',
+  '--namespace=GLib',
+  '--nsversion=2.0',
+  '--library=glib-2.0',
+  '--library=gobject-2.0',
+]
+
+dep_type = glib_dep.type_name()
+if dep_type == 'pkgconfig'
+  glib_command += ['--external-library', '--pkg=glib-2.0']
+  glib_libdir = glib_dep.get_pkgconfig_variable('libdir')
+  glib_incdir = join_paths(glib_dep.get_pkgconfig_variable('includedir'), 'glib-2.0')
+  glib_libincdir = join_paths(glib_libdir, 'glib-2.0', 'include')
+  glib_files += join_paths(glib_incdir, 'gobject', 'glib-types.h')
+  glib_files += join_paths(glib_libincdir, 'glibconfig.h')
+  if giounix_dep.found()
+    glib_files += join_paths(glib_incdir, 'glib-unix.h')
+  endif
+  # Parse glob to get installed header list
+  ret = run_command(python3, '-c', globber.format(join_paths(glib_incdir, 'glib', '*.h')))
+  if ret.returncode() != 0
+    error('Failed to get glib header list')
+  endif
+  glib_headers = ret.stdout().strip().split('\n')
+  # Get a list of all source files
+  glib_srcdir = get_option('glib-src-dir')
+  if glib_srcdir != ''
+    ret = run_command(python3, '-c', globber.format(join_paths(glib_srcdir, 'glib', '*.c')))
+    if ret.returncode() != 0
+      error('Failed to get glib source list')
+    endif
+    glib_files += ret.stdout().strip().split('\n')
+  endif
+  glib_includes = ['-I' + glib_incdir, '-I' + glib_libincdir]
+elif dep_type == 'internal'
+  glib_command += ['--pkg-export=glib-2.0']
+  # XXX: Assumes that the builddir layout is 'mirror'
+  glib_libdir = join_paths(meson.build_root(), 'subprojects', 'glib', 'glib')
+  # XXX: Assumes the location of the glib subproject dir
+  # We should add API to meson to get a specific file from a specific subproject
+  glibproj_incdir = join_paths(meson.source_root(), 'subprojects', 'glib')
+  glib_incdir = join_paths(glibproj_incdir, 'glib')
+  glib_libincdir = glib_libdir
+  glib_files += join_paths(glibproj_incdir, 'gobject', 'glib-types.h')
+  glib_files += join_paths(glib_libincdir, 'glibconfig.h')
+  if giounix_dep.found()
+    glib_files += join_paths(glib_incdir, 'glib-unix.h')
+  endif
+  # We know exactly what headers will be installed, so just fetch that
+  glib_subproject = subproject('glib')
+  glib_headers = glib_subproject.get_variable('glib_sub_headers')
+  glib_files += glib_subproject.get_variable('glib_sources')
+  # XXX: Assumes that the builddir layout is 'mirror'
+  gobject_libdir = join_paths(meson.build_root(), 'subprojects', 'glib', 'gobject')
+  gmodule_libdir = join_paths(meson.build_root(), 'subprojects', 'glib', 'gmodule')
+  gio_libdir = join_paths(meson.build_root(), 'subprojects', 'glib', 'gio')
+  glib_libpaths = ['-L' + glib_libdir, '-L' + gobject_libdir,
+                   '-L' + gmodule_libdir, '-L' + gio_libdir]
+  glib_command += glib_libpaths
+  glib_includes = ['-I' + glibproj_incdir, '-I' + glib_incdir, '-I' + glib_libincdir]
+else
+  error('Unknown glib dependency type: ' + dep_type)
 endif
 
-glib_sources_file = custom_target('glib-sources-file',
-  input: 'glib-2.0.c',
-  output: 'glib-sources.list',
-  command: [
-    find_program('generate_source_list.py'),
-    '@OUTPUT@',
-    glib_glob,
-    'glib-autocleanups.h',
-    glib_libincludedir + '/glibconfig.h',
-    glib_includedir + '/gobject/glib-types.h',
-    '@INPUT@',
-  ]
-)
+foreach h : glib_headers
+  hstr = '@0@'.format(h)
+  if not hstr.endswith('autocleanups.h')
+    glib_files += h
+  endif
+endforeach
 
 glib_gir = custom_target('gir-glib',
-  input: glib_sources_file,
+  input: glib_files,
   output: 'GLib-2.0.gir',
   depends: giscanner_pymod,
   install: true,
   install_dir: girdir,
-  command: scanner_command + [
-    '--identifier-prefix=G',
-    '--symbol-prefix=g',
-    '--symbol-prefix=glib',
-    '--c-include=glib.h',
-    '--namespace=GLib',
-    '--nsversion=2.0',
-    '--pkg=glib-2.0',
-    '--library=glib-2.0',
-    '--library=gobject-2.0',
-    '--cflags-begin',
-    '-I' + glib_includedir,
-    '-I' + glib_libincludedir,
+  command: glib_command + [
+    '--cflags-begin'] + glib_includes + [
     '-DGLIB_COMPILATION',
     '-D__G_I18N_LIB_H__',
     '-DGETTEXT_PACKAGE=Dummy',
     '--cflags-end',
-    '--filelist=@INPUT@',
+    '@INPUT@',
   ]
 )
 
 gir_files += glib_gir
 
 # GObject
-gobject_glob = glib_includedir + '/gobject/*.h'
-if glib_srcdir != ''
-  gobject_glob += ',' + glib_srcdir + '/gobject/*.c'
+gobject_files = files('gobject-2.0.c')
+gobject_command = scanner_command + [
+  '--identifier-prefix=G',
+  '--c-include=glib-object.h',
+  '--namespace=GObject',
+  '--nsversion=2.0',
+  '--library=gobject-2.0',
+]
+
+if dep_type == 'pkgconfig'
+  gobject_command += ['--external-library', '--pkg=gobject-2.0']
+  # Get the installed header list
+  ret = run_command(python3, '-c', globber.format(join_paths(glib_incdir, 'gobject', '*.h')))
+  if ret.returncode() != 0
+    error('Failed to get gobject header list')
+  endif
+  gobject_headers = ret.stdout().strip().split('\n')
+  if glib_srcdir != ''
+    ret = run_command(python3, '-c', globber.format(join_paths(glib_srcdir, 'gobject', '*.c')))
+    if ret.returncode() != 0
+      error('Failed to get gobject source list')
+    endif
+    gobject_files += ret.stdout().strip().split('\n')
+  endif
+else
+  gobject_command += ['--pkg-export=gobject-2.0']
+  gobject_headers = glib_subproject.get_variable('gobject_install_headers')
+  gobject_files += glib_subproject.get_variable('gobject_sources')
+  gobject_command += glib_libpaths
 endif
 
-gobject_sources_file = custom_target('gobject-sources-file',
-  input: 'gobject-2.0.c',
-  output: 'gobject-sources.list',
-  command: [
-    find_program('generate_source_list.py'),
-    '@OUTPUT@',
-    gobject_glob,
-    'glib-types.h',
-    '@INPUT@',
-  ]
-)
+foreach h : gobject_headers
+  hstr = '@0@'.format(h)
+  if not hstr.endswith('autocleanups.h') and not hstr.endswith('glib-types.h')
+    gobject_files += h
+  endif
+endforeach
 
 gobject_gir = custom_target('gir-gobject',
-  input: gobject_sources_file,
+  input: gobject_files,
   output: 'GObject-2.0.gir',
   depends: [glib_gir, giscanner_pymod],
   install: true,
   install_dir: girdir,
-  command: scanner_command + [
-    '--identifier-prefix=G',
-    '--symbol-prefix=g',
-    '--c-include=glib-object.h',
-    '--namespace=GObject',
-    '--nsversion=2.0',
-    '--pkg=gobject-2.0',
-    '--library=gobject-2.0',
+  command: gobject_command + [
     '--include-uninstalled=' + glib_gir.full_path(),
-    '--cflags-begin',
-    '-I' + glib_includedir,
-    '-I' + glib_libincludedir,
+    '--cflags-begin'] + glib_includes + [
     '-DGOBJECT_COMPILATION',
     '--cflags-end',
-    '--filelist=@INPUT@',
+    '@INPUT@',
   ]
 )
 
 gir_files += gobject_gir
 
 # GModule
+gmodule_files = files('gmodule-2.0.c')
+gmodule_command = scanner_command + [
+  '--identifier-prefix=G',
+  '--symbol-prefix=g',
+  '--c-include=gmodule.h',
+  '--namespace=GModule',
+  '--nsversion=2.0',
+  '--library=gmodule-2.0',
+]
+
+if dep_type == 'pkgconfig'
+  gmodule_command += ['--external-library', '--pkg=gmodule-2.0']
+  gmodule_files += join_paths(glib_incdir, 'gmodule.h')
+  if glib_srcdir != ''
+    gmodule_files += join_paths(glib_srcdir, 'gmodule', 'gmodule.c')
+  endif
+else
+  gmodule_command += ['--pkg-export=gmodule-2.0']
+  gmodule_command += glib_libpaths
+  gmodule_files += [join_paths(glibproj_incdir, 'gmodule', 'gmodule.h'),
+                    join_paths(glibproj_incdir, 'gmodule', 'gmodule.c')]
+endif
+
 gir_files += custom_target('gir-gmodule',
-  input: 'gmodule-2.0.c', # TODO: glib sources
+  input: gmodule_files,
   output: 'GModule-2.0.gir',
   depends: [glib_gir, giscanner_pymod],
   install: true,
   install_dir: girdir,
-  command: scanner_command + [
-    '--identifier-prefix=G',
-    '--symbol-prefix=g',
-    '--c-include=gmodule.h',
-    '--namespace=GModule',
-    '--nsversion=2.0',
-    '--pkg=gmodule-2.0',
-    '--library=gmodule-2.0',
+  command: gmodule_command + [
     '--include-uninstalled=' + glib_gir.full_path(),
-    '--cflags-begin',
-    '-I' + glib_includedir,
-    '-I' + glib_libincludedir,
+    '--cflags-begin'] + glib_includes + [
     '--cflags-end',
-    glib_includedir + '/gmodule.h',
     '@INPUT@',
   ]
 )
 
-# Gio
+## Gio
+gio_files = files('gio-2.0.c')
 gio_command = scanner_command + [
   '--identifier-prefix=G',
   '--symbol-prefix=g',
   '--c-include=gio/gio.h',
   '--namespace=Gio',
   '--nsversion=2.0',
-  '--pkg=gio-2.0',
   '--library=gio-2.0',
-  '--include-uninstalled=' + gobject_gir.full_path(),
-  '--cflags-begin',
-  '-DGIO_COMPILATION',
-  '-DG_SETTINGS_ENABLE_BACKEND',
-  '-I' + glib_includedir,
-  '--cflags-end',
-  '--filelist=@INPUT@',
 ]
 
-gio_glob = glib_includedir + '/gio/*.h'
-if glib_srcdir != ''
-  gio_glob += ',' + glib_srcdir + '/gio/*.c'
-endif
-
-if giounix_dep.found()
-  giounix_includedir = giounix_dep.get_pkgconfig_variable('includedir') + '/gio-unix-2.0'
-  gio_glob += ',' + giounix_includedir + '/gio/*.h'
-
-  get_header_list = '''
-from glob import glob
-from os.path import basename
-
-print(','.join(basename(f) for f in glob('@0@/gio/*.h')))
-'''.format(giounix_includedir)
-
-  ret = run_command(py3.find_python(), '-c', get_header_list)
+if dep_type == 'pkgconfig'
+  gio_command += ['--external-library', '--pkg=gio-2.0']
+  # Get the installed header list
+  ret = run_command(python3, '-c', globber.format(join_paths(glib_incdir, 'gio', '*.h')))
   if ret.returncode() != 0
     error('Failed to get gio header list')
   endif
-  gio_headers = ret.stdout().strip().split(',')
-  foreach header : gio_headers
-    gio_command += '--c-include=gio/' + header
-  endforeach
-
-  gio_command += '--pkg=gio-unix-2.0'
+  gio_headers = ret.stdout().strip().split('\n')
+  # Get all gio (and gio-unix) sources. This is not entirely correct, but it's
+  # probably fine since it matches what Autotools does. We are more exact in
+  # the subproject case.
+  if glib_srcdir != ''
+    ret = run_command(python3, '-c', globber.format(join_paths(glib_srcdir, 'gio', '*.c')))
+    if ret.returncode() != 0
+      error('Failed to get gio source list')
+    endif
+    gio_files += ret.stdout().strip().split('\n')
+  endif
+else
+  gio_command += ['--pkg-export=gio-2.0']
+  gio_headers = glib_subproject.get_variable('gio_headers')
+  gio_files += glib_subproject.get_variable('gio_sources')
+  gio_command += glib_libpaths
 endif
 
-gio_sources_file = custom_target('gio-sources-file',
-  input: 'gio-2.0.c',
-  output: 'gio-sources.list',
-  command: [
-    find_program('generate_source_list.py'),
-    '@OUTPUT@',
-    gio_glob,
-    ' ',
-    '@INPUT@',
-  ]
-)
+foreach h : gio_headers
+  hstr = '@0@'.format(h)
+  if not hstr.endswith('autocleanups.h')
+    gio_files += h
+  endif
+endforeach
+
+if giounix_dep.found()
+  if dep_type == 'pkgconfig'
+    gio_command += ['--pkg=gio-unix-2.0']
+    giounix_includedir = join_paths(giounix_dep.get_pkgconfig_variable('includedir'), 'gio-unix-2.0')
+    # Get the installed gio-unix header list
+    ret = run_command(python3, '-c', globber.format(join_paths(giounix_includedir, 'gio', '*.h')))
+    if ret.returncode() != 0
+      error('Failed to get gio-unix header list')
+    endif
+    giounix_headers = ret.stdout().strip().split('\n')
+  else
+    gio_command += ['--pkg-export=gio-unix-2.0']
+    giounix_headers = glib_subproject.get_variable('gio_unix_include_headers')
+  endif
+  # No filtering needed
+  gio_files += giounix_headers
+  # GIO Unix headers must be included explicitly since there is no catch-all
+  # header that includes all of them unlike gio/gio.h above
+  foreach header : giounix_headers
+    hstr = '@0@'.format(header)
+    hbase = hstr.split('/')[-1]
+    gio_command += '--c-include=gio/@0@'.format(hbase)
+  endforeach
+endif
 
 gir_files += custom_target('gir-gio',
-  input: gio_sources_file,
+  input: gio_files,
   output: 'Gio-2.0.gir',
   depends: [gobject_gir, giscanner_pymod],
   install: true,
   install_dir: girdir,
-  command: gio_command,
+  command: gio_command + [
+    '--include-uninstalled=' + gobject_gir.full_path(),
+    '--cflags-begin'] + glib_includes + [
+    '-DGIO_COMPILATION',
+    '-DG_SETTINGS_ENABLE_BACKEND',
+    '--cflags-end',
+    '@INPUT@',
+  ]
 )
 
 # GIRepository
@@ -251,12 +341,12 @@ gir_files += custom_target('gir-girepository',
     '--c-include=girepository.h',
     '--namespace=GIRepository',
     '--nsversion=2.0',
-    '--pkg=gobject-introspection-1.0',
+    '--pkg-export=gobject-introspection-1.0',
     '--library=girepository-1.0',
     '--include-uninstalled=' + gobject_gir.full_path(),
     '--cflags-begin',
     '-DGI_COMPILATION',
-    '-I' + meson.source_root() + '/girepository',
+    '-I' + meson.current_source_dir() + '/../girepository',
     '--cflags-end',
     '@INPUT@',
   ]
