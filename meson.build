@@ -98,9 +98,16 @@ else
   pkgconfig_conf.set('EXEEXT', '')
 endif
 pkgconfig_conf.set('VERSION', meson.project_version())
-pkgconfig_conf.set('FFI_PC_CFLAGS', libffi_dep.get_pkgconfig_variable('Cflags'))
 pkgconfig_conf.set('FFI_PC_PACKAGES', 'libffi')
-pkgconfig_conf.set('FFI_PC_LIBS', libffi_dep.get_pkgconfig_variable('Libs'))
+if libffi_dep.type_name() == 'pkgconfig'
+  pkgconfig_conf.set('FFI_PC_CFLAGS', libffi_dep.get_pkgconfig_variable('Cflags'))
+  pkgconfig_conf.set('FFI_PC_LIBS', libffi_dep.get_pkgconfig_variable('Libs'))
+else
+  # XXX: We can't know the correct values for these, needs meson API. Maybe we
+  # should use meson's pkgconfig module to generate the whole file.
+  pkgconfig_conf.set('FFI_PC_CFLAGS', '')
+  pkgconfig_conf.set('FFI_PC_LIBS', '-lffi')
+endif
 
 configure_file(
   input: 'gobject-introspection-no-export-1.0.pc.in',
