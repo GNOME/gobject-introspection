@@ -10,6 +10,8 @@ project('gobject-introspection', 'c',
 host_system = host_machine.system()
 gi_versions = meson.project_version().split('.')
 
+configinc = include_directories('.')
+
 py3 = import('python3')
 
 cc = meson.get_compiler('c')
@@ -52,6 +54,8 @@ endif
 # Always bumped to match our version
 glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
 
+glib_dep = dependency('glib-2.0', version : glib_version,
+  fallback: ['glib', 'libglib_dep'])
 gobject_dep = dependency('gobject-2.0', version : glib_version,
   fallback: ['glib', 'libgobject_dep'])
 gio_dep = dependency('gio-2.0', version : glib_version,
