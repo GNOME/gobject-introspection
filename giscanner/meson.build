@@ -1,6 +1,4 @@
-pkglibdir = join_paths(get_option('libdir'), meson.project_name())
-giscannerdir = join_paths(pkglibdir, 'giscanner')
-install_data([
+giscanner_files = [
   '__init__.py',
   'annotationmain.py',
   'annotationparser.py',
@@ -27,8 +25,19 @@ install_data([
   'transformer.py',
   'utils.py',
   'xmlwriter.py',
-], install_dir: giscannerdir)
+]
 
+pkglibdir = join_paths(get_option('libdir'), meson.project_name())
+giscannerdir = join_paths(pkglibdir, 'giscanner')
+
+giscanner_built_files = []
+blank_conf = configuration_data()
+foreach f : giscanner_files
+  giscanner_built_files += configure_file(input : f, output : f,
+                                          install : true,
+                                          install_dir : giscannerdir,
+                                          configuration : blank_conf)
+endforeach
 
 install_subdir('doctemplates', install_dir: giscannerdir)
 
