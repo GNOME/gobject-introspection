@@ -27,10 +27,10 @@ from __future__ import unicode_literals
 import copy
 import operator
 from itertools import chain
+from collections import OrderedDict
 
 from . import message
 
-from .collections import OrderedDict
 from .message import Position
 from .utils import to_underscores
 

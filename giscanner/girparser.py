@@ -25,11 +25,11 @@ from __future__ import unicode_literals
 
 import os
 
+from collections import OrderedDict
 from xml.etree.cElementTree import parse
 
 from . import ast
 from .girwriter import COMPATIBLE_GIR_VERSION
-from .collections import OrderedDict
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
 C_NS = "http://www.gtk.org/introspection/c/1.0"

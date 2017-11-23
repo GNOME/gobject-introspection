@@ -29,11 +29,6 @@ install_data([
   'xmlwriter.py',
 ], install_dir: giscannerdir)
 
-install_data([
-  'collections/__init__.py',
-  'collections/counter.py',
-  'collections/ordereddict.py',
-], install_dir: join_paths(giscannerdir, 'collections'))
 
 install_subdir('doctemplates', install_dir: giscannerdir)
 
