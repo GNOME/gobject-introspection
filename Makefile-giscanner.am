@@ -53,12 +53,6 @@ pkgpyexec_PYTHON = 			\
 	giscanner/utils.py		\
 	giscanner/xmlwriter.py
 
-collectionsdir = $(pkgpyexecdir)/collections
-collections_PYTHON =		\
-	giscanner/collections/__init__.py	\
-	giscanner/collections/counter.py	\
-	giscanner/collections/ordereddict.py
-
 templatedir = $(pkglibdir)
 nobase_dist_template_DATA =		\
 	giscanner/doctemplates/base.tmpl	\

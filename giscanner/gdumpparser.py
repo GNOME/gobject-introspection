@@ -89,12 +89,12 @@ class GDumpParser(object):
         """
 
         # First pass: parsing
-        for node in self._namespace.values():
+        for node in list(self._namespace.values()):
             if isinstance(node, ast.Function):
                 self._initparse_function(node)
 
         if self._namespace.name == 'GObject' or self._namespace.name == 'GLib':
-            for node in self._namespace.values():
+            for node in list(self._namespace.values()):
                 if isinstance(node, ast.Record):
                     self._initparse_gobject_record(node)
 
@@ -123,7 +123,7 @@ class GDumpParser(object):
         # Pair up boxed types and class records
         for name, boxed in self._boxed_types.items():
             self._pair_boxed_type(boxed)
-        for node in self._namespace.values():
+        for node in list(self._namespace.values()):
             if isinstance(node, (ast.Class, ast.Interface)):
                 self._find_class_record(node)
 

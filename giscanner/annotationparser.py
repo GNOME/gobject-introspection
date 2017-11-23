@@ -116,10 +116,9 @@ import os
 import re
 import operator
 
-from collections import namedtuple
 from operator import ne, gt, lt
+from collections import namedtuple, Counter, OrderedDict
 
-from .collections import Counter, OrderedDict
 from .message import Position, warn, error
 
 
