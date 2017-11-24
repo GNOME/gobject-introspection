@@ -38,6 +38,7 @@ girdir = join_paths(get_option('datadir'), 'gir-1.0')
 install_data(gir_files, install_dir: girdir)
 
 scanner_command = [
+  python3,
   girscanner,
   '--output=@OUTPUT@',
   '--no-libtool',
