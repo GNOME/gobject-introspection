@@ -64,7 +64,7 @@ gio_dep = dependency('gio-2.0', version : glib_version,
 gmodule_dep = dependency('gmodule-2.0', version : glib_version,
   fallback: ['glib', 'libgmodule_dep'])
 giounix_dep = dependency('gio-unix-2.0', version : glib_version,
-  fallback: ['glib', 'libgio_dep'], required: false)
+  fallback: ['glib', 'libgiounix_dep'], required: false)
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
 
