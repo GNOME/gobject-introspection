@@ -47,6 +47,12 @@ scanner_command = [
   '--add-include-path', join_paths(meson.current_source_dir()),
 ]
 
+dep_type = glib_dep.type_name()
+if dep_type == 'internal'
+  scanner_command += ['--extra-library=gio-2.0', '--extra-library=gmodule-2.0',
+                      '--extra-library=glib-2.0', '--extra-library=gobject-2.0']
+endif
+
 # Take a glob and print to newlines
 globber = '''
 from glob import glob
@@ -68,7 +74,6 @@ glib_command = scanner_command + [
   '--library=gobject-2.0',
 ]
 
-dep_type = glib_dep.type_name()
 if dep_type == 'pkgconfig'
   glib_command += ['--external-library', '--pkg=glib-2.0']
   glib_libdir = glib_dep.get_pkgconfig_variable('libdir')
@@ -120,7 +125,19 @@ elif dep_type == 'internal'
   glib_libpaths = ['-L' + glib_libdir, '-L' + gobject_libdir,
                    '-L' + gmodule_libdir, '-L' + gio_libdir]
   glib_command += glib_libpaths
-  glib_includes = ['-I' + glibproj_incdir, '-I' + glib_incdir, '-I' + glib_libincdir]
+  # Includes that will be used to compile the scanner executable
+  glib_buildinc = join_paths(meson.build_root(), 'subprojects', 'glib')
+  gmodule_incdir = join_paths(glibproj_incdir, 'gmodule')
+  gio_incdir = join_paths(glibproj_incdir, 'gio')
+  glib_includes = ['-I' + glibproj_incdir, '-I' + glib_incdir, '-I' + glib_libincdir,
+                   '-I' + glib_buildinc, '-I' + gmodule_incdir, '-I' + gio_incdir]
+  # XXX: We need include paths to all glib dependencies too. We assume that the
+  # dependencies are only libffi and proxy-libintl, and that they are used as
+  # subprojects. In the worst case we add paths to non-existent directories.
+  ffi_incdir = join_paths(meson.build_root(), 'subprojects', 'libffi', 'include')
+  glib_includes += ['-I' + ffi_incdir]
+  intl_incdir = join_paths(meson.source_root(), 'subprojects', 'proxy-libintl')
+  glib_includes += ['-I' + intl_incdir]
 else
   error('Unknown glib dependency type: ' + dep_type)
 endif
@@ -333,6 +350,24 @@ gir_files += custom_target('gir-gio',
 )
 
 # GIRepository
+
+girepository_command = scanner_command + [
+  '--identifier-prefix=GI',
+  '--symbol-prefix=g',
+  '--c-include=girepository.h',
+  '--namespace=GIRepository',
+  '--nsversion=2.0',
+  '--library=girepository-1.0',
+]
+
+if dep_type == 'pkgconfig'
+  girepository_command += ['--external-library', '--pkg=gobject-introspection-1.0']
+else
+  girepository_command += ['--pkg-export=gobject-introspection-1.0',
+                           '-L' + meson.current_build_dir() + '/../girepository']
+  girepository_command += glib_libpaths
+endif
+
 gir_files += custom_target('gir-girepository',
   input: girepo_gir_sources,
   output: 'GIRepository-2.0.gir',
@@ -340,18 +375,11 @@ gir_files += custom_target('gir-girepository',
   depend_files: giscanner_built_files,
   install: true,
   install_dir: girdir,
-  command: scanner_command + [
-    '--identifier-prefix=GI',
-    '--symbol-prefix=g',
-    '--c-include=girepository.h',
-    '--namespace=GIRepository',
-    '--nsversion=2.0',
-    '--pkg-export=gobject-introspection-1.0',
-    '--library=girepository-1.0',
+  command: girepository_command + [
     '--include-uninstalled=' + gobject_gir.full_path(),
-    '--cflags-begin',
-    '-DGI_COMPILATION',
+    '--cflags-begin'] + glib_includes + [
     '-I' + meson.current_source_dir() + '/../girepository',
+    '-DGI_COMPILATION',
     '--cflags-end',
     '@INPUT@',
   ]
