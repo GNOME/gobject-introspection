@@ -49,6 +49,11 @@ scanner_command = [
 
 dep_type = glib_dep.type_name()
 if dep_type == 'internal'
+  # XXX: Instead of hard-coding the subproject directory, we should use
+  # gnome.generate_gir() because that will take care of dependencies, include
+  # paths, library paths, and more that we now have to handle manually when
+  # building with subprojects.
+  subprojdir = 'subprojects'
   scanner_command += ['--extra-library=gio-2.0', '--extra-library=gmodule-2.0',
                       '--extra-library=glib-2.0', '--extra-library=gobject-2.0']
 endif
@@ -103,10 +108,10 @@ if dep_type == 'pkgconfig'
 elif dep_type == 'internal'
   glib_command += ['--pkg-export=glib-2.0']
   # XXX: Assumes that the builddir layout is 'mirror'
-  glib_libdir = join_paths(meson.build_root(), 'subprojects', 'glib', 'glib')
+  glib_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'glib')
   # XXX: Assumes the location of the glib subproject dir
   # We should add API to meson to get a specific file from a specific subproject
-  glibproj_incdir = join_paths(meson.source_root(), 'subprojects', 'glib')
+  glibproj_incdir = join_paths(meson.source_root(), subprojdir, 'glib')
   glib_incdir = join_paths(glibproj_incdir, 'glib')
   glib_libincdir = glib_libdir
   glib_files += join_paths(glibproj_incdir, 'gobject', 'glib-types.h')
@@ -119,14 +124,14 @@ elif dep_type == 'internal'
   glib_headers = glib_subproject.get_variable('glib_sub_headers')
   glib_files += glib_subproject.get_variable('glib_sources')
   # XXX: Assumes that the builddir layout is 'mirror'
-  gobject_libdir = join_paths(meson.build_root(), 'subprojects', 'glib', 'gobject')
-  gmodule_libdir = join_paths(meson.build_root(), 'subprojects', 'glib', 'gmodule')
-  gio_libdir = join_paths(meson.build_root(), 'subprojects', 'glib', 'gio')
+  gobject_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'gobject')
+  gmodule_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'gmodule')
+  gio_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'gio')
   glib_libpaths = ['-L' + glib_libdir, '-L' + gobject_libdir,
                    '-L' + gmodule_libdir, '-L' + gio_libdir]
   glib_command += glib_libpaths
   # Includes that will be used to compile the scanner executable
-  glib_buildinc = join_paths(meson.build_root(), 'subprojects', 'glib')
+  glib_buildinc = join_paths(meson.build_root(), subprojdir, 'glib')
   gmodule_incdir = join_paths(glibproj_incdir, 'gmodule')
   gio_incdir = join_paths(glibproj_incdir, 'gio')
   glib_includes = ['-I' + glibproj_incdir, '-I' + glib_incdir, '-I' + glib_libincdir,
@@ -134,9 +139,9 @@ elif dep_type == 'internal'
   # XXX: We need include paths to all glib dependencies too. We assume that the
   # dependencies are only libffi and proxy-libintl, and that they are used as
   # subprojects. In the worst case we add paths to non-existent directories.
-  ffi_incdir = join_paths(meson.build_root(), 'subprojects', 'libffi', 'include')
+  ffi_incdir = join_paths(meson.build_root(), subprojdir, 'libffi', 'include')
   glib_includes += ['-I' + ffi_incdir]
-  intl_incdir = join_paths(meson.source_root(), 'subprojects', 'proxy-libintl')
+  intl_incdir = join_paths(meson.source_root(), subprojdir, 'proxy-libintl')
   glib_includes += ['-I' + intl_incdir]
 else
   error('Unknown glib dependency type: ' + dep_type)
