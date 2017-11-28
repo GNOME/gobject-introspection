@@ -29,11 +29,7 @@ foreach type : ['char', 'short', 'int', 'long']
   config.set('SIZEOF_@0@'.format(type.to_upper()), size)
 endforeach
 
-add_project_arguments([
-    '-I' + meson.build_root(),
-    '-DHAVE_CONFIG_H',
-  ], language: 'c',
-)
+add_project_arguments(['-DHAVE_CONFIG_H'], language: 'c')
 
 gi_hidden_visibility_cflags = []
 if host_machine.system() == 'windows'
