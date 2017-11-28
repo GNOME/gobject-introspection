@@ -64,17 +64,13 @@ giounix_dep = dependency('gio-unix-2.0', version : glib_version,
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
 
-gir_build = get_option('gir_build')
 subdir('girepository')
 subdir('tools')
 subdir('giscanner')
-if gir_build
-  ### To do in a second time
-  subdir('gir')
-endif
+subdir('gir')
 subdir('examples')
 subdir('docs')
-### Missing meson.build file
+### TODO
 ### subdir('tests')
 
 install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))

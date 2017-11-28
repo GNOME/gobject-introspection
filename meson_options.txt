@@ -17,7 +17,3 @@ option('gtk-doc', type: 'boolean', value: false,
 option('cairo-libname', type: 'string',
   description: 'Custom name for the cairo-gobject library name'
 )
-
-option('gir_build', type: 'boolean', value : true,
-  description: 'Windows: post build (gir) stuff'
-)
