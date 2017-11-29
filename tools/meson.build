@@ -1,11 +1,6 @@
 libdir_abs = join_paths(get_option('prefix'), get_option('libdir'))
 datadir_abs = join_paths(get_option('prefix'), get_option('datadir'))
 python_path = python3.path()
-# If there is a space in the path to python, we cannot use it in the shebang
-# since there is no way to quote spaces. Use the basename instead.
-if python_path.contains(' ')
-  python_path = python_path.split('/')[-1]
-endif
 
 tools = [
   ['g-ir-scanner', 'scannermain', 'scanner_main'],
