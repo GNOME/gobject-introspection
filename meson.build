@@ -32,7 +32,7 @@ endforeach
 add_project_arguments(['-DHAVE_CONFIG_H'], language: 'c')
 
 gi_hidden_visibility_cflags = []
-if host_machine.system() == 'windows'
+if host_system == 'windows'
   config.set('DLL_EXPORT', true)
   config.set('_GI_EXTERN', '__declspec(dllexport) extern')
   if cc.get_id() != 'msvc'
@@ -59,8 +59,16 @@ gio_dep = dependency('gio-2.0', version : glib_version,
   fallback: ['glib', 'libgio_dep'])
 gmodule_dep = dependency('gmodule-2.0', version : glib_version,
   fallback: ['glib', 'libgmodule_dep'])
-giounix_dep = dependency('gio-unix-2.0', version : glib_version,
-  fallback: ['glib', 'libgiounix_dep'], required: false)
+if host_system != 'windows'
+  giounix_dep = dependency('gio-unix-2.0', version : glib_version,
+    fallback: ['glib', 'libgiounix_dep'])
+else
+  # Don't even try to look for gio-unix-2.0 on Windows because Meson will
+  # fruitlessly try to find it in the glib subproject even when we don't want
+  # it to look in the subproject at all. Just use a not-found dependency.
+  giounix_dep = dependency('', required : false)
+  # XXX: Autotools doesn't build girs for gio-win32-2.0, but maybe we should?
+endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
 
