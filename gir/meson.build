@@ -132,7 +132,6 @@ elif dep_type == 'internal'
   gio_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'gio')
   glib_libpaths = ['-L' + glib_libdir, '-L' + gobject_libdir,
                    '-L' + gmodule_libdir, '-L' + gio_libdir]
-  glib_command += glib_libpaths
   # Includes that will be used to compile the scanner executable
   glib_buildinc = join_paths(meson.build_root(), subprojdir, 'glib')
   gmodule_incdir = join_paths(glibproj_incdir, 'gmodule')
@@ -146,6 +145,12 @@ elif dep_type == 'internal'
   glib_includes += ['-I' + ffi_incdir]
   intl_incdir = join_paths(meson.source_root(), subprojdir, 'proxy-libintl')
   glib_includes += ['-I' + intl_incdir]
+
+  ffi_libdir = join_paths(meson.build_root(), subprojdir, 'libffi', 'src')
+  glib_libpaths = ['-L' + ffi_libdir] + glib_libpaths
+
+  glib_command += glib_libpaths
+
 else
   error('Unknown glib dependency type: ' + dep_type)
 endif
