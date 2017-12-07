@@ -62,7 +62,10 @@ endif
 globber = '''
 from glob import glob
 
-for f in glob('@0@'):
+# Sort the glob for stable results. Also ensures that gmarshal.h is not
+# #include-ed by scannerparser.y first because it does not include glib.h
+# itself, which leaves several defines unresolved.
+for f in sorted(glob('@0@')):
   print(f)
 '''
 
