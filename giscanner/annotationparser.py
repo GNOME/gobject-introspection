@@ -518,15 +518,15 @@ class GtkDocAnnotations(OrderedDict):
 
     __slots__ = ('position')
 
-    def __init__(self, position=None, sequence=None):
-        OrderedDict.__init__(self, sequence)
+    def __init__(self, *args, position=None, **kwargs):
+        OrderedDict.__init__(self, *args, **kwargs)
 
         #: A :class:`giscanner.message.Position` instance specifying the location of the
         #: annotations in the source file or :const:`None`.
         self.position = position
 
     def __copy__(self):
-        return GtkDocAnnotations(self.position, self)
+        return GtkDocAnnotations(self, position=self.position)
 
 
 class GtkDocAnnotatable(object):
@@ -1871,7 +1871,7 @@ class GtkDocCommentBlockParser(object):
 
         if parse_options:
             if annotations is None:
-                parsed_annotations = GtkDocAnnotations(position)
+                parsed_annotations = GtkDocAnnotations(position=position)
             else:
                 parsed_annotations = annotations.copy()
         else:
