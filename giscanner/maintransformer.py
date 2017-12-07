@@ -896,7 +896,7 @@ class MainTransformer(object):
             # the number of parameters (@foo) is the same or greater
             # than the number of signal parameters
             if len(block.params) > len(signal.parameters):
-                names = block.params.items()
+                names = [(k, v) for k, v in block.params.items()]
                 # Resolve real parameter names early, so that in later
                 # phase we can refer to them while resolving annotations.
                 for i, param in enumerate(signal.parameters):
