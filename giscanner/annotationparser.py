@@ -518,12 +518,12 @@ class GtkDocAnnotations(OrderedDict):
 
     __slots__ = ('position')
 
-    def __init__(self, *args, position=None, **kwargs):
-        OrderedDict.__init__(self, *args, **kwargs)
-
+    def __init__(self, *args, **kwargs):
         #: A :class:`giscanner.message.Position` instance specifying the location of the
         #: annotations in the source file or :const:`None`.
-        self.position = position
+        self.position = kwargs.pop('position', None)
+
+        OrderedDict.__init__(self, *args, **kwargs)
 
     def __copy__(self):
         return GtkDocAnnotations(self, position=self.position)
