@@ -265,8 +265,8 @@
  * to a function and maybe a data argument, and the marshaller
  * converts between #GValue and native C types. The GObject
  * library provides the #GCClosure type for this purpose. Bindings for
- * other languages need marshallers which convert between #GValue<!--
- * -->s and suitable representations in the runtime of the language in
+ * other languages need marshallers which convert between #GValues
+ * and suitable representations in the runtime of the language in
  * order to use functions written in that languages as callbacks.
  *
  * Within GObject, closures play an important role in the
@@ -3126,6 +3126,11 @@
  *
  * Increases the reference count of @object.
  *
+ * Since GLib 2.56, if `GLIB_VERSION_MAX_ALLOWED` is 2.56 or greater, the type
+ * of @object will be propagated to the return type (using the GCC typeof()
+ * extension), so any casting the caller needs to do on the return type must be
+ * explicit.
+ *
  * Returns: (type GObject.Object) (transfer none): the same @object
  */
 
@@ -3142,6 +3147,9 @@
  * reference by clearing the floating flag while leaving the reference
  * count unchanged.  If the object is not floating, then this call
  * adds a new normal reference increasing the reference count by one.
+ *
+ * Since GLib 2.56, the type of @object will be propagated to the return type
+ * under the same conditions as for g_object_ref().
  *
  * Since: 2.10
  * Returns: (type GObject.Object) (transfer none): @object
@@ -6245,10 +6253,11 @@
  * g_value_dup_variant:
  * @value: a valid #GValue of type %G_TYPE_VARIANT
  *
- * Get the contents of a variant #GValue, increasing its refcount.
+ * Get the contents of a variant #GValue, increasing its refcount. The returned
+ * #GVariant is never floating.
  *
- * Returns: variant contents of @value, should be unrefed using
- *   g_variant_unref() when no longer needed
+ * Returns: (transfer full) (nullable): variant contents of @value (may be %NULL);
+ *    should be unreffed using g_variant_unref() when no longer needed
  * Since: 2.26
  */
 
@@ -6476,7 +6485,7 @@
  *
  * Get the contents of a variant #GValue.
  *
- * Returns: variant contents of @value
+ * Returns: (nullable): variant contents of @value (may be %NULL)
  * Since: 2.26
  */
 

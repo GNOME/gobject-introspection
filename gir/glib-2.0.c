@@ -12120,7 +12120,7 @@
  * @bytes: (nullable): a #GBytes
  *
  * Releases a reference on @bytes.  This may result in the bytes being
- * freed.
+ * freed. If @bytes is %NULL, it will return immediately.
  *
  * Since: 2.32
  */
@@ -14146,7 +14146,8 @@
  *   for the specifier.
  *
  * Returns: a newly allocated string formatted to the requested format
- *     or %NULL in the case that there was an error. The string
+ *     or %NULL in the case that there was an error (such as a format specifier
+ *     not being supported in the current locale). The string
  *     should be freed with g_free().
  * Since: 2.26
  */
@@ -27608,7 +27609,8 @@
  *     first element comes before the second, or a positive value if
  *     the first element comes after the second.
  *
- * Sorts a #GSList using the given comparison function.
+ * Sorts a #GSList using the given comparison function. The algorithm
+ * used is a stable sort.
  *
  * Returns: the start of the sorted #GSList
  */
@@ -28015,16 +28017,14 @@
  * g_source_remove:
  * @tag: the ID of the source to remove.
  *
- * Removes the source with the given id from the default main context.
+ * Removes the source with the given ID from the default main context. You must
+ * use g_source_destroy() for sources added to a non-default main context.
  *
- * The id of a #GSource is given by g_source_get_id(), or will be
+ * The ID of a #GSource is given by g_source_get_id(), or will be
  * returned by the functions g_source_attach(), g_idle_add(),
  * g_idle_add_full(), g_timeout_add(), g_timeout_add_full(),
  * g_child_watch_add(), g_child_watch_add_full(), g_io_add_watch(), and
  * g_io_add_watch_full().
- *
- * See also g_source_destroy(). You must use g_source_destroy() for sources
- * added to a non-default main context.
  *
  * It is a programmer error to attempt to remove a non-existent source.
  *
@@ -28264,7 +28264,7 @@
  * Note that if you have a pair of sources where the ready time of one
  * suggests that it will be delivered first but the priority for the
  * other suggests that it would be delivered first, and the ready time
- * for both sources is reached during the same main context iteration
+ * for both sources is reached during the same main context iteration,
  * then the order of dispatch is undefined.
  *
  * It is a no-op to call this function on a #GSource which has already been
@@ -35256,6 +35256,13 @@
  * It makes sense to call this function if you've received #GVariant
  * data from untrusted sources and you want to ensure your serialised
  * output is definitely in normal form.
+ *
+ * If @value is already in normal form, a new reference will be returned
+ * (which will be floating if @value is floating). If it is not in normal form,
+ * the newly created #GVariant will be returned with a single non-floating
+ * reference. Typically, g_variant_take_ref() should be called on the return
+ * value from this function to guarantee ownership of a single non-floating
+ * reference to it.
  *
  * Returns: (transfer full): a trusted #GVariant
  * Since: 2.24

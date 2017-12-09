@@ -5912,7 +5912,7 @@
  * ## An example for file descriptor passing # {#gdbus-unix-fd-client}
  *
  * Here is an example for passing UNIX file descriptors:
- * [gdbus-unix-fd-client.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-unix-fd-client.c)
+ * [gdbus-unix-fd-client.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-unix-fd-client.c)
  *
  * ## An example for exporting a GObject # {#gdbus-export}
  *
@@ -10705,7 +10705,7 @@
  * _g_freedesktop_dbus_call_add_match:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_rule: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -10733,7 +10733,7 @@
  * _g_freedesktop_dbus_call_add_match_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_rule: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.AddMatch">AddMatch()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -10748,7 +10748,7 @@
  * _g_freedesktop_dbus_call_get_connection_selinux_security_context:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -10778,7 +10778,7 @@
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
  * @out_security_context: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionSELinuxSecurityContext">GetConnectionSELinuxSecurityContext()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -10793,7 +10793,7 @@
  * _g_freedesktop_dbus_call_get_connection_unix_process_id:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -10823,7 +10823,7 @@
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
  * @out_pid: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixProcessID">GetConnectionUnixProcessID()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -10838,7 +10838,7 @@
  * _g_freedesktop_dbus_call_get_connection_unix_user:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -10868,7 +10868,7 @@
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
  * @out_uid: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetConnectionUnixUser">GetConnectionUnixUser()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -10882,7 +10882,7 @@
 /**
  * _g_freedesktop_dbus_call_get_id:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -10911,7 +10911,7 @@
  * _g_freedesktop_dbus_call_get_id_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @out_unique_id: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetId">GetId()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -10926,7 +10926,7 @@
  * _g_freedesktop_dbus_call_get_name_owner:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -10956,7 +10956,7 @@
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
  * @out_unique_name: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.GetNameOwner">GetNameOwner()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -10970,7 +10970,7 @@
 /**
  * _g_freedesktop_dbus_call_hello:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -10999,7 +10999,7 @@
  * _g_freedesktop_dbus_call_hello_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @out_assigned_name: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.Hello">Hello()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11013,7 +11013,7 @@
 /**
  * _g_freedesktop_dbus_call_list_activatable_names:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11028,7 +11028,7 @@
 /**
  * _g_freedesktop_dbus_call_list_activatable_names_finish:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @out_activatable_names: (out): Return location for return parameter or %NULL to ignore.
+ * @out_activatable_names: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_list_activatable_names().
  * @error: Return location for error or %NULL.
  *
@@ -11041,8 +11041,8 @@
 /**
  * _g_freedesktop_dbus_call_list_activatable_names_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @out_activatable_names: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @out_activatable_names: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListActivatableNames">ListActivatableNames()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11056,7 +11056,7 @@
 /**
  * _g_freedesktop_dbus_call_list_names:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11071,7 +11071,7 @@
 /**
  * _g_freedesktop_dbus_call_list_names_finish:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @out_names: (out): Return location for return parameter or %NULL to ignore.
+ * @out_names: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_list_names().
  * @error: Return location for error or %NULL.
  *
@@ -11084,8 +11084,8 @@
 /**
  * _g_freedesktop_dbus_call_list_names_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @out_names: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @out_names: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListNames">ListNames()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11100,7 +11100,7 @@
  * _g_freedesktop_dbus_call_list_queued_owners:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11115,7 +11115,7 @@
 /**
  * _g_freedesktop_dbus_call_list_queued_owners_finish:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @out_queued_owners: (out): Return location for return parameter or %NULL to ignore.
+ * @out_queued_owners: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to _g_freedesktop_dbus_call_list_queued_owners().
  * @error: Return location for error or %NULL.
  *
@@ -11129,8 +11129,8 @@
  * _g_freedesktop_dbus_call_list_queued_owners_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
- * @out_queued_owners: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @out_queued_owners: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ListQueuedOwners">ListQueuedOwners()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11145,7 +11145,7 @@
  * _g_freedesktop_dbus_call_name_has_owner:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11175,7 +11175,7 @@
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
  * @out_has_owner: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.NameHasOwner">NameHasOwner()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11190,7 +11190,7 @@
  * _g_freedesktop_dbus_call_release_name:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11220,7 +11220,7 @@
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
  * @out_value: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ReleaseName">ReleaseName()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11234,7 +11234,7 @@
 /**
  * _g_freedesktop_dbus_call_reload_config:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11261,7 +11261,7 @@
 /**
  * _g_freedesktop_dbus_call_reload_config_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.ReloadConfig">ReloadConfig()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11276,7 +11276,7 @@
  * _g_freedesktop_dbus_call_remove_match:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_rule: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11304,7 +11304,7 @@
  * _g_freedesktop_dbus_call_remove_match_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_rule: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.RemoveMatch">RemoveMatch()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11320,7 +11320,7 @@
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
  * @arg_flags: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11351,7 +11351,7 @@
  * @arg_name: Argument to pass with the method invocation.
  * @arg_flags: Argument to pass with the method invocation.
  * @out_value: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.RequestName">RequestName()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11367,7 +11367,7 @@
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_name: Argument to pass with the method invocation.
  * @arg_flags: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11398,7 +11398,7 @@
  * @arg_name: Argument to pass with the method invocation.
  * @arg_flags: Argument to pass with the method invocation.
  * @out_value: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.StartServiceByName">StartServiceByName()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11413,7 +11413,7 @@
  * _g_freedesktop_dbus_call_update_activation_environment:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_environment: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -11441,7 +11441,7 @@
  * _g_freedesktop_dbus_call_update_activation_environment_sync:
  * @proxy: A #_GFreedesktopDBusProxy.
  * @arg_environment: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-DBus.UpdateActivationEnvironment">UpdateActivationEnvironment()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -11692,7 +11692,7 @@
 
 /**
  * _g_freedesktop_dbus_override_properties:
- * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @klass: The class structure for a #GObject derived class.
  * @property_id_begin: The property id to assign to the first overridden property.
  *
  * Overrides all #GObject properties in the #_GFreedesktopDBus interface for a concrete class.
@@ -11706,9 +11706,9 @@
  * _g_freedesktop_dbus_proxy_new:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
- * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
@@ -11738,7 +11738,7 @@
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
@@ -11768,7 +11768,7 @@
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Like _g_freedesktop_dbus_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
@@ -11785,9 +11785,9 @@
  * _g_freedesktop_dbus_proxy_new_sync:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
- * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-DBus.top_of_page">org.freedesktop.DBus</link>. See g_dbus_proxy_new_sync() for more details.
