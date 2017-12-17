@@ -881,6 +881,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             return "void"
         elif type_.target_giname is not None:
             giname = type_.target_giname
+            if giname == 'Gdk.Atom':
+                return 'String'
             if giname in ('GLib.ByteArray', 'GLib.Bytes'):
                 return 'ByteArray'
             if giname == 'GObject.Value':
