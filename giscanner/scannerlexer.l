@@ -192,7 +192,7 @@ stringtext				([^\\\"])|(\\.)
 "__stdcall" 			        { /* ignore */ }
 "__w64"					{ /* ignore */ }
 "__int64"				{ return INT; }
-
+"_Float128"                             { return FLOAT; }
 
 "G_GINT64_CONSTANT"			{ return INTL_CONST; }
 "G_GUINT64_CONSTANT"			{ return INTUL_CONST; }
