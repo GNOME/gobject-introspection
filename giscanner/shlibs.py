@@ -117,6 +117,11 @@ def _resolve_non_libtool(options, binary, libraries):
         shlibs = []
         for line in proc.stdout:
             line = line.decode('ascii')
+            # ldd on *BSD show the argument passed on the first line even if
+            # there is only one argument. We have to ignore it because it is
+            # possible for the name of the binary to match _ldd_library_pattern.
+            if line == binary.args[0] + ':\n':
+                continue
             for library, pattern in patterns.items():
                 m = pattern.search(line)
                 if m:
