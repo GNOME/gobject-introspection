@@ -244,7 +244,8 @@ class DumpCompiler(object):
                                                    libtool,
                                                    self._options.libraries,
                                                    self._options.extra_libraries,
-                                                   self._options.library_paths)
+                                                   self._options.library_paths,
+                                                   self._options.lib_dirs_envvar)
             args.extend(pkg_config_libs)
 
         else:
