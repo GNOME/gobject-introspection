@@ -127,6 +127,9 @@ def _get_option_parser():
     parser.add_option("", "--use-ldd-wrapper",
                       action="store", dest="ldd_wrapper", default=None,
                       help="wrapper to use instead of ldd (useful when cross-compiling)")
+    parser.add_option("", "--lib-dirs-envvar",
+                      action="store", dest="lib_dirs_envvar", default=None,
+                      help="environment variable to write a list of library directories to (for running the transient binary), instead of standard LD_LIBRARY_PATH")
     parser.add_option("", "--program-arg",
                       action="append", dest="program_args", default=[],
                       help="extra arguments to program")
