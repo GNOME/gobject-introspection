@@ -5991,9 +5991,9 @@
  * of %G_IO_ERROR_DBUS_ERROR. Note that GDBus clients can still recover
  * org.project.Foo.Bar.Error.AnotherError using g_dbus_error_get_remote_error().
  *
- * Note that errors in the %G_DBUS_ERROR error domain is intended only
+ * Note that the %G_DBUS_ERROR error domain is intended only
  * for returning errors from a remote message bus process. Errors
- * generated locally in-process by e.g. #GDBusConnection is from the
+ * generated locally in-process by e.g. #GDBusConnection should use the
  * %G_IO_ERROR domain.
  */
 
@@ -11810,6 +11810,18 @@
 
 
 /**
+ * _g_io_module_extract_name:
+ * @filename: filename of a GIOModule
+ *
+ * Extract the plugin name from its filename. It removes optional "lib" or
+ * "libgio" prefix, and removes everything after the first dot. For example:
+ * "libgiognutls.so" -> "gnutls".
+ *
+ * Returns: (transfer full): the module's name
+ */
+
+
+/**
  * _g_io_module_get_default:
  * @extension_point: the name of an extension point
  * @envvar: (nullable): the name of an environment variable to
@@ -14027,6 +14039,51 @@
  * zero.  Any timeouts currently in progress are not impacted.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_set_option_context_description:
+ * @application: the #GApplication
+ * @description: (nullable): a string to be shown in `--help` output
+ *  after the list of options, or %NULL
+ *
+ * Adds a description to the @application option context.
+ *
+ * See g_option_context_set_description() for more information.
+ *
+ * Since: 2.56
+ */
+
+
+/**
+ * g_application_set_option_context_parameter_string:
+ * @application: the #GApplication
+ * @parameter_string: (nullable): a string which is displayed
+ *   in the first line of `--help` output, after the usage summary `programname [OPTION...]`.
+ *
+ * Sets the parameter string to be used by the commandline handling of @application.
+ *
+ * This function registers the argument to be passed to g_option_context_new()
+ * when the internal #GOptionContext of @application is created.
+ *
+ * See g_option_context_new() for more information about @parameter_string.
+ *
+ * Since: 2.56
+ */
+
+
+/**
+ * g_application_set_option_context_summary:
+ * @application: the #GApplication
+ * @summary: (nullable): a string to be shown in `--help` output
+ *  before the list of options, or %NULL
+ *
+ * Adds a summary to the @application option context.
+ *
+ * See g_option_context_set_summary() for more information.
+ *
+ * Since: 2.56
  */
 
 
@@ -20924,6 +20981,22 @@
  *
  * Returns: (transfer none): The value of the Keywords key
  * Since: 2.32
+ */
+
+
+/**
+ * g_desktop_app_info_get_locale_string:
+ * @info: a #GDesktopAppInfo
+ * @key: the key to look up
+ *
+ * Looks up a localized string value in the keyfile backing @info
+ * translated to the current locale.
+ *
+ * The @key is looked up in the "Desktop Entry" group.
+ *
+ * Returns: (nullable): a newly allocated string, or %NULL if the key
+ *     is not found
+ * Since: 2.56
  */
 
 

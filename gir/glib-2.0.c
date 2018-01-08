@@ -11326,7 +11326,8 @@
 /**
  * g_bookmark_file_load_from_data:
  * @bookmark: an empty #GBookmarkFile struct
- * @data: desktop bookmarks loaded in memory
+ * @data: (array length=length) (element-type guint8): desktop bookmarks
+ *    loaded in memory
  * @length: the length of @data in bytes
  * @error: return location for a #GError, or %NULL
  *
@@ -11343,7 +11344,7 @@
  * g_bookmark_file_load_from_data_dirs:
  * @bookmark: a #GBookmarkFile
  * @file: (type filename): a relative path to a filename to open and parse
- * @full_path: (type filename) (nullable): return location for a string
+ * @full_path: (out) (optional) (type filename): return location for a string
  *    containing the full path of the file, or %NULL
  * @error: return location for a #GError, or %NULL
  *
@@ -11540,7 +11541,8 @@
  * g_bookmark_file_set_groups:
  * @bookmark: a #GBookmarkFile
  * @uri: an item's URI
- * @groups: (nullable): an array of group names, or %NULL to remove all groups
+ * @groups: (nullable) (array length=length) (element-type utf8): an array of
+ *    group names, or %NULL to remove all groups
  * @length: number of group name values in @groups
  *
  * Sets a list of group names for the item with URI @uri.  Each previously
@@ -11661,8 +11663,8 @@
  *
  * This function outputs @bookmark as a string.
  *
- * Returns: a newly allocated string holding
- *   the contents of the #GBookmarkFile
+ * Returns: (array length=length) (element-type guint8):
+ *   a newly allocated string holding the contents of the #GBookmarkFile
  * Since: 2.12
  */
 
@@ -18612,6 +18614,10 @@
  * translated in the given @locale if available.  If @locale is
  * %NULL then the current locale is assumed.
  *
+ * If @locale is to be non-%NULL, or if the current locale will change over
+ * the lifetime of the #GKeyFile, it must be loaded with
+ * %G_KEY_FILE_KEEP_TRANSLATIONS in order to load strings for all locales.
+ *
  * If @key cannot be found then %NULL is returned and @error is set
  * to #G_KEY_FILE_ERROR_KEY_NOT_FOUND. If the value associated
  * with @key cannot be interpreted or no suitable translation can
@@ -18635,6 +18641,10 @@
  * Returns the values associated with @key under @group_name
  * translated in the given @locale if available.  If @locale is
  * %NULL then the current locale is assumed.
+ *
+ * If @locale is to be non-%NULL, or if the current locale will change over
+ * the lifetime of the #GKeyFile, it must be loaded with
+ * %G_KEY_FILE_KEEP_TRANSLATIONS in order to load strings for all locales.
  *
  * If @key cannot be found then %NULL is returned and @error is set
  * to #G_KEY_FILE_ERROR_KEY_NOT_FOUND. If the values associated
@@ -23601,8 +23611,7 @@
  * nothing.
  *
  * If *@err is %NULL (ie: an error variable is present but there is no
- * error condition) then also do nothing. Whether or not it makes sense
- * to take advantage of this feature is up to you.
+ * error condition) then also do nothing.
  *
  * Since: 2.16
  */

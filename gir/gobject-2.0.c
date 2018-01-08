@@ -5706,7 +5706,7 @@
 
 /**
  * g_type_module_add_interface:
- * @module: a #GTypeModule
+ * @module: (nullable): a #GTypeModule
  * @instance_type: type to which to add the interface.
  * @interface_type: interface type to add
  * @interface_info: type information structure
@@ -5717,12 +5717,15 @@
  *
  * As long as any instances of the type exist, the type plugin will
  * not be unloaded.
+ *
+ * Since 2.56 if @module is %NULL this will call g_type_add_interface_static()
+ * instead. This can be used when making a static build of the module.
  */
 
 
 /**
  * g_type_module_register_enum:
- * @module: a #GTypeModule
+ * @module: (nullable): a #GTypeModule
  * @name: name for the type
  * @const_static_values: an array of #GEnumValue structs for the
  *                       possible enumeration values. The array is
@@ -5737,6 +5740,9 @@
  * As long as any instances of the type exist, the type plugin will
  * not be unloaded.
  *
+ * Since 2.56 if @module is %NULL this will call g_type_register_static()
+ * instead. This can be used when making a static build of the module.
+ *
  * Since: 2.6
  * Returns: the new or existing type ID
  */
@@ -5744,7 +5750,7 @@
 
 /**
  * g_type_module_register_flags:
- * @module: a #GTypeModule
+ * @module: (nullable): a #GTypeModule
  * @name: name for the type
  * @const_static_values: an array of #GFlagsValue structs for the
  *                       possible flags values. The array is
@@ -5759,6 +5765,9 @@
  * As long as any instances of the type exist, the type plugin will
  * not be unloaded.
  *
+ * Since 2.56 if @module is %NULL this will call g_type_register_static()
+ * instead. This can be used when making a static build of the module.
+ *
  * Since: 2.6
  * Returns: the new or existing type ID
  */
@@ -5766,7 +5775,7 @@
 
 /**
  * g_type_module_register_type:
- * @module: a #GTypeModule
+ * @module: (nullable): a #GTypeModule
  * @parent_type: the type for the parent class
  * @type_name: name for the type
  * @type_info: type information structure
@@ -5783,6 +5792,9 @@
  *
  * As long as any instances of the type exist, the type plugin will
  * not be unloaded.
+ *
+ * Since 2.56 if @module is %NULL this will call g_type_register_static()
+ * instead. This can be used when making a static build of the module.
  *
  * Returns: the new or existing type ID
  */
