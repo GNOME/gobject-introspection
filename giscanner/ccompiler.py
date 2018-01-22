@@ -116,7 +116,7 @@ class CCompiler(object):
         runtime_path_envvar = []
         runtime_paths = []
 
-        if self.check_is_msvc():
+        if os.name == 'nt':
             runtime_path_envvar = ['LIB', 'PATH']
         else:
             runtime_path_envvar = ['LD_LIBRARY_PATH']
@@ -288,9 +288,10 @@ class CCompiler(object):
             proc = subprocess.Popen([self.compiler_cmd, '-print-search-dirs'],
                                     stdout=subprocess.PIPE)
             o, e = proc.communicate()
+            libsearch = options.library_paths
             for line in o.decode('ascii').splitlines():
                 if line.startswith('libraries: '):
-                    libsearch = line[len('libraries: '):].split(os.pathsep)
+                    libsearch += line[len('libraries: '):].split(os.pathsep)
 
         shlibs = []
         not_resolved = []
