@@ -90,6 +90,11 @@ and/or use gtk-doc annotations.  -->
       </member>
       <member name="code2" value="2" c:identifier="REGRESS_ATEST_ERROR_CODE2">
       </member>
+      <function name="quark" c:identifier="regress_atest_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
     </enumeration>
     <record name="AnAnonymousUnion" c:type="RegressAnAnonymousUnion">
       <source-position filename="regress.h" line="1481"/>
@@ -2978,6 +2983,11 @@ use it should be.</doc>
               value="2"
               c:identifier="REGRESS_TEST_DEF_ERROR_CODE2">
       </member>
+      <function name="quark" c:identifier="regress_test_def_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
     </enumeration>
     <enumeration name="TestEnum"
                  glib:type-name="RegressTestEnum"
@@ -5529,7 +5539,8 @@ detection, and fixing it via annotations.</doc>
       </return-value>
     </function>
     <function name="atest_error_quark"
-              c:identifier="regress_atest_error_quark">
+              c:identifier="regress_atest_error_quark"
+              moved-to="ATestError.quark">
       <return-value transfer-ownership="none">
         <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>
@@ -6982,7 +6993,8 @@ call and can be released on return.</doc>
       </return-value>
     </function>
     <function name="test_def_error_quark"
-              c:identifier="regress_test_def_error_quark">
+              c:identifier="regress_test_def_error_quark"
+              moved-to="TestDEFError.quark">
       <return-value transfer-ownership="none">
         <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>

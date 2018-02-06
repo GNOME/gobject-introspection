@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
-<page id="Regress.atest_error_quark"
+<page id="Regress.TestDEFError.quark"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    <link xref="index" group="function" type="guide"/>
+    <link xref="Regress.TestDEFError" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>GQuark</api:type>
       </api:returns>
-      <api:name>regress_atest_error_quark</api:name>
+      <api:name>regress_test_def_error_quark</api:name>
     </api:function>
   </info>
-  <title>regress_atest_error_quark</title>
+  <title>regress_test_def_error_quark</title>
   <synopsis><code mime="text/x-csrc">
-GQuark regress_atest_error_quark (void);
+GQuark regress_test_def_error_quark (void);
   </code></synopsis>
 
 
