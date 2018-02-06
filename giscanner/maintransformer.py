@@ -1025,11 +1025,11 @@ the ones that failed to resolve removed."""
             uscore_enums[uscored] = enum
             uscore_enums[enum.name] = enum
 
-        for node in self._namespace.values():
-            if not isinstance(node, ast.ErrorQuarkFunction):
+        for func in self._namespace.values():
+            if not isinstance(func, ast.ErrorQuarkFunction):
                 continue
-            full = node.symbol[:-len('_quark')]
-            ns, short = self._transformer.split_csymbol(node.symbol)
+            full = func.symbol[:-len('_quark')]
+            ns, short = self._transformer.split_csymbol(func.symbol)
             short = short[:-len('_quark')]
             if full == "g_io_error":
                 # Special case; GIOError was already taken forcing GIOErrorEnum
@@ -1040,10 +1040,18 @@ the ones that failed to resolve removed."""
                 if enum is None:
                     enum = uscore_enums.get(short)
             if enum is not None:
-                enum.error_domain = node.error_domain
+                enum.error_domain = func.error_domain
+                # Pair quark function with enum, if this haven't been
+                # done already as a part of _pair_static_method. Note
+                # that we use slightly different matching algorithm.
+                if func.moved_to is None:
+                    new_func = func.clone()
+                    new_func.name = 'quark'
+                    enum.static_methods.append(new_func)
+                    func.moved_to = enum.name + '.' + new_func.name
             else:
-                message.warn_node(node,
-                    """%s: Couldn't find corresponding enumeration""" % (node.symbol, ))
+                message.warn_node(func,
+                    """%s: Couldn't find corresponding enumeration""" % (func.symbol, ))
 
     def _split_uscored_by_type(self, uscored):
         """'uscored' should be an un-prefixed uscore string.  This
