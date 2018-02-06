@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<page id="Regress.test_def_error_quark"
+<page id="Regress.TestDEFError.quark"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    <link xref="index" group="function" type="guide"/>
+    <link xref="Regress.TestDEFError" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>GLib.Quark</api:type>
@@ -14,9 +14,9 @@
       <api:name>regress_test_def_error_quark</api:name>
     </api:function>
   </info>
-  <title>Regress.test_def_error_quark</title>
+  <title>Regress.TestDEFError.quark</title>
   <synopsis><code mime="text/x-gjs">
-function test_def_error_quark(): <link href="../GLib-2.0/GLib.Quark.html">GLib.Quark</link> {
+function quark(): <link href="../GLib-2.0/GLib.Quark.html">GLib.Quark</link> {
     // Gjs wrapper for regress_test_def_error_quark()
 }
   </code></synopsis>
