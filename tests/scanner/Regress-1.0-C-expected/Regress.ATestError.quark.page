@@ -1,24 +1,22 @@
 <?xml version="1.0"?>
-<page id="Regress.atest_error_quark"
+<page id="Regress.ATestError.quark"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    <link xref="index" group="function" type="guide"/>
+    <link xref="Regress.ATestError" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>GLib.Quark</api:type>
+        <api:type>GQuark</api:type>
       </api:returns>
       <api:name>regress_atest_error_quark</api:name>
     </api:function>
   </info>
-  <title>Regress.atest_error_quark</title>
-  <synopsis><code mime="text/x-gjs">
-function atest_error_quark(): <link href="../GLib-2.0/GLib.Quark.html">GLib.Quark</link> {
-    // Gjs wrapper for regress_atest_error_quark()
-}
+  <title>regress_atest_error_quark</title>
+  <synopsis><code mime="text/x-csrc">
+GQuark regress_atest_error_quark (void);
   </code></synopsis>
 
 
