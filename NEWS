@@ -1,4 +1,27 @@
-For NEWS for newer releases see git shortlog
+=== 2.56 ======================================================================
+
+    • Changes:
+      - Add _Float128 to the base C types
+      - Update annotations imported from GLib, and require GLib 2.56
+
+    • Bugs resolved:
+      - #764791 - gitypelib.c: increase #define MAX_NAME_LEN from 200 to 255
+      - #756921 - g-ir-scanner does not recognize _Thread_local
+      - #791991 - Broken shared-library value in gir files on *BSD when
+                  builddir includes the name of the library
+      - #791902 - Building using non-libtool (e.g., meson) on MinGW
+      - #629667 - MY_ENUM_VALUE = <constant> only works for last member
+      - #699354 - g-ir-compiler man page for --shared-library incorrectly
+                  says "lib" and ".so" should be removed
+      - #761985 - os.name can be wrong in some context
+      - #699328 - GI_TYPELIB_PATH is undocumented
+
+    • Contributors:
+      Ting-Wei Lan, Leslie Giles, Rico Tzschichholz, Christoph Reiter,
+      Nicola Fontana
+
+---
+For older releases, see the Git log
 ---
 0.6.3 22-jun 2009
     Bugs resolved:
