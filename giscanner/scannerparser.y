@@ -206,6 +206,29 @@ toggle_conditional (GISourceScanner *scanner)
     }
 }
 
+static void
+set_or_merge_base_type (GISourceType *type,
+                        GISourceType *base)
+{
+  if (base->type == CTYPE_INVALID)
+    {
+      g_assert (base->base_type == NULL);
+
+      type->storage_class_specifier |= base->storage_class_specifier;
+      type->type_qualifier |= base->type_qualifier;
+      type->function_specifier |= base->function_specifier;
+      type->is_bitfield |= base->is_bitfield;
+
+      ctype_free (base);
+    }
+  else
+    {
+      g_assert (type->base_type == NULL);
+
+      type->base_type = base;
+    }
+}
+
 %}
 
 %error-verbose
@@ -786,7 +809,7 @@ declaration_specifiers
 			$$->name = name;
 			ctype_free ($2);
 		} else {
-			$$->base_type = $2;
+			set_or_merge_base_type ($1, $2);
 		}
 	  }
 	| type_specifier
@@ -983,7 +1006,7 @@ specifier_qualifier_list
 	: type_specifier specifier_qualifier_list
 	  {
 		$$ = $1;
-		$$->base_type = $2;
+		set_or_merge_base_type ($1, $2);
 	  }
 	| type_specifier
 	| type_qualifier specifier_qualifier_list

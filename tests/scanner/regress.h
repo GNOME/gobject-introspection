@@ -1398,7 +1398,7 @@ typedef struct {
 
 _GI_TEST_EXTERN
 void regress_like_xkl_config_item_set_name (RegressLikeXklConfigItem *self,
-                                            const char *name);
+                                            char const *name);
 
 #define REGRESS_UTF8_CONSTANT "const \xe2\x99\xa5 utf8"
 
