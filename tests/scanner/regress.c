@@ -4294,7 +4294,7 @@ regress_test_versioning (void)
 
 void
 regress_like_xkl_config_item_set_name (RegressLikeXklConfigItem *self,
-                                       const char *name)
+                                       char const *name)
 {
   strncpy (self->name, name, sizeof (self->name) - 1);
   self->name[sizeof(self->name)-1] = '\0';
