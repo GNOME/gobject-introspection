@@ -330,6 +330,7 @@ class MainTransformer(object):
         # might lose the ctype from the original node.
         if type_node is not None:
             result.ctype = type_node.ctype
+            result.complete_ctype = type_node.complete_ctype
         return result
 
     def _get_position(self, func, param):

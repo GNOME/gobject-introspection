@@ -4502,7 +4502,7 @@ detection, and fixing it via annotations.</doc>
       <parameters>
         <parameter name="fname" transfer-ownership="none">
           <doc xml:space="preserve">Source file</doc>
-          <type name="filename" c:type="char*"/>
+          <type name="filename" c:type="const char*"/>
         </parameter>
       </parameters>
     </function>

@@ -13,14 +13,14 @@
       </api:returns>
       <api:name>regress_annotation_set_source_file</api:name>
       <api:arg>
-        <api:type>char*</api:type>
+        <api:type>const char*</api:type>
         <api:name>fname</api:name>
       </api:arg>
     </api:function>
   </info>
   <title>regress_annotation_set_source_file</title>
   <synopsis><code mime="text/x-csrc">
-void regress_annotation_set_source_file (char* fname);
+void regress_annotation_set_source_file (const char* fname);
   </code></synopsis>
 
 
