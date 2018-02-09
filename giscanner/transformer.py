@@ -455,7 +455,7 @@ raise ValueError."""
         func.add_symbol_reference(symbol)
         return func
 
-    def _create_source_type(self, source_type):
+    def _create_source_type(self, source_type, is_parameter=False):
         assert source_type is not None
         if source_type.type == CTYPE_VOID:
             value = 'void'
@@ -463,15 +463,19 @@ raise ValueError."""
             value = source_type.name
         elif source_type.type == CTYPE_TYPEDEF:
             value = source_type.name
+        elif (source_type.type == CTYPE_POINTER or
+                # Array to pointer adjustment as per 6.7.6.3.
+                # This is performed only on the outermost array,
+                # so we don't forward is_parameter.
+                (source_type.type == CTYPE_ARRAY and is_parameter)):
+            value = self._create_source_type(source_type.base_type) + '*'
         elif source_type.type == CTYPE_ARRAY:
             return self._create_source_type(source_type.base_type)
-        elif source_type.type == CTYPE_POINTER:
-            value = self._create_source_type(source_type.base_type) + '*'
         else:
             value = 'gpointer'
         return value
 
-    def _create_complete_source_type(self, source_type):
+    def _create_complete_source_type(self, source_type, is_parameter=False):
         assert source_type is not None
 
         const = (source_type.type_qualifier & TYPE_QUALIFIER_CONST)
@@ -491,16 +495,21 @@ raise ValueError."""
                 value = 'const ' + value
             if volatile:
                 value = 'volatile ' + value
-        elif source_type.type == CTYPE_ARRAY:
-            return self._create_complete_source_type(source_type.base_type)
-        elif source_type.type == CTYPE_POINTER:
+            return value
+        elif (source_type.type == CTYPE_POINTER or
+                # Array to pointer adjustment as per 6.7.6.3.
+                # This is performed only on the outermost array,
+                # so we don't forward is_parameter.
+                (source_type.type == CTYPE_ARRAY and is_parameter)):
             value = self._create_complete_source_type(source_type.base_type) + '*'
             # TODO: handle pointer to function as a special case?
             if const:
                 value += ' const'
             if volatile:
                 value += ' volatile'
-
+            return value
+        elif source_type.type == CTYPE_ARRAY:
+            return self._create_complete_source_type(source_type.base_type)
         else:
             if const:
                 value = 'gconstpointer'
@@ -509,8 +518,6 @@ raise ValueError."""
             if volatile:
                 value = 'volatile ' + value
             return value
-
-        return value
 
     def _create_parameters(self, symbol, base_type):
         for i, child in enumerate(base_type.child_list):
@@ -651,8 +658,8 @@ raise ValueError."""
         return canonical
 
     def _create_type_from_base(self, source_type, is_parameter=False, is_return=False):
-        ctype = self._create_source_type(source_type)
-        complete_ctype = self._create_complete_source_type(source_type)
+        ctype = self._create_source_type(source_type, is_parameter=is_parameter)
+        complete_ctype = self._create_complete_source_type(source_type, is_parameter=is_parameter)
         const = ((source_type.type == CTYPE_POINTER) and
                  (source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST))
         return self.create_type_from_ctype_string(ctype, is_const=const,
