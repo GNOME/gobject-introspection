@@ -1,15 +1,15 @@
 ## Process this file with automake to produce Makefile.in
 
-BUILT_SOURCES += 		\
-	scannerparser.c		\
-	scannerparser.h 	\
-	scannerlexer.c 		\
-	scannerlexer.h
+BUILT_SOURCES += 			\
+	giscanner/scannerparser.c	\
+	giscanner/scannerparser.h 	\
+	giscanner/scannerlexer.c 	\
+	giscanner/scannerlexer.h
 
 AM_YFLAGS = -d -t
 
 # Why do I have to do this automake?
-scannerlexer.h: scannerlexer.c
+giscanner/scannerlexer.h: giscanner/scannerlexer.c
 
 noinst_LTLIBRARIES += libgiscanner.la
 
