@@ -4528,7 +4528,7 @@ detection, and fixing it via annotations.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="properties" transfer-ownership="none">
-          <array length="0" zero-terminated="0" c:type="gchar*">
+          <array length="0" zero-terminated="0" c:type="gchar**">
             <type name="utf8"/>
           </array>
         </parameter>
