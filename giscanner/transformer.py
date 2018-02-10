@@ -832,13 +832,7 @@ raise ValueError."""
             # by it being returned to the "parse" function and are also added to
             # the tag namespace if it has a tag_name set.
             compound = compound_class(name, symbol.ident, disguised=disguised, tag_name=tag_name)
-            if tag_name:
-                # Force the struct as disguised for now since we do not yet know
-                # if it has fields that will be parsed. Note that this is using
-                # an erroneous definition of disguised and we should eventually
-                # only look at the field count when needed.
-                compound.disguised = True
-            else:
+            if not tag_name:
                 # Case where we have an anonymous struct which is typedef'd:
                 #   typedef struct {...} Struct;
                 # we need to parse the fields because we never get a struct
@@ -854,10 +848,6 @@ raise ValueError."""
             compound = self._tag_ns[symbol.ident]
         else:
             compound = compound_class(None, symbol.ident, tag_name=symbol.ident)
-
-        # Make sure disguised is False as we are now about to parse the
-        # fields of the real struct.
-        compound.disguised = False
         # Fields may need to be parsed in either of the above cases because the
         # Record can be created with a typedef prior to the struct definition.
         self._parse_fields(symbol, compound)

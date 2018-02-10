@@ -1087,7 +1087,6 @@ it says it's pointer but it's actually a string.</doc>
     </class>
     <record name="FooBufferClass"
             c:type="RegressFooBufferClass"
-            disguised="1"
             glib:is-gtype-struct-for="FooBuffer">
     </record>
     <callback name="FooCallback" c:type="RegressFooCallback">
@@ -1705,7 +1704,6 @@ uses a C sugar return type.</doc>
     </class>
     <record name="FooOtherObjectClass"
             c:type="RegressFooOtherObjectClass"
-            disguised="1"
             glib:is-gtype-struct-for="FooOtherObject">
     </record>
     <record name="FooRectangle" c:type="RegressFooRectangle">
@@ -1811,9 +1809,7 @@ exposed to language bindings.</doc>
         <type name="gint" c:type="int"/>
       </field>
     </record>
-    <record name="FooStructPrivate"
-            c:type="RegressFooStructPrivate"
-            disguised="1">
+    <record name="FooStructPrivate" c:type="RegressFooStructPrivate">
     </record>
     <interface name="FooSubInterface"
                c:symbol-prefix="foo_sub_interface"
@@ -2053,7 +2049,7 @@ exposed to language bindings.</doc>
     <constant name="INT_CONSTANT" value="4422" c:type="REGRESS_INT_CONSTANT">
       <type name="gint" c:type="gint"/>
     </constant>
-    <record name="Intset" c:type="RegressIntset" disguised="1">
+    <record name="Intset" c:type="RegressIntset">
       <doc xml:space="preserve">Like telepathy-glib's TpIntset.</doc>
     </record>
     <constant name="LONG_STRING_CONSTANT"
@@ -2351,9 +2347,7 @@ use it should be.</doc>
         </parameters>
       </method>
     </record>
-    <record name="TestBoxedPrivate"
-            c:type="RegressTestBoxedPrivate"
-            disguised="1">
+    <record name="TestBoxedPrivate" c:type="RegressTestBoxedPrivate">
     </record>
     <callback name="TestCallback" c:type="RegressTestCallback">
       <return-value transfer-ownership="none">
