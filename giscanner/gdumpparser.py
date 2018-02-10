@@ -230,7 +230,6 @@ blob containing data gleaned from GObject's primitive introspection."""
                                                       c_symbol_prefix='variant')
         elif record.name == 'InitiallyUnownedClass':
             record.fields = self._namespace.get('ObjectClass').fields
-            record.disguised = False
 
     # Introspection over the data we get from the dynamic
     # GObject/GType system out of the binary
@@ -510,9 +509,6 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             pair_node.add_gtype(boxed.gtype_name, boxed.get_type)
             assert boxed.c_symbol_prefix is not None
             pair_node.c_symbol_prefix = boxed.c_symbol_prefix
-            # Quick hack - reset the disguised flag; we're setting it
-            # incorrectly in the scanner
-            pair_node.disguised = False
         else:
             return False
 

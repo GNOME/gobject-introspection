@@ -851,7 +851,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         if isinstance(node, (ast.Compound, ast.Boxed)):
             self.resolve_gboxed_constructor(node)
 
-        if isinstance(node, ast.Compound) and node.disguised and \
+        if isinstance(node, ast.Compound) and len(node.fields) == 0 and \
            len(node.methods) == len(node.static_methods) == len(node.constructors) == 0:
             return False
 
