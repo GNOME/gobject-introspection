@@ -48,7 +48,6 @@ extern void ctype_free (GISourceType * type);
 
 static int last_enum_value = -1;
 static gboolean is_bitfield;
-static GHashTable *const_table = NULL;
 
 /**
  * parse_c_string_literal:
@@ -326,7 +325,7 @@ set_or_merge_base_type (GISourceType *type,
 primary_expression
 	: identifier
 	  {
-		$$ = g_hash_table_lookup (const_table, $1);
+		$$ = g_hash_table_lookup (scanner->const_table, $1);
 		if ($$ == NULL) {
 			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 		} else {
@@ -1120,7 +1119,7 @@ enumerator
 		$$->ident = $1;
 		$$->const_int_set = TRUE;
 		$$->const_int = ++last_enum_value;
-		g_hash_table_insert (const_table, g_strdup ($$->ident), gi_source_symbol_ref ($$));
+		g_hash_table_insert (scanner->const_table, g_strdup ($$->ident), gi_source_symbol_ref ($$));
 	  }
 	| identifier '=' constant_expression
 	  {
@@ -1129,7 +1128,7 @@ enumerator
 		$$->const_int_set = TRUE;
 		$$->const_int = $3->const_int;
 		last_enum_value = $$->const_int;
-		g_hash_table_insert (const_table, g_strdup ($$->ident), gi_source_symbol_ref ($$));
+		g_hash_table_insert (scanner->const_table, g_strdup ($$->ident), gi_source_symbol_ref ($$));
 	  }
 	;
 
@@ -1791,16 +1790,9 @@ gi_source_scanner_parse_file (GISourceScanner *scanner, FILE *file)
 {
   g_return_val_if_fail (file != NULL, FALSE);
 
-  const_table = g_hash_table_new_full (g_str_hash, g_str_equal,
-				       g_free, (GDestroyNotify)gi_source_symbol_unref);
-
   lineno = 1;
   yyin = file;
   yyparse (scanner);
-
-  g_hash_table_destroy (const_table);
-  const_table = NULL;
-
   yyin = NULL;
 
   return TRUE;

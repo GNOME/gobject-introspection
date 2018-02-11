@@ -945,6 +945,11 @@ it says it's pointer but it's actually a string.</doc>
               c:type="REGRESS_FOO_DEFINE_SHOULD_BE_EXPOSED">
       <type name="utf8" c:type="gchar*"/>
     </constant>
+    <constant name="FOO_FLAGS_SECOND_AND_THIRD"
+              value="6"
+              c:type="REGRESS_FOO_FLAGS_SECOND_AND_THIRD">
+      <type name="gint" c:type="gint"/>
+    </constant>
     <constant name="FOO_PIE_IS_TASTY"
               value="3.141590"
               c:type="REGRESS_FOO_PIE_IS_TASTY">

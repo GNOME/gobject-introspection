@@ -218,6 +218,8 @@ gi_source_scanner_new (void)
   scanner = g_slice_new0 (GISourceScanner);
   scanner->typedef_table = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free, NULL);
+  scanner->const_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                                (GDestroyNotify) gi_source_symbol_unref);
   scanner->files = g_hash_table_new_full (g_file_hash, (GEqualFunc)g_file_equal,
                                           g_object_unref, NULL);
   g_queue_init (&scanner->conditionals);
@@ -238,6 +240,7 @@ gi_source_scanner_free (GISourceScanner *scanner)
   g_object_unref (scanner->current_file);
 
   g_hash_table_destroy (scanner->typedef_table);
+  g_hash_table_destroy (scanner->const_table);
 
   g_slist_foreach (scanner->comments, (GFunc)gi_source_comment_free, NULL);
   g_slist_free (scanner->comments);
