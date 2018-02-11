@@ -115,6 +115,7 @@ struct _GISourceScanner
   GHashTable *files;
   GSList *comments; /* _GIComment */
   GHashTable *typedef_table;
+  GHashTable *const_table;
   gboolean skipping;
   GQueue conditionals;
 };

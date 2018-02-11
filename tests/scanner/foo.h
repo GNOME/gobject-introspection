@@ -246,6 +246,7 @@ typedef enum
   REGRESS_FOO_FLAGS_THIRD  = 1 << 2
 } RegressFooFlagsType;
 
+#define REGRESS_FOO_FLAGS_SECOND_AND_THIRD (REGRESS_FOO_FLAGS_SECOND | REGRESS_FOO_FLAGS_THIRD)
 
 _GI_TEST_EXTERN
 GType regress_foo_flags_type_get_type (void);
