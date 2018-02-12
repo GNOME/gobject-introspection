@@ -593,7 +593,7 @@
  * g_direct_hash() is also the appropriate hash function for keys
  * of the form `GINT_TO_POINTER (n)` (or similar macros).
  *
- * A good hash functions should produce
+ * <!-- FIXME: Need more here. --> A good hash functions should produce
  * hash values that are evenly distributed over a fairly large range.
  * The modulus is taken with the hash table size (a prime number) to
  * find the 'bucket' to place each key into. The function should also
@@ -5443,7 +5443,7 @@
  * in it ("/"). However, displaying file names may require conversion:
  * from the character set in which they were created, to the character
  * set in which the application operates. Consider the Spanish file name
- * "Presentación.sxi". If the application which created it uses
+ * "Presentaci&oacute;n.sxi". If the application which created it uses
  * ISO-8859-1 for its encoding,
  * |[
  * Character:  P  r  e  s  e  n  t  a  c  i  ó  n  .  s  x  i
@@ -5456,31 +5456,31 @@
  * Hex code:   50 72 65 73 65 6e 74 61 63 69 c3 b3 6e 2e 73 78 69
  * ]|
  * Glib uses UTF-8 for its strings, and GUI toolkits like GTK+ that use
- * GLib do the same thing. If you get a file name from the file system,
+ * Glib do the same thing. If you get a file name from the file system,
  * for example, from readdir() or from g_dir_read_name(), and you wish
  * to display the file name to the user, you  will need to convert it
  * into UTF-8. The opposite case is when the user types the name of a
- * file they wish to save: the toolkit will give you that string in
+ * file he wishes to save: the toolkit will give you that string in
  * UTF-8 encoding, and you will need to convert it to the character
  * set used for file names before you can create the file with open()
  * or fopen().
  *
- * By default, GLib assumes that file names on disk are in UTF-8
+ * By default, Glib assumes that file names on disk are in UTF-8
  * encoding. This is a valid assumption for file systems which
  * were created relatively recently: most applications use UTF-8
  * encoding for their strings, and that is also what they use for
  * the file names they create. However, older file systems may
  * still contain file names created in "older" encodings, such as
  * ISO-8859-1. In this case, for compatibility reasons, you may want
- * to instruct GLib to use that particular encoding for file names
+ * to instruct Glib to use that particular encoding for file names
  * rather than UTF-8. You can do this by specifying the encoding for
  * file names in the [`G_FILENAME_ENCODING`][G_FILENAME_ENCODING]
  * environment variable. For example, if your installation uses
- * ISO-8859-1 for file names, you can put this in your `~/.profile`:
+ * ISO-8859-1 for file names, you can put this in your `~/.profile`
  * |[
  * export G_FILENAME_ENCODING=ISO-8859-1
  * ]|
- * GLib provides the functions g_filename_to_utf8() and
+ * Glib provides the functions g_filename_to_utf8() and
  * g_filename_from_utf8() to perform the necessary conversions.
  * These functions convert file names from the encoding specified
  * in `G_FILENAME_ENCODING` to UTF-8 and vice-versa. This
@@ -7235,13 +7235,8 @@
  *
  * These functions provide support for allocating and freeing memory.
  *
- * If any call to allocate memory using functions g_new(), g_new0(), g_renew(),
- * g_malloc(), g_malloc0(), g_malloc0_n(), g_realloc(), and g_realloc_n()
- * fails, the application is terminated. This also means that there is no
- * need to check if the call succeeded. On the other hand, g_try_...() family
- * of functions returns %NULL on failure that can be used as a check
- * for unsuccessful memory allocation. The application is not terminated
- * in this case.
+ * If any call to allocate memory fails, the application is terminated.
+ * This also means that there is no need to check if the call succeeded.
  *
  * It's important to match g_malloc() (and wrappers such as g_new()) with
  * g_free(), g_slice_alloc() (and wrappers such as g_slice_new()) with
@@ -7841,12 +7836,6 @@
  * g_sequence_move_range() will not invalidate the iterators pointing
  * to it. The only operation that will invalidate an iterator is when
  * the element it points to is removed from any sequence.
- *
- * To sort the data, either use g_sequence_insert_sorted() or
- * g_sequence_insert_sorted_iter() to add data to the #GSequence or, if
- * you want to add a large amount of data, it is more efficient to call
- * g_sequence_sort() or g_sequence_sort_iter() after doing unsorted
- * insertions.
  */
 
 
@@ -10617,9 +10606,9 @@
  *
  *   membuf = g_malloc (8192);
  *
- *   // Some computation on membuf
+ *   /<!-- -->* Some computation on membuf *<!-- -->/
  *
- *   // membuf will be automatically freed here
+ *   /<!-- -->* membuf will be automatically freed here *<!-- -->/
  *   return TRUE;
  * }
  * ]|
@@ -12107,12 +12096,6 @@
  * A reference to @bytes will be held by the newly created #GBytes until
  * the byte data is no longer needed.
  *
- * Since 2.56, if @offset is 0 and @length matches the size of @bytes, then
- * @bytes will be returned with the reference count incremented by 1. If @bytes
- * is a slice of another #GBytes, then the resulting #GBytes will reference
- * the same #GBytes instead of @bytes. This allows consumers to simplify the
- * usage of #GBytes when asynchronously writing to streams.
- *
  * Returns: (transfer full): a new #GBytes
  * Since: 2.32
  */
@@ -12853,7 +12836,7 @@
  * Converts a string from one character set to another.
  *
  * Note that you should use g_iconv() for streaming conversions.
- * Despite the fact that @bytes_read can return information about partial
+ * Despite the fact that @byes_read can return information about partial
  * characters, the g_convert_... functions are not generally suitable
  * for streaming. If the underlying converter maintains internal state,
  * then this won't be preserved across successive calls to g_convert(),
@@ -12880,7 +12863,7 @@
  *                 for the @len parameter is unsafe)
  * @to_codeset: name of character set into which to convert @str
  * @from_codeset: character set of @str.
- * @fallback: UTF-8 string to use in place of characters not
+ * @fallback: UTF-8 string to use in place of character not
  *                present in the target encoding. (The string must be
  *                representable in the target encoding).
  *                If %NULL, characters not in the target encoding will
@@ -12904,7 +12887,7 @@
  * in which case GLib will simply return that approximate conversion.
  *
  * Note that you should use g_iconv() for streaming conversions.
- * Despite the fact that @bytes_read can return information about partial
+ * Despite the fact that @byes_read can return information about partial
  * characters, the g_convert_... functions are not generally suitable
  * for streaming. If the underlying converter maintains internal state,
  * then this won't be preserved across successive calls to g_convert(),
@@ -12943,7 +12926,7 @@
  * Converts a string from one character set to another.
  *
  * Note that you should use g_iconv() for streaming conversions.
- * Despite the fact that @bytes_read can return information about partial
+ * Despite the fact that @byes_read can return information about partial
  * characters, the g_convert_... functions are not generally suitable
  * for streaming. If the underlying converter maintains internal state,
  * then this won't be preserved across successive calls to g_convert(),
@@ -12951,14 +12934,6 @@
  * this is the GNU C converter for CP1255 which does not emit a base
  * character until it knows that the next character is not a mark that
  * could combine with the base character.)
- *
- * Characters which are valid in the input character set, but which have no
- * representation in the output character set will result in a
- * %G_CONVERT_ERROR_ILLEGAL_SEQUENCE error. This is in contrast to the iconv()
- * specification, which leaves this behaviour implementation defined. Note that
- * this is the same error code as is returned for an invalid byte sequence in
- * the input character set. To get defined behaviour for conversion of
- * unrepresentable characters, use g_convert_with_fallback().
  *
  * Returns: If the conversion was successful, a newly allocated
  *               nul-terminated string, which must be freed with
@@ -13169,7 +13144,7 @@
  *
  * If the previous value was replaced then ownership of the
  * old value (@oldval) is passed to the caller, including
- * the registered destroy notify for it (passed out in @old_destroy).
+ * the registred destroy notify for it (passed out in @old_destroy).
  * Its up to the caller to free this as he wishes, which may
  * or may not include using @old_destroy as sometimes replacement
  * should not destroy the object in the normal way.
@@ -15701,7 +15676,7 @@
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
- *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
+ *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out): the number of bytes stored in the output buffer (not
@@ -15713,11 +15688,6 @@
  * filenames. Note that on Windows GLib uses UTF-8 for filenames;
  * on other platforms, this function indirectly depends on the
  * [current locale][setlocale].
- *
- * The input string shall not contain nul characters even if the @len
- * argument is positive. A nul character found inside the string will result
- * in error %G_CONVERT_ERROR_ILLEGAL_SEQUENCE. Note that nul bytes are
- * prohibited in all filename encodings that GLib is known to work with.
  *
  * Returns: (array length=bytes_written) (element-type guint8) (transfer full):
  *               The converted string, or %NULL on an error.
@@ -15753,7 +15723,7 @@
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
- *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
+ *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in the output
@@ -15765,14 +15735,6 @@
  * filenames into a UTF-8 string. Note that on Windows GLib uses UTF-8
  * for filenames; on other platforms, this function indirectly depends on
  * the [current locale][setlocale].
- *
- * The input string shall not contain nul characters even if the @len
- * argument is positive. A nul character found inside the string will result
- * in error %G_CONVERT_ERROR_ILLEGAL_SEQUENCE.
- * If the source encoding is not UTF-8 and the conversion output contains a
- * nul character, the error %G_CONVERT_ERROR_EMBEDDED_NUL is set and the
- * function returns %NULL. Use g_convert() to produce output that
- * may contain embedded nul characters.
  *
  * Returns: The converted string, or %NULL on an error.
  */
@@ -15966,10 +15928,6 @@
  * used by the "narrow" versions of C library and Win32 functions that
  * handle file names. It might be different from the character set
  * used by the C library's current locale.
- *
- * On Linux, the character set is found by consulting nl_langinfo() if
- * available. If not, the environment variables `LC_ALL`, `LC_CTYPE`, `LANG`
- * and `CHARSET` are queried in order.
  *
  * The return value is %TRUE if the locale's encoding is UTF-8, in that
  * case you can perhaps avoid calling g_convert().
@@ -17534,13 +17492,6 @@
  * GLib provides g_convert() and g_locale_to_utf8() which are likely
  * more convenient than the raw iconv wrappers.
  *
- * Note that the behaviour of iconv() for characters which are valid in the
- * input character set, but which have no representation in the output character
- * set, is implementation defined. This function may return success (with a
- * positive number of non-reversible conversions as replacement characters were
- * used), or it may return -1 and set an error such as %EILSEQ, in such a
- * situation.
- *
  * Returns: count of non-reversible conversions, or -1 on error
  */
 
@@ -18648,29 +18599,6 @@
  * Returns: (array zero-terminated=1) (transfer full): a newly-allocated %NULL-terminated array of strings.
  *     Use g_strfreev() to free it.
  * Since: 2.6
- */
-
-
-/**
- * g_key_file_get_locale_for_key:
- * @key_file: a #GKeyFile
- * @group_name: a group name
- * @key: a key
- * @locale: (nullable): a locale identifier or %NULL
- *
- * Returns the actual locale which the result of
- * g_key_file_get_locale_string() or g_key_file_get_locale_string_list()
- * came from.
- *
- * If calling g_key_file_get_locale_string() or
- * g_key_file_get_locale_string_list() with exactly the same @key_file,
- * @group_name, @key and @locale, the result of those functions will
- * have originally been tagged with the locale that is the result of
- * this function.
- *
- * Returns: (nullable): the locale from the file, or %NULL if the key was not
- *   found or the entry in the file was was untranslated
- * Since: 2.56
  */
 
 
@@ -19860,13 +19788,15 @@
  * g_locale_from_utf8:
  * @utf8string: a UTF-8 encoded string
  * @len: the length of the string, or -1 if the string is
- *                 nul-terminated.
+ *                 nul-terminated (Note that some encodings may allow nul
+ *                 bytes to occur inside strings. In that case, using -1
+ *                 for the @len parameter is unsafe)
  * @bytes_read: (out) (optional): location to store the number of bytes in the
  *                 input string that were successfully converted, or %NULL.
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
- *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
+ *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in the output
@@ -19878,11 +19808,6 @@
  * the C runtime (usually the same as that used by the operating
  * system) in the [current locale][setlocale]. On Windows this means
  * the system codepage.
- *
- * The input string shall not contain nul characters even if the @len
- * argument is positive. A nul character found inside the string will result
- * in error %G_CONVERT_ERROR_ILLEGAL_SEQUENCE. Use g_convert() to convert
- * input that may contain embedded nul characters.
  *
  * Returns: A newly-allocated buffer containing the converted string,
  *               or %NULL on an error, and error will be set.
@@ -19902,7 +19827,7 @@
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
- *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
+ *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in the output
@@ -19913,14 +19838,6 @@
  * Converts a string which is in the encoding used for strings by
  * the C runtime (usually the same as that used by the operating
  * system) in the [current locale][setlocale] into a UTF-8 string.
- *
- * If the source encoding is not UTF-8 and the conversion output contains a
- * nul character, the error %G_CONVERT_ERROR_EMBEDDED_NUL is set and the
- * function returns %NULL.
- * If the source encoding is UTF-8, an embedded nul character is treated with
- * the %G_CONVERT_ERROR_ILLEGAL_SEQUENCE error for backward compatibility with
- * earlier versions of this library. Use g_convert() to produce output that
- * may contain embedded nul characters.
  *
  * Returns: A newly-allocated buffer containing the converted string,
  *               or %NULL on an error, and error will be set.
@@ -26407,10 +26324,6 @@
  * if the first item comes before the second, and a positive value
  * if the second  item comes before the first.
  *
- * Note that when adding a large amount of data to a #GSequence,
- * it is more efficient to do unsorted insertions and then call
- * g_sequence_sort() or g_sequence_sort_iter().
- *
  * Returns: (transfer none): a #GSequenceIter pointing to the new item.
  * Since: 2.14
  */
@@ -26436,10 +26349,6 @@
  * return 0 if the iterators are equal, a negative value if the
  * first iterator comes before the second, and a positive value
  * if the second iterator comes before the first.
- *
- * Note that when adding a large amount of data to a #GSequence,
- * it is more efficient to do unsorted insertions and then call
- * g_sequence_sort() or g_sequence_sort_iter().
  *
  * Returns: (transfer none): a #GSequenceIter pointing to the new item
  * Since: 2.14
@@ -26581,7 +26490,10 @@
  * the second item comes before the first.
  *
  * This function will fail if the data contained in the sequence is
- * unsorted.
+ * unsorted.  Use g_sequence_insert_sorted() or
+ * g_sequence_insert_sorted_iter() to add data to your sequence or, if
+ * you want to add a large amount of data, call g_sequence_sort() after
+ * doing unsorted insertions.
  *
  * Returns: (transfer none) (nullable): an #GSequenceIter pointing to the position of the
  *     first item found equal to @data according to @cmp_func and
@@ -26606,7 +26518,10 @@
  * value if the second iterator comes before the first.
  *
  * This function will fail if the data contained in the sequence is
- * unsorted.
+ * unsorted.  Use g_sequence_insert_sorted() or
+ * g_sequence_insert_sorted_iter() to add data to your sequence or, if
+ * you want to add a large amount of data, call g_sequence_sort() after
+ * doing unsorted insertions.
  *
  * Returns: (transfer none) (nullable): an #GSequenceIter pointing to the position of
  *     the first item found equal to @data according to @cmp_func
@@ -26739,7 +26654,10 @@
  * consider using g_sequence_lookup().
  *
  * This function will fail if the data contained in the sequence is
- * unsorted.
+ * unsorted.  Use g_sequence_insert_sorted() or
+ * g_sequence_insert_sorted_iter() to add data to your sequence or, if
+ * you want to add a large amount of data, call g_sequence_sort() after
+ * doing unsorted insertions.
  *
  * Returns: (transfer none): an #GSequenceIter pointing to the position where @data
  *     would have been inserted according to @cmp_func and @cmp_data
@@ -26766,7 +26684,10 @@
  * consider using g_sequence_lookup_iter().
  *
  * This function will fail if the data contained in the sequence is
- * unsorted.
+ * unsorted.  Use g_sequence_insert_sorted() or
+ * g_sequence_insert_sorted_iter() to add data to your sequence or, if
+ * you want to add a large amount of data, call g_sequence_sort() after
+ * doing unsorted insertions.
  *
  * Returns: (transfer none): a #GSequenceIter pointing to the position in @seq
  *     where @data would have been inserted according to @iter_cmp
@@ -34148,9 +34069,6 @@
  * must be valid UTF-8 encoded text. (Use g_utf8_validate() on all
  * text before trying to use UTF-8 utility functions with it.)
  *
- * Note you must ensure @dest is at least 4 * @n to fit the
- * largest possible UTF-8 characters
- *
  * Returns: @dest
  */
 
@@ -36121,7 +36039,7 @@
  * GVariant *new_variant;
  *
  * new_variant = g_variant_new ("(t^as)",
- *                              // This cast is required.
+ *                              /<!-- -->* This cast is required. *<!-- -->/
  *                              (guint64) some_flags,
  *                              some_strings);
  * ]|
@@ -38172,9 +38090,7 @@
  * goffset:
  *
  * A signed integer type that is used for file offsets,
- * corresponding to the POSIX type `off_t` as if compiling with
- * `_FILE_OFFSET_BITS` set to 64. #goffset is always 64 bits wide, even on
- * 32-bit architectures.
+ * corresponding to the C99 type off64_t.
  * Values of this type can range from #G_MINOFFSET to
  * #G_MAXOFFSET.
  *
