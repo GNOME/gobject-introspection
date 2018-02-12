@@ -2366,13 +2366,9 @@
 /**
  * GNetworkMonitor::network-changed:
  * @monitor: a #GNetworkMonitor
- * @available: the current value of #GNetworkMonitor:network-available
+ * @network_available: the current value of #GNetworkMonitor:network-available
  *
- * Emitted when the network configuration changes. If @available is
- * %TRUE, then some hosts may be reachable that were not reachable
- * before, while others that were reachable before may no longer be
- * reachable. If @available is %FALSE, then no remote hosts are
- * reachable.
+ * Emitted when the network configuration changes.
  *
  * Since: 2.32
  */
@@ -3567,18 +3563,20 @@
 /**
  * GTlsClientConnection:use-ssl3:
  *
- * If %TRUE, tells the connection to use a fallback version of TLS
+ * If %TRUE, forces the connection to use a fallback version of TLS
  * or SSL, rather than trying to negotiate the best version of TLS
  * to use. This can be used when talking to servers that don't
  * implement version negotiation correctly and therefore refuse to
- * handshake at all with a "modern" TLS handshake.
+ * handshake at all with a modern TLS handshake.
  *
- * Despite the property name, the fallback version is not
- * necessarily SSL 3.0; if SSL 3.0 has been disabled, the
- * #GTlsClientConnection will use the next highest available version
- * (normally TLS 1.0) as the fallback version.
+ * Despite the property name, the fallback version is usually not
+ * SSL 3.0, because SSL 3.0 is generally disabled by the #GTlsBackend.
+ * #GTlsClientConnection will use the next-highest available version
+ * as the fallback version.
  *
  * Since: 2.28
+ * Deprecated: 2.56: SSL 3.0 is insecure, and this property does not
+ * generally enable or disable it, despite its name.
  */
 
 
@@ -5819,6 +5817,9 @@
  * like `unix:tmpdir=/tmp/my-app-name`. The exact format of addresses
  * is explained in detail in the
  * [D-Bus specification](http://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
+ *
+ * TCP D-Bus connections are supported, but accessing them via a proxy is
+ * currently not supported.
  */
 
 
@@ -6274,7 +6275,7 @@
  * both well-known and unique names.
  *
  * By default, #GDBusProxy will cache all properties (and listen to
- * changes) of the remote object, and proxy all signals that gets
+ * changes) of the remote object, and proxy all signals that get
  * emitted. This behaviour can be changed by passing suitable
  * #GDBusProxyFlags when the proxy is created. If the proxy is for a
  * well-known name, the property cache is flushed when the name owner
@@ -16044,6 +16045,8 @@
  *     before encountering any of the stop characters. Set @length to
  *     a #gsize to get the length of the string. This function will
  *     return %NULL on an error.
+ * Deprecated: 2.56: Use g_data_input_stream_read_upto() instead, which has more
+ *     consistent behaviour regarding the stop character.
  */
 
 
@@ -16073,6 +16076,8 @@
  * g_data_input_stream_read_upto_async() instead.
  *
  * Since: 2.20
+ * Deprecated: 2.56: Use g_data_input_stream_read_upto_async() instead, which
+ *     has more consistent behaviour regarding the stop character.
  */
 
 
@@ -16091,6 +16096,8 @@
  *     before encountering any of the stop characters. Set @length to
  *     a #gsize to get the length of the string. This function will
  *     return %NULL on an error.
+ * Deprecated: 2.56: Use g_data_input_stream_read_upto_finish() instead, which
+ *     has more consistent behaviour regarding the stop character.
  */
 
 
@@ -16826,7 +16833,8 @@
  * @method_name: the name of the method to invoke
  * @parameters: (nullable): a #GVariant tuple with parameters for the method
  *     or %NULL if not passing parameters
- * @reply_type: (nullable): the expected type of the reply, or %NULL
+ * @reply_type: (nullable): the expected type of the reply (which will be a
+ *     tuple), or %NULL
  * @flags: flags from the #GDBusCallFlags enumeration
  * @timeout_msec: the timeout in milliseconds, -1 to use the default
  *     timeout or %G_MAXINT for no timeout
@@ -16848,7 +16856,9 @@
  *
  * If @reply_type is non-%NULL then the reply will be checked for having this type and an
  * error will be raised if it does not match.  Said another way, if you give a @reply_type
- * then any non-%NULL return value will be of this type.
+ * then any non-%NULL return value will be of this type. Unless it’s
+ * %G_VARIANT_TYPE_UNIT, the @reply_type will be a tuple containing one or more
+ * values.
  *
  * If the @parameters #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.:
@@ -18417,7 +18427,7 @@
  *
  * For example, an exported D-Bus interface may queue up property
  * changes and emit the
- * `org.freedesktop.DBus.Properties::PropertiesChanged`
+ * `org.freedesktop.DBus.Properties.PropertiesChanged`
  * signal later (e.g. in an idle handler). This technique is useful
  * for collapsing multiple property changes into one.
  *
@@ -19602,7 +19612,7 @@
  *   g_dbus_method_invocation_return_value (invocation,
  *                                          g_variant_new ("(s)", result_string));
  *
- * /<!-- -->* Do not free @invocation here; returning a value does that *<!-- -->/
+ * // Do not free @invocation here; returning a value does that
  * ]|
  *
  * This method will take ownership of @invocation. See
@@ -20427,9 +20437,9 @@
  * #GDBusProxy:g-interface-info) and @property_name is referenced by
  * it, then @value is checked against the type of the property.
  *
- * Returns: A reference to the #GVariant instance that holds the value
- * for @property_name or %NULL if the value is not in the cache. The
- * returned reference must be freed with g_variant_unref().
+ * Returns: (transfer full) (nullable): A reference to the #GVariant instance
+ *    that holds the value for @property_name or %NULL if the value is not in
+ *    the cache. The returned reference must be freed with g_variant_unref().
  * Since: 2.26
  */
 
@@ -20440,7 +20450,8 @@
  *
  * Gets the names of all cached properties on @proxy.
  *
- * Returns: (transfer full): A %NULL-terminated array of strings or %NULL if
+ * Returns: (transfer full) (nullable) (array zero-terminated=1): A
+ *          %NULL-terminated array of strings or %NULL if
  *          @proxy has no cached properties. Free the returned array with
  *          g_strfreev().
  * Since: 2.26
@@ -20492,8 +20503,8 @@
  * that @proxy conforms to. See the #GDBusProxy:g-interface-info
  * property for more details.
  *
- * Returns: A #GDBusInterfaceInfo or %NULL. Do not unref the returned
- * object, it is owned by @proxy.
+ * Returns: (transfer none) (nullable): A #GDBusInterfaceInfo or %NULL.
+ *    Do not unref the returned object, it is owned by @proxy.
  * Since: 2.26
  */
 
@@ -20529,7 +20540,8 @@
  * #GObject::notify signal to track changes to the
  * #GDBusProxy:g-name-owner property.
  *
- * Returns: The name owner or %NULL if no name owner exists. Free with g_free().
+ * Returns: (transfer full) (nullable): The name owner or %NULL if no name
+ *    owner exists. Free with g_free().
  * Since: 2.26
  */
 
@@ -20592,7 +20604,8 @@
  *
  * Finishes creating a #GDBusProxy.
  *
- * Returns: A #GDBusProxy or %NULL if @error is set. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusProxy or %NULL if @error is set.
+ *    Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -20624,7 +20637,8 @@
  *
  * Finishes creating a #GDBusProxy.
  *
- * Returns: A #GDBusProxy or %NULL if @error is set. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusProxy or %NULL if @error is set.
+ *    Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -20645,7 +20659,8 @@
  *
  * #GDBusProxy is used in this [example][gdbus-wellknown-proxy].
  *
- * Returns: A #GDBusProxy or %NULL if error is set. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusProxy or %NULL if error is set.
+ *    Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -20680,7 +20695,8 @@
  *
  * #GDBusProxy is used in this [example][gdbus-wellknown-proxy].
  *
- * Returns: A #GDBusProxy or %NULL if error is set. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusProxy or %NULL if error is set.
+ *    Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -20747,7 +20763,8 @@
 /**
  * g_dbus_proxy_set_interface_info:
  * @proxy: A #GDBusProxy
- * @info: (nullable): Minimum interface this proxy conforms to or %NULL to unset.
+ * @info: (transfer none) (nullable): Minimum interface this proxy conforms to
+ *    or %NULL to unset.
  *
  * Ensure that interactions with @proxy conform to the given
  * interface. See the #GDBusProxy:g-interface-info property for more
@@ -25345,6 +25362,24 @@
 
 
 /**
+ * g_file_peek_path:
+ * @file: input #GFile
+ *
+ * Exactly like g_file_get_path(), but caches the result via
+ * g_object_set_qdata_full().  This is useful for example in C
+ * applications which mix `g_file_*` APIs with native ones.  It
+ * also avoids an extra duplicated string when possible, so will be
+ * generally more efficient.
+ *
+ * This call does no blocking I/O.
+ *
+ * Returns: (type filename) (nullable): string containing the #GFile's path,
+ *     or %NULL if no such path exists. The returned string is owned by @file.
+ * Since: 2.56
+ */
+
+
+/**
  * g_file_poll_mountable:
  * @file: input #GFile
  * @cancellable: optional #GCancellable object, %NULL to ignore
@@ -25411,7 +25446,7 @@
  * Utility function to check if a particular file exists. This is
  * implemented using g_file_query_info() and as such does blocking I/O.
  *
- * Note that in many cases it is racy to first check for file existence
+ * Note that in many cases it is [racy to first check for file existence](https://en.wikipedia.org/wiki/Time_of_check_to_time_of_use)
  * and then execute something based on the outcome of that, because the
  * file might have been created or removed in between the operations. The
  * general approach to handling that is to not check, but just do the
@@ -30911,6 +30946,8 @@
  * Deprecated in favor of g_notification_set_priority().
  *
  * Since: 2.40
+ * Deprecated: 2.42: Since 2.42, this has been deprecated in favour of
+ *    g_notification_set_priority().
  */
 
 
@@ -31797,6 +31834,9 @@
  * if @cancellable has already been cancelled when you call, which
  * may happen if you call this method after a source triggers due
  * to having been cancelled.
+ *
+ * Also note that if %G_IO_ERROR_WOULD_BLOCK is returned some underlying
+ * transports like D/TLS require that you send the same @buffer and @count.
  *
  * Returns: the number of bytes written, or -1 on error (including
  *   %G_IO_ERROR_WOULD_BLOCK).
@@ -33688,7 +33728,7 @@
 /**
  * g_settings_list_relocatable_schemas:
  *
- * <!-- -->
+ * Deprecated.
  *
  * Returns: (element-type utf8) (transfer none): a list of relocatable
  *   #GSettings schemas that are available.  The list must not be
@@ -33701,7 +33741,7 @@
 /**
  * g_settings_list_schemas:
  *
- * <!-- -->
+ * Deprecated.
  *
  * Returns: (element-type utf8) (transfer none): a list of #GSettings
  *   schemas that are available.  The list must not be modified or
@@ -39853,12 +39893,14 @@
  * g_tls_client_connection_get_use_ssl3:
  * @conn: the #GTlsClientConnection
  *
- * Gets whether @conn will use SSL 3.0 rather than the
- * highest-supported version of TLS; see
- * g_tls_client_connection_set_use_ssl3().
+ * Gets whether @conn will force the lowest-supported TLS protocol
+ * version rather than attempt to negotiate the highest mutually-
+ * supported version of TLS; see g_tls_client_connection_set_use_ssl3().
  *
- * Returns: whether @conn will use SSL 3.0
+ * Returns: whether @conn will use the lowest-supported TLS protocol version
  * Since: 2.28
+ * Deprecated: 2.56: SSL 3.0 is insecure, and this function does not
+ * actually indicate whether it is enabled.
  */
 
 
@@ -39910,15 +39952,20 @@
 /**
  * g_tls_client_connection_set_use_ssl3:
  * @conn: the #GTlsClientConnection
- * @use_ssl3: whether to use SSL 3.0
+ * @use_ssl3: whether to use the lowest-supported protocol version
  *
- * If @use_ssl3 is %TRUE, this forces @conn to use SSL 3.0 rather than
- * trying to properly negotiate the right version of TLS or SSL to use.
- * This can be used when talking to servers that do not implement the
- * fallbacks correctly and which will therefore fail to handshake with
- * a "modern" TLS handshake attempt.
+ * If @use_ssl3 is %TRUE, this forces @conn to use the lowest-supported
+ * TLS protocol version rather than trying to properly negotiate the
+ * highest mutually-supported protocol version with the peer. This can
+ * be used when talking to broken TLS servers that exhibit protocol
+ * version intolerance.
+ *
+ * Be aware that SSL 3.0 is generally disabled by the #GTlsBackend, so
+ * the lowest-supported protocol version is probably not SSL 3.0.
  *
  * Since: 2.28
+ * Deprecated: 2.56: SSL 3.0 is insecure, and this function does not
+ * generally enable or disable it, despite its name.
  */
 
 
