@@ -1508,8 +1508,14 @@ object_macro_define
 	: object_macro constant_expression
 	  {
 		if ($2->const_int_set || $2->const_boolean_set || $2->const_double_set || $2->const_string != NULL) {
-			$2->ident = $1;
-			gi_source_scanner_add_symbol (scanner, $2);
+			GISourceSymbol *macro = gi_source_symbol_copy ($2);
+			g_free (macro->ident);
+			macro->ident = $1;
+			gi_source_scanner_add_symbol (scanner, macro);
+			gi_source_symbol_unref (macro);
+			gi_source_symbol_unref ($2);
+		} else {
+			g_free ($1);
 			gi_source_symbol_unref ($2);
 		}
 	  }

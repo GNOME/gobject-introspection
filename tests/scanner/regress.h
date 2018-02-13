@@ -423,6 +423,13 @@ typedef enum
   REGRESS_TEST_EVALUE3 = '0'
 } RegressTestEnumNoGEnum;
 
+/**
+ * REGRESS_TEST_EVALUE_DEPRECATED:
+ *
+ * Scanner used to replace %REGRESS_TEST_EVALUE1 with %REGRESS_TEST_EVALUE_DEPRECATED.
+ */
+#define REGRESS_TEST_EVALUE_DEPRECATED REGRESS_TEST_EVALUE1
+
 _GI_TEST_EXTERN
 const gchar * regress_test_enum_param(RegressTestEnum e);
 
