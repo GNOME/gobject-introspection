@@ -17,6 +17,7 @@ giscanner_files = [
   'maintransformer.py',
   'message.py',
   'msvccompiler.py',
+  'pkgconfig.py',
   'shlibs.py',
   'scannermain.py',
   'sectionparser.py',
