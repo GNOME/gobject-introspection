@@ -230,6 +230,7 @@ endif
 
 PYTESTS = \
 	test_shlibs.py \
+	test_pkgconfig.py \
 	test_sourcescanner.py \
 	test_transformer.py \
 	test_xmlwriter.py
