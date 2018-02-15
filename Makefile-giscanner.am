@@ -40,17 +40,18 @@ pkgpyexec_PYTHON = 			\
 	giscanner/docmain.py		\
 	giscanner/docwriter.py		\
 	giscanner/dumper.py		\
-	giscanner/introspectablepass.py	\
+	giscanner/gdumpparser.py 	\
 	giscanner/girparser.py		\
 	giscanner/girwriter.py		\
-	giscanner/gdumpparser.py 	\
+	giscanner/introspectablepass.py	\
 	giscanner/libtoolimporter.py	\
 	giscanner/maintransformer.py	\
 	giscanner/message.py		\
 	giscanner/msvccompiler.py	\
-	giscanner/shlibs.py		\
+	giscanner/pkgconfig.py		\
 	giscanner/scannermain.py	\
 	giscanner/sectionparser.py	\
+	giscanner/shlibs.py		\
 	giscanner/sourcescanner.py	\
 	giscanner/testcodegen.py	\
 	giscanner/transformer.py	\
