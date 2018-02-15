@@ -12,6 +12,7 @@ if cc.get_id() != 'msvc'
     'test_sourcescanner.py',
     'test_transformer.py',
     'test_xmlwriter.py',
+    'test_pkgconfig.py',
     ]
 endif
 
