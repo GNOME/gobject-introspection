@@ -229,6 +229,7 @@ CHECKDOCS =
 endif
 
 PYTESTS = \
+	test_pkgconfig.py \
 	test_sourcescanner.py \
 	test_transformer.py
 

@@ -33,7 +33,7 @@ import tempfile
 from distutils.errors import LinkError
 
 from .gdumpparser import IntrospectionBinary
-from . import utils
+from . import pkgconfig, utils
 from .ccompiler import CCompiler
 
 # bugzilla.gnome.org/558436
@@ -95,9 +95,8 @@ class DumpCompiler(object):
         # Acquire the compiler (and linker) commands via the CCompiler class in ccompiler.py
         self._compiler = CCompiler()
 
-        self._pkgconfig_cmd = os.environ.get('PKG_CONFIG', 'pkg-config')
         self._uninst_srcdir = os.environ.get('UNINSTALLED_INTROSPECTION_SRCDIR')
-        self._packages = ['gio-2.0 gmodule-2.0']
+        self._packages = ['gio-2.0', 'gmodule-2.0']
         self._packages.extend(options.packages)
         if self._compiler.check_is_msvc():
             self._linker_cmd = ['link.exe']
@@ -187,21 +186,9 @@ class DumpCompiler(object):
                             self._options.namespace_version, suffix)
         return os.path.join(tmpdir, tmpl)
 
-    def _run_pkgconfig(self, flag):
-        # Enable the --msvc-syntax pkg-config flag when
-        # the Microsoft compiler is used
-        if self._compiler.check_is_msvc():
-            cmd = [self._pkgconfig_cmd, '--msvc-syntax', flag]
-        else:
-            cmd = [self._pkgconfig_cmd, flag]
-        proc = subprocess.Popen(
-            cmd + self._packages,
-            stdout=subprocess.PIPE)
-        out, err = proc.communicate()
-        return out.decode('ascii').split()
-
     def _compile(self, *sources):
-        pkgconfig_flags = self._run_pkgconfig('--cflags')
+        pkgconfig_flags = pkgconfig.cflags(self._packages,
+                                           msvc_syntax=self._compiler.check_is_msvc())
         return self._compiler.compile(pkgconfig_flags,
                                       self._options.cpp_includes,
                                       sources,
@@ -252,7 +239,8 @@ class DumpCompiler(object):
 
         args.extend(sources)
 
-        pkg_config_libs = self._run_pkgconfig('--libs')
+        pkg_config_libs = pkgconfig.libs(self._packages,
+                                         msvc_syntax=self._compiler.check_is_msvc())
 
         if not self._options.external_library:
             self._compiler.get_internal_link_flags(args,

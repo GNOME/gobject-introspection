@@ -35,7 +35,7 @@ import sys
 import tempfile
 import platform
 
-from giscanner import message
+from giscanner import message, pkgconfig
 from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Include, Namespace
 from giscanner.dumper import compile_introspection_binary
@@ -285,7 +285,7 @@ def test_codegen(optstring,
 
 
 def process_options(output, allowed_flags):
-    for option in output.split():
+    for option in output:
         for flag in allowed_flags:
             if not option.startswith(flag):
                 continue
@@ -294,19 +294,11 @@ def process_options(output, allowed_flags):
 
 
 def process_packages(options, packages):
-    args = [os.environ.get('PKG_CONFIG', 'pkg-config'), '--cflags']
-    args.extend(packages)
-    output = subprocess.Popen(args,
-                              stdout=subprocess.PIPE).communicate()[0]
-    if output is None:
-        # the error output should have already appeared on our stderr,
-        # so we just exit
-        return 1
-    output = output.decode('ascii')
+    flags = pkgconfig.cflags(packages)
     # Some pkg-config files on Windows have options we don't understand,
     # so we explicitly filter to only the ones we need.
     options_whitelist = ['-I', '-D', '-U', '-l', '-L']
-    filtered_output = list(process_options(output, options_whitelist))
+    filtered_output = list(process_options(flags, options_whitelist))
     parser = _get_option_parser()
     pkg_options, unused = parser.parse_args(filtered_output)
     options.cpp_includes.extend([os.path.realpath(f) for f in pkg_options.cpp_includes])
@@ -531,9 +523,10 @@ def scanner_main(args):
     packages = set(options.packages)
     packages.update(transformer.get_pkgconfig_packages())
     if packages:
-        exit_code = process_packages(options, packages)
-        if exit_code:
-            return exit_code
+        try:
+            process_packages(options, packages)
+        except pkgconfig.PkgConfigError as e:
+            _error(str(e))
 
     ss = create_source_scanner(options, args)
 
