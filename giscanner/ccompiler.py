@@ -356,10 +356,7 @@ class CCompiler(object):
         return shlibs
 
     def check_is_msvc(self):
-        if isinstance(self.compiler, MSVCCompiler):
-            return True
-        else:
-            return False
+        return isinstance(self.compiler, MSVCCompiler)
 
     # Private APIs
     def _set_cpp_options(self, options):
