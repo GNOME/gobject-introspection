@@ -494,6 +494,9 @@ def scanner_main(args):
     parser = _get_option_parser()
     (options, args) = parser.parse_args(args)
 
+    if options.verbose:
+        import distutils
+        distutils.log.set_threshold(distutils.log.DEBUG)
     if options.passthrough_gir:
         passthrough_gir(options.passthrough_gir, sys.stdout)
     if options.test_codegen:
