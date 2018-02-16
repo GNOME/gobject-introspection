@@ -12844,7 +12844,7 @@
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
  *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
- *                 stored will the byte offset after the last valid
+ *                 stored will be the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in
  *                 the output buffer (not including the terminating nul).
@@ -12938,7 +12938,7 @@
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
  *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
- *                 stored will the byte offset after the last valid
+ *                 stored will be the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in
  *                 the output buffer (not including the terminating nul).
@@ -15708,7 +15708,7 @@
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
  *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
- *                 stored will the byte offset after the last valid
+ *                 stored will be the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in
  *                 the output buffer (not including the terminating nul).
@@ -15761,7 +15761,7 @@
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
  *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
- *                 stored will the byte offset after the last valid
+ *                 stored will be the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in the output
  *                 buffer (not including the terminating nul).
@@ -16504,6 +16504,10 @@
  * corresponding value it is able to be stored more efficiently.  See
  * the discussion in the section description.
  *
+ * Starting from GLib 2.40, this function returns a boolean value to
+ * indicate whether the newly added value was already in the hash table
+ * or not.
+ *
  * Returns: %TRUE if the key did not exist yet
  * Since: 2.32
  */
@@ -16706,6 +16710,10 @@
  * value is freed using that function. If you supplied a
  * @key_destroy_func when creating the #GHashTable, the passed
  * key is freed using that function.
+ *
+ * Starting from GLib 2.40, this function returns a boolean value to
+ * indicate whether the newly added value was already in the hash table
+ * or not.
  *
  * Returns: %TRUE if the key did not exist yet
  */
@@ -16961,6 +16969,10 @@
  * the #GHashTable, the old value is freed using that function.
  * If you supplied a @key_destroy_func when creating the
  * #GHashTable, the old key is freed using that function.
+ *
+ * Starting from GLib 2.40, this function returns a boolean value to
+ * indicate whether the newly added value was already in the hash table
+ * or not.
  *
  * Returns: %TRUE if the key did not exist yet
  */
@@ -19875,7 +19887,7 @@
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
  *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
- *                 stored will the byte offset after the last valid
+ *                 stored will be the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in the output
  *                 buffer (not including the terminating nul).
@@ -19913,7 +19925,7 @@
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
  *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
- *                 stored will the byte offset after the last valid
+ *                 stored will be the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in the output
  *                 buffer (not including the terminating nul).

@@ -7974,7 +7974,7 @@
  * that describes the keys in your settings and their types and default
  * values, as well as some other information.
  *
- * Normally, a schema has as fixed path that determines where the settings
+ * Normally, a schema has a fixed path that determines where the settings
  * are stored in the conceptual global tree of settings. However, schemas
  * can also be '[relocatable][gsettings-relocatable]', i.e. not equipped with
  * a fixed path. This is
@@ -17125,7 +17125,9 @@
  *
  * If the parameters GVariant is floating, it is consumed.
  *
- * This can only fail if @parameters is not compatible with the D-Bus protocol.
+ * This can only fail if @parameters is not compatible with the D-Bus protocol
+ * (%G_IO_ERROR_INVALID_ARGUMENT), or if @connection has been closed
+ * (%G_IO_ERROR_CLOSED).
  *
  * Returns: %TRUE unless @error is set
  * Since: 2.26
@@ -37980,8 +37982,8 @@
  * @subprocess: a #GSubprocess
  * @stdin_buf: (nullable): data to send to the stdin of the subprocess, or %NULL
  * @cancellable: a #GCancellable
- * @stdout_buf: (out): data read from the subprocess stdout
- * @stderr_buf: (out): data read from the subprocess stderr
+ * @stdout_buf: (out) (nullable) (optional) (transfer full): data read from the subprocess stdout
+ * @stderr_buf: (out) (nullable) (optional) (transfer full): data read from the subprocess stderr
  * @error: a pointer to a %NULL #GError pointer, or %NULL
  *
  * Communicate with the subprocess until it terminates, and all input
@@ -38048,8 +38050,8 @@
  * g_subprocess_communicate_finish:
  * @subprocess: Self
  * @result: Result
- * @stdout_buf: (out): Return location for stdout data
- * @stderr_buf: (out): Return location for stderr data
+ * @stdout_buf: (out) (nullable) (optional) (transfer full): Return location for stdout data
+ * @stderr_buf: (out) (nullable) (optional) (transfer full): Return location for stderr data
  * @error: Error
  *
  * Complete an invocation of g_subprocess_communicate_async().
@@ -38061,8 +38063,8 @@
  * @subprocess: a #GSubprocess
  * @stdin_buf: (nullable): data to send to the stdin of the subprocess, or %NULL
  * @cancellable: a #GCancellable
- * @stdout_buf: (out): data read from the subprocess stdout
- * @stderr_buf: (out): data read from the subprocess stderr
+ * @stdout_buf: (out) (nullable) (optional) (transfer full): data read from the subprocess stdout
+ * @stderr_buf: (out) (nullable) (optional) (transfer full): data read from the subprocess stderr
  * @error: a pointer to a %NULL #GError pointer, or %NULL
  *
  * Like g_subprocess_communicate(), but validates the output of the
@@ -38087,8 +38089,8 @@
  * g_subprocess_communicate_utf8_finish:
  * @subprocess: Self
  * @result: Result
- * @stdout_buf: (out): Return location for stdout data
- * @stderr_buf: (out): Return location for stderr data
+ * @stdout_buf: (out) (nullable) (optional) (transfer full): Return location for stdout data
+ * @stderr_buf: (out) (nullable) (optional) (transfer full): Return location for stderr data
  * @error: Error
  *
  * Complete an invocation of g_subprocess_communicate_utf8_async().
