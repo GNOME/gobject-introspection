@@ -8,5 +8,5 @@ The tools (tools/) are licensed under the GPLv2+.  See the file COPYING.GPL.
 
 There is also some MIT code in giscanner/.  In general where
 applicable files should have headers denoting their license status; if
-they do not, please file a bug at http://bugzilla.gnome.org.
+they do not, please file a bug at https://gitlab.gnome.org/GNOME/gobject-introspection/issues.
 

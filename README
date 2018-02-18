@@ -62,7 +62,7 @@ http://live.gnome.org/GObjectIntrospection
 
 Reporting bugs
 ==============
-Bugs should be reported in http://bugzilla.gnome.org/ in the gobject-introspection product.
+Bugs should be reported in https://gitlab.gnome.org/GNOME/gobject-introspection/issues.
 
 Contact
 =======
