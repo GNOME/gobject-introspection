@@ -9,6 +9,7 @@ scanner_test_files = [
 # FIXME: MSVC
 if cc.get_id() != 'msvc'
   scanner_test_files += [
+    'test_ccompiler.py',
     'test_sourcescanner.py',
     'test_transformer.py',
     'test_xmlwriter.py',

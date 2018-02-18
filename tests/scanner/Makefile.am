@@ -229,6 +229,7 @@ CHECKDOCS =
 endif
 
 PYTESTS = \
+	test_ccompiler.py \
 	test_shlibs.py \
 	test_pkgconfig.py \
 	test_sourcescanner.py \
