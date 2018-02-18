@@ -34,6 +34,10 @@ from distutils.sysconfig import customize_compiler
 from . import utils
 
 
+# Flags that retain macros in preprocessed output.
+FLAGS_RETAINING_MACROS = ['-g3', '-ggdb3', '-gstabs3', '-gcoff3', '-gxcoff3', '-gvms3']
+
+
 class CCompiler(object):
 
     compiler_cmd = ''
@@ -58,7 +62,7 @@ class CCompiler(object):
             if compiler_name != 'msvc' and \
                compiler_name != 'mingw32':
                 raise SystemExit('Specified Compiler \'%s\' is unsupported.' % compiler_name)
-        else:
+        elif compiler_name is None:
             # XXX: Is it common practice to use a non-Unix compiler
             #      class instance on non-Windows on platforms g-i supports?
             compiler_name = distutils.ccompiler.get_default_compiler()
@@ -386,6 +390,6 @@ class CCompiler(object):
             else:
                 # We expect the preprocessor to remove macros. If debugging is turned
                 # up high enough that won't happen, so don't add those flags. Bug #720504
-                if option not in ['-g3', '-ggdb3', '-gstabs3', '-gcoff3', '-gxcoff3', '-gvms3']:
+                if option not in FLAGS_RETAINING_MACROS:
                     other_options.append(option)
         return (includes, macros, other_options)
