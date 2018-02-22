@@ -178,6 +178,7 @@ glib_gir = custom_target('gir-glib',
     '--cflags-begin'] + glib_includes + [
     '-DGLIB_COMPILATION',
     '-D__G_I18N_LIB_H__',
+    '-DG_STDIO_NO_WRAP_ON_UNIX',
     '-DGETTEXT_PACKAGE=Dummy',
     '--cflags-end',
     '@INPUT@',
