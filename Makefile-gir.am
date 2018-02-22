@@ -75,7 +75,8 @@ GLib_2_0_gir_CFLAGS = \
             -I$(GLIB_LIBDIR)/glib-2.0/include \
             -DGETTEXT_PACKAGE=Dummy \
             -DGLIB_COMPILATION \
-            -D__G_I18N_LIB_H__
+            -D__G_I18N_LIB_H__ \
+            -DG_STDIO_NO_WRAP_ON_UNIX
 GLib_2_0_gir_FILES =  \
                 $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
 		$(filter-out $(GLIB_INCLUDEDIR)/glib/glib-autocleanups.h,$(wildcard $(GLIB_INCLUDEDIR)/glib/*.h)) \
