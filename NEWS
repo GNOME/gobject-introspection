@@ -4,7 +4,17 @@
       - Add _Float128 to the base C types
       - Update annotations imported from GLib, and require GLib 2.56
 
-    • Bugs resolved:
+    • Issues resolved on gitlab.gnome.org:
+      - #173 - Fails to parse flag-constants
+      - #175 - writer: Include documentation and symbol position in
+               source files
+      - #120 - adding subdir-objects to AM_INIT_AUTOMAKE
+      - #190 - const qualifier dropped from c:type on (type filename)
+               parameters
+      - #188 - giscanner: don't print "suppressed N warnings" if --quiet
+               was specified
+
+    • Bugs resolved on bugzilla.gnome.org:
       - #764791 - gitypelib.c: increase #define MAX_NAME_LEN from 200 to 255
       - #756921 - g-ir-scanner does not recognize _Thread_local
       - #791991 - Broken shared-library value in gir files on *BSD when
@@ -18,7 +28,8 @@
 
     • Contributors:
       Ting-Wei Lan, Leslie Giles, Rico Tzschichholz, Christoph Reiter,
-      Nicola Fontana
+      Nicola Fontana, Tomasz Miąsko, Emmanuele Bassi, Philip Chimento,
+      Karl-Philipp Richter
 
 ---
 For older releases, see the Git log
