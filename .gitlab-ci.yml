@@ -9,7 +9,7 @@ build-job:
     - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true _build .
     - cd _build
     - ninja
-    - meson test
+    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
   except:
     - tags
   artifacts:
