@@ -48,8 +48,9 @@ configure_file(
   output: 'config.h'
 )
 
-# Always bumped to match our version
-glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
+# FIXME: Always bumped to match our version
+#glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
+glib_version = '>= 2.55.1'
 
 glib_dep = dependency('glib-2.0', version : glib_version,
   fallback: ['glib', 'libglib_dep'])
