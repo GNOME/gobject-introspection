@@ -52,14 +52,11 @@ from . import utils
 
 def process_cflags_begin(option, opt, value, parser):
     cflags = getattr(parser.values, option.dest)
-    # Copy instead of consuming else cpp_defines, cpp_includes, etc will be empty
-    rargs = parser.rargs[:]
-    while len(rargs) > 0 and rargs[0] != '--cflags-end':
-        arg = rargs.pop(0)
-        if arg == "-I" and rargs and rargs[0] != '--cflags-end':
+    while len(parser.rargs) > 0 and parser.rargs[0] != '--cflags-end':
+        arg = parser.rargs.pop(0)
+        if arg == "-I" and parser.rargs and parser.rargs[0] != '--cflags-end':
             # This is a special case where there's a space between -I and the path.
-            arg += rargs.pop(0)
-        incdir = utils.cflag_real_include_path(arg)
+            arg += parser.rargs.pop(0)
         cflags.append(utils.cflag_real_include_path(arg))
 
 
