@@ -6,7 +6,7 @@ stages:
 build-job:
   stage: build
   script:
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug --werror -Dcairo=true _build .
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true _build .
     - cd _build
     - ninja
     - meson test
