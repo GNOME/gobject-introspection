@@ -1,11 +1,16 @@
 FROM fedora:27
 
 RUN dnf -y install \
+    bison \
     cairo-devel \
     cairo-gobject-devel \
     ccache \
+    chrpath \
     desktop-file-utils \
     elfutils-libelf-devel \
+    flex \
+    fontconfig-devel \
+    freetype-devel \
     gcc \
     gcc-c++ \
     gettext \
@@ -15,13 +20,19 @@ RUN dnf -y install \
     glibc-headers \
     gtk-doc \
     itstool \
+    libXft-devel \
+    libXfixes-devel \
     libattr-devel \
     libffi-devel \
     libmount-devel \
     libselinux-devel \
+    libxml2-devel \
     libxslt \
+    mesa-libGL-devel \
     meson \
     pcre-devel \
+    python3-devel \
+    python3-mako \
     systemtap-sdt-devel \
     zlib-devel
 
