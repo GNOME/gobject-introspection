@@ -56,7 +56,7 @@
 _GI_EXTERN MOD_INIT(_giscanner);
 
 #define NEW_CLASS(ctype, name, cname, num_methods)	      \
-static const PyMethodDef _Py##cname##_methods[num_methods];    \
+static const PyMethodDef _Py##cname##_methods[num_methods] G_GNUC_UNUSED;    \
 PyTypeObject Py##cname##_Type = {             \
     PyVarObject_HEAD_INIT(NULL, 0)            \
     "scanner." name,                          \
