@@ -4,14 +4,26 @@ RUN dnf -y install \
     cairo-devel \
     cairo-gobject-devel \
     ccache \
+    desktop-file-utils \
+    elfutils-libelf-devel \
     gcc \
     gcc-c++ \
     gettext \
     git \
     glib2-devel \
+    glibc-devel \
+    glibc-headers \
+    gtk-doc \
     itstool \
+    libattr-devel \
     libffi-devel \
-    meson
+    libmount-devel \
+    libselinux-devel \
+    libxslt \
+    meson \
+    pcre-devel \
+    systemtap-sdt-devel \
+    zlib-devel
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
