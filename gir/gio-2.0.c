@@ -16122,6 +16122,8 @@
  * Note that @stop_chars may contain '\0' if @stop_chars_len is
  * specified.
  *
+ * The returned string will always be nul-terminated on success.
+ *
  * Returns: (transfer full): a string with the data that was read
  *     before encountering any of the stop characters. Set @length to
  *     a #gsize to get the length of the string. This function will
@@ -16173,6 +16175,8 @@
  * Note that this function does not consume the stop character. You
  * have to use g_data_input_stream_read_byte() to get it before calling
  * g_data_input_stream_read_upto_async() again.
+ *
+ * The returned string will always be nul-terminated on success.
  *
  * Returns: (transfer full): a string with the data that was read
  *     before encountering any of the stop characters. Set @length to
@@ -30481,7 +30485,7 @@
  * used as the port number to connect to.
  *
  * In general, @host_and_port is expected to be provided by the user
- * (allowing them to give the hostname, and a port overide if necessary)
+ * (allowing them to give the hostname, and a port override if necessary)
  * and @default_port is expected to be provided by the application.
  *
  * (The port component of @host_and_port can also be specified as a

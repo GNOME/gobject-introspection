@@ -8903,7 +8903,8 @@
  *
  * The @clear_func will be called when an element in the array
  * data segment is removed and when the array is freed and data
- * segment is deallocated as well.
+ * segment is deallocated as well. @clear_func will be passed a
+ * pointer to the element to clear, rather than the element itself.
  *
  * Note that in contrast with other uses of #GDestroyNotify
  * functions, @clear_func is expected to clear the contents of
@@ -14051,6 +14052,11 @@
  * Creates a copy of @datetime and adds the specified number of months to the
  * copy. Add negative values to subtract months.
  *
+ * The day of the month of the resulting #GDateTime is clamped to the number
+ * of days in the updated calendar month. For example, if adding 1 month to
+ * 31st January 2018, the result would be 28th February 2018. In 2020 (a leap
+ * year), the result would be 29th February.
+ *
  * Returns: the newly created #GDateTime which should be freed with
  *   g_date_time_unref().
  * Since: 2.26
@@ -14092,6 +14098,9 @@
  *
  * Creates a copy of @datetime and adds the specified number of years to the
  * copy. Add negative values to subtract years.
+ *
+ * As with g_date_time_add_months(), if the resulting date would be 29th
+ * February on a non-leap year, the day will be clamped to 28th February.
  *
  * Returns: the newly created #GDateTime which should be freed with
  *   g_date_time_unref().
@@ -14235,6 +14244,14 @@
  *   for the specifier.
  * - 0: Pad a numeric result with zeros. This overrides the default padding
  *   for the specifier.
+ *
+ * Additionally, when O is used with B, b, or h, it produces the alternative
+ * form of a month name. The alternative form should be used when the month
+ * name is used without a day number (e.g., standalone). It is required in
+ * some languages (Baltic, Slavic, Greek, and more) due to their grammatical
+ * rules. For other languages there is no difference. \%OB is a GNU and BSD
+ * strftime() extension expected to be added to the future POSIX specification,
+ * \%Ob and \%Oh are GNU strftime() extensions. Since: 2.56
  *
  * Returns: a newly allocated string formatted to the requested format
  *     or %NULL in the case that there was an error (such as a format specifier
