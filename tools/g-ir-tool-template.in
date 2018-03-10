@@ -68,7 +68,7 @@ if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner.so')):
         # Autotools, most likely
         builddir = os.path.abspath(builddir)
         # For _giscanner.so
-        sys.path.insert(0, os.path.join(builddir, 'giscanner'))
+        sys.path.insert(0, os.path.join(builddir, '.libs'))
         srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
         if srcdir:
             # For the giscanner python files
