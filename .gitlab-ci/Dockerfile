@@ -3,9 +3,12 @@ FROM fedora:27
 RUN dnf -y install \
     cairo-devel \
     cairo-gobject-devel \
+    ccache \
     gcc \
     gcc-c++ \
-    glib-devel \
+    gettext \
+    git \
+    glib2-devel \
     itstool \
     libffi-devel \
     meson
