@@ -1,5 +1,5 @@
 project('gobject-introspection', 'c',
-  version: '1.55.0',
+  version: '1.55.2',
   meson_version: '>= 0.42.0',
   default_options: [
     'warning_level=1',
