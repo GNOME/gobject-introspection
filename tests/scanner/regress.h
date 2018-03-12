@@ -165,7 +165,7 @@ _GI_TEST_EXTERN
 char *regress_test_array_gtype_in (int n_types, GType *types);
 
 _GI_TEST_EXTERN
-char **regress_test_strv_out_container (void);
+const char **regress_test_strv_out_container (void);
 
 _GI_TEST_EXTERN
 char **regress_test_strv_out (void);
@@ -174,7 +174,7 @@ _GI_TEST_EXTERN
 const char * const * regress_test_strv_out_c (void);
 
 _GI_TEST_EXTERN
-void   regress_test_strv_outarg (char ***retp);
+void   regress_test_strv_outarg (const char ***retp);
 
 _GI_TEST_EXTERN
 int regress_test_array_fixed_size_int_in (int *ints);

@@ -795,10 +795,10 @@ regress_test_strv_out (void)
  *
  * Return value: (array zero-terminated=1) (transfer container):
  */
-char **
+const char **
 regress_test_strv_out_container (void)
 {
-  char **ret = g_new (char *, 4);
+  const char **ret = g_new (const char *, 4);
   ret[0] = "1";
   ret[1] = "2";
   ret[2] = "3";
@@ -811,9 +811,9 @@ regress_test_strv_out_container (void)
  * @retp: (array zero-terminated=1) (out) (transfer container):
  */
 void
-regress_test_strv_outarg (char ***retp)
+regress_test_strv_outarg (const char ***retp)
 {
-  char **ret = g_new (char *, 4);
+  const char **ret = g_new (const char *, 4);
   ret[0] = "1";
   ret[1] = "2";
   ret[2] = "3";
@@ -1198,7 +1198,7 @@ regress_test_gslist_null_out (GSList **out_list)
 /************************************************************************/
 /* GHash */
 
-static char *table_data[3][2] = {
+static const char *table_data[3][2] = {
   { "foo", "bar" }, { "baz", "bat" }, { "qux", "quux" }
 };
 
@@ -1209,7 +1209,9 @@ regress_test_table_ghash_new_container (void)
   int i;
   hash = g_hash_table_new(g_str_hash, g_str_equal);
   for (i=0; i<3; i++)
-    g_hash_table_insert(hash, table_data[i][0], table_data[i][1]);
+    g_hash_table_insert(hash,
+                        (gpointer) table_data[i][0],
+                        (gpointer) table_data[i][1]);
   return hash;
 }
 
