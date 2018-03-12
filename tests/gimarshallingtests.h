@@ -506,7 +506,7 @@ void gi_marshalling_tests_utf8_full_in (gchar *utf8);
 
 
 _GI_TEST_EXTERN
-void gi_marshalling_tests_utf8_none_out (gchar **utf8);
+void gi_marshalling_tests_utf8_none_out (const char **utf8);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_full_out (gchar **utf8);
@@ -517,7 +517,7 @@ void gi_marshalling_tests_utf8_dangling_out (gchar **utf8);
 
 
 _GI_TEST_EXTERN
-void gi_marshalling_tests_utf8_none_inout (gchar **utf8);
+void gi_marshalling_tests_utf8_none_inout (const char **utf8);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_utf8_full_inout (gchar **utf8);
@@ -781,7 +781,7 @@ void gi_marshalling_tests_array_in_nonzero_nonlen (gint first, const guint8 *cha
 
 
 _GI_TEST_EXTERN
-gchar **gi_marshalling_tests_array_zero_terminated_return (void);
+const char **gi_marshalling_tests_array_zero_terminated_return (void);
 
 _GI_TEST_EXTERN
 gchar **gi_marshalling_tests_array_zero_terminated_return_null (void);
@@ -798,11 +798,11 @@ void gi_marshalling_tests_array_zero_terminated_in (gchar **utf8s);
 
 
 _GI_TEST_EXTERN
-void gi_marshalling_tests_array_zero_terminated_out (gchar ***utf8s);
+void gi_marshalling_tests_array_zero_terminated_out (const char ***utf8s);
 
 
 _GI_TEST_EXTERN
-void gi_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s);
+void gi_marshalling_tests_array_zero_terminated_inout (const char ***utf8s);
 
 
 _GI_TEST_EXTERN
