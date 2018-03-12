@@ -5182,7 +5182,7 @@ gi_marshalling_tests_gerror_return (void)
 {
   GQuark quark = g_quark_from_static_string (GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN);
 
-  return g_error_new (quark, GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE, GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
+  return g_error_new_literal (quark, GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE, GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
 }
 
 static GIMarshallingTestsOverridesStruct *
