@@ -3167,7 +3167,7 @@ regress_test_sub_obj_init (RegressTestSubObj *obj)
 }
 
 RegressTestObj*
-regress_test_sub_obj_new ()
+regress_test_sub_obj_new (void)
 {
   return g_object_new (REGRESS_TEST_TYPE_SUB_OBJ, NULL);
 }
@@ -3481,6 +3481,8 @@ regress_test_fundamental_sub_object_new (const char * data)
 
 #define regress_test_fundamental_hidden_sub_object_get_type \
   _regress_test_fundamental_hidden_sub_object_get_type
+
+GType regress_test_fundamental_hidden_sub_object_get_type (void);
 
 typedef struct _RegressTestFundamentalHiddenSubObject RegressTestFundamentalHiddenSubObject;
 typedef struct _GObjectClass                   RegressTestFundamentalHiddenSubObjectClass;
@@ -3887,14 +3889,13 @@ regress_test_skip_unannotated_callback (RegressTestCallback callback)
 
 /* interface */
 
+typedef RegressTestInterfaceIface RegressTestInterfaceInterface;
+G_DEFINE_INTERFACE (RegressTestInterface, regress_test_interface, G_TYPE_OBJECT)
+
 static void
 regress_test_interface_default_init(RegressTestInterfaceIface *iface)
 {
 }
-
-typedef RegressTestInterfaceIface RegressTestInterfaceInterface;
-G_DEFINE_INTERFACE (RegressTestInterface, regress_test_interface, G_TYPE_OBJECT)
-
 
 /* gobject with non-standard prefix */
 G_DEFINE_TYPE(RegressTestWi8021x, regress_test_wi_802_1x, G_TYPE_OBJECT);
