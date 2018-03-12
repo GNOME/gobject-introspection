@@ -292,7 +292,7 @@ regress_test_int_value_arg(const GValue *v)
   return i;
 }
 
-static GValue value;
+static GValue global_value;
 /**
  * regress_test_value_return:
  * @i: an int
@@ -302,12 +302,12 @@ static GValue value;
 const GValue *
 regress_test_value_return(int i)
 {
-  memset(&value, '\0', sizeof(GValue));
+  memset(&global_value, '\0', sizeof(GValue));
 
-  g_value_init (&value, G_TYPE_INT);
-  g_value_set_int (&value, i);
+  g_value_init (&global_value, G_TYPE_INT);
+  g_value_set_int (&global_value, i);
 
-  return &value;
+  return &global_value;
 }
 
 /************************************************************************/
