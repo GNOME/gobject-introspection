@@ -1413,7 +1413,7 @@ gi_marshalling_tests_array_uint64_in (const guint64 *ints, gint length)
 void
 gi_marshalling_tests_array_unichar_in (const gunichar *chars, gint length)
 {
-  unsigned ix;
+  int ix;
   static const gunichar expected[] = GI_MARSHALLING_TESTS_CONSTANT_UCS4;
   g_assert_cmpint (length, ==, 12);
   for (ix = 0; ix < length; ix++)
