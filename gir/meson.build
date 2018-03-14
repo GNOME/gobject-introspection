@@ -191,6 +191,7 @@ gobject_files = []
 gobject_command = scanner_command + [
   '--identifier-prefix=G',
   '--c-include=glib-object.h',
+  '--c-include=gobject/gvaluecollector.h',
   '--namespace=GObject',
   '--nsversion=2.0',
   '--library=gobject-2.0',

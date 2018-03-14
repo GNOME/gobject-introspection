@@ -99,11 +99,11 @@ GOBJECT_LIBRARY=gobject-2.0
 
 GObject-2.0.gir: GLib-2.0.gir
 GObject_2_0_gir_LIBS = $(GOBJECT_LIBRARY)
+GObject_2_0_gir_C_INCLUDES = glib-object.h gobject/gvaluecollector.h
 GObject_2_0_gir_SCANNERFLAGS = \
             --external-library \
             --reparse-validate \
             --identifier-prefix=G \
-            --c-include="glib-object.h" \
             --add-include-path=. \
             $(GObject_2_0_gir_DOCSRC)
 
