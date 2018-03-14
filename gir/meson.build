@@ -220,7 +220,7 @@ endif
 
 foreach h : gobject_headers
   hstr = '@0@'.format(h)
-  if not hstr.endswith('autocleanups.h') and not hstr.endswith('glib-types.h')
+  if not hstr.endswith('autocleanups.h') and not hstr.endswith('glib-types.h') and not hstr.endswith('gvaluecollector.h')
     gobject_files += h
   endif
 endforeach
