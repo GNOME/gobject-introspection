@@ -117,7 +117,8 @@ GObject_2_0_gir_CFLAGS = \
             -I$(GOBJECT_INCLUDEDIR) \
             -I$(GOBJECT_LIBDIR)/glib-2.0/include
 GObject_2_0_gir_FILES = \
-	$(filter-out $(GOBJECT_INCLUDEDIR)/gobject/glib-types.h, $(wildcard $(GOBJECT_INCLUDEDIR)/gobject/*.h)) \
+	$(filter-out $(GOBJECT_INCLUDEDIR)/gobject/glib-types.h $(GOBJECT_INCLUDEDIR)/gobject/gvaluecollector.h, \
+               $(wildcard $(GOBJECT_INCLUDEDIR)/gobject/*.h)) \
 	gir/gobject-2.0.c
 
 BUILT_GIRSOURCES += GObject-2.0.gir
