@@ -172,8 +172,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\giscanner\giscannermodule.c" />
-    <ClCompile Include="..\..\scannerlexer.c" />
-    <ClCompile Include="..\..\scannerparser.c" />
+    <ClCompile Include="..\..\giscanner\scannerlexer.c" />
+    <ClCompile Include="..\..\giscanner\scannerparser.c" />
     <ClCompile Include="..\..\giscanner\sourcescanner.c" />
   </ItemGroup>
   <ItemGroup>

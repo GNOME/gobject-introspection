@@ -16,8 +16,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\giscanner\giscannermodule.c"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\scannerlexer.c"><Filter>Sources</Filter></ClCompile>
-    <ClCompile Include="..\..\scannerparser.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\giscanner\scannerlexer.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\giscanner\scannerparser.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\giscanner\sourcescanner.c"><Filter>Sources</Filter></ClCompile>
   </ItemGroup>
 </Project>
