@@ -177,8 +177,6 @@ stringtext				([^\\\"])|(\\.)
 "_Nullable"				{ /* Ignore */ }
 "_Null_unspecified"			{ /* Ignore */ }
 "_Noreturn" 			        { /* Ignore */ }
-"__signed"                              { return SIGNED; }
-"__signed__"				{ return SIGNED; }
 "__restrict"				{ return RESTRICT; }
 "__restrict__"				{ return RESTRICT; }
 "thread_local"				{ return THREAD_LOCAL; }
@@ -186,15 +184,13 @@ stringtext				([^\\\"])|(\\.)
 "__typeof"				{ if (!parse_ignored_macro()) REJECT; }
 "__volatile"	        	        { return VOLATILE; }
 "__volatile__"	        	        { return VOLATILE; }
-"_Bool"					{ return BOOL; }
+"_Bool"					{ return BASIC_TYPE; }
 "typedef char __static_assert_t".*"\n"	{ ++lineno; /* Ignore */ }
 "__cdecl" 	        	        { /* Ignore */ }
 "__declspec(deprecated(".*"))"		{ /* Ignore */ }
 "__declspec"[\t ]*"("[a-z\t ]+")"	{ /* Ignore */ }
 "__stdcall" 			        { /* ignore */ }
 "__w64"					{ /* ignore */ }
-"__int64"				{ return INT; }
-"_Float128"                             { return FLOAT; }
 
 "G_GINT64_CONSTANT"			{ return INTL_CONST; }
 "G_GUINT64_CONSTANT"			{ return INTUL_CONST; }
@@ -208,34 +204,43 @@ stringtext				([^\\\"])|(\\.)
 
 "asm"           		        { if (!parse_ignored_macro()) REJECT; }
 "auto"					{ return AUTO; }
-"bool"                                  { return BOOL; }
 "break"					{ return BREAK; }
 "case"					{ return CASE; }
-"char"					{ return CHAR; }
+"char"					{ return BASIC_TYPE; }
 "const"					{ return CONST; }
 "continue"				{ return CONTINUE; }
 "default"				{ return DEFAULT; }
 "do"					{ return DO; }
-"double"				{ return DOUBLE; }
+"double"				{ return BASIC_TYPE; }
 "else"					{ return ELSE; }
 "enum"					{ return ENUM; }
 "extern"				{ return EXTERN; }
-"float"					{ return FLOAT; }
+"float"					{ return BASIC_TYPE; }
+"_Float16"                              { return BASIC_TYPE; }
+"_Float32"                              { return BASIC_TYPE; }
+"_Float64"                              { return BASIC_TYPE; }
+"_Float128"                             { return BASIC_TYPE; }
+"_Float32x"                             { return BASIC_TYPE; }
+"_Float64x"                             { return BASIC_TYPE; }
+"_Float128x"                            { return BASIC_TYPE; }
 "for"					{ return FOR; }
 "goto"					{ return GOTO; }
 "if"					{ return IF; }
 "inline"				{ return INLINE; }
-"int"					{ return INT; }
-"__uint128_t"				{ return INT; }
-"__int128_t"				{ return INT; }
-"__uint128"				{ return INT; }
-"__int128"				{ return INT; }
-"long"					{ return LONG; }
+"int"					{ return BASIC_TYPE; }
+"__int64"				{ return BASIC_TYPE; }
+"__uint128_t"				{ return BASIC_TYPE; }
+"__int128_t"				{ return BASIC_TYPE; }
+"__uint128"				{ return BASIC_TYPE; }
+"__int128"				{ return BASIC_TYPE; }
+"long"					{ return BASIC_TYPE; }
 "register"				{ return REGISTER; }
 "restrict"				{ return RESTRICT; }
 "return"				{ return RETURN; }
-"short"					{ return SHORT; }
+"short"					{ return BASIC_TYPE; }
 "signed"				{ return SIGNED; }
+"__signed"                              { return SIGNED; }
+"__signed__"				{ return SIGNED; }
 "sizeof"				{ return SIZEOF; }
 "static"				{ return STATIC; }
 "struct"				{ return STRUCT; }

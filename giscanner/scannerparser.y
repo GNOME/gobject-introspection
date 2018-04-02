@@ -245,6 +245,7 @@ set_or_merge_base_type (GISourceType *type,
 %parse-param { GISourceScanner* scanner }
 %lex-param { GISourceScanner* scanner }
 
+%token <str> BASIC_TYPE
 %token <str> IDENTIFIER "identifier"
 %token <str> TYPEDEF_NAME "typedef-name"
 
@@ -254,8 +255,8 @@ set_or_merge_base_type (GISourceType *type,
 %token ELLIPSIS ADDEQ SUBEQ MULEQ DIVEQ MODEQ XOREQ ANDEQ OREQ SL SR
 %token SLEQ SREQ EQ NOTEQ LTEQ GTEQ ANDAND OROR PLUSPLUS MINUSMINUS ARROW
 
-%token AUTO BOOL BREAK CASE CHAR CONST CONTINUE DEFAULT DO DOUBLE ELSE ENUM
-%token EXTENSION EXTERN FLOAT FOR GOTO IF INLINE INT LONG REGISTER RESTRICT
+%token AUTO BREAK CASE CONST CONTINUE DEFAULT DO ELSE ENUM
+%token EXTENSION EXTERN FOR GOTO IF INLINE REGISTER RESTRICT
 %token RETURN SHORT SIGNED SIZEOF STATIC STRUCT SWITCH THREAD_LOCAL TYPEDEF
 %token UNION UNSIGNED VOID VOLATILE WHILE
 
@@ -274,6 +275,7 @@ set_or_merge_base_type (GISourceType *type,
 %type <ctype> struct_or_union_specifier
 %type <ctype> type_specifier
 %type <str> identifier
+%type <str> basic_type
 %type <str> typedef_name
 %type <str> identifier_or_typedef_name
 %type <symbol> abstract_declarator
@@ -877,34 +879,17 @@ storage_class_specifier
 	  }
 	;
 
+basic_type
+	: BASIC_TYPE
+	  {
+		$$ = g_strdup (yytext);
+	  }
+	;
+
 type_specifier
 	: VOID
 	  {
 		$$ = gi_source_type_new (CTYPE_VOID);
-	  }
-	| CHAR
-	  {
-		$$ = gi_source_basic_type_new ("char");
-	  }
-	| SHORT
-	  {
-		$$ = gi_source_basic_type_new ("short");
-	  }
-	| INT
-	  {
-		$$ = gi_source_basic_type_new ("int");
-	  }
-	| LONG
-	  {
-		$$ = gi_source_basic_type_new ("long");
-	  }
-	| FLOAT
-	  {
-		$$ = gi_source_basic_type_new ("float");
-	  }
-	| DOUBLE
-	  {
-		$$ = gi_source_basic_type_new ("double");
 	  }
 	| SIGNED
 	  {
@@ -914,9 +899,10 @@ type_specifier
 	  {
 		$$ = gi_source_basic_type_new ("unsigned");
 	  }
-	| BOOL
+	| basic_type
 	  {
-		$$ = gi_source_basic_type_new ("bool");
+		$$ = gi_source_type_new (CTYPE_BASIC_TYPE);
+		$$->name = $1;
 	  }
 	| struct_or_union_specifier
 	| enum_specifier
