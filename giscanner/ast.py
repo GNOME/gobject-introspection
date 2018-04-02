@@ -307,8 +307,6 @@ type_names['int32_t'] = TYPE_INT32
 type_names['uint32_t'] = TYPE_UINT32
 type_names['int64_t'] = TYPE_INT64
 type_names['uint64_t'] = TYPE_UINT64
-# C99 stdbool
-type_names['bool'] = TYPE_BOOLEAN
 
 # A few additional GLib type aliases
 type_names['guchar'] = TYPE_UINT8
