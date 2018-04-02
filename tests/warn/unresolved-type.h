@@ -48,3 +48,7 @@ void test_f64x (_Float64x f);
 void test_f128x (_Float128x f);
 // EXPECT:48: Warning: Test: test_f128x: argument f: Unresolved type: '_Float128x'
 
+// For backward compatibility we don't warn about _Bool used as return type.
+_Bool test_ret_bool1 ();
+bool test_ret_bool2 ();
+gboolean test_ret_bool3 ();

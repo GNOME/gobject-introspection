@@ -689,6 +689,14 @@ raise ValueError."""
         canonical = self._canonicalize_ctype(ctype)
         base = canonical.replace('*', '')
 
+        # While gboolean and _Bool are distinct types, they used to be treated
+        # by scanner as exactly the same one. In general this is incorrect
+        # because of different ABI, but this usually works fine in return
+        # position, so for backward compatibility lets continue for now:
+        if is_return and canonical == '_Bool':
+            canonical = 'gboolean'
+            base = canonical
+
         # Special default: char ** -> ast.Array, same for GStrv
         if (is_return and canonical == 'utf8*') or base == 'GStrv':
             bare_utf8 = ast.TYPE_STRING.clone()
