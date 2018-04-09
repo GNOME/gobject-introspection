@@ -8491,7 +8491,7 @@
  *   i = (int) (long) p;
  * ]|
  * The GLib macros GPOINTER_TO_INT(), GINT_TO_POINTER(), etc. take care
- * to do the right thing on the every platform.
+ * to do the right thing on every platform.
  *
  * Warning: You may not store pointers in integers. This is not
  * portable in any way, shape or form. These macros only allow storing
@@ -12282,8 +12282,8 @@
 /**
  * g_checksum_get_digest: (skip)
  * @checksum: a #GChecksum
- * @buffer: output buffer
- * @digest_len: an inout parameter. The caller initializes it to the size of @buffer.
+ * @buffer: (array length=digest_len): output buffer
+ * @digest_len: (inout): an inout parameter. The caller initializes it to the size of @buffer.
  *   After the call it contains the length of the digest.
  *
  * Gets the digest from @checksum as a raw binary vector and places it
@@ -16171,6 +16171,27 @@
 
 
 /**
+ * g_get_language_names_with_category:
+ * @category_name: a locale category name
+ *
+ * Computes a list of applicable locale names with a locale category name,
+ * which can be used to construct the fallback locale-dependent filenames
+ * or search paths. The returned list is sorted from most desirable to
+ * least desirable and always contains the default locale "C".
+ *
+ * This function consults the environment variables `LANGUAGE`, `LC_ALL`,
+ * @category_name, and `LANG` to find the list of locales specified by the
+ * user.
+ *
+ * g_get_language_names() returns g_get_language_names_with_category("LC_MESSAGES").
+ *
+ * Returns: (array zero-terminated=1) (transfer none): a %NULL-terminated array of strings owned by GLib
+ *    that must not be modified or freed.
+ * Since: 2.58
+ */
+
+
+/**
  * g_get_locale_variants:
  * @locale: a locale identifier
  *
@@ -17067,8 +17088,8 @@
 /**
  * g_hmac_get_digest:
  * @hmac: a #GHmac
- * @buffer: output buffer
- * @digest_len: an inout parameter. The caller initializes it to the
+ * @buffer: (array length=digest_len): output buffer
+ * @digest_len: (inout): an inout parameter. The caller initializes it to the
  *   size of @buffer. After the call it contains the length of the digest
  *
  * Gets the digest from @checksum as a raw binary array and places it
@@ -32209,7 +32230,7 @@
  * context. You can do these steps manually if you need greater control or to
  * use a custom main context.
  *
- * The interval given in terms of monotonic time, not wall clock time.
+ * The interval given is in terms of monotonic time, not wall clock time.
  * See g_get_monotonic_time().
  *
  * Returns: the ID (greater than 0) of the event source.
@@ -32328,7 +32349,7 @@
  * The scheduling granularity/accuracy of this timeout source will be
  * in seconds.
  *
- * The interval given in terms of monotonic time, not wall clock time.
+ * The interval given is in terms of monotonic time, not wall clock time.
  * See g_get_monotonic_time().
  *
  * Returns: the newly-created timeout source
