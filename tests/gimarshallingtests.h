@@ -1975,6 +1975,7 @@ struct _GIMarshallingTestsPropertiesObject {
     GObject *some_object;
     GIMarshallingTestsFlags some_flags;
     GIMarshallingTestsGEnum some_enum;
+    GByteArray *some_byte_array;
 };
 
 struct _GIMarshallingTestsPropertiesObjectClass {
