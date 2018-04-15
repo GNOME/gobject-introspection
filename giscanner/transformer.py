@@ -669,9 +669,12 @@ raise ValueError."""
                 name = base
             return ast.List(name, ast.TYPE_ANY, ctype=ctype,
                         is_const=is_const, complete_ctype=complete_ctype)
-        elif base in ('GArray', 'GPtrArray', 'GByteArray',
-                      'GLib.Array', 'GLib.PtrArray', 'GLib.ByteArray',
-                      'GObject.Array', 'GObject.PtrArray', 'GObject.ByteArray'):
+        elif base in ('GByteArray', 'GLib.ByteArray', 'GObject.ByteArray'):
+            return ast.Array('GLib.ByteArray', ast.TYPE_UINT8, ctype=ctype,
+                         is_const=is_const, complete_ctype=complete_ctype)
+        elif base in ('GArray', 'GPtrArray',
+                      'GLib.Array', 'GLib.PtrArray',
+                      'GObject.Array', 'GObject.PtrArray'):
             if '.' in base:
                 name = 'GLib.' + base.split('.', 1)[1]
             else:

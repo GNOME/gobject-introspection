@@ -361,14 +361,11 @@ class MainTransformer(object):
                 message.warn("invalid (element-type) for a GPtrArray, "
                              "must be a pointer", annotations.position)
 
-        # GByteArrays have (element-type) guint8 by default
-        if array_type == ast.Array.GLIB_BYTEARRAY:
-            if element_type == ast.TYPE_ANY:
-                array.element_type = ast.TYPE_UINT8
-            elif element_type not in [ast.TYPE_UINT8, ast.TYPE_INT8, ast.TYPE_CHAR]:
-                message.warn("invalid (element-type) for a GByteArray, "
-                             "must be one of guint8, gint8 or gchar",
-                             annotations.position)
+        if (array_type == ast.Array.GLIB_BYTEARRAY
+        and element_type not in [ast.TYPE_UINT8, ast.TYPE_INT8, ast.TYPE_CHAR]):
+            message.warn("invalid (element-type) for a GByteArray, "
+                         "must be one of guint8, gint8 or gchar",
+                         annotations.position)
 
     def _apply_annotations_array(self, parent, node, annotations):
         element_type_options = annotations.get(ANN_ELEMENT_TYPE)
