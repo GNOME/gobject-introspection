@@ -147,7 +147,8 @@ elif dep_type == 'internal'
   glib_includes += ['-I' + intl_incdir]
 
   ffi_libdir = join_paths(meson.build_root(), subprojdir, 'libffi', 'src')
-  glib_libpaths = ['-L' + ffi_libdir] + glib_libpaths
+  intl_libdir = join_paths(meson.build_root(), subprojdir, 'proxy-libintl')
+  glib_libpaths = ['-L' + ffi_libdir, '-L' + intl_libdir] + glib_libpaths
 
   glib_command += glib_libpaths
 
