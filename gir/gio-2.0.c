@@ -2918,12 +2918,14 @@
 /**
  * GSimpleAction::activate:
  * @simple: the #GSimpleAction
- * @parameter: (nullable): the parameter to the activation
+ * @parameter: (nullable): the parameter to the activation, or %NULL if it has
+ *   no parameter
  *
  * Indicates that the action was just activated.
  *
- * @parameter will always be of the expected type.  In the event that
- * an incorrect type was given, no signal will be emitted.
+ * @parameter will always be of the expected type, i.e. the parameter type
+ * specified when the action was created. If an incorrect type is given when
+ * activating the action, this signal is not emitted.
  *
  * Since GLib 2.40, if no handler is connected to this signal then the
  * default behaviour for boolean-stated actions with a %NULL parameter
@@ -2945,8 +2947,10 @@
  * Indicates that the action just received a request to change its
  * state.
  *
- * @value will always be of the correct state type.  In the event that
- * an incorrect type was given, no signal will be emitted.
+ * @value will always be of the correct state type, i.e. the type of the
+ * initial state passed to g_simple_action_new_stateful(). If an incorrect
+ * type is given when requesting to change the state, this signal is not
+ * emitted.
  *
  * If no handler is connected to this signal then the default
  * behaviour is to call g_simple_action_set_state() to set the state
@@ -17135,7 +17139,7 @@
  * @cancellable: (nullable): a #GCancellable or %NULL
  * @error: return location for error or %NULL
  *
- * Synchronously closees @connection. The calling thread is blocked
+ * Synchronously closes @connection. The calling thread is blocked
  * until this is done. See g_dbus_connection_close() for the
  * asynchronous version of this method and more details about what it
  * does.
@@ -33728,8 +33732,7 @@
  * to call g_settings_get_child().
  *
  * For GSettings objects that are lists, this value can change at any
- * time and you should connect to the "children-changed" signal to watch
- * for those changes.  Note that there is a race condition here: you may
+ * time. Note that there is a race condition here: you may
  * request a child after listing it only for it to have been destroyed
  * in the meantime.  For this reason, g_settings_get_child() may return
  * %NULL even for a child that was listed by this function.
@@ -34695,11 +34698,13 @@
 /**
  * g_simple_action_new:
  * @name: the name of the action
- * @parameter_type: (nullable): the type of parameter to the activate function
+ * @parameter_type: (nullable): the type of parameter that will be passed to
+ *   handlers for the #GSimpleAction::activate signal, or %NULL for no parameter
  *
  * Creates a new action.
  *
- * The created action is stateless.  See g_simple_action_new_stateful().
+ * The created action is stateless. See g_simple_action_new_stateful() to create
+ * an action that has state.
  *
  * Returns: a new #GSimpleAction
  * Since: 2.28
@@ -34709,15 +34714,16 @@
 /**
  * g_simple_action_new_stateful:
  * @name: the name of the action
- * @parameter_type: (nullable): the type of the parameter to the activate function
+ * @parameter_type: (nullable): the type of the parameter that will be passed to
+ *   handlers for the #GSimpleAction::activate signal, or %NULL for no parameter
  * @state: the initial state of the action
  *
  * Creates a new stateful action.
  *
- * @state is the initial state of the action.  All future state values
- * must have the same #GVariantType as the initial state.
+ * All future state values must have the same #GVariantType as the initial
+ * @state.
  *
- * If the @state GVariant is floating, it is consumed.
+ * If the @state #GVariant is floating, it is consumed.
  *
  * Returns: a new #GSimpleAction
  * Since: 2.28

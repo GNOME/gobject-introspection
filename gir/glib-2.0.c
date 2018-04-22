@@ -8350,10 +8350,17 @@
  * #GTimeZone is a structure that represents a time zone, at no
  * particular point in time.  It is refcounted and immutable.
  *
+ * Each time zone has an identifier (for example, ‘Europe/London’) which is
+ * platform dependent. See g_time_zone_new() for information on the identifier
+ * formats. The identifier of a time zone can be retrieved using
+ * g_time_zone_get_identifier().
+ *
  * A time zone contains a number of intervals.  Each interval has
- * an abbreviation to describe it, an offet to UTC and a flag indicating
- * if the daylight savings time is in effect during that interval.  A
- * time zone always has at least one interval -- interval 0.
+ * an abbreviation to describe it (for example, ‘PDT’), an offet to UTC and a
+ * flag indicating if the daylight savings time is in effect during that
+ * interval.  A time zone always has at least one interval — interval 0. Note
+ * that interval abbreviations are not the same as time zone identifiers
+ * (apart from ‘UTC’), and cannot be passed to g_time_zone_new().
  *
  * Every UTC time is contained within exactly one interval, but a given
  * local time may be contained within zero, one or two intervals (due to
@@ -14362,6 +14369,17 @@
  *
  * Returns: the number of seconds
  * Since: 2.26
+ */
+
+
+/**
+ * g_date_time_get_timezone:
+ * @datetime: a #GDateTime
+ *
+ * Get the time zone for this @datetime.
+ *
+ * Returns: (transfer none): the time zone
+ * Since: 2.58
  */
 
 
@@ -30340,7 +30358,7 @@
  * @str_array: a %NULL-terminated array of strings
  *
  * Returns the length of the given %NULL-terminated
- * string array @str_array.
+ * string array @str_array. @str_array must not be %NULL.
  *
  * Returns: length of @str_array.
  * Since: 2.6
@@ -32000,6 +32018,24 @@
 
 
 /**
+ * g_time_zone_get_identifier:
+ * @tz: a #GTimeZone
+ *
+ * Get the identifier of this #GTimeZone, as passed to g_time_zone_new().
+ * If the identifier passed at construction time was not recognised, `UTC` will
+ * be returned. If it was %NULL, the identifier of the local timezone at
+ * construction time will be returned.
+ *
+ * The identifier will be returned in the same format as provided at
+ * construction time: if provided as a time offset, that will be returned by
+ * this function.
+ *
+ * Returns: identifier for this timezone
+ * Since: 2.58
+ */
+
+
+/**
  * g_time_zone_get_offset:
  * @tz: a #GTimeZone
  * @interval: an interval within the timezone
@@ -32118,6 +32154,21 @@
  *
  * Returns: the local timezone
  * Since: 2.26
+ */
+
+
+/**
+ * g_time_zone_new_offset:
+ * @seconds: offset to UTC, in seconds
+ *
+ * Creates a #GTimeZone corresponding to the given constant offset from UTC,
+ * in seconds.
+ *
+ * This is equivalent to calling g_time_zone_new() with a string in the form
+ * `[+|-]hh[:mm[:ss]]`.
+ *
+ * Returns: (transfer full): a timezone at the given offset from UTC
+ * Since: 2.58
  */
 
 
