@@ -35,6 +35,7 @@ import sys
 import tempfile
 import platform
 
+import giscanner
 from giscanner import message
 from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Include, Namespace
@@ -101,7 +102,8 @@ def get_windows_option_group(parser):
 
 
 def _get_option_parser():
-    parser = optparse.OptionParser('%prog [options] sources')
+    parser = optparse.OptionParser('%prog [options] sources',
+                                   version='%prog ' + giscanner.__version__)
     parser.add_option('', "--quiet",
                       action="store_true", dest="quiet",
                       default=False,

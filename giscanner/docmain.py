@@ -24,8 +24,10 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import os
+import sys
 import argparse
 
+import giscanner
 from .docwriter import DocWriter
 from .sectionparser import generate_sections_file, write_sections_file
 from .transformer import Transformer
@@ -33,7 +35,8 @@ from .transformer import Transformer
 
 def doc_main(args):
     parser = argparse.ArgumentParser()
-
+    parser.add_argument('--version', action='version',
+                      version='%(prog)s ' + giscanner.__version__)
     parser.add_argument("girfile")
     parser.add_argument("-o", "--output",
                       action="store", dest="output",

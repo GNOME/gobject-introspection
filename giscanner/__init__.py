@@ -22,3 +22,7 @@ import os
 builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
 if builddir is not None:
     __path__.append(os.path.join(builddir, 'giscanner'))
+try:
+    from ._version import __version__
+except ImportError:
+    __version__ = '0.0.0'

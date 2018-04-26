@@ -28,6 +28,7 @@ import optparse
 import codecs
 from contextlib import contextmanager
 
+import giscanner
 from giscanner import message
 from giscanner.annotationparser import GtkDocCommentBlockParser, GtkDocCommentBlockWriter
 from giscanner.scannermain import (get_preprocessor_option_group,
@@ -54,7 +55,8 @@ def encode_stdout(encoding):
 
 
 def annotation_main(args):
-    parser = optparse.OptionParser('%prog [options] sources')
+    parser = optparse.OptionParser('%prog [options] sources',
+                                   version='%prog ' + giscanner.__version__)
 
     group = optparse.OptionGroup(parser, "Tool modes, one is required")
     group.add_option("-e", "--extract",
