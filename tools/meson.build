@@ -31,7 +31,6 @@ endforeach
 girscanner = tool_output[0]
 
 gircompiler = executable('g-ir-compiler', 'compiler.c',
-  c_args: '-DGIREPO_DEFAULT_SEARCH_PATH="@0"'.format(libdir_abs),
   dependencies: [
     girepo_internals_dep,
     girepo_dep,
@@ -40,7 +39,6 @@ gircompiler = executable('g-ir-compiler', 'compiler.c',
 )
 
 girgenerate = executable('g-ir-generate', 'generate.c',
-  c_args: '-DGIREPO_DEFAULT_SEARCH_PATH="@0"'.format(libdir_abs),
   dependencies: [
     girepo_internals_dep,
     girepo_dep,
