@@ -23,8 +23,7 @@ g-ir-doc-tool: tools/g-ir-tool-template.in _giscanner.la Makefile
 	@chmod a+x $@
 
 g_ir_compiler_SOURCES = tools/compiler.c
-g_ir_compiler_CPPFLAGS = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
-			 -I$(top_srcdir)/girepository
+g_ir_compiler_CPPFLAGS = -I$(top_srcdir)/girepository
 g_ir_compiler_CFLAGS = $(GIO_CFLAGS)
 g_ir_compiler_LDADD = \
 	libgirepository-internals.la	\
@@ -32,8 +31,7 @@ g_ir_compiler_LDADD = \
 	$(GIREPO_LIBS)
 
 g_ir_generate_SOURCES = tools/generate.c
-g_ir_generate_CPPFLAGS = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
-			 -I$(top_srcdir)/girepository
+g_ir_generate_CPPFLAGS = -I$(top_srcdir)/girepository
 g_ir_generate_CFLAGS = $(GIO_CFLAGS)
 g_ir_generate_LDADD = \
 	libgirepository-internals.la	\
