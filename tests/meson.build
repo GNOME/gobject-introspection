@@ -17,3 +17,4 @@ install_data(installed_sources, install_dir: join_paths(get_option('datadir'), '
 
 ### TODO: actually test
 subdir('warn')
+subdir('scanner')
