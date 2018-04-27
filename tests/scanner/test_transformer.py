@@ -16,12 +16,6 @@ else:
 
 
 os.environ['GI_SCANNER_DISABLE_CACHE'] = '1'
-path = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
-assert path is not None
-sys.path.insert(0, path)
-
-# Not correct, but enough to get the tests going uninstalled
-builtins.__dict__['DATADIR'] = path
 
 from giscanner import ast
 from giscanner.sourcescanner import SourceScanner

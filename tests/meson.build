@@ -16,3 +16,5 @@ installed_sources = [
 install_data(installed_sources, install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0', 'tests'))
 
 ### TODO: actually test
+
+subdir('scanner')
