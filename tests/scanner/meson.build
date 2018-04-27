@@ -3,6 +3,7 @@ scanner_test_env = environment()
 scanner_test_env.append('PYTHONPATH', join_paths(meson.current_build_dir(), '../../'))
 
 scanner_test_files = [
+  'test_shlibs.py',
   'test_sourcescanner.py',
   'test_transformer.py'
 ]
