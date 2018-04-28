@@ -16,7 +16,7 @@
   </info>
   <title>regress_test_strv_out_container</title>
   <synopsis><code mime="text/x-csrc">
-char** regress_test_strv_out_container (void);
+const char** regress_test_strv_out_container (void);
   </code></synopsis>
 
 

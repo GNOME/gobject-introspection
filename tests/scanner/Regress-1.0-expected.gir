@@ -623,7 +623,7 @@ each string needs to be freed.</doc>
           </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">The data</doc>
-            <array length="1" zero-terminated="0" c:type="guchar*">
+            <array length="1" zero-terminated="0" c:type="const guchar*">
               <type name="guint8" c:type="guchar"/>
             </array>
           </parameter>
@@ -646,7 +646,7 @@ each string needs to be freed.</doc>
           </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:space="preserve">The data</doc>
-            <array length="1" zero-terminated="0" c:type="gchar*">
+            <array length="1" zero-terminated="0" c:type="const gchar*">
               <type name="gint8"/>
             </array>
           </parameter>
@@ -2374,7 +2374,7 @@ use it should be.</doc>
           <type name="gsize" c:type="gsize"/>
         </parameter>
         <parameter name="two" transfer-ownership="none">
-          <array length="3" zero-terminated="0" c:type="char**">
+          <array length="3" zero-terminated="0" c:type="const char**">
             <type name="utf8"/>
           </array>
         </parameter>
@@ -4536,7 +4536,7 @@ detection, and fixing it via annotations.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="properties" transfer-ownership="none">
-          <array length="0" zero-terminated="0" c:type="gchar**">
+          <array length="0" zero-terminated="0" c:type="const gchar* const*">
             <type name="utf8"/>
           </array>
         </parameter>
@@ -6555,7 +6555,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
     <function name="test_strv_out_container"
               c:identifier="regress_test_strv_out_container">
       <return-value transfer-ownership="container">
-        <array c:type="char**">
+        <array c:type="const char**">
           <type name="utf8"/>
         </array>
       </return-value>
@@ -6569,7 +6569,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="container">
-          <array c:type="char***">
+          <array c:type="const char***">
             <type name="utf8" c:type="char**"/>
           </array>
         </parameter>
