@@ -1,10 +1,9 @@
-image: ebassi/gitlab-gi:latest
-
 stages:
   - build
 
-build-job:
+fedora-x86_64:
   stage: build
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v1
   script:
     - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true _build .
     - cd _build
@@ -14,6 +13,6 @@ build-job:
     - tags
   artifacts:
     when: on_failure
-    name: "glib-_${CI_COMMIT_REF_NAME}"
+    name: "gi-_${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
