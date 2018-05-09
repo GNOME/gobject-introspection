@@ -392,13 +392,11 @@ girepository_command = scanner_command + [
   '--namespace=GIRepository',
   '--nsversion=2.0',
   '--library=girepository-1.0',
+  '--pkg-export=gobject-introspection-1.0',
+  '-L' + meson.current_build_dir() + '/../girepository',
 ]
 
-if dep_type == 'pkgconfig'
-  girepository_command += ['--external-library', '--pkg=gobject-introspection-1.0']
-else
-  girepository_command += ['--pkg-export=gobject-introspection-1.0',
-                           '-L' + meson.current_build_dir() + '/../girepository']
+if dep_type != 'pkgconfig'
   girepository_command += glib_libpaths
 endif
 
