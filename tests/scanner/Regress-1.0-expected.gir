@@ -2907,6 +2907,30 @@ use it should be.</doc>
                glib:type-name="RegressTestInterface"
                glib:get-type="regress_test_interface_get_type"
                glib:type-struct="TestInterfaceIface">
+      <method name="emit_signal"
+              c:identifier="regress_test_interface_emit_signal">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve">the object to emit the signal</doc>
+            <type name="TestInterface" c:type="RegressTestInterface*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <glib:signal name="interface-signal" when="last">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="ptr" transfer-ownership="none">
+            <doc xml:space="preserve">the code must look up the signal with
+  g_interface_info_find_signal() in order to get this to work.</doc>
+            <type name="gint" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
     </interface>
     <record name="TestInterfaceIface"
             c:type="RegressTestInterfaceIface"

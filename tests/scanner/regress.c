@@ -3895,6 +3895,31 @@ G_DEFINE_INTERFACE (RegressTestInterface, regress_test_interface, G_TYPE_OBJECT)
 static void
 regress_test_interface_default_init(RegressTestInterfaceIface *iface)
 {
+  static gboolean initialized = FALSE;
+  if (initialized)
+    return;
+
+  /**
+   * RegressTestInterface::interface-signal:
+   * @self: the object which emitted the signal
+   * @ptr: (type int): the code must look up the signal with
+   *   g_interface_info_find_signal() in order to get this to work.
+   */
+  g_signal_new ("interface-signal", REGRESS_TEST_TYPE_INTERFACE,
+                G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
+                G_TYPE_NONE, 1, G_TYPE_POINTER);
+
+  initialized = TRUE;
+}
+
+/**
+ * regress_test_interface_emit_signal:
+ * @self: the object to emit the signal
+ */
+void
+regress_test_interface_emit_signal (RegressTestInterface *self)
+{
+  g_signal_emit_by_name (self, "interface-signal", NULL);
 }
 
 /* gobject with non-standard prefix */
