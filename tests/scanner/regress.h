@@ -840,6 +840,9 @@ _GI_TEST_EXTERN
 void       regress_test_obj_emit_sig_with_array_len_prop (RegressTestObj *obj);
 
 _GI_TEST_EXTERN
+void       regress_test_obj_emit_sig_with_inout_int (RegressTestObj *obj);
+
+_GI_TEST_EXTERN
 int        regress_test_obj_instance_method (RegressTestObj *obj);
 
 _GI_TEST_EXTERN

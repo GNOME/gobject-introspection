@@ -3134,6 +3134,19 @@ case.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="emit_sig_with_inout_int"
+              c:identifier="regress_test_obj_emit_sig_with_inout_int">
+        <doc xml:space="preserve">The signal handler must increment the inout parameter by 1.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:space="preserve">The object to emit the signal.</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
       <method name="emit_sig_with_int64"
               c:identifier="regress_test_obj_emit_sig_with_int64">
         <return-value transfer-ownership="none">
@@ -3776,6 +3789,23 @@ raise from the introspection client language.</doc>
               <type name="utf8"/>
               <type name="GObject.Value"/>
             </type>
+          </parameter>
+        </parameters>
+      </glib:signal>
+      <glib:signal name="sig-with-inout-int" when="last">
+        <doc xml:space="preserve">This signal is modeled after GtkEditable::insert-text.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="position"
+                     direction="inout"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:space="preserve">The position, in characters, at which to
+    insert the new text. This is an in-out paramter. After the signal
+    emission is finished, it should point after the newly inserted text.</doc>
+            <type name="gint" c:type="gpointer"/>
           </parameter>
         </parameters>
       </glib:signal>
