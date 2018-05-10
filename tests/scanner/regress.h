@@ -1196,6 +1196,9 @@ struct _RegressTestInterfaceIface {
 _GI_TEST_EXTERN
 GType regress_test_interface_get_type (void) G_GNUC_CONST;
 
+_GI_TEST_EXTERN
+void regress_test_interface_emit_signal (RegressTestInterface *self);
+
 /* gobject with non-standard prefix */
 #define REGRESS_TEST_TYPE_WI_802_1X              (regress_test_wi_802_1x_get_type ())
 #define REGRESS_TEST_WI_802_1X(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_TEST_TYPE_WI_802_1X, RegressTestWi8021x))
