@@ -2279,6 +2279,7 @@ enum {
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INT64_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_UINT64_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INTARRAY_RET,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INOUT_INT,
   N_REGRESS_TEST_OBJ_SIGNALS
 };
 
@@ -2528,6 +2529,27 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  G_TYPE_ARRAY,
 		  1,
 		  G_TYPE_INT);
+
+  /**
+   * RegressTestObj::sig-with-inout-int
+   * @self: The object that emitted the signal
+   * @position: (inout) (type int): The position, in characters, at which to
+   *     insert the new text. This is an in-out paramter. After the signal
+   *     emission is finished, it should point after the newly inserted text.
+   *
+   * This signal is modeled after GtkEditable::insert-text.
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INOUT_INT] =
+    g_signal_new ("sig-with-inout-int",
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL,
+                  NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_POINTER);
 
   gobject_class->set_property = regress_test_obj_set_property;
   gobject_class->get_property = regress_test_obj_get_property;
@@ -2805,6 +2827,20 @@ regress_test_obj_emit_sig_with_array_len_prop (RegressTestObj *obj)
 {
   int arr[] = { 0, 1, 2, 3, 4 };
   g_signal_emit_by_name (obj, "sig-with-array-len-prop", &arr, 5);
+}
+
+/**
+ * regress_test_obj_emit_sig_with_inout_int:
+ * @obj: The object to emit the signal.
+ *
+ * The signal handler must increment the inout parameter by 1.
+ */
+void
+regress_test_obj_emit_sig_with_inout_int (RegressTestObj *obj)
+{
+  int inout = 42;
+  g_signal_emit_by_name (obj, "sig-with-inout-int", &inout);
+  g_assert_cmpint (inout, ==, 43);
 }
 
 int
