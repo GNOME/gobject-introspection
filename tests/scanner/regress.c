@@ -2667,7 +2667,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                "A contained double",
                                G_MINDOUBLE,
                                G_MAXDOUBLE,
-                               1.0f,
+                               1.0,
                                G_PARAM_READWRITE);
   g_object_class_install_property (gobject_class,
                                    PROP_TEST_OBJ_DOUBLE,
