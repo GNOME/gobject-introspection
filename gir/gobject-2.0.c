@@ -64,7 +64,7 @@
  * in ::notify being emitted, even if the new value is the same as the old.
  * If they did pass %G_PARAM_EXPLICIT_NOTIFY, then this signal is emitted only
  * when they explicitly call g_object_notify() or g_object_notify_by_pspec(),
- * and common practice is to avoid doing so if the value remained unchanged.
+ * and common practice is to do that only when the value has actually changed.
  *
  * This signal is typically used to obtain change notification for a
  * single property, by specifying the property name as a detail in the
@@ -273,7 +273,9 @@
  * library provides the #GCClosure type for this purpose. Bindings for
  * other languages need marshallers which convert between #GValues
  * and suitable representations in the runtime of the language in
- * order to use functions written in that languages as callbacks.
+ * order to use functions written in that language as callbacks. Use
+ * g_closure_set_marshal() to set the marshaller on such a custom
+ * closure implementation.
  *
  * Within GObject, closures play an important role in the
  * implementation of signals. When a signal is registered, the
@@ -4833,7 +4835,7 @@
  * Creates a new signal. (This is usually done in the class initializer.)
  *
  * This is a variant of g_signal_new() that takes a C callback instead
- * off a class offset for the signal's class handler. This function
+ * of a class offset for the signal's class handler. This function
  * doesn't need a function pointer exposed in the class structure of
  * an object definition, instead the function pointer is passed
  * directly and can be overriden by derived classes with

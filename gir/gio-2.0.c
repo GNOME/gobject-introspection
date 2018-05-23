@@ -973,7 +973,7 @@
  * @manager: The #GDBusObjectManagerClient emitting the signal.
  * @object_proxy: The #GDBusObjectProxy on which an interface has properties that are changing.
  * @interface_proxy: The #GDBusProxy that has properties that are changing.
- * @changed_properties: A #GVariant containing the properties that changed.
+ * @changed_properties: A #GVariant containing the properties that changed (type: `a{sv}`).
  * @invalidated_properties: (array zero-terminated=1) (element-type utf8): A %NULL terminated
  *   array of properties that were invalidated.
  *
@@ -1170,7 +1170,7 @@
 /**
  * GDBusProxy::g-properties-changed:
  * @proxy: The #GDBusProxy emitting the signal.
- * @changed_properties: A #GVariant containing the properties that changed
+ * @changed_properties: A #GVariant containing the properties that changed (type: `a{sv}`)
  * @invalidated_properties: A %NULL terminated array of properties that was invalidated
  *
  * Emitted when one or more D-Bus properties on @proxy changes. The
@@ -21247,7 +21247,8 @@
  * (i.e. a desktop id of kde-foo.desktop will match
  * `/usr/share/applications/kde/foo.desktop`).
  *
- * Returns: a new #GDesktopAppInfo, or %NULL if no desktop file with that id
+ * Returns: (nullable): a new #GDesktopAppInfo, or %NULL if no desktop
+ *     file with that id exists.
  */
 
 
@@ -21258,7 +21259,7 @@
  *
  * Creates a new #GDesktopAppInfo.
  *
- * Returns: a new #GDesktopAppInfo or %NULL on error.
+ * Returns: (nullable): a new #GDesktopAppInfo or %NULL on error.
  */
 
 
@@ -21268,7 +21269,7 @@
  *
  * Creates a new #GDesktopAppInfo.
  *
- * Returns: a new #GDesktopAppInfo or %NULL on error.
+ * Returns: (nullable): a new #GDesktopAppInfo or %NULL on error.
  * Since: 2.18
  */
 
@@ -24084,7 +24085,7 @@
  * @value_p: (not nullable): pointer to the value
  *
  * Sets the @attribute to contain the given value, if possible. To unset the
- * attribute, use %G_ATTRIBUTE_TYPE_INVALID for @type.
+ * attribute, use %G_FILE_ATTRIBUTE_TYPE_INVALID for @type.
  */
 
 
@@ -24494,7 +24495,7 @@
  *
  * Checks to see if a file is native to the platform.
  *
- * A native file s one expressed in the platform-native filename format,
+ * A native file is one expressed in the platform-native filename format,
  * e.g. "C:\Windows" or "/usr/bin/". This does not mean the file is local,
  * as it might be on a locally mounted remote filesystem.
  *
@@ -41655,6 +41656,22 @@
  * Gets the mount path for a unix mount.
  *
  * Returns: (type filename): the mount path for @mount_entry.
+ */
+
+
+/**
+ * g_unix_mount_get_options:
+ * @mount_entry: a #GUnixMountEntry.
+ *
+ * Gets a comma-separated list of mount options for the unix mount. For example,
+ * `rw,relatime,seclabel,data=ordered`.
+ *
+ * This is similar to g_unix_mount_point_get_options(), but it takes
+ * a #GUnixMountEntry as an argument.
+ *
+ * Returns: (nullable): a string containing the options, or %NULL if not
+ * available.
+ * Since: 2.58
  */
 
 

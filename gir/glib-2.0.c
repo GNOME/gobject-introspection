@@ -3410,6 +3410,26 @@
 
 
 /**
+ * G_GNUC_NO_INLINE:
+ *
+ * Expands to the GNU C `noinline` function attribute if the compiler is gcc.
+ * If the compiler is not gcc, this macro expands to nothing.
+ *
+ * Declaring a function as `noinline` prevents the function from being
+ * considered for inlining.
+ *
+ * The attribute may be placed before the declaration, right before the
+ * `static` keyword.
+ *
+ * See the
+ * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noinline-function-attribute)
+ * for more details.
+ *
+ * Since: 2.58
+ */
+
+
+/**
  * G_GNUC_NO_INSTRUMENT:
  *
  * Expands to the GNU C no_instrument_function function attribute if the
@@ -7727,6 +7747,9 @@
  * using one of the [Type Conversion Macros][glib-Type-Conversion-Macros],
  * or simply pointers to any type of data.
  *
+ * As with all other GLib data structures, #GQueue is not thread-safe.
+ * For a thread-safe queue, use #GAsyncQueue.
+ *
  * To create a new GQueue, use g_queue_new().
  *
  * To initialize a statically-allocated GQueue, use #G_QUEUE_INIT or
@@ -8532,6 +8555,12 @@
  * GLib also defines macros for the limits of some of the standard
  * integer and floating point types, as well as macros for suitable
  * printf() formats for these types.
+ *
+ * Note that depending on the platform and build configuration, the format
+ * macros might not be compatible with the system provided printf() function,
+ * because GLib might use a different printf() implementation internally.
+ * The format macros will always work with GLib API (like g_print()), and with
+ * any C99 compatible printf() implementation.
  */
 
 
@@ -12248,6 +12277,33 @@
 
 
 /**
+ * g_canonicalize_filename:
+ * @filename: (type filename): the name of the file
+ * @relative_to: (type filename) (nullable): the relative directory, or %NULL
+ * to use the current working directory
+ *
+ * Gets the canonical file name from @filename. All triple slashes are turned into
+ * single slashes, and all `..` and `.`s resolved against @relative_to.
+ *
+ * Symlinks are not followed, and the returned path is guaranteed to be absolute.
+ *
+ * If @filename is an absolute path, @relative_to is ignored. Otherwise,
+ * @relative_to will be prepended to @filename to make it absolute. @relative_to
+ * must be an absolute path, or %NULL. If @relative_to is %NULL, it'll fallback
+ * to g_get_current_dir().
+ *
+ * This function never fails, and will canonicalize file paths even if they don't
+ * exist.
+ *
+ * No file system I/O is done.
+ *
+ * Returns: (type filename) (transfer full): a newly allocated string with the
+ * canonical file path
+ * Since: 2.58
+ */
+
+
+/**
  * g_chdir:
  * @path: (type filename): a pathname in the GLib file name encoding
  *     (UTF-8 on Windows)
@@ -13019,19 +13075,24 @@
  *     into the format string (as with printf())
  *
  * Logs a "critical warning" (#G_LOG_LEVEL_CRITICAL).
- * It's more or less application-defined what constitutes
- * a critical vs. a regular warning. You could call
- * g_log_set_always_fatal() to make critical warnings exit
- * the program, then use g_critical() for fatal errors, for
- * example.
  *
- * You can also make critical warnings fatal at runtime by
+ * Critical warnings are intended to be used in the event of an error
+ * that originated in the current process (a programmer error).
+ * Logging of a critical error is by definition an indication of a bug
+ * somewhere in the current program (or its libraries).
+ *
+ * g_return_if_fail(), g_return_val_if_fail(), g_return_if_reached() and
+ * g_return_val_if_reached() log at %G_LOG_LEVEL_CRITICAL.
+ *
+ * You can make critical warnings fatal at runtime by
  * setting the `G_DEBUG` environment variable (see
  * [Running GLib Applications](glib-running.html)):
  *
  * |[
  *   G_DEBUG=fatal-warnings gdb ./my-program
  * ]|
+ *
+ * You can also use g_log_set_always_fatal().
  *
  * Any unrelated failures can be skipped over in
  * [gdb](https://www.gnu.org/software/gdb/) using the `continue` command.
@@ -17068,6 +17129,31 @@
 
 
 /**
+ * g_hash_table_steal_extended:
+ * @hash_table: a #GHashTable
+ * @lookup_key: the key to look up
+ * @stolen_key: (out) (optional) (transfer full): return location for the
+ *    original key
+ * @stolen_value: (out) (optional) (nullable) (transfer full): return location
+ *    for the value associated with the key
+ *
+ * Looks up a key in the #GHashTable, stealing the original key and the
+ * associated value and returning %TRUE if the key was found. If the key was
+ * not found, %FALSE is returned.
+ *
+ * If found, the stolen key and value are removed from the hash table without
+ * calling the key and value destroy functions, and ownership is transferred to
+ * the caller of this method; as with g_hash_table_steal().
+ *
+ * You can pass %NULL for @lookup_key, provided the hash and equal functions
+ * of @hash_table are %NULL-safe.
+ *
+ * Returns: %TRUE if the key was found in the #GHashTable
+ * Since: 2.58
+ */
+
+
+/**
  * g_hash_table_thaw:
  * @hash_table: a #GHashTable
  *
@@ -20133,6 +20219,11 @@
  * messages, programs must install a custom log writer function using
  * g_log_set_writer_func(). See
  * [Using Structured Logging][using-structured-logging].
+ *
+ * This function is mostly intended to be used with
+ * %G_LOG_LEVEL_CRITICAL.  You should typically not set
+ * %G_LOG_LEVEL_WARNING, %G_LOG_LEVEL_MESSAGE, %G_LOG_LEVEL_INFO or
+ * %G_LOG_LEVEL_DEBUG as fatal except inside of test programs.
  *
  * Returns: the old fatal mask for the log domain
  */
@@ -24136,9 +24227,10 @@
  * Removes the pointer at the given index from the pointer array.
  * The following elements are moved down one place. If @array has
  * a non-%NULL #GDestroyNotify function it is called for the removed
- * element.
+ * element. If so, the return value from this function will potentially point
+ * to freed memory (depending on the #GDestroyNotify implementation).
  *
- * Returns: the pointer which was removed
+ * Returns: (nullable): the pointer which was removed
  */
 
 
@@ -24151,9 +24243,11 @@
  * The last element in the array is used to fill in the space, so
  * this function does not preserve the order of the array. But it
  * is faster than g_ptr_array_remove_index(). If @array has a non-%NULL
- * #GDestroyNotify function it is called for the removed element.
+ * #GDestroyNotify function it is called for the removed element. If so, the
+ * return value from this function will potentially point to freed memory
+ * (depending on the #GDestroyNotify implementation).
  *
- * Returns: the pointer which was removed
+ * Returns: (nullable): the pointer which was removed
  */
 
 
@@ -24244,6 +24338,38 @@
  * pointers to the pointers in the array.
  *
  * This is guaranteed to be a stable sort since version 2.32.
+ */
+
+
+/**
+ * g_ptr_array_steal_index:
+ * @array: a #GPtrArray
+ * @index_: the index of the pointer to steal
+ *
+ * Removes the pointer at the given index from the pointer array.
+ * The following elements are moved down one place. The #GDestroyNotify for
+ * @array is *not* called on the removed element; ownership is transferred to
+ * the caller of this function.
+ *
+ * Returns: (transfer full) (nullable): the pointer which was removed
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ptr_array_steal_index_fast:
+ * @array: a #GPtrArray
+ * @index_: the index of the pointer to steal
+ *
+ * Removes the pointer at the given index from the pointer array.
+ * The last element in the array is used to fill in the space, so
+ * this function does not preserve the order of the array. But it
+ * is faster than g_ptr_array_steal_index(). The #GDestroyNotify for @array is
+ * *not* called on the removed element; ownership is transferred to the caller
+ * of this function.
+ *
+ * Returns: (transfer full) (nullable): the pointer which was removed
+ * Since: 2.58
  */
 
 
@@ -25195,7 +25321,7 @@
 /**
  * g_regex_escape_string:
  * @string: (array length=length): the string to escape
- * @length: the length of @string, or -1 if @string is nul-terminated
+ * @length: the length of @string, in bytes, or -1 if @string is nul-terminated
  *
  * Escapes the special characters used for regular expressions
  * in @string, for instance "a.b*c" becomes "a\.b\*c". This
@@ -25317,10 +25443,12 @@
  * @match_info: (out) (optional): pointer to location where to store
  *     the #GMatchInfo, or %NULL if you do not need it
  *
- * Scans for a match in string for the pattern in @regex.
+ * Scans for a match in @string for the pattern in @regex.
  * The @match_options are combined with the match options specified
  * when the @regex structure was created, letting you have more
  * flexibility in reusing #GRegex structures.
+ *
+ * Unless %G_REGEX_RAW is specified in the options, @string must be valid UTF-8.
  *
  * A #GMatchInfo structure, used to get information on the match,
  * is stored in @match_info if not %NULL. Note that if @match_info
@@ -25393,7 +25521,7 @@
  * g_regex_match_all_full:
  * @regex: a #GRegex structure from g_regex_new()
  * @string: (array length=string_len): the string to scan for matches
- * @string_len: the length of @string, or -1 if @string is nul-terminated
+ * @string_len: the length of @string, in bytes, or -1 if @string is nul-terminated
  * @start_position: starting index of the string to match, in bytes
  * @match_options: match options
  * @match_info: (out) (optional): pointer to location where to store
@@ -25401,7 +25529,7 @@
  * @error: location to store the error occurring, or %NULL to ignore errors
  *
  * Using the standard algorithm for regular expression matching only
- * the longest match in the string is retrieved, it is not possible
+ * the longest match in the @string is retrieved, it is not possible
  * to obtain all the available matches. For instance matching
  * "<a> <b> <c>" against the pattern "<.*>"
  * you get "<a> <b> <c>".
@@ -25427,6 +25555,8 @@
  * string and setting #G_REGEX_MATCH_NOTBOL in the case of a pattern
  * that begins with any kind of lookbehind assertion, such as "\b".
  *
+ * Unless %G_REGEX_RAW is specified in the options, @string must be valid UTF-8.
+ *
  * A #GMatchInfo structure, used to get information on the match, is
  * stored in @match_info if not %NULL. Note that if @match_info is
  * not %NULL then it is created even if the function returns %FALSE,
@@ -25446,14 +25576,14 @@
  * g_regex_match_full:
  * @regex: a #GRegex structure from g_regex_new()
  * @string: (array length=string_len): the string to scan for matches
- * @string_len: the length of @string, or -1 if @string is nul-terminated
+ * @string_len: the length of @string, in bytes, or -1 if @string is nul-terminated
  * @start_position: starting index of the string to match, in bytes
  * @match_options: match options
  * @match_info: (out) (optional): pointer to location where to store
  *     the #GMatchInfo, or %NULL if you do not need it
  * @error: location to store the error occurring, or %NULL to ignore errors
  *
- * Scans for a match in string for the pattern in @regex.
+ * Scans for a match in @string for the pattern in @regex.
  * The @match_options are combined with the match options specified
  * when the @regex structure was created, letting you have more
  * flexibility in reusing #GRegex structures.
@@ -25461,6 +25591,8 @@
  * Setting @start_position differs from just passing over a shortened
  * string and setting #G_REGEX_MATCH_NOTBOL in the case of a pattern
  * that begins with any kind of lookbehind assertion, such as "\b".
+ *
+ * Unless %G_REGEX_RAW is specified in the options, @string must be valid UTF-8.
  *
  * A #GMatchInfo structure, used to get information on the match, is
  * stored in @match_info if not %NULL. Note that if @match_info is
@@ -25562,7 +25694,7 @@
  * g_regex_replace:
  * @regex: a #GRegex structure
  * @string: (array length=string_len): the string to perform matches against
- * @string_len: the length of @string, or -1 if @string is nul-terminated
+ * @string_len: the length of @string, in bytes, or -1 if @string is nul-terminated
  * @start_position: starting index of the string to match, in bytes
  * @replacement: text to replace each match with
  * @match_options: options for the match
@@ -25604,7 +25736,7 @@
  * g_regex_replace_eval:
  * @regex: a #GRegex structure from g_regex_new()
  * @string: (array length=string_len): string to perform matches against
- * @string_len: the length of @string, or -1 if @string is nul-terminated
+ * @string_len: the length of @string, in bytes, or -1 if @string is nul-terminated
  * @start_position: starting index of the string to match, in bytes
  * @match_options: options for the match
  * @eval: a function to call for each match
@@ -25666,7 +25798,7 @@
  * g_regex_replace_literal:
  * @regex: a #GRegex structure
  * @string: (array length=string_len): the string to perform matches against
- * @string_len: the length of @string, or -1 if @string is nul-terminated
+ * @string_len: the length of @string, in bytes, or -1 if @string is nul-terminated
  * @start_position: starting index of the string to match, in bytes
  * @replacement: text to replace each match with
  * @match_options: options for the match
@@ -25720,7 +25852,7 @@
  * g_regex_split_full:
  * @regex: a #GRegex structure
  * @string: (array length=string_len): the string to split with the pattern
- * @string_len: the length of @string, or -1 if @string is nul-terminated
+ * @string_len: the length of @string, in bytes, or -1 if @string is nul-terminated
  * @start_position: starting index of the string to match, in bytes
  * @match_options: match time option flags
  * @max_tokens: the maximum number of tokens to split @string into.
@@ -26475,14 +26607,14 @@
  * @cmp_func: the function used to compare items in the sequence
  * @cmp_data: user data passed to @cmp_func.
  *
- * Inserts @data into @sequence using @func to determine the new
+ * Inserts @data into @seq using @cmp_func to determine the new
  * position. The sequence must already be sorted according to @cmp_func;
  * otherwise the new position of @data is undefined.
  *
- * @cmp_func is called with two items of the @seq and @user_data.
+ * @cmp_func is called with two items of the @seq, and @cmp_data.
  * It should return 0 if the items are equal, a negative value
  * if the first item comes before the second, and a positive value
- * if the second  item comes before the first.
+ * if the second item comes before the first.
  *
  * Note that when adding a large amount of data to a #GSequence,
  * it is more efficient to do unsorted insertions and then call
@@ -26498,7 +26630,7 @@
  * @seq: a #GSequence
  * @data: data for the new item
  * @iter_cmp: the function used to compare iterators in the sequence
- * @cmp_data: user data passed to @cmp_func
+ * @cmp_data: user data passed to @iter_cmp
  *
  * Like g_sequence_insert_sorted(), but uses
  * a #GSequenceIterCompareFunc instead of a #GCompareDataFunc as
@@ -26508,11 +26640,6 @@
  * It should return 0 if the iterators are equal, a negative
  * value if the first iterator comes before the second, and a
  * positive value if the second iterator comes before the first.
- *
- * It is called with two iterators pointing into @seq. It should
- * return 0 if the iterators are equal, a negative value if the
- * first iterator comes before the second, and a positive value
- * if the second iterator comes before the first.
  *
  * Note that when adding a large amount of data to a #GSequence,
  * it is more efficient to do unsorted insertions and then call
@@ -26652,7 +26779,7 @@
  * returned. In that case, you can use g_sequence_iter_next() and
  * g_sequence_iter_prev() to get others.
  *
- * @cmp_func is called with two items of the @seq and @user_data.
+ * @cmp_func is called with two items of the @seq, and @cmp_data.
  * It should return 0 if the items are equal, a negative value if
  * the first item comes before the second, and a positive value if
  * the second item comes before the first.
@@ -26686,7 +26813,7 @@
  * unsorted.
  *
  * Returns: (transfer none) (nullable): an #GSequenceIter pointing to the position of
- *     the first item found equal to @data according to @cmp_func
+ *     the first item found equal to @data according to @iter_cmp
  *     and @cmp_data, or %NULL if no such item exists
  * Since: 2.28
  */
@@ -26713,13 +26840,13 @@
  * @begin: a #GSequenceIter
  * @end: a #GSequenceIter
  *
- * Inserts the (@begin, @end) range at the destination pointed to by ptr.
+ * Inserts the (@begin, @end) range at the destination pointed to by @dest.
  * The @begin and @end iters must point into the same sequence. It is
  * allowed for @dest to point to a different sequence than the one pointed
  * into by @begin and @end.
  *
- * If @dest is NULL, the range indicated by @begin and @end is
- * removed from the sequence. If @dest iter points to a place within
+ * If @dest is %NULL, the range indicated by @begin and @end is
+ * removed from the sequence. If @dest points to a place within
  * the (@begin, @end) range, the range does not move.
  *
  * Since: 2.14
@@ -26807,7 +26934,7 @@
  * Returns an iterator pointing to the position where @data would
  * be inserted according to @cmp_func and @cmp_data.
  *
- * @cmp_func is called with two items of the @seq and @user_data.
+ * @cmp_func is called with two items of the @seq, and @cmp_data.
  * It should return 0 if the items are equal, a negative value if
  * the first item comes before the second, and a positive value if
  * the second item comes before the first.
@@ -26888,12 +27015,13 @@
  * @cmp_func: the function used to compare items in the sequence
  * @cmp_data: user data passed to @cmp_func.
  *
- * Moves the data pointed to a new position as indicated by @cmp_func. This
+ * Moves the data pointed to by @iter to a new position as indicated by
+ * @cmp_func. This
  * function should be called for items in a sequence already sorted according
  * to @cmp_func whenever some aspect of an item changes so that @cmp_func
  * may return different values for that item.
  *
- * @cmp_func is called with two items of the @seq and @user_data.
+ * @cmp_func is called with two items of the @seq, and @cmp_data.
  * It should return 0 if the items are equal, a negative value if
  * the first item comes before the second, and a positive value if
  * the second item comes before the first.
@@ -26912,7 +27040,8 @@
  * a #GSequenceIterCompareFunc instead of a #GCompareDataFunc as
  * the compare function.
  *
- * @iter_cmp is called with two iterators pointing into @seq. It should
+ * @iter_cmp is called with two iterators pointing into the #GSequence that
+ * @iter points into. It should
  * return 0 if the iterators are equal, a negative value if the first
  * iterator comes before the second, and a positive value if the second
  * iterator comes before the first.
@@ -26928,7 +27057,7 @@
  * @cmp_data: user data passed to @cmp_func
  *
  * Like g_sequence_sort(), but uses a #GSequenceIterCompareFunc instead
- * of a GCompareDataFunc as the compare function
+ * of a #GCompareDataFunc as the compare function
  *
  * @cmp_func is called with two iterators pointing into @seq. It should
  * return 0 if the iterators are equal, a negative value if the first
@@ -37737,6 +37866,16 @@
  * This is not intended for end user error reporting. Use of #GError is
  * preferred for that instead, as it allows calling functions to perform actions
  * conditional on the type of error.
+ *
+ * Warning messages are intended to be used in the event of unexpected
+ * external conditions (system misconfiguration, missing files,
+ * other trusted programs violating protocol, invalid contents in
+ * trusted files, etc.)
+ *
+ * If attempting to deal with programmer errors (for example, incorrect function
+ * parameters) then you should use %G_LOG_LEVEL_CRITICAL instead.
+ *
+ * g_warn_if_reached() and g_warn_if_fail() log at %G_LOG_LEVEL_WARNING.
  *
  * You can make warnings fatal at runtime by setting the `G_DEBUG`
  * environment variable (see
