@@ -5355,6 +5355,7 @@ enum
   SOME_OBJECT_PROPERTY,
   SOME_FLAGS_PROPERTY,
   SOME_ENUM_PROPERTY,
+  SOME_READONLY_PROPERTY,
 };
 
 G_DEFINE_TYPE (GIMarshallingTestsPropertiesObject, gi_marshalling_tests_properties_object, G_TYPE_OBJECT);
@@ -5446,6 +5447,9 @@ gi_marshalling_tests_properties_object_get_property (GObject *object,
       break;
     case SOME_ENUM_PROPERTY:
       g_value_set_enum (value, self->some_enum);
+      break;
+    case SOME_READONLY_PROPERTY:
+      g_value_set_int (value, 42);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -5682,6 +5686,13 @@ static void gi_marshalling_tests_properties_object_class_init (GIMarshallingTest
                                                       GI_MARSHALLING_TESTS_TYPE_GENUM,
                                                       GI_MARSHALLING_TESTS_GENUM_VALUE1,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (object_class, SOME_READONLY_PROPERTY,
+                                   g_param_spec_int ("some-readonly",
+                                                     "some-readonly",
+                                                     "some-readonly",
+                                                     G_MININT, G_MAXINT, 0,
+                                                     G_PARAM_READABLE));
 }
 
 GIMarshallingTestsPropertiesObject *
