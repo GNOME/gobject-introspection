@@ -10,6 +10,7 @@
 % if getattr(node, 'properties', []):
   <h2>Property Details</h2>
   % for p in node.properties:
+    <%doc:introspectable node="${p}">
     <h3 class="entry property ${doc.deprecated_class(p)}"
         id="${formatter.make_anchor(p)}">
       ${p.name | dash_to_underscore}
@@ -32,5 +33,6 @@
     % if p.doc:
       ${doc.format_documentation(p)}
     % endif
+    </%doc:introspectable>
   % endfor
 % endif

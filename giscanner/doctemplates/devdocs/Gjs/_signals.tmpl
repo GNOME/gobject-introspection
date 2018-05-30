@@ -3,6 +3,7 @@
 % if getattr(node, 'signals', []):
   <h2>Signal Details</h2>
   % for s in node.signals:
+    <%doc:introspectable node="${s}">
     <h3>
       <span class="entry signal ${doc.deprecated_class(s)}"
             id="${formatter.make_anchor(s)}">
@@ -16,5 +17,6 @@
       ${method.describe_parameters(s)}
     </dl>
     ${doc.format_documentation(s)}
+    </%doc:introspectable>
   % endfor
 % endif

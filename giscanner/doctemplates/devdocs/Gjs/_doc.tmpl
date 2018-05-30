@@ -29,3 +29,9 @@
     deprecated
   % endif
 </%def>
+
+<%def name="introspectable(node)">
+  % if getattr(node, "introspectable", True):
+    ${caller.body()}
+  % endif
+</%def>

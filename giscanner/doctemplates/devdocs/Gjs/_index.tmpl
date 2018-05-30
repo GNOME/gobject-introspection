@@ -67,6 +67,7 @@
     <table class="index">
       <tbody>
       % for m in methods:
+        <%doc:introspectable node="${m}">
         <tr>
           % if m in static_methods:
             <td class="static-method-indicator">static</td>
@@ -75,6 +76,7 @@
           % endif
           ${format_function_cell(m)}
         </tr>
+        </%doc:introspectable>
       % endfor
       </tbody>
     </table>
@@ -88,9 +90,11 @@
     <table>
       <tbody>
       % for m in node.virtual_methods:
+        <%doc:introspectable node="${m}">
         <tr>
           ${format_function_cell(m)}
         </tr>
+        </%doc:introspectable>
       % endfor
       </tbody>
     </table>
@@ -111,6 +115,7 @@
       </thead>
       <tbody>
       % for p in node.properties:
+        <%doc:introspectable node="${p}">
         <tr>
           <td class="${doc.deprecated_class(p)}">
             <a href="#${formatter.make_anchor(p)}">${p.name}</a>
@@ -118,6 +123,7 @@
           <td>${formatter.format_type(p.type)}</td>
           <td>${formatter.format_property_flags(p, abbrev=True)}</td>
         </tr>
+        </%doc:introspectable>
       % endfor
       </tbody>
     </table>
@@ -131,12 +137,14 @@
     <table>
       <tbody>
       % for s in node.signals:
+        <%doc:introspectable node="${s}">
         <tr>
           <td class="${doc.deprecated_class(s)}">
             <a href="#${formatter.make_anchor(s)}">${s.name}</a><!-- no space
             -->(${formatter.format_in_parameters(s)})
           </td>
         </tr>
+        </%doc:introspectable>
       % endfor
       </tbody>
     </table>
@@ -158,6 +166,7 @@
       </thead>
       <tbody>
       % for f in non_private_fields:
+        <%doc:introspectable node="${f}">
         <tr>
           <td class="${doc.deprecated_class(f)}">
             <span class="entry" href="#${formatter.make_anchor(f)}">
@@ -174,6 +183,7 @@
           % endif
           </td>
         </tr>
+        </%doc:introspectable>
       % endfor
       </tbody>
     </table>
