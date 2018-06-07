@@ -380,15 +380,5 @@ docs/reference/Makefile
 docs/reference/version.xml
 giscanner/_version.py
 gobject-introspection-1.0.pc
-gobject-introspection-no-export-1.0.pc
-config.h.win32
-win32/Makefile
-win32/vs9/Makefile
-win32/vs9/gi-version-paths.vsprops
-win32/vs10/Makefile
-win32/vs10/gi-version-paths.props
-win32/vs11/Makefile
-win32/vs12/Makefile
-win32/vs14/Makefile
-win32/vs15/Makefile])
+gobject-introspection-no-export-1.0.pc])
 AC_OUTPUT

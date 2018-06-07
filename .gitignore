@@ -19,7 +19,6 @@ compile
 config.guess
 config.h
 config.h.in
-config.h.win32
 config.log
 config.status
 config.sub
@@ -100,15 +99,6 @@ tests/*/*.trs
 
 # tarballs
 *.tar.xz
-
-# Generated Visual Studio project files
-win32/*/*.props
-win32/*/*.sln
-win32/*/*.vcproj
-win32/*/*.vcxproj
-win32/*/*.vcxproj.filters
-win32/*/*.vsprops
-win32/*/README.txt
 
 #yelp-build
 *.html

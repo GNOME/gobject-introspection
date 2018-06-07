@@ -23,12 +23,11 @@ include Makefile-giscanner.am
 include Makefile-examples.am
 include Makefile-gir.am
 include Makefile-tools.am
-include Makefile-msvcproj.am
 
 ## Process this file with automake to produce Makefile.in
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
-SUBDIRS = . docs tests win32
+SUBDIRS = . docs tests
 
 DIST_SUBDIRS = $(SUBDIRS)
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-doctool
