@@ -5,6 +5,7 @@ Goals
 The introspection project has two major goals, and a variety of more minor
 ones.
 
+
 Two level applications - C and <your favorite runtime>
 ------------------------------------------------------
 
@@ -20,8 +21,8 @@ application logic such as configuration, layout, dialogs, etc.
 
 .. note::
 
-  to achieve this goal you need to write your code using GObject convention.
-  if you don't know about gobject please see `here
+  To achieve this goal you need to write your code using GObject convention.
+  For more information about that, see the `GObject tutorial
   <https://developer.gnome.org/gobject/stable/pt02.html>`__
 
 Thus, one of the major goals of the GObject introspection project is to be a
@@ -30,6 +31,7 @@ tool for the job, rather than being limited inside one or the other. With the
 introspection project, you can write for example a ClutterActor or GtkWidget
 subclass in C, and then without any additional work use that class inside the
 high level language of your choice.
+
 
 Sharing binding infrastructure work, and making the platform even more binding-friendly
 ---------------------------------------------------------------------------------------
@@ -52,6 +54,7 @@ Additionally, because the introspection build process will occur inside the
 GObject libraries themselves, a goal is to encourage GObject authors to
 consider shaping their APIs to be more binding friendly from the start, rather
 than as an afterthought.
+
 
 Additional goals and uses
 -------------------------

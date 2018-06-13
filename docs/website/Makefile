@@ -1,6 +1,6 @@
 all: _build
 
-_build: Makefile *.rst tools/*.rst images/*.svg annotations/*.rst conf.py
+_build: Makefile *.rst images/*.svg */*.rst conf.py
 	python3 -m sphinx  -b html . _build
 
 linkcheck:

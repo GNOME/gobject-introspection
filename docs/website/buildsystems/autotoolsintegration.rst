@@ -2,69 +2,35 @@
 Autotools Integration
 =====================
 
-Checklist
----------
+The gobject-introspection package provides the following two macros for use in
+your configure.ac file:
 
-Checklist for making a GObject based library using autotools provide
-introspection support. It's not comprehensive, you'll need to adapt this for
-the library you're adding introspection support to.
+GOBJECT_INTROSPECTION_CHECK([version])
+  This macro adds a ``--enable-introspection=yes|no|auto`` configure
+  option which defaults to ``auto``.
 
-There are 2 ways to add introspection support, one adds the introspection m4
-to the distribution, and the library will still build even if introspection is
-not installed. The other method will add a build dependency on introspection
-(you will need introspection installed to run ./autogen or ./configure)
+  * ``auto`` - Will set ``HAVE_INTROSPECTION`` if gobject-introspection is available
+    and the version requirement is satisfied.
+  * ``yes`` - Will error out if gobject-introspection is missing or the version
+    requirement is not satisfied. ``HAVE_INTROSPECTION`` will always be true.
+  * ``no`` - Will never error out and ``HAVE_INTROSPECTION`` will always be false.
 
-Method 1 - Recommended - most portable
---------------------------------------
+GOBJECT_INTROSPECTION_REQUIRE([version])
+    This macro does not add a configure option and behaves as if
+    ``--enable-introspection=yes``.
 
-* copy the m4 file into your distribution (check your distribution to see
-  where m4 files normally go, this may be 'common' in some applications
 
-  .. code-block:: none
+Example
+-------
 
-    Create an m4 directory in the root
-    copy gobject-introspection/m4/introspection.m4 to m4/
-    or 
-    copy /usr/share/aclocal/introspection.m4 to m4/
-
-* configure.ac (or configure.in if no .ac file is used)
-
-  .. code-block:: none
-
-    #-- these may be in the file already, or you may need to modify the existing lines.
-    AC_PREREQ(2.62)
-    AM_INIT_AUTOMAKE([-Wno-portability])
-
-    #
-    # Gobject Introspection
-    #
-    #-- add the correct m4 directory location.
-    AC_CONFIG_MACRO_DIR([m4])
-
-    #-- any typos here, and you will end up with a message about HAVE_INTROSPECTION not being defined
-    GOBJECT_INTROSPECTION_CHECK([1.30.0])
-
-* Makefile.am (modify these variables in the file, you may have to add them to
-  existing definitions, make sure m4 location is correct)
-
-  .. code-block:: none
-
-    ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
-    DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
-    EXTRA_DIST = m4/introspection.m4
-    SUBDIRS = m4 ...
-
-Method 2 - Add a build dependency on Introspection
---------------------------------------------------
-
-Introspection will be required to build the library, however you will not have
-to update the m4 files in the future.
+You'll need to adapt this for the library you're adding introspection support
+to.
 
 * configure.ac (or configure.in if no .ac file is used)
 
   .. code-block:: none
 
-     GOBJECT_INTROSPECTION_CHECK([1.30.0])
+     GOBJECT_INTROSPECTION_CHECK([1.40.0])
 
 * Makefile.am
 
@@ -73,9 +39,6 @@ to update the m4 files in the future.
     DISTCHECK_CONFIGURE_FLAGS = --enable-introspection
 
   or just add to the existing DISTCHECK_CONFIGURE_FLAGS 
-
-Method 1 and Method 2
----------------------
 
 * foo/Makefile.am - must be near the end (after CLEANFILES has been set)
 
@@ -106,7 +69,8 @@ Method 1 and Method 2
     endif
 
   You can also check out a complete example at
-  http://git.gnome.org/cgit/gtk+/tree/gtk/Makefile.am#n962
+  https://gitlab.gnome.org/GNOME/gtk/blob/c0ba041c73214f82d2c32b2ca1fa8f3c388c6170/gtk/Makefile.am#L1571
+
 
 Makefile variable documentation
 -------------------------------
@@ -115,8 +79,8 @@ Makefile variable documentation
 you want to build there in the XXX-Y.gir format where X is the name of the gir
 (for example Gtk) and Y is the version (for example 2.0).
 
-If output is Gtk-2.0.gir then you should name the variables like
-``Gtk_2_0_gir_NAMESPACE``, ``Gtk_2_0_gir_VERSION`` etc.
+If output is Gtk-3.0.gir then you should name the variables like
+``Gtk_3_0_gir_NAMESPACE``, ``Gtk_3_0_gir_VERSION`` etc.
 
 * Required variables:
 
@@ -130,7 +94,7 @@ If output is Gtk-2.0.gir then you should name the variables like
 * Optional variables, commonly used:
 
   * ``INCLUDES`` - Gir files to include without the .gir suffix, for instance
-    GLib-2.0, Gtk-2.0. This is needed for all libraries which you depend on
+    GLib-2.0, Gtk-3.0. This is needed for all libraries which you depend on
     that provides introspection information.
   * ``SCANNERFLAGS`` - Flags to pass in to the scanner, see g-ir-scanner(1)
     for a list
@@ -152,7 +116,7 @@ If output is Gtk-2.0.gir then you should name the variables like
   * ``NAMESPACE`` - Namespace of the gir, first letter capital, rest should be
     lower case, for instance: 'Gtk', 'Clutter', 'ClutterGtk'. If not present
     the namespace will be fetched from the gir filename, the part before the
-    first dash. For 'Gtk-2.0', namespace will be 'Gtk'.
+    first dash. For 'Gtk-3.0', namespace will be 'Gtk'.
   * ``VERSION`` - Version of the gir, if not present, will be fetched from gir
-    filename, the part after the first dash. For 'Gtk-2.0', version will be
-    '2.0'.
+    filename, the part after the first dash. For 'Gtk-3.0', version will be
+    '3.0'.

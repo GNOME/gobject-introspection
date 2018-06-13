@@ -1,6 +1,6 @@
-========================
-Writing Bindingable APIs
-========================
+=====================
+Writing Bindable APIs
+=====================
 
 Things to avoid
 ---------------
@@ -8,14 +8,17 @@ Things to avoid
 Structures with custom memory management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Avoid creating C structures with custom _ref/_unref/_free type functions. You
-have two general choices; a `boxed
-<https://developer.gnome.org/gobject/unstable/gobject-Boxed-Types.html>`__
-type (this is a value type, it is copied), or a full `GObject
-<https://developer.gnome.org/gobject/unstable/gobject-The-Base-Object-Type.html>`__.
-GObject is not significantly more typing, and using it gives infrastructure
-like toggle references that are critical for garbage-collected language
-bindings.
+Avoid creating C structures with custom memory management unless they are
+registered as a `boxed type
+<https://developer.gnome.org/gobject/unstable/gobject-Boxed-Types.html>`__.
+If you don't register them as a boxed type bindings will fall back to
+simple memory copying, which might not be what you want.
+
+Also consider using a full `GObject
+<https://developer.gnome.org/gobject/unstable/gobject-The-Base-Object-Type.html>`__
+as that allows bindings to better integrate those objects with the binding
+language, like for example preserve user defined state across language
+boundaries.
 
 Example to avoid:
 
@@ -83,6 +86,10 @@ parameter).
                                                    ...);
     GtkListStore *gtk_list_store_newv             (gint          n_columns,
                                                    GType        *types);
+
+You can also expose the array variant under the name of the varargs variant
+using the ``rename-to`` annotation:
+``gtk_list_store_newv: (rename-to gtk_list_store_new)``
 
 
 Multiple out parameters

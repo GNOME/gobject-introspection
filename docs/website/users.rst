@@ -12,7 +12,7 @@ Bindings based on GObject-Introspection
 * `pgi <http://github.com/lazka/pgi>`__ - Pure Python GObject Introspection Bindings (runtime)
 * `GTK2-Perl/Introspection <https://wiki.gnome.org/GTK2-Perl/Introspection>`__ - Perl bindings (runtime)
 * `JGIR <https://wiki.gnome.org/Projects/JGIR>`__ - Java/JVM bindings (compile time, using typelib)
-* `Gjs <https://wiki.gnome.org/Projects/Gjs>`__ - Javascript (spidermonkey) bindings (runtime)
+* `GJS <https://wiki.gnome.org/Projects/Gjs>`__ - Javascript (spidermonkey) bindings (runtime)
 * `Seed <https://wiki.gnome.org/Projects/Seed>`__ -  Javascript (JSCore, WebKit JS engine) bindings (runtime)
 * `sbank <http://live.gnome.org/sbank>`__ - Scheme binding for gobject-introspection (runtime)
 * `GObjectIntrospection/GObjectConsume <https://wiki.gnome.org/Projects/GObjectIntrospection/GObjectConsume>`__ - Qt bindings (compile time)
