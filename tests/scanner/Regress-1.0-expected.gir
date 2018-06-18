@@ -3576,6 +3576,14 @@ raise an error.</doc>
       <property name="boxed" writable="1" transfer-ownership="none">
         <type name="TestBoxed"/>
       </property>
+      <property name="byte-array"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
+        <array name="GLib.ByteArray">
+          <type name="guint8" c:type="guint8"/>
+        </array>
+      </property>
       <property name="double" writable="1" transfer-ownership="none">
         <type name="gdouble" c:type="gdouble"/>
       </property>

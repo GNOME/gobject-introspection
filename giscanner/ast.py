@@ -109,7 +109,9 @@ in contrast to the other create_type() functions."""
                        ctype=fundamental.ctype)
         if gtype_name == 'GHashTable':
             return Map(TYPE_ANY, TYPE_ANY, gtype_name=gtype_name)
-        elif gtype_name in ('GArray', 'GPtrArray', 'GByteArray'):
+        elif gtype_name == 'GByteArray':
+            return Array('GLib.ByteArray', TYPE_UINT8, gtype_name=gtype_name)
+        elif gtype_name in ('GArray', 'GPtrArray'):
             return Array('GLib.' + gtype_name[1:], TYPE_ANY,
                          gtype_name=gtype_name)
         elif gtype_name == 'GStrv':

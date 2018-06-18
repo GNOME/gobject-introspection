@@ -5355,6 +5355,7 @@ enum
   SOME_OBJECT_PROPERTY,
   SOME_FLAGS_PROPERTY,
   SOME_ENUM_PROPERTY,
+  SOME_BYTE_ARRAY_PROPERTY,
 };
 
 G_DEFINE_TYPE (GIMarshallingTestsPropertiesObject, gi_marshalling_tests_properties_object, G_TYPE_OBJECT);
@@ -5447,6 +5448,9 @@ gi_marshalling_tests_properties_object_get_property (GObject *object,
     case SOME_ENUM_PROPERTY:
       g_value_set_enum (value, self->some_enum);
       break;
+    case SOME_BYTE_ARRAY_PROPERTY:
+      g_value_set_boxed (value, self->some_byte_array);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -5528,6 +5532,11 @@ gi_marshalling_tests_properties_object_set_property (GObject *object,
       break;
     case SOME_ENUM_PROPERTY:
       self->some_enum = g_value_get_enum (value);
+      break;
+    case SOME_BYTE_ARRAY_PROPERTY:
+      if (self->some_byte_array != NULL)
+        g_byte_array_unref (self->some_byte_array);
+      self->some_byte_array = g_value_dup_boxed (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -5682,6 +5691,13 @@ static void gi_marshalling_tests_properties_object_class_init (GIMarshallingTest
                                                       GI_MARSHALLING_TESTS_TYPE_GENUM,
                                                       GI_MARSHALLING_TESTS_GENUM_VALUE1,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (object_class, SOME_BYTE_ARRAY_PROPERTY,
+                                   g_param_spec_boxed ("some-byte-array",
+                                                       "some-byte-array",
+                                                       "some-byte-array",
+                                                       G_TYPE_BYTE_ARRAY,
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 }
 
 GIMarshallingTestsPropertiesObject *

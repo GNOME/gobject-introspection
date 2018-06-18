@@ -2101,7 +2101,8 @@ enum
   PROP_TEST_OBJ_DOUBLE,
   PROP_TEST_OBJ_STRING,
   PROP_TEST_OBJ_GTYPE,
-  PROP_TEST_OBJ_NAME_CONFLICT
+  PROP_TEST_OBJ_NAME_CONFLICT,
+  PROP_TEST_OBJ_BYTE_ARRAY,
 };
 
 static void
@@ -2688,6 +2689,18 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                             G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
   g_object_class_install_property (gobject_class,
                                    PROP_TEST_OBJ_NAME_CONFLICT,
+                                   pspec);
+
+  /**
+   * TestObj:byte-array:
+   */
+  pspec = g_param_spec_boxed ("byte-array",
+                              "GByteArray property",
+                              "A contained byte array without any element-type annotations",
+                              G_TYPE_BYTE_ARRAY,
+                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_BYTE_ARRAY,
                                    pspec);
 
   klass->matrix = regress_test_obj_default_matrix;
