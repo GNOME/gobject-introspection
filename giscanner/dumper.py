@@ -287,6 +287,8 @@ class DumpCompiler(object):
             with os.fdopen(tf, 'wb') as f:
                 shellcontents = ' '.join([x.replace('\\', '/') for x in args])
                 fcontents = '#!/bin/sh\nunset PWD\n{}\n'.format(shellcontents)
+                if not isinstance(fcontents, bytes):
+                    fcontents = fcontents.encode('utf-8')
                 f.write(fcontents)
             shell = utils.which(shell)
             args = [shell, tf_name.replace('\\', '/')]
