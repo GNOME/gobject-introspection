@@ -109,7 +109,11 @@ def check(args):
     logger.enable_warnings((WARNING, ERROR, FATAL))
 
     transformer = Transformer(namespace)
-    transformer.set_include_paths([os.path.join(top_srcdir, 'gir'), top_builddir])
+    transformer.set_include_paths([
+        os.path.join(top_srcdir, 'gir'),
+        top_builddir,
+        os.path.join(top_builddir, 'gir'),
+    ])
     transformer.register_include(Include.from_string('GObject-2.0'))
 
     ss = SourceScanner()

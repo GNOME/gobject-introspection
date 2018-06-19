@@ -24,4 +24,4 @@ TESTS = \
 LOG_COMPILER = env PYTHONPATH=$(top_builddir):$(top_srcdir) TOP_BUILDDIR=$(top_builddir) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
 	$(PYTHON) $(srcdir)/warningtester.py
 
-EXTRA_DIST = warningtester.py common.h $(TESTS)
+EXTRA_DIST = warningtester.py common.h meson.build $(TESTS)
