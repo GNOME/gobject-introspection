@@ -26,7 +26,6 @@ from __future__ import unicode_literals
 import os
 import sys
 import tempfile
-import shutil
 import subprocess
 from xml.etree.cElementTree import parse
 
@@ -181,7 +180,7 @@ blob containing data gleaned from GObject's primitive introspection."""
             return parse(out_path)
         finally:
             if not utils.have_debug_flag('save-temps'):
-                shutil.rmtree(self._binary.tmpdir)
+                utils.rmtree(self._binary.tmpdir)
 
     # Parser
 
