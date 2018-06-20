@@ -64,12 +64,8 @@ _gir_includes = $(foreach include,$($(_gir_name)_INCLUDES),--include=$(include))
 _gir_export_packages = $(foreach pkg,$($(_gir_name)_EXPORT_PACKAGES),--pkg-export=$(pkg))
 _gir_c_includes = $(foreach include,$($(_gir_name)_C_INCLUDES),--c-include=$(include))
 
-# Reuse the LIBTOOL variable from automake if it's set, but
-# work around MSYS weirdness: When running g-ir-scanner, MSYS changes
-# a command-line argument --libtool="/bin/sh ../../libtool" into
-# --libtool=c:/opt/msys/1.0/bin/libtool. So just use sh.exe without path
-# because we already "know" where the libtool configure produced is.
-_gir_libtool = $(if $(findstring MINGW,$(shell uname -s)),--libtool="$(top_builddir)/libtool",$(if $(LIBTOOL),--libtool="$(LIBTOOL)"))
+# Reuse the LIBTOOL variable from automake if it's set
+_gir_libtool = $(if $(LIBTOOL),--libtool="$(LIBTOOL)")
 
 # Macros for AM_SILENT_RULES prettiness
 _gir_verbosity = $(if $(AM_DEFAULT_VERBOSITY),$(AM_DEFAULT_VERBOSITY),1)

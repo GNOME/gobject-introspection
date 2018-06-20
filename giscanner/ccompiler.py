@@ -280,8 +280,6 @@ class CCompiler(object):
         else:
             libtool = utils.get_libtool_command(options)
             if libtool:
-                if os.name == 'nt':
-                    args.append(utils.which(os.environ.get('SHELL', 'sh.exe')))
                 args.extend(libtool)
                 args.append('--mode=execute')
             args.extend([os.environ.get('DLLTOOL', 'dlltool.exe'), '--identify'])
