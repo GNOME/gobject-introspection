@@ -28,7 +28,6 @@ import os
 import sys
 import shlex
 import subprocess
-import shutil
 import tempfile
 from distutils.errors import LinkError
 
@@ -171,14 +170,14 @@ class DumpCompiler(object):
             introspection_obj = self._compile(c_path)
         except CompilerError as e:
             if not utils.have_debug_flag('save-temps'):
-                shutil.rmtree(tmpdir)
+                utils.rmtree(tmpdir)
             raise SystemExit('compilation of temporary binary failed:' + str(e))
 
         try:
             self._link(bin_path, introspection_obj)
         except LinkerError as e:
             if not utils.have_debug_flag('save-temps'):
-                shutil.rmtree(tmpdir)
+                utils.rmtree(tmpdir)
             raise SystemExit('linking of temporary binary failed: ' + str(e))
 
         return IntrospectionBinary([bin_path], tmpdir)

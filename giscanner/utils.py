@@ -27,6 +27,8 @@ import re
 import os
 import subprocess
 import platform
+import shutil
+import time
 
 
 _debugflags = None
@@ -291,3 +293,26 @@ def get_system_data_dirs():
         xdg_data_dirs.append('/usr/share')
 
     return xdg_data_dirs
+
+
+def rmtree(*args, **kwargs):
+    '''
+    A variant of shutil.rmtree() which waits and tries again in case one of
+    the files in the directory tree can't be deleted.
+
+    This can be the case if a file is still in use by some process,
+    for example a Virus scanner on Windows scanning .exe files when they are
+    created.
+    '''
+
+    tries = 3
+    for i in range(1, tries + 1):
+        try:
+            shutil.rmtree(*args, **kwargs)
+        except OSError:
+            if i == tries:
+                raise
+            time.sleep(i)
+            continue
+        else:
+            return
