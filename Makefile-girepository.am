@@ -1,5 +1,6 @@
 EXTRA_DIST +=						\
-	girepository/docs.c
+	girepository/docs.c \
+	girepository/meson.build
 
 girepodir = $(includedir)/gobject-introspection-1.0/
 girepo_HEADERS =					\

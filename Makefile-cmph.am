@@ -3,6 +3,9 @@ EXTRA_LTLIBRARIES += libcmph.la
 libcmph_la_CPPFLAGS = -Icmph $(GLIB_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS)
 libcmph_la_LIBADD = -lm $(GLIB_LIBS)
 
+EXTRA_DIST += \
+	girepository/cmph/meson.build
+
 libcmph_la_SOURCES = \
 	girepository/cmph/bdz.c \
 	girepository/cmph/bdz.h \

@@ -25,7 +25,8 @@ libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
 EXTRA_DIST += \
 	gimarshallingtests.h \
 	gi-tester \
-	gitestmacros.h
+	gitestmacros.h \
+	meson.build
 
 BUILT_SOURCES += everything.c everything.h
 
