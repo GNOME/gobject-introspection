@@ -114,15 +114,13 @@ _giscanner_la_LDFLAGS = \
 
 if OS_WIN32
 # Windows requires Python extension modules to be explicitly
-# linked to libpython. Extension modules are shared libaries
-# (.dll files), but need to be called .pyd for Python to load
-# them as extension modules.
+# linked to libpython.
 _giscanner_la_LIBADD += \
 	$(PYTHON_LIBS)
 
 _giscanner_la_LDFLAGS += \
 	-no-undefined \
-	-shrext ".pyd"
+	-shrext $(PYTHON_SO)
 endif
 
 _giscanner_la_SOURCES = giscanner/giscannermodule.c
