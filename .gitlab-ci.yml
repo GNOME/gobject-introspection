@@ -1,9 +1,16 @@
 stages:
   - build
 
+cache:
+  paths:
+    - _ccache/
+
 fedora-x86_64:
   stage: build
   image: registry.gitlab.gnome.org/gnome/gobject-introspection:v1
+  variables:
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
   script:
     - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true _build .
     - cd _build

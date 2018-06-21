@@ -15,6 +15,7 @@ pacman --noconfirm -S --needed \
     git \
     base-devel \
     mingw-w64-$MSYS2_ARCH-toolchain \
+    mingw-w64-$MSYS2_ARCH-ccache \
     mingw-w64-$MSYS2_ARCH-meson \
     mingw-w64-$MSYS2_ARCH-python3 \
     mingw-w64-$MSYS2_ARCH-libffi \
@@ -24,6 +25,9 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-pcre \
     mingw-w64-$MSYS2_ARCH-zlib \
     mingw-w64-$MSYS2_ARCH-gettext
+
+export CCACHE_BASEDIR="${CI_PROJECT_DIR}"
+export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
 meson --buildtype debug _build
 cd _build
