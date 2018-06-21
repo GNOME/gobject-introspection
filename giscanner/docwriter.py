@@ -462,6 +462,8 @@ class DocFormatter(object):
 class DocFormatterC(DocFormatter):
     language = "C"
     mime_type = "text/x-csrc"
+    output_format = "mallard"
+    output_extension = ".page"
 
     fundamentals = {
         "TRUE": "TRUE",
@@ -507,12 +509,20 @@ class DocFormatterIntrospectableBase(DocFormatter):
 class DocFormatterPython(DocFormatterIntrospectableBase):
     language = "Python"
     mime_type = "text/python"
+    output_format = "mallard"
+    output_extension = ".page"
 
     fundamentals = {
         "TRUE": "True",
         "FALSE": "False",
         "NULL": "None",
     }
+
+    def get_output_format(self):
+        return 'mallard'
+
+    def get_output_extension(self):
+        return 'page'
 
     def should_render_node(self, node):
         if getattr(node, "is_constructor", False):
@@ -585,6 +595,8 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
 class DocFormatterGjs(DocFormatterIntrospectableBase):
     language = "Gjs"
     mime_type = "text/x-gjs"
+    output_format = "mallard"
+    output_extension = ".page"
 
     fundamentals = {
         "TRUE": "true",
@@ -878,20 +890,23 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
                              for p in construct_params)
 
 LANGUAGES = {
-    "c": DocFormatterC,
-    "python": DocFormatterPython,
-    "gjs": DocFormatterGjs,
+    "mallard": {
+        "c": DocFormatterC,
+        "python": DocFormatterPython,
+        "gjs": DocFormatterGjs,
+    },
 }
 
 
 class DocWriter(object):
-    def __init__(self, transformer, language):
+    def __init__(self, transformer, language, output_format):
         self._transformer = transformer
 
         try:
-            formatter_class = LANGUAGES[language.lower()]
+            formatter_class = LANGUAGES[output_format][language.lower()]
         except KeyError:
-            raise SystemExit("Unsupported language: %s" % (language, ))
+            raise SystemExit("Unsupported language %s for output format %s" %
+                             (language, output_format))
 
         self._formatter = formatter_class(self._transformer)
         self._language = self._formatter.language
@@ -905,7 +920,8 @@ class DocWriter(object):
         else:
             srcdir = os.path.dirname(__file__)
 
-        template_dir = os.path.join(srcdir, 'doctemplates')
+        template_dir = os.path.join(srcdir, 'doctemplates',
+                                    self._formatter.output_format)
 
         return TemplateLookup(directories=[template_dir],
                               module_directory=tempfile.mkdtemp(),
@@ -955,7 +971,8 @@ class DocWriter(object):
                                  formatter=self._formatter,
                                  ast=ast)
 
+        output_base_name = page_id + self._formatter.output_extension
         output_file_name = os.path.join(os.path.abspath(output),
-                                        page_id + '.page')
+                                        output_base_name)
         with open(output_file_name, 'wb') as fp:
             fp.write(result)
