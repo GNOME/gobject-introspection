@@ -19,7 +19,6 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-meson \
     mingw-w64-$MSYS2_ARCH-python3 \
     mingw-w64-$MSYS2_ARCH-libffi \
-    mingw-w64-$MSYS2_ARCH-glib2 \
     mingw-w64-$MSYS2_ARCH-pkg-config \
     mingw-w64-$MSYS2_ARCH-cairo \
     mingw-w64-$MSYS2_ARCH-pcre \
