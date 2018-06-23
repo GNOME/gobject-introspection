@@ -15,6 +15,9 @@ STATIC_GIRSOURCES =                 \
         gir/win32-1.0.gir
 EXTRA_DIST += $(STATIC_GIRSOURCES)
 
+EXTRA_DIST += \
+	gir/meson.build
+
 gir/cairo-1.0.gir: gir/cairo-1.0.gir.in Makefile
 	[ -d $(@D) ] || $(mkdir_p) $(@D) ; \
 	sed \

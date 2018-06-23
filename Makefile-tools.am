@@ -6,7 +6,8 @@ bin_SCRIPTS += g-ir-doc-tool
 endif
 
 EXTRA_DIST += 				\
-	tools/g-ir-tool-template.in
+	tools/g-ir-tool-template.in \
+	tools/meson.build
 
 TOOL_SUBSTITUTIONS = -e s,@libdir\@,$(libdir), -e s,@datarootdir\@,$(datarootdir), -e s,@PYTHON\@,$(PYTHON),
 

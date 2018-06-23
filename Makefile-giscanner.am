@@ -6,6 +6,9 @@ BUILT_SOURCES += 			\
 	giscanner/scannerlexer.c 	\
 	giscanner/scannerlexer.h
 
+EXTRA_DIST += \
+	giscanner/meson.build
+
 AM_YFLAGS = -d -t
 
 # Why do I have to do this automake?

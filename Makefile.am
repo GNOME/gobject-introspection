@@ -58,7 +58,9 @@ EXTRA_DIST += 			\
 	misc/update-glib-annotations.py	\
 	misc/update-gtkdoc-tests.py	\
 	misc/verbump.py		\
-	README.msvc
+	README.msvc \
+	meson.build \
+	meson_options.txt
 
 # Default pep8.py --exclude + emacs backup files
 PEP8_EXCLUDES=--exclude='.svn,CVS,.bzr,.hg,.git,__pycache__,.\#*'
