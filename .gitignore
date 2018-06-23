@@ -150,3 +150,6 @@ htmlcov*
 .settings
 .project
 .pydevproject
+
+#emacs
+.dir-locals.el
