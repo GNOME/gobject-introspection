@@ -4,8 +4,7 @@ The goal of the project is to describe the APIs and collect them in
 a uniform, machine readable format.
 
 GIR XML format
-==============
-
+--------------
 There's an XML format called GIR used by GObjectIntrospection.
 The purpose of it is to provide a common structure to access the complete
 available API that a library or other unit of code exports.
@@ -16,8 +15,7 @@ meant to be usable to use in other situations, for instance to/from another
 set of languages.
 
 Typelib
-=======
-
+-------
 The typelib is an on-disk version of the GIR designed to be fast, memory
 efficient and complete enough so that language bindings can be written
 on top of it without other sources of information.
@@ -26,9 +24,9 @@ accessed from the language binding or another application who wishes to
 use the information.
 
 Tools
-=====
-
+-----
 The following tools are shipped with GObject Introspection:
+
 - g-ir-scanner, a tool which generates GIR XML files by parsing headers,
   GTK-Doc comment blocks including annotations and introspecting GObject
   based libraries.
@@ -41,8 +39,7 @@ The following tools are shipped with GObject Introspection:
 - g-ir-doc-tool, generates API reference documentation from a GIR XML file.
 
 API library
-===========
-
+-----------
 There's also a C based library called libgirepository which provides
 an API to access to the typelib metadata. It also contains an API to
 invoke functions, given the function info object. The implementation is
@@ -53,18 +50,18 @@ There are a number of GIR test files in tests/, and a script to do
 roundtrip tests (GIR -> typelib -> GIR).
 
 Helping out
-===========
+-----------
 The introspection framework needs a lot more work, see TODO.
 
 Homepage
-========
-http://live.gnome.org/GObjectIntrospection
+--------
+https://gi.readthedocs.io/
 
 Reporting bugs
-==============
+--------------
 Bugs should be reported in https://gitlab.gnome.org/GNOME/gobject-introspection/issues.
 
 Contact
-=======
-Mail: gtk-devel-list@gnome.org
-IRC: #introspection@irc.gnome.org
+-------
+:Mail: gtk-devel-list@gnome.org
+:IRC: #introspection@irc.gnome.org

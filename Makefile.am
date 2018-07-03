@@ -58,7 +58,8 @@ EXTRA_DIST += 			\
 	misc/update-glib-annotations.py	\
 	misc/update-gtkdoc-tests.py	\
 	misc/verbump.py		\
-	README.msvc \
+	README.rst \
+	MSVC.README.rst \
 	meson.build \
 	meson_options.txt
 
