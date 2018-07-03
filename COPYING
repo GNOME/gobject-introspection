@@ -1,12 +1,13 @@
 gobject-introspection has two licenses; one for the typelib library,
 and one for the tools.
 
-The scanner (giscanner/) and typelib libraries (girepository/) are
-licensed under the LGPLv2+.  See the file COPYING.LGPL.
+* The typelib libraries (girepository/) are licensed under the LGPLv2+.
+  See the file COPYING.LGPL.
 
-The tools (tools/) are licensed under the GPLv2+.  See the file COPYING.GPL.
+* The remaining code is GPLv2+ compatible (see the file COPYING.GPL) and
+  consists of a mix of GPLv2+, LGPLv2+ and MIT. See the license headers in
+  each file for details.
 
-There is also some MIT code in giscanner/.  In general where
-applicable files should have headers denoting their license status; if
-they do not, please file a bug at https://gitlab.gnome.org/GNOME/gobject-introspection/issues.
-
+In general where applicable files should have headers denoting their license
+status; if they do not, please file a bug at
+https://gitlab.gnome.org/GNOME/gobject-introspection/issues.
