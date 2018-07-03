@@ -203,8 +203,9 @@ class DumpCompiler(object):
         return out.decode('ascii').split()
 
     def _compile(self, *sources):
-        pkgconfig_flags = self._run_pkgconfig('--cflags')
-        return self._compiler.compile(pkgconfig_flags,
+        cflags = self._run_pkgconfig('--cflags')
+        cflags.extend(self._options.cflags)
+        return self._compiler.compile(cflags,
                                       self._options.cpp_includes,
                                       sources,
                                       self._options.init_sections)
