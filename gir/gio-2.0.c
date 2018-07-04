@@ -2315,6 +2315,29 @@
 
 
 /**
+ * GMountOperation:is-tcrypt-hidden-volume:
+ *
+ * Whether the device to be unlocked is a TCRYPT hidden volume.
+ * See https://www.veracrypt.fr/en/Hidden%20Volume.html.
+ *
+ * Since: 2.58
+ */
+
+
+/**
+ * GMountOperation:is-tcrypt-system-volume:
+ *
+ * Whether the device to be unlocked is a TCRYPT system volume.
+ * In this context, a system volume is a volume with a bootloader
+ * and operating system installed. This is only supported for Windows
+ * operating systems. For further documentation, see
+ * https://www.veracrypt.fr/en/System%20Encryption.html.
+ *
+ * Since: 2.58
+ */
+
+
+/**
  * GMountOperation:password:
  *
  * The password that is used for authentication when carrying out
@@ -2326,6 +2349,16 @@
  * GMountOperation:password-save:
  *
  * Determines if and how the password information should be saved.
+ */
+
+
+/**
+ * GMountOperation:pim:
+ *
+ * The VeraCrypt PIM value, when unlocking a VeraCrypt volume. See
+ * https://www.veracrypt.fr/en/Personal%20Iterations%20Multiplier%20(PIM).html.
+ *
+ * Since: 2.58
  */
 
 
@@ -7431,6 +7464,12 @@
  * #GtkMountOperation. If no user interaction is desired (for example
  * when automounting filesystems at login time), usually %NULL can be
  * passed, see each method taking a #GMountOperation for details.
+ *
+ * The term ‘TCRYPT’ is used to mean ‘compatible with TrueCrypt and VeraCrypt’.
+ * [TrueCrypt](https://en.wikipedia.org/wiki/TrueCrypt) is a discontinued system for
+ * encrypting file containers, partitions or whole disks, typically used with Windows.
+ * [VeraCrypt](https://www.veracrypt.fr/) is a maintained fork of TrueCrypt with various
+ * improvements and auditing fixes.
  */
 
 
@@ -10050,7 +10089,7 @@
  * different kinds of identifiers, such as Hal UDIs, filesystem labels,
  * traditional Unix devices (e.g. `/dev/sda2`), UUIDs. GIO uses predefined
  * strings as names for the different kinds of identifiers:
- * #G_VOLUME_IDENTIFIER_KIND_HAL_UDI, #G_VOLUME_IDENTIFIER_KIND_LABEL, etc.
+ * #G_VOLUME_IDENTIFIER_KIND_UUID, #G_VOLUME_IDENTIFIER_KIND_LABEL, etc.
  * Use g_volume_get_identifier() to obtain an identifier for a volume.
  *
  *
@@ -15395,8 +15434,8 @@
  *
  * Gets the mime type for the content type, if one is registered.
  *
- * Returns: (nullable): the registered mime type for the given @type,
- *     or %NULL if unknown.
+ * Returns: (nullable) (transfer full): the registered mime type for the
+ *     given @type, or %NULL if unknown; free with g_free().
  */
 
 
@@ -21183,17 +21222,46 @@
  * launch applications.  Ordinary applications should use
  * g_app_info_launch_uris().
  *
- * If the application is launched via traditional UNIX fork()/exec()
- * then @spawn_flags, @user_setup and @user_setup_data are used for the
- * call to g_spawn_async().  Additionally, @pid_callback (with
- * @pid_callback_data) will be called to inform about the PID of the
- * created process.
+ * If the application is launched via GSpawn, then @spawn_flags, @user_setup
+ * and @user_setup_data are used for the call to g_spawn_async().
+ * Additionally, @pid_callback (with @pid_callback_data) will be called to
+ * inform about the PID of the created process. See g_spawn_async_with_pipes()
+ * for information on certain parameter conditions that can enable an
+ * optimized posix_spawn() codepath to be used.
  *
  * If application launching occurs via some other mechanism (eg: D-Bus
  * activation) then @spawn_flags, @user_setup, @user_setup_data,
  * @pid_callback and @pid_callback_data are ignored.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
+ */
+
+
+/**
+ * g_desktop_app_info_launch_uris_as_manager_with_fds:
+ * @appinfo: a #GDesktopAppInfo
+ * @uris: (element-type utf8): List of URIs
+ * @launch_context: (nullable): a #GAppLaunchContext
+ * @spawn_flags: #GSpawnFlags, used for each process
+ * @user_setup: (scope async) (nullable): a #GSpawnChildSetupFunc, used once
+ *     for each process.
+ * @user_setup_data: (closure user_setup) (nullable): User data for @user_setup
+ * @pid_callback: (scope call) (nullable): Callback for child processes
+ * @pid_callback_data: (closure pid_callback) (nullable): User data for @callback
+ * @stdin_fd: file descriptor to use for child's stdin, or -1
+ * @stdout_fd: file descriptor to use for child's stdout, or -1
+ * @stderr_fd: file descriptor to use for child's stderr, or -1
+ * @error: return location for a #GError, or %NULL
+ *
+ * Equivalent to g_desktop_app_info_launch_uris_as_manager() but allows
+ * you to pass in file descriptors for the stdin, stdout and stderr streams
+ * of the launched process.
+ *
+ * If application launching occurs via some non-spawn mechanism (e.g. D-Bus
+ * activation) then @stdin_fd, @stdout_fd and @stderr_fd are ignored.
+ *
+ * Returns: %TRUE on successful launch, %FALSE otherwise.
+ * Since: 2.58
  */
 
 
@@ -21459,10 +21527,12 @@
  * @drive: a #GDrive
  * @kind: the kind of identifier to return
  *
- * Gets the identifier of the given kind for @drive.
+ * Gets the identifier of the given kind for @drive. The only
+ * identifier currently available is
+ * #G_DRIVE_IDENTIFIER_KIND_UNIX_DEVICE.
  *
- * Returns: a newly allocated string containing the
- *     requested identfier, or %NULL if the #GDrive
+ * Returns: (nullable) (transfer full): a newly allocated string containing the
+ *     requested identifier, or %NULL if the #GDrive
  *     doesn't have this kind of identifier.
  */
 
@@ -21484,7 +21554,7 @@
  *
  * Gets the sort key for @drive, if any.
  *
- * Returns: Sorting key for @drive or %NULL if no such key is available.
+ * Returns: (nullable): Sorting key for @drive or %NULL if no such key is available.
  * Since: 2.32
  */
 
@@ -22914,6 +22984,11 @@
  * the actual file or directory represented by the #GFile; see
  * g_file_copy() if attempting to copy a file.
  *
+ * g_file_dup() is useful when a second handle is needed to the same underlying
+ * file, for use in a separate thread (#GFile is not thread-safe). For use
+ * within the same thread, use g_object_ref() to increment the existing object’s
+ * reference count.
+ *
  * This call does no blocking I/O.
  *
  * Returns: (transfer full): a new #GFile that is a duplicate
@@ -23731,7 +23806,7 @@
  *
  * Gets the attribute type, value and status for an attribute key.
  *
- * Returns: (transfer none): %TRUE if @info has an attribute named @attribute,
+ * Returns: %TRUE if @info has an attribute named @attribute,
  *      %FALSE otherwise.
  */
 
@@ -29960,7 +30035,8 @@
  * This is a convenience method for getting the #GVolume and then
  * using that object to get the #GDrive.
  *
- * Returns: (transfer full): a #GDrive or %NULL if @mount is not associated with a volume or a drive.
+ * Returns: (transfer full) (nullable): a #GDrive or %NULL if @mount is not
+ *      associated with a volume or a drive.
  *      The returned object should be unreffed with
  *      g_object_unref() when no longer needed.
  */
@@ -30008,7 +30084,7 @@
  *
  * Gets the sort key for @mount, if any.
  *
- * Returns: Sorting key for @mount or %NULL if no such key is available.
+ * Returns: (nullable): Sorting key for @mount or %NULL if no such key is available.
  * Since: 2.32
  */
 
@@ -30035,7 +30111,8 @@
  * considered an opaque string. Returns %NULL if there is no UUID
  * available.
  *
- * Returns: the UUID for @mount or %NULL if no UUID can be computed.
+ * Returns: (nullable) (transfer full): the UUID for @mount or %NULL if no UUID
+ *     can be computed.
  *     The returned string should be freed with g_free()
  *     when no longer needed.
  */
@@ -30047,7 +30124,8 @@
  *
  * Gets the volume for the @mount.
  *
- * Returns: (transfer full): a #GVolume or %NULL if @mount is not associated with a volume.
+ * Returns: (transfer full) (nullable): a #GVolume or %NULL if @mount is not
+ *      associated with a volume.
  *      The returned object should be unreffed with
  *      g_object_unref() when no longer needed.
  */
@@ -30188,6 +30266,30 @@
 
 
 /**
+ * g_mount_operation_get_is_tcrypt_hidden_volume:
+ * @op: a #GMountOperation.
+ *
+ * Check to see whether the mount operation is being used
+ * for a TCRYPT hidden volume.
+ *
+ * Returns: %TRUE if mount operation is for hidden volume.
+ * Since: 2.58
+ */
+
+
+/**
+ * g_mount_operation_get_is_tcrypt_system_volume:
+ * @op: a #GMountOperation.
+ *
+ * Check to see whether the mount operation is being used
+ * for a TCRYPT system volume.
+ *
+ * Returns: %TRUE if mount operation is for system volume.
+ * Since: 2.58
+ */
+
+
+/**
  * g_mount_operation_get_password:
  * @op: a #GMountOperation.
  *
@@ -30204,6 +30306,17 @@
  * Gets the state of saving passwords for the mount operation.
  *
  * Returns: a #GPasswordSave flag.
+ */
+
+
+/**
+ * g_mount_operation_get_pim:
+ * @op: a #GMountOperation.
+ *
+ * Gets a PIM from the mount operation.
+ *
+ * Returns: The VeraCrypt PIM within @op.
+ * Since: 2.58
  */
 
 
@@ -30263,6 +30376,28 @@
 
 
 /**
+ * g_mount_operation_set_is_tcrypt_hidden_volume:
+ * @op: a #GMountOperation.
+ * @hidden_volume: boolean value.
+ *
+ * Sets the mount operation to use a hidden volume if @hidden_volume is %TRUE.
+ *
+ * Since: 2.58
+ */
+
+
+/**
+ * g_mount_operation_set_is_tcrypt_system_volume:
+ * @op: a #GMountOperation.
+ * @system_volume: boolean value.
+ *
+ * Sets the mount operation to use a system volume if @system_volume is %TRUE.
+ *
+ * Since: 2.58
+ */
+
+
+/**
  * g_mount_operation_set_password:
  * @op: a #GMountOperation.
  * @password: password to set.
@@ -30277,6 +30412,17 @@
  * @save: a set of #GPasswordSave flags.
  *
  * Sets the state of saving passwords for the mount operation.
+ */
+
+
+/**
+ * g_mount_operation_set_pim:
+ * @op: a #GMountOperation.
+ * @pim: an unsigned integer.
+ *
+ * Sets the mount operation's PIM to @pim.
+ *
+ * Since: 2.58
  */
 
 
@@ -42477,7 +42623,7 @@
  *
  * Gets the drive for the @volume.
  *
- * Returns: (transfer full): a #GDrive or %NULL if @volume is not
+ * Returns: (transfer full) (nullable): a #GDrive or %NULL if @volume is not
  *     associated with a drive. The returned object should be unreffed
  *     with g_object_unref() when no longer needed.
  */
@@ -42504,8 +42650,8 @@
  * See the [introduction][volume-identifier] for more
  * information about volume identifiers.
  *
- * Returns: a newly allocated string containing the
- *     requested identfier, or %NULL if the #GVolume
+ * Returns: (nullable) (transfer full): a newly allocated string containing the
+ *     requested identifier, or %NULL if the #GVolume
  *     doesn't have this kind of identifier
  */
 
@@ -42516,7 +42662,7 @@
  *
  * Gets the mount for the @volume.
  *
- * Returns: (transfer full): a #GMount or %NULL if @volume isn't mounted.
+ * Returns: (transfer full) (nullable): a #GMount or %NULL if @volume isn't mounted.
  *     The returned object should be unreffed with g_object_unref()
  *     when no longer needed.
  */
@@ -42539,7 +42685,7 @@
  *
  * Gets the sort key for @volume, if any.
  *
- * Returns: Sorting key for @volume or %NULL if no such key is available
+ * Returns: (nullable): Sorting key for @volume or %NULL if no such key is available
  * Since: 2.32
  */
 
@@ -42566,7 +42712,8 @@
  * considered an opaque string. Returns %NULL if there is no UUID
  * available.
  *
- * Returns: the UUID for @volume or %NULL if no UUID can be computed.
+ * Returns: (nullable) (transfer full): the UUID for @volume or %NULL if no UUID
+ *     can be computed.
  *     The returned string should be freed with g_free()
  *     when no longer needed.
  */

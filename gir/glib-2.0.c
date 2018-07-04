@@ -2731,6 +2731,26 @@
 
 
 /**
+ * G_APPROX_VALUE:
+ * @a: a numeric value
+ * @b: a numeric value
+ * @epsilon: a numeric value that expresses the tolerance between @a and @b
+ *
+ * Evaluates to a truth value if the absolute difference between @a and @b is
+ * smaller than @epsilon, and to a false value otherwise.
+ *
+ * For example,
+ * - `G_APPROX_VALUE (5, 6, 2)` evaluates to true
+ * - `G_APPROX_VALUE (3.14, 3.15, 0.001)` evaluates to false
+ * - `G_APPROX_VALUE (n, 0.f, FLT_EPSILON)` evaluates to true if `n` is within
+ *   the single precision floating point epsilon from zero
+ *
+ * Returns: %TRUE if the two values are within the desired range
+ * Since: 2.58
+ */
+
+
+/**
  * G_ASCII_DTOSTR_BUF_SIZE:
  *
  * A good size for a buffer to be passed into g_ascii_dtostr().
@@ -7817,6 +7837,30 @@
 
 
 /**
+ * SECTION:refcount
+ * @Title: Reference counting
+ * @Short_description: Reference counting types and functions
+ *
+ * Reference counting is a garbage collection mechanism that is based on
+ * assigning a counter to a data type, or any memory area; the counter is
+ * increased whenever a new reference to that data type is acquired, and
+ * decreased whenever the reference is released. Once the last reference
+ * is released, the resources associated to that data type are freed.
+ *
+ * GLib uses reference counting in many of its data types, and provides
+ * the #grefcount and #gatomicrefcount types to implement safe and atomic
+ * reference counting semantics in new data types.
+ *
+ * It is important to note that #grefcount and #gatomicrefcount should be
+ * considered completely opaque types; you should always use the provided
+ * API to increase and decrease the counters, and you should never check
+ * their content directly, or compare their content with other values.
+ *
+ * Since: 2.58
+ */
+
+
+/**
  * SECTION:scanner
  * @title: Lexical Scanner
  * @short_description: a general purpose lexical scanner
@@ -8072,10 +8116,11 @@
  *
  * In addition to the traditional g_assert(), the test framework provides
  * an extended set of assertions for comparisons: g_assert_cmpfloat(),
- * g_assert_cmpint(), g_assert_cmpuint(), g_assert_cmphex(),
- * g_assert_cmpstr(), and g_assert_cmpmem(). The advantage of these
- * variants over plain g_assert() is that the assertion messages can be
- * more elaborate, and include the values of the compared entities.
+ * g_assert_cmpfloat_with_epsilon(), g_assert_cmpint(), g_assert_cmpuint(),
+ * g_assert_cmphex(), g_assert_cmpstr(), and g_assert_cmpmem(). The
+ * advantage of these variants over plain g_assert() is that the assertion
+ * messages can be more elaborate, and include the values of the compared
+ * entities.
  *
  * A full example of creating a test suite with two tests using fixtures:
  * |[<!-- language="C" -->
@@ -8819,10 +8864,18 @@
  * g_array_insert_vals:
  * @array: a #GArray
  * @index_: the index to place the elements at
- * @data: (not nullable): a pointer to the elements to insert
+ * @data: (nullable): a pointer to the elements to insert
  * @len: the number of elements to insert
  *
  * Inserts @len elements into a #GArray at the given index.
+ *
+ * If @index_ is greater than the array’s current length, the array is expanded.
+ * The elements between the old end of the array and the newly inserted elements
+ * will be initialised to zero if the array was configured to clear elements;
+ * otherwise their values will be undefined.
+ *
+ * @data may be %NULL if (and only if) @len is zero. If @len is zero, this
+ * function is a no-op.
  *
  * Returns: the #GArray
  */
@@ -8865,10 +8918,13 @@
 /**
  * g_array_prepend_vals:
  * @array: a #GArray
- * @data: (not nullable): a pointer to the elements to prepend to the start of the array
- * @len: the number of elements to prepend
+ * @data: (nullable): a pointer to the elements to prepend to the start of the array
+ * @len: the number of elements to prepend, which may be zero
  *
  * Adds @len elements onto the start of the array.
+ *
+ * @data may be %NULL if (and only if) @len is zero. If @len is zero, this
+ * function is a no-op.
  *
  * This operation is slower than g_array_append_vals() since the
  * existing elements in the array have to be moved to make space for
@@ -9583,6 +9639,24 @@
  * actual values of @n1 and @n2.
  *
  * Since: 2.16
+ */
+
+
+/**
+ * g_assert_cmpfloat_with_epsilon:
+ * @n1: an floating point number
+ * @n2: another floating point number
+ * @epsilon: a numeric value that expresses the expected tolerance
+ *   between @n1 and @n2
+ *
+ * Debugging macro to compare two floating point numbers within an epsilon.
+ *
+ * The effect of `g_assert_cmpfloat_with_epsilon (n1, n2, epsilon)` is
+ * the same as `g_assert_true (abs (n1 - n2) < epsilon)`. The advantage
+ * of this macro is that it can produce a message that includes the
+ * actual values of @n1 and @n2.
+ *
+ * Since: 2.58
  */
 
 
@@ -10572,6 +10646,50 @@
  *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
+ */
+
+
+/**
+ * g_atomic_ref_count_compare:
+ * @arc: the address of an atomic reference count variable
+ * @val: the value to compare
+ *
+ * Atomically compares the current value of @arc with @val.
+ *
+ * Returns: %TRUE if the reference count is the same
+ *   as the given value
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_ref_count_dec:
+ * @arc: the address of an atomic reference count variable
+ *
+ * Atomically decreases the reference count.
+ *
+ * Returns: %TRUE if the reference count reached 0, and %FALSE otherwise
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_ref_count_inc:
+ * @arc: the address of an atomic reference count variable
+ *
+ * Atomically increases the reference count.
+ *
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_ref_count_init:
+ * @arc: the address of an atomic reference count variable
+ *
+ * Atomically initializes a reference count variable.
+ *
+ * Since: 2.58
  */
 
 
@@ -15648,6 +15766,17 @@
  *   Also since the file is recreated, existing permissions, access control
  *   lists, metadata etc. may be lost. If @filename is a symbolic link,
  *   the link itself will be replaced, not the linked file.
+ *
+ * - On UNIX, if @filename already exists and is non-empty, and if the system
+ *   supports it (via a journalling filesystem or equivalent), the fsync()
+ *   call (or equivalent) will be used to ensure atomic replacement: @filename
+ *   will contain either its old contents or @contents, even in the face of
+ *   system power loss, the disk being unsafely removed, etc.
+ *
+ * - On UNIX, if @filename does not already exist or is empty, there is a
+ *   possibility that system power loss etc. after calling this function will
+ *   leave @filename empty or full of NUL bytes, depending on the underlying
+ *   filesystem.
  *
  * - On Windows renaming a file will not remove an existing file with the
  *   new name, so on Windows there is a race condition between the existing
@@ -21085,6 +21214,7 @@
  *
  * Returns: %TRUE if the operation succeeded, and
  *   this thread is now the owner of @context.
+ * Deprecated: 2.58: Use g_main_context_is_owner() and separate locking instead.
  */
 
 
@@ -25281,6 +25411,50 @@
 
 
 /**
+ * g_ref_count_compare:
+ * @rc: the address of a reference count variable
+ * @val: the value to compare
+ *
+ * Compares the current value of @rc with @val.
+ *
+ * Returns: %TRUE if the reference count is the same
+ *   as the given value
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_count_dec:
+ * @rc: the address of a reference count variable
+ *
+ * Decreases the reference count.
+ *
+ * Returns: %TRUE if the reference count reached 0, and %FALSE otherwise
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_count_inc:
+ * @rc: the address of a reference count variable
+ *
+ * Increases the reference count.
+ *
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_count_init:
+ * @rc: the address of a reference count variable
+ *
+ * Initializes a reference count variable.
+ *
+ * Since: 2.58
+ */
+
+
+/**
  * g_regex_check_replacement:
  * @replacement: the replacement string
  * @has_references: (out) (optional): location to store information about
@@ -28160,6 +28334,11 @@
  * context. The reverse
  * mapping from ID to source is done by g_main_context_find_source_by_id().
  *
+ * You can only call this function while the source is associated to a
+ * #GMainContext instance; calling this function before g_source_attach()
+ * or after g_source_destroy() yields undefined behavior. The ID returned
+ * is unique within the #GMainContext instance passed to g_source_attach().
+ *
  * Returns: the ID (greater than 0) for the source
  */
 
@@ -28478,7 +28657,8 @@
  *
  * The exact type of @func depends on the type of source; ie. you
  * should not count on @func being called with @data as its first
- * parameter.
+ * parameter. Cast @func with G_SOURCE_FUNC() to avoid warnings about
+ * incompatible function types.
  *
  * See [memory management of sources][mainloop-memory-management] for details
  * on how to handle memory management of @data.
@@ -28689,6 +28869,44 @@
 
 
 /**
+ * g_spawn_async_with_fds:
+ * @working_directory: (type filename) (nullable): child's current working directory, or %NULL to inherit parent's, in the GLib file name encoding
+ * @argv: (array zero-terminated=1): child's argument vector, in the GLib file name encoding
+ * @envp: (array zero-terminated=1) (nullable): child's environment, or %NULL to inherit parent's, in the GLib file name encoding
+ * @flags: flags from #GSpawnFlags
+ * @child_setup: (scope async) (nullable): function to run in the child just before exec()
+ * @user_data: (closure): user data for @child_setup
+ * @child_pid: (out) (optional): return location for child process ID, or %NULL
+ * @stdin_fd: file descriptor to use for child's stdin, or -1
+ * @stdout_fd: file descriptor to use for child's stdout, or -1
+ * @stderr_fd: file descriptor to use for child's stderr, or -1
+ * @error: return location for error
+ *
+ * Identical to g_spawn_async_with_pipes() but instead of
+ * creating pipes for the stdin/stdout/stderr, you can pass existing
+ * file descriptors into this function through the @stdin_fd,
+ * @stdout_fd and @stderr_fd parameters. The following @flags
+ * also have their behaviour slightly tweaked as a result:
+ *
+ * %G_SPAWN_STDOUT_TO_DEV_NULL means that the child's standard output
+ * will be discarded, instead of going to the same location as the parent's
+ * standard output. If you use this flag, @standard_output must be -1.
+ * %G_SPAWN_STDERR_TO_DEV_NULL means that the child's standard error
+ * will be discarded, instead of going to the same location as the parent's
+ * standard error. If you use this flag, @standard_error must be -1.
+ * %G_SPAWN_CHILD_INHERITS_STDIN means that the child will inherit the parent's
+ * standard input (by default, the child's standard input is attached to
+ * /dev/null). If you use this flag, @standard_input must be -1.
+ *
+ * It is valid to pass the same fd in multiple parameters (e.g. you can pass
+ * a single fd for both stdout and stderr).
+ *
+ * Returns: %TRUE on success, %FALSE if an error was set
+ * Since: 2.58
+ */
+
+
+/**
  * g_spawn_async_with_pipes:
  * @working_directory: (type filename) (nullable): child's current working
  *     directory, or %NULL to inherit parent's, in the GLib file name encoding
@@ -28774,10 +28992,11 @@
  * is equivalent to calling CloseHandle() on the process handle returned
  * in @child_pid). See g_child_watch_add().
  *
- * %G_SPAWN_LEAVE_DESCRIPTORS_OPEN means that the parent's open file
- * descriptors will be inherited by the child; otherwise all descriptors
- * except stdin/stdout/stderr will be closed before calling exec() in
- * the child. %G_SPAWN_SEARCH_PATH means that @argv[0] need not be an
+ * Open UNIX file descriptors marked as `FD_CLOEXEC` will be automatically
+ * closed in the child process. %G_SPAWN_LEAVE_DESCRIPTORS_OPEN means that
+ * other open file descriptors will be inherited by the child; otherwise all
+ * descriptors except stdin/stdout/stderr will be closed before calling exec()
+ * in the child. %G_SPAWN_SEARCH_PATH means that @argv[0] need not be an
  * absolute path, it will be looked for in the `PATH` environment
  * variable. %G_SPAWN_SEARCH_PATH_FROM_ENVP means need not be an
  * absolute path, it will be looked for in the `PATH` variable from
@@ -28851,6 +29070,21 @@
  *
  * If @child_pid is not %NULL and an error does not occur then the returned
  * process reference must be closed using g_spawn_close_pid().
+ *
+ * On modern UNIX platforms, GLib can use an efficient process launching
+ * codepath driven internally by posix_spawn(). This has the advantage of
+ * avoiding the fork-time performance costs of cloning the parent process
+ * address space, and avoiding associated memory overcommit checks that are
+ * not relevant in the context of immediately executing a distinct process.
+ * This optimized codepath will be used provided that the following conditions
+ * are met:
+ *
+ * 1. %G_SPAWN_DO_NOT_REAP_CHILD is set
+ * 2. %G_SPAWN_LEAVE_DESCRIPTORS_OPEN is set
+ * 3. %G_SPAWN_SEARCH_PATH_FROM_ENVP is not set
+ * 4. @working_directory is %NULL
+ * 5. @child_setup is %NULL
+ * 6. The program is of a recognised binary format, or has a shebang. Otherwise, GLib will have to execute the program through the shell, which is not done using the optimized codepath.
  *
  * If you are writing a GTK+ application, and the program you are spawning is a
  * graphical application too, then to ensure that the spawned program opens its
@@ -29096,9 +29330,9 @@
  * @key_equal_func parameter, when using non-%NULL strings as keys in a
  * #GHashTable.
  *
- * Note that this function is primarily meant as a hash table comparison
- * function. For a general-purpose, %NULL-safe string comparison function,
- * see g_strcmp0().
+ * This function is typically used for hash table comparisons, but can be used
+ * for general purpose comparisons of non-%NULL strings. For a %NULL-safe string
+ * comparison function, see g_strcmp0().
  *
  * Returns: %TRUE if the two keys match
  */
@@ -35375,7 +35609,7 @@
  * It is an error to call this function with a @value of any type
  * other than %G_VARIANT_TYPE_BYTE.
  *
- * Returns: a #guchar
+ * Returns: a #guint8
  * Since: 2.24
  */
 
@@ -35558,7 +35792,7 @@
  * the appropriate type:
  * - %G_VARIANT_TYPE_INT16 (etc.): #gint16 (etc.)
  * - %G_VARIANT_TYPE_BOOLEAN: #guchar (not #gboolean!)
- * - %G_VARIANT_TYPE_BYTE: #guchar
+ * - %G_VARIANT_TYPE_BYTE: #guint8
  * - %G_VARIANT_TYPE_HANDLE: #guint32
  * - %G_VARIANT_TYPE_DOUBLE: #gdouble
  *
@@ -38171,6 +38405,23 @@
 
 
 /**
+ * gatomicrefcount:
+ *
+ * A type for implementing atomic reference count semantics.
+ *
+ * Use g_atomic_ref_count_init() to initialize it; g_atomic_ref_count_inc()
+ * to increase the counter, and g_atomic_ref_count_dec() to decrease it.
+ *
+ * It is safe to use #gatomicrefcount if you're expecting to operate on the
+ * reference counter from multiple threads.
+ *
+ * See also: #grefcount
+ *
+ * Since: 2.58
+ */
+
+
+/**
  * gboolean:
  *
  * A standard boolean type.
@@ -38439,6 +38690,25 @@
  *
  * An untyped pointer.
  * #gpointer looks better and is easier to use than void*.
+ */
+
+
+/**
+ * grefcount:
+ *
+ * A type for implementing non-atomic reference count semantics.
+ *
+ * Use g_ref_count_init() to initialize it; g_ref_count_inc() to
+ * increase the counter, and g_ref_count_dec() to decrease it.
+ *
+ * It is safe to use #grefcount only if you're expecting to operate
+ * on the reference counter from a single thread. It is entirely up
+ * to you to ensure that all reference count changes happen in the
+ * same thread.
+ *
+ * See also: #gatomicrefcount
+ *
+ * Since: 2.58
  */
 
 
