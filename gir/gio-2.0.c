@@ -23806,7 +23806,7 @@
  *
  * Gets the attribute type, value and status for an attribute key.
  *
- * Returns: %TRUE if @info has an attribute named @attribute,
+ * Returns: (transfer none): %TRUE if @info has an attribute named @attribute,
  *      %FALSE otherwise.
  */
 

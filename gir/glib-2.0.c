@@ -5090,6 +5090,132 @@
 
 
 /**
+ * SECTION:arcbox
+ * @Title: Atomically reference counted data
+ * @Short_description: Allocated memory with atomic reference counting semantics
+ *
+ * An "atomically reference counted box", or "ArcBox", is an opaque wrapper
+ * data type that is guaranteed to be as big as the size of a given data type,
+ * and which augments the given data type with thread safe reference counting
+ * semantics for its memory management.
+ *
+ * ArcBox is useful if you have a plain old data type, like a structure
+ * typically placed on the stack, and you wish to provide additional API
+ * to use it on the heap; or if you want to implement a new type to be
+ * passed around by reference without necessarily implementing copy/free
+ * semantics or your own reference counting.
+ *
+ * The typical use is:
+ *
+ * |[<!-- language="C" -->
+ * typedef struct {
+ *   char *name;
+ *   char *address;
+ *   char *city;
+ *   char *state;
+ *   int age;
+ * } Person;
+ *
+ * Person *
+ * person_new (void)
+ * {
+ *   return g_atomic_rc_box_new0 (Person);
+ * }
+ * ]|
+ *
+ * Every time you wish to acquire a reference on the memory, you should
+ * call g_atomic_rc_box_acquire(); similarly, when you wish to release a reference
+ * you should call g_atomic_rc_box_release():
+ *
+ * |[<!-- language="C" -->
+ * // Add a Person to the Database; the Database acquires ownership
+ * // of the Person instance
+ * void
+ * add_person_to_database (Database *db, Person *p)
+ * {
+ *   db->persons = g_list_prepend (db->persons, g_atomic_rc_box_acquire (p));
+ * }
+ *
+ * // Removes a Person from the Database; the reference acquired by
+ * // add_person_to_database() is released here
+ * void
+ * remove_person_from_database (Database *db, Person *p)
+ * {
+ *   db->persons = g_list_remove (db->persons, p);
+ *   g_atomic_rc_box_release (p);
+ * }
+ * ]|
+ *
+ * If you have additional memory allocated inside the structure, you can
+ * use g_atomic_rc_box_release_full(), which takes a function pointer, which
+ * will be called if the reference released was the last:
+ *
+ * |[<!-- language="C" -->
+ * void
+ * person_clear (Person *p)
+ * {
+ *   g_free (p->name);
+ *   g_free (p->address);
+ *   g_free (p->city);
+ *   g_free (p->state);
+ * }
+ *
+ * void
+ * remove_person_from_database (Database *db, Person *p)
+ * {
+ *   db->persons = g_list_remove (db->persons, p);
+ *   g_atomic_rc_box_release_full (p, (GDestroyNotify) person_clear);
+ * }
+ * ]|
+ *
+ * If you wish to transfer the ownership of a reference counted data
+ * type without increasing the reference count, you can use g_steal_pointer():
+ *
+ * |[<!-- language="C" -->
+ *   Person *p = g_atomic_rc_box_new (Person);
+ *
+ *   fill_person_details (p);
+ *
+ *   add_person_to_database (db, g_steal_pointer (&p));
+ * ]|
+ *
+ * ## Thread safety
+ *
+ * The reference counting operations on data allocated using g_atomic_rc_box_alloc(),
+ * g_atomic_rc_box_new(), and g_atomic_rc_box_dup() are guaranteed to be atomic, and thus
+ * can be safely be performed by different threads. It is important to note that
+ * only the reference acquisition and release are atomic; changes to the content
+ * of the data are your responsibility.
+ *
+ * ## Automatic pointer clean up
+ *
+ * If you want to add g_autoptr() support to your plain old data type through
+ * reference counting, you can use the G_DEFINE_AUTOPTR_CLEANUP_FUNC() and
+ * g_atomic_rc_box_release():
+ *
+ * |[<!-- language="C" -->
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, g_atomic_rc_box_release)
+ * ]|
+ *
+ * If you need to clear the contents of the data, you will need to use an
+ * ancillary function that calls g_rc_box_release_full():
+ *
+ * |[<!-- laguage="C" -->
+ * static void
+ * my_data_struct_release (MyDataStruct *data)
+ * {
+ *   // my_data_struct_clear() is defined elsewhere
+ *   g_atomic_rc_box_release_full (data, (GDestroyNotify) my_data_struct_clear);
+ * }
+ *
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_clear)
+ * ]|
+ *
+ * Since: 2.58.
+ */
+
+
+/**
  * SECTION:arrays
  * @title: Arrays
  * @short_description: arrays of arbitrary elements which grow
@@ -7837,6 +7963,137 @@
 
 
 /**
+ * SECTION:rcbox
+ * @Title: Reference counted data
+ * @Short_description: Allocated memory with reference counting semantics
+ *
+ * A "reference counted box", or "RcBox", is an opaque wrapper data type
+ * that is guaranteed to be as big as the size of a given data type, and
+ * which augments the given data type with reference counting semantics
+ * for its memory management.
+ *
+ * RcBox is useful if you have a plain old data type, like a structure
+ * typically placed on the stack, and you wish to provide additional API
+ * to use it on the heap; or if you want to implement a new type to be
+ * passed around by reference without necessarily implementing copy/free
+ * semantics or your own reference counting.
+ *
+ * The typical use is:
+ *
+ * |[<!-- language="C" -->
+ * typedef struct {
+ *   char *name;
+ *   char *address;
+ *   char *city;
+ *   char *state;
+ *   int age;
+ * } Person;
+ *
+ * Person *
+ * person_new (void)
+ * {
+ *   return g_rc_box_new0 (Person);
+ * }
+ * ]|
+ *
+ * Every time you wish to acquire a reference on the memory, you should
+ * call g_rc_box_acquire(); similarly, when you wish to release a reference
+ * you should call g_rc_box_release():
+ *
+ * |[<!-- language="C" -->
+ * // Add a Person to the Database; the Database acquires ownership
+ * // of the Person instance
+ * void
+ * add_person_to_database (Database *db, Person *p)
+ * {
+ *   db->persons = g_list_prepend (db->persons, g_rc_box_acquire (p));
+ * }
+ *
+ * // Removes a Person from the Database; the reference acquired by
+ * // add_person_to_database() is released here
+ * void
+ * remove_person_from_database (Database *db, Person *p)
+ * {
+ *   db->persons = g_list_remove (db->persons, p);
+ *   g_rc_box_release (p);
+ * }
+ * ]|
+ *
+ * If you have additional memory allocated inside the structure, you can
+ * use g_rc_box_release_full(), which takes a function pointer, which
+ * will be called if the reference released was the last:
+ *
+ * |[<!-- language="C" -->
+ * void
+ * person_clear (Person *p)
+ * {
+ *   g_free (p->name);
+ *   g_free (p->address);
+ *   g_free (p->city);
+ *   g_free (p->state);
+ * }
+ *
+ * void
+ * remove_person_from_database (Database *db, Person *p)
+ * {
+ *   db->persons = g_list_remove (db->persons, p);
+ *   g_rc_box_release_full (p, (GDestroyNotify) person_clear);
+ * }
+ * ]|
+ *
+ * If you wish to transfer the ownership of a reference counted data
+ * type without increasing the reference count, you can use g_steal_pointer():
+ *
+ * |[<!-- language="C" -->
+ *   Person *p = g_rc_box_new (Person);
+ *
+ *   // fill_person_details() is defined elsewhere
+ *   fill_person_details (p);
+ *
+ *   // add_person_to_database_no_ref() is defined elsewhere; it adds
+ *   // a Person to the Database without taking a reference
+ *   add_person_to_database_no_ref (db, g_steal_pointer (&p));
+ * ]|
+ *
+ * ## Thread safety
+ *
+ * The reference counting operations on data allocated using g_rc_box_alloc(),
+ * g_rc_box_new(), and g_rc_box_dup() are not thread safe; it is your code's
+ * responsibility to ensure that references are acquired are released on the
+ * same thread.
+ *
+ * If you need thread safe reference counting, see the [atomic reference counted
+ * data][arcbox] API.
+ *
+ * ## Automatic pointer clean up
+ *
+ * If you want to add g_autoptr() support to your plain old data type through
+ * reference counting, you can use the G_DEFINE_AUTOPTR_CLEANUP_FUNC() and
+ * g_rc_box_release():
+ *
+ * |[<!-- language="C" -->
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, g_rc_box_release)
+ * ]|
+ *
+ * If you need to clear the contents of the data, you will need to use an
+ * ancillary function that calls g_rc_box_release_full():
+ *
+ * |[<!-- laguage="C" -->
+ * static void
+ * my_data_struct_release (MyDataStruct *data)
+ * {
+ *   // my_data_struct_clear() is defined elsewhere
+ *   g_rc_box_release_full (data, (GDestroyNotify) my_data_struct_clear);
+ * }
+ *
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_clear)
+ * ]|
+ *
+ * Since: 2.58.
+ */
+
+
+/**
  * SECTION:refcount
  * @Title: Reference counting
  * @Short_description: Reference counting types and functions
@@ -7855,6 +8112,75 @@
  * considered completely opaque types; you should always use the provided
  * API to increase and decrease the counters, and you should never check
  * their content directly, or compare their content with other values.
+ *
+ * Since: 2.58
+ */
+
+
+/**
+ * SECTION:refstring
+ * @Title: Reference counted strings
+ * @Short_description: Strings with reference counted memory management
+ *
+ * Reference counted strings are normal C strings that have been augmented
+ * with a reference counter to manage their resources. You allocate a new
+ * reference counted string and acquire and release references as needed,
+ * instead of copying the string among callers; when the last reference on
+ * the string is released, the resources allocated for it are freed.
+ *
+ * Typically, reference counted strings can be used when parsing data from
+ * files and storing them into data structures that are passed to various
+ * callers:
+ *
+ * |[<!-- language="C" -->
+ * PersonDetails *
+ * person_details_from_data (const char *data)
+ * {
+ *   // Use g_autoptr() to simplify error cases
+ *   g_autoptr(GRefString) full_name = NULL;
+ *   g_autoptr(GRefString) address =  NULL;
+ *   g_autoptr(GRefString) city = NULL;
+ *   g_autoptr(GRefString) state = NULL;
+ *   g_autoptr(GRefString) zip_code = NULL;
+ *
+ *   // parse_person_details() is defined elsewhere; returns refcounted strings
+ *   if (!parse_person_details (data, &full_name, &address, &city, &state, &zip_code))
+ *     return NULL;
+ *
+ *   if (!validate_zip_code (zip_code))
+ *     return NULL;
+ *
+ *   // add_address_to_cache() and add_full_name_to_cache() are defined
+ *   // elsewhere; they add strings to various caches, using refcounted
+ *   // strings to avoid copying data over and over again
+ *   add_address_to_cache (address, city, state, zip_code);
+ *   add_full_name_to_cache (full_name);
+ *
+ *   // person_details_new() is defined elsewhere; it takes a reference
+ *   // on each string
+ *   PersonDetails *res = person_details_new (full_name,
+ *                                            address,
+ *                                            city,
+ *                                            state,
+ *                                            zip_code);
+ *
+ *   return res;
+ * }
+ * ]|
+ *
+ * In the example above, we have multiple functions taking the same strings
+ * for different uses; with typical C strings, we'd have to copy the strings
+ * every time the life time rules of the data differ from the life time of
+ * the string parsed from the original buffer. With reference counted strings,
+ * each caller can take a reference on the data, and keep it as long as it
+ * needs to own the string.
+ *
+ * Reference counted strings can also be "interned" inside a global table
+ * owned by GLib; while an interned string has at least a reference, creating
+ * a new interned reference counted string with the same contents will return
+ * a reference to the existing string instead of creating a new reference
+ * counted string instance. Once the string loses its last reference, it will
+ * be automatically removed from the global interned strings table.
  *
  * Since: 2.58
  */
@@ -10646,6 +10972,139 @@
  *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
+ */
+
+
+/**
+ * g_atomic_rc_box_acquire:
+ * @mem_block: (not nullable): a pointer to reference counted data
+ *
+ * Atomically acquires a reference on the data pointed by @mem_block.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the data,
+ *   with its reference count increased
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_rc_box_alloc:
+ * @block_size: the size of the allocation, must be greater than 0
+ *
+ * Allocates @block_size bytes of memory, and adds atomic
+ * reference counting semantics to it.
+ *
+ * The data will be freed when its reference count drops to
+ * zero.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the allocated memory
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_rc_box_alloc0:
+ * @block_size: the size of the allocation, must be greater than 0
+ *
+ * Allocates @block_size bytes of memory, and adds atomic
+ * referenc counting semantics to it.
+ *
+ * The contents of the returned data is set to zero.
+ *
+ * The data will be freed when its reference count drops to
+ * zero.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the allocated memory
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_rc_box_dup:
+ * @block_size: the number of bytes to copy, must be greater than 0
+ * @mem_block: (not nullable): the memory to copy
+ *
+ * Allocates a new block of data with atomit reference counting
+ * semantics, and copies @block_size bytes of @mem_block
+ * into it.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the allocated
+ *   memory
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_rc_box_get_size:
+ * @mem_block: (not nullable): a pointer to reference counted data
+ *
+ * Retrieves the size of the reference counted data pointed by @mem_block.
+ *
+ * Returns: the size of the data, in bytes
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_rc_box_new:
+ * @type: the type to allocate, typically a structure name
+ *
+ * A convenience macro to allocate atomically reference counted
+ * data with the size of the given @type.
+ *
+ * This macro calls g_atomic_rc_box_alloc() with `sizeof (@type)` and
+ * casts the returned pointer to a pointer of the given @type,
+ * avoiding a type cast in the source code.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the allocated
+ *   memory, cast to a pointer for the given @type
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_rc_box_new0:
+ * @type: the type to allocate, typically a structure name
+ *
+ * A convenience macro to allocate atomically reference counted
+ * data with the size of the given @type, and set its contents
+ * to zero.
+ *
+ * This macro calls g_atomic_rc_box_alloc0() with `sizeof (@type)` and
+ * casts the returned pointer to a pointer of the given @type,
+ * avoiding a type cast in the source code.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the allocated
+ *   memory, cast to a pointer for the given @type
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_rc_box_release:
+ * @mem_block: (transfer full) (not nullable): a pointer to reference counted data
+ *
+ * Atomically releases a reference on the data pointed by @mem_block.
+ *
+ * If the reference was the last one, it will free the
+ * resources allocated for @mem_block.
+ *
+ * Since: 2.58
+ */
+
+
+/**
+ * g_atomic_rc_box_release_full:
+ * @mem_block: (transfer full) (not nullable): a pointer to reference counted data
+ * @clear_func: (not nullable): a function to call when clearing the data
+ *
+ * Atomically releases a reference on the data pointed by @mem_block.
+ *
+ * If the reference was the last one, it will call @clear_func
+ * to clear the contents of @mem_block, and then will free the
+ * resources allocated for @mem_block.
+ *
+ * Since: 2.58
  */
 
 
@@ -14063,7 +14522,10 @@
  *
  * To set the value of a date to the current day, you could write:
  * |[<!-- language="C" -->
- *  g_date_set_time_t (date, time (NULL));
+ *  time_t now = time (NULL);
+ *  if (now == (time_t) -1)
+ *    // handle the error
+ *  g_date_set_time_t (date, now);
  * ]|
  *
  * Since: 2.10
@@ -25287,6 +25749,138 @@
 
 
 /**
+ * g_rc_box_acquire:
+ * @mem_block: (not nullable): a pointer to reference counted data
+ *
+ * Acquires a reference on the data pointed by @mem_block.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the data,
+ *   with its reference count increased
+ * Since: 2.58
+ */
+
+
+/**
+ * g_rc_box_alloc:
+ * @block_size: the size of the allocation, must be greater than 0
+ *
+ * Allocates @block_size bytes of memory, and adds reference
+ * counting semantics to it.
+ *
+ * The data will be freed when its reference count drops to
+ * zero.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the allocated memory
+ * Since: 2.58
+ */
+
+
+/**
+ * g_rc_box_alloc0:
+ * @block_size: the size of the allocation, must be greater than 0
+ *
+ * Allocates @block_size bytes of memory, and adds reference
+ * counting semantics to it.
+ *
+ * The contents of the returned data is set to zero.
+ *
+ * The data will be freed when its reference count drops to
+ * zero.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the allocated memory
+ * Since: 2.58
+ */
+
+
+/**
+ * g_rc_box_dup:
+ * @block_size: the number of bytes to copy, must be greater than 0
+ * @mem_block: (not nullable): the memory to copy
+ *
+ * Allocates a new block of data with reference counting
+ * semantics, and copies @block_size bytes of @mem_block
+ * into it.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the allocated
+ *   memory
+ * Since: 2.58
+ */
+
+
+/**
+ * g_rc_box_get_size:
+ * @mem_block: (not nullable): a pointer to reference counted data
+ *
+ * Retrieves the size of the reference counted data pointed by @mem_block.
+ *
+ * Returns: the size of the data, in bytes
+ * Since: 2.58
+ */
+
+
+/**
+ * g_rc_box_new:
+ * @type: the type to allocate, typically a structure name
+ *
+ * A convenience macro to allocate reference counted data with
+ * the size of the given @type.
+ *
+ * This macro calls g_rc_box_alloc() with `sizeof (@type)` and
+ * casts the returned pointer to a pointer of the given @type,
+ * avoiding a type cast in the source code.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the
+ *   allocated memory, cast to a pointer for the given @type
+ * Since: 2.58
+ */
+
+
+/**
+ * g_rc_box_new0:
+ * @type: the type to allocate, typically a structure name
+ *
+ * A convenience macro to allocate reference counted data with
+ * the size of the given @type, and set its contents to zero.
+ *
+ * This macro calls g_rc_box_alloc0() with `sizeof (@type)` and
+ * casts the returned pointer to a pointer of the given @type,
+ * avoiding a type cast in the source code.
+ *
+ * Returns: (transfer full) (not nullable): a pointer to the
+ *   allocated memory, cast to a pointer for the given @type
+ * Since: 2.58
+ */
+
+
+/**
+ * g_rc_box_release:
+ * @mem_block: (transfer full) (not nullable): a pointer to reference counted data
+ *
+ * Releases a reference on the data pointed by @mem_block.
+ *
+ * If the reference was the last one, it will free the
+ * resources allocated for @mem_block.
+ *
+ * Since: 2.58
+ */
+
+
+/**
+ * g_rc_box_release_full:
+ * @mem_block: (transfer full) (not nullable): a pointer to reference counted data
+ * @clear_func: (not nullable): a function to call when clearing the data
+ *
+ * Releases a reference on the data pointed by @mem_block.
+ *
+ * If the reference was the last one, it will call @clear_func
+ * to clear the contents of @mem_block, and then will free the
+ * resources allocated for @mem_block.
+ *
+ * Since: 2.58
+ */
+
+
+/**
  * g_realloc:
  * @mem: (nullable): the memory to reallocate
  * @n_bytes: new size of the memory in bytes
@@ -25449,6 +26043,84 @@
  * @rc: the address of a reference count variable
  *
  * Initializes a reference count variable.
+ *
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_string_acquire:
+ * @str: a reference counted string
+ *
+ * Acquires a reference on a string.
+ *
+ * Returns: the given string, with its reference count increased
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_string_length:
+ * @str: a reference counted string
+ *
+ * Retrieves the length of @str.
+ *
+ * Returns: the length of the given string, in bytes
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_string_new:
+ * @str: (not nullable): a NUL-terminated string
+ *
+ * Creates a new reference counted string and copies the contents of @str
+ * into it.
+ *
+ * Returns: (transfer full) (not nullable): the newly created reference counted string
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_string_new_intern:
+ * @str: (not nullable): a NUL-terminated string
+ *
+ * Creates a new reference counted string and copies the content of @str
+ * into it.
+ *
+ * If you call this function multiple times with the same @str, or with
+ * the same contents of @str, it will return a new reference, instead of
+ * creating a new string.
+ *
+ * Returns: (transfer full) (not nullable): the newly created reference
+ *   counted string, or a new reference to an existing string
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_string_new_len:
+ * @str: (not nullable): a string
+ * @len: length of @str to use, or -1 if @str is nul-terminated
+ *
+ * Creates a new reference counted string and copies the contents of @str
+ * into it, up to @len bytes.
+ *
+ * Since this function does not stop at nul bytes, it is the caller's
+ * responsibility to ensure that @str has at least @len addressable bytes.
+ *
+ * Returns: (transfer full) (not nullable): the newly created reference counted string
+ * Since: 2.58
+ */
+
+
+/**
+ * g_ref_string_release:
+ * @str: a reference counted string
+ *
+ * Releases a reference on a string; if it was the last reference, the
+ * resources allocated by the string are freed as well.
  *
  * Since: 2.58
  */
