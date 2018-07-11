@@ -32,7 +32,7 @@ warn_test_env.set(
 if host_system != 'windows'
   foreach warn_fn : warn_tests
     test(
-      'warn-' + warn_fn.split('.')[0], files(python3.path()),
+      'warn-' + warn_fn.split('.')[0], python,
       workdir: meson.current_source_dir(),
       env: warn_test_env,
       args: ['warningtester.py', warn_fn],

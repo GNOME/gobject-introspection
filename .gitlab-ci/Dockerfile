@@ -36,6 +36,9 @@ RUN dnf -y install \
     python3-mako \
     python3-pip \
     python3-wheel \
+    python2 \
+    python2-devel \
+    python2-mako \
     redhat-rpm-config \
     systemtap-sdt-devel \
     zlib-devel \

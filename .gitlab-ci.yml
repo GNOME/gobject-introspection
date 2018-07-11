@@ -5,14 +5,33 @@ cache:
   paths:
     - _ccache/
 
-fedora-x86_64:
+fedora-x86_64-python3:
   stage: build
   image: registry.gitlab.gnome.org/gnome/gobject-introspection:v1
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
   script:
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true _build .
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true -Dpython=python3 _build .
+    - cd _build
+    - ninja
+    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+  except:
+    - tags
+  artifacts:
+    when: on_failure
+    name: "gi-_${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+
+fedora-x86_64-python2:
+  stage: build
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v1
+  variables:
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+  script:
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true -Dpython=python2 _build .
     - cd _build
     - ninja
     - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib

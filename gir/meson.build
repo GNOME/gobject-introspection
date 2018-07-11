@@ -38,7 +38,7 @@ girdir = join_paths(get_option('datadir'), 'gir-1.0')
 install_data(gir_files, install_dir: girdir)
 
 scanner_command = [
-  python3,
+  python,
   girscanner,
   '--output=@OUTPUT@',
   '--no-libtool',
@@ -93,7 +93,7 @@ if dep_type == 'pkgconfig'
     glib_files += join_paths(glib_incdir, 'glib-unix.h')
   endif
   # Parse glob to get installed header list
-  ret = run_command(python3, '-c', globber.format(join_paths(glib_incdir, 'glib', '*.h')))
+  ret = run_command(python, '-c', globber.format(join_paths(glib_incdir, 'glib', '*.h')))
   if ret.returncode() != 0
     error('Failed to get glib header list')
   endif
@@ -101,7 +101,7 @@ if dep_type == 'pkgconfig'
   # Get a list of all source files
   glib_srcdir = get_option('glib-src-dir')
   if glib_srcdir != ''
-    ret = run_command(python3, '-c', globber.format(join_paths(glib_srcdir, 'glib', '*.c')))
+    ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'glib', '*.c')))
     if ret.returncode() != 0
       error('Failed to get glib source list')
     endif
@@ -200,13 +200,13 @@ gobject_command = scanner_command + [
 if dep_type == 'pkgconfig'
   gobject_command += ['--external-library', '--pkg=gobject-2.0']
   # Get the installed header list
-  ret = run_command(python3, '-c', globber.format(join_paths(glib_incdir, 'gobject', '*.h')))
+  ret = run_command(python, '-c', globber.format(join_paths(glib_incdir, 'gobject', '*.h')))
   if ret.returncode() != 0
     error('Failed to get gobject header list')
   endif
   gobject_headers = ret.stdout().strip().split('\n')
   if glib_srcdir != ''
-    ret = run_command(python3, '-c', globber.format(join_paths(glib_srcdir, 'gobject', '*.c')))
+    ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'gobject', '*.c')))
     if ret.returncode() != 0
       error('Failed to get gobject source list')
     endif
@@ -307,7 +307,7 @@ gio_command = scanner_command + [
 if dep_type == 'pkgconfig'
   gio_command += ['--external-library', '--pkg=gio-2.0']
   # Get the installed header list
-  ret = run_command(python3, '-c', globber.format(join_paths(glib_incdir, 'gio', '*.h')))
+  ret = run_command(python, '-c', globber.format(join_paths(glib_incdir, 'gio', '*.h')))
   if ret.returncode() != 0
     error('Failed to get gio header list')
   endif
@@ -316,7 +316,7 @@ if dep_type == 'pkgconfig'
   # probably fine since it matches what Autotools does. We are more exact in
   # the subproject case.
   if glib_srcdir != ''
-    ret = run_command(python3, '-c', globber.format(join_paths(glib_srcdir, 'gio', '*.c')))
+    ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'gio', '*.c')))
     if ret.returncode() != 0
       error('Failed to get gio source list')
     endif
@@ -341,7 +341,7 @@ if giounix_dep.found()
     gio_command += ['--pkg=gio-unix-2.0']
     giounix_includedir = join_paths(giounix_dep.get_pkgconfig_variable('includedir'), 'gio-unix-2.0')
     # Get the installed gio-unix header list
-    ret = run_command(python3, '-c', globber.format(join_paths(giounix_includedir, 'gio', '*.h')))
+    ret = run_command(python, '-c', globber.format(join_paths(giounix_includedir, 'gio', '*.h')))
     if ret.returncode() != 0
       error('Failed to get gio-unix header list')
     endif

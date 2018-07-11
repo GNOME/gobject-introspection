@@ -17,3 +17,7 @@ option('gtk-doc', type: 'boolean', value: false,
 option('cairo-libname', type: 'string',
   description: 'Custom name for the cairo-gobject library name'
 )
+
+option('python', type: 'string', value: 'python3',
+  description: 'Path or name of the Python interpreter to build for'
+)

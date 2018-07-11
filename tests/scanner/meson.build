@@ -13,6 +13,6 @@ if host_system != 'windows'
 endif
 
 foreach f : scanner_test_files 
-  test(f, python3, args: files(f), env: scanner_test_env)
+  test(f, python, args: files(f), env: scanner_test_env)
 endforeach
 

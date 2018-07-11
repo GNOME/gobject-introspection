@@ -1,6 +1,6 @@
 project('gobject-introspection', 'c',
   version: '1.57.1',
-  meson_version: '>= 0.42.0',
+  meson_version: '>= 0.46.0',
   default_options: [
     'warning_level=1',
     'buildtype=debugoptimized',
@@ -12,8 +12,8 @@ gi_versions = meson.project_version().split('.')
 
 configinc = include_directories('.')
 
-py3 = import('python3')
-python3 = py3.find_python()
+pymod = import('python')
+python = pymod.find_installation(get_option('python'))
 
 cc = meson.get_compiler('c')
 config = configuration_data()
