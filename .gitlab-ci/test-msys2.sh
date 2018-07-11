@@ -18,6 +18,7 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-ccache \
     mingw-w64-$MSYS2_ARCH-meson \
     mingw-w64-$MSYS2_ARCH-python3 \
+    mingw-w64-$MSYS2_ARCH-python3-pip \
     mingw-w64-$MSYS2_ARCH-libffi \
     mingw-w64-$MSYS2_ARCH-pkg-config \
     mingw-w64-$MSYS2_ARCH-cairo \
@@ -27,6 +28,9 @@ pacman --noconfirm -S --needed \
 
 export CCACHE_BASEDIR="${CI_PROJECT_DIR}"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
+
+pip3 install --upgrade --user meson==0.47.1
+export PATH="$HOME/.local/bin:$PATH"
 
 meson --buildtype debug _build
 cd _build
