@@ -106,7 +106,9 @@ def _resolve_non_libtool(options, binary, libraries):
             args.extend(['otool', '-L', binary.args[0]])
         else:
             args.extend(['ldd', binary.args[0]])
-        output = subprocess.check_output(args, universal_newlines=True, errors='replace')
+        output = subprocess.check_output(args)
+        if isinstance(output, bytes):
+            output = output.decode("utf-8", "replace")
 
         # Use absolute paths on OS X to conform to how libraries are usually
         # referenced on OS X systems, and file names everywhere else.
