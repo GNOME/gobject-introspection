@@ -1,6 +1,5 @@
 libdir_abs = join_paths(get_option('prefix'), get_option('libdir'))
 datadir_abs = join_paths(get_option('prefix'), get_option('datadir'))
-python_path = python3.path()
 
 tools = [
   ['g-ir-scanner', 'scannermain', 'scanner_main'],
@@ -15,7 +14,7 @@ foreach tool : tools
   tools_conf = configuration_data()
   tools_conf.set('libdir', libdir_abs)
   tools_conf.set('datarootdir', datadir_abs)
-  tools_conf.set('PYTHON', python_path)
+  tools_conf.set('PYTHON', 'python' + python.language_version())
 
   tools_conf.set('TOOL_MODULE', tool[1])
   tools_conf.set('TOOL_FUNCTION', tool[2])
