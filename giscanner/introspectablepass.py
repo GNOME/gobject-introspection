@@ -84,7 +84,7 @@ class IntrospectablePass(object):
 
         if not node.type.resolved:
             self._parameter_warning(parent, node,
-                                    "Unresolved type: %r" % (node.type.unresolved_string, ))
+                                    "Unresolved type: '%s'" % (node.type.unresolved_string, ))
             parent.introspectable = False
             return
 

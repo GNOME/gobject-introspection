@@ -32,7 +32,10 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 pip3 install --upgrade --user meson==0.47.1
 export PATH="$HOME/.local/bin:$PATH"
 
-meson --buildtype debug _build
+# FIXME: https://github.com/Alexpux/MINGW-packages/pull/4064
+# Passing the full interpreter path works around the issue
+PYTHON="$(which python3)"
+meson -Dpython="${PYTHON}" --buildtype debug _build
 cd _build
 ninja
 
