@@ -1,60 +1,121 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
-targetname=$1
+import io
+import sys
+import os
+import re
+import difflib
+import subprocess
 
-# Note the target name for the documentation targets (-C, -Python, -Gjs)
-# incorrectly include a relative path to the srcdir, strip that off for usage
-# in directory diffs.
-targetbase=${targetname##*/}
 
-# The "shared-library" field of the GIR is platform-dependent. For example, on
-# OSX, shared libraries have the extension .dylib. Ignore this field when
-# determining whether the output succeeded.
-ignore_expr='-I shared-library=".*"$'
+def assert_files_no_diff(a, b, ignore=None):
+    if ignore is None:
+        ignore = []
 
-case $targetname in
-*.gir)
-    len=${#targetname}
-    limit=$(expr $len - 4)
-    diff -u -U 10 ${ignore_expr} ${srcdir}/${targetname:0:${limit}}-expected.gir ${builddir}/${targetname}
-    exit $?
-    ;;
-*.typelib)
-    # Do nothing for typelibs, this just ensures they build as part of the tests
-    exit 0
-    ;;
-*-C)
-    diff -r -u -w -I '^\s*$' -U 10 ${srcdir}/${targetbase}-expected ${builddir}/${targetbase}
-    exit $?
-    ;;
-*-Python)
-    diff -r -u -w -I '^\s*$' -U 10 ${srcdir}/${targetbase}-expected ${builddir}/${targetbase}
-    exit $?
-    ;;
-*-Gjs)
-    diff -r -u -w -I '^\s*$' -U 10 ${srcdir}/${targetbase}-expected ${builddir}/${targetbase}
-    exit $?
-    ;;
-*-sections.txt)
-    diff -u -w -I '^\s*$' -U 10 ${srcdir}/${targetname::$((${#targetname} - 4))}-expected.txt ${builddir}/${targetname}
-    exit $?
-    ;;
-*.py)
-    if [[ -z "${TESTARGS}" ]]; then
-        # Run as regular Python file if TESTARGS is empty
-        PYTHONPATH=${top_builddir}:${top_srcdir} ${PYTHON} ${targetname}
-        exit $?
-    else
-        # Run as Python unittest module with TESTARGS concatenated to the basename of target.
-        # Ensure we are in the directory containing the python module first.
-        export PYTHONPATH=$(readlink -f ${top_builddir}):$(readlink -f ${top_srcdir})
-        modulename=$(basename "${targetbase}" .py)
-        (cd $(dirname ${targetname}) &&  ${PYTHON} -m unittest -v "${modulename}.${TESTARGS}")
-        exit $?
-    fi
-    ;;
-*)
-    echo $"Usage: [TESTARGS=<args>] gi-tester <targetname>"
-    exit 1
-    ;;
-esac
+    def filter_lines(lines):
+        filtered = []
+        for line in lines:
+            do_ignore = False
+            for pattern in ignore:
+                if re.search(pattern, line) is not None:
+                    do_ignore = True
+                    break
+            if not do_ignore:
+                filtered.append(line)
+        return filtered
+
+    with io.open(a, encoding="utf-8") as ah, \
+            io.open(b, encoding="utf-8") as bh:
+
+        result = difflib.unified_diff(
+            filter_lines(ah.readlines()),
+            filter_lines(bh.readlines()),
+            fromfile=a, tofile=b)
+
+        result = "".join(result)
+        if result:
+            raise AssertionError(result)
+
+
+def assert_dirs_no_diff(a, b, ignore=None):
+    list_a = sorted(os.listdir(a))
+    list_b = sorted(os.listdir(b))
+
+    result = difflib.unified_diff(
+        [l + "\n" for l in list_a],
+        [l + "\n" for l in list_b],
+        fromfile=a, tofile=b)
+    result = "".join(result)
+    if result:
+        raise AssertionError(result)
+
+    for entry in list_a:
+        assert_files_no_diff(
+            os.path.join(a, entry),
+            os.path.join(b, entry),
+            ignore=ignore)
+
+
+def assert_no_diff(a, b, ignore=None):
+    """
+    Args:
+        a (str): file or directory
+        b (str): file or directory
+        ignore (list): a list of regexes for lines in files to ignore
+    """
+
+    if os.path.isdir(a) != os.path.isdir(b):
+        raise AssertionError
+
+    if os.path.isdir(a):
+        assert_dirs_no_diff(a, b, ignore=ignore)
+    else:
+        assert_files_no_diff(a, b, ignore=ignore)
+
+
+def main(argv):
+    if len(argv) != 2:
+        raise SystemError("exactly one arg, not %r" % argv[1:])
+
+    targetname = argv[1]
+    targetbase = os.path.basename(targetname)
+    srcdir = os.environ.get("srcdir", "")
+    builddir = os.environ.get("builddir", "")
+
+    if targetname.endswith(".typelib"):
+        # Do nothing for typelibs, this just ensures they build as part of
+        # the tests
+        if not os.path.exists(targetname):
+            raise SystemError("%s does not exist" % targetname)
+    elif targetname.endswith(".gir"):
+        # The "shared-library" field of the GIR is platform-dependent.
+        # For example, on OSX, shared libraries have the extension .dylib.
+        # Ignore this field when determining whether the output succeeded.
+        ignore = ['shared-library=".*"$']
+        expected = os.path.join(
+            srcdir, os.path.splitext(targetname)[0] + "-expected.gir")
+        actual = os.path.join(builddir, targetname)
+        assert_no_diff(expected, actual, ignore=ignore)
+    elif targetname.rsplit("-")[-1] in ("C", "Python", "Gjs"):
+        expected = os.path.join(srcdir, targetbase + "-expected")
+        actual = os.path.join(builddir, targetbase)
+        assert_no_diff(expected, actual, ignore=['^\s*$'])
+    elif targetname.endswith("-sections.txt"):
+        expected = os.path.join(
+            srcdir, os.path.splitext(targetname)[0] + "-expected.txt")
+        actual = os.path.join(builddir, targetname)
+        assert_no_diff(expected, actual, ignore=['^\s*$'])
+    elif targetname.endswith(".py"):
+        env = os.environ.copy()
+        env["PYTHONPATH"] = os.pathsep.join(
+            filter(
+                None,
+                [os.environ.get("top_builddir"),
+                 os.environ.get("top_srcdir")]))
+        subprocess.check_call([env["PYTHON"], targetname], env=env)
+    else:
+        raise SystemError("Unknown file type: %s" % targetbase)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

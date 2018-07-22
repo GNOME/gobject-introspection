@@ -75,4 +75,4 @@ GIMarshallingTests-1.0.gir: libgimarshallingtests-1.0.la Makefile
 	$(AM_V_GEN) $(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) $< -o $@
 
 TESTS=Everything-1.0.typelib GIMarshallingTests-1.0.typelib
-LOG_COMPILER=$(srcdir)/gi-tester
+LOG_COMPILER=$(PYTHON) $(srcdir)/gi-tester

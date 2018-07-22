@@ -237,7 +237,7 @@ TESTS = $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS) $(PYTESTS)
 TESTS_ENVIRONMENT = env srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddir) top_builddir=$(top_builddir) \
 	CC="$(CC)" \
 	PYTHON=$(PYTHON) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir)
-LOG_COMPILER = $(top_srcdir)/tests/gi-tester
+LOG_COMPILER = $(PYTHON) $(top_srcdir)/tests/gi-tester
 
 EXTRA_DIST += \
 	$(PYTESTS) \
