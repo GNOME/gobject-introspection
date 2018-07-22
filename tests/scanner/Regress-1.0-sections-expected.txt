@@ -331,6 +331,7 @@ regress_test_inherit_drawable_get_size
 <TITLE>RegressTestInterface</TITLE>
 RegressTestInterface
 RegressTestInterfaceIface
+regress_test_interface_emit_signal
 
 <SECTION>
 <FILE>regress-test-obj</FILE>
@@ -340,6 +341,7 @@ RegressTestObjClass
 regress_test_obj_do_matrix
 regress_test_obj_emit_sig_with_array_len_prop
 regress_test_obj_emit_sig_with_foreign_struct
+regress_test_obj_emit_sig_with_inout_int
 regress_test_obj_emit_sig_with_int64
 regress_test_obj_emit_sig_with_obj
 regress_test_obj_emit_sig_with_uint64
