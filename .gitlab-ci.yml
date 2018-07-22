@@ -1,13 +1,14 @@
 stages:
   - build
 
+image: lazka/gobject-introspection:v1
+
 cache:
   paths:
     - _ccache/
 
-fedora-x86_64-python3:
+fedora-x86_64-meson-python3:
   stage: build
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v1
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
@@ -24,9 +25,8 @@ fedora-x86_64-python3:
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
-fedora-x86_64-python2:
+fedora-x86_64-meson-python2:
   stage: build
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v1
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
@@ -43,7 +43,23 @@ fedora-x86_64-python2:
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
-msys2-mingw32:
+fedora-x86_64-autotools-python3:
+  stage: build
+  variables:
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+  script:
+    - sed -i 's|\[glib-2\.0 >= [0-9.]*\]|[glib-2.0 >= 1.0]|' configure.ac
+    - ./autogen.sh --with-python=python3
+    - make -j4
+    - make check
+  artifacts:
+    when: on_failure
+    name: "gi-_${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+
+msys2-mingw32-python3:
   stage: build
   tags:
     - win32

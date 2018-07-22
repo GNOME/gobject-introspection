@@ -1,6 +1,8 @@
 FROM fedora:28
 
 RUN dnf -y install \
+    autoconf \
+    automake \
     bison \
     cairo-devel \
     cairo-gobject-devel \
@@ -20,6 +22,7 @@ RUN dnf -y install \
     glibc-headers \
     gtk-doc \
     itstool \
+    libtool \
     libXft-devel \
     libXfixes-devel \
     libattr-devel \
