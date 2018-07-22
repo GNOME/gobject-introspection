@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+import io
+import os
+import sys
+import tempfile
+import difflib
+import contextlib
+import subprocess
+
+
+@contextlib.contextmanager
+def temp_filename(*args, **kwargs):
+    fd, name = tempfile.mkstemp(*args, **kwargs)
+    try:
+        os.close(fd)
+        yield name
+    finally:
+        os.unlink(name)
+
+
+def main(argv):
+    # Takes a path to the gitestoffsets binary
+
+    assert len(argv) == 2
+
+    gitestoffsets = argv[1]
+
+    with temp_filename(suffix=".compiled") as compiled_name, \
+            temp_filename(suffix=".introspected") as introspected_name:
+
+        subprocess.check_call(
+            [gitestoffsets, compiled_name, introspected_name])
+
+        with io.open(compiled_name, encoding="utf-8") as compiled, \
+                io.open(introspected_name, encoding="utf-8") as introspected:
+
+            result = difflib.unified_diff(
+                compiled.readlines(), introspected.readlines(),
+                fromfile=compiled_name, tofile=introspected_name)
+            result = "".join(result)
+            if result:
+                raise SystemExit(result)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
