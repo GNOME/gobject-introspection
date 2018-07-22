@@ -196,11 +196,18 @@ class DumpCompiler(object):
             cmd = [self._pkgconfig_cmd, '--msvc-syntax', flag]
         else:
             cmd = [self._pkgconfig_cmd, flag]
-        proc = subprocess.Popen(
-            cmd + self._packages,
-            stdout=subprocess.PIPE)
-        out, err = proc.communicate()
-        return out.decode('ascii').split()
+        try:
+            proc = subprocess.Popen(
+                cmd + self._packages,
+                stdout=subprocess.PIPE)
+        except EnvironmentError:
+            if self._compiler.check_is_msvc():
+                return u""
+            else:
+                raise
+        else:
+            out, err = proc.communicate()
+            return out.decode('ascii').split()
 
     def _compile(self, *sources):
         cflags = self._run_pkgconfig('--cflags')
