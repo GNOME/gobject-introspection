@@ -90,3 +90,15 @@ msys2-mingw32-python3:
     name: "gi-_%CI_COMMIT_REF_NAME%"
     paths:
       - _build/meson-logs
+
+vs2017-x64:
+  stage: build
+  tags:
+    - win32
+  script:
+    - .gitlab-ci/test-msvc.bat
+  artifacts:
+    when: on_failure
+    name: "gi-_%CI_COMMIT_REF_NAME%"
+    paths:
+      - _build/meson-logs
