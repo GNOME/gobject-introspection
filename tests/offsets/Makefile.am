@@ -41,7 +41,10 @@ gitestoffsets_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 gitestoffsets.c: gen-gitestoffsets offsets.h Offsets-1.0.typelib
 	$(AM_V_GEN) $(PYTHON) $(srcdir)/gen-gitestoffsets $(srcdir)/offsets.h > $@ || ( rm -f $@ && false )
 
-EXTRA_DIST += gen-gitestoffsets
+EXTRA_DIST += \
+	gen-gitestoffsets \
+	test-offsets \
+	meson.build
 BUILT_SOURCES += gitestoffsets.c
 CLEANFILES += gitestoffsets.c $(EXTRA_PROGRAMS)
 
@@ -50,7 +53,4 @@ CLEANFILES += gitestoffsets.c $(EXTRA_PROGRAMS)
 # The trailing "echo" in LOG_COMPILER is used to ignore automake passing
 # gitestoffsets as we already run this in the same command line.
 TESTS = gitestoffsets
-LOG_COMPILER = env GI_TYPELIB_PATH=:$(top_builddir) ./gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected && \
-	diff -u offsets.compiled offsets.introspected && echo
-
-CLEANFILES += offsets.compiled offsets.introspected
+LOG_COMPILER = env GI_TYPELIB_PATH=:$(top_builddir) $(PYTHON) $(srcdir)/test-offsets ./gitestoffsets$(EXEEXT) && echo
