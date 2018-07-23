@@ -4859,7 +4859,7 @@ static void gi_marshalling_tests_sub_sub_object_class_init (GIMarshallingTestsSu
 /* Interfaces */
 
 static void
-gi_marshalling_tests_interface_class_init (void *g_iface)
+gi_marshalling_tests_interface_class_init (void *g_iface, void *data)
 {
 }
 
@@ -4938,7 +4938,7 @@ gi_marshalling_tests_interface_impl_get_as_interface (GIMarshallingTestsInterfac
 }
 
 static void
-gi_marshalling_tests_interface2_class_init (void *g_iface)
+gi_marshalling_tests_interface2_class_init (void *g_iface, void *data)
 {
 }
 
@@ -4959,7 +4959,7 @@ gi_marshalling_tests_interface2_get_type (void)
 }
 
 static void
-gi_marshalling_tests_interface3_class_init (void *g_iface)
+gi_marshalling_tests_interface3_class_init (void *g_iface, void *data)
 {
 }
 
