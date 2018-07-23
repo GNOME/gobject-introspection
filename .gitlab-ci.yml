@@ -1,7 +1,7 @@
 stages:
   - build
 
-image: lazka/gobject-introspection:v1
+image: registry.gitlab.gnome.org/gnome/gobject-introspection:v1
 
 cache:
   paths:
