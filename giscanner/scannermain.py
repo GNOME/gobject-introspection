@@ -34,6 +34,7 @@ import subprocess
 import sys
 import tempfile
 import platform
+import shlex
 
 import giscanner
 from giscanner import message
@@ -382,10 +383,12 @@ see --identifier-prefix and --symbol-prefix.""")
 
 
 def create_transformer(namespace, options):
+    identifier_filter_cmd = shlex.split(options.identifier_filter_cmd)
+    symbol_filter_cmd = shlex.split(options.symbol_filter_cmd)
     transformer = Transformer(namespace,
                               accept_unprefixed=options.accept_unprefixed,
-                              identifier_filter_cmd=options.identifier_filter_cmd,
-                              symbol_filter_cmd=options.symbol_filter_cmd)
+                              identifier_filter_cmd=identifier_filter_cmd,
+                              symbol_filter_cmd=symbol_filter_cmd)
     transformer.set_include_paths(options.include_paths)
     if options.passthrough_gir or options.reparse_validate_gir:
         transformer.disable_cache()
