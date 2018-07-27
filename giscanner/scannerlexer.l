@@ -381,7 +381,7 @@ _realpath (const char *path)
    * GetFullPathNameA() here unless we already defined it, like
    * in giscanner.c.
    */
-  extern __stdcall GetFullPathNameA(const char*, int, char*, char**);
+  extern unsigned long __stdcall GetFullPathNameA(const char*, int, char*, char**);
   char *buffer;
   char dummy;
   int rc, len;
