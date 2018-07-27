@@ -677,163 +677,7 @@ static const PyMethodDef _PyGISourceScanner_methods[] = {
   { NULL, NULL, 0 }
 };
 
-
-static int calc_attrs_length(PyObject *attributes, int indent,
-			     int self_indent)
-{
-  int attr_length = 0;
-  int i;
-
-  if (indent == -1)
-    return -1;
-
-  for (i = 0; i < PyList_Size (attributes); ++i)
-    {
-      PyObject *tuple, *pyvalue;
-      PyObject *s = NULL;
-      char *attr, *value;
-      char *escaped;
-
-      tuple = PyList_GetItem (attributes, i);
-      if (PyTuple_GetItem(tuple, 1) == Py_None)
-	continue;
-
-      if (!PyArg_ParseTuple(tuple, "sO", &attr, &pyvalue))
-        return -1;
-
-      if (PyUnicode_Check(pyvalue)) {
-        s = PyUnicode_AsUTF8String(pyvalue);
-        if (!s) {
-          return -1;
-        }
-        value = PyBytes_AsString(s);
-      } else if (PyBytes_Check(pyvalue)) {
-        value = PyBytes_AsString(pyvalue);
-      } else {
-        PyErr_SetString(PyExc_TypeError,
-                        "value must be string or unicode");
-        return -1;
-      }
-
-      escaped = g_markup_escape_text (value, -1);
-      attr_length += 2 + strlen(attr) + strlen(escaped) + 2;
-      g_free(escaped);
-      Py_XDECREF(s);
-    }
-
-  return attr_length + indent + self_indent;
-}
-
-/* Hall of shame, wasted time debugging the code below
- * 20min - Johan 2009-02-19
- */
-static PyObject *
-pygi_collect_attributes (PyObject *self,
-			 PyObject *args)
-{
-  char *tag_name;
-  PyObject *attributes;
-  int indent, indent_len, i, j, self_indent;
-  char *indent_char;
-  gboolean first;
-  GString *attr_value = NULL;
-  int len;
-  PyObject *result = NULL;
-
-  if (!PyArg_ParseTuple(args, "sO!isi",
-			&tag_name, &PyList_Type, &attributes,
-			&self_indent, &indent_char,
-			&indent))
-    return NULL;
-
-  if (attributes == Py_None || !PyList_Size(attributes))
-    return PyUnicode_DecodeUTF8("", 0, "strict");
-
-  len = calc_attrs_length(attributes, indent, self_indent);
-  if (len < 0)
-    return NULL;
-  if (len > 79)
-    indent_len = self_indent + strlen(tag_name) + 1;
-  else
-    indent_len = 0;
-
-  first = TRUE;
-  attr_value = g_string_new ("");
-
-  for (i = 0; i < PyList_Size (attributes); ++i)
-    {
-      PyObject *tuple, *pyvalue;
-      PyObject *s = NULL;
-      char *attr, *value, *escaped;
-
-      tuple = PyList_GetItem (attributes, i);
-
-      if (!PyTuple_Check (tuple))
-        {
-          PyErr_SetString(PyExc_TypeError,
-                          "attribute item must be a tuple");
-	  goto out;
-        }
-
-      if (PyTuple_Size (tuple) != 2)
-        {
-          PyErr_SetString(PyExc_IndexError,
-                          "attribute item must be a tuple of length 2");
-	  goto out;
-        }
-
-      if (PyTuple_GetItem(tuple, 1) == Py_None)
-	continue;
-
-      /* this leaks, but we exit after, so */
-      if (!PyArg_ParseTuple(tuple, "sO", &attr, &pyvalue))
-	goto out;
-
-      if (PyUnicode_Check(pyvalue)) {
-        s = PyUnicode_AsUTF8String(pyvalue);
-        if (!s)
-	  goto out;
-        value = PyBytes_AsString(s);
-      } else if (PyBytes_Check(pyvalue)) {
-        value = PyBytes_AsString(pyvalue);
-      } else {
-        PyErr_SetString(PyExc_TypeError,
-                        "value must be string or unicode");
-	goto out;
-      }
-
-      if (indent_len && !first)
-	{
-	  g_string_append_c (attr_value, '\n');
-	  for (j = 0; j < indent_len; j++)
-	    g_string_append_c (attr_value, ' ');
-	}
-      g_string_append_c (attr_value, ' ');
-      g_string_append (attr_value, attr);
-      g_string_append_c (attr_value, '=');
-      g_string_append_c (attr_value, '\"');
-      escaped = g_markup_escape_text (value, -1);
-      g_string_append (attr_value, escaped);
-      g_string_append_c (attr_value, '\"');
-      if (first)
-	first = FALSE;
-      Py_XDECREF(s);
-  }
-
-  result = PyUnicode_DecodeUTF8 (attr_value->str, attr_value->len, "strict");
- out:
-  if (attr_value != NULL)
-    g_string_free (attr_value, TRUE);
-  return result;
-}
-
 /* Module */
-
-static PyMethodDef pyscanner_functions[] = {
-  { "collect_attributes",
-    (PyCFunction) pygi_collect_attributes, METH_VARARGS },
-  { NULL, NULL, 0, NULL }
-};
 
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef moduledef = {
@@ -841,7 +685,7 @@ static struct PyModuleDef moduledef = {
 	NULL, /* m_name */
 	NULL, /* m_doc */
 	0,
-	pyscanner_functions,
+	NULL,
 	NULL
 };
 #endif /* PY_MAJOR_VERSION >= 3 */
@@ -864,7 +708,7 @@ MOD_INIT(_giscanner)
     moduledef.m_name = module_name;
     m = PyModule_Create (&moduledef);
 #else
-    m = Py_InitModule (module_name, (PyMethodDef*)pyscanner_functions);
+    m = Py_InitModule (module_name, NULL);
 #endif
     d = PyModule_GetDict (m);
 

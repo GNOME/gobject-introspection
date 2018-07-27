@@ -40,10 +40,16 @@ class TestXMLWriter(unittest.TestCase):
         self.assertEqual(res, '<tag attr="utf8"/>')
 
         res = build_xml_tag('tag', [('attr', 'foo\nbar')])
-        self.assertEqual(res, '<tag attr="foo\nbar"/>')
+        self.assertEqual(res, '<tag attr="foo&#10;bar"/>')
+
+        res = build_xml_tag('tag', [('attr', 'foo\tbar')])
+        self.assertEqual(res, '<tag attr="foo&#9;bar"/>')
 
         res = build_xml_tag('tag', [('attr', '\004')])
-        self.assertEqual(res, '<tag attr="&#x4;"/>')
+        self.assertEqual(res, '<tag attr="\x04"/>')
+
+        res = build_xml_tag('tag', [('attr', 'limba1\t\034')])
+        self.assertEqual(res, '<tag attr="limba1&#9;\034"/>')
 
         res = build_xml_tag('tag', [('attr', '')])
         self.assertEqual(res, '<tag attr=""/>')
@@ -56,6 +62,9 @@ class TestXMLWriter(unittest.TestCase):
 
         res = build_xml_tag('tag', [('a', 'b'), ('c', 'd')])
         self.assertEqual(res, '<tag a="b" c="d"/>')
+
+        res = build_xml_tag('tag', [('foo', None), ('bar', 'quux')])
+        self.assertEqual(res, '<tag bar="quux"/>')
 
     def test_build_xml_tag_data(self):
         res = build_xml_tag('tag', [], b'foo')
