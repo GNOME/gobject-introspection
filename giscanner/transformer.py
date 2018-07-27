@@ -50,7 +50,7 @@ class Transformer(object):
     namespace = property(lambda self: self._namespace)
 
     def __init__(self, namespace, accept_unprefixed=False,
-                 identifier_filter_cmd='', symbol_filter_cmd=''):
+                 identifier_filter_cmd=None, symbol_filter_cmd=None):
         self._cachestore = CacheStore()
         self._accept_unprefixed = accept_unprefixed
         self._namespace = namespace
@@ -259,12 +259,11 @@ currently-scanned namespace is first."""
             proc = subprocess.Popen(self._symbol_filter_cmd,
                                     stdin=subprocess.PIPE,
                                     stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE,
-                                    shell=True)
+                                    stderr=subprocess.PIPE)
             _name = name
             proc_name, err = proc.communicate(name.encode())
             if proc.returncode:
-                raise ValueError('filter: "%s" exited: %d with error: %s' %
+                raise ValueError('filter: %r exited: %d with error: %s' %
                                  (self._symbol_filter_cmd, proc.returncode, err))
             name = proc_name.decode('ascii')
             name = name.strip()
@@ -326,11 +325,10 @@ raise ValueError."""
             proc = subprocess.Popen(self._identifier_filter_cmd,
                                     stdin=subprocess.PIPE,
                                     stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE,
-                                    shell=True)
+                                    stderr=subprocess.PIPE)
             proc_ident, err = proc.communicate(ident.encode())
             if proc.returncode:
-                raise ValueError('filter: "%s" exited: %d with error: %s' %
+                raise ValueError('filter: %r exited: %d with error: %s' %
                                  (self._identifier_filter_cmd, proc.returncode, err))
             ident = proc_ident.decode('ascii').strip()
 

@@ -42,16 +42,15 @@ def load_namespace_from_source_string(namespace, source):
 
 class TestIdentifierFilter(unittest.TestCase):
     def test_underscore_t_identifier_filter(self):
-        cmd = textwrap.dedent(r"""
-              python -c '
-              import sys, re
-              for line in sys.stdin:
-                  line = re.sub(r"^test_t$", "TestContext", line)
-                  line = re.sub(r"_t$", "", line)
-                  line = re.sub(r"^test_", "Test_", line)
-                  line = re.sub(r"_([a-z])", lambda m: m.group(1).title(),
-                                line)
-                  sys.stdout.write(line)'""")
+        cmd = [sys.executable, '-c', textwrap.dedent("""
+            import sys, re
+            for line in sys.stdin:
+                line = re.sub(r"^test_t$", "TestContext", line)
+                line = re.sub(r"_t$", "", line)
+                line = re.sub(r"^test_", "Test_", line)
+                line = re.sub(r"_([a-z])", lambda m: m.group(1).title(),
+                              line)
+                sys.stdout.write(line)""")]
 
         namespace = ast.Namespace('Test', '1.0')
         xformer = Transformer(namespace, identifier_filter_cmd=cmd)
@@ -63,16 +62,29 @@ class TestIdentifierFilter(unittest.TestCase):
         self.assertEqual(xformer.strip_identifier('test_foo_tart'), 'FooTart')
 
     def test_invalid_command(self):
-        cmd = r'this-is-not-a-real-command'
+        cmd = ['this-is-not-a-real-command']
+        namespace = ast.Namespace('Test', '1.0')
+        xformer = Transformer(namespace, identifier_filter_cmd=cmd)
+        self.assertRaises(OSError, xformer.strip_identifier, 'test_t')
+
+    def test_invalid_argument(self):
+        cmd = [sys.executable, '--not-a-valid-argument']
         namespace = ast.Namespace('Test', '1.0')
         xformer = Transformer(namespace, identifier_filter_cmd=cmd)
         self.assertRaises(ValueError, xformer.strip_identifier, 'test_t')
 
-    def test_invalid_argument(self):
-        cmd = r'sed --not-a-valid-argument'
+
+class TestSymbolFilter(unittest.TestCase):
+
+    def test_split_csymbol(self):
+        cmd = [
+            sys.executable, '-c',
+            'import sys; sys.stdout.write("test_" + sys.stdin.read())']
         namespace = ast.Namespace('Test', '1.0')
-        xformer = Transformer(namespace, identifier_filter_cmd=cmd)
-        self.assertRaises(ValueError, xformer.strip_identifier, 'test_t')
+        xformer = Transformer(namespace, symbol_filter_cmd=cmd)
+
+        self.assertEqual(
+            xformer.split_csymbol('foo_bar_quux')[1], "foo_bar_quux")
 
 
 class TestStructTypedefs(unittest.TestCase):
