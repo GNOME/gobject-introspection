@@ -149,27 +149,3 @@ class XMLWriter(object):
             yield
         finally:
             self.pop_tag()
-
-
-def test():
-    w = XMLWriter()
-    w.push_tag('repository')
-    w.push_tag('namespace')
-    w.push_tag('enumeration')
-    w.push_tag('member',
-               [('name', 'west'),
-                ('value', '7'),
-                ('c:identifier', 'GTK_ANCHOR_WEST'),
-                ('glib:nick', 'west')])
-
-    w.pop_tag()
-    w.pop_tag()
-    w.pop_tag()
-    x = w.get_xml()
-    lines = x.split('\n')
-    import pprint
-    pprint.pprint(lines)
-    assert len(lines[3]) < 80, len(lines[3])
-
-if __name__ == '__main__':
-    test()

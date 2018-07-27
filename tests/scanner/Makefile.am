@@ -231,7 +231,8 @@ endif
 PYTESTS = \
 	test_shlibs.py \
 	test_sourcescanner.py \
-	test_transformer.py
+	test_transformer.py \
+	test_xmlwriter.py
 
 TESTS = $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS) $(PYTESTS)
 TESTS_ENVIRONMENT = env srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddir) top_builddir=$(top_builddir) \
