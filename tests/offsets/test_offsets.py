@@ -20,7 +20,8 @@ def temp_filename(*args, **kwargs):
 class TestOffsets(unittest.TestCase):
 
     def test_main(self):
-        gitestoffsets = os.path.join(os.environ["builddir"], "gitestoffsets")
+        exe = ".exe" if os.name == "nt" else ""
+        gitestoffsets = os.path.join(os.environ["builddir"], "gitestoffsets" + exe)
 
         env = os.environ.copy()
         env["GI_TYPELIB_PATH"] = os.pathsep.join(
