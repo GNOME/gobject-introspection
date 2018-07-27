@@ -64,7 +64,7 @@ AC_DEFUN([AM_CHECK_PYTHON_LIBS],
 AC_MSG_CHECKING(for libraries required to link against libpython)
 dnl deduce PYTHON_LIBS
 if test "x$PYTHON_LIBS" = x; then
-	PYTHON_LIBS=`$PYTHON-config --ldflags --libs`
+	PYTHON_LIBS=`$PYTHON-config --ldflags`
 fi
 AC_SUBST(PYTHON_LIBS)
 dnl check if libpython exist:
