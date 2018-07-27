@@ -25,10 +25,6 @@
 #include <Python.h>
 #include "sourcescanner.h"
 
-#ifdef G_OS_WIN32
-#define USE_WINDOWS
-#endif
-
 #ifdef _WIN32
 #include <fcntl.h>
 #include <io.h>
