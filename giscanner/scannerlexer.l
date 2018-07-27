@@ -40,10 +40,6 @@
 #include "sourcescanner.h"
 #include "scannerparser.h"
 
-#ifdef USE_WINDOWS
-#include <windows.h>
-#endif
-
 int lineno;
 char linebuf[2000];
 
@@ -385,9 +381,7 @@ _realpath (const char *path)
    * GetFullPathNameA() here unless we already defined it, like
    * in giscanner.c.
    */
-#ifndef USE_WINDOWS
   extern __stdcall GetFullPathNameA(const char*, int, char*, char**);
-#endif
   char *buffer;
   char dummy;
   int rc, len;
