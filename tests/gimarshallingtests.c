@@ -5371,11 +5371,15 @@ gi_marshalling_tests_properties_object_finalize (GObject *obj)
   GIMarshallingTestsPropertiesObject *self;
   self = GI_MARSHALLING_TESTS_PROPERTIES_OBJECT (obj);
 
+  if (self->some_gvalue) {
+    g_boxed_free (G_TYPE_VALUE, self->some_gvalue);
+    self->some_gvalue = NULL;
+  }
+
   g_clear_pointer (&self->some_strv, g_strfreev);
   g_clear_pointer (&self->some_boxed_struct, gi_marshalling_tests_boxed_struct_free);
   g_clear_pointer (&self->some_variant, g_variant_unref);
   g_clear_pointer (&self->some_boxed_glist, g_list_free);
-  g_clear_pointer (&self->some_gvalue, g_boxed_free);
   g_clear_object (&self->some_object);
 
   G_OBJECT_CLASS (gi_marshalling_tests_properties_object_parent_class)->finalize (obj);
