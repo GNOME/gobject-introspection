@@ -48,6 +48,7 @@ fedora-x86_64-autotools-python2:
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+    CFLAGS: "-Werror"
   script:
     - sed -i 's|\[glib-2\.0 >= [0-9.]*\]|[glib-2.0 >= 1.0]|' configure.ac
     - ./autogen.sh --with-python=python2
@@ -64,6 +65,7 @@ fedora-x86_64-autotools-python3:
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+    CFLAGS: "-Werror"
   script:
     - sed -i 's|\[glib-2\.0 >= [0-9.]*\]|[glib-2.0 >= 1.0]|' configure.ac
     - ./autogen.sh --with-python=python3

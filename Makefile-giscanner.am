@@ -23,7 +23,8 @@ libgiscanner_la_SOURCES = \
 	giscanner/scannerparser.y
 libgiscanner_la_CPPFLAGS = -I$(top_srcdir)/girepository -I$(top_srcdir)/giscanner
 libgiscanner_la_LIBADD = $(GOBJECT_LIBS) $(GIO_LIBS)
-libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS) $(GIO_CFLAGS)
+libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS) $(GIO_CFLAGS) $(WARN_CFLAGS)
+libgiscanner_la_LDFLAGS = $(WARN_LDFLAGS)
 
 # Python module
 pkgpyexecdir = $(pkglibdir)/giscanner
@@ -109,10 +110,12 @@ nobase_dist_template_DATA =		\
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \
 	$(GOBJECT_CFLAGS) \
+	$(WARN_CFLAGS) \
 	-I$(top_srcdir)/giscanner
 _giscanner_la_LIBADD = libgiscanner.la $(GOBJECT_LIBS)
 
 _giscanner_la_LDFLAGS = \
+	$(WARN_LDFLAGS) \
 	-module -avoid-version \
 	-export-symbols-regex "init_giscanner|PyInit__giscanner"
 

@@ -25,7 +25,8 @@ g-ir-doc-tool: tools/g-ir-tool-template.in _giscanner.la Makefile
 
 g_ir_compiler_SOURCES = tools/compiler.c
 g_ir_compiler_CPPFLAGS = -I$(top_srcdir)/girepository
-g_ir_compiler_CFLAGS = $(GIO_CFLAGS)
+g_ir_compiler_CFLAGS = $(GIO_CFLAGS) $(WARN_CFLAGS)
+g_ir_compiler_LDFLAGS = $(WARN_LDFLAGS)
 g_ir_compiler_LDADD = \
 	libgirepository-internals.la	\
 	libgirepository-1.0.la		\
@@ -33,14 +34,16 @@ g_ir_compiler_LDADD = \
 
 g_ir_generate_SOURCES = tools/generate.c
 g_ir_generate_CPPFLAGS = -I$(top_srcdir)/girepository
-g_ir_generate_CFLAGS = $(GIO_CFLAGS)
+g_ir_generate_CFLAGS = $(GIO_CFLAGS) $(WARN_CFLAGS)
+g_ir_generate_LDFLAGS = $(WARN_LDFLAGS)
 g_ir_generate_LDADD = \
 	libgirepository-internals.la	\
 	libgirepository-1.0.la		\
 	$(GIREPO_LIBS)
 
 g_ir_inspect_SOURCES = tools/g-ir-inspect.c
-g_ir_inspect_CFLAGS = $(GIO_CFLAGS) -I$(top_srcdir)/girepository
+g_ir_inspect_CFLAGS = $(GIO_CFLAGS)  $(WARN_CFLAGS) -I$(top_srcdir)/girepository
+g_ir_inspect_LDFLAGS = $(WARN_LDFLAGS)
 g_ir_inspect_LDADD = \
         libgirepository-1.0.la	\
         $(GIREPO_LIBS)
