@@ -2,6 +2,7 @@ FROM fedora:28
 
 RUN dnf -y install \
     autoconf \
+    autoconf-archive \
     automake \
     bison \
     cairo-devel \
