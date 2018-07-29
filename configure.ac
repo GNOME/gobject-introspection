@@ -66,7 +66,6 @@ AX_COMPILER_FLAGS(,, [yes])
 AX_APPEND_COMPILE_FLAGS([-Wno-duplicated-branches -Wno-switch-enum])
 # FIXME: Fix the warnings and remove the flags
 AX_APPEND_COMPILE_FLAGS([-Wno-redundant-decls -Wno-switch-default -Wno-deprecated-declarations -Wno-type-limits])
-AX_APPEND_COMPILE_FLAGS([-Wno-implicit-fallthrough])
 
 WARN_CFLAGS_PYTHON="$WARN_CFLAGS"
 AX_APPEND_COMPILE_FLAGS([-Wno-discarded-qualifiers], [WARN_CFLAGS_PYTHON])
