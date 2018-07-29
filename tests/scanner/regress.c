@@ -2137,7 +2137,7 @@ regress_test_obj_set_property (GObject      *object,
     case PROP_TEST_OBJ_LIST_OLD:
       g_list_free_full (self->list, g_free);
       list = g_value_get_pointer (value);
-      self->list = g_list_copy_deep (list, (GCopyFunc) g_strdup, NULL);
+      self->list = g_list_copy_deep (list, (GCopyFunc) (void *) g_strdup, NULL);
       break;
 
     case PROP_TEST_OBJ_INT:
