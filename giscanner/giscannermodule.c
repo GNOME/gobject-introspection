@@ -495,7 +495,7 @@ pygi_source_scanner_set_macro_scan (PyGISourceScanner *self,
 }
 
 static PyObject *
-pygi_source_scanner_get_symbols (PyGISourceScanner *self)
+pygi_source_scanner_get_symbols (PyGISourceScanner *self, PyObject *unused)
 {
   GSList *l, *symbols;
   PyObject *list;
@@ -516,7 +516,7 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
 }
 
 static PyObject *
-pygi_source_scanner_get_comments (PyGISourceScanner *self)
+pygi_source_scanner_get_comments (PyGISourceScanner *self, PyObject *unused)
 {
   GSList *l, *comments;
   PyObject *list;

@@ -466,6 +466,12 @@ regress_foo_dbus_data_get_type (void)
   return our_type;
 }
 
+static RegressFooBRect *
+regress_foo_brect_copy (const RegressFooBRect *boxed)
+{
+  return (RegressFooBRect *)g_memdup (boxed, sizeof (RegressFooBRect));
+}
+
 GType
 regress_foo_brect_get_type (void)
 {
@@ -473,9 +479,15 @@ regress_foo_brect_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("RegressFooBRect",
-					     (GBoxedCopyFunc) g_memdup, /* Won't work */
+					     (GBoxedCopyFunc) regress_foo_brect_copy,
 					     (GBoxedFreeFunc) g_free);
   return our_type;
+}
+
+static RegressFooBUnion *
+regress_foo_bunion_copy (const RegressFooBUnion *boxed)
+{
+  return (RegressFooBUnion *)g_memdup (boxed, sizeof (RegressFooBUnion));
 }
 
 GType
@@ -485,7 +497,7 @@ regress_foo_bunion_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("RegressFooBUnion",
-					     (GBoxedCopyFunc) g_memdup, /* Won't work */
+					     (GBoxedCopyFunc) regress_foo_bunion_copy,
 					     (GBoxedFreeFunc) g_free);
   return our_type;
 }

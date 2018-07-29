@@ -39,7 +39,7 @@ void
 ctype_free (GISourceType * type)
 {
   g_free (type->name);
-  g_list_foreach (type->child_list, (GFunc)gi_source_symbol_unref, NULL);
+  g_list_foreach (type->child_list, (GFunc)(void *)gi_source_symbol_unref, NULL);
   g_list_free (type->child_list);
   g_slice_free (GISourceType, type);
 }
@@ -242,9 +242,9 @@ gi_source_scanner_free (GISourceScanner *scanner)
   g_hash_table_destroy (scanner->typedef_table);
   g_hash_table_destroy (scanner->const_table);
 
-  g_slist_foreach (scanner->comments, (GFunc)gi_source_comment_free, NULL);
+  g_slist_foreach (scanner->comments, (GFunc)(void *)gi_source_comment_free, NULL);
   g_slist_free (scanner->comments);
-  g_slist_foreach (scanner->symbols, (GFunc)gi_source_symbol_unref, NULL);
+  g_slist_foreach (scanner->symbols, (GFunc)(void *)gi_source_symbol_unref, NULL);
   g_slist_free (scanner->symbols);
 
   g_hash_table_unref (scanner->files);
