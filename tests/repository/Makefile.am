@@ -1,5 +1,5 @@
-AM_CFLAGS = $(GOBJECT_CFLAGS)
-AM_LDFLAGS = -module -avoid-version
+AM_CFLAGS = $(WARN_CFLAGS) $(GOBJECT_CFLAGS)
+AM_LDFLAGS = $(WARN_LDFLAGS) -module -avoid-version
 LIBS = $(GOBJECT_LIBS)
 
 EXTRA_PROGRAMS = gitestrepo giteststructinfo gitestthrows gitypelibtest

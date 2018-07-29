@@ -6,9 +6,6 @@ EXTRA_DIST=
 BUILT_SOURCES=
 CLEANFILES=
 
-AM_CFLAGS = $(GOBJECT_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS) -I$(srcdir)
-LIBADD = $(GOBJECT_LIBS)
-
 testsdir = $(datadir)/gobject-introspection-1.0/tests
 tests_DATA =		    \
     everything.c	    \
@@ -20,7 +17,14 @@ tests_DATA =		    \
 EXTRA_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
 
 libeverything_1_0_la_SOURCES = everything.c
+libeverything_1_0_la_CFLAGS = $(GOBJECT_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS) $(WARN_CFLAGS) -I$(srcdir)
+libeverything_1_0_la_LDFLAGS = $(WARN_LDFLAGS)
+libeverything_1_0_la_LIBADD = $(GOBJECT_LIBS)
+
 libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
+libgimarshallingtests_1_0_la_CFLAGS = $(GOBJECT_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS) $(WARN_CFLAGS) -I$(srcdir)
+libgimarshallingtests_1_0_la_LDFLAGS = $(WARN_LDFLAGS)
+libgimarshallingtests_1_0_la_LIBADD = $(GOBJECT_LIBS)
 
 EXTRA_DIST += \
 	gimarshallingtests.h \
