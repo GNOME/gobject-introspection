@@ -59,29 +59,14 @@ if test "$YACC" = :; then
 	AC_MSG_ERROR([bison not found but required])
 fi
 
-
-changequote(,)dnl
-ensureflag() {
-  flag="$1"; shift
-  result="$@"
-
-  case " ${result} " in
-  *[\ \	]${flag}[\ \	]*) ;;
-  *) result="${flag} ${result}" ;;
-  esac
-
-  echo ${result}
-}
-changequote([,])dnl
-
-if test "$GCC" = "yes"; then
-    for flag in -Wall -Wchar-subscripts -Wmissing-declarations \
-        -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wcast-align \
-        -Wsign-compare -fno-strict-aliasing;
-    do
-        CFLAGS="$(ensureflag $flag $CFLAGS)"
-    done
-fi
+# Default compiler warnings
+m4_ifndef([AX_COMPILER_FLAGS], [AC_MSG_ERROR(['autoconf-archive' missing])])
+AX_COMPILER_FLAGS(,, [yes])
+# These get triggered a lot, not worth it imo, but feel free to fix them
+AX_APPEND_COMPILE_FLAGS([-Wno-discarded-qualifiers -Wno-switch-enum])
+# FIXME: Fix the warnings and remove the flags
+AX_APPEND_COMPILE_FLAGS([-Wno-redundant-decls -Wno-switch-default -Wno-shadow -Wno-deprecated-declarations -Wno-cast-function-type -Wno-type-limits])
+AX_APPEND_COMPILE_FLAGS([-Wno-duplicated-branches -Wno-implicit-fallthrough])
 
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen])

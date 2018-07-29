@@ -32,10 +32,12 @@ noinst_LTLIBRARIES += libgirepository-internals.la libgirepository-gthash.la
 libgirepository_gthash_la_SOURCES =				\
 	girepository/gthash.c
 libgirepository_gthash_la_CFLAGS =	\
+	$(WARN_CFLAGS) \
 	$(GIREPO_CFLAGS)	\
 	$(GI_HIDDEN_VISIBILITY_CFLAGS)	\
 	-I$(top_srcdir)/girepository
-
+libgirepository_gthash_la_LDFLAGS =	\
+	$(WARN_LDFLAGS)
 libgirepository_gthash_la_LIBADD = libcmph.la $(GIREPO_LIBS)
 
 libgirepository_internals_la_SOURCES =				\
@@ -50,9 +52,13 @@ libgirepository_internals_la_SOURCES =				\
 	girepository/girwriter.h
 
 libgirepository_internals_la_CFLAGS =	\
+	$(WARN_CFLAGS) \
 	$(GIREPO_CFLAGS)	\
 	$(GI_HIDDEN_VISIBILITY_CFLAGS)	\
 	-I$(top_srcdir)/girepository
+
+libgirepository_internals_la_LDFLAGS = \
+	$(WARN_LDFLAGS)
 
 libgirepository_internals_la_LIBADD = libgirepository-gthash.la $(GIREPO_LIBS)
 
@@ -83,12 +89,14 @@ libgirepository_1_0_la_SOURCES =			\
 	girepository/givfuncinfo.c
 
 libgirepository_1_0_la_CPPFLAGS =	\
+	$(WARN_CFLAGS) \
 	$(GIREPO_CFLAGS)	\
 	$(GI_HIDDEN_VISIBILITY_CFLAGS)	\
 	-I$(top_srcdir)/girepository	\
 	-DG_IREPOSITORY_COMPILATION
 libgirepository_1_0_la_LIBADD = libgirepository-gthash.la $(GIREPO_LIBS)
 libgirepository_1_0_la_LDFLAGS = \
+	$(WARN_LDFLAGS) \
 	$(EXTRA_LINK_FLAGS) \
 	-no-undefined -version-number 1:0:0
 
@@ -99,7 +107,8 @@ if !OS_WIN32
 noinst_PROGRAMS += gi-dump-types
 
 gi_dump_types_SOURCES = girepository/gdump.c girepository/gi-dump-types.c
-gi_dump_types_CFLAGS = $(GIO_UNIX_CFLAGS) $(GMODULE_CFLAGS)
+gi_dump_types_CFLAGS = $(GIO_UNIX_CFLAGS) $(GMODULE_CFLAGS) $(WARN_CFLAGS)
+gi_dump_types_LDFLAGS = $(WARN_LDFLAGS)
 gi_dump_types_LDADD = $(GIO_UNIX_LIBS) $(GMODULE_LIBS)
 endif
 
