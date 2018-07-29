@@ -63,11 +63,15 @@ fi
 m4_ifndef([AX_COMPILER_FLAGS], [AC_MSG_ERROR(['autoconf-archive' missing])])
 AX_COMPILER_FLAGS(,, [yes])
 # These get triggered a lot, not worth it imo, but feel free to fix them
-AX_APPEND_COMPILE_FLAGS([-Wno-discarded-qualifiers -Wno-duplicated-branches -Wno-switch-enum])
+AX_APPEND_COMPILE_FLAGS([-Wno-duplicated-branches -Wno-switch-enum])
 # FIXME: Fix the warnings and remove the flags
 AX_APPEND_COMPILE_FLAGS([-Wno-redundant-decls -Wno-switch-default -Wno-shadow -Wno-deprecated-declarations -Wno-cast-function-type -Wno-type-limits])
 AX_APPEND_COMPILE_FLAGS([-Wno-implicit-fallthrough -Wno-suggest-attribute=format -Wno-double-promotion -Wno-sign-compare])
 AX_APPEND_COMPILE_FLAGS([-Wno-incompatible-pointer-types])
+
+WARN_CFLAGS_PYTHON="$WARN_CFLAGS"
+AX_APPEND_COMPILE_FLAGS([-Wno-discarded-qualifiers], [WARN_CFLAGS_PYTHON])
+AC_SUBST(WARN_CFLAGS_PYTHON)
 
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen])

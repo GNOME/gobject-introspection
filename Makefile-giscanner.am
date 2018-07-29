@@ -110,7 +110,7 @@ nobase_dist_template_DATA =		\
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \
 	$(GOBJECT_CFLAGS) \
-	$(WARN_CFLAGS) \
+	$(WARN_CFLAGS_PYTHON) \
 	-I$(top_srcdir)/giscanner
 _giscanner_la_LIBADD = libgiscanner.la $(GOBJECT_LIBS)
 

@@ -816,7 +816,7 @@ regress_annotation_space_after_comment_bug631690 (void)
 gchar*
 regress_annotation_return_filename (void)
 {
-  return "a utf-8 filename";
+  return g_strdup ("a utf-8 filename");
 }
 
 /**
