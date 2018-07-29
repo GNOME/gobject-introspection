@@ -74,7 +74,8 @@ TESTS += cmph-bdz-test
 EXTRA_PROGRAMS += cmph-bdz-test
 
 cmph_bdz_test_SOURCES = girepository/cmph-bdz-test.c
-cmph_bdz_test_CFLAGS = -I$(top_srcdir)/girepository/cmph $(GOBJECT_CFLAGS)
+cmph_bdz_test_CFLAGS = -I$(top_srcdir)/girepository/cmph $(GOBJECT_CFLAGS) $(WARN_CFLAGS)
+cmph_bdz_test_LDFLAGS = $(WARN_LDFLAGS)
 cmph_bdz_test_LDADD = libcmph.la $(GOBJECT_LIBS)
 
 CLEANFILES += cmph-bdz-test libcmph.la
