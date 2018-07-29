@@ -400,7 +400,7 @@ regress_annotation_object_get_objects (RegressAnnotationObject *object)
 GObject*
 regress_annotation_object_create_object (RegressAnnotationObject *object)
 {
-  return g_object_ref (object);
+  return G_OBJECT (g_object_ref (object));
 }
 
 /**
