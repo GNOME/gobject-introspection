@@ -65,14 +65,14 @@ AX_COMPILER_FLAGS(,, [yes])
 # These get triggered a lot, not worth it imo, but feel free to fix them
 AX_APPEND_COMPILE_FLAGS([-Wno-duplicated-branches -Wno-switch-enum])
 # FIXME: Fix the warnings and remove the flags
-AX_APPEND_COMPILE_FLAGS([-Wno-redundant-decls -Wno-switch-default -Wno-deprecated-declarations])
+AX_APPEND_COMPILE_FLAGS([-Wno-redundant-decls -Wno-deprecated-declarations])
 
 WARN_CFLAGS_PYTHON="$WARN_CFLAGS"
 AX_APPEND_COMPILE_FLAGS([-Wno-discarded-qualifiers], [WARN_CFLAGS_PYTHON])
 AC_SUBST(WARN_CFLAGS_PYTHON)
 
 WARN_CFLAGS_FLEX="$WARN_CFLAGS"
-AX_APPEND_COMPILE_FLAGS([-Wno-sign-compare], [WARN_CFLAGS_FLEX])
+AX_APPEND_COMPILE_FLAGS([-Wno-sign-compare -Wno-switch-default], [WARN_CFLAGS_FLEX])
 AC_SUBST(WARN_CFLAGS_FLEX)
 
 # Checks for libraries.
