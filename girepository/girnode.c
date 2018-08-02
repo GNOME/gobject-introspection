@@ -923,6 +923,8 @@ _g_ir_node_can_have_member (GIrNode    *node)
     case G_IR_NODE_FIELD:
     case G_IR_NODE_XREF:
       return FALSE;
+    default:
+      g_assert_not_reached ();
     };
   return FALSE;
 }
@@ -1182,14 +1184,14 @@ get_index_of_member_type (GIrNodeInterface *node,
 
   for (l = node->members; l; l = l->next)
     {
-      GIrNode *node = l->data;
+      GIrNode *member_node = l->data;
 
-      if (node->type != type)
+      if (member_node->type != type)
         continue;
 
       index++;
 
-      if (strcmp (node->name, name) == 0)
+      if (strcmp (member_node->name, name) == 0)
         break;
     }
 
@@ -1543,13 +1545,13 @@ _g_ir_node_build_typelib (GIrNode         *node,
 
 		  case GI_TYPE_TAG_ERROR:
 		    {
-		      ErrorTypeBlob *blob = (ErrorTypeBlob *)&data[*offset2];
+		      ErrorTypeBlob *error_blob = (ErrorTypeBlob *)&data[*offset2];
 
-		      blob->pointer = 1;
-		      blob->reserved = 0;
-		      blob->tag = type->tag;
-		      blob->reserved2 = 0;
-		      blob->n_domains = 0;
+		      error_blob->pointer = 1;
+		      error_blob->reserved = 0;
+		      error_blob->tag = type->tag;
+		      error_blob->reserved2 = 0;
+		      error_blob->n_domains = 0;
 
 		      *offset2 += sizeof (ErrorTypeBlob);
 		    }
@@ -2305,6 +2307,8 @@ _g_ir_node_build_typelib (GIrNode         *node,
 	    blob->size = strlen (constant->value) + 1;
 	    memcpy (&data[blob->offset], constant->value, blob->size);
 	    break;
+	  default:
+	    g_assert_not_reached ();
 	  }
 	*offset2 += ALIGN_VALUE (blob->size, 4);
 

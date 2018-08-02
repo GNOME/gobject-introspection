@@ -10,7 +10,6 @@ int regress_foo_init_argv (int argc, char **argv);
 int regress_foo_init_argv_address (int *argc, char ***argv);
 void regress_foo_private_function (RegressFooObject *regress_foo);
 void regress_foo_test_unsigned (unsigned int uint);
-void regress_foo_interface_do_regress_foo (RegressFooInterface *self, int x);
 void regress_foo_do_regress_foo (RegressFooInterface *self, int x);
 int regress_foo_enum_method (RegressFooEnumType regress_foo_enum);
 RegressFooHidden * regress_foo_hidden_copy (const RegressFooHidden *boxed);
@@ -466,6 +465,12 @@ regress_foo_dbus_data_get_type (void)
   return our_type;
 }
 
+static RegressFooBRect *
+regress_foo_brect_copy (const RegressFooBRect *boxed)
+{
+  return (RegressFooBRect *)g_memdup (boxed, sizeof (RegressFooBRect));
+}
+
 GType
 regress_foo_brect_get_type (void)
 {
@@ -473,9 +478,15 @@ regress_foo_brect_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("RegressFooBRect",
-					     (GBoxedCopyFunc) g_memdup, /* Won't work */
+					     (GBoxedCopyFunc) regress_foo_brect_copy,
 					     (GBoxedFreeFunc) g_free);
   return our_type;
+}
+
+static RegressFooBUnion *
+regress_foo_bunion_copy (const RegressFooBUnion *boxed)
+{
+  return (RegressFooBUnion *)g_memdup (boxed, sizeof (RegressFooBUnion));
 }
 
 GType
@@ -485,7 +496,7 @@ regress_foo_bunion_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("RegressFooBUnion",
-					     (GBoxedCopyFunc) g_memdup, /* Won't work */
+					     (GBoxedCopyFunc) regress_foo_bunion_copy,
 					     (GBoxedFreeFunc) g_free);
   return our_type;
 }

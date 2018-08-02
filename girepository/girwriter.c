@@ -62,6 +62,9 @@ xml_element_free (XmlElement *elem)
 }
 
 static void
+xml_printf (Xml *xml, const char *fmt, ...) G_GNUC_PRINTF (2, 3);
+
+static void
 xml_printf (Xml *xml, const char *fmt, ...)
 {
   va_list ap;
@@ -237,7 +240,7 @@ write_type_info (const gchar *namespace,
   else if (tag == GI_TYPE_TAG_ARRAY)
     {
       gint length, size;
-      char *name = NULL;
+      const char *name = NULL;
 
       xml_start_element (file, "array");
 
@@ -502,6 +505,8 @@ write_callable_info (const gchar    *namespace,
 	case GI_DIRECTION_INOUT:
 	  xml_printf (file, " direction=\"inout\"");
 	  break;
+	default:
+	  g_assert_not_reached ();
 	}
 
       if (g_arg_info_may_be_null (arg))
@@ -526,6 +531,8 @@ write_callable_info (const gchar    *namespace,
         case GI_SCOPE_TYPE_NOTIFIED:
           xml_printf (file, " scope=\"notified\"");
           break;
+        default:
+          g_assert_not_reached ();
         }
 
       if (g_arg_info_get_closure (arg) >= 0)
@@ -748,7 +755,7 @@ write_constant_value (const gchar *namespace,
       xml_printf (file, "%" G_GUINT64_FORMAT, value->v_uint64);
       break;
     case GI_TYPE_TAG_FLOAT:
-      xml_printf (file, "%f", value->v_float);
+      xml_printf (file, "%f", (double)value->v_float);
       break;
     case GI_TYPE_TAG_DOUBLE:
       xml_printf (file, "%f", value->v_double);

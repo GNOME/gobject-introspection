@@ -197,7 +197,7 @@ GIRepository-2.0.gir: GObject-2.0.gir libgirepository-1.0.la
 
 GIRepository_2_0_gir_LIBS = libgirepository-1.0.la
 GIRepository_2_0_gir_SCANNERFLAGS = \
-	--warn-all \
+        $(WARN_SCANNERFLAGS) \
         --identifier-prefix=GI \
         --symbol-prefix=g \
         --c-include="girepository.h" \

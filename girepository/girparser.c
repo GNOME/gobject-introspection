@@ -2761,7 +2761,6 @@ start_element_handler (GMarkupParseContext *context,
 		       GError             **error)
 {
   ParseContext *ctx = user_data;
-  gint line_number, char_number;
 
   if (logged_levels & G_LOG_LEVEL_DEBUG)
     {
@@ -3093,10 +3092,13 @@ start_element_handler (GMarkupParseContext *context,
 		      ctx, error))
 	goto out;
       break;
+    default:
+      break;
     }
 
   if (*error == NULL && ctx->state != STATE_PASSTHROUGH)
     {
+      gint line_number, char_number;
       g_markup_parse_context_get_position (context, &line_number, &char_number);
       if (!g_str_has_prefix (element_name, "c:"))
 	g_printerr ("%s:%d:%d: warning: element %s from state %d is unknown, ignoring\n",
@@ -3108,6 +3110,7 @@ start_element_handler (GMarkupParseContext *context,
  out:
   if (*error)
     {
+      gint line_number, char_number;
       g_markup_parse_context_get_position (context, &line_number, &char_number);
 
       g_printerr ("%s:%d:%d: error: %s\n", ctx->file_path, line_number, char_number, (*error)->message);
@@ -3478,8 +3481,8 @@ end_element_handler (GMarkupParseContext *context,
 	  (strcmp ("varargs", element_name) == 0))
 	{
 	  end_type (ctx);
-	  break;
 	}
+      break;
     case STATE_ATTRIBUTE:
       if (strcmp ("attribute", element_name) == 0)
         {

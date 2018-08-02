@@ -400,7 +400,7 @@ regress_annotation_object_get_objects (RegressAnnotationObject *object)
 GObject*
 regress_annotation_object_create_object (RegressAnnotationObject *object)
 {
-  return g_object_ref (object);
+  return G_OBJECT (g_object_ref (object));
 }
 
 /**
@@ -816,7 +816,7 @@ regress_annotation_space_after_comment_bug631690 (void)
 gchar*
 regress_annotation_return_filename (void)
 {
-  return "a utf-8 filename";
+  return g_strdup ("a utf-8 filename");
 }
 
 /**

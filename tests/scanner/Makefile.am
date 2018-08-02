@@ -22,10 +22,10 @@ CLEANFILES += $(EXTRA_LTLIBRARIES)
 
 GI_SCANNER_CFLAGS = -I$(top_srcdir)/tests
 AM_CPPFLAGS = -I$(top_srcdir)/girepository
-AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS) $(GI_SCANNER_CFLAGS)
+AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS) $(GI_HIDDEN_VISIBILITY_CFLAGS) $(GI_SCANNER_CFLAGS) $(WARN_CFLAGS)
 # -rpath needed to force libtool to build a shared library for a check_LTLIBRARIES
 # target. See http://lists.gnu.org/archive/html/automake/2005-10/msg00107.html
-AM_LDFLAGS = -rpath /unused -avoid-version
+AM_LDFLAGS = $(WARN_LDFLAGS) -rpath /unused -avoid-version
 LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
 
 libsletter_la_SOURCES = sletter.c sletter.h

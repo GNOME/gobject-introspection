@@ -59,29 +59,19 @@ if test "$YACC" = :; then
 	AC_MSG_ERROR([bison not found but required])
 fi
 
+# Default compiler warnings
+m4_ifndef([AX_COMPILER_FLAGS], [AC_MSG_ERROR(['autoconf-archive' missing])])
+AX_COMPILER_FLAGS(,, [yes])
+# These get triggered a lot, not worth it imo, but feel free to fix them
+AX_APPEND_COMPILE_FLAGS([-Wno-duplicated-branches -Wno-switch-enum])
 
-changequote(,)dnl
-ensureflag() {
-  flag="$1"; shift
-  result="$@"
+WARN_CFLAGS_PYTHON="$WARN_CFLAGS"
+AX_APPEND_COMPILE_FLAGS([-Wno-discarded-qualifiers], [WARN_CFLAGS_PYTHON])
+AC_SUBST(WARN_CFLAGS_PYTHON)
 
-  case " ${result} " in
-  *[\ \	]${flag}[\ \	]*) ;;
-  *) result="${flag} ${result}" ;;
-  esac
-
-  echo ${result}
-}
-changequote([,])dnl
-
-if test "$GCC" = "yes"; then
-    for flag in -Wall -Wchar-subscripts -Wmissing-declarations \
-        -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wcast-align \
-        -Wsign-compare -fno-strict-aliasing;
-    do
-        CFLAGS="$(ensureflag $flag $CFLAGS)"
-    done
-fi
+WARN_CFLAGS_FLEX="$WARN_CFLAGS"
+AX_APPEND_COMPILE_FLAGS([-Wno-sign-compare -Wno-switch-default -Wno-redundant-decls], [WARN_CFLAGS_FLEX])
+AC_SUBST(WARN_CFLAGS_FLEX)
 
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen])
