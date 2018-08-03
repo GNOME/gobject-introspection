@@ -8078,7 +8078,7 @@
  * If you need to clear the contents of the data, you will need to use an
  * ancillary function that calls g_rc_box_release_full():
  *
- * |[<!-- laguage="C" -->
+ * |[<!-- language="C" -->
  * static void
  * my_data_struct_release (MyDataStruct *data)
  * {
@@ -12000,7 +12000,7 @@
  * This function looks for a desktop bookmark file named @file in the
  * paths returned from g_get_user_data_dir() and g_get_system_data_dirs(),
  * loads the file into @bookmark and returns the file's full path in
- * @full_path.  If the file could not be loaded then an %error is
+ * @full_path.  If the file could not be loaded then @error is
  * set to either a #GFileError or #GBookmarkFileError.
  *
  * Returns: %TRUE if a key file could be loaded, %FALSE otherwise
@@ -24123,7 +24123,7 @@
  *
  * Increments the reference count of @group by one.
  *
- * Returns: a #GoptionGroup
+ * Returns: a #GOptionGroup
  * Since: 2.44
  */
 
@@ -30143,12 +30143,12 @@
  * If the source language of @str is known, it can used to improve the
  * accuracy of the translation by passing it as @from_locale.  It should
  * be a valid POSIX locale string (of the form
- * "language[_territory][.codeset][@modifier]").
+ * `language[_territory][.codeset][@modifier]`).
  *
  * If @from_locale is %NULL then the current locale is used.
  *
  * If you want to do translation for no specific locale, and you want it
- * to be done independently of the currently locale, specify "C" for
+ * to be done independently of the currently locale, specify `"C"` for
  * @from_locale.
  *
  * Returns: a string in plain ASCII
@@ -36895,10 +36895,10 @@
  * should ensure that a string is a valid D-Bus object path before
  * passing it to g_variant_new_object_path().
  *
- * A valid object path starts with '/' followed by zero or more
- * sequences of characters separated by '/' characters.  Each sequence
- * must contain only the characters "[A-Z][a-z][0-9]_".  No sequence
- * (including the one following the final '/' character) may be empty.
+ * A valid object path starts with `/` followed by zero or more
+ * sequences of characters separated by `/` characters.  Each sequence
+ * must contain only the characters `[A-Z][a-z][0-9]_`.  No sequence
+ * (including the one following the final `/` character) may be empty.
  *
  * Returns: %TRUE if @string is a D-Bus object path
  * Since: 2.24

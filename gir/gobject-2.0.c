@@ -75,7 +75,7 @@
  *                   text_view)
  * ]|
  * It is important to note that you must use
- * [canonical][canonical-parameter-name] parameter names as
+ * [canonical parameter names][canonical-parameter-names] as
  * detail strings for the notify signal.
  */
 
@@ -819,7 +819,7 @@
 
 /**
  * g_binding_unbind:
- * @binding: a #GBinding
+ * @binding: (transfer full): a #GBinding
  *
  * Explicitly releases the binding between the source and the target
  * property expressed by @binding.
