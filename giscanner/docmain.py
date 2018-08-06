@@ -32,7 +32,7 @@ from .docwriter import DocWriter
 from .sectionparser import generate_sections_file, write_sections_file
 from .transformer import Transformer
 
-FORMATS = ['devdocs', 'mallard', 'sections']
+FORMATS = ('devdocs', 'mallard', 'sections')
 
 
 def doc_main(args):
