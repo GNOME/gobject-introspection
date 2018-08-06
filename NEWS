@@ -1,3 +1,36 @@
+=== 2.58 ======================================================================
+
+    • Changes:
+      - Update annotations imported from GLib, and require GLib 2.58
+      - Ensure that G-I builds on macOS
+      - Add a --version argument to the Python-based tools
+      - Allow selecting the output format for g-ir-doc-tool
+      - Drop the Visual Studio templates
+      - Use Sphinx to generate the user documentation; gtk-doc is still
+        required for the girepository-1.0 C API reference
+      - Support all _Float* C types from ISO/IEC TS 18661-3:2015
+
+    • Issues resolved on gitlab.gnome.org:
+      - #139 - make check fails for gobject-introspection 1.44.0 on
+               OS X 10.10.4
+      - #184 - Default element-type not set for GByteArray object
+               properties
+      - #189 - c:type missing pointer/array information in GIR for
+               C array parameters
+      - #134 - Allow multiple output formats
+      - #218 - gtk2 hits unreachable code after enable -Wswitch-default
+      - #113 - Memory leaks in GI regress and marshalling tests property
+               setters
+
+    • Bugs resolved on bugzilla.gnome.org:
+      - #702788 - The girepository DLL is acquiring pointers incorrectly
+                  on Windows/x64
+
+    • Contributors:
+      Tomasz Miąsko, Emmanuele Bassi, Rico Tzschichholz, Chun-wei Fan,
+      Philip Chimento, Tom Schoonjans, Christoph Reiter, Ray Donnelly,
+      Marcus Calhoun-Lopez, Florian Müllner
+
 === 2.56 ======================================================================
 
     • Changes:
