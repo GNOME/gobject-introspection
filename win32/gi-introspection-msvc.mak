@@ -96,7 +96,7 @@ GLib-$(GLIB_APIVERSION).gir: glib_list
 	@-echo Generating $@...
 	$(PYTHON) $(G_IR_SCANNER_CURRENT) --verbose -I$(TOP_SRCDIR) --add-include-path=$(TOP_SRCDIR)	\
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GLib --nsversion=$(GLIB_APIVERSION)	\
-	--no-libtool --pkg=gio-windows-$(GLIB_APIVERSION) --pkg=glib-$(GLIB_APIVERSION)	\
+	--no-libtool --pkg=glib-$(GLIB_APIVERSION)	\
 	--include=win32-$(GI_APIVERSION) --library=glib-2.0 --library=gobject-2.0	\
 	--external-library --reparse-validate --identifier-prefix=G --symbol-prefix=g	\
 	--symbol-prefix=glib --c-include="glib.h" -I$(PREFIX)\include\glib-$(GLIB_APIVERSION)	\
@@ -117,7 +117,7 @@ GObject-$(GLIB_APIVERSION).gir: gobject_list GModule-$(GLIB_APIVERSION).gir
 	$(PYTHON) $(G_IR_SCANNER_CURRENT) --verbose -I$(TOP_SRCDIR) --add-include-path=$(TOP_SRCDIR)	\
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=GObject --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --include=GLib-$(GLIB_APIVERSION) --pkg=gobject-$(GLIB_APIVERSION) --library=gobject-2.0	\
-	--external-library --reparse-validate --identifier-prefix=G --c-include="glib-gobject.h"	\
+	--external-library --reparse-validate --identifier-prefix=G --c-include="glib-object.h"	\
 	-I$(PREFIX)/include/glib-2.0 -I$(PREFIX)/lib/glib-2.0/include -I$(PREFIX)/include	\
 	-DGOBJECT_COMPILATION --filelist=gobject_list -o $@
 
@@ -127,7 +127,7 @@ Gio-$(GLIB_APIVERSION).gir: gio_list GObject-$(GLIB_APIVERSION).gir
 	--add-include-path=$(TOP_SRCDIR)\gir --add-include-path=. --namespace=Gio --nsversion=$(GLIB_APIVERSION)	\
 	--no-libtool --pkg=gio-$(GLIB_APIVERSION) --pkg=gio-windows-$(GLIB_APIVERSION) --include=GObject-$(GLIB_APIVERSION)	\
 	--library=gio-2.0 --external-library --reparse-validate --warn-all	\
-	--identifier-prefix=G --include=GLib-$(GLIB_APIVERSION) --c-include="gio/gio.h" -DGIO_COMPILATION -DG_SETTINGS_ENABLE_BACKEND	\
+	--identifier-prefix=G --c-include="gio/gio.h" -DGIO_COMPILATION -DG_SETTINGS_ENABLE_BACKEND	\
 	-I$(PREFIX)\include\glib-2.0 -I$(PREFIX)\lib\glib-2.0\include	\
 	-I$(PREFIX)\include --filelist=gio_list -o $@
 

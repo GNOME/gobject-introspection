@@ -159,8 +159,8 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File RelativePath="..\..\giscanner\giscannermodule.c" />
-			<File RelativePath="..\..\scannerlexer.c" />
-			<File RelativePath="..\..\scannerparser.c" />
+			<File RelativePath="..\..\giscanner\scannerlexer.c" />
+			<File RelativePath="..\..\giscanner\scannerparser.c" />
 			<File RelativePath="..\..\giscanner\sourcescanner.c" />
 		</Filter>
 		<Filter
