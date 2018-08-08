@@ -34,6 +34,7 @@ import tempfile
 from xml.sax import saxutils
 from mako.lookup import TemplateLookup
 import markdown
+from markdown.extensions.headerid import HeaderIdExtension
 
 from . import ast, xmlwriter
 from .utils import to_underscores
@@ -63,7 +64,6 @@ language_mimes = {
     "sql": "text/x-sql",
     "yaml": "application/x-yaml",
 }
-
 
 def make_page_id(node, recursive=False):
     if isinstance(node, ast.Namespace):
@@ -192,14 +192,17 @@ class TemplatedScanner(object):
 class DocstringScanner(TemplatedScanner):
     def __init__(self):
         specs = [
-            ('new_paragraph', r'\n\n'),
-            ('new_line', r'\n'),
             ('!alpha', r'[a-zA-Z0-9_]+'),
             ('!alpha_dash', r'[a-zA-Z0-9_-]+'),
             ('code_start_with_language',
-                r'\|\[\<!\-\-\s*language\s*\=\s*\"<<language_name:alpha>>\"\s*\-\-\>'),
+            r'\|\[\<!\-\-\s*language\s*\=\s*\"<<language_name:alpha>>\"\s*\-\-\>'),
             ('code_start', r'\|\['),
             ('code_end', r'\]\|'),
+            ('html_code_start', r'<code(.*?)>'),
+            ('html_code_end', r'</code>'),
+            ('markdown_code_toggle', r'\`'),
+            ('markdown_attr_start', r'\{'),
+            ('markdown_attr_end', r'\}'),
             ('property', r'#<<type_name:alpha>>:(<<property_name:alpha_dash>>)'),
             ('signal', r'#<<type_name:alpha>>::(<<signal_name:alpha_dash>>)'),
             ('type_name', r'#(<<type_name:alpha>>)'),
@@ -219,9 +222,13 @@ class DocFormatter(object):
         # https://wiki.gnome.org/Projects/GTK%2B/DocumentationSyntax/Markdown
         # we won't insert paragraphs and will respect new lines.
         self._processing_code = False
+        self._processing_attr = False
 
     def escape(self, text):
         return saxutils.escape(text)
+    
+    def unescape(self, text):
+        return saxutils.unescape(text)
 
     def should_render_node(self, node):
         if getattr(node, "private", False):
@@ -275,6 +282,8 @@ class DocFormatter(object):
         raise KeyError("Could not find %s" % (name, ))
 
     def _process_other(self, node, match, props):
+        if self._processing_code:
+            return match
         return self.escape(match)
 
     def _process_property(self, node, match, props):
@@ -302,6 +311,9 @@ class DocFormatter(object):
         return self.format_xref(signal)
 
     def _process_type_name(self, node, match, props):
+        if self._processing_attr:
+            return match
+
         ident = props['type_name']
         type_ = self._resolve_type(ident)
         plural = False
@@ -354,31 +366,66 @@ class DocFormatter(object):
     #
     # A better solution would be to replace DocstringScanner by Markdown
     # entirely, implementing the custom markup with Markdown extensions.
+    #
+    # UPDATE: As a temporary fix for code blocks we will convert directly to ``` syntax.
+    # 
+    # NOTES:
+    # _process_markdown_code_toggle:
+    #     Whenever we encounter ` we need to toggle whether we are escaping text as text inside
+    #     inline code blocks is unescaped
+    # _process_markdown_attr_(start|end):
+    #     Whenever we encounter { or } we must stop parsing type names as curly braces are used for
+    #     attributes in GIR files in addition to type declarations.
+    # _process_html_code_(start|end):
+    #     Whenever we encounter an HTML <code> block we must stop escaping text.
+    #
+    # TODO: Convert to markdown extensions.
+
+    def _process_markdown_code_toggle(self, node, match, props):
+        self._processing_code = not self._processing_code
+        return match
+    
+    def _process_markdown_attr_start(self, node, match, props):
+        if not self._processing_code:
+            self._processing_attr = True
+        return match
+    
+    def _process_markdown_attr_end(self, node, match, props):
+        if not self._processing_code:
+            self._processing_attr = False
+        return match
+
+    def _process_html_code_start(self, node, match, props):
+        self._processing_code = True
+        return match
+    
+    def _process_html_code_end(self, node, match, props):
+        self._processing_code = False
+        return match
 
     def _process_code_start(self, node, match, props):
         self._processing_code = True
-        return '</p><pre>\n    '
+        return '</p>\n```\n'
 
     def _process_code_start_with_language(self, node, match, props):
         self._processing_code = True
         try:
-            mime = language_mimes[props["language_name"].lower()]
-            return '</p><pre data-mime="' + mime + '">\n    '
+            return '</p>\n```' + props["language_name"].lower() + '\n'
         except KeyError:
-            return '</p><pre>\n    '
+            return '</p>\n```\n'
 
     def _process_code_end(self, node, match, props):
         self._processing_code = False
-        return '\n</pre><p>'
+        return '\n```\n<p>'
 
     def _process_new_line(self, node, match, props):
         if self._processing_code:
-            return '\n    '
+            return '\n'
         return '\n'
 
     def _process_new_paragraph(self, node, match, props):
         if self._processing_code:
-            return '\n\n    '
+            return '\n\n'
         return "</p><p>"
 
     def _process_token(self, node, tok):
@@ -395,6 +442,11 @@ class DocFormatter(object):
             'code_start': self._process_code_start,
             'code_start_with_language': self._process_code_start_with_language,
             'code_end': self._process_code_end,
+            'html_code_start': self._process_html_code_start,
+            'html_code_end': self._process_html_code_end,
+            'markdown_code_toggle': self._process_markdown_code_toggle,
+            'markdown_attr_start': self._process_markdown_attr_start,
+            'markdown_attr_end': self._process_markdown_attr_end,
             'new_line': self._process_new_line,
             'new_paragraph': self._process_new_paragraph,
         }
@@ -1053,6 +1105,9 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
 
 
 class DevDocsFormatterGjs(DocFormatterGjs):
+    output_format = "devdocs"
+    output_extension = ".html"
+    
     def _is_static_method(self, node):
         if not hasattr(node.parent, "static_methods"):
             return False
@@ -1112,7 +1167,13 @@ class DevDocsFormatterGjs(DocFormatterGjs):
             return ''
 
         cleaned_up_gtkdoc = super(DevDocsFormatterGjs, self).format_inline(node, doc)
-        return markdown.markdown(cleaned_up_gtkdoc)
+        return markdown.markdown(cleaned_up_gtkdoc, extensions=[
+            InlineMarkdown(),
+            'markdown.extensions.fenced_code',
+            'markdown.extensions.nl2br',
+            'markdown.extensions.attr_list',
+            HeaderIdExtension(forceid=False)
+        ])
 
     def format_function_name(self, func):
         name = func.name
@@ -1194,7 +1255,13 @@ class DevDocsFormatterGjs(DocFormatterGjs):
         if para is None:
             return ''
         cleaned_up_gtkdoc = super(DevDocsFormatterGjs, self).format_inline(node, para)
-        return markdown.markdown(cleaned_up_gtkdoc, extensions=[InlineMarkdown()])
+        return markdown.markdown(cleaned_up_gtkdoc, extensions=[
+            InlineMarkdown(),
+            'markdown.extensions.fenced_code',
+            'markdown.extensions.nl2br',
+            'markdown.extensions.attr_list',
+            HeaderIdExtension(forceid=False)
+        ])
 
     def format_in_parameters(self, node):
         return ', '.join(p.argname for p in self.get_in_parameters(node))
