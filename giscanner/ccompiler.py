@@ -212,8 +212,6 @@ class CCompiler(object):
     def compile(self, pkg_config_cflags, cpp_includes, source, init_sections):
         extra_postargs = []
         includes = []
-        source_str = ''.join(source)
-        tmpdir_idx = source_str.rfind(os.sep, 0, source_str.rfind(os.sep))
         (include_paths, macros, extra_args) = \
             self._set_cpp_options(pkg_config_cflags)
 

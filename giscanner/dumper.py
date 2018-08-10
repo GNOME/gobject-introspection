@@ -29,7 +29,6 @@ import sys
 import shlex
 import subprocess
 import tempfile
-from distutils.errors import LinkError
 
 from .gdumpparser import IntrospectionBinary
 from . import pkgconfig, utils
