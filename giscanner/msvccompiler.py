@@ -21,8 +21,7 @@
 import os
 import distutils
 
-from distutils.errors import (DistutilsExecError, CompileError, LibError,
-                              LinkError, UnknownFileError)
+from distutils.errors import DistutilsExecError, CompileError
 from distutils.ccompiler import CCompiler, gen_preprocess_options
 from distutils.dep_util import newer
 

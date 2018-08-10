@@ -30,7 +30,6 @@ import optparse
 import os
 import shutil
 import stat
-import subprocess
 import sys
 import tempfile
 import platform
@@ -391,7 +390,7 @@ def create_transformer(namespace, options):
             _error("Invalid include path '%s'" % (include, ))
         try:
             include_obj = Include.from_string(include)
-        except:
+        except Exception:
             _error("Malformed include '%s'\n" % (include, ))
         transformer.register_include(include_obj)
     for include_path in options.includes_uninstalled:

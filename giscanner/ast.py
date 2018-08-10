@@ -202,6 +202,7 @@ class TypeUnknown(Type):
     def __init__(self):
         Type.__init__(self, _target_unknown=True)
 
+
 # Fundamental types, two special ones
 TYPE_NONE = Type(target_fundamental='none', ctype='void')
 TYPE_ANY = Type(target_fundamental='gpointer', ctype='gpointer')

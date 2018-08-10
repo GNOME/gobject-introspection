@@ -260,7 +260,6 @@ currently-scanned namespace is first."""
                                     stdin=subprocess.PIPE,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
-            _name = name
             proc_name, err = proc.communicate(name.encode())
             if proc.returncode:
                 raise ValueError('filter: %r exited: %d with error: %s' %
