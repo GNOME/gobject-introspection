@@ -35,8 +35,7 @@ from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CL
                                ANN_VFUNC, ANN_NULLABLE, ANN_OPTIONAL, ANN_NOT)
 from .annotationparser import (OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
                                OPT_OUT_CALLEE_ALLOCATES, OPT_OUT_CALLER_ALLOCATES,
-                               OPT_TRANSFER_CONTAINER, OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE,
-                               OPT_NOT_NULLABLE)
+                               OPT_TRANSFER_CONTAINER, OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
 
 from .utils import to_underscores_noprefix
 
@@ -515,7 +514,7 @@ class MainTransformer(object):
                 initially_unowned_type = ast.Type(target_giname='GObject.InitiallyUnowned')
                 try:
                     initially_unowned = self._transformer.lookup_typenode(initially_unowned_type)
-                except KeyError as e:
+                except KeyError:
                     message.error_node(node, "constructor found but GObject is not in includes")
                     return None
                 if initially_unowned and self._is_gi_subclass(typeval, initially_unowned_type):

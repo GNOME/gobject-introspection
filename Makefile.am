@@ -53,30 +53,17 @@ EXTRA_DIST += 			\
 	$(pkgconfig_DATA)	\
 	$(man_MANS)		\
 	$(m4_DATA)		\
-	misc/pep8.py		\
-	misc/pyflakes.py	\
 	misc/update-glib-annotations.py	\
 	misc/update-gtkdoc-tests.py	\
 	misc/verbump.py		\
 	README.rst \
 	MSVC.README.rst \
 	meson.build \
-	meson_options.txt
+	meson_options.txt \
+	.flake8
 
-# Default pep8.py --exclude + emacs backup files
-PEP8_EXCLUDES=--exclude='.svn,CVS,.bzr,.hg,.git,__pycache__,.\#*'
-
-check-local:
-	@echo "TEST: PEP-8 INQUISITION"
-	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs \
-		$(PYTHON) $(top_srcdir)/misc/pep8.py --max-line-length=99 --ignore=E128,W503 $(PEP8_EXCLUDES)
-	@find $(top_srcdir)/tests -name \*.py | sort | uniq | xargs \
-		$(PYTHON) $(top_srcdir)/misc/pep8.py --ignore=E127,E402,E501,E731 $(PEP8_EXCLUDES)
-
-check-pyflakes:
-	@echo "  CHECK Pyflakes"
-	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pyflakes.py
-
+check.quality:
+	(cd $(abs_top_srcdir) && $(PYTHON) -m flake8);
 
 # Colin's handy Makefile bits for:
 # 1) stuffing tarballs with pre-generated scripts from your workstation
