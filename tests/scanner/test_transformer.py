@@ -9,11 +9,6 @@ import os
 import sys
 import textwrap
 
-if sys.version_info.major < 3:
-    import __builtin__ as builtins
-else:
-    import builtins
-
 
 os.environ['GI_SCANNER_DISABLE_CACHE'] = '1'
 
@@ -380,7 +375,7 @@ class TestNestedStructs(unittest.TestCase):
         self.assertEqual(len(node.fields), 1)
 
         simple = self.namespace.get('SimpleStruct')
-        self.assertTrue(node is not None)
+        self.assertTrue(simple is not None)
 
         field = node.fields[0]
         self.assertTrue(field is not None)

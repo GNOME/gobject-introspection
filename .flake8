@@ -1,0 +1,4 @@
+[flake8]
+ignore=E127,E402,E501,E731,E128,W503,E741
+exclude=misc/*
+builtins=DATADIR

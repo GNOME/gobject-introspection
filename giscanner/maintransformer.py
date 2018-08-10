@@ -35,8 +35,7 @@ from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CL
                                ANN_VFUNC, ANN_NULLABLE, ANN_OPTIONAL, ANN_NOT)
 from .annotationparser import (OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
                                OPT_OUT_CALLEE_ALLOCATES, OPT_OUT_CALLER_ALLOCATES,
-                               OPT_TRANSFER_CONTAINER, OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE,
-                               OPT_NOT_NULLABLE)
+                               OPT_TRANSFER_CONTAINER, OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
 
 from .utils import to_underscores_noprefix
 

@@ -55,6 +55,7 @@ def break_on_debug_flag(flag):
         import pdb
         pdb.set_trace()
 
+
 # Copied from h2defs.py
 _upperstr_pat1 = re.compile(r'([^A-Z])([A-Z])')
 _upperstr_pat2 = re.compile(r'([A-Z][A-Z])([A-Z][0-9a-z])')
@@ -263,7 +264,7 @@ def get_user_cache_dir(dir=None):
             xdg_cache_home = os.path.join(xdg_cache_home, dir)
         try:
             makedirs(xdg_cache_home, mode=0o755, exist_ok=True)
-        except:
+        except EnvironmentError:
             # Let's fall back to ~/.cache below
             pass
         else:
@@ -276,7 +277,7 @@ def get_user_cache_dir(dir=None):
             cachedir = os.path.join(cachedir, dir)
         try:
             makedirs(cachedir, mode=0o755, exist_ok=True)
-        except:
+        except EnvironmentError:
             return None
         else:
             return cachedir

@@ -889,6 +889,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             return ', '.join(('%s: %s' % (p.argname, self.format_type(p.type)))
                              for p in construct_params)
 
+
 LANGUAGES = {
     "mallard": {
         "c": DocFormatterC,
