@@ -51,7 +51,15 @@ well.
 Open a Visual Studio command prompt and create an empty build directory (which needs
 to be on the same drive as the G-I sources).  In that directory, run the following::
 
-  python $(PythonInstallationPath)\scripts\meson.py $(G-I_srcdir) --buildtype=<build_configuration> --prefix=$(PREFIX) -Dcairo-libname=<DLL filename of cairo-gobject>
+  python $(PythonInstallationPath)\scripts\meson.py $(G-I_srcdir) --buildtype=<build_configuration> --prefix=$(PREFIX) -Dcairo-libname=<DLL filename of cairo-gobject> -Dpython=<full path to Python interpreter to build _giscanner.pyd>
+
+The -Dcairo-libname is likely necessary as the default DLL file name for Cairo-GObject
+may likely not match the default "libcairo-gobject-2.dll", which is the default
+DLL filename for Cairo-GObject that is built with Visual Studio.
+
+The -Dpython is likely necessary when using multiple Python installations on the
+system and is necessary when building with Visual Studio 2008~2013 when building
+with later versions of Meson (which requires Python 3.5+), due to CRT differences.
 
 When Meson completes configuring and generating the build files, proceed building
 using Ninja or the generated Visual Studio projects.
