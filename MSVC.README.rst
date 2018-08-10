@@ -55,7 +55,7 @@ to be on the same drive as the G-I sources).  In that directory, run the followi
 
 The -Dcairo-libname is likely necessary as the default DLL file name for Cairo-GObject
 may likely not match the default "libcairo-gobject-2.dll", which is the default
-DLL filename for Cairo-GObject that is built with Visual Studio.
+DLL filename for Cairo-GObject that is built with MinGW/mingw-w64.
 
 The -Dpython is likely necessary when using multiple Python installations on the
 system and is necessary when building with Visual Studio 2008~2013 when building
