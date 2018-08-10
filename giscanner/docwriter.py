@@ -1266,6 +1266,7 @@ class DevDocsFormatterGjs(DocFormatterGjs):
     def format_in_parameters(self, node):
         return ', '.join(p.argname for p in self.get_in_parameters(node))
 
+
 LANGUAGES = {
     "devdocs": {
         "gjs": DevDocsFormatterGjs,

@@ -17,6 +17,9 @@ fedora-x86_64-meson-python3:
     - cd _build
     - ninja
     - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+    - cd ..
+    - python3 -m pip install --user flake8
+    - python3 -m flake8
   except:
     - tags
   artifacts:
@@ -35,6 +38,9 @@ fedora-x86_64-meson-python2:
     - cd _build
     - ninja
     - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+    - cd ..
+    - python2 -m pip install --user flake8
+    - python2 -m flake8
   except:
     - tags
   artifacts:
@@ -54,6 +60,8 @@ fedora-x86_64-autotools-python2:
     - ./autogen.sh --with-python=python2
     - make -j4
     - make check
+    - python2 -m pip install --user flake8
+    - make check.quality
   artifacts:
     when: on_failure
     name: "gi-_${CI_COMMIT_REF_NAME}"
@@ -71,6 +79,8 @@ fedora-x86_64-autotools-python3:
     - ./autogen.sh --with-python=python3
     - make -j4
     - make check
+    - python3 -m pip install --user flake8
+    - make check.quality
   artifacts:
     when: on_failure
     name: "gi-_${CI_COMMIT_REF_NAME}"

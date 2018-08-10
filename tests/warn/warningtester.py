@@ -157,4 +157,5 @@ def check(args):
                              "warning:\n%s" % (filename,
                                                _diff([expected_warning], [emitted_warning])))
 
+
 sys.exit(check(sys.argv[1:]))
