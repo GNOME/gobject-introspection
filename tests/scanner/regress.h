@@ -780,6 +780,7 @@ struct _RegressTestObj
   char* string;
   GType gtype;
   gint name_conflict;
+  GByteArray *byte_array;
 
   /* < private > */
   void (*function_ptr) (void);

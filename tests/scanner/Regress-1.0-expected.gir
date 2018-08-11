@@ -3709,6 +3709,11 @@ raise an error.</doc>
       <field name="name_conflict">
         <type name="gint" c:type="gint"/>
       </field>
+      <field name="byte_array">
+        <array name="GLib.ByteArray" c:type="GByteArray*">
+          <type name="guint8" c:type="guint8"/>
+        </array>
+      </field>
       <field name="function_ptr">
         <callback name="function_ptr">
           <return-value transfer-ownership="none">

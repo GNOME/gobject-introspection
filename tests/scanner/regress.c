@@ -2165,6 +2165,10 @@ regress_test_obj_set_property (GObject      *object,
       self->name_conflict = g_value_get_int (value);
       break;
 
+    case PROP_TEST_OBJ_BYTE_ARRAY:
+      self->byte_array = g_value_get_boxed (value);
+      break;
+
     default:
       /* We don't have any other property... */
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -2224,6 +2228,10 @@ regress_test_obj_get_property (GObject    *object,
 
     case PROP_TEST_OBJ_NAME_CONFLICT:
       g_value_set_int (value, self->name_conflict);
+      break;
+
+    case PROP_TEST_OBJ_BYTE_ARRAY:
+      g_value_set_boxed (value, self->byte_array);
       break;
 
     default:
