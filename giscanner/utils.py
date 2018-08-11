@@ -238,6 +238,9 @@ def makedirs(name, mode=0o777, exist_ok=False):
             # be happy if someone already created the path
             if e.errno != errno.EEXIST:
                 raise
+        cdir = os.path.curdir
+        if isinstance(tail, bytes):
+            cdir = os.path.curdir.encode("ascii")
         if tail == cdir:           # xxx/newdir/. exists if xxx/newdir exists
             return
     try:
