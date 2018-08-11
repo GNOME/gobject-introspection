@@ -134,6 +134,8 @@ docs/reference/version.xml
 #Shinx documentation output
 docs/giscanner/_build/*
 
+giscanner/_version.py
+
 #g-ir-doc-tool tests
 *.page
 !tests/scanner/*-expected/*.page
