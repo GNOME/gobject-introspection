@@ -63,7 +63,7 @@ EXTRA_DIST += 			\
 	.flake8
 
 check.quality:
-	(cd $(abs_top_srcdir) && $(PYTHON) -m flake8);
+	(cd $(abs_top_srcdir) && $(PYTHON) -m flake8 --count);
 
 # Colin's handy Makefile bits for:
 # 1) stuffing tarballs with pre-generated scripts from your workstation

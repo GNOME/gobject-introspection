@@ -19,7 +19,7 @@ fedora-x86_64-meson-python3:
     - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
     - cd ..
     - python3 -m pip install --user flake8
-    - python3 -m flake8
+    - python3 -m flake8 --count
   except:
     - tags
   artifacts:
@@ -40,7 +40,7 @@ fedora-x86_64-meson-python2:
     - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
     - cd ..
     - python2 -m pip install --user flake8
-    - python2 -m flake8
+    - python2 -m flake8 --count
   except:
     - tags
   artifacts:

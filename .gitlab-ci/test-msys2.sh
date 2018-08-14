@@ -42,4 +42,4 @@ ninja
 meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
 cd ..
 
-python3 -m flake8
+python3 -m flake8 --count
