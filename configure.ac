@@ -276,13 +276,20 @@ dnl an external dependency
 AC_ARG_ENABLE(doctool,[  --disable-doctool           disable g-ir-doc-tool ],,enable_doctool=auto)
 AS_IF([ test x$enable_doctool != xno], [
    AM_CHECK_PYMOD(mako,,have_python_mako=yes,have_python_mako=no)
+   AM_CHECK_PYMOD(markdown,,have_python_markdown=yes,have_python_markdown=no)
 ])
-AS_IF([ test x$enable_doctool = xauto && test x$have_python_mako = xyes ],
+AS_IF([ test x$enable_doctool = xauto &&
+        test x$have_python_mako = xyes &&
+        test x$have_python_markdown = xyes ],
       [ enable_doctool=yes ],
-      [ test x$enable_doctool = xauto && test x$have_python_mako = xno ],
+      [ test x$enable_doctool = xauto &&
+        (test x$have_python_mako = xno ||
+         test x$have_python_markdown = xno) ],
       [ enable_doctool=no ],
       [ test x$enable_doctool = xyes && test x$have_python_mako = xno ],
-      [ AC_MSG_ERROR([Python mako module not found]) ])
+      [ AC_MSG_ERROR([Python mako module not found]) ],
+      [ test x$enable_doctool = xyes && test x$have_python_markdown = xno ],
+      [ AC_MSG_ERROR([Python markdown module not found]) ])
 AM_CONDITIONAL(BUILD_DOCTOOL, test x$enable_doctool != xno)
 
 # Glib documentation

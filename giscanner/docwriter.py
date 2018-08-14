@@ -28,13 +28,42 @@ from __future__ import unicode_literals
 
 import os
 import re
+import sys
 import tempfile
 
 from xml.sax import saxutils
 from mako.lookup import TemplateLookup
+import markdown
+from markdown.extensions.headerid import HeaderIdExtension
 
 from . import ast, xmlwriter
 from .utils import to_underscores
+from .mdextensions import InlineMarkdown
+
+# Freely inspired from
+# https://github.com/GNOME/yelp-xsl/blob/master/js/syntax.html
+language_mimes = {
+    "bash-script": "application/x-shellscript",
+    "shell": "application/x-shellscript",
+    "csharp": "text/x-csharp",
+    "css": "text/css",
+    "diff": "text/xpatch",
+    "html": "text/html",
+    "java": "text/x-java",
+    "javascript": "application/javascript",
+    "lisp": "text/x-scheme",
+    "lua": "text-x-lua",
+    "c": "text/x-csrc",
+    "c++": "text/x-c++src",
+    "pascal": "text/x-pascal",
+    "perl": "application/x-perl",
+    "php": "application/x-php",
+    "plain": "text/plain",
+    "python": "text/x-python",
+    "ruby": "application/x-ruby",
+    "sql": "text/x-sql",
+    "yaml": "application/x-yaml",
+}
 
 
 def make_page_id(node, recursive=False):
@@ -166,6 +195,15 @@ class DocstringScanner(TemplatedScanner):
         specs = [
             ('!alpha', r'[a-zA-Z0-9_]+'),
             ('!alpha_dash', r'[a-zA-Z0-9_-]+'),
+            ('code_start_with_language',
+            r'\|\[\<!\-\-\s*language\s*\=\s*\"<<language_name:alpha>>\"\s*\-\-\>'),
+            ('code_start', r'\|\['),
+            ('code_end', r'\]\|'),
+            ('html_code_start', r'<code(.*?)>'),
+            ('html_code_end', r'</code>'),
+            ('markdown_code_toggle', r'\`'),
+            ('markdown_attr_start', r'\{'),
+            ('markdown_attr_end', r'\}'),
             ('property', r'#<<type_name:alpha>>:(<<property_name:alpha_dash>>)'),
             ('signal', r'#<<type_name:alpha>>::(<<signal_name:alpha_dash>>)'),
             ('type_name', r'#(<<type_name:alpha>>)'),
@@ -181,9 +219,17 @@ class DocFormatter(object):
     def __init__(self, transformer):
         self._transformer = transformer
         self._scanner = DocstringScanner()
+        # If we are processing a code block as defined by
+        # https://wiki.gnome.org/Projects/GTK%2B/DocumentationSyntax/Markdown
+        # we won't insert paragraphs and will respect new lines.
+        self._processing_code = False
+        self._processing_attr = False
 
     def escape(self, text):
         return saxutils.escape(text)
+
+    def unescape(self, text):
+        return saxutils.unescape(text)
 
     def should_render_node(self, node):
         if getattr(node, "private", False):
@@ -203,11 +249,9 @@ class DocFormatter(object):
         if doc is None:
             return ''
 
-        result = ''
-        for para in doc.split('\n\n'):
-            result += '  <p>'
-            result += self.format_inline(node, para)
-            result += '</p>'
+        result = '<p>'
+        result += self.format_inline(node, doc)
+        result += '</p>'
         return result
 
     def _resolve_type(self, ident):
@@ -239,6 +283,8 @@ class DocFormatter(object):
         raise KeyError("Could not find %s" % (name, ))
 
     def _process_other(self, node, match, props):
+        if self._processing_code:
+            return match
         return self.escape(match)
 
     def _process_property(self, node, match, props):
@@ -266,11 +312,20 @@ class DocFormatter(object):
         return self.format_xref(signal)
 
     def _process_type_name(self, node, match, props):
-        type_ = self._resolve_type(props['type_name'])
-        if type_ is None:
+        if self._processing_attr:
             return match
 
-        return self.format_xref(type_)
+        ident = props['type_name']
+        type_ = self._resolve_type(ident)
+        plural = False
+        if type_ is None:
+            singularized = ident.rstrip("s")  # Try to remove plural
+            type_ = self._resolve_type(singularized)
+            plural = True
+            if type_ is None:
+                return match
+
+        return self.format_xref(type_, pluralize=plural)
 
     def _process_enum_value(self, node, match, props):
         member_name = props['member_name']
@@ -301,6 +356,79 @@ class DocFormatter(object):
 
         return self.format_xref(func)
 
+    # FIXME: the four spaces after newlines in the following functions are to
+    # keep Markdown happy. We pass the documentation string first through this
+    # templated scanner, which converts |[ ]| to <pre></pre>. Then in the case
+    # of DevDocs output, we pass the resulting string through Markdown; but
+    # Markdown will not respect the <pre> element and will treat the code as
+    # markup, converting asterisks into <em> etc. Putting four spaces at the
+    # start of each line makes Markdown recognize the code as code without
+    # affecting the normal HTML output too much.
+    #
+    # A better solution would be to replace DocstringScanner by Markdown
+    # entirely, implementing the custom markup with Markdown extensions.
+    #
+    # UPDATE: As a temporary fix for code blocks we will convert directly to ``` syntax.
+    #
+    # NOTES:
+    # _process_markdown_code_toggle:
+    #     Whenever we encounter ` we need to toggle whether we are escaping text as text inside
+    #     inline code blocks is unescaped
+    # _process_markdown_attr_(start|end):
+    #     Whenever we encounter { or } we must stop parsing type names as curly braces are used for
+    #     attributes in GIR files in addition to type declarations.
+    # _process_html_code_(start|end):
+    #     Whenever we encounter an HTML <code> block we must stop escaping text.
+    #
+    # TODO: Convert to markdown extensions.
+
+    def _process_markdown_code_toggle(self, node, match, props):
+        self._processing_code = not self._processing_code
+        return match
+
+    def _process_markdown_attr_start(self, node, match, props):
+        if not self._processing_code:
+            self._processing_attr = True
+        return match
+
+    def _process_markdown_attr_end(self, node, match, props):
+        if not self._processing_code:
+            self._processing_attr = False
+        return match
+
+    def _process_html_code_start(self, node, match, props):
+        self._processing_code = True
+        return match
+
+    def _process_html_code_end(self, node, match, props):
+        self._processing_code = False
+        return match
+
+    def _process_code_start(self, node, match, props):
+        self._processing_code = True
+        return '</p>\n```\n'
+
+    def _process_code_start_with_language(self, node, match, props):
+        self._processing_code = True
+        try:
+            return '</p>\n```' + props["language_name"].lower() + '\n'
+        except KeyError:
+            return '</p>\n```\n'
+
+    def _process_code_end(self, node, match, props):
+        self._processing_code = False
+        return '\n```\n<p>'
+
+    def _process_new_line(self, node, match, props):
+        if self._processing_code:
+            return '\n'
+        return '\n'
+
+    def _process_new_paragraph(self, node, match, props):
+        if self._processing_code:
+            return '\n\n'
+        return "</p><p>"
+
     def _process_token(self, node, tok):
         kind, match, props = tok
 
@@ -312,6 +440,16 @@ class DocFormatter(object):
             'enum_value': self._process_enum_value,
             'parameter': self._process_parameter,
             'function_call': self._process_function_call,
+            'code_start': self._process_code_start,
+            'code_start_with_language': self._process_code_start_with_language,
+            'code_end': self._process_code_end,
+            'html_code_start': self._process_html_code_start,
+            'html_code_end': self._process_html_code_end,
+            'markdown_code_toggle': self._process_markdown_code_toggle,
+            'markdown_attr_start': self._process_markdown_attr_start,
+            'markdown_attr_end': self._process_markdown_attr_end,
+            'new_line': self._process_new_line,
+            'new_paragraph': self._process_new_paragraph,
         }
 
         return dispatch[kind](node, match, props)
@@ -336,6 +474,9 @@ class DocFormatter(object):
     def format_type(self, type_, link=False):
         raise NotImplementedError
 
+    def format_value(self, node):
+        raise NotImplementedError
+
     def format_page_name(self, node):
         if isinstance(node, ast.Namespace):
             return node.name
@@ -352,33 +493,41 @@ class DocFormatter(object):
         else:
             return make_page_id(node)
 
-    def format_xref(self, node, **attrdict):
+    def format_xref(self, node, pluralize=False, **attrdict):
         if node is None or not hasattr(node, 'namespace'):
             attrs = [('xref', 'index')] + list(sorted(attrdict.items()))
             return xmlwriter.build_xml_tag('link', attrs)
         elif isinstance(node, ast.Member):
             # Enum/BitField members are linked to the main enum page.
-            return self.format_xref(node.parent, **attrdict) + '.' + node.name
+            return self.format_xref(node.parent, pluralize=pluralize, **attrdict) + '.' + node.name
         elif node.namespace is self._transformer.namespace:
-            return self.format_internal_xref(node, attrdict)
+            return self.format_internal_xref(node, attrdict, pluralize=pluralize)
         else:
-            return self.format_external_xref(node, attrdict)
+            return self.format_external_xref(node, attrdict, pluralize=pluralize)
 
-    def format_internal_xref(self, node, attrdict):
+    def format_internal_xref(self, node, attrdict, pluralize=False):
         attrs = [('xref', make_page_id(node))] + list(sorted(attrdict.items()))
-        return xmlwriter.build_xml_tag('link', attrs)
+        if not pluralize:
+            return xmlwriter.build_xml_tag('link', attrs)
+        else:
+            return xmlwriter.build_xml_tag('link', attrs, make_page_id(node) +
+            "s")
 
-    def format_external_xref(self, node, attrdict):
+    def format_external_xref(self, node, attrdict, pluralize=False):
         ns = node.namespace
         attrs = [('href', '../%s-%s/%s.html' % (ns.name, str(ns.version),
                                                 make_page_id(node)))]
         attrs += list(sorted(attrdict.items()))
-        return xmlwriter.build_xml_tag('link', attrs, self.format_page_name(node))
+        if not pluralize:
+            return xmlwriter.build_xml_tag('link', attrs, self.format_page_name(node))
+        else:
+            return xmlwriter.build_xml_tag('link', attrs,
+                    self.format_page_name(node) + "s")
 
     def field_is_writable(self, field):
         return True
 
-    def format_property_flags(self, property_, construct_only=False):
+    def format_property_flags(self, property_, construct_only=False, abbrev=False):
         flags = []
 
         if property_.readable and not construct_only:
@@ -392,6 +541,23 @@ class DocFormatter(object):
             if property_.construct_only:
                 flags.append("Construct Only")
 
+        if abbrev:
+            return "/".join([''.join([word[0] for word in flag.lower().split()])
+                for flag in flags])
+        return " / ".join(flags)
+
+    def format_signal_flags(self, signal):
+        flags = []
+        if signal.action:
+            flags.append("Action")
+        if signal.detailed:
+            flags.append("Detailed")
+        if signal.no_hooks:
+            flags.append("No Hooks")
+        if signal.no_recurse:
+            flags.append("No Recurse")
+        if signal.when:
+            flags.append("Run " + signal.when.capitalize())
         return " / ".join(flags)
 
     def to_underscores(self, node):
@@ -399,6 +565,8 @@ class DocFormatter(object):
             return node.name.replace('-', '_')
         elif node.name:
             return to_underscores(node.name)
+        elif isinstance(node, ast.Function) and node.moved_to:
+            return to_underscores(node.moved_to)
         elif isinstance(node, ast.Callback):
             return 'callback'
         elif isinstance(node, ast.Union):
@@ -421,6 +589,51 @@ class DocFormatter(object):
 
         parent_chain.reverse()
         return parent_chain
+
+    def get_inheritable_types(self, node):
+        """Return an ast.Node object for each type (ast.Class and ast.Interface
+        types) from which an ast.Class @node might inherit methods, properties,
+        and signals."""
+
+        assert isinstance(node, ast.Class)
+
+        parent_chain = self.get_class_hierarchy(node)
+        types = []
+        for p in parent_chain:
+            types += [self._transformer.lookup_typenode(t) for t in p.interfaces]
+        types += [t for t in parent_chain if t is not node]
+        return types
+
+    def is_private_field(self, node, f):
+        """Returns whether @f is a private field of @node (including a heuristic
+        that tries to determine whether the field is the parent instance field
+        or a private pointer but not marked as such.)"""
+
+        if f.private:
+            return True
+        if f.anonymous_node:
+            return True
+        if f.name == 'g_type_instance':
+            return True  # this field on GObject is not exposed
+
+        field_typenode = self._transformer.lookup_typenode(f.type)
+        if not field_typenode:
+            return False
+
+        if getattr(field_typenode, 'disguised', False):
+            return True  # guess that it's a pointer to a private struct
+            # this also catches fields of type GdkAtom, since that is disguised
+            # as well. Not sure whether that's correct or not.
+
+        if not isinstance(node, ast.Class):
+            return False  # parent instance heuristics only apply to classes
+
+        if node.parent_type:
+            parent_typenode = self._transformer.lookup_typenode(node.parent_type)
+            if field_typenode == parent_typenode:
+                return True  # guess that it's a parent instance field
+
+        return False
 
     def format_prerequisites(self, node):
         assert isinstance(node, ast.Interface)
@@ -721,6 +934,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             return "void"
         elif type_.target_giname is not None:
             giname = type_.target_giname
+            if giname == 'Gdk.Atom':
+                return 'String'
             if giname in ('GLib.ByteArray', 'GLib.Bytes'):
                 return 'ByteArray'
             if giname == 'GObject.Value':
@@ -889,7 +1104,172 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             return ', '.join(('%s: %s' % (p.argname, self.format_type(p.type)))
                              for p in construct_params)
 
+
+class DevDocsFormatterGjs(DocFormatterGjs):
+    output_format = "devdocs"
+    output_extension = ".html"
+
+    def _is_static_method(self, node):
+        if not hasattr(node.parent, "static_methods"):
+            return False
+        return node in node.parent.static_methods
+
+    def should_render_node(self, node):
+        # For DevDocs, we only want to render the top-level nodes.
+        if isinstance(node, (ast.Compound, ast.Boxed)):
+            self.resolve_gboxed_constructor(node)
+
+        if not super(DevDocsFormatterGjs, self).should_render_node(node):
+            return False
+
+        if isinstance(node, ast.Function) and not node.is_method and \
+           not node.is_constructor and not self._is_static_method(node):
+            return True  # module-level function
+        toplevel_types = [ast.Alias, ast.Bitfield, ast.Boxed, ast.Callback,
+            ast.Class, ast.Constant, ast.Enum, ast.Interface, ast.Namespace,
+            ast.Record, ast.Union]
+        for ast_type in toplevel_types:
+            if isinstance(node, ast_type):
+                return True
+
+        return False
+
+    def format_fundamental_type(self, name):
+        # Don't specify the C type after Number as the Mallard docs do; it's
+        # confusing to GJS newbies.
+        if name in ["gint8", "guint8", "gint16", "guint16", "gint32", "guint32",
+                    "gchar", "guchar", "gshort", "gint", "guint", "gfloat",
+                    "gdouble", "gsize", "gssize", "gintptr", "guintptr",
+                    "glong", "gulong", "gint64", "guint64", "long double",
+                    "long long", "unsigned long long"]:
+            return "Number"  # gsize and up cannot fully be represented in GJS
+        if name in ["none", "gpointer"]:
+            return "void"
+        if name in ["utf8", "gunichar", "filename"]:
+            return "String"
+        if name == "gboolean":
+            return "Boolean"
+        if name == "GType":
+            return "GObject.Type"
+        if name == "GVariant":
+            return "GLib.Variant"
+        return name
+
+    def format_value(self, node):
+        # Constants only have fundamental types?
+        type_ = node.value_type.target_fundamental
+        if type_ in ["utf8", "gunichar", "filename"]:
+            return repr(node.value)
+            # escapes quotes in the string; ought to be the same in Javascript
+        return node.value
+
+    def format(self, node, doc):
+        if doc is None:
+            return ''
+
+        cleaned_up_gtkdoc = super(DevDocsFormatterGjs, self).format_inline(node, doc)
+        return markdown.markdown(cleaned_up_gtkdoc, extensions=[
+            'markdown.extensions.fenced_code',
+            'markdown.extensions.nl2br',
+            'markdown.extensions.attr_list',
+            HeaderIdExtension(forceid=False)
+        ])
+
+    def format_function_name(self, func):
+        name = func.name
+        if func.shadows:
+            name = func.shadows
+
+        if isinstance(func, ast.VFunction):
+            return 'vfunc_' + name
+        return name
+
+    def format_page_name(self, node):
+        if isinstance(node, ast.Function) and node.parent is not None:
+            return node.parent.name + "." + self.format_function_name(node)
+        return super(DevDocsFormatterGjs, self).format_page_name(node)
+
+    def _write_xref_markdown(self, target, anchor=None, display_name=None, pluralize=False):
+        if display_name is None:
+            display_name = target
+        link = target + ".html"
+        if anchor is not None:
+            link += "#" + anchor
+        return "[{}]({}){}".format(display_name, link, 's' if pluralize else '')
+
+    def to_underscores(self, node):
+        try:
+            return super(DevDocsFormatterGjs, self).to_underscores(node)
+        except Exception as e:
+            if e.message == 'invalid node':
+                print('warning: invalid node in', node.parent.name,
+                    file=sys.stderr)
+                return node.parent.name + '_invalid_node'
+
+    def make_anchor(self, node):
+        style_class = get_node_kind(node)
+        return "{}-{}".format(style_class, self.to_underscores(node))
+
+    def _process_parameter(self, node, match, props):
+        # Display the instance parameter as "this" instead of whatever name it
+        # has in C.
+        if hasattr(node, 'instance_parameter') and \
+           node.instance_parameter is not None and \
+           props['param_name'] == node.instance_parameter.argname:
+            return '<code>this</code>'
+        return super(DevDocsFormatterGjs, self)._process_parameter(node, match, props)
+
+    def format_xref(self, node, pluralize=False, **attrdict):
+        if node is None or not hasattr(node, 'namespace'):
+            return self._write_xref_markdown('index')
+        if node.namespace is self._transformer.namespace:
+            return self.format_internal_xref(node, attrdict, pluralize=pluralize)
+        return self.format_external_xref(node, attrdict, pluralize=pluralize)
+
+    def format_internal_xref(self, node, attrdict, pluralize=False):
+        if not self.should_render_node(node):
+            # Non-toplevel nodes are linked to the main page.
+            page = make_page_id(node.parent)
+            name = node.name
+            if isinstance(node, ast.Member):
+                name = name.upper()
+            return self._write_xref_markdown(page, self.make_anchor(node),
+                                             page + "." + name,
+                                             pluralize=pluralize)
+        return self._write_xref_markdown(make_page_id(node), pluralize=pluralize)
+
+    def format_external_xref(self, node, attrdict, pluralize=False):
+        ns = node.namespace
+        slug = ns.name.lower() + str(ns.version).replace('.', '')
+        if not self.should_render_node(node):
+            target = 'gir:///%s/%s' % (slug, make_page_id(node.parent))
+            return self._write_xref_markdown(target, self.make_anchor(node),
+                                             self.format_page_name(node.parent),
+                                             pluralize=pluralize)
+        target = 'gir:///%s/%s' % (slug, make_page_id(node))
+        return self._write_xref_markdown(target, None,
+                                         self.format_page_name(node),
+                                         pluralize=pluralize)
+
+    def format_inline(self, node, para):
+        if para is None:
+            return ''
+        cleaned_up_gtkdoc = super(DevDocsFormatterGjs, self).format_inline(node, para)
+        return markdown.markdown(cleaned_up_gtkdoc, extensions=[
+            InlineMarkdown(),
+            'markdown.extensions.fenced_code',
+            'markdown.extensions.nl2br',
+            'markdown.extensions.attr_list',
+            HeaderIdExtension(forceid=False)
+        ])
+
+    def format_in_parameters(self, node):
+        return ', '.join(p.argname for p in self.get_in_parameters(node))
+
 LANGUAGES = {
+    "devdocs": {
+        "gjs": DevDocsFormatterGjs,
+    },
     "mallard": {
         "c": DocFormatterC,
         "python": DocFormatterPython,
@@ -910,6 +1290,7 @@ class DocWriter(object):
 
         self._formatter = formatter_class(self._transformer)
         self._language = self._formatter.language
+        self._output_format = output_format
 
         self._lookup = self._get_template_lookup()
 
@@ -968,6 +1349,7 @@ class DocWriter(object):
                                  node=node,
                                  page_id=page_id,
                                  page_kind=page_kind,
+                                 get_node_kind=get_node_kind,
                                  formatter=self._formatter,
                                  ast=ast)
 
