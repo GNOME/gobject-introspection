@@ -65,6 +65,7 @@ language_mimes = {
     "yaml": "application/x-yaml",
 }
 
+
 def make_page_id(node, recursive=False):
     if isinstance(node, ast.Namespace):
         if recursive:
@@ -226,7 +227,7 @@ class DocFormatter(object):
 
     def escape(self, text):
         return saxutils.escape(text)
-    
+
     def unescape(self, text):
         return saxutils.unescape(text)
 
@@ -368,7 +369,7 @@ class DocFormatter(object):
     # entirely, implementing the custom markup with Markdown extensions.
     #
     # UPDATE: As a temporary fix for code blocks we will convert directly to ``` syntax.
-    # 
+    #
     # NOTES:
     # _process_markdown_code_toggle:
     #     Whenever we encounter ` we need to toggle whether we are escaping text as text inside
@@ -384,12 +385,12 @@ class DocFormatter(object):
     def _process_markdown_code_toggle(self, node, match, props):
         self._processing_code = not self._processing_code
         return match
-    
+
     def _process_markdown_attr_start(self, node, match, props):
         if not self._processing_code:
             self._processing_attr = True
         return match
-    
+
     def _process_markdown_attr_end(self, node, match, props):
         if not self._processing_code:
             self._processing_attr = False
@@ -398,7 +399,7 @@ class DocFormatter(object):
     def _process_html_code_start(self, node, match, props):
         self._processing_code = True
         return match
-    
+
     def _process_html_code_end(self, node, match, props):
         self._processing_code = False
         return match
@@ -1107,7 +1108,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
 class DevDocsFormatterGjs(DocFormatterGjs):
     output_format = "devdocs"
     output_extension = ".html"
-    
+
     def _is_static_method(self, node):
         if not hasattr(node.parent, "static_methods"):
             return False
@@ -1168,7 +1169,6 @@ class DevDocsFormatterGjs(DocFormatterGjs):
 
         cleaned_up_gtkdoc = super(DevDocsFormatterGjs, self).format_inline(node, doc)
         return markdown.markdown(cleaned_up_gtkdoc, extensions=[
-            InlineMarkdown(),
             'markdown.extensions.fenced_code',
             'markdown.extensions.nl2br',
             'markdown.extensions.attr_list',
