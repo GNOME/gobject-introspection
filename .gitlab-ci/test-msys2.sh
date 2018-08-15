@@ -29,7 +29,7 @@ pacman --noconfirm -S --needed \
 export CCACHE_BASEDIR="${CI_PROJECT_DIR}"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
-pip3 install --upgrade --user meson==0.47.1
+pip3 install --upgrade --user meson==0.47.1 flake8
 export PATH="$HOME/.local/bin:$PATH"
 
 # FIXME: https://github.com/Alexpux/MINGW-packages/pull/4064
@@ -40,3 +40,6 @@ cd _build
 ninja
 
 meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+cd ..
+
+python3 -m flake8 --count

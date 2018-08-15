@@ -29,7 +29,6 @@ import codecs
 from contextlib import contextmanager
 
 import giscanner
-from giscanner import message
 from giscanner.annotationparser import GtkDocCommentBlockParser, GtkDocCommentBlockWriter
 from giscanner.scannermain import (get_preprocessor_option_group,
                                    create_source_scanner,
@@ -80,8 +79,6 @@ def annotation_main(args):
 
     if options.packages:
         process_packages(options, options.packages)
-
-    logger = message.MessageLogger.get(namespace=None)
 
     ss = create_source_scanner(options, args)
 
