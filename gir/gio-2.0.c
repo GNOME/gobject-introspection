@@ -3602,14 +3602,7 @@
  *
  * If %TRUE, forces the connection to use a fallback version of TLS
  * or SSL, rather than trying to negotiate the best version of TLS
- * to use. This can be used when talking to servers that don't
- * implement version negotiation correctly and therefore refuse to
- * handshake at all with a modern TLS handshake.
- *
- * Despite the property name, the fallback version is usually not
- * SSL 3.0, because SSL 3.0 is generally disabled by the #GTlsBackend.
- * #GTlsClientConnection will use the next-highest available version
- * as the fallback version.
+ * to use. See g_tls_client_connection_set_use_ssl3().
  *
  * Since: 2.28
  * Deprecated: 2.56: SSL 3.0 is insecure, and this property does not
@@ -4251,7 +4244,7 @@
  * GXdpDocuments::handle-add:
  * @object: A #GXdpDocuments.
  * @invocation: A #GDBusMethodInvocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @arg_o_path_fd: Argument passed by remote caller.
  * @arg_reuse_existing: Argument passed by remote caller.
  * @arg_persistent: Argument passed by remote caller.
@@ -4268,7 +4261,7 @@
  * GXdpDocuments::handle-add-full:
  * @object: A #GXdpDocuments.
  * @invocation: A #GDBusMethodInvocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @arg_o_path_fds: Argument passed by remote caller.
  * @arg_flags: Argument passed by remote caller.
  * @arg_app_id: Argument passed by remote caller.
@@ -4286,7 +4279,7 @@
  * GXdpDocuments::handle-add-named:
  * @object: A #GXdpDocuments.
  * @invocation: A #GDBusMethodInvocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @arg_o_path_parent_fd: Argument passed by remote caller.
  * @arg_filename: Argument passed by remote caller.
  * @arg_reuse_existing: Argument passed by remote caller.
@@ -4557,7 +4550,7 @@
  * GXdpOpenURI::handle-open-file:
  * @object: A #GXdpOpenURI.
  * @invocation: A #GDBusMethodInvocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @arg_parent_window: Argument passed by remote caller.
  * @arg_fd: Argument passed by remote caller.
  * @arg_options: Argument passed by remote caller.
@@ -9083,7 +9076,7 @@
  * where it was created (waiting until the next iteration of the main
  * loop first, if necessary). The caller will pass the #GTask back to
  * the operation's finish function (as a #GAsyncResult), and you can
- * can use g_task_propagate_pointer() or the like to extract the
+ * use g_task_propagate_pointer() or the like to extract the
  * return value.
  *
  * Here is an example for using GTask as a GAsyncResult:
@@ -19041,7 +19034,7 @@
 
 /**
  * g_dbus_message_new_from_blob:
- * @blob: (array length=blob_len) (element-type guint8): A blob represent a binary D-Bus message.
+ * @blob: (array length=blob_len) (element-type guint8): A blob representing a binary D-Bus message.
  * @blob_len: The length of @blob.
  * @capabilities: A #GDBusCapabilityFlags describing what protocol features are supported.
  * @error: Return location for error or %NULL.
@@ -40153,14 +40146,19 @@
  * @conn: the #GTlsClientConnection
  * @use_ssl3: whether to use the lowest-supported protocol version
  *
- * If @use_ssl3 is %TRUE, this forces @conn to use the lowest-supported
- * TLS protocol version rather than trying to properly negotiate the
- * highest mutually-supported protocol version with the peer. This can
- * be used when talking to broken TLS servers that exhibit protocol
- * version intolerance.
+ * Since 2.42.1, if @use_ssl3 is %TRUE, this forces @conn to use the
+ * lowest-supported TLS protocol version rather than trying to properly
+ * negotiate the highest mutually-supported protocol version with the
+ * peer. Be aware that SSL 3.0 is generally disabled by the
+ * #GTlsBackend, so the lowest-supported protocol version is probably
+ * not SSL 3.0.
  *
- * Be aware that SSL 3.0 is generally disabled by the #GTlsBackend, so
- * the lowest-supported protocol version is probably not SSL 3.0.
+ * Since 2.58, this may additionally cause an RFC 7507 fallback SCSV to
+ * be sent to the server, causing modern TLS servers to immediately
+ * terminate the connection. You should generally only use this function
+ * if you need to connect to broken servers that exhibit TLS protocol
+ * version intolerance, and when an initial attempt to connect to a
+ * server normally has already failed.
  *
  * Since: 2.28
  * Deprecated: 2.56: SSL 3.0 is insecure, and this function does not
@@ -40321,7 +40319,8 @@
  * the beginning of the communication, you do not need to call this
  * function explicitly unless you want clearer error reporting.
  * However, you may call g_tls_connection_handshake() later on to
- * renegotiate parameters (encryption methods, etc) with the client.
+ * rehandshake, if TLS 1.2 or older is in use. With TLS 1.3, this will
+ * instead perform a rekey.
  *
  * #GTlsConnection::accept_certificate may be emitted during the
  * handshake.
@@ -40428,7 +40427,8 @@
  * @conn: a #GTlsConnection
  * @mode: the rehandshaking mode
  *
- * Sets how @conn behaves with respect to rehandshaking requests.
+ * Sets how @conn behaves with respect to rehandshaking requests, when
+ * TLS 1.2 or older is in use.
  *
  * %G_TLS_REHANDSHAKE_NEVER means that it will never agree to
  * rehandshake after the initial handshake is complete. (For a client,
@@ -43656,8 +43656,8 @@
  * @arg_o_path_fd: Argument to pass with the method invocation.
  * @arg_reuse_existing: Argument to pass with the method invocation.
  * @arg_persistent: Argument to pass with the method invocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -43690,8 +43690,8 @@
  * @arg_flags: Argument to pass with the method invocation.
  * @arg_app_id: Argument to pass with the method invocation.
  * @arg_permissions: Argument to pass with the method invocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -43706,7 +43706,7 @@
 /**
  * gxdp_documents_call_add_full_finish:
  * @proxy: A #GXdpDocumentsProxy.
- * @out_doc_ids: (out): Return location for return parameter or %NULL to ignore.
+ * @out_doc_ids: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
  * @out_extra_out: (out): Return location for return parameter or %NULL to ignore.
  * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_documents_call_add_full().
@@ -43725,11 +43725,11 @@
  * @arg_flags: Argument to pass with the method invocation.
  * @arg_app_id: Argument to pass with the method invocation.
  * @arg_permissions: Argument to pass with the method invocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @out_doc_ids: (out): Return location for return parameter or %NULL to ignore.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
+ * @out_doc_ids: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
  * @out_extra_out: (out): Return location for return parameter or %NULL to ignore.
  * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddFull">AddFull()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -43747,8 +43747,8 @@
  * @arg_filename: Argument to pass with the method invocation.
  * @arg_reuse_existing: Argument to pass with the method invocation.
  * @arg_persistent: Argument to pass with the method invocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -43781,10 +43781,10 @@
  * @arg_filename: Argument to pass with the method invocation.
  * @arg_reuse_existing: Argument to pass with the method invocation.
  * @arg_persistent: Argument to pass with the method invocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
  * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddNamed">AddNamed()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -43801,10 +43801,10 @@
  * @arg_o_path_fd: Argument to pass with the method invocation.
  * @arg_reuse_existing: Argument to pass with the method invocation.
  * @arg_persistent: Argument to pass with the method invocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
  * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Add">Add()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -43819,7 +43819,7 @@
  * gxdp_documents_call_delete:
  * @proxy: A #GXdpDocumentsProxy.
  * @arg_doc_id: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -43847,7 +43847,7 @@
  * gxdp_documents_call_delete_sync:
  * @proxy: A #GXdpDocumentsProxy.
  * @arg_doc_id: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Delete">Delete()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -43861,7 +43861,7 @@
 /**
  * gxdp_documents_call_get_mount_point:
  * @proxy: A #GXdpDocumentsProxy.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -43890,7 +43890,7 @@
  * gxdp_documents_call_get_mount_point_sync:
  * @proxy: A #GXdpDocumentsProxy.
  * @out_path: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GetMountPoint">GetMountPoint()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -43907,7 +43907,7 @@
  * @arg_doc_id: Argument to pass with the method invocation.
  * @arg_app_id: Argument to pass with the method invocation.
  * @arg_permissions: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -43937,7 +43937,7 @@
  * @arg_doc_id: Argument to pass with the method invocation.
  * @arg_app_id: Argument to pass with the method invocation.
  * @arg_permissions: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.GrantPermissions">GrantPermissions()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -43952,7 +43952,7 @@
  * gxdp_documents_call_info:
  * @proxy: A #GXdpDocumentsProxy.
  * @arg_doc_id: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -43984,7 +43984,7 @@
  * @arg_doc_id: Argument to pass with the method invocation.
  * @out_path: (out): Return location for return parameter or %NULL to ignore.
  * @out_apps: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Info">Info()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -43999,7 +43999,7 @@
  * gxdp_documents_call_list:
  * @proxy: A #GXdpDocumentsProxy.
  * @arg_app_id: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -44029,7 +44029,7 @@
  * @proxy: A #GXdpDocumentsProxy.
  * @arg_app_id: Argument to pass with the method invocation.
  * @out_docs: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.List">List()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -44044,7 +44044,7 @@
  * gxdp_documents_call_lookup:
  * @proxy: A #GXdpDocumentsProxy.
  * @arg_filename: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -44074,7 +44074,7 @@
  * @proxy: A #GXdpDocumentsProxy.
  * @arg_filename: Argument to pass with the method invocation.
  * @out_doc_id: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Lookup">Lookup()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -44091,7 +44091,7 @@
  * @arg_doc_id: Argument to pass with the method invocation.
  * @arg_app_id: Argument to pass with the method invocation.
  * @arg_permissions: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -44121,7 +44121,7 @@
  * @arg_doc_id: Argument to pass with the method invocation.
  * @arg_app_id: Argument to pass with the method invocation.
  * @arg_permissions: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-Documents.RevokePermissions">RevokePermissions()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -44136,7 +44136,7 @@
  * gxdp_documents_complete_add:
  * @object: A #GXdpDocuments.
  * @invocation: (transfer full): A #GDBusMethodInvocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @doc_id: Parameter to return.
  *
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.Add">Add()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
@@ -44149,7 +44149,7 @@
  * gxdp_documents_complete_add_full:
  * @object: A #GXdpDocuments.
  * @invocation: (transfer full): A #GDBusMethodInvocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @doc_ids: Parameter to return.
  * @extra_out: Parameter to return.
  *
@@ -44163,7 +44163,7 @@
  * gxdp_documents_complete_add_named:
  * @object: A #GXdpDocuments.
  * @invocation: (transfer full): A #GDBusMethodInvocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @doc_id: Parameter to return.
  *
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-Documents.AddNamed">AddNamed()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
@@ -44277,7 +44277,7 @@
 
 /**
  * gxdp_documents_override_properties:
- * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @klass: The class structure for a #GObject derived class.
  * @property_id_begin: The property id to assign to the first overridden property.
  *
  * Overrides all #GObject properties in the #GXdpDocuments interface for a concrete class.
@@ -44291,9 +44291,9 @@
  * gxdp_documents_proxy_new:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
- * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
@@ -44323,7 +44323,7 @@
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
@@ -44353,7 +44353,7 @@
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Like gxdp_documents_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
@@ -44370,9 +44370,9 @@
  * gxdp_documents_proxy_new_sync:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
- * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-Documents.top_of_page">org.freedesktop.portal.Documents</link>. See g_dbus_proxy_new_sync() for more details.
@@ -44617,8 +44617,8 @@
  * @arg_parent_window: Argument to pass with the method invocation.
  * @arg_fd: Argument to pass with the method invocation.
  * @arg_options: Argument to pass with the method invocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -44650,10 +44650,10 @@
  * @arg_parent_window: Argument to pass with the method invocation.
  * @arg_fd: Argument to pass with the method invocation.
  * @arg_options: Argument to pass with the method invocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @out_handle: (out): Return location for return parameter or %NULL to ignore.
  * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenFile">OpenFile()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -44670,7 +44670,7 @@
  * @arg_parent_window: Argument to pass with the method invocation.
  * @arg_uri: Argument to pass with the method invocation.
  * @arg_options: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -44702,7 +44702,7 @@
  * @arg_uri: Argument to pass with the method invocation.
  * @arg_options: Argument to pass with the method invocation.
  * @out_handle: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenURI">OpenURI()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -44717,7 +44717,7 @@
  * gxdp_open_uri_complete_open_file:
  * @object: A #GXdpOpenURI.
  * @invocation: (transfer full): A #GDBusMethodInvocation.
- * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @fd_list: (nullable): A #GUnixFDList or %NULL.
  * @handle: Parameter to return.
  *
  * Helper function used in service implementations to finish handling invocations of the <link linkend="gdbus-method-org-freedesktop-portal-OpenURI.OpenFile">OpenFile()</link> D-Bus method. If you instead want to finish handling an invocation by returning an error, use g_dbus_method_invocation_return_error() or similar.
@@ -44761,7 +44761,7 @@
 
 /**
  * gxdp_open_uri_override_properties:
- * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @klass: The class structure for a #GObject derived class.
  * @property_id_begin: The property id to assign to the first overridden property.
  *
  * Overrides all #GObject properties in the #GXdpOpenURI interface for a concrete class.
@@ -44775,9 +44775,9 @@
  * gxdp_open_uri_proxy_new:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
- * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
@@ -44807,7 +44807,7 @@
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
@@ -44837,7 +44837,7 @@
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Like gxdp_open_uri_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
@@ -44854,9 +44854,9 @@
  * gxdp_open_uri_proxy_new_sync:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
- * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-OpenURI.top_of_page">org.freedesktop.portal.OpenURI</link>. See g_dbus_proxy_new_sync() for more details.
@@ -44893,7 +44893,7 @@
  * gxdp_proxy_resolver_call_lookup:
  * @proxy: A #GXdpProxyResolverProxy.
  * @arg_uri: Argument to pass with the method invocation.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL.
  * @user_data: User data to pass to @callback.
  *
@@ -44908,7 +44908,7 @@
 /**
  * gxdp_proxy_resolver_call_lookup_finish:
  * @proxy: A #GXdpProxyResolverProxy.
- * @out_proxies: (out): Return location for return parameter or %NULL to ignore.
+ * @out_proxies: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
  * @res: The #GAsyncResult obtained from the #GAsyncReadyCallback passed to gxdp_proxy_resolver_call_lookup().
  * @error: Return location for error or %NULL.
  *
@@ -44922,8 +44922,8 @@
  * gxdp_proxy_resolver_call_lookup_sync:
  * @proxy: A #GXdpProxyResolverProxy.
  * @arg_uri: Argument to pass with the method invocation.
- * @out_proxies: (out): Return location for return parameter or %NULL to ignore.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @out_proxies: (out) (array zero-terminated=1): Return location for return parameter or %NULL to ignore.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the <link linkend="gdbus-method-org-freedesktop-portal-ProxyResolver.Lookup">Lookup()</link> D-Bus method on @proxy. The calling thread is blocked until a reply is received.
@@ -44957,7 +44957,7 @@
 
 /**
  * gxdp_proxy_resolver_override_properties:
- * @klass: The class structure for a #GObject<!-- -->-derived class.
+ * @klass: The class structure for a #GObject derived class.
  * @property_id_begin: The property id to assign to the first overridden property.
  *
  * Overrides all #GObject properties in the #GXdpProxyResolver interface for a concrete class.
@@ -44971,9 +44971,9 @@
  * gxdp_proxy_resolver_proxy_new:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
- * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
@@ -45003,7 +45003,7 @@
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: User data to pass to @callback.
  *
@@ -45033,7 +45033,7 @@
  * @flags: Flags from the #GDBusProxyFlags enumeration.
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Like gxdp_proxy_resolver_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
@@ -45050,9 +45050,9 @@
  * gxdp_proxy_resolver_proxy_new_sync:
  * @connection: A #GDBusConnection.
  * @flags: Flags from the #GDBusProxyFlags enumeration.
- * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
+ * @name: (nullable): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
- * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL
  *
  * Synchronously creates a proxy for the D-Bus interface <link linkend="gdbus-interface-org-freedesktop-portal-ProxyResolver.top_of_page">org.freedesktop.portal.ProxyResolver</link>. See g_dbus_proxy_new_sync() for more details.

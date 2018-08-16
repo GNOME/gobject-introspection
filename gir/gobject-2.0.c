@@ -819,7 +819,7 @@
 
 /**
  * g_binding_unbind:
- * @binding: (transfer full): a #GBinding
+ * @binding: a #GBinding
  *
  * Explicitly releases the binding between the source and the target
  * property expressed by @binding.
