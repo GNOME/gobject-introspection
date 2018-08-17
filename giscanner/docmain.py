@@ -48,7 +48,7 @@ def doc_main(args):
                       help="Output language")
     parser.add_argument("-f", "--format",
                         action="store", dest="format",
-                        choices=FORMATS, default=FORMATS[0],
+                        choices=FORMATS, default=FORMATS[1],
                         help="Output format")
     parser.add_argument("-I", "--add-include-path",
                       action="append", dest="include_paths", default=[],
