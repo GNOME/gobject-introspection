@@ -249,9 +249,12 @@ class DocFormatter(object):
         if doc is None:
             return ''
 
-        result = '<p>'
-        result += self.format_inline(node, doc)
-        result += '</p>'
+        result = ''
+        for para in doc.split('\n\n'):
+            result += '  <p>'
+            result += self.format_inline(node, para)
+            result += '</p>'
+
         return result
 
     def _resolve_type(self, ident):
