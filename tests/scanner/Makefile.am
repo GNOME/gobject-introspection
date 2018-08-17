@@ -242,6 +242,7 @@ TESTS_ENVIRONMENT = env srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(bui
 LOG_COMPILER = $(PYTHON) $(top_srcdir)/tests/gi-tester
 
 EXTRA_DIST += \
+	meson.build \
 	$(PYTESTS) \
 	Regress-1.0-C-expected					\
 	Regress-1.0-Gjs-expected				\
