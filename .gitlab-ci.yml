@@ -57,7 +57,7 @@ fedora-x86_64-autotools-python2:
     CFLAGS: "-Werror"
   script:
     - sed -i 's|\[glib-2\.0 >= [0-9.]*\]|[glib-2.0 >= 1.0]|' configure.ac
-    - ./autogen.sh --with-python=python2
+    - ./autogen.sh --with-python=python2 --enable-gtk-doc --enable-doctool
     - make -j4
     - make check
     - python2 -m pip install --user flake8
@@ -76,7 +76,7 @@ fedora-x86_64-autotools-python3:
     CFLAGS: "-Werror"
   script:
     - sed -i 's|\[glib-2\.0 >= [0-9.]*\]|[glib-2.0 >= 1.0]|' configure.ac
-    - ./autogen.sh --with-python=python3
+    - ./autogen.sh --with-python=python3 --enable-gtk-doc --enable-doctool
     - make -j4
     - make check
     - python3 -m pip install --user flake8
