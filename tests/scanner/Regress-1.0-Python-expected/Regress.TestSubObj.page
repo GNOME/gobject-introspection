@@ -12,7 +12,7 @@
   <synopsis><code>
 from gi.repository import Regress
 
-test_sub_obj = Regress.TestSubObj()
+test_sub_obj = Regress.TestSubObj(<link xref='Regress.TestSubObj-boolean'>boolean</link>=value)
   </code></synopsis>
 
 
