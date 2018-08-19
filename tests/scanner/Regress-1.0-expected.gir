@@ -2919,6 +2919,12 @@ use it should be.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <property name="number"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
+        <type name="gint" c:type="gint"/>
+      </property>
       <glib:signal name="interface-signal" when="last">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -4312,6 +4318,7 @@ the introspection client langage.</doc>
            glib:type-name="RegressTestSubObj"
            glib:get-type="regress_test_sub_obj_get_type"
            glib:type-struct="TestSubObjClass">
+      <implements name="TestInterface"/>
       <constructor name="new" c:identifier="regress_test_sub_obj_new">
         <return-value transfer-ownership="full">
           <type name="TestObj" c:type="RegressTestObj*"/>
@@ -4338,8 +4345,20 @@ the introspection client langage.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <property name="boolean"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </property>
       <field name="parent_instance">
         <type name="TestObj" c:type="RegressTestObj"/>
+      </field>
+      <field name="number" readable="0" private="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="boolean" readable="0" private="1">
+        <type name="gboolean" c:type="gboolean"/>
       </field>
     </class>
     <record name="TestSubObjClass"
