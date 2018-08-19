@@ -968,6 +968,9 @@ typedef struct _RegressTestSubObjClass    RegressTestSubObjClass;
 struct _RegressTestSubObj
 {
   RegressTestObj parent_instance;
+  /*< private >*/
+  gint number;
+  gboolean boolean;
 };
 
 struct _RegressTestSubObjClass

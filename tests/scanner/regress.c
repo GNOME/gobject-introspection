@@ -3214,12 +3214,84 @@ struct _CallbackInfo
   gpointer user_data;
 };
 
+static void
+regress_test_sub_obj_iface_init (RegressTestInterfaceIface *iface)
+{
+}
 
-G_DEFINE_TYPE(RegressTestSubObj, regress_test_sub_obj, REGRESS_TEST_TYPE_OBJ);
+enum {
+  PROP_TEST_SUB_OBJ_NUMBER = 1,
+  PROP_TEST_SUB_OBJ_BOOLEAN,
+};
+
+G_DEFINE_TYPE_WITH_CODE(RegressTestSubObj, regress_test_sub_obj,
+                        REGRESS_TEST_TYPE_OBJ,
+                        G_IMPLEMENT_INTERFACE(REGRESS_TEST_TYPE_INTERFACE,
+                                              regress_test_sub_obj_iface_init));
+
+
+static void
+regress_test_sub_obj_set_property (GObject      *object,
+                                   guint         property_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+  RegressTestSubObj *self = REGRESS_TEST_SUB_OBJECT (object);
+
+  switch (property_id)
+    {
+    case PROP_TEST_SUB_OBJ_NUMBER:
+      self->number = g_value_get_int (value);
+      break;
+
+    case PROP_TEST_SUB_OBJ_BOOLEAN:
+      self->boolean = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
+
+static void
+regress_test_sub_obj_get_property (GObject    *object,
+                                   guint       property_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  RegressTestSubObj *self = REGRESS_TEST_SUB_OBJECT (object);
+
+  switch (property_id)
+    {
+    case PROP_TEST_SUB_OBJ_NUMBER:
+      g_value_set_int (value, self->number);
+      break;
+
+    case PROP_TEST_SUB_OBJ_BOOLEAN:
+      g_value_set_boolean (value, self->boolean);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
 
 static void
 regress_test_sub_obj_class_init (RegressTestSubObjClass *klass)
 {
+  const guint flags;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  gobject_class->get_property = regress_test_sub_obj_get_property;
+  gobject_class->set_property = regress_test_sub_obj_set_property;
+
+  flags = G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS;
+
+  g_object_class_install_property (gobject_class, PROP_TEST_SUB_OBJ_BOOLEAN,
+                                   g_param_spec_boolean ("boolean", "Boolean", "Boolean",
+                                                         TRUE, flags));
+
+  g_object_class_override_property (gobject_class, PROP_TEST_SUB_OBJ_NUMBER,
+                                    "number");
 }
 
 static void
@@ -3956,6 +4028,7 @@ G_DEFINE_INTERFACE (RegressTestInterface, regress_test_interface, G_TYPE_OBJECT)
 static void
 regress_test_interface_default_init(RegressTestInterfaceIface *iface)
 {
+  const guint flags;
   static gboolean initialized = FALSE;
   if (initialized)
     return;
@@ -3969,6 +4042,14 @@ regress_test_interface_default_init(RegressTestInterfaceIface *iface)
   g_signal_new ("interface-signal", REGRESS_TEST_TYPE_INTERFACE,
                 G_SIGNAL_RUN_LAST, 0, NULL, NULL, NULL,
                 G_TYPE_NONE, 1, G_TYPE_POINTER);
+
+  flags = G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS;
+  /**
+   * RegressTestInterface:number:
+   */
+  g_object_interface_install_property (iface,
+                                       g_param_spec_int ("number", "Number", "Number",
+                                                         0, 10, 0, flags));
 
   initialized = TRUE;
 }
