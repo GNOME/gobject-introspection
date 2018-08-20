@@ -61,7 +61,12 @@ builtins.__dict__['DATADIR'] = datadir
 
 # Again, relative paths first so that the installation prefix is relocatable
 pylibdir = os.path.abspath(os.path.join(filedir, '..', 'lib', 'gobject-introspection'))
-if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner.so')):
+
+py_mod_suffix = 'so'
+if os.name == 'nt':
+   py_mod_suffix = 'pyd'
+
+if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner.' + py_mod_suffix)):
     # Running uninstalled?
     builddir = os.getenv('UNINSTALLED_INTROSPECTION_BUILDDIR', None)
     if builddir is not None:
