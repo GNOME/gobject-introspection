@@ -42,11 +42,14 @@ You will need the following, in addition to your Visual Studio installation:
   as they run on your system.
 
 Set PATH to contain your Python-3.4.x+ interpreter, Ninja build tool (if needed) and
-winflex/flex and Bison executables towards its end.
-
-Note that if you plan to use g-ir-scanner for other packages built using Meson, you
-need to use the same Python release series (3.4, 3.5...) for running Meson there as
-well.
+winflex/flex and Bison executables towards its end.  Please note that if using Python
+2.7.x (such as with the case of building with Visual Studio 2008), the PATH variable
+needs to contain the native Windows Python 2.7.x installation path as well, before
+the path where the Flex and Bison executables are, if using the Flex and Bison
+executables from MSYS2 or Cygwin, as the copy of the Python interpreter from MSYS2
+and Cygwin will likely conflict with the installation of the native Windows Python
+2.7.x.  Please note that building against MSYS2 or Cygwin Python with Visual Studio
+builds is not (and will likely never be) supported.
 
 Open a Visual Studio command prompt and create an empty build directory (which needs
 to be on the same drive as the G-I sources).  In that directory, run the following::
@@ -60,6 +63,7 @@ DLL filename for Cairo-GObject that is built with MinGW/mingw-w64.
 The -Dpython is likely necessary when using multiple Python installations on the
 system and is necessary when building with Visual Studio 2008~2013 when building
 with later versions of Meson (which requires Python 3.5+), due to CRT differences.
+Note that for this setting, Python-2.7.x or Python-3.4.x or later is supported.
 
 When Meson completes configuring and generating the build files, proceed building
 using Ninja or the generated Visual Studio projects.
