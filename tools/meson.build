@@ -9,13 +9,18 @@ if get_option('doctool')
   tools += [['g-ir-doc-tool', 'docmain', 'doc_main']]
 endif
 
-python_name = 'python@0@'.format(python.language_version().split('.')[0])
+if cc.get_id() == 'msvc'
+  python_cmd = python.get_variable('prefix') + '\\python.exe'
+else
+  python_cmd = '/usr/bin/env python@0@'.format(python.language_version().split('.')[0])
+endif
+
 tool_output = []
 foreach tool : tools
   tools_conf = configuration_data()
   tools_conf.set('libdir', libdir_abs)
   tools_conf.set('datarootdir', datadir_abs)
-  tools_conf.set('PYTHON', python_name)
+  tools_conf.set('PYTHON_CMD', python_cmd)
 
   tools_conf.set('TOOL_MODULE', tool[1])
   tools_conf.set('TOOL_FUNCTION', tool[2])
