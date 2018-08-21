@@ -25,6 +25,7 @@ from __future__ import unicode_literals
 
 import os
 import sys
+import sysconfig
 
 if sys.version_info.major < 3:
     import __builtin__ as builtins
@@ -62,11 +63,10 @@ builtins.__dict__['DATADIR'] = datadir
 # Again, relative paths first so that the installation prefix is relocatable
 pylibdir = os.path.abspath(os.path.join(filedir, '..', 'lib', 'gobject-introspection'))
 
-py_mod_suffix = 'so'
-if os.name == 'nt':
-   py_mod_suffix = 'pyd'
+# EXT_SUFFIX for py3 SO for py2
+py_mod_suffix = sysconfig.get_config_var('EXT_SUFFIX') or sysconfig.get_config_var('SO')
 
-if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner.' + py_mod_suffix)):
+if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner' + py_mod_suffix)):
     # Running uninstalled?
     builddir = os.getenv('UNINSTALLED_INTROSPECTION_BUILDDIR', None)
     if builddir is not None:
