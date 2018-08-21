@@ -24,7 +24,15 @@
 #endif
 #include <Python.h>
 #include "sourcescanner.h"
-#include <stdio.h>
+
+#ifdef _WIN32
+#include <fcntl.h>
+#include <io.h>
+#define WIN32_LEAN_AND_MEAN
+#define STRICT
+#include <windows.h>
+#endif
+
 #include <glib-object.h>
 
 #ifndef Py_TYPE
