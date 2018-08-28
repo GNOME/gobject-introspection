@@ -3389,15 +3389,29 @@
 /**
  * G_GNUC_MALLOC:
  *
- * Expands to the GNU C malloc function attribute if the compiler is gcc.
- * Declaring a function as malloc enables better optimization of the function.
- * A function can have the malloc attribute if it returns a pointer which is
- * guaranteed to not alias with any other pointer when the function returns
- * (in practice, this means newly allocated memory).
+ * Expands to the
+ * [GNU C `malloc` function attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-functions-that-behave-like-malloc)
+ * if the compiler is gcc.
+ * Declaring a function as `malloc` enables better optimization of the function,
+ * but must only be done if the allocation behaviour of the function is fully
+ * understood, otherwise miscompilation can result.
+ *
+ * A function can have the `malloc` attribute if it returns a pointer which is
+ * guaranteed to not alias with any other pointer valid when the function
+ * returns, and moreover no pointers to valid objects occur in any storage
+ * addressed by the returned pointer.
+ *
+ * In practice, this means that `G_GNUC_MALLOC` can be used with any function
+ * which returns unallocated or zeroed-out memory, but not with functions which
+ * return initialised structures containing other pointers, or with functions
+ * that reallocate memory. This definition changed in GLib 2.58 to match the
+ * stricter definition introduced around GCC 5.
  *
  * Place the attribute after the declaration, just before the semicolon.
  *
- * See the GNU C documentation for more details.
+ * See the
+ * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-functions-that-behave-like-malloc)
+ * for more details.
  *
  * Since: 2.6
  */
@@ -13228,7 +13242,11 @@
  * pointer is set to %NULL.
  *
  * A macro is also included that allows this function to be used without
- * pointer casts.
+ * pointer casts. This will mask any warnings about incompatible function types
+ * or calling conventions, so you must ensure that your @destroy function is
+ * compatible with being called as `GDestroyNotify` using the standard calling
+ * convention for the platform that GLib was compiled for; otherwise the program
+ * will experience undefined behaviour.
  *
  * Since: 2.34
  */
@@ -16055,8 +16073,8 @@
  * preferred for that instead, as it allows calling functions to perform actions
  * conditional on the type of error.
  *
- * Error messages are always fatal, resulting in a call to
- * abort() to terminate the application. This function will
+ * Error messages are always fatal, resulting in a call to G_BREAKPOINT()
+ * to terminate the application. This function will
  * result in a core dump; don't use it for errors you expect.
  * Using this function indicates a bug in your program, i.e.
  * an assertion failure.
@@ -20183,8 +20201,10 @@
  * container itself.
  *
  * @func, as a #GCopyFunc, takes two arguments, the data to be copied
- * and a @user_data pointer. It's safe to pass %NULL as user_data,
- * if the copy function takes only one argument.
+ * and a @user_data pointer. On common processor architectures, it's safe to
+ * pass %NULL as @user_data if the copy function takes only one argument. You
+ * may get compiler warnings from this though if compiling with GCC’s
+ * `-Wcast-function-type` warning.
  *
  * For instance, if @list holds a list of GObjects, you can do:
  * |[<!-- language="C" -->
@@ -20723,8 +20743,9 @@
  *
  * Logs an error or debugging message.
  *
- * If the log level has been set as fatal, the abort()
- * function is called to terminate the program.
+ * If the log level has been set as fatal, G_BREAKPOINT() is called
+ * to terminate the program. See the documentation for G_BREAKPOINT() for
+ * details of the debugging options this provides.
  *
  * If g_log_default_handler() is used as the log handler function, a new-line
  * character will automatically be appended to @..., and need not be entered
@@ -20747,7 +20768,7 @@
  * allows to install an alternate default log handler.
  * This is used if no log handler has been set for the particular log
  * domain and log level combination. It outputs the message to stderr
- * or stdout and if the log level is fatal it calls abort(). It automatically
+ * or stdout and if the log level is fatal it calls G_BREAKPOINT(). It automatically
  * prints a new-line character after the message, so one does not need to be
  * manually included in @message.
  *
@@ -20952,7 +20973,7 @@
  * Log a message with structured data. The message will be passed through to
  * the log writer set by the application using g_log_set_writer_func(). If the
  * message is fatal (i.e. its log level is %G_LOG_LEVEL_ERROR), the program will
- * be aborted at the end of this function. If the log writer returns
+ * be aborted by calling G_BREAKPOINT() at the end of this function. If the log writer returns
  * %G_LOG_WRITER_UNHANDLED (failure), no other fallback writers will be tried.
  * See the documentation for #GLogWriterFunc for information on chaining
  * writers.
@@ -21230,8 +21251,9 @@
  *
  * Logs an error or debugging message.
  *
- * If the log level has been set as fatal, the abort()
- * function is called to terminate the program.
+ * If the log level has been set as fatal, G_BREAKPOINT() is called
+ * to terminate the program. See the documentation for G_BREAKPOINT() for
+ * details of the debugging options this provides.
  *
  * If g_log_default_handler() is used as the log handler function, a new-line
  * character will automatically be appended to @..., and need not be entered
@@ -28475,9 +28497,11 @@
  * In contrast with g_slist_copy(), this function uses @func to make a copy of
  * each list element, in addition to copying the list container itself.
  *
- * @func, as a #GCopyFunc, takes two arguments, the data to be copied and a user
- * pointer. It's safe to pass #NULL as user_data, if the copy function takes only
- * one argument.
+ * @func, as a #GCopyFunc, takes two arguments, the data to be copied
+ * and a @user_data pointer. On common processor architectures, it's safe to
+ * pass %NULL as @user_data if the copy function takes only one argument. You
+ * may get compiler warnings from this though if compiling with GCC’s
+ * `-Wcast-function-type` warning.
  *
  * For instance, if @list holds a list of GObjects, you can do:
  * |[<!-- language="C" -->
@@ -28489,7 +28513,7 @@
  * g_slist_free_full (another_list, g_object_unref);
  * ]|
  *
- * Returns: a full copy of @list, use #g_slist_free_full to free it
+ * Returns: a full copy of @list, use g_slist_free_full() to free it
  * Since: 2.34
  */
 
@@ -31823,6 +31847,12 @@
  *
  * - `--debug-log`: Debug test logging output.
  *
+ * Since 2.58, if tests are compiled with `G_DISABLE_ASSERT` defined,
+ * g_test_init() will print an error and exit. This is to prevent no-op tests
+ * from being executed, as g_assert() is commonly (erroneously) used in unit
+ * tests, and is a no-op when compiled with `G_DISABLE_ASSERT`. Ensure your
+ * tests are compiled without `G_DISABLE_ASSERT` defined.
+ *
  * Since: 2.16
  */
 
@@ -32123,11 +32153,13 @@
  * particular code runs before or after a given test case, use
  * g_test_add(), which lets you specify setup and teardown functions.
  *
- * If all tests are skipped, this function will return 0 if
- * producing TAP output, or 77 (treated as "skip test" by Automake) otherwise.
+ * If all tests are skipped or marked as incomplete (expected failures),
+ * this function will return 0 if producing TAP output, or 77 (treated
+ * as "skip test" by Automake) otherwise.
  *
  * Returns: 0 on success, 1 on failure (assuming it returns at all),
- *   0 or 77 if all tests were skipped with g_test_skip()
+ *   0 or 77 if all tests were skipped with g_test_skip() and/or
+ *   g_test_incomplete()
  * Since: 2.16
  */
 
@@ -32965,6 +32997,8 @@
  * seconds. It can optionally include fractions of a second and a time
  * zone indicator. (In the absence of any time zone indication, the
  * timestamp is assumed to be in local time.)
+ *
+ * Any leading or trailing space in @iso_date is ignored.
  *
  * Returns: %TRUE if the conversion was successful.
  * Since: 2.12
