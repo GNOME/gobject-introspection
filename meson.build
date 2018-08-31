@@ -1,5 +1,5 @@
 project('gobject-introspection', 'c',
-  version: '1.57.4',
+  version: '1.58.0',
   meson_version: '>= 0.46.0',
   default_options: [
     'warning_level=1',
@@ -50,7 +50,7 @@ configure_file(
 
 # FIXME: Always bumped to match our version
 #glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
-glib_version = '>= 2.57.2'
+glib_version = '>= 2.58.0'
 
 glib_dep = dependency('glib-2.0', version : glib_version,
   fallback: ['glib', 'libglib_dep'])
