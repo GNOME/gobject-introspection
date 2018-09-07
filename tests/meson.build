@@ -8,6 +8,8 @@ test_regress_incdirs = include_directories(['.', 'scanner'])
 installed_sources = [
   'scanner/regress.c',
   'scanner/regress.h',
+  'scanner/warnlib.c',
+  'scanner/warnlib.h',
   'gimarshallingtests.c',
   'gimarshallingtests.h',
   'gitestmacros.h',
