@@ -114,7 +114,10 @@ GIR_SUFFIX="gir-1.0"
 AC_SUBST(GIR_SUFFIX)
 AC_DEFINE_UNQUOTED(GIR_SUFFIX, "$GIR_SUFFIX", [Name of the gir directory])
 
-GIR_DIR="$EXPANDED_DATADIR/$GIR_SUFFIX"
+AC_ARG_WITH(gir-dir-prefix,
+		AS_HELP_STRING([--with-gir-dir-prefix], [Director prefix for gir installation]),
+		[GIR_DIR_PREFIX="$withval"], [GIR_DIR_PREFIX="$EXPANDED_DATADIR"])
+GIR_DIR="$GIR_DIR_PREFIX/$GIR_SUFFIX"
 AC_SUBST(GIR_DIR)
 AC_DEFINE_UNQUOTED(GIR_DIR, "$GIR_DIR", [Director prefix for gir installation])
 

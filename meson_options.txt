@@ -21,3 +21,7 @@ option('cairo-libname', type: 'string',
 option('python', type: 'string', value: 'python3',
   description: 'Path or name of the Python interpreter to build for'
 )
+
+option('gir-dir-prefix', type: 'string',
+  description: 'Intermediate prefix for gir installation under ${prefix}'
+)
