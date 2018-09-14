@@ -18,7 +18,12 @@ python = pymod.find_installation(get_option('python'))
 cc = meson.get_compiler('c')
 config = configuration_data()
 config.set_quoted('GIR_SUFFIX', 'gir-1.0')
-config.set_quoted('GIR_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'gir-1.0'))
+gir_dir_prefix = get_option('gir-dir-prefix')
+if gir_dir_prefix == ''
+    gir_dir_prefix = get_option('datadir')
+endif
+girdir = join_paths(get_option('prefix'), gir_dir_prefix, 'gir-1.0')
+config.set_quoted('GIR_DIR', girdir)
 config.set_quoted('GOBJECT_INTROSPECTION_LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
 
 foreach type : ['char', 'short', 'int', 'long']
@@ -93,6 +98,7 @@ pkgconfig_conf.set('libdir', join_paths('${prefix}', get_option('libdir')))
 pkgconfig_conf.set('datarootdir', join_paths('${prefix}', get_option('datadir')))
 pkgconfig_conf.set('datadir', '${datarootdir}')
 pkgconfig_conf.set('includedir', join_paths('${prefix}', get_option('includedir')))
+pkgconfig_conf.set('GIR_DIR', join_paths('${prefix}', gir_dir_prefix, 'gir-1.0'))
 if host_system == 'windows' or host_system == 'cygwin'
   pkgconfig_conf.set('EXEEXT', '.exe')
 else

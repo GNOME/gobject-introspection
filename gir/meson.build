@@ -34,7 +34,6 @@ gir_files = [
 ]
 
 typelibdir = join_paths(get_option('libdir'), 'girepository-1.0')
-girdir = join_paths(get_option('datadir'), 'gir-1.0')
 install_data(gir_files, install_dir: girdir)
 
 scanner_command = [
