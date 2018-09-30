@@ -10,7 +10,7 @@ py -3 -m zipfile -e pkg-config-lite-0.28-1.zip .
 
 SET PATH=%CD%\pkg-config-lite-0.28-1\bin;%CD%\win_flex_bison;%PATH%
 
-pip3 install --upgrade --user meson==0.47.1 || goto :error
+pip3 install --upgrade --user meson==0.48.0 || goto :error
 meson _build || goto :error
 ninja -C _build || goto :error
 
