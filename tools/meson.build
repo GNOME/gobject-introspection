@@ -20,6 +20,7 @@ foreach tool : tools
   tools_conf = configuration_data()
   tools_conf.set('libdir', libdir_abs)
   tools_conf.set('datarootdir', datadir_abs)
+  tools_conf.set('gir_dir_prefix', gir_dir_prefix)
   tools_conf.set('PYTHON_CMD', python_cmd)
 
   tools_conf.set('TOOL_MODULE', tool[1])

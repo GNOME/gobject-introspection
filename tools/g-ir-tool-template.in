@@ -60,6 +60,16 @@ if not os.path.isdir(os.path.join(datadir, 'gir-1.0')):
 
 builtins.__dict__['DATADIR'] = datadir
 
+# Respect gir_dir_prefix for meson and autotools
+girdir = ''
+# for meson
+if '@gir_dir_prefix@' and not '@gir_dir_prefix@'.startswith('@'):
+    girdir = os.path.abspath(os.path.join(filedir, '..', '@gir_dir_prefix@'))
+# for autotools
+elif '@GIR_DIR@' and not '@GIR_DIR@'.startswith('@'):
+    girdir = os.path.dirname(os.path.abspath('@GIR_DIR@'))
+builtins.__dict__['GIRDIR'] = girdir
+
 # Again, relative paths first so that the installation prefix is relocatable
 pylibdir = os.path.abspath(os.path.join(filedir, '..', 'lib', 'gobject-introspection'))
 
