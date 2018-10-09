@@ -18,6 +18,7 @@ sys.path.insert(0, path)
 
 # Not correct, but enough to get the tests going uninstalled
 builtins.__dict__['DATADIR'] = path
+builtins.__dict__['GIRDIR'] = ''
 
 from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Include, Namespace

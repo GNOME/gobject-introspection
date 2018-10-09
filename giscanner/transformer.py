@@ -184,6 +184,7 @@ None."""
     def _get_gi_data_dirs(self):
         data_dirs = utils.get_system_data_dirs()
         data_dirs.append(DATADIR)
+        data_dirs.append(GIRDIR)
         if os.name != 'nt':
             # For backwards compatibility, was always unconditionally added to the list.
             data_dirs.append('/usr/share')
