@@ -10,7 +10,7 @@ g_ir_scanner=${bindir}/g-ir-scanner
 g_ir_compiler=${bindir}/g-ir-compiler@EXEEXT@
 g_ir_generate=${bindir}/g-ir-generate@EXEEXT@
 gidatadir=${datadir}/gobject-introspection-1.0
-girdir=@GIR_DIR@
+girdir=@GIR_PC_DIR@
 typelibdir=${libdir}/girepository-1.0
 
 Cflags: -I${includedir}/gobject-introspection-1.0 @FFI_PC_CFLAGS@
