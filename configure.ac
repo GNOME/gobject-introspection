@@ -116,9 +116,18 @@ AC_DEFINE_UNQUOTED(GIR_SUFFIX, "$GIR_SUFFIX", [Name of the gir directory])
 
 AC_ARG_WITH([gir-dir-prefix],
 		[AS_HELP_STRING([--with-gir-dir-prefix], [Directory prefix for gir installation])],
-		[GIR_DIR_PREFIX="$withval"], [GIR_DIR_PREFIX="$EXPANDED_DATADIR"])
-GIR_DIR="$GIR_DIR_PREFIX/$GIR_SUFFIX"
+		[GIR_DIR_PREFIX="$withval"], [])
+
+if test -z $GIR_DIR_PREFIX; then
+        GIR_DIR="$EXPANDED_DATADIR/$GIR_SUFFIX"
+        GIR_PC_DIR="\${datadir}/$GIR_SUFFIX"
+else
+        GIR_DIR="$GIR_DIR_PREFIX/$GIR_SUFFIX"
+        GIR_PC_DIR="$GIR_DIR_PREFIX/$GIR_SUFFIX"
+fi
+
 AC_SUBST(GIR_DIR)
+AC_SUBST(GIR_PC_DIR)
 AC_DEFINE_UNQUOTED(GIR_DIR, "$GIR_DIR", [Directory prefix for gir installation])
 
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.58.0])
