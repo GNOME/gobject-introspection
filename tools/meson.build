@@ -10,7 +10,7 @@ if get_option('doctool')
 endif
 
 if cc.get_id() == 'msvc'
-  python_cmd = python.get_variable('prefix') + '\\python.exe'
+  python_cmd = '/usr/bin/env ' + python.get_variable('prefix') + '\\python.exe'
 else
   python_cmd = '/usr/bin/env python@0@'.format(python.language_version().split('.')[0])
 endif
