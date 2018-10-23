@@ -2103,6 +2103,7 @@ enum
   PROP_TEST_OBJ_GTYPE,
   PROP_TEST_OBJ_NAME_CONFLICT,
   PROP_TEST_OBJ_BYTE_ARRAY,
+  PROP_TEST_OBJ_WRITE_ONLY,
 };
 
 static void
@@ -2167,6 +2168,11 @@ regress_test_obj_set_property (GObject      *object,
 
     case PROP_TEST_OBJ_BYTE_ARRAY:
       self->byte_array = g_value_get_boxed (value);
+      break;
+
+    case PROP_TEST_OBJ_WRITE_ONLY:
+      if (g_value_get_boolean (value))
+        self->some_int8 = 0;
       break;
 
     default:
@@ -2736,6 +2742,14 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_TEST_OBJ_BYTE_ARRAY,
                                    pspec);
+
+  /**
+   * TestObj:write-only:
+   */
+  pspec = g_param_spec_boolean ("write-only", "Write-only property",
+                                "A write-only bool property that resets the value of TestObj:int to 0 when true",
+                                FALSE, G_PARAM_WRITABLE);
+  g_object_class_install_property (gobject_class, PROP_TEST_OBJ_WRITE_ONLY, pspec);
 
   klass->matrix = regress_test_obj_default_matrix;
 }

@@ -3671,6 +3671,12 @@ raise an error.</doc>
       <property name="string" writable="1" transfer-ownership="none">
         <type name="utf8" c:type="gchar*"/>
       </property>
+      <property name="write-only"
+                readable="0"
+                writable="1"
+                transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
