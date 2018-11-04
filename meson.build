@@ -15,6 +15,12 @@ configinc = include_directories('.')
 pymod = import('python')
 python = pymod.find_installation(get_option('python'))
 
+python_version = python.language_version()
+python_version_req = '>=3.4'
+if not python_version.version_compare(python_version_req)
+  error('Requires Python @0@, @1@ found.'.format(python_version_req, python_version))
+endif
+
 cc = meson.get_compiler('c')
 config = configuration_data()
 config.set_quoted('GIR_SUFFIX', 'gir-1.0')

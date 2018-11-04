@@ -42,10 +42,6 @@ RUN dnf -y install \
     python3-markdown \
     python3-pip \
     python3-wheel \
-    python2 \
-    python2-devel \
-    python2-mako \
-    python2-markdown \
     redhat-rpm-config \
     systemtap-sdt-devel \
     zlib-devel \
