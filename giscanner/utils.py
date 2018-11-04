@@ -83,7 +83,7 @@ def to_underscores_noprefix(name):
     return name
 
 
-_libtool_pat = re.compile("dlname='([A-z0-9\.\-\+]+)'\n")
+_libtool_pat = re.compile("dlname='([A-z0-9\\.\\-\\+]+)'\n")
 
 
 def _extract_dlname_field(la_file):
