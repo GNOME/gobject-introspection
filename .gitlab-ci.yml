@@ -105,6 +105,7 @@ msys2-mingw32-python3:
 
 vs2017-x64-python3:
   stage: build
+  allow_failure: true
   tags:
     - win32
   script:
