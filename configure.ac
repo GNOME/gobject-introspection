@@ -258,16 +258,13 @@ AC_CHECK_FUNCS([backtrace backtrace_symbols])
 # we will fallback to reading $PYTHON if --with-python is not given, and
 # python.m4 will get the expected input
 AC_ARG_WITH(python,
-  AS_HELP_STRING([--with-python=PATH],[Path to Python interpreter; searches $PATH if only a program name is given; if not given, searches for a few standard names such as "python3" or "python2"]),
+  AS_HELP_STRING([--with-python=PATH],[Path to Python interpreter; searches $PATH if only a program name, such as "python3" or "python3.4", is given; if not given, searches for a few standard names]),
   [PYTHON="$withval"], [])
 if test x"$PYTHON" = xyes; then
     AC_MSG_ERROR([--with-python option requires a path or program argument])
 fi
-if test -n "$PYTHON" && ! which "$PYTHON"; then
-    AC_MSG_ERROR([Python interpreter $PYTHON does not exist])
-fi
+AM_PATH_PYTHON(3.4,,[AC_MSG_ERROR([Requires Python >=3.4])])
 
-AM_PATH_PYTHON([2.7])
 case "$host" in
 *-*-mingw*)
 	# Change backslashes to forward slashes in pyexecdir to avoid
