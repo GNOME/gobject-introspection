@@ -1,7 +1,7 @@
 stages:
   - build
 
-image: registry.gitlab.gnome.org/gnome/gobject-introspection:v1
+image: registry.gitlab.gnome.org/gnome/gobject-introspection:v2
 
 cache:
   paths:
@@ -22,46 +22,6 @@ fedora-x86_64-meson-python3:
     - python3 -m flake8 --count
   except:
     - tags
-  artifacts:
-    when: on_failure
-    name: "gi-_${CI_COMMIT_REF_NAME}"
-    paths:
-      - "${CI_PROJECT_DIR}/_build/meson-logs"
-
-fedora-x86_64-meson-python2:
-  stage: build
-  variables:
-    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
-    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
-  script:
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true -Dpython=python2 _build .
-    - cd _build
-    - ninja
-    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
-    - cd ..
-    - python2 -m pip install --user flake8
-    - python2 -m flake8 --count
-  except:
-    - tags
-  artifacts:
-    when: on_failure
-    name: "gi-_${CI_COMMIT_REF_NAME}"
-    paths:
-      - "${CI_PROJECT_DIR}/_build/meson-logs"
-
-fedora-x86_64-autotools-python2:
-  stage: build
-  variables:
-    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
-    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
-    CFLAGS: "-Werror"
-  script:
-    - sed -i 's|\[glib-2\.0 >= [0-9.]*\]|[glib-2.0 >= 1.0]|' configure.ac
-    - ./autogen.sh --with-python=python2 --enable-gtk-doc --enable-doctool
-    - make -j4
-    - make check
-    - python2 -m pip install --user flake8
-    - make check.quality
   artifacts:
     when: on_failure
     name: "gi-_${CI_COMMIT_REF_NAME}"
