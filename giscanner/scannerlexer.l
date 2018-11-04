@@ -164,6 +164,7 @@ stringtext				([^\\\"])|(\\.)
 "__asm__" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "__attribute__" 		        { if (!parse_ignored_macro()) REJECT; }
 "__attribute" 		                { if (!parse_ignored_macro()) REJECT; }
+"__pragma" 		                { if (!parse_ignored_macro()) REJECT; }
 "__const"                               { return CONST; }
 "__extension__"                         { return EXTENSION; }
 "__inline__"                            { return INLINE; }
