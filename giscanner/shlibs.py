@@ -119,7 +119,10 @@ def _resolve_non_libtool(options, binary, libraries):
 def resolve_from_ldd_output(libraries, output, basename=False):
     patterns = {}
     for library in libraries:
-        patterns[library] = _ldd_library_pattern(library)
+        if not os.path.isfile(library):
+            patterns[library] = _ldd_library_pattern(library)
+    if len(patterns) == 0:
+        return []
 
     shlibs = []
     for line in output.splitlines():
