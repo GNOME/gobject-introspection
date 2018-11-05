@@ -136,11 +136,6 @@ def resolve_from_ldd_output(libraries, output, basename=False):
                     shlibs.append(m.group())
                     break
 
-    if len(patterns) > 0:
-        raise SystemExit(
-            "ERROR: can't resolve libraries to shared libraries: " +
-            ", ".join(patterns.keys()))
-
     if basename:
         shlibs = list(map(os.path.basename, shlibs))
     return shlibs

@@ -23,13 +23,6 @@ class TestLddParser(unittest.TestCase):
             ['libglib-2.0.so.0', 'libgtk-3.so.0', 'libpango-1.0.so.0'],
             resolve_from_ldd_output(libraries, output))
 
-    def test_unresolved_library(self):
-        output = ''
-        libraries = ['foo']
-
-        with self.assertRaises(SystemExit, msg='can\'t resolve libraries to shared libraries: foo'):
-            resolve_from_ldd_output(libraries, output)
-
     def test_prefixed_library_name(self):
         output = '''\
            /usr/lib/liblibX.so
