@@ -156,7 +156,7 @@ class CCompiler(object):
                 if library != 'm':
                     args.append(library + '.lib')
             else:
-                if library.endswith(".la"):  # explicitly specified libtool library
+                if library.endswith(".la") or os.path.isabs(library):  # explicitly specified libtool library
                     args.append(library)
                 else:
                     args.append('-l' + library)
