@@ -133,17 +133,6 @@ class CCompiler(object):
                 if sys.platform != 'darwin':
                     args.append('-Wl,--no-as-needed')
 
-        for library in libraries + extra_libraries:
-            if self.check_is_msvc():
-                # Note that Visual Studio builds do not use libtool!
-                if library != 'm':
-                    args.append(library + '.lib')
-            else:
-                if library.endswith(".la"):  # explicitly specified libtool library
-                    args.append(library)
-                else:
-                    args.append('-l' + library)
-
         for library_path in libpaths:
             # The dumper program needs to look for dynamic libraries
             # in the library paths first
@@ -160,6 +149,17 @@ class CCompiler(object):
                         args.append('-Wl,-rpath,' + library_path)
 
             runtime_paths.append(library_path)
+
+        for library in libraries + extra_libraries:
+            if self.check_is_msvc():
+                # Note that Visual Studio builds do not use libtool!
+                if library != 'm':
+                    args.append(library + '.lib')
+            else:
+                if library.endswith(".la"):  # explicitly specified libtool library
+                    args.append(library)
+                else:
+                    args.append('-l' + library)
 
         for envvar in runtime_path_envvar:
             if envvar in os.environ:
