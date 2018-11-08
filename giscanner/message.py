@@ -80,11 +80,8 @@ class Position(object):
                                         self.column or -1)
 
     def format(self, cwd):
-        filename = os.path.realpath(self.filename)
-        cwd = os.path.realpath(cwd)
-        common_prefix = os.path.commonprefix((filename, cwd))
-        if common_prefix:
-            filename = os.path.relpath(filename, common_prefix)
+        filename = os.path.relpath(os.path.realpath(self.filename),
+                                   os.path.realpath(cwd))
 
         if self.column is not None:
             return '%s:%d:%d' % (filename, self.line, self.column)
