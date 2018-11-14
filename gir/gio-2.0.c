@@ -5804,8 +5804,7 @@
  * well-known name, the property cache is flushed when the name owner
  * vanishes and reloaded when a name owner appears.
  *
- * If a #GDBusProxy is used for a well-known name, the owner of the
- * name is tracked and can be read from
+ * The unique name owner of the proxy's name is tracked and can be read from
  * #GDBusProxy:g-name-owner. Connect to the #GObject::notify signal to
  * get notified of changes. Additionally, only signals and property
  * changes emitted from the current name owner are considered and
@@ -6976,7 +6975,7 @@
  * then attempt to connect to that host, handling the possibility of
  * multiple IP addresses and multiple address families.
  *
- * See #GSocketConnectable for and example of using the connectable
+ * See #GSocketConnectable for an example of using the connectable
  * interface.
  */
 
@@ -7034,7 +7033,7 @@
  * address families.
  *
  * See #GSrvTarget for more information about SRV records, and see
- * #GSocketConnectable for and example of using the connectable
+ * #GSocketConnectable for an example of using the connectable
  * interface.
  */
 
@@ -7452,7 +7451,7 @@
  * fixed-size.
  *
  * #GSeekable on fixed-sized streams is approximately the same as POSIX
- * lseek() on a block device (for example: attmepting to seek past the
+ * lseek() on a block device (for example: attempting to seek past the
  * end of the device is an error).  Fixed streams typically cannot be
  * truncated.
  *
@@ -7586,6 +7585,11 @@
  *
  *     <key name="box" type="(ii)">
  *       <default>(20,30)</default>
+ *     </key>
+ *
+ *     <key name="empty-string" type="s">
+ *       <default>""</default>
+ *       <summary>Empty strings have to be provided in GVariant form</summary>
  *     </key>
  *
  *   </schema>
@@ -9290,6 +9294,9 @@
  * from a certificate or key store. It is an abstract base class which
  * TLS library specific subtypes override.
  *
+ * A #GTlsDatabase may be accessed from multiple threads by the TLS backend.
+ * All implementations are required to be fully thread-safe.
+ *
  * Most common client applications will not directly interact with
  * #GTlsDatabase. It is used internally by #GTlsConnection.
  *
@@ -9588,6 +9595,9 @@
  * [thread-default-context aware][g-main-context-push-thread-default],
  * and so should not be used other than from the main thread, with no
  * thread-default-context active.
+ *
+ * In order to receive updates about volumes and mounts monitored through GVFS,
+ * a main loop must be running.
  */
 
 
@@ -14916,7 +14926,7 @@
  * dispatched anywhere else - not even the standard dispatch machinery
  * (that API such as g_dbus_connection_signal_subscribe() and
  * g_dbus_connection_send_message_with_reply() relies on) will see the
- * message. Similary, if a filter consumes an outgoing message, the
+ * message. Similarly, if a filter consumes an outgoing message, the
  * message will not be sent to the other peer.
  *
  * If @user_data_free_func is non-%NULL, it will be called (in the
@@ -15996,6 +16006,11 @@
  * signal is unsubscribed from, and may be called after @connection
  * has been destroyed.)
  *
+ * The returned subscription identifier is an opaque value which is guaranteed
+ * to never be zero.
+ *
+ * This function can never fail.
+ *
  * Returns: a subscription identifier that can be used with g_dbus_connection_signal_unsubscribe()
  * Since: 2.26
  */
@@ -16798,7 +16813,7 @@
 
 /**
  * g_dbus_message_bytes_needed:
- * @blob: (array length=blob_len) (element-type guint8): A blob represent a binary D-Bus message.
+ * @blob: (array length=blob_len) (element-type guint8): A blob representing a binary D-Bus message.
  * @blob_len: The length of @blob (must be at least 16).
  * @error: Return location for error or %NULL.
  *
@@ -16904,7 +16919,10 @@
  *
  * Gets a header field on @message.
  *
- * Returns: A #GVariant with the value if the header was found, %NULL
+ * The caller is responsible for checking the type of the returned #GVariant
+ * matches what is expected.
+ *
+ * Returns: (transfer none) (nullable): A #GVariant with the value if the header was found, %NULL
  * otherwise. Do not free, it is owned by @message.
  * Since: 2.26
  */
@@ -17079,6 +17097,9 @@
  * Creates a new #GDBusMessage from the data stored at @blob. The byte
  * order that the message was in can be retrieved using
  * g_dbus_message_get_byte_order().
+ *
+ * If the @blob cannot be parsed, contains invalid fields, or contains invalid
+ * headers, %G_IO_ERROR_INVALID_ARGUMENT will be returned.
  *
  * Returns: A new #GDBusMessage or %NULL if @error is set. Free with
  * g_object_unref().
@@ -18691,6 +18712,10 @@
  * match rules for signals. Connect to the #GDBusProxy::g-signal signal
  * to handle signals from the remote object.
  *
+ * If both %G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES and
+ * %G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS are set, this constructor is
+ * guaranteed to complete immediately without blocking.
+ *
  * If @name is a well-known name and the
  * %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START and %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START_AT_CONSTRUCTION
  * flags aren't set and no name owner currently exists, the message bus
@@ -18795,6 +18820,10 @@
  * If the %G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS flag is not set, also sets up
  * match rules for signals. Connect to the #GDBusProxy::g-signal signal
  * to handle signals from the remote object.
+ *
+ * If both %G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES and
+ * %G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS are set, this constructor is
+ * guaranteed to return immediately without blocking.
  *
  * If @name is a well-known name and the
  * %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START and %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START_AT_CONSTRUCTION
@@ -19191,6 +19220,23 @@
  * Returns: a newly allocated string, or %NULL if the key
  *     is not found
  * Since: 2.36
+ */
+
+
+/**
+ * g_desktop_app_info_get_string_list:
+ * @info: a #GDesktopAppInfo
+ * @key: the key to look up
+ * @length: (out) (optional): return location for the number of returned strings, or %NULL
+ *
+ * Looks up a string list value in the keyfile backing @info.
+ *
+ * The @key is looked up in the "Desktop Entry" group.
+ *
+ * Returns: (array zero-terminated=1 length=length) (element-type utf8) (transfer full):
+ *  a %NULL-terminated string array or %NULL if the specified
+ *  key cannot be found. The array should be freed with g_strfreev().
+ * Since: 2.59.0
  */
 
 
@@ -24907,8 +24953,8 @@
  *   native, the returned string is the result of g_file_get_uri()
  *   (such as `sftp://path/to/my%20icon.png`).
  *
- * - If @icon is a #GThemedIcon with exactly one name, the encoding is
- *    simply the name (such as `network-server`).
+ * - If @icon is a #GThemedIcon with exactly one name and no fallbacks,
+ *   the encoding is simply the name (such as `network-server`).
  *
  * Returns: (nullable): An allocated NUL-terminated UTF8 string or
  * %NULL if @icon can't be serialized. Use g_free() to free.
@@ -31915,16 +31961,9 @@
  * The list is exactly the list of strings for which it is not an error
  * to call g_settings_get_child().
  *
- * For GSettings objects that are lists, this value can change at any
- * time. Note that there is a race condition here: you may
- * request a child after listing it only for it to have been destroyed
- * in the meantime.  For this reason, g_settings_get_child() may return
- * %NULL even for a child that was listed by this function.
- *
- * For GSettings objects that are not lists, you should probably not be
- * calling this function from "normal" code (since you should already
- * know what children are in your schema).  This function may still be
- * useful there for introspection reasons, however.
+ * There is little reason to call this function from "normal" code, since
+ * you should already know what children are in your schema. This function
+ * may still be useful there for introspection reasons, however.
  *
  * You should free the return value with g_strfreev() when you are done
  * with it.
@@ -37929,6 +37968,24 @@
 
 
 /**
+ * g_tls_backend_set_default_database:
+ * @backend: the #GTlsBackend
+ * @database: (nullable): the #GTlsDatabase
+ *
+ * Set the default #GTlsDatabase used to verify TLS connections
+ *
+ * Any subsequent call to g_tls_backend_get_default_database() will return
+ * the database set in this call.  Existing databases and connections are not
+ * modified.
+ *
+ * Setting a %NULL default database will reset to using the system default
+ * database as if g_tls_backend_set_default_database() had never been called.
+ *
+ * Since: 2.60
+ */
+
+
+/**
  * g_tls_backend_supports_dtls:
  * @backend: the #GTlsBackend
  *
@@ -38394,8 +38451,10 @@
  * the beginning of the communication, you do not need to call this
  * function explicitly unless you want clearer error reporting.
  * However, you may call g_tls_connection_handshake() later on to
- * rehandshake, if TLS 1.2 or older is in use. With TLS 1.3, this will
- * instead perform a rekey.
+ * rehandshake, if TLS 1.2 or older is in use. With TLS 1.3, the
+ * behavior is undefined but guaranteed to be reasonable and
+ * nondestructive, so most older code should be expected to continue to
+ * work without changes.
  *
  * #GTlsConnection::accept_certificate may be emitted during the
  * handshake.
@@ -39897,6 +39956,22 @@
 
 
 /**
+ * g_unix_mount_get_root_path:
+ * @mount_entry: a #GUnixMountEntry.
+ *
+ * Gets the root of the mount within the filesystem. This is useful e.g. for
+ * mounts created by bind operation, or btrfs subvolumes.
+ *
+ * For example, the root path is equal to "/" for mount created by
+ * "mount /dev/sda1 /mnt/foo" and "/bar" for
+ * "mount --bind /mnt/foo/bar /mnt/bar".
+ *
+ * Returns: (nullable): a string containing the root, or %NULL if not supported.
+ * Since: 2.60
+ */
+
+
+/**
  * g_unix_mount_guess_can_eject:
  * @mount_entry: a #GUnixMountEntry
  *
@@ -40809,7 +40884,7 @@
  * also listen for the "removed" signal on the returned object
  * and give up its reference when handling that signal
  *
- * Similary, if implementing g_volume_monitor_adopt_orphan_mount(),
+ * Similarly, if implementing g_volume_monitor_adopt_orphan_mount(),
  * the implementor must take a reference to @mount and return it in
  * its g_volume_get_mount() implemented. Also, the implementor must
  * listen for the "unmounted" signal on @mount and give up its

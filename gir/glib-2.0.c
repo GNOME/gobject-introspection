@@ -2108,7 +2108,9 @@
  *
  * GLib is attempting to unify around the use of 64bit integers to
  * represent microsecond-precision time. As such, this type will be
- * removed from a future version of GLib.
+ * removed from a future version of GLib. A consequence of using `glong` for
+ * `tv_sec` is that on 32-bit systems `GTimeVal` is subject to the year 2038
+ * problem.
  */
 
 
@@ -3325,6 +3327,23 @@
 
 
 /**
+ * G_GNUC_FALLTHROUGH:
+ *
+ * Expands to the GNU C fallthrough statement attribute if the compiler is gcc.
+ * This allows declaring case statement to explicitly fall through in switch
+ * statements. To enable this feature, use -Wimplicit-fallthrough during
+ * compilation.
+ *
+ * Put the attribute right before the case statement you want to fall through
+ * to.
+ *
+ * See the GNU C documentation for more details.
+ *
+ * Since: 2.60
+ */
+
+
+/**
  * G_GNUC_FORMAT:
  * @arg_idx: the index of the argument
  *
@@ -3561,6 +3580,24 @@
  * See the
  * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-Wformat-3288)
  * for details.
+ */
+
+
+/**
+ * G_GNUC_STRFTIME:
+ * @format_idx: the index of the argument corresponding to
+ *     the format string (the arguments are numbered from 1)
+ *
+ * Expands to the GNU C strftime format function attribute if the compiler
+ * is gcc. This is used for declaring functions which take a format argument
+ * which is passed to strftime() or an API implementing its formats. It allows
+ * the compiler check the format passed to the function.
+ *
+ * See the
+ * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-Wformat-3288)
+ * for details.
+ *
+ * Since: 2.60
  */
 
 
@@ -6708,7 +6745,10 @@
  *
  * The above definition is recursive to arbitrary depth. "aaaaai" and
  * "(ui(nq((y)))s)" are both valid type strings, as is
- * "a(aa(ui)(qna{ya(yd)}))".
+ * "a(aa(ui)(qna{ya(yd)}))". In order to not hit memory limits, #GVariant
+ * imposes a limit on recursion depth of 65 nested containers. This is the
+ * limit in the D-Bus specification (64) plus one to allow a #GDBusMessage to
+ * be nested in a top-level tuple.
  *
  * The meaning of each of the characters is as follows:
  * - `b`: the type string of %G_VARIANT_TYPE_BOOLEAN; a boolean value.
@@ -9137,15 +9177,15 @@
  * @free_segment: if %TRUE the actual element data is freed as well
  *
  * Frees the memory allocated for the #GArray. If @free_segment is
- * %TRUE it frees the memory block holding the elements as well and
- * also each element if @array has a @element_free_func set. Pass
+ * %TRUE it frees the memory block holding the elements as well. Pass
  * %FALSE if you want to free the #GArray wrapper but preserve the
- * underlying array for use elsewhere. If the reference count of @array
- * is greater than one, the #GArray wrapper is preserved but the size
- * of @array will be set to zero.
+ * underlying array for use elsewhere. If the reference count of
+ * @array is greater than one, the #GArray wrapper is preserved but
+ * the size of  @array will be set to zero.
  *
- * If array elements contain dynamically-allocated memory, they should
- * be freed separately.
+ * If array contents point to dynamically-allocated memory, they should
+ * be freed separately if @free_seg is %TRUE and no @clear_func
+ * function has been set for @array.
  *
  * This function is not thread-safe. If using a #GArray from multiple
  * threads, use only the atomic g_array_ref() and g_array_unref()
@@ -11729,8 +11769,8 @@
  * @stamp: (out) (optional): return location for the last registration time, or %NULL
  * @error: return location for a #GError, or %NULL
  *
- * Gets the registration informations of @app_name for the bookmark for
- * @uri.  See g_bookmark_file_set_app_info() for more informations about
+ * Gets the registration information of @app_name for the bookmark for
+ * @uri.  See g_bookmark_file_set_app_info() for more information about
  * the returned data.
  *
  * The string returned in @app_exec must be freed.
@@ -16904,8 +16944,9 @@
  *
  * g_get_language_names() returns g_get_language_names_with_category("LC_MESSAGES").
  *
- * Returns: (array zero-terminated=1) (transfer none): a %NULL-terminated array of strings owned by GLib
- *    that must not be modified or freed.
+ * Returns: (array zero-terminated=1) (transfer none): a %NULL-terminated array of strings owned by
+ *    the thread g_get_language_names_with_category was called from.
+ *    It must not be modified or freed. It must be copied if planned to be used in another thread.
  * Since: 2.58
  */
 
@@ -19303,7 +19344,9 @@
  * @group_name. If both @key and @group_name are %NULL, then
  * @comment will be read from above the first group in the file.
  *
- * Note that the returned string includes the '#' comment markers.
+ * Note that the returned string does not include the '#' comment markers,
+ * but does include any whitespace after them (on each line). It includes
+ * the line breaks between lines, but does not include the final line break.
  *
  * Returns: a comment that should be freed with g_free()
  * Since: 2.6
@@ -24277,7 +24320,9 @@
  * g_path_get_dirname:
  * @file_name: (type filename): the name of the file
  *
- * Gets the directory components of a file name.
+ * Gets the directory components of a file name. For example, the directory
+ * component of `/usr/bin/test` is `/usr/bin`. The directory component of `/`
+ * is `/`.
  *
  * If the file name has no directory components "." is returned.
  * The returned string should be freed when no longer needed.
@@ -29391,7 +29436,11 @@
  * on how to handle memory management of @data.
  *
  * Typically, you won't use this function. Instead use functions specific
- * to the type of source you are using.
+ * to the type of source you are using, such as g_idle_add() or g_timeout_add().
+ *
+ * It is safe to call this function multiple times on a source which has already
+ * been attached to a context. The changes will take effect for the next time
+ * the source is dispatched after this call returns.
  */
 
 
@@ -29408,6 +29457,10 @@
  * an initial reference count on @callback_data, and thus
  * @callback_funcs->unref will eventually be called once more
  * than @callback_funcs->ref.
+ *
+ * It is safe to call this function multiple times on a source which has already
+ * been attached to a context. The changes will take effect for the next time
+ * the source is dispatched after this call returns.
  */
 
 
@@ -33031,10 +33084,12 @@
  * variation of ISO 8601 format is required.
  *
  * If @time_ represents a date which is too large to fit into a `struct tm`,
- * %NULL will be returned. This is platform dependent, but it is safe to assume
- * years up to 3000 are supported. The return value of g_time_val_to_iso8601()
- * has been nullable since GLib 2.54; before then, GLib would crash under the
- * same conditions.
+ * %NULL will be returned. This is platform dependent. Note also that since
+ * `GTimeVal` stores the number of seconds as a `glong`, on 32-bit systems it
+ * is subject to the year 2038 problem.
+ *
+ * The return value of g_time_val_to_iso8601() has been nullable since GLib
+ * 2.54; before then, GLib would crash under the same conditions.
  *
  * Returns: (nullable): a newly allocated string containing an ISO 8601 date,
  *    or %NULL if @time_ was too large
@@ -35536,6 +35591,22 @@
 
 
 /**
+ * g_utf8_validate_len:
+ * @str: (array length=max_len) (element-type guint8): a pointer to character data
+ * @max_len: max bytes to validate
+ * @end: (out) (optional) (transfer none): return location for end of valid data
+ *
+ * Validates UTF-8 encoded text.
+ *
+ * As with g_utf8_validate(), but @max_len must be set, and hence this function
+ * will always return %FALSE if any of the bytes of @str are nul.
+ *
+ * Returns: %TRUE if the text was valid UTF-8
+ * Since: 2.60
+ */
+
+
+/**
  * g_utime:
  * @filename: (type filename): a pathname in the GLib file name encoding
  *     (UTF-8 on Windows)
@@ -36438,6 +36509,11 @@
  * The returned value is never floating.  You should free it with
  * g_variant_unref() when you're done with it.
  *
+ * There may be implementation specific restrictions on deeply nested values,
+ * which would result in the unit tuple being returned as the child value,
+ * instead of further nested children. #GVariant is guaranteed to handle
+ * nesting up to at least 64 levels.
+ *
  * This function is O(1).
  *
  * Returns: (transfer full): the child at the specified index
@@ -36922,6 +36998,9 @@
  * If @value is found to be in normal form then it will be marked as
  * being trusted.  If the value was already marked as being trusted then
  * this function will immediately return %TRUE.
+ *
+ * There may be implementation specific restrictions on deeply nested values.
+ * GVariant is guaranteed to handle nesting up to at least 64 levels.
  *
  * Returns: %TRUE if @value is in normal form
  * Since: 2.24
@@ -37488,6 +37567,10 @@
  *
  * A reference is taken on @bytes.
  *
+ * The data in @bytes must be aligned appropriately for the @type being loaded.
+ * Otherwise this function will internally create a copy of the memory (since
+ * GLib 2.60) or (in older versions) fail and exit the process.
+ *
  * Returns: (transfer none): a new #GVariant with a floating reference
  * Since: 2.36
  */
@@ -37526,6 +37609,11 @@
  * @notify will be called with @user_data when @data is no longer
  * needed.  The exact time of this call is unspecified and might even be
  * before this function returns.
+ *
+ * Note: @data must be backed by memory that is aligned appropriately for the
+ * @type being loaded. Otherwise this function will internally create a copy of
+ * the memory (since GLib 2.60) or (in older versions) fail and exit the
+ * process.
  *
  * Returns: (transfer none): a new floating #GVariant of type @type
  * Since: 2.24

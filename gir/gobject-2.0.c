@@ -1821,6 +1821,8 @@
  * Creates a new closure which invokes @callback_func with @user_data as
  * the last parameter.
  *
+ * @destroy_data will be called as a finalize notifier on the #GClosure.
+ *
  * Returns: (transfer none): a floating reference to a new #GCClosure
  */
 
@@ -1863,6 +1865,8 @@
  *
  * Creates a new closure which invokes @callback_func with @user_data as
  * the first parameter.
+ *
+ * @destroy_data will be called as a finalize notifier on the #GClosure.
  *
  * Returns: (transfer none): a floating reference to a new #GCClosure
  */
@@ -1934,7 +1938,7 @@
 
 /**
  * g_closure_invalidate:
- * @closure: GClosure to invalidate
+ * @closure: #GClosure to invalidate
  *
  * Sets a flag on the closure to indicate that its calling
  * environment has become invalid, and thus causes any future
@@ -3466,8 +3470,8 @@
 
 /**
  * g_object_watch_closure:
- * @object: GObject restricting lifetime of @closure
- * @closure: GClosure to watch
+ * @object: #GObject restricting lifetime of @closure
+ * @closure: #GClosure to watch
  *
  * This function essentially limits the life time of the @closure to
  * the life time of the object. That is, when the object is finalized,
