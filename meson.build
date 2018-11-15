@@ -197,7 +197,9 @@ endif
 subdir('girepository')
 subdir('tools')
 subdir('giscanner')
-subdir('gir')
+if get_option('enable-introspection-data') == true
+    subdir('gir')
+endif
 subdir('docs')
 subdir('tests')
 
