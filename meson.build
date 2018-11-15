@@ -91,7 +91,9 @@ libffi_dep = dependency('libffi',
 subdir('girepository')
 subdir('tools')
 subdir('giscanner')
-subdir('gir')
+if get_option('enable-introspection-data') == true
+    subdir('gir')
+endif
 subdir('examples')
 subdir('docs')
 subdir('tests')
