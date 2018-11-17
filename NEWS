@@ -1,3 +1,15 @@
+2.58.1 - 2018-11-17
+-------------------
+
+* meson: Install warnlib mr#62 (Jan Tojnar <jtojnar@gmail.com>)
+* scanner: Parse __typeof__ and discard it
+  mr#71 (Jan Alexander Steffens (heftig) <jan.steffens@gmail.com>)
+* meson: add back /usr/bin/env to the python-cmd
+  issue#237 mr#70 (Havard Graff <havard@pexip.com>)
+* Fix non libtool build
+  mr#72 (Olivier Crête <olivier.crete@collabora.com>)
+
+
 === 2.58 ======================================================================
 
     • Changes:
