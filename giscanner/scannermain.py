@@ -248,6 +248,9 @@ match the namespace prefix.""")
     parser.add_option("", "--include-last-in-src",
                       action="append", dest="include_last_src", default=[],
                       help="Header to include after the other headers in generated sources")
+    parser.add_option("", "--sources-top-dirs", default=[], action='append',
+                      help="Paths to the sources directories used to determine"
+                      " relative files locations to be used in the gir file.")
 
     return parser
 
@@ -441,7 +444,7 @@ def create_source_scanner(options, args):
                        cflags=options.cflags)
     ss.parse_files(filenames)
     ss.parse_macros(filenames)
-    return ss
+    return ss, filenames
 
 
 def write_output(data, options):
@@ -535,7 +538,7 @@ def scanner_main(args):
         except pkgconfig.PkgConfigError as e:
             _error(str(e))
 
-    ss = create_source_scanner(options, args)
+    ss, filenames = create_source_scanner(options, args)
 
     cbp = GtkDocCommentBlockParser()
     blocks = cbp.parse_comment_blocks(ss.get_comments())
@@ -575,7 +578,9 @@ def scanner_main(args):
 
     transformer.namespace.c_includes = options.c_includes
     transformer.namespace.exported_packages = exported_packages
-    writer = Writer(transformer.namespace)
+    if not options.sources_top_dirs:
+        options.sources_top_dirs = [os.path.commonprefix(filenames).rpartition(os.path.sep)[0]]
+    writer = Writer(transformer.namespace, options.sources_top_dirs)
     data = writer.get_encoded_xml()
 
     write_output(data, options)

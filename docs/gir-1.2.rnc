@@ -195,6 +195,9 @@ grammar {
     & element doc {
       attribute xml:space { "preserve" }?,
       attribute xml:whitespace { "preserve" }?,
+      attribute filename { xsd:string },
+      attribute line { xsd:string },
+      attribute column { xsd:string },
 
       text
     }?
@@ -203,6 +206,11 @@ grammar {
       attribute xml:whitespace { "preserve" }?,
 
       text
+    }?
+    & element doc-position {
+      attribute filename { xsd:string },
+      attribute line { xsd:string },
+      attribute column { xsd:string },
     }?
   )
 
