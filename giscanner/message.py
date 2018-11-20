@@ -42,12 +42,13 @@ class Position(object):
     want to inform about.
     """
 
-    __slots__ = ('filename', 'line', 'column')
+    __slots__ = ('filename', 'line', 'column', 'is_typedef')
 
-    def __init__(self, filename=None, line=None, column=None):
+    def __init__(self, filename=None, line=None, column=None, is_typedef=False):
         self.filename = filename
         self.line = line
         self.column = column
+        self.is_typedef = is_typedef
 
     def _compare(self, other, op):
         return op((self.filename, self.line, self.column),
