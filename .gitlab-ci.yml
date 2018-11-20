@@ -46,6 +46,7 @@ fedora-x86_64-autotools-python3:
     name: "gi-_${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/tests/scanner/test-suite.log"
 
 msys2-mingw32-python3:
   stage: build
