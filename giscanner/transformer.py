@@ -626,7 +626,8 @@ raise ValueError."""
             # https://bugzilla.gnome.org/show_bug.cgi?id=755882
             if name.endswith('_autoptr'):
                 return None
-            return ast.Alias(name, target, ctype=symbol.ident)
+            node = ast.Alias(name, target, ctype=symbol.ident)
+            node.add_symbol_reference(symbol)
         else:
             raise NotImplementedError(
                 "symbol '%s' of type %s" % (symbol.ident, ctype_name(ctype)))
