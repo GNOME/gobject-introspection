@@ -25,6 +25,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import os
+
 from . import ast
 from .xmlwriter import XMLWriter
 
@@ -35,12 +37,13 @@ COMPATIBLE_GIR_VERSION = '1.2'
 
 class GIRWriter(XMLWriter):
 
-    def __init__(self, namespace):
+    def __init__(self, namespace, sources_roots=[]):
         super(GIRWriter, self).__init__()
         self.write_comment(
             'This file was automatically generated from C sources - DO NOT EDIT!\n'
             'To affect the contents of this file, edit the original C definitions,\n'
             'and/or use gtk-doc annotations. ')
+        self.sources_roots = sources_roots
         self._write_repository(namespace)
 
     def _write_repository(self, namespace):
@@ -121,13 +124,30 @@ class GIRWriter(XMLWriter):
         if node.version:
             attrs.append(('version', node.version))
 
+    def _get_relative_path(self, filename):
+        res = filename
+        for root in self.sources_roots:
+            relpath = os.path.relpath(filename, root)
+            if len(relpath) < len(res):
+                res = relpath
+
+        return res
+
     def _write_generic(self, node):
         for key, value in node.attributes.items():
             self.write_tag('attribute', [('name', key), ('value', value)])
 
         if hasattr(node, 'doc') and node.doc:
-            self.write_tag('doc', [('xml:space', 'preserve')],
-                           node.doc)
+            column = '-1'
+            if node.doc_position.column is not None:
+                columns = str(node.doc_position.column)
+            attrs = [('xml:space', 'preserve'),
+                    ('filename', self._get_relative_path(node.doc_position.filename)),
+                    ('line', str(node.doc_position.line))]
+            if node.doc_position.column:
+                attrs.append(('column', str(node.doc_position.column)))
+
+            self.write_tag('doc', attrs, node.doc)
 
         if hasattr(node, 'version_doc') and node.version_doc:
             self.write_tag('doc-version', [('xml:space', 'preserve')],
@@ -140,6 +160,15 @@ class GIRWriter(XMLWriter):
         if hasattr(node, 'stability_doc') and node.stability_doc:
             self.write_tag('doc-stability', [('xml:space', 'preserve')],
                            node.stability_doc)
+
+        file_positions = getattr(node, 'file_positions', [])
+        for filepos in sorted(list(file_positions), key=lambda x: (
+                self._get_relative_path(x.filename), x.line)):
+            position = [('filename', self._get_relative_path(filepos.filename)),
+                        ('line', str(filepos.line))]
+            if filepos.column:
+                position.append(('column', str(filepos.column)))
+            self.write_tag('doc-position', position)
 
     def _append_node_generic(self, node, attrs):
         if node.skip or not node.introspectable:
