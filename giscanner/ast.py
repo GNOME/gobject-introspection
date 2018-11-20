@@ -563,6 +563,7 @@ properties."""
         self.deprecated = None
         self.deprecated_doc = None
         self.doc = None
+        self.doc_position = None
 
 
 class Node(Annotated):
