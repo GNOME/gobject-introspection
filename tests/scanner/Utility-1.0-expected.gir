@@ -86,7 +86,6 @@ and/or use gtk-doc annotations.  -->
            glib:type-name="UtilityObject"
            glib:get-type="utility_object_get_type"
            glib:type-struct="ObjectClass">
-      <doc-position filename="utility.h" line="13"/>
       <doc-position filename="utility.h" line="23"/>
       <method name="watch_dir" c:identifier="utility_object_watch_dir">
         <doc-position filename="utility.h" line="63"/>
@@ -125,7 +124,6 @@ and/or use gtk-doc annotations.  -->
     <record name="ObjectClass"
             c:type="UtilityObjectClass"
             glib:is-gtype-struct-for="Object">
-      <doc-position filename="utility.h" line="13"/>
       <doc-position filename="utility.h" line="23"/>
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
