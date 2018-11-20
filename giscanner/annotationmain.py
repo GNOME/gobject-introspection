@@ -80,7 +80,7 @@ def annotation_main(args):
     if options.packages:
         process_packages(options, options.packages)
 
-    ss = create_source_scanner(options, args)
+    ss, _ = create_source_scanner(options, args)
 
     if options.extract:
         parser = GtkDocCommentBlockParser()

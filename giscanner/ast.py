@@ -31,6 +31,7 @@ from collections import OrderedDict
 
 from . import message
 
+from .sourcescanner import CTYPE_TYPEDEF, CSYMBOL_TYPE_TYPEDEF
 from .message import Position
 from .utils import to_underscores
 
@@ -565,6 +566,7 @@ properties."""
         self.deprecated = None
         self.deprecated_doc = None
         self.doc = None
+        self.doc_position = None
 
 
 class Node(Annotated):
@@ -632,9 +634,23 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
     def add_file_position(self, position):
         self.file_positions.add(position)
 
+    def get_main_position(self):
+        if not self.file_positions:
+            return None
+
+        res = None
+        for position in self.file_positions:
+            if position.is_typedef:
+                res = position
+            else:
+                return position
+
+        return res
+
     def add_symbol_reference(self, symbol):
         if symbol.source_filename:
-            self.add_file_position(Position(symbol.source_filename, symbol.line))
+            self.add_file_position(Position(symbol.source_filename, symbol.line,
+                is_typedef=symbol.type in (CTYPE_TYPEDEF, CSYMBOL_TYPE_TYPEDEF)))
 
     def walk(self, callback, chain):
         res = callback(self, chain)
