@@ -15,6 +15,7 @@ and/or use gtk-doc annotations.  -->
              c:symbol-prefixes="gtk_frob">
     <function name="language_manager_get_default"
               c:identifier="gtk_frob_language_manager_get_default">
+      <source-position filename="gtkfrob.h" line="11"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>

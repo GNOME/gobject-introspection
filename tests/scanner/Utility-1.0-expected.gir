@@ -15,11 +15,13 @@ and/or use gtk-doc annotations.  -->
              c:identifier-prefixes="Utility"
              c:symbol-prefixes="utility">
     <alias name="Glyph" c:type="UtilityGlyph">
+      <source-position filename="utility.h" line="26"/>
       <type name="guint32" c:type="guint32"/>
     </alias>
     <record name="Buffer" c:type="UtilityBuffer">
+      <source-position filename="utility.h" line="54"/>
       <field name="data" writable="1">
-        <doc xml:space="preserve">the data</doc>
+        <doc xml:space="preserve" filename="utility.c" line="10">the data</doc>
         <type name="gpointer"/>
       </field>
       <field name="length" writable="1">
@@ -27,10 +29,12 @@ and/or use gtk-doc annotations.  -->
       </field>
     </record>
     <union name="Byte" c:type="UtilityByte">
+      <source-position filename="utility.h" line="47"/>
       <field name="value" writable="1">
         <type name="guint8" c:type="guint8"/>
       </field>
       <record name="parts" c:type="parts">
+        <source-position filename="utility.h" line="46"/>
         <field name="first_nibble" writable="1" bits="4">
           <type name="guint8" c:type="guint8"/>
         </field>
@@ -40,6 +44,7 @@ and/or use gtk-doc annotations.  -->
       </record>
     </union>
     <enumeration name="EnumType" c:type="UtilityEnumType">
+      <source-position filename="utility.h" line="74"/>
       <member name="a" value="0" c:identifier="UTILITY_ENUM_A">
       </member>
       <member name="b" value="1" c:identifier="UTILITY_ENUM_B">
@@ -48,6 +53,7 @@ and/or use gtk-doc annotations.  -->
       </member>
     </enumeration>
     <callback name="FileFunc" c:type="UtilityFileFunc">
+      <source-position filename="utility.h" line="56"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -65,6 +71,7 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </callback>
     <bitfield name="FlagType" c:type="UtilityFlagType">
+      <source-position filename="utility.h" line="82"/>
       <member name="a" value="1" c:identifier="UTILITY_FLAG_A">
       </member>
       <member name="b" value="2" c:identifier="UTILITY_FLAG_B">
@@ -79,7 +86,9 @@ and/or use gtk-doc annotations.  -->
            glib:type-name="UtilityObject"
            glib:get-type="utility_object_get_type"
            glib:type-struct="ObjectClass">
+      <source-position filename="utility.h" line="23"/>
       <method name="watch_dir" c:identifier="utility_object_watch_dir">
+        <source-position filename="utility.h" line="63"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -115,11 +124,13 @@ and/or use gtk-doc annotations.  -->
     <record name="ObjectClass"
             c:type="UtilityObjectClass"
             glib:is-gtype-struct-for="Object">
+      <source-position filename="utility.h" line="23"/>
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
     <record name="Struct" c:type="UtilityStruct">
+      <source-position filename="utility.h" line="90"/>
       <field name="field" writable="1">
         <type name="gint" c:type="int"/>
       </field>
@@ -136,10 +147,12 @@ and/or use gtk-doc annotations.  -->
       </field>
     </record>
     <record name="TaggedValue" c:type="UtilityTaggedValue">
+      <source-position filename="utility.h" line="37"/>
       <field name="tag" writable="1">
         <type name="gint" c:type="int"/>
       </field>
       <union name="value" c:type="value">
+        <source-position filename="utility.h" line="36"/>
         <field name="v_pointer" writable="1">
           <type name="gpointer" c:type="gpointer"/>
         </field>
@@ -152,6 +165,7 @@ and/or use gtk-doc annotations.  -->
       </union>
     </record>
     <union name="Union" c:type="UtilityUnion">
+      <source-position filename="utility.h" line="97"/>
       <field name="pointer" writable="1">
         <type name="utf8" c:type="char*"/>
       </field>
@@ -163,6 +177,7 @@ and/or use gtk-doc annotations.  -->
       </field>
     </union>
     <function name="dir_foreach" c:identifier="utility_dir_foreach">
+      <source-position filename="utility.h" line="100"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
