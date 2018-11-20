@@ -236,6 +236,7 @@ class MainTransformer(object):
             block = self._blocks.get(section_name)
             if block and block.description:
                 node.doc = block.description
+                node.doc_position = block.position
         if isinstance(node, (ast.Class, ast.Interface)):
             for prop in node.properties:
                 self._apply_annotations_property(node, prop)
@@ -693,6 +694,7 @@ class MainTransformer(object):
 
         if tag and tag.description:
             node.doc = tag.description
+            node.doc_position = tag.position
 
         if ANN_SKIP in annotations:
             node.skip = True
@@ -710,6 +712,7 @@ class MainTransformer(object):
 
         if block.description:
             node.doc = block.description
+            node.doc_position = block.position
 
         since_tag = block.tags.get(TAG_SINCE)
         if since_tag is not None:
@@ -859,6 +862,7 @@ class MainTransformer(object):
         if type_annotation:
             field.type = self._transformer.create_type_from_user_string(type_annotation[0])
         field.doc = tag.description
+        field.doc_position = tag.position
         try:
             self._adjust_container_type(parent, field, tag.annotations)
         except AttributeError as ex:
@@ -936,6 +940,7 @@ class MainTransformer(object):
             param = block.params.get(m.symbol, None)
             if param and param.description:
                 m.doc = param.description
+                m.doc_position = param.position
 
     def _pass_read_annotations2(self, node, chain):
         if isinstance(node, ast.Function):

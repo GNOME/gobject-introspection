@@ -16,6 +16,7 @@ and/or use gtk-doc annotations.  -->
     <enumeration name="DBusError"
                  c:type="SDBusError"
                  glib:error-domain="s-dbus-error">
+      <doc-position filename="sletter.h" line="33"/>
       <member name="code1" value="1" c:identifier="S_DBUS_ERROR_CODE1">
       </member>
       <member name="code2" value="2" c:identifier="S_DBUS_ERROR_CODE2">
@@ -24,6 +25,7 @@ and/or use gtk-doc annotations.  -->
       </member>
     </enumeration>
     <record name="Point" c:type="SPoint">
+      <doc-position filename="sletter.h" line="11"/>
       <field name="x" writable="1">
         <type name="gdouble" c:type="double"/>
       </field>
@@ -34,6 +36,7 @@ and/or use gtk-doc annotations.  -->
     <enumeration name="SpawnError"
                  c:type="SSpawnError"
                  glib:error-domain="s-spawn-error">
+      <doc-position filename="sletter.h" line="22"/>
       <member name="code1" value="1" c:identifier="S_SPAWN_ERROR_CODE1">
       </member>
       <member name="code2" value="2" c:identifier="S_SPAWN_ERROR_CODE2">
@@ -47,6 +50,7 @@ and/or use gtk-doc annotations.  -->
       </return-value>
     </function>
     <function name="hello" c:identifier="s_hello">
+      <doc-position filename="sletter.h" line="14"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>

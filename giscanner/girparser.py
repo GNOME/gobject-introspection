@@ -30,6 +30,7 @@ from xml.etree.cElementTree import parse
 
 from . import ast
 from .girwriter import COMPATIBLE_GIR_VERSION
+from .message import Position
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
 C_NS = "http://www.gtk.org/introspection/c/1.0"
@@ -189,6 +190,9 @@ class GIRParser(object):
         if doc is not None:
             if doc.text:
                 obj.doc = doc.text
+                obj.doc_position = Position(doc.attrib['filename'],
+                                            doc.attrib['line'],
+                                            doc.attrib.get('column', None))
         version = node.attrib.get('version')
         if version:
             obj.version = version
@@ -218,6 +222,20 @@ class GIRParser(object):
                 value = attribute.attrib.get('value')
                 attributes_[name] = value
             obj.attributes = attributes_
+
+        if hasattr(obj, 'add_file_position'):
+            positions = sorted(node.findall(_corens('doc-position')),
+                               key=lambda x: (x.attrib['filename'],
+                                              int(x.attrib['line'])))
+            for position in positions:
+                if 'column' in position.attrib:
+                    column = int(position.attrib['column'])
+                else:
+                    column = None
+
+                obj.add_file_position(Position(position.attrib['filename'],
+                                               int(position.attrib['line']),
+                                               column))
 
     def _parse_object_interface(self, node):
         parent = node.attrib.get('parent')
