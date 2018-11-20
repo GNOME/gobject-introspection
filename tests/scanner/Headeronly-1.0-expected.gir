@@ -12,6 +12,7 @@ and/or use gtk-doc annotations.  -->
              c:identifier-prefixes="Headeronly"
              c:symbol-prefixes="headeronly">
     <enumeration name="ExampleEnum" c:type="HeaderonlyExampleEnum">
+      <doc-position filename="headeronly.h" line="7"/>
       <member name="foo" value="0" c:identifier="HEADERONLY_FOO">
       </member>
       <member name="bar" value="1" c:identifier="HEADERONLY_BAR">
