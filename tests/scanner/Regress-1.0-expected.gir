@@ -4022,6 +4022,14 @@ the introspection client langage.</doc>
         <type name="gint" c:type="gint"/>
       </field>
     </record>
+    <record name="TestReferenceCounters" c:type="RegressTestReferenceCounters">
+      <field name="refcount" writable="1">
+        <type name="gint" c:type="grefcount"/>
+      </field>
+      <field name="atomicrefcount" writable="1">
+        <type name="gint" c:type="gatomicrefcount"/>
+      </field>
+    </record>
     <enumeration name="TestReferenceEnum" c:type="RegressTestReferenceEnum">
       <member name="0" value="4" c:identifier="REGRESS_TEST_REFERENCE_0">
       </member>
