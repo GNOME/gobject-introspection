@@ -322,6 +322,8 @@ type_names['gssize'] = TYPE_SSIZE
 type_names['gintptr'] = TYPE_INTPTR
 type_names['guintptr'] = TYPE_UINTPTR
 type_names['gconstpointer'] = TYPE_ANY
+type_names['grefcount'] = TYPE_INT
+type_names['gatomicrefcount'] = TYPE_INT
 
 # We used to support these; continue to do so
 type_names['any'] = TYPE_ANY
