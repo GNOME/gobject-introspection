@@ -4,6 +4,7 @@
 #ifndef _GI_DISABLE_CAIRO
 #include <cairo-gobject.h>
 #endif
+#include <glib.h>
 #include <glib-object.h>
 #include <gio/gio.h>
 #include <time.h>
@@ -1493,5 +1494,12 @@ typedef struct {
 
 GVariant *
 regress_get_variant (void);
+
+typedef struct _RegressTestReferenceCounters RegressTestReferenceCounters;
+
+struct _RegressTestReferenceCounters {
+  grefcount       refcount;
+  gatomicrefcount atomicrefcount;
+};
 
 #endif /* __GITESTTYPES_H__ */
