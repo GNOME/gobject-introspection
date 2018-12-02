@@ -353,6 +353,21 @@
 
 
 /**
+ * GApplication::name-lost:
+ * @application: the application
+ *
+ * The ::name-lost signal is emitted only on the registered primary instance
+ * when a new instance has taken over. This can only happen if the application
+ * is using the %G_APPLICATION_ALLOW_REPLACEMENT flag.
+ *
+ * The default handler for this signal calls g_application_quit().
+ *
+ * Returns: %TRUE if the signal has been handled
+ * Since: 2.60
+ */
+
+
+/**
  * GApplication::open:
  * @application: the application
  * @files: (array length=n_files) (element-type GFile): an array of #GFiles
@@ -429,10 +444,11 @@
  *     If this function returns %TRUE, registration will proceed; otherwise
  *     registration will abort. Since: 2.34
  * @dbus_unregister: invoked locally during unregistration, if the application
- *     is using its D-Bus backend. Use this to undo anything done by the
- *     @dbus_register vfunc. Since: 2.34
+ *     is using its D-Bus backend. Use this to undo anything done by
+ *     the @dbus_register vfunc. Since: 2.34
  * @handle_local_options: invoked locally after the parsing of the commandline
  *  options has occurred. Since: 2.40
+ * @name_lost: invoked when another instance is taking over the name. Since: 2.60
  *
  * Virtual function table for #GApplication.
  *
@@ -1707,6 +1723,9 @@
  * g_dtls_connection_set_rehandshake_mode().
  *
  * Since: 2.48
+ * Deprecated: 2.60.: Changing the rehandshake mode is no longer
+ *   required for compatibility. Also, rehandshaking has been removed
+ *   from the TLS protocol in TLS 1.3.
  */
 
 
@@ -2318,7 +2337,7 @@
  * GMountOperation:is-tcrypt-hidden-volume:
  *
  * Whether the device to be unlocked is a TCRYPT hidden volume.
- * See https://www.veracrypt.fr/en/Hidden%20Volume.html.
+ * See [the VeraCrypt documentation](https://www.veracrypt.fr/en/Hidden%20Volume.html).
  *
  * Since: 2.58
  */
@@ -2331,7 +2350,7 @@
  * In this context, a system volume is a volume with a bootloader
  * and operating system installed. This is only supported for Windows
  * operating systems. For further documentation, see
- * https://www.veracrypt.fr/en/System%20Encryption.html.
+ * [the VeraCrypt documentation](https://www.veracrypt.fr/en/System%20Encryption.html).
  *
  * Since: 2.58
  */
@@ -2356,7 +2375,7 @@
  * GMountOperation:pim:
  *
  * The VeraCrypt PIM value, when unlocking a VeraCrypt volume. See
- * https://www.veracrypt.fr/en/Personal%20Iterations%20Multiplier%20(PIM).html.
+ * [the VeraCrypt documentation](https://www.veracrypt.fr/en/Personal%20Iterations%20Multiplier%20(PIM).html).
  *
  * Since: 2.58
  */
@@ -9553,10 +9572,10 @@
  * for credentials.
  *
  * The callback will be fired when the operation has resolved (either
- * with success or failure), and a #GAsyncReady structure will be
+ * with success or failure), and a #GAsyncResult instance will be
  * passed to the callback.  That callback should then call
  * g_volume_mount_finish() with the #GVolume instance and the
- * #GAsyncReady data to see if the operation was completed
+ * #GAsyncResult data to see if the operation was completed
  * successfully.  If an @error is present when g_volume_mount_finish()
  * is called, then it will be filled with any error information.
  *
@@ -10917,7 +10936,7 @@
  * @uri: the uri to show
  * @context: (nullable): an optional #GAppLaunchContext
  * @cancellable: (nullable): a #GCancellable
- * @callback: (nullable): a #GASyncReadyCallback to call when the request is done
+ * @callback: (nullable): a #GAsyncReadyCallback to call when the request is done
  * @user_data: (nullable): data to pass to @callback
  *
  * Async version of g_app_info_launch_default_for_uri().
@@ -13195,7 +13214,7 @@
  *
  * See also g_cancellable_make_pollfd().
  *
- * Returns: A valid file descriptor. %-1 if the file descriptor
+ * Returns: A valid file descriptor. `-1` if the file descriptor
  * is not supported, or on errors.
  */
 
@@ -13910,7 +13929,7 @@
  *
  * Reads an unsigned 8-bit/1-byte value from @stream.
  *
- * Returns: an unsigned 8-bit/1-byte value read from the @stream or %0
+ * Returns: an unsigned 8-bit/1-byte value read from the @stream or `0`
  * if an error occurred.
  */
 
@@ -13926,7 +13945,7 @@
  * In order to get the correct byte order for this read operation,
  * see g_data_input_stream_get_byte_order() and g_data_input_stream_set_byte_order().
  *
- * Returns: a signed 16-bit/2-byte value read from @stream or %0 if
+ * Returns: a signed 16-bit/2-byte value read from @stream or `0` if
  * an error occurred.
  */
 
@@ -13946,7 +13965,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: a signed 32-bit/4-byte value read from the @stream or %0 if
+ * Returns: a signed 32-bit/4-byte value read from the @stream or `0` if
  * an error occurred.
  */
 
@@ -13966,7 +13985,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: a signed 64-bit/8-byte value read from @stream or %0 if
+ * Returns: a signed 64-bit/8-byte value read from @stream or `0` if
  * an error occurred.
  */
 
@@ -14091,7 +14110,7 @@
  * In order to get the correct byte order for this read operation,
  * see g_data_input_stream_get_byte_order() and g_data_input_stream_set_byte_order().
  *
- * Returns: an unsigned 16-bit/2-byte value read from the @stream or %0 if
+ * Returns: an unsigned 16-bit/2-byte value read from the @stream or `0` if
  * an error occurred.
  */
 
@@ -14111,7 +14130,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: an unsigned 32-bit/4-byte value read from the @stream or %0 if
+ * Returns: an unsigned 32-bit/4-byte value read from the @stream or `0` if
  * an error occurred.
  */
 
@@ -14131,7 +14150,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: an unsigned 64-bit/8-byte read from @stream or %0 if
+ * Returns: an unsigned 64-bit/8-byte read from @stream or `0` if
  * an error occurred.
  */
 
@@ -15466,7 +15485,7 @@
  * bus. This can also be used to figure out if @connection is a
  * message bus connection.
  *
- * Returns: the unique name or %NULL if @connection is not a message
+ * Returns: (nullable): the unique name or %NULL if @connection is not a message
  *     bus connection. Do not free this string, it is owned by
  *     @connection.
  * Since: 2.26
@@ -19236,7 +19255,7 @@
  * Returns: (array zero-terminated=1 length=length) (element-type utf8) (transfer full):
  *  a %NULL-terminated string array or %NULL if the specified
  *  key cannot be found. The array should be freed with g_strfreev().
- * Since: 2.59.0
+ * Since: 2.60.0
  */
 
 
@@ -20094,8 +20113,15 @@
  * Likewise, on the server side, although a handshake is necessary at
  * the beginning of the communication, you do not need to call this
  * function explicitly unless you want clearer error reporting.
- * However, you may call g_dtls_connection_handshake() later on to
- * renegotiate parameters (encryption methods, etc) with the client.
+ *
+ * If TLS 1.2 or older is in use, you may call
+ * g_dtls_connection_handshake() after the initial handshake to
+ * rehandshake; however, this usage is deprecated because rehandshaking
+ * is no longer part of the TLS protocol in TLS 1.3. Accordingly, the
+ * behavior of calling this function after the initial handshake is now
+ * undefined, except it is guaranteed to be reasonable and
+ * nondestructive so as to preserve compatibility with code written for
+ * older versions of GLib.
  *
  * #GDtlsConnection::accept_certificate may be emitted during the
  * handshake.
@@ -20224,6 +20250,9 @@
  * software.
  *
  * Since: 2.48
+ * Deprecated: 2.60.: Changing the rehandshake mode is no longer
+ *   required for compatibility. Also, rehandshaking has been removed
+ *   from the TLS protocol in TLS 1.3.
  */
 
 
@@ -38398,6 +38427,9 @@
  *
  * Returns: @conn's rehandshaking mode
  * Since: 2.28
+ * Deprecated: 2.60.: Changing the rehandshake mode is no longer
+ *   required for compatibility. Also, rehandshaking has been removed
+ *   from the TLS protocol in TLS 1.3.
  */
 
 
@@ -38450,11 +38482,15 @@
  * Likewise, on the server side, although a handshake is necessary at
  * the beginning of the communication, you do not need to call this
  * function explicitly unless you want clearer error reporting.
- * However, you may call g_tls_connection_handshake() later on to
- * rehandshake, if TLS 1.2 or older is in use. With TLS 1.3, the
- * behavior is undefined but guaranteed to be reasonable and
- * nondestructive, so most older code should be expected to continue to
- * work without changes.
+ *
+ * If TLS 1.2 or older is in use, you may call
+ * g_tls_connection_handshake() after the initial handshake to
+ * rehandshake; however, this usage is deprecated because rehandshaking
+ * is no longer part of the TLS protocol in TLS 1.3. Accordingly, the
+ * behavior of calling this function after the initial handshake is now
+ * undefined, except it is guaranteed to be reasonable and
+ * nondestructive so as to preserve compatibility with code written for
+ * older versions of GLib.
  *
  * #GTlsConnection::accept_certificate may be emitted during the
  * handshake.
@@ -38584,6 +38620,9 @@
  * software.
  *
  * Since: 2.28
+ * Deprecated: 2.60.: Changing the rehandshake mode is no longer
+ *   required for compatibility. Also, rehandshaking has been removed
+ *   from the TLS protocol in TLS 1.3.
  */
 
 
@@ -38735,7 +38774,7 @@
  *
  * Lookup the issuer of @certificate in the database.
  *
- * The %issuer property
+ * The #GTlsCertificate:issuer property
  * of @certificate is not modified, and the two certificates are not hooked
  * into a chain.
  *
