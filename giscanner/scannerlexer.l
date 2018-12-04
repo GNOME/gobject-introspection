@@ -177,8 +177,8 @@ stringtext				([^\\\"])|(\\.)
 "__restrict__"				{ return RESTRICT; }
 "thread_local"				{ return THREAD_LOCAL; }
 "_Thread_local"				{ return THREAD_LOCAL; }
-"__typeof__"				{ if (!parse_ignored_macro()) REJECT; }
-"__typeof"				{ if (!parse_ignored_macro()) REJECT; }
+"__typeof__"				{ if (parse_ignored_macro()) return VOID; else REJECT; }
+"__typeof"				{ if (parse_ignored_macro()) return VOID; else REJECT; }
 "__volatile"	        	        { return VOLATILE; }
 "__volatile__"	        	        { return VOLATILE; }
 "_Bool"					{ return BASIC_TYPE; }
