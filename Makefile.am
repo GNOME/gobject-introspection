@@ -55,7 +55,6 @@ EXTRA_DIST += 			\
 	$(m4_DATA)		\
 	misc/update-glib-annotations.py	\
 	misc/update-gtkdoc-tests.py	\
-	misc/verbump.py		\
 	README.rst \
 	MSVC.README.rst \
 	meson.build \
@@ -64,37 +63,3 @@ EXTRA_DIST += 			\
 
 check.quality:
 	(cd $(abs_top_srcdir) && $(PYTHON) -m flake8 --count);
-
-# Colin's handy Makefile bits for:
-# 1) stuffing tarballs with pre-generated scripts from your workstation
-# 2) bumping configure.ac version post-release
-# 3) tagging correctly in git
-# 4) uploading to gnome.org
-# To use:
-#  $ make check
-#  $ make dist
-#  $ make prepare-minor-release
-
-# Customize to taste
-TAG_PREFIX=GOBJECT_INTROSPECTION_
-COMPRESSION=.xz
-
-
-PACKAGE=@PACKAGE@
-VERSION=@VERSION@
-DISTNAME=$(PACKAGE)-$(VERSION).tar$(COMPRESSION)
-TAG_VERSION=$(shell echo $(VERSION) |sed s/\\\./_/g)
-
-prepare-release-tag: Makefile
-	git tag -m "Tag $(TAG_VERSION)" -a $(TAG_PREFIX)$(TAG_VERSION)
-
-prepare-minor-release: $(DISTNAME) prepare-release-tag Makefile
-	env top_srcdir=$(top_srcdir) python $(top_srcdir)/misc/verbump.py
-
-upload-release: $(DISTNAME) Makefile
-	git log origin/master..master
-	@echo -n "Ok to push? [y/N] "; read ans; test x$$ans == xy || exit 1
-	git push --tags origin master:master
-	scp $(DISTNAME) master.gnome.org:
-	ssh master.gnome.org install-module $(DISTNAME)
-
