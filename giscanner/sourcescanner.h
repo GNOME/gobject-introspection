@@ -155,7 +155,7 @@ GISourceScanner *   gi_source_scanner_new              (void);
 gboolean            gi_source_scanner_lex_filename     (GISourceScanner  *igenerator,
 						        const gchar      *filename);
 gboolean            gi_source_scanner_parse_file       (GISourceScanner  *igenerator,
-						        FILE             *file);
+						        const gchar      *filename);
 void                gi_source_scanner_parse_macros     (GISourceScanner  *scanner,
 							GList            *filenames);
 void                gi_source_scanner_set_macro_scan   (GISourceScanner  *scanner,
