@@ -127,7 +127,14 @@ class GIRWriter(XMLWriter):
     def _get_relative_path(self, filename):
         res = filename
         for root in self.sources_roots:
-            relpath = os.path.relpath(filename, root)
+            relpath = ''
+            try:
+                relpath = os.path.relpath(filename, root)
+
+            # We might be on different drives on Windows, so relpath() won't work
+            except ValueError:
+                relpath = filename
+
             if len(relpath) < len(res):
                 res = relpath
 
