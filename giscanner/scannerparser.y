@@ -1626,6 +1626,19 @@ read_identifier (FILE * f, int c, char **identifier)
   return c;
 }
 
+static gboolean
+parse_file (GISourceScanner *scanner, FILE *file)
+{
+  g_return_val_if_fail (file != NULL, FALSE);
+
+  lineno = 1;
+  yyin = file;
+  yyparse (scanner);
+  yyin = NULL;
+
+  return TRUE;
+}
+
 void
 gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
 {
@@ -1772,29 +1785,29 @@ gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
     }
 
   rewind (fmacros);
-  gi_source_scanner_parse_file (scanner, fmacros);
+  parse_file (scanner, fmacros);
   fclose (fmacros);
   g_unlink (tmp_name);
 }
 
 gboolean
-gi_source_scanner_parse_file (GISourceScanner *scanner, FILE *file)
+gi_source_scanner_parse_file (GISourceScanner *scanner, const gchar *filename)
 {
-  g_return_val_if_fail (file != NULL, FALSE);
+  FILE *file;
+  gboolean result;
 
-  lineno = 1;
-  yyin = file;
-  yyparse (scanner);
-  yyin = NULL;
+  file = g_fopen (filename, "r");
+  result = parse_file (scanner, file);
+  fclose (file);
 
-  return TRUE;
+  return result;
 }
 
 gboolean
 gi_source_scanner_lex_filename (GISourceScanner *scanner, const gchar *filename)
 {
   lineno = 1;
-  yyin = fopen (filename, "r");
+  yyin = g_fopen (filename, "r");
 
   while (yylex (scanner) != YYEOF)
     ;

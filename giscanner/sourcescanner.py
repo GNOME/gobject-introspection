@@ -307,10 +307,7 @@ class SourceScanner(object):
                       self._cpp_options)
 
         os.unlink(tmp_name_cpp)
-        fp = open(tmpfile_output, 'r')
-
-        self._scanner.parse_file(fp.fileno())
-        fp.close()
+        self._scanner.parse_file(tmpfile_output)
         os.unlink(tmpfile_output)
 
     def _write_preprocess_src(self, fp, defines, undefs, filenames):
