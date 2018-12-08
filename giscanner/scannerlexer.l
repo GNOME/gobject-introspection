@@ -513,7 +513,8 @@ print_error (GISourceScanner *scanner)
 {
   if (yytext[0]) {
     char *filename = g_file_get_parse_name (scanner->current_file);
-    fprintf(stderr, "%s:%d: unexpected character `%c'\n", filename, lineno, yytext[0]);
+    gchar *error = g_strdup_printf ("%s:%d: unexpected character `%c'", filename, lineno, yytext[0]);
+    scanner->errors = g_slist_prepend (scanner->errors, error);
     g_free (filename);
   }
 }

@@ -81,7 +81,7 @@ typedef struct {
 
 NEW_CLASS (PyGISourceSymbol, "SourceSymbol", GISourceSymbol, 10);
 NEW_CLASS (PyGISourceType, "SourceType", GISourceType, 9);
-NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner, 8);
+NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner, 9);
 
 
 /* Symbol */
@@ -508,6 +508,26 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self, G_GNUC_UNUSED PyObject
 }
 
 static PyObject *
+pygi_source_scanner_get_errors (PyGISourceScanner *self, G_GNUC_UNUSED PyObject *unused)
+{
+  GSList *l, *errors;
+  PyObject *list;
+  int i = 0;
+
+  errors = gi_source_scanner_get_errors (self->scanner);
+  list = PyList_New (g_slist_length (errors));
+
+  for (l = errors; l; l = l->next)
+    {
+      PyObject *item = PyUnicode_FromString (l->data);
+      PyList_SetItem (list, i++, item);
+    }
+
+  g_slist_free (errors);
+  return list;
+}
+
+static PyObject *
 pygi_source_scanner_get_comments (PyGISourceScanner *self, G_GNUC_UNUSED PyObject *unused)
 {
   GSList *l, *comments;
@@ -563,6 +583,7 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self, G_GNUC_UNUSED PyObjec
 }
 
 static const PyMethodDef _PyGISourceScanner_methods[] = {
+  { "get_errors", (PyCFunction) pygi_source_scanner_get_errors, METH_NOARGS },
   { "get_comments", (PyCFunction) pygi_source_scanner_get_comments, METH_NOARGS },
   { "get_symbols", (PyCFunction) pygi_source_scanner_get_symbols, METH_NOARGS },
   { "append_filename", (PyCFunction) pygi_source_scanner_append_filename, METH_VARARGS },

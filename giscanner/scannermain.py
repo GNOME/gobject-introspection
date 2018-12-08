@@ -444,8 +444,12 @@ def create_source_scanner(options, args):
                        options.cpp_defines,
                        options.cpp_undefines,
                        cflags=options.cflags)
-    ss.parse_files(filenames)
-    ss.parse_macros(filenames)
+    try:
+        ss.parse_files(filenames)
+        ss.parse_macros(filenames)
+    finally:
+        for error in ss.get_errors():
+            print(error, file=sys.stderr)
     return ss, filenames
 
 
