@@ -97,12 +97,12 @@ AC_DEFINE_UNQUOTED([SHLIB_SUFFIX], "$SHLIB_SUFFIX", [Define to the platform's sh
 #### find the actual value for $prefix that we'll end up with
 ##   (I know this is broken and should be done in the Makefile, but
 ##    that's a major pain and almost nobody actually seems to care)
-AX_RECURSIVE_EVAL([$localstatedir], EXPANDED_LOCALSTATEDIR)
-AX_RECURSIVE_EVAL([$sysconfdir], EXPANDED_SYSCONFDIR)
-AX_RECURSIVE_EVAL([$bindir], EXPANDED_BINDIR)
-AX_RECURSIVE_EVAL([$libdir], EXPANDED_LIBDIR)
-AX_RECURSIVE_EVAL([$libexecdir], EXPANDED_LIBEXECDIR)
-AX_RECURSIVE_EVAL([$datadir], EXPANDED_DATADIR)
+AS_AC_EXPAND(EXPANDED_LOCALSTATEDIR, "$localstatedir")
+AS_AC_EXPAND(EXPANDED_SYSCONFDIR, "$sysconfdir")
+AS_AC_EXPAND(EXPANDED_BINDIR, "$bindir")
+AS_AC_EXPAND(EXPANDED_LIBDIR, "$libdir")
+AS_AC_EXPAND(EXPANDED_LIBEXECDIR, "$libexecdir")
+AS_AC_EXPAND(EXPANDED_DATADIR, "$datadir")
 
 #### Directory to install the libexec binaries
 GOBJECT_INTROSPECTION_LIBDIR="$EXPANDED_LIBDIR"
