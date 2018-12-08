@@ -271,10 +271,6 @@ class CCompiler(object):
             args.append('dumpbin.exe')
             args.append('-symbols')
 
-            # Work around the attempt to resolve m.lib on Python 2.x
-            if sys.version_info.major < 3:
-                libraries[:] = [lib for lib in libraries if lib != 'm']
-
         # When we are not using Visual C++ (i.e. we are using GCC)...
         else:
             libtool = utils.get_libtool_command(options)

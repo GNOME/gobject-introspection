@@ -18,22 +18,9 @@
 # Boston, MA 02111-1307, USA.
 #
 
-from __future__ import with_statement
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-import sys
-
+from io import StringIO
 from contextlib import contextmanager
 from xml.sax.saxutils import escape, quoteattr
-
-if sys.version_info.major < 3:
-    from StringIO import StringIO
-else:
-    from io import StringIO
-    unicode = str
 
 
 def _calc_attrs_length(attributes, indent, self_indent):
@@ -141,7 +128,7 @@ class XMLWriter(object):
     def write_line(self, line='', indent=True, do_escape=False):
         if isinstance(line, bytes):
             line = line.decode('utf-8')
-        assert isinstance(line, unicode)
+        assert isinstance(line, str)
         if do_escape:
             line = escape(line)
         if indent:

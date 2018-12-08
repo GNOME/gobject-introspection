@@ -161,10 +161,6 @@ def parsed2tree(docblock):
 
 
 if __name__ == '__main__':
-    if sys.version_info < (3, 0):
-        print('Sorry, update-gtkdoc-tests.py requires Python 3.x')
-        sys.exit(1)
-
     gi_tests = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'tests', 'scanner', 'annotationparser', 'gtkdoc'))
 
     gtkdoc_tests = None

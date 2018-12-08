@@ -18,11 +18,6 @@
 # Boston, MA 02111-1307, USA.
 #
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import contextlib
 import os
 import sys
@@ -88,9 +83,7 @@ class PkgConfigTest(unittest.TestCase):
         with pkg_config_script(s) as command:
             pkgconfig.libs(['a', 'b-42.0'], command=command)
 
-    @unittest.skipIf(
-        sys.version_info < (3, 0) or os.name == "nt",
-        "Python 2 defaults to ascii encoding in text file I/O and nothing is done to change that")
+    @unittest.skipIf(os.name == "nt", "FIXME")
     def test_non_ascii_output(self):
         with pkg_config_script("""print("-L'zażółć gęślą jaźń'")""") as command:
             flags = pkgconfig.cflags(['test-1.0'], command=command)

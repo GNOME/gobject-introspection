@@ -29,12 +29,6 @@ should match, resulting symbolic groups are verified
 against the expected output.
 '''
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-import sys
 import unittest
 
 from giscanner.annotationparser import (COMMENT_BLOCK_START_RE, COMMENT_BLOCK_END_RE,
@@ -42,11 +36,6 @@ from giscanner.annotationparser import (COMMENT_BLOCK_START_RE, COMMENT_BLOCK_EN
                                         SECTION_RE, SYMBOL_RE, PROPERTY_RE,
                                         SIGNAL_RE, PARAMETER_RE, TAG_RE,
                                         TAG_VALUE_VERSION_RE, TAG_VALUE_STABILITY_RE)
-
-if sys.version_info.major < 3:
-    encode_name = lambda s: s.encode('ascii')
-else:
-    encode_name = lambda s: s
 
 
 comment_start_tests = [
@@ -902,10 +891,10 @@ def create_test_case(tests_class_name, testcases):
     for counter, test in enumerate(testcases):
         test_name = 'test_%03d' % (counter + 1)
         test_method = create_test_method(test)
-        test_method.__name__ = encode_name(test_name)
+        test_method.__name__ = test_name
         test_methods[test_name] = test_method
 
-    return type(encode_name(tests_class_name), (unittest.TestCase,), test_methods)
+    return type(tests_class_name, (unittest.TestCase,), test_methods)
 
 
 def create_test_cases():
