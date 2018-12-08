@@ -178,7 +178,7 @@ class CacheStore(object):
             return None
         try:
             data = pickle.load(fd)
-        except (AttributeError, EOFError, ValueError, pickle.BadPickleGet):
+        except Exception:
             # Broken cache entry, remove it
             self._remove_filename(store_filename)
             data = None
