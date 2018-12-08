@@ -274,6 +274,9 @@ class SourceScanner(object):
     def get_comments(self):
         return self._scanner.get_comments()
 
+    def get_errors(self):
+        return self._scanner.get_errors()
+
     def dump(self):
         print('-' * 30)
         for symbol in self._scanner.get_symbols():
