@@ -1,16 +1,7 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import os
 import sys
 import difflib
-
-if sys.version_info.major < 3:
-    import __builtin__ as builtins
-else:
-    import builtins
+import builtins
 
 path = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
 assert path is not None

@@ -17,12 +17,7 @@
 # Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 #
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
-import errno
 import re
 import os
 import subprocess
@@ -218,39 +213,6 @@ def which(program):
     return None
 
 
-def makedirs(name, mode=0o777, exist_ok=False):
-    """Super-mkdir; create a leaf directory and all intermediate ones.  Works like
-    mkdir, except that any intermediate path segment (not just the rightmost)
-    will be created if it does not exist. If the target directory already
-    exists, raise an OSError if exist_ok is False. Otherwise no exception is
-    raised.  This is recursive.
-
-    Note: This function has been imported from Python 3.4 sources and adapted to work
-    with Python 2.X because get_user_cache_dir() uses the exist_ok parameter. It can
-    be removed again when Python 2.X support is dropped.
-    """
-    head, tail = os.path.split(name)
-    if not tail:
-        head, tail = os.path.split(head)
-    if head and tail and not os.path.exists(head):
-        try:
-            makedirs(head, mode, exist_ok)
-        except (IOError, OSError) as e:
-            # be happy if someone already created the path
-            if e.errno != errno.EEXIST:
-                raise
-        cdir = os.path.curdir
-        if isinstance(tail, bytes):
-            cdir = os.path.curdir.encode("ascii")
-        if tail == cdir:           # xxx/newdir/. exists if xxx/newdir exists
-            return
-    try:
-        os.mkdir(name, mode)
-    except (IOError, OSError) as e:
-        if not exist_ok or e.errno != errno.EEXIST or not os.path.isdir(name):
-            raise
-
-
 def get_user_cache_dir(dir=None):
     '''
     This is a Python reimplemention of `g_get_user_cache_dir()` because we don't want to
@@ -263,7 +225,7 @@ def get_user_cache_dir(dir=None):
         if dir is not None:
             xdg_cache_home = os.path.join(xdg_cache_home, dir)
         try:
-            makedirs(xdg_cache_home, mode=0o755, exist_ok=True)
+            os.makedirs(xdg_cache_home, mode=0o755, exist_ok=True)
         except EnvironmentError:
             # Let's fall back to ~/.cache below
             pass
@@ -276,7 +238,7 @@ def get_user_cache_dir(dir=None):
         if dir is not None:
             cachedir = os.path.join(cachedir, dir)
         try:
-            makedirs(cachedir, mode=0o755, exist_ok=True)
+            os.makedirs(cachedir, mode=0o755, exist_ok=True)
         except EnvironmentError:
             return None
         else:

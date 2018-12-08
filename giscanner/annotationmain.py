@@ -18,11 +18,6 @@
 # 02110-1301, USA.
 #
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import sys
 import optparse
 import codecs
@@ -38,15 +33,11 @@ from giscanner.scannermain import (get_preprocessor_option_group,
 @contextmanager
 def encode_stdout(encoding):
     """Force stdout into a specific encoding."""
-    # Python 2 does not encode stdout writes so wrap it with 'encoding' encoded writer.
     # Python 3 uses a io.TextIOBase wrapped stdout with the system default encoding.
     # Re-wrap the underlying buffer with a new writer with the given 'encoding'.
     # See: https://docs.python.org/3/library/sys.html#sys.stdout
     old_stdout = sys.stdout
-    if sys.version_info.major < 3:
-        binary_stdout = sys.stdout
-    else:
-        binary_stdout = sys.stdout.buffer
+    binary_stdout = sys.stdout.buffer
 
     sys.stdout = codecs.getwriter(encoding)(binary_stdout)
     yield
