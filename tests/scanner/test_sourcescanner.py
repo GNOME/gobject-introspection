@@ -46,6 +46,19 @@ void foo() {
         self.assertEqual(len(errors), 1)
         self.assertTrue("syntax error" in errors[0])
 
+    def test_ignore_pragma(self):
+        """Pragma directive and __pragma keyword are ignored"""
+        scanner = self._parse_files("""
+#pragma warning(push)
+void test(void) {
+    __pragma(warning(push))
+    __pragma(warning(disable:6246))
+    __pragma(warning(pop))
+}
+#pragma warning(pop)
+""")
+        self.assertFalse(scanner.get_errors())
+
     def test_ignore_typeof(self):
         # https://gitlab.gnome.org/GNOME/gobject-introspection/merge_requests/71
         scanner = self._parse_files("""

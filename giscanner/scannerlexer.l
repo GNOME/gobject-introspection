@@ -173,6 +173,7 @@ stringtext				([^\\\"])|(\\.)
 "_Nullable"				{ /* Ignore */ }
 "_Null_unspecified"			{ /* Ignore */ }
 "_Noreturn" 			        { /* Ignore */ }
+"__pragma" 		                { if (!parse_ignored_macro()) REJECT; }
 "__restrict"				{ return RESTRICT; }
 "__restrict__"				{ return RESTRICT; }
 "thread_local"				{ return THREAD_LOCAL; }
