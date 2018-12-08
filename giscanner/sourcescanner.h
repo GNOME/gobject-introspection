@@ -118,6 +118,7 @@ struct _GISourceScanner
   GHashTable *const_table;
   gboolean skipping;
   GQueue conditionals;
+  GSList *errors;
 };
 
 struct _GISourceSymbol
@@ -162,6 +163,7 @@ void                gi_source_scanner_set_macro_scan   (GISourceScanner  *scanne
 							gboolean          macro_scan);
 GSList *            gi_source_scanner_get_symbols      (GISourceScanner  *scanner);
 GSList *            gi_source_scanner_get_comments     (GISourceScanner  *scanner);
+GSList *            gi_source_scanner_get_errors       (GISourceScanner  *scanner);
 void                gi_source_scanner_free             (GISourceScanner  *scanner);
 
 GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type, GFile *file, int line);

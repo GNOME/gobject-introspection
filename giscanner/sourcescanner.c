@@ -246,6 +246,7 @@ gi_source_scanner_free (GISourceScanner *scanner)
   g_slist_free (scanner->comments);
   g_slist_foreach (scanner->symbols, (GFunc)(void *)gi_source_symbol_unref, NULL);
   g_slist_free (scanner->symbols);
+  g_slist_free_full (scanner->errors, g_free);
 
   g_hash_table_unref (scanner->files);
 
@@ -323,6 +324,19 @@ GSList *
 gi_source_scanner_get_symbols (GISourceScanner  *scanner)
 {
   return g_slist_reverse (g_slist_copy (scanner->symbols));
+}
+
+/**
+ * gi_source_scanner_get_errors:
+ * @scanner: scanner instance
+ *
+ * Returns: (transfer container): List of strings.
+ *   Free resulting list with g_slist_free().
+ */
+GSList *
+gi_source_scanner_get_errors (GISourceScanner  *scanner)
+{
+  return g_slist_reverse (g_slist_copy (scanner->errors));
 }
 
 /**
