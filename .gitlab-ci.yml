@@ -81,7 +81,6 @@ msys2-mingw32-autotools:
 
 vs2017-x64-meson:
   stage: build
-  allow_failure: true
   tags:
     - win32
   script:
