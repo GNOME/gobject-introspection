@@ -13,3 +13,4 @@ The following example shows how to call the ``g_assertion_message()`` function
 from libglib-2.0:
 
 .. literalinclude:: ../../../examples/glib-print.c
+    :language: c

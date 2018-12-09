@@ -9,6 +9,7 @@ GObject Introspection
     :titlesonly:
     :maxdepth: 1
 
+    changelog
     goals
     architecture
     users
