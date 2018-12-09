@@ -402,7 +402,7 @@ endif
 gir_files += custom_target('gir-girepository',
   input: girepo_gir_sources,
   output: 'GIRepository-2.0.gir',
-  depends: [gobject_gir, giscanner_pymod],
+  depends: [gobject_gir, giscanner_pymod, girepo_lib],
   depend_files: giscanner_built_files,
   install: true,
   install_dir: girdir,
