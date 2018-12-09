@@ -791,6 +791,9 @@ declaration
 	  }
 	;
 
+empty_declaration
+	: ';'
+
 declaration_specifiers
 	: storage_class_specifier declaration_specifiers
 	  {
@@ -1459,6 +1462,7 @@ translation_unit
 external_declaration
 	: function_definition
 	| declaration
+	| empty_declaration
 	| macro
 	;
 
