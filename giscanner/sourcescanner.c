@@ -210,6 +210,14 @@ gi_source_function_new (void)
   return func;
 }
 
+static void
+gi_source_comment_free (GISourceComment *comment)
+{
+  g_free (comment->comment);
+  g_free (comment->filename);
+  g_slice_free (GISourceComment, comment);
+}
+
 GISourceScanner *
 gi_source_scanner_new (void)
 {
@@ -222,16 +230,11 @@ gi_source_scanner_new (void)
                                                 (GDestroyNotify) gi_source_symbol_unref);
   scanner->files = g_hash_table_new_full (g_file_hash, (GEqualFunc)g_file_equal,
                                           g_object_unref, NULL);
+  scanner->symbols = g_ptr_array_new_with_free_func ((GDestroyNotify) gi_source_comment_free);
+  scanner->comments = g_ptr_array_new_with_free_func ((GDestroyNotify) gi_source_symbol_unref);
+  scanner->errors = g_ptr_array_new_with_free_func (g_free);
   g_queue_init (&scanner->conditionals);
   return scanner;
-}
-
-static void
-gi_source_comment_free (GISourceComment *comment)
-{
-  g_free (comment->comment);
-  g_free (comment->filename);
-  g_slice_free (GISourceComment, comment);
 }
 
 void
@@ -242,11 +245,9 @@ gi_source_scanner_free (GISourceScanner *scanner)
   g_hash_table_destroy (scanner->typedef_table);
   g_hash_table_destroy (scanner->const_table);
 
-  g_slist_foreach (scanner->comments, (GFunc)(void *)gi_source_comment_free, NULL);
-  g_slist_free (scanner->comments);
-  g_slist_foreach (scanner->symbols, (GFunc)(void *)gi_source_symbol_unref, NULL);
-  g_slist_free (scanner->symbols);
-  g_slist_free_full (scanner->errors, g_free);
+  g_ptr_array_free (scanner->symbols, TRUE);
+  g_ptr_array_free (scanner->comments, TRUE);
+  g_ptr_array_free (scanner->errors, TRUE);
 
   g_hash_table_unref (scanner->files);
 
@@ -281,8 +282,7 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
   g_assert (scanner->current_file);
 
   if (scanner->macro_scan || g_hash_table_contains (scanner->files, scanner->current_file))
-    scanner->symbols = g_slist_prepend (scanner->symbols,
-                                        gi_source_symbol_ref (symbol));
+    g_ptr_array_add (scanner->symbols, gi_source_symbol_ref (symbol));
 
   g_assert (symbol->source_filename != NULL);
 
@@ -309,45 +309,41 @@ gi_source_scanner_take_comment (GISourceScanner *scanner,
       return;
     }
 
-  scanner->comments = g_slist_prepend (scanner->comments,
-                                       comment);
+  g_ptr_array_add (scanner->comments, comment);
 }
 
 /**
  * gi_source_scanner_get_symbols:
  * @scanner: scanner instance
  *
- * Returns: (transfer container): List of GISourceSymbol.
- *   Free resulting list with g_slist_free().
+ * Returns: (transfer none): Array of GISourceSymbol.
  */
-GSList *
+GPtrArray *
 gi_source_scanner_get_symbols (GISourceScanner  *scanner)
 {
-  return g_slist_reverse (g_slist_copy (scanner->symbols));
+  return scanner->symbols;
 }
 
 /**
  * gi_source_scanner_get_errors:
  * @scanner: scanner instance
  *
- * Returns: (transfer container): List of strings.
- *   Free resulting list with g_slist_free().
+ * Returns: (transfer none): Array of strings.
  */
-GSList *
+GPtrArray *
 gi_source_scanner_get_errors (GISourceScanner  *scanner)
 {
-  return g_slist_reverse (g_slist_copy (scanner->errors));
+  return scanner->errors;
 }
 
 /**
  * gi_source_scanner_get_comments:
  * @scanner: scanner instance
  *
- * Returns: (transfer container): List of GISourceComment.
- *   Free resulting list with g_slist_free().
+ * Returns: (transfer none): Array of GISourceComment.
  */
-GSList *
+GPtrArray *
 gi_source_scanner_get_comments(GISourceScanner  *scanner)
 {
-  return g_slist_reverse (g_slist_copy (scanner->comments));
+  return scanner->comments;
 }

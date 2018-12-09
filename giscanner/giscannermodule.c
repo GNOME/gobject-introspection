@@ -489,57 +489,54 @@ pygi_source_scanner_set_macro_scan (PyGISourceScanner *self,
 static PyObject *
 pygi_source_scanner_get_symbols (PyGISourceScanner *self, G_GNUC_UNUSED PyObject *unused)
 {
-  GSList *l, *symbols;
+  GPtrArray *symbols;
   PyObject *list;
-  int i = 0;
+  guint i = 0;
 
   symbols = gi_source_scanner_get_symbols (self->scanner);
-  list = PyList_New (g_slist_length (symbols));
+  list = PyList_New (symbols->len);
 
-  for (l = symbols; l; l = l->next)
+  for (i = 0; i != symbols->len; ++i)
     {
-      PyObject *item = pygi_source_symbol_new (l->data);
-      PyList_SetItem (list, i++, item);
+      PyObject *item = pygi_source_symbol_new (g_ptr_array_index (symbols, i));
+      PyList_SetItem (list, i, item);
     }
 
-  g_slist_free (symbols);
-  Py_INCREF (list);
   return list;
 }
 
 static PyObject *
 pygi_source_scanner_get_errors (PyGISourceScanner *self, G_GNUC_UNUSED PyObject *unused)
 {
-  GSList *l, *errors;
+  GPtrArray *errors;
   PyObject *list;
-  int i = 0;
+  guint i = 0;
 
   errors = gi_source_scanner_get_errors (self->scanner);
-  list = PyList_New (g_slist_length (errors));
+  list = PyList_New (errors->len);
 
-  for (l = errors; l; l = l->next)
+  for (i = 0; i != errors->len; ++i)
     {
-      PyObject *item = PyUnicode_FromString (l->data);
-      PyList_SetItem (list, i++, item);
+      PyObject *item = PyUnicode_FromString (g_ptr_array_index (errors, i));
+      PyList_SetItem (list, i, item);
     }
 
-  g_slist_free (errors);
   return list;
 }
 
 static PyObject *
 pygi_source_scanner_get_comments (PyGISourceScanner *self, G_GNUC_UNUSED PyObject *unused)
 {
-  GSList *l, *comments;
+  GPtrArray *comments;
   PyObject *list;
-  int i = 0;
+  guint i = 0;
 
   comments = gi_source_scanner_get_comments (self->scanner);
-  list = PyList_New (g_slist_length (comments));
+  list = PyList_New (comments->len);
 
-  for (l = comments; l; l = l->next)
+  for (i = 0; i != comments->len; ++i)
     {
-      GISourceComment *comment = l->data;
+      GISourceComment *comment = g_ptr_array_index (comments, i);
       PyObject *comment_obj;
       PyObject *filename_obj;
       PyObject *item;
@@ -571,14 +568,12 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self, G_GNUC_UNUSED PyObjec
         }
 
       item = Py_BuildValue ("(OOi)", comment_obj, filename_obj, comment->line);
-      PyList_SetItem (list, i++, item);
+      PyList_SetItem (list, i, item);
 
       Py_DECREF (comment_obj);
       Py_DECREF (filename_obj);
     }
 
-  g_slist_free (comments);
-  Py_INCREF (list);
   return list;
 }
 
