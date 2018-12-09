@@ -166,7 +166,7 @@ pop_conditional (GISourceScanner *scanner)
     {
       gchar *filename = g_file_get_path (scanner->current_file);
       gchar *error = g_strdup_printf ("%s:%d: mismatched %s", filename, lineno, yytext);
-      scanner->errors = g_slist_prepend (scanner->errors, error);
+      g_ptr_array_add (scanner->errors, error);
       g_free (filename);
     }
 
@@ -183,7 +183,7 @@ warn_if_cond_has_gi_scanner (GISourceScanner *scanner,
       gchar *filename = g_file_get_path (scanner->current_file);
       gchar *error = g_strdup_printf ("%s:%d: the __GI_SCANNER__ constant should only be used with simple #ifdef or #endif: %s",
                filename, lineno, text);
-      scanner->errors = g_slist_prepend (scanner->errors, error);
+      g_ptr_array_add (scanner->errors, error);
       g_free (filename);
     }
 }
@@ -1571,7 +1571,7 @@ yyerror (GISourceScanner *scanner, const char *s)
     {
       gchar *error = g_strdup_printf ("%s:%d: %s in '%s' at '%s'",
           g_file_get_parse_name (scanner->current_file), lineno, s, linebuf, yytext);
-      scanner->errors = g_slist_prepend (scanner->errors, error);
+      g_ptr_array_add (scanner->errors, error);
     }
 }
 

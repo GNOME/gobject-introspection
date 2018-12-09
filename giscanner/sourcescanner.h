@@ -111,14 +111,14 @@ struct _GISourceScanner
   gboolean macro_scan;
   gboolean private; /* set by gtk-doc comment <private>/<public> */
   gboolean flags; /* set by gtk-doc comment <flags> */
-  GSList *symbols;
+  GPtrArray *symbols; /* GISourceSymbol */
   GHashTable *files;
-  GSList *comments; /* _GIComment */
+  GPtrArray *comments; /* GISourceComment */
   GHashTable *typedef_table;
   GHashTable *const_table;
   gboolean skipping;
   GQueue conditionals;
-  GSList *errors;
+  GPtrArray *errors;
 };
 
 struct _GISourceSymbol
@@ -161,9 +161,9 @@ void                gi_source_scanner_parse_macros     (GISourceScanner  *scanne
 							GList            *filenames);
 void                gi_source_scanner_set_macro_scan   (GISourceScanner  *scanner,
 							gboolean          macro_scan);
-GSList *            gi_source_scanner_get_symbols      (GISourceScanner  *scanner);
-GSList *            gi_source_scanner_get_comments     (GISourceScanner  *scanner);
-GSList *            gi_source_scanner_get_errors       (GISourceScanner  *scanner);
+GPtrArray *         gi_source_scanner_get_symbols      (GISourceScanner  *scanner);
+GPtrArray *         gi_source_scanner_get_comments     (GISourceScanner  *scanner);
+GPtrArray *         gi_source_scanner_get_errors       (GISourceScanner  *scanner);
 void                gi_source_scanner_free             (GISourceScanner  *scanner);
 
 GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type, GFile *file, int line);
