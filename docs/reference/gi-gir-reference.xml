@@ -40,8 +40,8 @@
   <refsect2 id="gi-gir-namespace">
     <title><emphasis>namespace</emphasis> node</title>
 
-    Parent node: <link linkend="gi-gir-api">api</link>.
-    Possible children: <link linkend="gi-gir-callback">callback</link>,
+    Parent node: <link linkend="gi-gir-api-node">api</link>.
+    Possible children: callback,
     <link linkend="gi-gir-class">class</link>,
     <link linkend="gi-gir-function">function</link>.
     <link linkend="gi-gir-interface">interface</link>.
@@ -63,9 +63,9 @@
 
     Parent node: <link linkend="gi-gir-namespace">namespace</link>.
     Possible children: <link linkend="gi-gir-class">constructor</link>,
-    <link linkend="gi-gir-field">field</link>,
-    <link linkend="gi-gir-method">method</link>,
-    <link linkend="gi-gir-property">property</link>.
+    field,
+    method,
+    property.
     <example>
     <title>A GIR fragment showing an class node</title>
     <programlisting><![CDATA[
@@ -86,9 +86,9 @@
     <title><emphasis>interface</emphasis> node</title>
 
     Parent node: <link linkend="gi-gir-namespace">namespace</link>.
-    Possible children: <link linkend="gi-gir-field">field</link>,
-    <link linkend="gi-gir-method">method</link>,
-    <link linkend="gi-gir-property">property</link>.
+    Possible children: field,
+    method,
+    property.
     <example>
     <title>A GIR fragment showing an interface node</title>
     <programlisting><![CDATA[
