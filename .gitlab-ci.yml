@@ -1,5 +1,6 @@
 stages:
   - build
+  - deploy
 
 image: registry.gitlab.gnome.org/gnome/gobject-introspection:v3
 
@@ -13,20 +14,24 @@ fedora-x86_64-meson:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
   script:
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dcairo=true -Dpython=python3 _build .
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dgtk-doc=true -Dcairo=true -Dpython=python3 _build .
     - cd _build
     - ninja
     - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+    - ninja gi-doc
     - cd ..
+    - mkdir -p public
+    - mv _build/docs/reference/html/ public/docs/
     - python3 -m pip install --user flake8
     - python3 -m flake8 --count
   except:
     - tags
   artifacts:
-    when: on_failure
+    when: always
     name: "gi-_${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - public
 
 fedora-x86_64-autotools:
   stage: build
@@ -90,3 +95,15 @@ vs2017-x64-meson:
     name: "gi-_%CI_COMMIT_REF_NAME%"
     paths:
       - _build/meson-logs
+
+pages:
+  stage: deploy
+  dependencies:
+    - fedora-x86_64-meson
+  script:
+   - echo
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
