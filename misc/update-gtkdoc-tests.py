@@ -191,7 +191,7 @@ if __name__ == '__main__':
                 writer = GtkDocCommentBlockWriter(indent=True)
                 logger.enable_warnings((ERROR, FATAL))
 
-                with io.open(path, 'rU') as f:
+                with io.open(path, 'r') as f:
                     lines = f.readlines()
 
                 chunks = []
