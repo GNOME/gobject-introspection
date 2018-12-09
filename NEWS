@@ -1,3 +1,14 @@
+2.58.2 - 2018-12-09
+-------------------
+
+* meson: Fix random build errors (mostly MSVC)
+  (Tomasz Miąsko <tomasz.miasko@gmail.com>)
+* scanner: Fix parsing of __typeof__ that is part of a cast expression
+  (Tomasz Miąsko <tomasz.miasko@gmail.com>)
+* scanner: Ignore __pragma keyword used by MSVC
+  (Tomasz Miąsko <tomasz.miasko@gmail.com>)
+
+
 2.58.1 - 2018-11-17
 -------------------
 
