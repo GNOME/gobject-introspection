@@ -1,4 +1,4 @@
-2.58.2 - 2018-12-09
+1.58.2 - 2018-12-09
 -------------------
 
 * meson: Fix random build errors (mostly MSVC)
@@ -9,7 +9,7 @@
   :mr:`87` (:user:`Tomasz Miąsko <tmiasko>`)
 
 
-2.58.1 - 2018-11-17
+1.58.1 - 2018-11-17
 -------------------
 
 * meson: Install warnlib :mr:`62` (:user:`Jan Tojnar <jtojnar>`)
@@ -21,7 +21,7 @@
   :mr:`72` (:user:`Olivier Crête <ocrete>`)
 
 
-2.58.0 - 2018-08-31
+1.58.0 - 2018-08-31
 -------------------
 
 ::
@@ -60,7 +60,7 @@
       Philip Chimento, Tom Schoonjans, Christoph Reiter, Ray Donnelly,
       Marcus Calhoun-Lopez, Florian Müllner, Evan Welsh, Mathieu Duponchelle
 
-2.56 - 2018-03-13
+1.56 - 2018-03-13
 -----------------
 
 ::
