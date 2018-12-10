@@ -137,6 +137,7 @@ if glib_dep.type_name() == 'pkgconfig'
 endif
 
 ### TODO: actually test
+subdir('offsets')
 subdir('warn')
 subdir('repository')
 subdir('scanner')
