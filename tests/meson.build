@@ -17,6 +17,126 @@ installed_sources = [
 
 install_data(installed_sources, install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0', 'tests'))
 
+# Generate everything.h and everything.c:
+test_everything_files = custom_target('everything',
+  output: ['everything.h', 'everything.c'],
+  depends: typelibs,
+  command: [
+    python,
+    girscanner,
+    '--generate-typelib-tests=Everything,@OUTPUT0@,@OUTPUT1@',
+    '--function-decoration=_GI_TEST_EXTERN',
+    '--include-first-in-src=config.h',
+    '--include-last-in-header=gitestmacros.h',
+  ]
+)
+
+test_everything_headers = [test_everything_files[0]]
+test_everything_sources = [test_everything_files[1]]
+
+everything_lib = shared_library('everything-1.0',
+  sources: test_everything_sources,
+  include_directories : configinc,
+  c_args: gi_hidden_visibility_cflags,
+  dependencies: [glib_dep, gobject_dep],
+  version: '1.0.0',
+)
+
+gimarshallingtests_lib = shared_library('gimarshallingtests-1.0',
+  sources: test_marshalling_sources,
+  include_directories : configinc,
+  c_args: gi_hidden_visibility_cflags,
+  dependencies: [glib_dep, gobject_dep],
+  version: '1.0.0',
+)
+
+test_gir_files = []
+test_typelibs = []
+
+# FIXME: When using glib as a subproject g-ir-scanner will not discover build
+# flag of dependencies through pkg-config, instead they have to be specified
+# manually like for example in gir/meson.build. This remain to be done here as
+# well. Though, this could work differently altogether. Instead one could
+# generate appropriate pkg-config files and point PKG_CONFIG_PATH to them,
+# leaving all invocations of g-ir-scanner as is.
+if glib_dep.type_name() == 'pkgconfig'
+  test_gir_files += custom_target('gir-everything',
+    input: test_everything_sources + test_everything_headers,
+    output: 'Everything-1.0.gir',
+    depends: [everything_lib] + typelibs,
+    command: [
+      python,
+      girscanner,
+      '--output=@OUTPUT@',
+      '--no-libtool',
+      '--reparse-validate',
+      '--add-include-path', join_paths(meson.source_root(), 'gir'),
+      '--add-include-path', join_paths(meson.build_root(), 'gir'),
+      '--warn-all',
+      '--warn-error',
+      '--namespace=Everything',
+      '--nsversion=1.0',
+      '--include=Gio-2.0',
+      '--library=everything-1.0',
+      '-L', meson.current_build_dir(),
+      '-I', meson.current_source_dir(),
+      '@INPUT@',
+    ]
+  )
+
+  test_gir_files += custom_target('gir-gimarshallingtests',
+    input: test_marshalling_sources + test_marshalling_headers,
+    output: 'GIMarshallingTests-1.0.gir',
+    depends: [gimarshallingtests_lib] + typelibs,
+    command: [
+      python,
+      girscanner,
+      '--output=@OUTPUT@',
+      '--no-libtool',
+      '--reparse-validate',
+      '--add-include-path', join_paths(meson.source_root(), 'gir'),
+      '--add-include-path', join_paths(meson.build_root(), 'gir'),
+      '--warn-all',
+      '--warn-error',
+      '--namespace=GIMarshallingTests',
+      '--symbol-prefix=gi_marshalling_tests',
+      '--nsversion=1.0',
+      '--include=Gio-2.0',
+      '--library=gimarshallingtests-1.0',
+      '-L' + meson.current_build_dir(),
+      '--c-include="tests/gimarshallingtests.h"',
+      '@INPUT@',
+    ]
+  )
+
+  foreach gir : test_gir_files
+    test_typelibs += custom_target('generate-typelib-@0@'.format(gir).underscorify(),
+      input: gir,
+      output: '@BASENAME@.typelib',
+      depends: [gobject_gir, ],
+      command: [gircompiler, '-o', '@OUTPUT@', '@INPUT@',
+                '--includedir', join_paths(meson.build_root(), 'gir'),
+                '--includedir', meson.current_build_dir()
+      ],
+      install: true,
+      install_dir: typelibdir,
+    )
+  endforeach
+
+  # FIXME: Remove? Those tests doesn't actually do anything for typelibs ...
+  foreach typelib : test_typelibs
+    gi_tester = files('gi-tester')
+    typelib_name = typelib.full_path().split('/')[-1]
+    test(
+      'gi-tester' + typelib_name,
+      python,
+      args: [gi_tester, typelib]
+    )
+  endforeach
+
+endif
+
 ### TODO: actually test
 subdir('warn')
+subdir('repository')
 subdir('scanner')

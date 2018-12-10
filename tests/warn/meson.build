@@ -28,8 +28,8 @@ warn_test_env.set(
   meson.build_root(),
   join_paths(meson.build_root(), 'giscanner'))
 
-# FIXME: Windows
-if host_system != 'windows'
+# FIXME: Glib as a subproject (used on Windows mostly).
+if glib_dep.type_name() == 'pkgconfig'
   foreach warn_fn : warn_tests
     test(
       'warn-' + warn_fn.split('.')[0], python,
