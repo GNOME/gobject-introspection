@@ -28,42 +28,6 @@
 
     <xi:include href="xml/overview-building.xml"/>
     <xi:include href="xml/overview-programming.xml"/>
-    <!-- <chapter>
-      <title>Introduction</title>
-
-      <para>
-        Metadata provided by GObject-Introspection is represented by a
-        number of structures:
-        <synopsis>
-        * <link linkend="gi-GIBaseInfo">GIBaseInfo</link>
-          * <link linkend="gi-GICallableInfo">GICallableInfo</link>
-            * <link linkend="gi-GIFunctionInfo">GIFunctionInfo</link>
-            * <link linkend="gi-GISignalInfo">GISignalInfo</link>
-            * <link linkend="gi-GIVFuncInfo">GIVFuncInfo</link>
-          * <link linkend="gi-GIRegisteredTypeInfo">GIRegisteredTypeInfo</link>
-            * <link linkend="gi-GIEnumInfo">GIEnumInfo</link>
-            * <link linkend="gi-GIInterfaceInfo">GIInterfaceInfo</link>
-            * <link linkend="gi-GIObjectInfo">GIObjectInfo</link>
-            * <link linkend="gi-GIStructInfo">GIStructInfo</link>
-            * <link linkend="gi-GIUnionInfo">GIUnionInfo</link>
-          * <link linkend="gi-GIArgInfo">GIArgInfo</link>
-          * <link linkend="gi-GIConstantInfo">GIConstantInfo</link>
-          * <link linkend="gi-GIFieldInfo">GIFieldInfo</link>
-          * <link linkend="gi-GIPropertyInfo">GIPropertyInfo</link>
-          * <link linkend="gi-GITypeInfo">GITypeInfo</link>
-        </synopsis>
-      </para>
-    </chapter> -->
-
-<!--
-    <chapter id="tools">
-      <title>GObject Introspection Tools</title>
-
-      &g-ir-scanner;
-      &g-ir-compiler;
-      &g-ir-generator;
-    </chapter>
--->
 
     <para>
       The GObject-Introspection package contains of a few different parts:
@@ -132,11 +96,6 @@
       <xi:include href="xml/girffi.xml"/>
 
       <xi:include href="xml/gi-gir-reference.xml"/>
-      <!--
-      &gi-gir-creating;
-      &gi-gir-parsing;
-      &gi-gir-verifying;
-       -->
     </chapter>
 
   </part>
@@ -149,26 +108,33 @@
     <title>Index of deprecated symbols</title>
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
   </index>
-  <index id="api-index-1-29-0" role="1.29.0">
-    <title>Index of new symbols in 1.29.0</title>
-    <xi:include href="xml/api-index-1.29.0.xml"><xi:fallback /></xi:include>
+  <index id="api-index-1-30" role="1.30">
+    <title>Index of new symbols in 1.30</title>
+    <xi:include href="xml/api-index-1.30.xml"><xi:fallback /></xi:include>
   </index>
-  <index id="api-index-1-29-17" role="1.29.17">
-    <title>Index of new symbols in 1.29.17</title>
-    <xi:include href="xml/api-index-1.29.17.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-1-30-1" role="1.30.1">
-    <title>Index of new symbols in 1.30.1</title>
-    <xi:include href="xml/api-index-1.30.1.xml"><xi:fallback /></xi:include>
+  <index id="api-index-1-32" role="1.32">
+    <title>Index of new symbols in 1.32</title>
+    <xi:include href="xml/api-index-1.32.xml"><xi:fallback /></xi:include>
   </index>
   <index id="api-index-1-34" role="1.34">
     <title>Index of new symbols in 1.34</title>
     <xi:include href="xml/api-index-1.34.xml"><xi:fallback /></xi:include>
   </index>
-  <index id="api-index-1-35-8" role="1.35.8">
-    <title>Index of new symbols in 1.35.8</title>
-    <xi:include href="xml/api-index-1.35.8.xml"><xi:fallback /></xi:include>
+  <index id="api-index-1-36" role="1.36">
+    <title>Index of new symbols in 1.36</title>
+    <xi:include href="xml/api-index-1.36.xml"><xi:fallback /></xi:include>
   </index>
-
+  <index id="api-index-1-42" role="1.42">
+    <title>Index of new symbols in 1.42</title>
+    <xi:include href="xml/api-index-1.42.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-44" role="1.44">
+    <title>Index of new symbols in 1.44</title>
+    <xi:include href="xml/api-index-1.44.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-46" role="1.46">
+    <title>Index of new symbols in 1.46</title>
+    <xi:include href="xml/api-index-1.46.xml"><xi:fallback /></xi:include>
+  </index>
   <xi:include href="xml/annotation-glossary.xml" />
 </book>
