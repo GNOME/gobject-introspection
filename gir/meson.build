@@ -416,8 +416,9 @@ gir_files += custom_target('gir-girepository',
   ]
 )
 
+typelibs = []
 foreach gir : gir_files
-  custom_target('generate-typelib-@0@'.format(gir).underscorify(),
+  typelibs += custom_target('generate-typelib-@0@'.format(gir).underscorify(),
     input: gir,
     output: '@BASENAME@.typelib',
     depends: [gobject_gir, ],
