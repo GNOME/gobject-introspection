@@ -118,8 +118,6 @@ if glib_dep.type_name() == 'pkgconfig'
                 '--includedir', join_paths(meson.build_root(), 'gir'),
                 '--includedir', meson.current_build_dir()
       ],
-      install: true,
-      install_dir: typelibdir,
     )
   endforeach
 
@@ -137,6 +135,7 @@ if glib_dep.type_name() == 'pkgconfig'
 endif
 
 ### TODO: actually test
+subdir('offsets')
 subdir('warn')
 subdir('repository')
 subdir('scanner')
