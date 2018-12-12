@@ -94,6 +94,8 @@ g_base_info_is_deprecated
 <SUBSECTION Standard>
 GI_TYPE_BASE_INFO
 g_base_info_gtype_get_type
+<SUBSECTION Private>
+GIUnresolvedInfo
 </SECTION>
 
 <SECTION>
@@ -140,7 +142,6 @@ g_callable_info_skip_return
 <SECTION>
 <FILE>gicommontypes</FILE>
 GIArgument
-GIUnresolvedInfo
 GITypeTag
 GIArrayType
 GI_TYPE_TAG_N_TYPES

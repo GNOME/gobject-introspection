@@ -22,11 +22,7 @@ gnome.gtkdoc('gi',
   main_xml: 'gi-docs.xml',
   dependencies: girepo_dep,
   src_dir: 'girepository',
-  html_assets: 'images/overview.png',
   content_files: [
-    'overview-building.xml',
-    'overview-programming.xml',
-    'gi-gir-reference.xml',
     'gi-struct-hierarchy.xml',
   ],
   scan_args: [

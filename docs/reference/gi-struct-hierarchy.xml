@@ -22,19 +22,21 @@
 * <link linkend="GIBaseInfo">GIBaseInfo</link>
   * <link linkend="gi-GICallableInfo">GICallableInfo</link>
     * <link linkend="gi-GIFunctionInfo">GIFunctionInfo</link>
+    * <link linkend="gi-GICallbackInfo">GICallbackInfo</link>
     * <link linkend="gi-GISignalInfo">GISignalInfo</link>
     * <link linkend="gi-GIVFuncInfo">GIVFuncInfo</link>
   * <link linkend="gi-GIRegisteredTypeInfo">GIRegisteredTypeInfo</link>
     * <link linkend="gi-GIEnumInfo">GIEnumInfo</link>
-    * <link linkend="gi-GIInterfaceInfo">GIInterfaceInfo</link>
-    * <link linkend="gi-GIObjectInfo">GIObjectInfo</link>
     * <link linkend="gi-GIStructInfo">GIStructInfo</link>
     * <link linkend="gi-GIUnionInfo">GIUnionInfo</link>
+    * <link linkend="gi-GIObjectInfo">GIObjectInfo</link>
+    * <link linkend="gi-GIInterfaceInfo">GIInterfaceInfo</link>
   * <link linkend="gi-GIArgInfo">GIArgInfo</link>
   * <link linkend="gi-GIConstantInfo">GIConstantInfo</link>
   * <link linkend="gi-GIFieldInfo">GIFieldInfo</link>
   * <link linkend="gi-GIPropertyInfo">GIPropertyInfo</link>
   * <link linkend="gi-GITypeInfo">GITypeInfo</link>
+  * <link linkend="gi-GIValueInfo">GIValueInfo</link>
 </synopsis>
 
 </refsynopsisdiv>
