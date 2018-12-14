@@ -23,6 +23,11 @@ endif
 
 cc = meson.get_compiler('c')
 config = configuration_data()
+
+config.set('GI_MAJOR_VERSION', gi_versions[0])
+config.set('GI_MINOR_VERSION', gi_versions[1])
+config.set('GI_MICRO_VERSION', gi_versions[2])
+
 config.set_quoted('GIR_SUFFIX', 'gir-1.0')
 gir_dir_prefix = get_option('gir-dir-prefix')
 if gir_dir_prefix == ''
