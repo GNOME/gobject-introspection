@@ -5,62 +5,29 @@
 <!ENTITY version SYSTEM "xml/version.xml">
 ]>
 <book id="index" lang="en" xmlns:xi="http://www.w3.org/2003/XInclude">
-  <title>GObject Introspection Reference Manual</title>
+  <title>libgirepository API Reference</title>
   <bookinfo>
-    <title>GObject Introspection Reference Manual</title>
+    <title>libgirepository API Reference</title>
     <releaseinfo>
-      This document is for GObject Introspection version &version;.
+      This document is for libgirepository version &version;.
       The latest version of this documentation can be found on-line at
-      <ulink type="http" url="http://developer.gnome.org/gi/unstable/">http://developer.gnome.org/gi/unstable/</ulink>.
+      <ulink type="http" url="https://developer.gnome.org/gi/unstable/">https://developer.gnome.org/gi/unstable/</ulink>.
+      <para>
+        For more information on how to build libgirepository, for how to build
+        bindings with it and for information on GObject Introspection in
+        general see
+        <ulink type="http" url="https://gi.readthedocs.io">https://gi.readthedocs.io</ulink>.
+      </para>
     </releaseinfo>
   </bookinfo>
 
-  <part id="overview">
-    <title>GObject-Introspection Overview</title>
-    <para>
-      GObject-Introspection is striving to provide a middleware layer between
-      (GObject based) C libraries and language bindings. The primary goal of
-      this project is to minimize duplicated effort in language binding
-      projects by providing shared metadata files on bound C libraries.
-      Language bindings can read these metadata files at runtime to learn
-      how to interface with a bound C library.
-    </para>
+    <xi:include href="xml/girepository.xml"/>
+    <xi:include href="xml/gitypelib.xml" />
+    <xi:include href="xml/gicommontypes.xml"/>
 
-    <xi:include href="xml/overview-building.xml"/>
-    <xi:include href="xml/overview-programming.xml"/>
-
-    <para>
-      The GObject-Introspection package contains of a few different parts:
-      <itemizedlist>
-        <listitem>
-          <para>The GIR XML format - an XML format describing the exported C API including documentation</para>
-        </listitem>
-        <listitem>
-          <para>The GTypelib format - a binary format optimized for fast disk access and low memory usage</para>
-        </listitem>
-        <listitem>
-          <para>g-ir-scanner - parses C source code and gtk-doc comments and generates GIR XML files</para>
-        </listitem>
-        <listitem>
-          <para>g-ir-compiler - compiles GIR XML files into typelibs</para>
-        </listitem>
-        <listitem>
-          <para>libgirepository - library to access typelib from C</para>
-        </listitem>
-      </itemizedlist>
-    </para>
-    <para>The following illustration shows how the different components fit together:</para>
-    <inlinegraphic fileref="overview.png" format="PNG"></inlinegraphic>
-  </part>
-
-  <part id="gi">
-    <title>API Reference</title>
     <chapter>
-      <title>GIRepository</title>
-      <xi:include href="xml/girepository.xml"/>
+      <title>GIBaseInfo</title>
       <xi:include href="xml/gi-struct-hierarchy.xml"/>
-
-      <xi:include href="xml/gicommontypes.xml"/>
 
       <xi:include href="xml/gibaseinfo.xml"/>
 
@@ -85,20 +52,15 @@
       <xi:include href="xml/givalueinfo.xml"/>
     </chapter>
 
-    <chapter id="gi-typelib">
-      <title>GITypelib</title>
-      <xi:include href="xml/gitypelib.xml" />
-      <xi:include href="xml/gitypelib-internal.xml"/>
+    <chapter>
+      <title>FFI Interface</title>
+      <xi:include href="xml/girffi.xml"/>
     </chapter>
 
     <chapter>
-      <title>TODO</title>
-      <xi:include href="xml/girffi.xml"/>
-
-      <xi:include href="xml/gi-gir-reference.xml"/>
+      <title>Internals &amp; Typelib Format</title>
+      <xi:include href="xml/gitypelib-internal.xml"/>
     </chapter>
-
-  </part>
 
   <index id="api-index-full">
     <title id="index-all">Index</title>

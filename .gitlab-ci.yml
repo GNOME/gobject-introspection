@@ -21,7 +21,7 @@ fedora-x86_64-meson:
     - ninja gi-doc
     - cd ..
     - mkdir -p public
-    - mv _build/docs/reference/html/ public/docs/
+    - mv _build/docs/reference/html/ public/girepository/
     - python3 -m pip install --user flake8
     - python3 -m flake8 --count
   except:
