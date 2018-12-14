@@ -34,6 +34,29 @@ test_constructor_return_type(GIBaseInfo* object_info)
   g_assert (strcmp (class_name, return_name) == 0);
 }
 
+static void
+test_type_info_get_name (GIRepository *repo)
+{
+  GIBaseInfo *base;
+  GIVFuncInfo *vfunc;
+  GITypeInfo *typeinfo;
+
+  base = g_irepository_find_by_name (repo, "Gio", "File");
+  g_assert_nonnull (base);
+  g_assert_true (GI_IS_INTERFACE_INFO (base));
+  vfunc = g_interface_info_find_vfunc ((GIInterfaceInfo*)base, "read_async");
+  g_assert_nonnull (vfunc);
+  g_base_info_unref ((GIBaseInfo*)base);
+
+  typeinfo = g_callable_info_get_return_type (vfunc);
+  g_assert_nonnull (typeinfo);
+  g_base_info_unref ((GIBaseInfo*)vfunc);
+
+  /* https://gitlab.gnome.org/GNOME/gobject-introspection/issues/96 */
+  g_assert_null (g_base_info_get_name (typeinfo));
+  g_base_info_unref ((GIBaseInfo*)typeinfo);
+}
+
 
 int
 main(int argc, char **argv)
@@ -136,6 +159,8 @@ main(int argc, char **argv)
     g_assert (invoker != NULL);
     g_assert (strcmp (g_base_info_get_name ((GIBaseInfo*)invoker), "get_display") == 0);
   }
+
+  test_type_info_get_name (repo);
 
   /* Error quark tests */
   errorinfo = g_irepository_find_by_error_domain (repo, G_RESOLVER_ERROR);
