@@ -13,6 +13,7 @@ GObject Introspection
     goals
     architecture
     users
+    build_test
     writingbindableapis
     buildsystems/index
     annotations/index
