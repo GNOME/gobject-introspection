@@ -26,6 +26,13 @@ AM_SILENT_RULES([yes])
 GI_VERSION=gi_version
 AC_SUBST(GI_VERSION)
 
+GI_MAJOR_VERSION=gi_major_version
+GI_MINOR_VERSION=gi_minor_version
+GI_MICRO_VERSION=gi_micro_version
+AC_SUBST(GI_MAJOR_VERSION)
+AC_SUBST(GI_MINOR_VERSION)
+AC_SUBST(GI_MICRO_VERSION)
+
 # Check for Win32
 AC_CANONICAL_HOST
 case "$host" in
@@ -388,6 +395,7 @@ docs/Makefile
 docs/reference/Makefile
 docs/reference/version.xml
 giscanner/_version.py
+girepository/giversion.h
 gobject-introspection-1.0.pc
 gobject-introspection-no-export-1.0.pc])
 AC_OUTPUT

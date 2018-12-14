@@ -201,19 +201,23 @@ GIRepository_2_0_gir_SCANNERFLAGS = \
         $(WARN_SCANNERFLAGS) \
         --identifier-prefix=GI \
         --symbol-prefix=g \
+        --symbol-prefix=gi \
         --c-include="girepository.h" \
         --add-include-path=.
 GIRepository_2_0_gir_PACKAGES = gobject-2.0
 GIRepository_2_0_gir_INCLUDES = GObject-2.0
 GIRepository_2_0_gir_EXPORT_PACKAGES = gobject-introspection-1.0
 GIRepository_2_0_gir_CFLAGS = \
-    -I$(top_srcdir)/girepository -I$(top_srcdir) \
+    -I$(top_srcdir)/girepository \
+    -I$(top_srcdir) \
+    -I$(top_builddir)/girepository \
     -DGI_COMPILATION
 GIRepository_2_0_gir_FILES = \
         $(top_srcdir)/girepository/girepository.h   \
         $(top_srcdir)/girepository/girepository.c   \
         $(top_srcdir)/girepository/gi*info.c	    \
         $(top_srcdir)/girepository/gi*info.h	    \
+        $(top_builddir)/girepository/giversion.h	    \
         $(top_srcdir)/girepository/gitypelib.h	    \
         $(top_srcdir)/girepository/gitypes.h
 
