@@ -41,7 +41,9 @@ fedora-x86_64-autotools:
     CFLAGS: "-Werror"
   script:
     - sed -i 's|\[glib-2\.0 >= [0-9.]*\]|[glib-2.0 >= 1.0]|' configure.ac
-    - ./autogen.sh --with-python=python3 --enable-gtk-doc --enable-doctool
+    - mkdir _build
+    - cd _build
+    - ../autogen.sh --with-python=python3 --enable-gtk-doc --enable-doctool
     - make -j4
     - make check
     - python3 -m pip install --user flake8
@@ -50,7 +52,10 @@ fedora-x86_64-autotools:
     when: on_failure
     name: "gi-_${CI_COMMIT_REF_NAME}"
     paths:
-      - "${CI_PROJECT_DIR}/*/scanner/test-suite.log"
+      - "_build/*.log"
+      - "_build/*/*.log"
+      - "_build/*/*/*.log"
+      - "_build/*/*/*/*.log"
 
 msys2-mingw32-meson:
   stage: build
