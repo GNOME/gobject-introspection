@@ -36,7 +36,7 @@ CLEANFILES += Offsets-1.0.gir Offsets-1.0.typelib liboffsets.la
 EXTRA_PROGRAMS += gitestoffsets
 
 nodist_gitestoffsets_SOURCES = gitestoffsets.c
-gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository -I$(top_srcdir)/tests
+gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository -I$(top_builddir)/girepository -I$(top_srcdir)/tests
 gitestoffsets_CFLAGS = $(WARN_CFLAGS)
 gitestoffsets_LDFLAGS = $(WARN_LDFLAGS)
 gitestoffsets_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)

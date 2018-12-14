@@ -135,6 +135,7 @@ docs/reference/version.xml
 docs/giscanner/_build/*
 
 giscanner/_version.py
+girepository/giversion.h
 
 #g-ir-doc-tool tests
 *.page
