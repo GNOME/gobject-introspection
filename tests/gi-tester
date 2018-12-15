@@ -111,7 +111,8 @@ def main(argv):
             filter(
                 None,
                 [os.environ.get("top_builddir"),
-                 os.environ.get("top_srcdir")]))
+                 os.environ.get("top_srcdir"),
+                 os.environ.get("PYTHONPATH")]))
         subprocess.check_call([env["PYTHON"], targetname], env=env)
     else:
         raise SystemError("Unknown file type: %s" % targetbase)
