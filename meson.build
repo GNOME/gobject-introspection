@@ -22,6 +22,52 @@ if not python_version.version_compare(python_version_req)
 endif
 
 cc = meson.get_compiler('c')
+
+project_c_args = []
+if cc.get_id() != 'msvc'
+    project_c_args += [
+      '-Wall',
+      '-Warray-bounds',
+      '-Wcast-align',
+      '-Wdeclaration-after-statement',
+      '-Wduplicated-branches',
+      '-Wextra',
+      '-Wformat=2',
+      '-Wformat-nonliteral',
+      '-Wformat-security',
+      '-Wimplicit-function-declaration',
+      '-Winit-self',
+      '-Wjump-misses-init',
+      '-Wlogical-op',
+      '-Wmissing-declarations',
+      '-Wmissing-format-attribute',
+      '-Wmissing-include-dirs',
+      '-Wmissing-noreturn',
+      '-Wmissing-prototypes',
+      '-Wnested-externs',
+      '-Wnull-dereference',
+      '-Wold-style-definition',
+      '-Wpacked',
+      '-Wpointer-arith',
+      '-Wrestrict',
+      '-Wreturn-type',
+      '-Wshadow',
+      '-Wsign-compare',
+      '-Wstrict-aliasing',
+      '-Wstrict-prototypes',
+      '-Wundef',
+      '-Wunused-but-set-variable',
+      '-Wwrite-strings',
+    ]
+
+    project_c_args += [
+      '-fno-strict-aliasing',
+    ]
+endif
+
+project_c_args = cc.get_supported_arguments(project_c_args)
+add_project_arguments(project_c_args, language: 'c')
+
 config = configuration_data()
 
 config.set('GI_MAJOR_VERSION', gi_versions[0])

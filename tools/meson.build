@@ -40,23 +40,35 @@ endforeach
 
 girscanner = tool_output[0]
 
+custom_c_args = cc.get_supported_arguments([
+  '-Wno-missing-field-initializers',
+])
 gircompiler = executable('g-ir-compiler', 'compiler.c',
   dependencies: [
     girepo_internals_dep,
     girepo_dep,
   ],
   install: true,
+  c_args: custom_c_args,
 )
 
+custom_c_args = cc.get_supported_arguments([
+  '-Wno-missing-field-initializers',
+])
 girgenerate = executable('g-ir-generate', 'generate.c',
   dependencies: [
     girepo_internals_dep,
     girepo_dep,
   ],
   install: true,
+  c_args: custom_c_args,
 )
 
+custom_c_args = cc.get_supported_arguments([
+  '-Wno-missing-field-initializers',
+])
 girinspect = executable('g-ir-inspect', 'g-ir-inspect.c',
   dependencies: girepo_dep,
   install: true,
+  c_args: custom_c_args,
 )

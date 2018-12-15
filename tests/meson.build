@@ -46,18 +46,24 @@ test_everything_files = custom_target('everything',
 test_everything_headers = [test_everything_files[0]]
 test_everything_sources = [test_everything_files[1]]
 
+custom_c_args = cc.get_supported_arguments([
+  '-Wno-unused-parameter',
+])
 everything_lib = shared_library('everything-1.0',
   sources: test_everything_sources,
   include_directories : configinc,
-  c_args: gi_hidden_visibility_cflags,
+  c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [glib_dep, gobject_dep],
   version: '1.0.0',
 )
 
+custom_c_args = cc.get_supported_arguments([
+  '-Wno-unused-parameter',
+])
 gimarshallingtests_lib = shared_library('gimarshallingtests-1.0',
   sources: test_marshalling_sources,
   include_directories : configinc,
-  c_args: gi_hidden_visibility_cflags,
+  c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [glib_dep, gobject_dep],
   version: '1.0.0',
 )
