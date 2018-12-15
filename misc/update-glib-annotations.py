@@ -1,108 +1,90 @@
 #!/usr/bin/env python3
 # Scan glib sources.
-# e.g.:
-#   ./update-glib-annotations.py ../../glib ../../glib/_build
+#
+# meson _build
+# ninja -C _build
+# ./misc/update-glib-annotations.py <path-to-glib-git-checkout>
 
 import os
 import sys
-
 import subprocess
 
-path=os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-for k in ['UNINSTALLED_INTROSPECTION_SRCDIR',
-          'UNINSTALLED_INTROSPECTION_BUILDDIR']:
-    if k not in os.environ:
-        os.environ[k] = path
 
-possible_builddirs = ['../_build/', '..', '../../build/']
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+SRC_DIR = os.path.realpath(os.path.join(SCRIPT_DIR, ".."))
 
 
-def directory_includes(dirs, srcdir, builddir):
-    result = []
-    result.append('-I' + srcdir)
-
-    if srcdir != builddir:
-        result.append('-I' + builddir)
-
-    for name in dirs:
-        result.append('-I' + os.path.join(srcdir, name))
-        if srcdir != builddir:
-            result.append('-I' + os.path.join(builddir, name))
-
-    return result
+def get_build_dir():
+    build_dir = os.path.join(SRC_DIR, "_build")
+    if not os.path.isdir(build_dir):
+        raise SystemExit(
+            "build dir not found: "
+            "build with meson in %r first" % build_dir)
+    return build_dir
 
 
-def extract_annotations(module, srcdir, builddir, outfile):
+def get_tool_path():
+    build_dir = get_build_dir()
+    tool_path = os.path.join(build_dir, "tools", "g-ir-annotation-tool")
+    if not os.path.isfile(tool_path):
+        raise SystemExit(
+            "g-ir-annotation-tool not found: "
+            "build with meson in %r first" % build_dir)
+    return tool_path
+
+
+def extract_annotations(module_name, glib_srcdir, outfile):
     sources = []
-    subdir = os.path.join(srcdir, module['name'])
-    includes = directory_includes(module['includes'],
-                                  srcdir, builddir)
 
-    for sourcename in os.listdir(subdir):
+    glib_subdir = os.path.join(glib_srcdir, module_name)
+    for sourcename in sorted(os.listdir(glib_subdir), reverse=True):
         if sourcename.endswith('.c'):
-            sources.append(os.path.join(subdir, sourcename))
+            sources.append(os.path.join(glib_subdir, sourcename))
 
-    annotation_tool_base_args = [
-        os.path.join(builddir, 'g-ir-annotation-tool'), '--extract']
+    env = os.environ.copy()
+    env['PYTHONPATH'] = os.path.join(get_build_dir(), 'giscanner')
 
-    return subprocess.check_call(annotation_tool_base_args +
-                                 module['defines'] +
-                                 includes +
-                                 sources,
-                                 stdout=outfile)
+    tool_args = [sys.executable, get_tool_path(), '--extract'] + sources
+    return subprocess.check_call(tool_args, stdout=outfile, env=env)
+
+
+def update_module(module_name, glib_src_dir, target_path):
+    tmpname = target_path + '.tmp'
+
+    if os.path.isfile(tmpname):
+        os.unlink(tmpname)
+    with open(tmpname, 'wb') as target:
+        extract_annotations(module_name, glib_src_dir, target)
+    if os.path.isfile(target_path):
+        os.unlink(target_path)
+    os.rename(tmpname, target_path)
+
+    print("Updated '%s'" % (target_path, ))
+
+
+def main(argv):
+    if len(argv) != 2:
+        print("only pass the glib src dir")
+    glib_src_dir = argv[1]
+    if not os.path.exists(os.path.join(glib_src_dir, "glib.doap")):
+        raise SystemExit("%s isn't the glib source dir" % glib_src_dir)
+
+    print("Using source directory: '%s' build directory: '%s'" % (
+        glib_src_dir, get_build_dir()))
+
+    gir_dir = os.path.join(SRC_DIR, "gir")
+    modules = {
+        'glib': os.path.join(gir_dir, 'glib-2.0.c'),
+        'gmodule': os.path.join(gir_dir, 'gmodule-2.0.c'),
+        'gobject': os.path.join(gir_dir, 'gobject-2.0.c'),
+        'gio': os.path.join(gir_dir, 'gio-2.0.c'),
+    }
+
+    for module_name, target_path in modules.items():
+        update_module(module_name, glib_src_dir, target_path)
+
+    print("Done; run \"git diff\" to see any changes.")
 
 
 if __name__ == '__main__':
-    srcdir = sys.argv[1]
-    if len(sys.argv) == 3:
-        builddir = sys.argv[2]
-    else:
-        for d in possible_builddirs:
-            if os.path.isfile(os.path.join(d, 'g-ir-annotation-tool')):
-                builddir = d
-                break
-        assert builddir is not None
-
-    print("Using source directory: '%s' build directory: '%s'" % (srcdir, builddir))
-
-    modules = [{'name':         'glib',
-                'srcname':      '../gir/glib-2.0.c',
-                'includes':     ['glib', 'gmodule'],
-                'defines':      ['-DGLIB_COMPILATION']},
-
-               {'name':         'gmodule',
-                'srcname':      '../gir/gmodule-2.0.c',
-                'includes':     ['glib', 'gmodule'],
-                'defines':      ['-DGLIB_COMPILATION']},
-
-               {'name':         'gobject',
-                'srcname':      '../gir/gobject-2.0.c',
-                'includes':     ['glib', 'gobject', 'gmodule'],
-                'defines':      ['-DGOBJECT_COMPILATION']},
-
-               {'name':         'gio',
-                'srcname':      '../gir/gio-2.0.c',
-                'includes':     ['glib', 'gmodule', 'gobject', 'gio'],
-                'defines':      ['-DGOBJECT_COMPILATION', '-DGIO_COMPILATION', '-DG_SETTINGS_ENABLE_BACKEND']}]
-
-    for module in modules:
-        srcname = module['srcname']
-        tmpname = module['srcname'] + '.tmp'
-
-        if os.path.isfile(tmpname):
-            os.unlink(tmpname)
-
-        if os.path.isfile(srcname):
-            os.unlink(srcname)
-
-        # Extract annotations into a file opened in binary mode.
-        # Since g-ir-scanner-tool outputs utf-8 encoded data, we simply pass
-        # that directly into this file via. the underlying subprocess call.
-        srcfile = open(tmpname, 'wb')
-        extract_annotations(module, srcdir, builddir, srcfile)
-        srcfile.close()
-        os.rename(tmpname, srcname)
-
-        print("Updated '%s'" % (srcname, ))
-
-    print("Done; run \"git diff\" to see any changes.")
+    main(sys.argv)
