@@ -69,20 +69,24 @@ if not cc.has_header('unistd.h')
   giscanner_args += '-DYY_NO_UNISTD_H'
 endif
 
+custom_c_args = cc.get_supported_arguments([
+  '-Wno-missing-field-initializers',
+  '-Wno-unused-parameter',
+])
 giscanner_lib = static_library('giscanner',
   sources: [
     'sourcescanner.c',
     scannerparser,
     scannerlexer,
   ],
-  c_args: giscanner_args,
+  c_args: giscanner_args + custom_c_args,
   include_directories : configinc,
   dependencies: [glib_dep, gobject_dep, gio_dep, gmodule_dep],
 )
 
 giscanner_pymod = python.extension_module('_giscanner', ['giscannermodule.c'],
   link_with: giscanner_lib,
-  c_args: [gi_hidden_visibility_cflags],
+  c_args: gi_hidden_visibility_cflags + custom_c_args,
   include_directories : configinc,
   dependencies: [glib_dep, gobject_dep, gio_dep, gmodule_dep,
                  python.dependency()],

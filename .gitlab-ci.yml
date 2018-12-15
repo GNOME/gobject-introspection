@@ -13,6 +13,7 @@ fedora-x86_64-meson:
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+    CFLAGS: "-Werror"
   script:
     - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dgtk-doc=true -Dcairo=true -Dpython=python3 _build .
     - cd _build
