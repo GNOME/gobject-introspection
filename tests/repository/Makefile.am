@@ -4,6 +4,7 @@ LIBS = $(GOBJECT_LIBS)
 
 EXTRA_PROGRAMS = gitestrepo giteststructinfo gitestthrows gitypelibtest
 CLEANFILES = $(EXTRA_PROGRAMS)
+EXTRA_DIST = meson.build
 
 gitestrepo_SOURCES = gitestrepo.c
 gitestrepo_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository -I$(top_builddir)/girepository

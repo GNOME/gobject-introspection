@@ -66,4 +66,5 @@ EXTRA_DIST = \
 	gtkdoc/annotations/tester.h.xml	\
 	gtkdoc/annotations/tester.c.xml	\
 	gtkdoc/gobject/gobject.h.xml		\
-	gtkdoc/gobject/gobject.c.xml
+	gtkdoc/gobject/gobject.c.xml		\
+	meson.build

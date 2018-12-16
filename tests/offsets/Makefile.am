@@ -46,7 +46,8 @@ gitestoffsets.c: gen-gitestoffsets offsets.h Offsets-1.0.typelib
 
 EXTRA_DIST += \
 	gen-gitestoffsets \
-	test_offsets.py
+	test_offsets.py \
+	meson.build
 BUILT_SOURCES += gitestoffsets.c
 CLEANFILES += gitestoffsets.c $(EXTRA_PROGRAMS)
 
