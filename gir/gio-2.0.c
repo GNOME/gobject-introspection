@@ -30771,6 +30771,64 @@
 
 
 /**
+ * g_resolver_lookup_by_name_with_flags:
+ * @resolver: a #GResolver
+ * @hostname: the hostname to look up
+ * @flags: extra #GResolverNameLookupFlags for the lookup
+ * @cancellable: (nullable): a #GCancellable, or %NULL
+ * @error: (nullable): return location for a #GError, or %NULL
+ *
+ * This differs from g_resolver_lookup_by_name() in that you can modify
+ * the lookup behavior with @flags. For example this can be used to limit
+ * results with #G_RESOLVER_NAME_LOOKUP_FLAGS_IPV4_ONLY.
+ *
+ * Returns: (element-type GInetAddress) (transfer full): a non-empty #GList
+ * of #GInetAddress, or %NULL on error. You
+ * must unref each of the addresses and free the list when you are
+ * done with it. (You can use g_resolver_free_addresses() to do this.)
+ * Since: 2.60
+ */
+
+
+/**
+ * g_resolver_lookup_by_name_with_flags_async:
+ * @resolver: a #GResolver
+ * @hostname: the hostname to look up the address of
+ * @flags: extra #GResolverNameLookupFlags for the lookup
+ * @cancellable: (nullable): a #GCancellable, or %NULL
+ * @callback: (scope async): callback to call after resolution completes
+ * @user_data: (closure): data for @callback
+ *
+ * Begins asynchronously resolving @hostname to determine its
+ * associated IP address(es), and eventually calls @callback, which
+ * must call g_resolver_lookup_by_name_with_flags_finish() to get the result.
+ * See g_resolver_lookup_by_name() for more details.
+ *
+ * Since: 2.60
+ */
+
+
+/**
+ * g_resolver_lookup_by_name_with_flags_finish:
+ * @resolver: a #GResolver
+ * @result: the result passed to your #GAsyncReadyCallback
+ * @error: return location for a #GError, or %NULL
+ *
+ * Retrieves the result of a call to
+ * g_resolver_lookup_by_name_with_flags_async().
+ *
+ * If the DNS resolution failed, @error (if non-%NULL) will be set to
+ * a value from #GResolverError. If the operation was cancelled,
+ * @error will be set to %G_IO_ERROR_CANCELLED.
+ *
+ * Returns: (element-type GInetAddress) (transfer full): a #GList
+ * of #GInetAddress, or %NULL on error. See g_resolver_lookup_by_name()
+ * for more details.
+ * Since: 2.60
+ */
+
+
+/**
  * g_resolver_lookup_records:
  * @resolver: a #GResolver
  * @rrname: the DNS name to lookup the record for
@@ -33574,6 +33632,8 @@
  * Asynchronously retrieves the next #GSocketAddress from @enumerator
  * and then calls @callback, which must call
  * g_socket_address_enumerator_next_finish() to get the result.
+ *
+ * It is an error to call this multiple times before the previous callback has finished.
  */
 
 
