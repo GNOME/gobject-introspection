@@ -1,3 +1,37 @@
+1.59.1 - 2018-12-16
+-------------------
+
+* Everything included in 1.58.2
+* build: Drop Python 2 support, require Python 3.4+ :mr:`69`
+* build: Add option to make .gir files installation paths configurable
+  :mr:`63` (:user:`Kai Kang <kai.7.kang>`)
+* build: Skip gobject/gvaluecollector.h when constructing GObject GIR
+  :mr:`20` (:user:`Tomasz Miąsko <tmiasko>`)
+* build: Port various tests to work with meson
+  :mr:`92` :mr:`94` :mr:`95` (:user:`Tomasz Miąsko <tmiasko>`)
+* regress: Add test for write-only property
+  :mr:`67` (:user:`Philip Chimento <ptomato>`)
+* regress: Implement interface and override properties
+  :mr:`59` (:user:`Philip Chimento <ptomato>`)
+* writer: Include documentation and symbol position in source files
+  :mr:`75` (:user:`Thibault Saunier <thiblahute>`)
+* giscanner: Print relative filename paths when warning
+  :mr:`74` (:user:`Jonas Ådahl <jadahl>`)
+* giscanner: Define grefcount and gatomicrefcount as aliases to gint
+  :mr:`76` (:user:`Tomasz Miąsko <tmiasko>`)
+* giscanner: Allow empty declarations. Fixes warnings with mingw headers.
+  :issue:`216` :mr:`89` (:user:`Christoph Reiter <creiter>`)
+* giscanner: Replace linked lists with arrays in source scanner
+  :mr:`90` (:user:`Tomasz Miąsko <tmiasko>`)
+* girepository: Various docs cleanups and fixes
+  :mr:`96` :mr:`97` :issue:`66` (:user:`Tomasz Miąsko <tmiasko>`,
+  :user:`Christoph Reiter <creiter>`, Jasper St. Pierre)
+* girepository: Don't abort when calling g_base_info_get_name() on a GITypeInfo
+  :issue:`96` :mr:`99` (:user:`Christoph Reiter <creiter>`)
+* girepository: Add version macros and functions
+  :issue:`200` :mr:`98` (:user:`Christoph Reiter <creiter>`)
+
+
 1.58.2 - 2018-12-09
 -------------------
 
