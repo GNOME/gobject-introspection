@@ -23,7 +23,9 @@ installed_sources = [
   'gitestmacros.h',
 ]
 
-install_data(installed_sources, install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0', 'tests'))
+test_install_dir = join_paths(get_option('datadir'), 'gobject-introspection-1.0', 'tests')
+
+install_data(installed_sources, install_dir: test_install_dir)
 
 # Generate everything.h and everything.c:
 test_everything_files = custom_target('everything',
@@ -36,7 +38,9 @@ test_everything_files = custom_target('everything',
     '--function-decoration=_GI_TEST_EXTERN',
     '--include-first-in-src=config.h',
     '--include-last-in-header=gitestmacros.h',
-  ]
+  ],
+  install: true,
+  install_dir: test_install_dir,
 )
 
 test_everything_headers = [test_everything_files[0]]
