@@ -217,6 +217,7 @@ GIRepository_2_0_gir_FILES = \
         $(top_srcdir)/girepository/girepository.c   \
         $(top_srcdir)/girepository/gi*info.c	    \
         $(top_srcdir)/girepository/gi*info.h	    \
+        $(top_srcdir)/girepository/giversion.c	    \
         $(top_builddir)/girepository/giversion.h    \
         $(top_srcdir)/girepository/gitypelib.h	    \
         $(top_srcdir)/girepository/gitypes.h
