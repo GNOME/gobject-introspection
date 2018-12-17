@@ -81,12 +81,19 @@ giscanner_lib = static_library('giscanner',
   dependencies: [glib_dep, gobject_dep, gio_dep, gmodule_dep],
 )
 
+# https://github.com/mesonbuild/meson/issues/4117
+if host_machine.system() == 'windows'
+  python_ext_dep = python.dependency()
+else
+  python_ext_dep = python.dependency().partial_dependency(compile_args: true)
+endif
+
 giscanner_pymod = python.extension_module('_giscanner', ['giscannermodule.c'],
   link_with: giscanner_lib,
   c_args: [gi_hidden_visibility_cflags],
   include_directories : configinc,
   dependencies: [glib_dep, gobject_dep, gio_dep, gmodule_dep,
-                 python.dependency()],
+                 python_ext_dep],
   install: true,
   install_dir: giscannerdir,
 )
