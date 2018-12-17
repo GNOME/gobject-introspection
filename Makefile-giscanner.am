@@ -122,6 +122,7 @@ nobase_dist_template_DATA =		\
 	giscanner/doctemplates/devdocs/Gjs/enum.tmpl		\
 	giscanner/doctemplates/devdocs/Gjs/function.tmpl	\
 	giscanner/doctemplates/devdocs/Gjs/interface.tmpl	\
+	giscanner/doctemplates/devdocs/Gjs/method.tmpl		\
 	giscanner/doctemplates/devdocs/Gjs/namespace.tmpl
 
 _giscanner_la_CFLAGS = \
