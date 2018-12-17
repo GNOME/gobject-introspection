@@ -15,6 +15,7 @@ giscanner_files = [
   'gdumpparser.py',
   'libtoolimporter.py',
   'maintransformer.py',
+  'mdextensions.py',
   'message.py',
   'msvccompiler.py',
   'pkgconfig.py',
