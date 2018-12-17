@@ -6,8 +6,16 @@ test_marshalling_headers = files('gimarshallingtests.h')
 test_regress_incdirs = include_directories(['.', 'scanner'])
 
 installed_sources = [
+  'scanner/annotation.c',
+  'scanner/annotation.h',
+  'scanner/drawable.c',
+  'scanner/drawable.h',
+  'scanner/foo.c',
+  'scanner/foo.h',
   'scanner/regress.c',
   'scanner/regress.h',
+  'scanner/utility.c',
+  'scanner/utility.h',
   'scanner/warnlib.c',
   'scanner/warnlib.h',
   'gimarshallingtests.c',
