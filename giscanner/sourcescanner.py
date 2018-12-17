@@ -24,6 +24,7 @@ import tempfile
 from .libtoolimporter import LibtoolImporter
 from .message import Position
 from .ccompiler import CCompiler
+from .utils import have_debug_flag
 
 with LibtoolImporter(None, None):
     if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
@@ -303,9 +304,11 @@ class SourceScanner(object):
                       tmpfile_output,
                       self._cpp_options)
 
-        os.unlink(tmp_name_cpp)
+        if not have_debug_flag('save-temps'):
+            os.unlink(tmp_name_cpp)
         self._scanner.parse_file(tmpfile_output)
-        os.unlink(tmpfile_output)
+        if not have_debug_flag('save-temps'):
+            os.unlink(tmpfile_output)
 
     def _write_preprocess_src(self, fp, defines, undefs, filenames):
         # Write to the temp file for feeding into the preprocessor
