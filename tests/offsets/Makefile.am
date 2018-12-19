@@ -2,7 +2,7 @@ include $(top_srcdir)/common.mk
 include $(top_srcdir)/Makefile.introspection
 
 BUILT_SOURCES =
-CLEANFILES =
+CLEANFILES = $(EXTRA_PROGRAMS)
 EXTRA_DIST =
 INTROSPECTION_GIRS =
 
@@ -35,21 +35,16 @@ CLEANFILES += Offsets-1.0.gir Offsets-1.0.typelib liboffsets.la
 
 EXTRA_PROGRAMS += gitestoffsets
 
-nodist_gitestoffsets_SOURCES = gitestoffsets.c
+gitestoffsets_SOURCES = gitestoffsets.c
 gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository -I$(top_builddir)/girepository -I$(top_srcdir)/tests
 gitestoffsets_CFLAGS = $(WARN_CFLAGS)
 gitestoffsets_LDFLAGS = $(WARN_LDFLAGS)
 gitestoffsets_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
-
-gitestoffsets.c: gen-gitestoffsets offsets.h Offsets-1.0.typelib
-	$(AM_V_GEN) $(PYTHON) $(srcdir)/gen-gitestoffsets $(srcdir)/offsets.h > $@ || ( rm -f $@ && false )
+EXTRA_gitestoffsets_DEPENDENCIES = Offsets-1.0.typelib
 
 EXTRA_DIST += \
-	gen-gitestoffsets \
 	test_offsets.py \
 	meson.build
-BUILT_SOURCES += gitestoffsets.c
-CLEANFILES += gitestoffsets.c $(EXTRA_PROGRAMS)
 
 ############################################################
 

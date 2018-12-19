@@ -51,15 +51,8 @@ if host_system != 'windows'
     ],
   )
 
-  gitestoffsets_sources = custom_target(
-    'generate-gitestoffsets.c',
-    output: ['gitestoffsets.c'],
-    command: [python] + files('gen-gitestoffsets', 'offsets.h'),
-    capture: true,
-  )
-
   executable('gitestoffsets',
-    gitestoffsets_sources, 
+    'gitestoffsets.c', 
     include_directories : test_offsets_inc,
     dependencies: [girepo_dep],
   )

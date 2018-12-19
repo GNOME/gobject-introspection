@@ -69,7 +69,6 @@ tests/GIMarshallingTests-1.0.gir
 tests/everything-stamp.h
 tests/everything.c
 tests/everything.h
-tests/offsets/gitestoffsets.c
 tests/repository/gitestrepo
 tests/repository/giteststructinfo
 tests/repository/gitestthrows
