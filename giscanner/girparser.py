@@ -185,9 +185,11 @@ class GIRParser(object):
         if doc is not None:
             if doc.text:
                 obj.doc = doc.text
-                obj.doc_position = Position(doc.attrib['filename'],
-                                            doc.attrib['line'],
-                                            doc.attrib.get('column', None))
+                filename = node.attrib.get('filename')
+                if filename is not None:
+                    line = node.attrib.get('line')
+                    column = node.attrib.get('column')
+                    obj.doc_position = Position(filename, line, column)
         version = node.attrib.get('version')
         if version:
             obj.version = version
