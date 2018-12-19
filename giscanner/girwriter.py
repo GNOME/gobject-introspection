@@ -139,11 +139,16 @@ class GIRWriter(XMLWriter):
             self.write_tag('attribute', [('name', key), ('value', value)])
 
         if hasattr(node, 'doc') and node.doc:
-            attrs = [('xml:space', 'preserve'),
-                    ('filename', self._get_relative_path(node.doc_position.filename)),
-                    ('line', str(node.doc_position.line))]
-            if node.doc_position.column:
-                attrs.append(('column', str(node.doc_position.column)))
+            attrs = []
+            if node.doc_position is not None:
+                doc_pos = node.doc_position
+                attrs += [
+                    ('xml:space', 'preserve'),
+                    ('filename', self._get_relative_path(doc_pos.filename)),
+                    ('line', str(doc_pos.line)),
+                ]
+                if doc_pos.column:
+                    attrs.append(('column', str(doc_pos.column)))
 
             self.write_tag('doc', attrs, node.doc)
 
