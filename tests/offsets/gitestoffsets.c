@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2008  Red Hat, Inc.
+ * Copyright (C) 2008 Red Hat, Inc.
+ * Copyright (C) 2018 Tomasz Miąsko
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,31 +38,6 @@ static GIRepository *repository;
 static const char *namespace = "Offsets";
 static const char *version = "1.0";
 
-static void
-print_field_offset(FILE         *outfile,
-                   GIStructInfo *struct_info,
-                   const gchar  *name)
-{
-   gint i;
-   gint n_fields = g_struct_info_get_n_fields (struct_info);
-   for (i = 0; i < n_fields; i++)
-     {
-       GIFieldInfo *field_info = g_struct_info_get_field (struct_info, i);
-       const char *field_name = g_base_info_get_name ((GIBaseInfo *)field_info);
-       if (strcmp (field_name, name) == 0)
-         {
-           fprintf (outfile, "%s %d\n", name, g_field_info_get_offset (field_info));
-           g_base_info_unref ((GIBaseInfo *)field_info);
-           return;
-         }
-
-       g_base_info_unref ((GIBaseInfo *)field_info);
-     }
-
-   g_error("Can't find field '%s.%s' in introspection information",
-           g_base_info_get_name ((GIBaseInfo *)struct_info), name);
-}
-
 typedef struct {
    char dummy;
    OffsetsArray struct_;
@@ -84,27 +60,39 @@ compiled_OffsetsArray (FILE *outfile)
 }
 
 static void
-introspected_OffsetsArray (FILE *outfile)
+introspected_struct (FILE *outfile, const gchar *name)
 {
-  GIStructInfo *struct_info = (GIStructInfo *)g_irepository_find_by_name(repository, namespace,
-                                                                         "Array");
-  if (!struct_info)
-     g_error ("Can't find GIStructInfo for 'OffsetsArray'");
+  gint i, n_fields;
+  GIStructInfo *struct_info;
 
-  fprintf (outfile, "OffsetsArray: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
+  struct_info = g_irepository_find_by_name(repository, namespace, name);
+  if (!struct_info)
+     g_error ("Can't find GIStructInfo for '%s'", name);
+
+  fprintf (outfile, "%s%s: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
+           namespace, name,
            g_struct_info_get_size (struct_info),
            g_struct_info_get_alignment (struct_info));
 
-  print_field_offset(outfile, struct_info, "some_ints");
-  print_field_offset(outfile, struct_info, "some_int8s");
-  print_field_offset(outfile, struct_info, "some_doubles");
-  print_field_offset(outfile, struct_info, "some_enum");
-  print_field_offset(outfile, struct_info, "some_ptrs");
+   n_fields = g_struct_info_get_n_fields (struct_info);
+   for (i = 0; i != n_fields; ++i)
+     {
+       GIFieldInfo *field_info;
+
+       field_info = g_struct_info_get_field (struct_info, i);
+
+       fprintf (outfile, "%s %d\n",
+                g_base_info_get_name ((GIBaseInfo *) field_info),
+                g_field_info_get_offset (field_info));
+
+       g_base_info_unref ((GIBaseInfo *)field_info);
+     }
 
   fprintf (outfile, "\n");
 
   g_base_info_unref ((GIBaseInfo *)struct_info);
 }
+
 typedef struct {
    char dummy;
    OffsetsBasic struct_;
@@ -137,39 +125,6 @@ compiled_OffsetsBasic (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-static void
-introspected_OffsetsBasic (FILE *outfile)
-{
-  GIStructInfo *struct_info = (GIStructInfo *)g_irepository_find_by_name(repository, namespace,
-                                                                         "Basic");
-  if (!struct_info)
-     g_error ("Can't find GIStructInfo for 'OffsetsBasic'");
-
-  fprintf (outfile, "OffsetsBasic: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
-           g_struct_info_get_size (struct_info),
-           g_struct_info_get_alignment (struct_info));
-
-  print_field_offset(outfile, struct_info, "dummy1");
-  print_field_offset(outfile, struct_info, "field_int8");
-  print_field_offset(outfile, struct_info, "dummy2");
-  print_field_offset(outfile, struct_info, "field_int16");
-  print_field_offset(outfile, struct_info, "dummy3");
-  print_field_offset(outfile, struct_info, "field_int32");
-  print_field_offset(outfile, struct_info, "dummy4");
-  print_field_offset(outfile, struct_info, "field_int64");
-  print_field_offset(outfile, struct_info, "dummy5");
-  print_field_offset(outfile, struct_info, "field_pointer");
-  print_field_offset(outfile, struct_info, "dummy6");
-  print_field_offset(outfile, struct_info, "field_float");
-  print_field_offset(outfile, struct_info, "dummy7");
-  print_field_offset(outfile, struct_info, "field_double");
-  print_field_offset(outfile, struct_info, "dummy8");
-  print_field_offset(outfile, struct_info, "field_size");
-
-  fprintf (outfile, "\n");
-
-  g_base_info_unref ((GIBaseInfo *)struct_info);
-}
 typedef struct {
    char dummy;
    OffsetsEnum struct_;
@@ -198,35 +153,6 @@ compiled_OffsetsEnum (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-static void
-introspected_OffsetsEnum (FILE *outfile)
-{
-  GIStructInfo *struct_info = (GIStructInfo *)g_irepository_find_by_name(repository, namespace,
-                                                                         "Enum");
-  if (!struct_info)
-     g_error ("Can't find GIStructInfo for 'OffsetsEnum'");
-
-  fprintf (outfile, "OffsetsEnum: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
-           g_struct_info_get_size (struct_info),
-           g_struct_info_get_alignment (struct_info));
-
-  print_field_offset(outfile, struct_info, "enum1");
-  print_field_offset(outfile, struct_info, "dummy1");
-  print_field_offset(outfile, struct_info, "enum2");
-  print_field_offset(outfile, struct_info, "dummy2");
-  print_field_offset(outfile, struct_info, "enum3");
-  print_field_offset(outfile, struct_info, "dummy3");
-  print_field_offset(outfile, struct_info, "enum4");
-  print_field_offset(outfile, struct_info, "dummy4");
-  print_field_offset(outfile, struct_info, "enum5");
-  print_field_offset(outfile, struct_info, "dummy5");
-  print_field_offset(outfile, struct_info, "enum6");
-  print_field_offset(outfile, struct_info, "dummy6");
-
-  fprintf (outfile, "\n");
-
-  g_base_info_unref ((GIBaseInfo *)struct_info);
-}
 typedef struct {
    char dummy;
    OffsetsNested struct_;
@@ -248,28 +174,6 @@ compiled_OffsetsNested (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-static void
-introspected_OffsetsNested (FILE *outfile)
-{
-  GIStructInfo *struct_info = (GIStructInfo *)g_irepository_find_by_name(repository, namespace,
-                                                                         "Nested");
-  if (!struct_info)
-     g_error ("Can't find GIStructInfo for 'OffsetsNested'");
-
-  fprintf (outfile, "OffsetsNested: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
-           g_struct_info_get_size (struct_info),
-           g_struct_info_get_alignment (struct_info));
-
-  print_field_offset(outfile, struct_info, "dummy1");
-  print_field_offset(outfile, struct_info, "nestee");
-  print_field_offset(outfile, struct_info, "dummy2");
-  print_field_offset(outfile, struct_info, "nestee_union");
-  print_field_offset(outfile, struct_info, "dummy3");
-
-  fprintf (outfile, "\n");
-
-  g_base_info_unref ((GIBaseInfo *)struct_info);
-}
 typedef struct {
    char dummy;
    OffsetsNestee struct_;
@@ -289,26 +193,6 @@ compiled_OffsetsNestee (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-static void
-introspected_OffsetsNestee (FILE *outfile)
-{
-  GIStructInfo *struct_info = (GIStructInfo *)g_irepository_find_by_name(repository, namespace,
-                                                                         "Nestee");
-  if (!struct_info)
-     g_error ("Can't find GIStructInfo for 'OffsetsNestee'");
-
-  fprintf (outfile, "OffsetsNestee: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
-           g_struct_info_get_size (struct_info),
-           g_struct_info_get_alignment (struct_info));
-
-  print_field_offset(outfile, struct_info, "field1");
-  print_field_offset(outfile, struct_info, "field2");
-  print_field_offset(outfile, struct_info, "field3");
-
-  fprintf (outfile, "\n");
-
-  g_base_info_unref ((GIBaseInfo *)struct_info);
-}
 typedef struct {
    char dummy;
    OffsetsObj struct_;
@@ -327,25 +211,6 @@ compiled_OffsetsObj (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-static void
-introspected_OffsetsObj (FILE *outfile)
-{
-  GIStructInfo *struct_info = (GIStructInfo *)g_irepository_find_by_name(repository, namespace,
-                                                                         "Obj");
-  if (!struct_info)
-     g_error ("Can't find GIStructInfo for 'OffsetsObj'");
-
-  fprintf (outfile, "OffsetsObj: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
-           g_struct_info_get_size (struct_info),
-           g_struct_info_get_alignment (struct_info));
-
-  print_field_offset(outfile, struct_info, "parent_instance");
-  print_field_offset(outfile, struct_info, "other");
-
-  fprintf (outfile, "\n");
-
-  g_base_info_unref ((GIBaseInfo *)struct_info);
-}
 typedef struct {
    char dummy;
    OffsetsObjClass struct_;
@@ -361,25 +226,6 @@ compiled_OffsetsObjClass (FILE *outfile)
   fprintf (outfile, "%s %ld\n", "parent_class", G_STRUCT_OFFSET(OffsetsObjClass, parent_class));
 
   fprintf (outfile, "\n");
-}
-
-static void
-introspected_OffsetsObjClass (FILE *outfile)
-{
-  GIStructInfo *struct_info = (GIStructInfo *)g_irepository_find_by_name(repository, namespace,
-                                                                         "ObjClass");
-  if (!struct_info)
-     g_error ("Can't find GIStructInfo for 'OffsetsObjClass'");
-
-  fprintf (outfile, "OffsetsObjClass: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
-           g_struct_info_get_size (struct_info),
-           g_struct_info_get_alignment (struct_info));
-
-  print_field_offset(outfile, struct_info, "parent_class");
-
-  fprintf (outfile, "\n");
-
-  g_base_info_unref ((GIBaseInfo *)struct_info);
 }
 
 int main(int argc, char **argv)
@@ -412,13 +258,13 @@ int main(int argc, char **argv)
   if (!outfile)
     g_error ("Cannot open '%s': %s'", argv[1], g_strerror(errno));
 
-  introspected_OffsetsArray (outfile);
-  introspected_OffsetsBasic (outfile);
-  introspected_OffsetsEnum (outfile);
-  introspected_OffsetsNested (outfile);
-  introspected_OffsetsNestee (outfile);
-  introspected_OffsetsObj (outfile);
-  introspected_OffsetsObjClass (outfile);
+  introspected_struct (outfile, "Array");
+  introspected_struct (outfile, "Basic");
+  introspected_struct (outfile, "Enum");
+  introspected_struct (outfile, "Nested");
+  introspected_struct (outfile, "Nestee");
+  introspected_struct (outfile, "Obj");
+  introspected_struct (outfile, "ObjClass");
 
   fclose (outfile);
 
