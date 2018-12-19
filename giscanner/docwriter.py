@@ -29,7 +29,6 @@ import tempfile
 from xml.sax import saxutils
 from mako.lookup import TemplateLookup
 import markdown
-from markdown.extensions.headerid import HeaderIdExtension
 
 from . import ast, xmlwriter
 from .utils import to_underscores
@@ -59,6 +58,18 @@ language_mimes = {
     "sql": "text/x-sql",
     "yaml": "application/x-yaml",
 }
+
+
+def get_headerid_ext():
+    try:
+        from markdown.extensions.headerid import HeaderIdExtension
+    except ImportError:
+        # markdown 3.x
+        from markdown.extensions.toc import TocExtension
+        return TocExtension(toc_depth=0)
+    else:
+        # markdown 2.x
+        return HeaderIdExtension(forceid=False)
 
 
 def make_page_id(node, recursive=False):
@@ -1170,7 +1181,7 @@ class DevDocsFormatterGjs(DocFormatterGjs):
             'markdown.extensions.fenced_code',
             'markdown.extensions.nl2br',
             'markdown.extensions.attr_list',
-            HeaderIdExtension(forceid=False)
+            get_headerid_ext(),
         ])
 
     def format_function_name(self, func):
@@ -1258,7 +1269,7 @@ class DevDocsFormatterGjs(DocFormatterGjs):
             'markdown.extensions.fenced_code',
             'markdown.extensions.nl2br',
             'markdown.extensions.attr_list',
-            HeaderIdExtension(forceid=False)
+            get_headerid_ext(),
         ])
 
     def format_in_parameters(self, node):

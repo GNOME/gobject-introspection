@@ -20,6 +20,7 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-python3 \
     mingw-w64-$MSYS2_ARCH-python3-pip \
     mingw-w64-$MSYS2_ARCH-python3-mako \
+    mingw-w64-$MSYS2_ARCH-python3-markdown \
     mingw-w64-$MSYS2_ARCH-libffi \
     mingw-w64-$MSYS2_ARCH-pkg-config \
     mingw-w64-$MSYS2_ARCH-cairo \
@@ -30,8 +31,7 @@ pacman --noconfirm -S --needed \
 export CCACHE_BASEDIR="${CI_PROJECT_DIR}"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
-# FIXME: markdown: https://gitlab.gnome.org/GNOME/gobject-introspection/issues/250
-pip3 install --upgrade --user meson==0.48.2 flake8 markdown==2.6.11
+pip3 install --upgrade --user meson==0.48.2 flake8
 export PATH="$HOME/.local/bin:$PATH"
 
 # FIXME: https://github.com/Alexpux/MINGW-packages/pull/4064
