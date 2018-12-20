@@ -34,6 +34,10 @@ from distutils.sysconfig import customize_compiler
 from . import utils
 
 
+# Flags that retain macros in preprocessed output.
+FLAGS_RETAINING_MACROS = ['-g3', '-ggdb3', '-gstabs3', '-gcoff3', '-gxcoff3', '-gvms3']
+
+
 class CCompiler(object):
 
     compiler_cmd = ''
@@ -376,6 +380,6 @@ class CCompiler(object):
             else:
                 # We expect the preprocessor to remove macros. If debugging is turned
                 # up high enough that won't happen, so don't add those flags. Bug #720504
-                if option not in ['-g3', '-ggdb3', '-gstabs3', '-gcoff3', '-gxcoff3', '-gvms3']:
+                if option not in FLAGS_RETAINING_MACROS:
                     other_options.append(option)
         return (includes, macros, other_options)

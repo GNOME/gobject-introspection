@@ -5,6 +5,7 @@ if test_env_common_path.length() > 0
 endif
 
 scanner_test_files = [
+  'test_ccompiler.py',
   'test_shlibs.py',
   'test_sourcescanner.py',
   'test_transformer.py',
