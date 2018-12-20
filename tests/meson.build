@@ -1,3 +1,21 @@
+sub_build_root = join_paths(meson.build_root(), 'subprojects')
+test_env_common_path = []
+if glib_dep.type_name() == 'internal' and host_system == 'windows'
+  test_env_common_path += [
+    join_paths(sub_build_root, 'glib', 'glib'),
+    join_paths(sub_build_root, 'glib', 'gobject'),
+    join_paths(sub_build_root, 'glib', 'gio'),
+    join_paths(sub_build_root, 'glib', 'gmodule'),
+    join_paths(sub_build_root, 'proxy-libintl'),
+    join_paths(sub_build_root, 'zlib'),
+  ]
+endif
+if libffi_dep.type_name() == 'internal' and host_system == 'windows'
+  test_env_common_path += [join_paths(sub_build_root, 'libffi',  'src')]
+endif
+test_env_common_pypath = [meson.build_root()]
+
+
 test_regress_sources = files('scanner/regress.c')
 test_regress_headers = files('scanner/regress.h')
 test_marshalling_sources = files('gimarshallingtests.c')

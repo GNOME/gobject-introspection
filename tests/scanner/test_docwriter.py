@@ -1,9 +1,17 @@
 import unittest
 
-from giscanner.docwriter import DocWriter
-from giscanner.transformer import Transformer
+try:
+    import mako
+except ImportError:
+    HAS_MAKO = False
+else:
+    HAS_MAKO = True
+    mako
+    from giscanner.docwriter import DocWriter
+    from giscanner.transformer import Transformer
 
 
+@unittest.skipUnless(HAS_MAKO, "mako missing")
 class TestDocWriter(unittest.TestCase):
 
     def test_main(self):
