@@ -183,6 +183,7 @@ stringtext				([^\\\"])|(\\.)
 "__volatile"	        	        { return VOLATILE; }
 "__volatile__"	        	        { return VOLATILE; }
 "_Bool"					{ return BASIC_TYPE; }
+"bool"					{ return BASIC_TYPE; }
 "typedef char __static_assert_t".*"\n"	{ ++lineno; /* Ignore */ }
 "__cdecl" 	        	        { /* Ignore */ }
 "__declspec(deprecated(".*"))"		{ /* Ignore */ }

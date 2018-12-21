@@ -78,6 +78,11 @@ void foo(int bar) {
         self.assertEqual(len(list(scanner.get_symbols())), 1)
         self.assertFalse(scanner.get_errors())
 
+    def test_bool_no_include(self):
+        # https://gitlab.gnome.org/GNOME/gobject-introspection/issues/247
+        scanner = self._parse_files("bool foo;")
+        self.assertFalse(scanner.get_errors())
+
 
 if __name__ == '__main__':
     unittest.main()

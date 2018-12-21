@@ -699,7 +699,7 @@ raise ValueError."""
         # because of different ABI, but this usually works fine,
         # so for backward compatibility lets continue for now:
         # https://gitlab.gnome.org/GNOME/gobject-introspection/merge_requests/24#note_92792
-        if canonical == '_Bool':
+        if canonical in ('_Bool', 'bool'):
             canonical = 'gboolean'
             base = canonical
 
