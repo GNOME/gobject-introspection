@@ -16,11 +16,14 @@ from giscanner.message import MessageLogger, WARNING, ERROR, FATAL
 def create_scanner_from_source_string(source):
     ss = SourceScanner()
     tmp_fd, tmp_name = tempfile.mkstemp(suffix='.h', text=True)
-    file = os.fdopen(tmp_fd, 'wt')
-    file.write(source)
-    file.close()
 
-    ss.parse_files([tmp_name])
+    try:
+        with os.fdopen(tmp_fd, 'wt') as file:
+            file.write(source)
+        ss.parse_files([tmp_name])
+    finally:
+        os.unlink(tmp_name)
+
     return ss
 
 
