@@ -2108,7 +2108,9 @@
  *
  * GLib is attempting to unify around the use of 64bit integers to
  * represent microsecond-precision time. As such, this type will be
- * removed from a future version of GLib.
+ * removed from a future version of GLib. A consequence of using `glong` for
+ * `tv_sec` is that on 32-bit systems `GTimeVal` is subject to the year 2038
+ * problem.
  */
 
 
@@ -6708,7 +6710,10 @@
  *
  * The above definition is recursive to arbitrary depth. "aaaaai" and
  * "(ui(nq((y)))s)" are both valid type strings, as is
- * "a(aa(ui)(qna{ya(yd)}))".
+ * "a(aa(ui)(qna{ya(yd)}))". In order to not hit memory limits, #GVariant
+ * imposes a limit on recursion depth of 65 nested containers. This is the
+ * limit in the D-Bus specification (64) plus one to allow a #GDBusMessage to
+ * be nested in a top-level tuple.
  *
  * The meaning of each of the characters is as follows:
  * - `b`: the type string of %G_VARIANT_TYPE_BOOLEAN; a boolean value.
@@ -11729,8 +11734,8 @@
  * @stamp: (out) (optional): return location for the last registration time, or %NULL
  * @error: return location for a #GError, or %NULL
  *
- * Gets the registration informations of @app_name for the bookmark for
- * @uri.  See g_bookmark_file_set_app_info() for more informations about
+ * Gets the registration information of @app_name for the bookmark for
+ * @uri.  See g_bookmark_file_set_app_info() for more information about
  * the returned data.
  *
  * The string returned in @app_exec must be freed.
@@ -33031,10 +33036,12 @@
  * variation of ISO 8601 format is required.
  *
  * If @time_ represents a date which is too large to fit into a `struct tm`,
- * %NULL will be returned. This is platform dependent, but it is safe to assume
- * years up to 3000 are supported. The return value of g_time_val_to_iso8601()
- * has been nullable since GLib 2.54; before then, GLib would crash under the
- * same conditions.
+ * %NULL will be returned. This is platform dependent. Note also that since
+ * `GTimeVal` stores the number of seconds as a `glong`, on 32-bit systems it
+ * is subject to the year 2038 problem.
+ *
+ * The return value of g_time_val_to_iso8601() has been nullable since GLib
+ * 2.54; before then, GLib would crash under the same conditions.
  *
  * Returns: (nullable): a newly allocated string containing an ISO 8601 date,
  *    or %NULL if @time_ was too large
@@ -36438,6 +36445,11 @@
  * The returned value is never floating.  You should free it with
  * g_variant_unref() when you're done with it.
  *
+ * There may be implementation specific restrictions on deeply nested values,
+ * which would result in the unit tuple being returned as the child value,
+ * instead of further nested children. #GVariant is guaranteed to handle
+ * nesting up to at least 64 levels.
+ *
  * This function is O(1).
  *
  * Returns: (transfer full): the child at the specified index
@@ -36922,6 +36934,9 @@
  * If @value is found to be in normal form then it will be marked as
  * being trusted.  If the value was already marked as being trusted then
  * this function will immediately return %TRUE.
+ *
+ * There may be implementation specific restrictions on deeply nested values.
+ * GVariant is guaranteed to handle nesting up to at least 64 levels.
  *
  * Returns: %TRUE if @value is in normal form
  * Since: 2.24

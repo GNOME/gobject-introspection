@@ -14916,7 +14916,7 @@
  * dispatched anywhere else - not even the standard dispatch machinery
  * (that API such as g_dbus_connection_signal_subscribe() and
  * g_dbus_connection_send_message_with_reply() relies on) will see the
- * message. Similary, if a filter consumes an outgoing message, the
+ * message. Similarly, if a filter consumes an outgoing message, the
  * message will not be sent to the other peer.
  *
  * If @user_data_free_func is non-%NULL, it will be called (in the
@@ -16798,7 +16798,7 @@
 
 /**
  * g_dbus_message_bytes_needed:
- * @blob: (array length=blob_len) (element-type guint8): A blob represent a binary D-Bus message.
+ * @blob: (array length=blob_len) (element-type guint8): A blob representing a binary D-Bus message.
  * @blob_len: The length of @blob (must be at least 16).
  * @error: Return location for error or %NULL.
  *
@@ -16904,7 +16904,10 @@
  *
  * Gets a header field on @message.
  *
- * Returns: A #GVariant with the value if the header was found, %NULL
+ * The caller is responsible for checking the type of the returned #GVariant
+ * matches what is expected.
+ *
+ * Returns: (transfer none) (nullable): A #GVariant with the value if the header was found, %NULL
  * otherwise. Do not free, it is owned by @message.
  * Since: 2.26
  */
@@ -17079,6 +17082,9 @@
  * Creates a new #GDBusMessage from the data stored at @blob. The byte
  * order that the message was in can be retrieved using
  * g_dbus_message_get_byte_order().
+ *
+ * If the @blob cannot be parsed, contains invalid fields, or contains invalid
+ * headers, %G_IO_ERROR_INVALID_ARGUMENT will be returned.
  *
  * Returns: A new #GDBusMessage or %NULL if @error is set. Free with
  * g_object_unref().
@@ -24907,8 +24913,8 @@
  *   native, the returned string is the result of g_file_get_uri()
  *   (such as `sftp://path/to/my%20icon.png`).
  *
- * - If @icon is a #GThemedIcon with exactly one name, the encoding is
- *    simply the name (such as `network-server`).
+ * - If @icon is a #GThemedIcon with exactly one name and no fallbacks,
+ *   the encoding is simply the name (such as `network-server`).
  *
  * Returns: (nullable): An allocated NUL-terminated UTF8 string or
  * %NULL if @icon can't be serialized. Use g_free() to free.
@@ -38394,8 +38400,10 @@
  * the beginning of the communication, you do not need to call this
  * function explicitly unless you want clearer error reporting.
  * However, you may call g_tls_connection_handshake() later on to
- * rehandshake, if TLS 1.2 or older is in use. With TLS 1.3, this will
- * instead perform a rekey.
+ * rehandshake, if TLS 1.2 or older is in use. With TLS 1.3, the
+ * behavior is undefined but guaranteed to be reasonable and
+ * nondestructive, so most older code should be expected to continue to
+ * work without changes.
  *
  * #GTlsConnection::accept_certificate may be emitted during the
  * handshake.
@@ -40809,7 +40817,7 @@
  * also listen for the "removed" signal on the returned object
  * and give up its reference when handling that signal
  *
- * Similary, if implementing g_volume_monitor_adopt_orphan_mount(),
+ * Similarly, if implementing g_volume_monitor_adopt_orphan_mount(),
  * the implementor must take a reference to @mount and return it in
  * its g_volume_get_mount() implemented. Also, the implementor must
  * listen for the "unmounted" signal on @mount and give up its
