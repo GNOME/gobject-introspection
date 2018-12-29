@@ -34,8 +34,6 @@
 #include <girepository.h>
 #include "offsets.h"
 
-#define ALIGNOF(T) G_STRUCT_OFFSET(struct {char a; T b;}, b)
-
 static GIRepository *repository;
 static const char *namespace = "Offsets";
 static const char *version = "1.0";
@@ -77,77 +75,82 @@ introspected_struct (FILE *outfile, const gchar *name)
 static void
 compiled (FILE *outfile)
 {
-  fprintf (outfile, "OffsetsArray: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsArray), ALIGNOF(OffsetsArray));
-  fprintf (outfile, "%s %ld\n", "some_ints", G_STRUCT_OFFSET(OffsetsArray, some_ints));
-  fprintf (outfile, "%s %ld\n", "some_int8s", G_STRUCT_OFFSET(OffsetsArray, some_int8s));
-  fprintf (outfile, "%s %ld\n", "some_doubles", G_STRUCT_OFFSET(OffsetsArray, some_doubles));
-  fprintf (outfile, "%s %ld\n", "some_enum", G_STRUCT_OFFSET(OffsetsArray, some_enum));
-  fprintf (outfile, "%s %ld\n", "some_ptrs", G_STRUCT_OFFSET(OffsetsArray, some_ptrs));
+#define ALIGNOF(type) G_STRUCT_OFFSET(struct {char a; type b;}, b)
+#define PRINT_TYPE(type) fprintf (outfile, \
+  "%s: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n", \
+  #type, sizeof (type), ALIGNOF (type))
+#define PRINT_MEMBER(type, member) fprintf (outfile, \
+  "%s %" G_GSIZE_FORMAT "\n", \
+  #member, G_STRUCT_OFFSET(type, member))
+
+  PRINT_TYPE (OffsetsArray);
+  PRINT_MEMBER (OffsetsArray, some_ints);
+  PRINT_MEMBER (OffsetsArray, some_int8s);
+  PRINT_MEMBER (OffsetsArray, some_doubles);
+  PRINT_MEMBER (OffsetsArray, some_enum);
+  PRINT_MEMBER (OffsetsArray, some_ptrs);
   fprintf (outfile, "\n");
 
-  fprintf (outfile, "OffsetsBasic: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsBasic), ALIGNOF(OffsetsBasic));
-  fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsBasic, dummy1));
-  fprintf (outfile, "%s %ld\n", "field_int8", G_STRUCT_OFFSET(OffsetsBasic, field_int8));
-  fprintf (outfile, "%s %ld\n", "dummy2", G_STRUCT_OFFSET(OffsetsBasic, dummy2));
-  fprintf (outfile, "%s %ld\n", "field_int16", G_STRUCT_OFFSET(OffsetsBasic, field_int16));
-  fprintf (outfile, "%s %ld\n", "dummy3", G_STRUCT_OFFSET(OffsetsBasic, dummy3));
-  fprintf (outfile, "%s %ld\n", "field_int32", G_STRUCT_OFFSET(OffsetsBasic, field_int32));
-  fprintf (outfile, "%s %ld\n", "dummy4", G_STRUCT_OFFSET(OffsetsBasic, dummy4));
-  fprintf (outfile, "%s %ld\n", "field_int64", G_STRUCT_OFFSET(OffsetsBasic, field_int64));
-  fprintf (outfile, "%s %ld\n", "dummy5", G_STRUCT_OFFSET(OffsetsBasic, dummy5));
-  fprintf (outfile, "%s %ld\n", "field_pointer", G_STRUCT_OFFSET(OffsetsBasic, field_pointer));
-  fprintf (outfile, "%s %ld\n", "dummy6", G_STRUCT_OFFSET(OffsetsBasic, dummy6));
-  fprintf (outfile, "%s %ld\n", "field_float", G_STRUCT_OFFSET(OffsetsBasic, field_float));
-  fprintf (outfile, "%s %ld\n", "dummy7", G_STRUCT_OFFSET(OffsetsBasic, dummy7));
-  fprintf (outfile, "%s %ld\n", "field_double", G_STRUCT_OFFSET(OffsetsBasic, field_double));
-  fprintf (outfile, "%s %ld\n", "dummy8", G_STRUCT_OFFSET(OffsetsBasic, dummy8));
-  fprintf (outfile, "%s %ld\n", "field_size", G_STRUCT_OFFSET(OffsetsBasic, field_size));
+  PRINT_TYPE (OffsetsBasic);
+  PRINT_MEMBER (OffsetsBasic, dummy1);
+  PRINT_MEMBER (OffsetsBasic, field_int8);
+  PRINT_MEMBER (OffsetsBasic, dummy2);
+  PRINT_MEMBER (OffsetsBasic, field_int16);
+  PRINT_MEMBER (OffsetsBasic, dummy3);
+  PRINT_MEMBER (OffsetsBasic, field_int32);
+  PRINT_MEMBER (OffsetsBasic, dummy4);
+  PRINT_MEMBER (OffsetsBasic, field_int64);
+  PRINT_MEMBER (OffsetsBasic, dummy5);
+  PRINT_MEMBER (OffsetsBasic, field_pointer);
+  PRINT_MEMBER (OffsetsBasic, dummy6);
+  PRINT_MEMBER (OffsetsBasic, field_float);
+  PRINT_MEMBER (OffsetsBasic, dummy7);
+  PRINT_MEMBER (OffsetsBasic, field_double);
+  PRINT_MEMBER (OffsetsBasic, dummy8);
+  PRINT_MEMBER (OffsetsBasic, field_size);
   fprintf (outfile, "\n");
 
-  fprintf (outfile, "OffsetsEnum: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsEnum), ALIGNOF(OffsetsEnum));
-  fprintf (outfile, "%s %ld\n", "enum1", G_STRUCT_OFFSET(OffsetsEnum, enum1));
-  fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsEnum, dummy1));
-  fprintf (outfile, "%s %ld\n", "enum2", G_STRUCT_OFFSET(OffsetsEnum, enum2));
-  fprintf (outfile, "%s %ld\n", "dummy2", G_STRUCT_OFFSET(OffsetsEnum, dummy2));
-  fprintf (outfile, "%s %ld\n", "enum3", G_STRUCT_OFFSET(OffsetsEnum, enum3));
-  fprintf (outfile, "%s %ld\n", "dummy3", G_STRUCT_OFFSET(OffsetsEnum, dummy3));
-  fprintf (outfile, "%s %ld\n", "enum4", G_STRUCT_OFFSET(OffsetsEnum, enum4));
-  fprintf (outfile, "%s %ld\n", "dummy4", G_STRUCT_OFFSET(OffsetsEnum, dummy4));
-  fprintf (outfile, "%s %ld\n", "enum5", G_STRUCT_OFFSET(OffsetsEnum, enum5));
-  fprintf (outfile, "%s %ld\n", "dummy5", G_STRUCT_OFFSET(OffsetsEnum, dummy5));
-  fprintf (outfile, "%s %ld\n", "enum6", G_STRUCT_OFFSET(OffsetsEnum, enum6));
-  fprintf (outfile, "%s %ld\n", "dummy6", G_STRUCT_OFFSET(OffsetsEnum, dummy6));
+  PRINT_TYPE (OffsetsEnum);
+  PRINT_MEMBER (OffsetsEnum, enum1);
+  PRINT_MEMBER (OffsetsEnum, dummy1);
+  PRINT_MEMBER (OffsetsEnum, enum2);
+  PRINT_MEMBER (OffsetsEnum, dummy2);
+  PRINT_MEMBER (OffsetsEnum, enum3);
+  PRINT_MEMBER (OffsetsEnum, dummy3);
+  PRINT_MEMBER (OffsetsEnum, enum4);
+  PRINT_MEMBER (OffsetsEnum, dummy4);
+  PRINT_MEMBER (OffsetsEnum, enum5);
+  PRINT_MEMBER (OffsetsEnum, dummy5);
+  PRINT_MEMBER (OffsetsEnum, enum6);
+  PRINT_MEMBER (OffsetsEnum, dummy6);
   fprintf (outfile, "\n");
 
-  fprintf (outfile, "OffsetsNested: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsNested), ALIGNOF(OffsetsNested));
-  fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsNested, dummy1));
-  fprintf (outfile, "%s %ld\n", "nestee", G_STRUCT_OFFSET(OffsetsNested, nestee));
-  fprintf (outfile, "%s %ld\n", "dummy2", G_STRUCT_OFFSET(OffsetsNested, dummy2));
-  fprintf (outfile, "%s %ld\n", "nestee_union", G_STRUCT_OFFSET(OffsetsNested, nestee_union));
-  fprintf (outfile, "%s %ld\n", "dummy3", G_STRUCT_OFFSET(OffsetsNested, dummy3));
+  PRINT_TYPE (OffsetsNested);
+  PRINT_MEMBER (OffsetsNested, dummy1);
+  PRINT_MEMBER (OffsetsNested, nestee);
+  PRINT_MEMBER (OffsetsNested, dummy2);
+  PRINT_MEMBER (OffsetsNested, nestee_union);
+  PRINT_MEMBER (OffsetsNested, dummy3);
   fprintf (outfile, "\n");
 
-  fprintf (outfile, "OffsetsNestee: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsNestee), ALIGNOF(OffsetsNestee));
-  fprintf (outfile, "%s %ld\n", "field1", G_STRUCT_OFFSET(OffsetsNestee, field1));
-  fprintf (outfile, "%s %ld\n", "field2", G_STRUCT_OFFSET(OffsetsNestee, field2));
-  fprintf (outfile, "%s %ld\n", "field3", G_STRUCT_OFFSET(OffsetsNestee, field3));
+  PRINT_TYPE (OffsetsNestee);
+  PRINT_MEMBER (OffsetsNestee, field1);
+  PRINT_MEMBER (OffsetsNestee, field2);
+  PRINT_MEMBER (OffsetsNestee, field3);
   fprintf (outfile, "\n");
 
-  fprintf (outfile, "OffsetsObj: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsObj), ALIGNOF(OffsetsObj));
-  fprintf (outfile, "%s %ld\n", "parent_instance", G_STRUCT_OFFSET(OffsetsObj, parent_instance));
-  fprintf (outfile, "%s %ld\n", "other", G_STRUCT_OFFSET(OffsetsObj, other));
+  PRINT_TYPE (OffsetsObj);
+  PRINT_MEMBER (OffsetsObj, parent_instance);
+  PRINT_MEMBER (OffsetsObj, other);
   fprintf (outfile, "\n");
 
-  fprintf (outfile, "OffsetsObjClass: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsObjClass), ALIGNOF(OffsetsObjClass));
-  fprintf (outfile, "%s %ld\n", "parent_class", G_STRUCT_OFFSET(OffsetsObjClass, parent_class));
+  PRINT_TYPE (OffsetsObjClass);
+  PRINT_MEMBER (OffsetsObjClass, parent_class);
   fprintf (outfile, "\n");
+
+#undef ALIGNOF
+#undef PRINT_TYPE
+#undef PRINT_MEMBER
 }
 
 int main(int argc, char **argv)
