@@ -29,9 +29,58 @@ import distutils
 from distutils.msvccompiler import MSVCCompiler
 from distutils.unixccompiler import UnixCCompiler
 from distutils.cygwinccompiler import Mingw32CCompiler
-from distutils.sysconfig import customize_compiler
+from distutils.sysconfig import get_config_vars
 
 from . import utils
+
+
+def customize_compiler(compiler):
+    """This is a version of distutils.sysconfig.customize_compiler, without
+    any macOS specific bits.
+    """
+
+    if compiler.compiler_type == "unix":
+        (cc, cxx, opt, cflags, ccshared, ldshared, shlib_suffix, ar, ar_flags) = \
+            get_config_vars('CC', 'CXX', 'OPT', 'CFLAGS',
+                            'CCSHARED', 'LDSHARED', 'SHLIB_SUFFIX', 'AR', 'ARFLAGS')
+
+        if 'CC' in os.environ:
+            cc = os.environ['CC']
+        if 'CXX' in os.environ:
+            cxx = os.environ['CXX']
+        if 'LDSHARED' in os.environ:
+            ldshared = os.environ['LDSHARED']
+        if 'CPP' in os.environ:
+            cpp = os.environ['CPP']
+        else:
+            cpp = cc + " -E"
+        if 'LDFLAGS' in os.environ:
+            ldshared = ldshared + ' ' + os.environ['LDFLAGS']
+        if 'CFLAGS' in os.environ:
+            cflags = opt + ' ' + os.environ['CFLAGS']
+            ldshared = ldshared + ' ' + os.environ['CFLAGS']
+        if 'CPPFLAGS' in os.environ:
+            cpp = cpp + ' ' + os.environ['CPPFLAGS']
+            cflags = cflags + ' ' + os.environ['CPPFLAGS']
+            ldshared = ldshared + ' ' + os.environ['CPPFLAGS']
+        if 'AR' in os.environ:
+            ar = os.environ['AR']
+        if 'ARFLAGS' in os.environ:
+            archiver = ar + ' ' + os.environ['ARFLAGS']
+        else:
+            archiver = ar + ' ' + ar_flags
+
+        cc_cmd = cc + ' ' + cflags
+        compiler.set_executables(
+            preprocessor=cpp,
+            compiler=cc_cmd,
+            compiler_so=cc_cmd + ' ' + ccshared,
+            compiler_cxx=cxx,
+            linker_so=ldshared,
+            linker_exe=cc,
+            archiver=archiver)
+
+    compiler.shared_lib_extension = shlib_suffix
 
 
 # Flags that retain macros in preprocessed output.
