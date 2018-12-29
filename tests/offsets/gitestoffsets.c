@@ -41,21 +41,6 @@ static const char *namespace = "Offsets";
 static const char *version = "1.0";
 
 static void
-compiled_OffsetsArray (FILE *outfile)
-{
-  fprintf (outfile, "OffsetsArray: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsArray), ALIGNOF(OffsetsArray));
-
-  fprintf (outfile, "%s %ld\n", "some_ints", G_STRUCT_OFFSET(OffsetsArray, some_ints));
-  fprintf (outfile, "%s %ld\n", "some_int8s", G_STRUCT_OFFSET(OffsetsArray, some_int8s));
-  fprintf (outfile, "%s %ld\n", "some_doubles", G_STRUCT_OFFSET(OffsetsArray, some_doubles));
-  fprintf (outfile, "%s %ld\n", "some_enum", G_STRUCT_OFFSET(OffsetsArray, some_enum));
-  fprintf (outfile, "%s %ld\n", "some_ptrs", G_STRUCT_OFFSET(OffsetsArray, some_ptrs));
-
-  fprintf (outfile, "\n");
-}
-
-static void
 introspected_struct (FILE *outfile, const gchar *name)
 {
   gint i, n_fields;
@@ -90,11 +75,19 @@ introspected_struct (FILE *outfile, const gchar *name)
 }
 
 static void
-compiled_OffsetsBasic (FILE *outfile)
+compiled (FILE *outfile)
 {
+  fprintf (outfile, "OffsetsArray: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
+           sizeof(OffsetsArray), ALIGNOF(OffsetsArray));
+  fprintf (outfile, "%s %ld\n", "some_ints", G_STRUCT_OFFSET(OffsetsArray, some_ints));
+  fprintf (outfile, "%s %ld\n", "some_int8s", G_STRUCT_OFFSET(OffsetsArray, some_int8s));
+  fprintf (outfile, "%s %ld\n", "some_doubles", G_STRUCT_OFFSET(OffsetsArray, some_doubles));
+  fprintf (outfile, "%s %ld\n", "some_enum", G_STRUCT_OFFSET(OffsetsArray, some_enum));
+  fprintf (outfile, "%s %ld\n", "some_ptrs", G_STRUCT_OFFSET(OffsetsArray, some_ptrs));
+  fprintf (outfile, "\n");
+
   fprintf (outfile, "OffsetsBasic: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
            sizeof(OffsetsBasic), ALIGNOF(OffsetsBasic));
-
   fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsBasic, dummy1));
   fprintf (outfile, "%s %ld\n", "field_int8", G_STRUCT_OFFSET(OffsetsBasic, field_int8));
   fprintf (outfile, "%s %ld\n", "dummy2", G_STRUCT_OFFSET(OffsetsBasic, dummy2));
@@ -111,16 +104,10 @@ compiled_OffsetsBasic (FILE *outfile)
   fprintf (outfile, "%s %ld\n", "field_double", G_STRUCT_OFFSET(OffsetsBasic, field_double));
   fprintf (outfile, "%s %ld\n", "dummy8", G_STRUCT_OFFSET(OffsetsBasic, dummy8));
   fprintf (outfile, "%s %ld\n", "field_size", G_STRUCT_OFFSET(OffsetsBasic, field_size));
-
   fprintf (outfile, "\n");
-}
 
-static void
-compiled_OffsetsEnum (FILE *outfile)
-{
   fprintf (outfile, "OffsetsEnum: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
            sizeof(OffsetsEnum), ALIGNOF(OffsetsEnum));
-
   fprintf (outfile, "%s %ld\n", "enum1", G_STRUCT_OFFSET(OffsetsEnum, enum1));
   fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsEnum, dummy1));
   fprintf (outfile, "%s %ld\n", "enum2", G_STRUCT_OFFSET(OffsetsEnum, enum2));
@@ -133,58 +120,33 @@ compiled_OffsetsEnum (FILE *outfile)
   fprintf (outfile, "%s %ld\n", "dummy5", G_STRUCT_OFFSET(OffsetsEnum, dummy5));
   fprintf (outfile, "%s %ld\n", "enum6", G_STRUCT_OFFSET(OffsetsEnum, enum6));
   fprintf (outfile, "%s %ld\n", "dummy6", G_STRUCT_OFFSET(OffsetsEnum, dummy6));
-
   fprintf (outfile, "\n");
-}
 
-static void
-compiled_OffsetsNested (FILE *outfile)
-{
   fprintf (outfile, "OffsetsNested: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
            sizeof(OffsetsNested), ALIGNOF(OffsetsNested));
-
   fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsNested, dummy1));
   fprintf (outfile, "%s %ld\n", "nestee", G_STRUCT_OFFSET(OffsetsNested, nestee));
   fprintf (outfile, "%s %ld\n", "dummy2", G_STRUCT_OFFSET(OffsetsNested, dummy2));
   fprintf (outfile, "%s %ld\n", "nestee_union", G_STRUCT_OFFSET(OffsetsNested, nestee_union));
   fprintf (outfile, "%s %ld\n", "dummy3", G_STRUCT_OFFSET(OffsetsNested, dummy3));
-
   fprintf (outfile, "\n");
-}
 
-static void
-compiled_OffsetsNestee (FILE *outfile)
-{
   fprintf (outfile, "OffsetsNestee: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
            sizeof(OffsetsNestee), ALIGNOF(OffsetsNestee));
-
   fprintf (outfile, "%s %ld\n", "field1", G_STRUCT_OFFSET(OffsetsNestee, field1));
   fprintf (outfile, "%s %ld\n", "field2", G_STRUCT_OFFSET(OffsetsNestee, field2));
   fprintf (outfile, "%s %ld\n", "field3", G_STRUCT_OFFSET(OffsetsNestee, field3));
-
   fprintf (outfile, "\n");
-}
 
-static void
-compiled_OffsetsObj (FILE *outfile)
-{
   fprintf (outfile, "OffsetsObj: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
            sizeof(OffsetsObj), ALIGNOF(OffsetsObj));
-
   fprintf (outfile, "%s %ld\n", "parent_instance", G_STRUCT_OFFSET(OffsetsObj, parent_instance));
   fprintf (outfile, "%s %ld\n", "other", G_STRUCT_OFFSET(OffsetsObj, other));
-
   fprintf (outfile, "\n");
-}
 
-static void
-compiled_OffsetsObjClass (FILE *outfile)
-{
   fprintf (outfile, "OffsetsObjClass: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
            sizeof(OffsetsObjClass), ALIGNOF(OffsetsObjClass));
-
   fprintf (outfile, "%s %ld\n", "parent_class", G_STRUCT_OFFSET(OffsetsObjClass, parent_class));
-
   fprintf (outfile, "\n");
 }
 
@@ -204,14 +166,7 @@ int main(int argc, char **argv)
   if (!outfile)
     g_error ("Cannot open '%s': %s'", argv[1], g_strerror(errno));
 
-  compiled_OffsetsArray (outfile);
-  compiled_OffsetsBasic (outfile);
-  compiled_OffsetsEnum (outfile);
-  compiled_OffsetsNested (outfile);
-  compiled_OffsetsNestee (outfile);
-  compiled_OffsetsObj (outfile);
-  compiled_OffsetsObjClass (outfile);
-
+  compiled (outfile);
   fclose (outfile);
 
   outfile = fopen (argv[2], "w");
