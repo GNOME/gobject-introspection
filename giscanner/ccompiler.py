@@ -45,7 +45,10 @@ def customize_compiler(compiler):
             get_config_vars('CC', 'CXX', 'LDSHARED', 'SHLIB_SUFFIX', 'AR', 'ARFLAGS')
 
         if 'CC' in os.environ:
-            cc = os.environ['CC']
+            newcc = os.environ['CC']
+            if 'LDSHARED' not in os.environ and ldshared.startswith(cc):
+                ldshared = newcc + ldshared[len(cc):]
+            cc = newcc
         if 'CXX' in os.environ:
             cxx = os.environ['CXX']
         if 'LDSHARED' in os.environ:
