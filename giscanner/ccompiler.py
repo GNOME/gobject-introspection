@@ -36,13 +36,13 @@ from . import utils
 
 def customize_compiler(compiler):
     """This is a version of distutils.sysconfig.customize_compiler, without
-    any macOS specific bits.
+    any macOS specific bits and which tries to avoid using any Python specific
+    defaults if alternatives through env vars are given.
     """
 
     if compiler.compiler_type == "unix":
-        (cc, cxx, opt, cflags, ccshared, ldshared, shlib_suffix, ar, ar_flags) = \
-            get_config_vars('CC', 'CXX', 'OPT', 'CFLAGS',
-                            'CCSHARED', 'LDSHARED', 'SHLIB_SUFFIX', 'AR', 'ARFLAGS')
+        (cc, cxx, ldshared, shlib_suffix, ar, ar_flags) = \
+            get_config_vars('CC', 'CXX', 'LDSHARED', 'SHLIB_SUFFIX', 'AR', 'ARFLAGS')
 
         if 'CC' in os.environ:
             cc = os.environ['CC']
@@ -57,8 +57,10 @@ def customize_compiler(compiler):
         if 'LDFLAGS' in os.environ:
             ldshared = ldshared + ' ' + os.environ['LDFLAGS']
         if 'CFLAGS' in os.environ:
-            cflags = opt + ' ' + os.environ['CFLAGS']
+            cflags = os.environ['CFLAGS']
             ldshared = ldshared + ' ' + os.environ['CFLAGS']
+        else:
+            cflags = ''
         if 'CPPFLAGS' in os.environ:
             cpp = cpp + ' ' + os.environ['CPPFLAGS']
             cflags = cflags + ' ' + os.environ['CPPFLAGS']
@@ -74,7 +76,7 @@ def customize_compiler(compiler):
         compiler.set_executables(
             preprocessor=cpp,
             compiler=cc_cmd,
-            compiler_so=cc_cmd + ' ' + ccshared,
+            compiler_so=cc_cmd,
             compiler_cxx=cxx,
             linker_so=ldshared,
             linker_exe=cc,

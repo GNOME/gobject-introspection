@@ -191,7 +191,6 @@ class UnixCCompilerTest(unittest.TestCase):
         args = self.preprocess_args()
         self.assertIn('-I.', args)
 
-    @unittest.skip("Currently Python build time CPPFLAGS are included as well")
     def test_preprocess_command(self):
         """"Checks complete preprocessing command."""
         args = self.preprocess_args(environ=dict(CPP='gcc -E'),
@@ -199,7 +198,6 @@ class UnixCCompilerTest(unittest.TestCase):
         self.assertEqual(['gcc', '-E', '-I.', '-C', '/tmp/file.c'],
                          args)
 
-    @unittest.skip("Currently Python build time CFLAGS and CPPFLAGS are included as well")
     def test_compile_command(self):
         """Checks complete compilation command."""
         args = self.compile_args(environ=dict(CC='clang'),
