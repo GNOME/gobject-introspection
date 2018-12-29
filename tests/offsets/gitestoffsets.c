@@ -34,21 +34,17 @@
 #include <girepository.h>
 #include "offsets.h"
 
+#define ALIGNOF(T) G_STRUCT_OFFSET(struct {char a; T b;}, b)
+
 static GIRepository *repository;
 static const char *namespace = "Offsets";
 static const char *version = "1.0";
-
-typedef struct {
-   char dummy;
-   OffsetsArray struct_;
-} AlignOffsetsArray;
 
 static void
 compiled_OffsetsArray (FILE *outfile)
 {
   fprintf (outfile, "OffsetsArray: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsArray),
-           G_STRUCT_OFFSET(AlignOffsetsArray, struct_));
+           sizeof(OffsetsArray), ALIGNOF(OffsetsArray));
 
   fprintf (outfile, "%s %ld\n", "some_ints", G_STRUCT_OFFSET(OffsetsArray, some_ints));
   fprintf (outfile, "%s %ld\n", "some_int8s", G_STRUCT_OFFSET(OffsetsArray, some_int8s));
@@ -93,17 +89,11 @@ introspected_struct (FILE *outfile, const gchar *name)
   g_base_info_unref ((GIBaseInfo *)struct_info);
 }
 
-typedef struct {
-   char dummy;
-   OffsetsBasic struct_;
-} AlignOffsetsBasic;
-
 static void
 compiled_OffsetsBasic (FILE *outfile)
 {
   fprintf (outfile, "OffsetsBasic: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsBasic),
-           G_STRUCT_OFFSET(AlignOffsetsBasic, struct_));
+           sizeof(OffsetsBasic), ALIGNOF(OffsetsBasic));
 
   fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsBasic, dummy1));
   fprintf (outfile, "%s %ld\n", "field_int8", G_STRUCT_OFFSET(OffsetsBasic, field_int8));
@@ -125,17 +115,11 @@ compiled_OffsetsBasic (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-typedef struct {
-   char dummy;
-   OffsetsEnum struct_;
-} AlignOffsetsEnum;
-
 static void
 compiled_OffsetsEnum (FILE *outfile)
 {
   fprintf (outfile, "OffsetsEnum: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsEnum),
-           G_STRUCT_OFFSET(AlignOffsetsEnum, struct_));
+           sizeof(OffsetsEnum), ALIGNOF(OffsetsEnum));
 
   fprintf (outfile, "%s %ld\n", "enum1", G_STRUCT_OFFSET(OffsetsEnum, enum1));
   fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsEnum, dummy1));
@@ -153,17 +137,11 @@ compiled_OffsetsEnum (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-typedef struct {
-   char dummy;
-   OffsetsNested struct_;
-} AlignOffsetsNested;
-
 static void
 compiled_OffsetsNested (FILE *outfile)
 {
   fprintf (outfile, "OffsetsNested: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsNested),
-           G_STRUCT_OFFSET(AlignOffsetsNested, struct_));
+           sizeof(OffsetsNested), ALIGNOF(OffsetsNested));
 
   fprintf (outfile, "%s %ld\n", "dummy1", G_STRUCT_OFFSET(OffsetsNested, dummy1));
   fprintf (outfile, "%s %ld\n", "nestee", G_STRUCT_OFFSET(OffsetsNested, nestee));
@@ -174,17 +152,11 @@ compiled_OffsetsNested (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-typedef struct {
-   char dummy;
-   OffsetsNestee struct_;
-} AlignOffsetsNestee;
-
 static void
 compiled_OffsetsNestee (FILE *outfile)
 {
   fprintf (outfile, "OffsetsNestee: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsNestee),
-           G_STRUCT_OFFSET(AlignOffsetsNestee, struct_));
+           sizeof(OffsetsNestee), ALIGNOF(OffsetsNestee));
 
   fprintf (outfile, "%s %ld\n", "field1", G_STRUCT_OFFSET(OffsetsNestee, field1));
   fprintf (outfile, "%s %ld\n", "field2", G_STRUCT_OFFSET(OffsetsNestee, field2));
@@ -193,17 +165,11 @@ compiled_OffsetsNestee (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-typedef struct {
-   char dummy;
-   OffsetsObj struct_;
-} AlignOffsetsObj;
-
 static void
 compiled_OffsetsObj (FILE *outfile)
 {
   fprintf (outfile, "OffsetsObj: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsObj),
-           G_STRUCT_OFFSET(AlignOffsetsObj, struct_));
+           sizeof(OffsetsObj), ALIGNOF(OffsetsObj));
 
   fprintf (outfile, "%s %ld\n", "parent_instance", G_STRUCT_OFFSET(OffsetsObj, parent_instance));
   fprintf (outfile, "%s %ld\n", "other", G_STRUCT_OFFSET(OffsetsObj, other));
@@ -211,17 +177,11 @@ compiled_OffsetsObj (FILE *outfile)
   fprintf (outfile, "\n");
 }
 
-typedef struct {
-   char dummy;
-   OffsetsObjClass struct_;
-} AlignOffsetsObjClass;
-
 static void
 compiled_OffsetsObjClass (FILE *outfile)
 {
   fprintf (outfile, "OffsetsObjClass: size=%" G_GSIZE_FORMAT ", alignment=%ld\n",
-           sizeof(OffsetsObjClass),
-           G_STRUCT_OFFSET(AlignOffsetsObjClass, struct_));
+           sizeof(OffsetsObjClass), ALIGNOF(OffsetsObjClass));
 
   fprintf (outfile, "%s %ld\n", "parent_class", G_STRUCT_OFFSET(OffsetsObjClass, parent_class));
 
