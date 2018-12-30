@@ -1,3 +1,13 @@
+1.58.3 - 2018-12-30
+-------------------
+
+* docwriter: Support python-markdown 3.x. issue#250
+* scanner:  Define grefcount and gatomicrefcount as aliases to gint. issue#254
+  (Tomasz Miąsko <tomasz.miasko@gmail.com>)
+* scanner: make using bool without stdbool include work again. issue#247
+* gir: Update glib annotations for glib 2.58.2
+
+
 2.58.2 - 2018-12-09
 -------------------
 
