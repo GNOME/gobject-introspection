@@ -71,13 +71,20 @@ custom_c_args = cc.get_supported_arguments([
   '-Wno-old-style-definition',
   '-Wno-missing-field-initializers',
 ])
-# FIXME: build with cairo
-custom_c_args += ['-D_GI_DISABLE_CAIRO']
+
+if with_cairo
+  regress_deps = [cairo_dep, cairo_gobject_dep]
+  regress_c_args = []
+else
+  regress_deps = []
+  regress_c_args += ['-D_GI_DISABLE_CAIRO']
+endif
+
 regress_lib = shared_library('regress-1.0',
   sources: ['regress.c', 'annotation.c', 'foo.c', 'drawable.c'],
   include_directories : [configinc, include_directories('..')],
-  c_args: gi_hidden_visibility_cflags + custom_c_args,
-  dependencies: [gobject_dep, gio_dep],
+  c_args: gi_hidden_visibility_cflags + regress_c_args + custom_c_args,
+  dependencies: [gobject_dep, gio_dep] + regress_deps,
 )
 
 if glib_dep.type_name() == 'pkgconfig'
@@ -244,8 +251,13 @@ if glib_dep.type_name() == 'pkgconfig'
     ]
   )
 
-  # FIXME: build with cairo and add to 'test_girs'
-  custom_target('gir-regress',
+  if with_cairo
+    regress_scanner_cairo_args = ['--include=cairo-1.0']
+  else
+    regress_scanner_cairo_args = ['-D_GI_DISABLE_CAIRO',]
+  endif
+
+  regress_gir = custom_target('gir-regress',
     input: ['regress.c', 'regress.h', 'annotation.c', 'annotation.h',
             'foo.c', 'foo.h', 'drawable.c', 'drawable.h'],
     output: 'Regress-1.0.gir',
@@ -268,10 +280,16 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
-      '-D_GI_DISABLE_CAIRO',
+      ] + regress_scanner_cairo_args + [
       '@INPUT@',
     ]
   )
+
+  # The reference gir is generated with cairo support, so we can only compare
+  # things if we build with cairo as well
+  if with_cairo
+    test_girs += regress_gir
+  endif
 endif
 
 foreach gir : test_girs

@@ -139,6 +139,20 @@ endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
 
+with_cairo = get_option('cairo')
+
+if with_cairo
+  cairo_dep = dependency('cairo', required: cc.get_id() != 'msvc')
+  cairo_gobject_dep = dependency('cairo-gobject', required: cc.get_id() != 'msvc')
+
+  if cc.get_id() == 'msvc' and (not cairo_gobject_dep.found() or not cairo_dep.found())
+    if cc.has_header('cairo.h') and cc.has_header ('cairo-gobject.h')
+      cairo_dep = cc.find_library ('cairo')
+      cairo_gobject_dep = cc.find_library ('cairo-gobject')
+    endif
+  endif
+endif
+
 subdir('girepository')
 subdir('tools')
 subdir('giscanner')
