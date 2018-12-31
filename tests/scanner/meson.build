@@ -66,6 +66,13 @@ gettype_lib = shared_library('gettype-1.0',
   dependencies: [gobject_dep],
 )
 
+barapp_lib = shared_library('barapp-1.0',
+  sources: ['barapp.c'],
+  include_directories : [configinc, include_directories('..')],
+  c_args: gi_hidden_visibility_cflags + custom_c_args,
+  dependencies: [gobject_dep, girepo_dep],
+)
+
 custom_c_args = cc.get_supported_arguments([
   '-Wno-unused-parameter',
   '-Wno-old-style-definition',
@@ -86,6 +93,8 @@ regress_lib = shared_library('regress-1.0',
   c_args: gi_hidden_visibility_cflags + regress_c_args + custom_c_args,
   dependencies: [gobject_dep, gio_dep] + regress_deps,
 )
+
+python_path = run_command(python, ['-c', 'import sys; sys.stdout.write(sys.executable)']).stdout()
 
 if glib_dep.type_name() == 'pkgconfig'
   test_girs += custom_target('gir-typedef',
@@ -110,6 +119,33 @@ if glib_dep.type_name() == 'pkgconfig'
       '--pkg=gobject-2.0',
       '--library=typedef-1.0',
       '--c-include=typedefs.h',
+      '-L', meson.current_build_dir(),
+      '-I', meson.current_source_dir(),
+      '-I', join_paths(meson.current_source_dir(), '..'),
+      '@INPUT@',
+    ]
+  )
+
+  test_girs += custom_target('gir-bar',
+    input: ['barapp.c', 'barapp.h'],
+    output: 'Bar-1.0.gir',
+    depends: [barapp_lib] + typelibs,
+    command: [
+      python,
+      girscanner,
+      '--output=@OUTPUT@',
+      '--no-libtool',
+      '--reparse-validate',
+      '--add-include-path', join_paths(meson.source_root(), 'gir'),
+      '--add-include-path', join_paths(meson.build_root(), 'gir'),
+      '--warn-all',
+      '--warn-error',
+      '--namespace=Bar',
+      '--nsversion=1.0',
+      '--include=GObject-2.0',
+      '--pkg=gobject-2.0',
+      '--library=barapp-1.0',
+      '--accept-unprefixed',
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
@@ -248,6 +284,62 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      '@INPUT@',
+    ]
+  )
+
+  test_girs += custom_target('gir-symbolfilter',
+    input: ['symbolfilter.h'],
+    output: 'Symbolfilter-1.0.gir',
+    depends: typelibs,
+    command: [
+      python,
+      girscanner,
+      '--output=@OUTPUT@',
+      '--no-libtool',
+      '--reparse-validate',
+      '--namespace=Symbolfilter',
+      '--nsversion=1.0',
+      '--header-only',
+      '--symbol-filter-cmd=' + python_path + ' ' +  join_paths(meson.current_source_dir(), 'symbolfilter.py'),
+      '@INPUT@',
+    ]
+  )
+
+  test_girs += custom_target('gir-identfilter',
+    input: ['identfilter.h'],
+    output: 'Identfilter-1.0.gir',
+    depends: typelibs,
+    command: [
+      python,
+      girscanner,
+      '--output=@OUTPUT@',
+      '--no-libtool',
+      '--accept-unprefixed',
+      '--reparse-validate',
+      '--namespace=Identfilter',
+      '--nsversion=1.0',
+      '--header-only',
+      '--identifier-filter-cmd=' + python_path + ' ' +  join_paths(meson.current_source_dir(), 'identfilter.py'),
+      '@INPUT@',
+    ]
+  )
+
+  test_girs += custom_target('gir-headeronly',
+    input: ['headeronly.h'],
+    output: 'Headeronly-1.0.gir',
+    depends: typelibs,
+    command: [
+      python,
+      girscanner,
+      '--output=@OUTPUT@',
+      '--no-libtool',
+      '--warn-all',
+      '--warn-error',
+      '--reparse-validate',
+      '--namespace=Headeronly',
+      '--nsversion=1.0',
+      '--header-only',
       '@INPUT@',
     ]
   )
