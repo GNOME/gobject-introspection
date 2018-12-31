@@ -1514,6 +1514,10 @@
  * simultaneous read-only access (by holding the 'reader' lock via
  * g_rw_lock_reader_lock()).
  *
+ * It is unspecified whether readers or writers have priority in acquiring the
+ * lock when a reader already holds the lock and a writer is queued to acquire
+ * it.
+ *
  * Here is an example for an array with access functions:
  * |[<!-- language="C" -->
  *   GRWLock lock;
@@ -2729,6 +2733,19 @@
  * @G_VARIANT_PARSE_ERROR_VALUE_EXPECTED: no value given
  *
  * Error codes returned by parsing text-format GVariants.
+ */
+
+
+/**
+ * G_ALIGNOF:
+ * @a: a type-name
+ *
+ * Return the minimum alignment required by the platform ABI for values of the given
+ * type. The address of a variable or struct member of the given type must always be
+ * a multiple of this alignment. For example, most platforms require int variables
+ * to be aligned at a 4-byte boundary, so `G_ALIGNOF (int)` is 4 on most platforms.
+ *
+ * Since: 2.60
  */
 
 
@@ -7408,7 +7425,8 @@
  * The "GMarkup" parser is intended to parse a simple markup format
  * that's a subset of XML. This is a small, efficient, easy-to-use
  * parser. It should not be used if you expect to interoperate with
- * other applications generating full-scale XML. However, it's very
+ * other applications generating full-scale XML, and must not be used if you
+ * expect to parse untrusted input. However, it's very
  * useful for application data files, config files, etc. where you
  * know your application will be the only one writing the file.
  * Full-scale XML parsers should be able to parse the subset used by
@@ -8497,7 +8515,8 @@
  * In addition to the traditional g_assert_true(), the test framework provides
  * an extended set of assertions for comparisons: g_assert_cmpfloat(),
  * g_assert_cmpfloat_with_epsilon(), g_assert_cmpint(), g_assert_cmpuint(),
- * g_assert_cmphex(), g_assert_cmpstr(), and g_assert_cmpmem(). The
+ * g_assert_cmphex(), g_assert_cmpstr(), g_assert_cmpmem() and
+ * g_assert_cmpvariant(). The
  * advantage of these variants over plain g_assert_true() is that the assertion
  * messages can be more elaborate, and include the values of the compared
  * entities.
@@ -10068,7 +10087,7 @@
  * g_assert_cmpfloat:
  * @n1: an floating point number
  * @cmp: The comparison operator to use.
- *     One of ==, !=, <, >, <=, >=.
+ *     One of `==`, `!=`, `<`, `>`, `<=`, `>=`.
  * @n2: another floating point number
  *
  * Debugging macro to compare two floating point numbers.
@@ -10104,7 +10123,7 @@
  * g_assert_cmphex:
  * @n1: an unsigned integer
  * @cmp: The comparison operator to use.
- *     One of ==, !=, <, >, <=, >=.
+ *     One of `==`, `!=`, `<`, `>`, `<=`, `>=`.
  * @n2: another unsigned integer
  *
  * Debugging macro to compare to unsigned integers.
@@ -10120,7 +10139,7 @@
  * g_assert_cmpint:
  * @n1: an integer
  * @cmp: The comparison operator to use.
- *     One of ==, !=, <, >, <=, >=.
+ *     One of `==`, `!=`, `<`, `>`, `<=`, `>=`.
  * @n2: another integer
  *
  * Debugging macro to compare two integers.
@@ -10162,7 +10181,7 @@
  * g_assert_cmpstr:
  * @s1: a string (may be %NULL)
  * @cmp: The comparison operator to use.
- *     One of ==, !=, <, >, <=, >=.
+ *     One of `==`, `!=`, `<`, `>`, `<=`, `>=`.
  * @s2: another string (may be %NULL)
  *
  * Debugging macro to compare two strings. If the comparison fails,
@@ -10187,7 +10206,7 @@
  * g_assert_cmpuint:
  * @n1: an unsigned integer
  * @cmp: The comparison operator to use.
- *     One of ==, !=, <, >, <=, >=.
+ *     One of `==`, `!=`, `<`, `>`, `<=`, `>=`.
  * @n2: another unsigned integer
  *
  * Debugging macro to compare two unsigned integers.
@@ -10198,6 +10217,24 @@
  * actual values of @n1 and @n2.
  *
  * Since: 2.16
+ */
+
+
+/**
+ * g_assert_cmpvariant:
+ * @v1: pointer to a #GVariant
+ * @v2: pointer to another #GVariant
+ *
+ * Debugging macro to compare two #GVariants. If the comparison fails,
+ * an error message is logged and the application is either terminated
+ * or the testcase marked as failed. The variants are compared using
+ * g_variant_equal().
+ *
+ * The effect of `g_assert_cmpvariant (v1, v2)` is the same as
+ * `g_assert_true (g_variant_equal (v1, v2))`. The advantage of this macro is
+ * that it can produce a message that includes the actual values of @v1 and @v2.
+ *
+ * Since: 2.60
  */
 
 
@@ -10218,7 +10255,7 @@
  *
  * This can only be used to test for a specific error. If you want to
  * test that @err is set, but don't care what it's set to, just use
- * `g_assert (err != NULL)`
+ * `g_assert_nonnull (err)`.
  *
  * Since: 2.20
  */
@@ -11131,6 +11168,9 @@
  * The data will be freed when its reference count drops to
  * zero.
  *
+ * The allocated data is guaranteed to be suitably aligned for any
+ * built-in type.
+ *
  * Returns: (transfer full) (not nullable): a pointer to the allocated memory
  * Since: 2.58
  */
@@ -11147,6 +11187,9 @@
  *
  * The data will be freed when its reference count drops to
  * zero.
+ *
+ * The allocated data is guaranteed to be suitably aligned for any
+ * built-in type.
  *
  * Returns: (transfer full) (not nullable): a pointer to the allocated memory
  * Since: 2.58
@@ -25924,6 +25967,9 @@
  * The data will be freed when its reference count drops to
  * zero.
  *
+ * The allocated data is guaranteed to be suitably aligned for any
+ * built-in type.
+ *
  * Returns: (transfer full) (not nullable): a pointer to the allocated memory
  * Since: 2.58
  */
@@ -25940,6 +25986,9 @@
  *
  * The data will be freed when its reference count drops to
  * zero.
+ *
+ * The allocated data is guaranteed to be suitably aligned for any
+ * built-in type.
  *
  * Returns: (transfer full) (not nullable): a pointer to the allocated memory
  * Since: 2.58
@@ -26946,7 +26995,7 @@
  * that the latest on-disk version is used. Call this only
  * if you just changed the data on disk yourself.
  *
- * Due to threadsafety issues this may cause leaking of strings
+ * Due to thread safety issues this may cause leaking of strings
  * that were previously returned from g_get_user_special_dir()
  * that can't be freed. We ensure to only leak the data for
  * the directories that actually changed value though.
@@ -31556,6 +31605,23 @@
 
 
 /**
+ * g_strv_equal:
+ * @strv1: a %NULL-terminated array of strings
+ * @strv2: another %NULL-terminated array of strings
+ *
+ * Checks if @strv1 and @strv2 contain exactly the same elements in exactly the
+ * same order. Elements are compared using g_str_equal(). To match independently
+ * of order, sort the arrays first (using g_qsort_with_data() or similar).
+ *
+ * Two empty arrays are considered equal. Neither @strv1 not @strv2 may be
+ * %NULL.
+ *
+ * Returns: %TRUE if @strv1 and @strv2 are equal
+ * Since: 2.60
+ */
+
+
+/**
  * g_strv_length:
  * @str_array: a %NULL-terminated array of strings
  *
@@ -31564,27 +31630,6 @@
  *
  * Returns: length of @str_array.
  * Since: 2.6
- */
-
-
-/**
- * g_test_add:
- * @testpath: The test path for a new test case.
- * @Fixture: The type of a fixture data structure.
- * @tdata: Data argument for the test functions.
- * @fsetup: The function to set up the fixture data.
- * @ftest: The actual test function.
- * @fteardown: The function to tear down the fixture data.
- *
- * Hook up a new test case at @testpath, similar to g_test_add_func().
- * A fixture data structure with setup and teardown functions may be provided,
- * similar to g_test_create_case().
- *
- * g_test_add() is implemented as a macro, so that the fsetup(), ftest() and
- * fteardown() callbacks can expect a @Fixture pointer as their first argument
- * in a type safe manner. They otherwise have type #GTestFixtureFunc.
- *
- * Since: 2.16
  */
 
 
@@ -31603,6 +31648,10 @@
  * If @testpath includes the component "subprocess" anywhere in it,
  * the test will be skipped by default, and only run if explicitly
  * required via the `-p` command-line option or g_test_trap_subprocess().
+ *
+ * No component of @testpath may start with a dot (`.`) if the
+ * %G_TEST_OPTION_ISOLATE_DIRS option is being used; and it is recommended to
+ * do so even if it isn’t.
  *
  * Since: 2.16
  */
@@ -31635,6 +31684,10 @@
  * If @testpath includes the component "subprocess" anywhere in it,
  * the test will be skipped by default, and only run if explicitly
  * required via the `-p` command-line option or g_test_trap_subprocess().
+ *
+ * No component of @testpath may start with a dot (`.`) if the
+ * %G_TEST_OPTION_ISOLATE_DIRS option is being used; and it is recommended to
+ * do so even if it isn’t.
  *
  * Since: 2.16
  */
@@ -31923,9 +31976,7 @@
  *        Changed if any arguments were handled.
  * @argv: Address of the @argv parameter of main().
  *        Any parameters understood by g_test_init() stripped before return.
- * @...: %NULL-terminated list of special options. Currently the only
- *       defined option is `"no_g_set_prgname"`, which
- *       will cause g_test_init() to not call g_set_prgname().
+ * @...: %NULL-terminated list of special options, documented below.
  *
  * Initialize the GLib testing framework, e.g. by seeding the
  * test random number generator, the name for g_get_prgname()
@@ -31958,6 +32009,14 @@
  *   `no-undefined`: Avoid tests for undefined behaviour
  *
  * - `--debug-log`: Debug test logging output.
+ *
+ * Options which can be passed to @... are:
+ *
+ *  - `"no_g_set_prgname"`: Causes g_test_init() to not call g_set_prgname().
+ *  - %G_TEST_OPTION_ISOLATE_DIRS: Creates a unique temporary directory for each
+ *    unit test and uses g_set_user_dirs() to set XDG directories to point into
+ *    that temporary directory for the duration of the unit test. See the
+ *    documentation for %G_TEST_OPTION_ISOLATE_DIRS.
  *
  * Since 2.58, if tests are compiled with `G_DISABLE_ASSERT` defined,
  * g_test_init() will print an error and exit. This is to prevent no-op tests

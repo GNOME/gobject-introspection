@@ -1646,6 +1646,17 @@
 
 
 /**
+ * GDtlsConnection:advertised-protocols:
+ *
+ * The list of application-layer protocols that the connection
+ * advertises that it is willing to speak. See
+ * g_dtls_connection_set_advertised_protocols().
+ *
+ * Since: 2.60
+ */
+
+
+/**
  * GDtlsConnection:base-socket:
  *
  * The #GDatagramBased that the connection wraps. Note that this may be any
@@ -1684,6 +1695,16 @@
  * user for passwords where necessary.
  *
  * Since: 2.48
+ */
+
+
+/**
+ * GDtlsConnection:negotiated-protocol:
+ *
+ * The application-layer protocol negotiated during the TLS
+ * handshake. See g_dtls_connection_get_negotiated_protocol().
+ *
+ * Since: 2.60
  */
 
 
@@ -3693,6 +3714,17 @@
 
 
 /**
+ * GTlsConnection:advertised-protocols:
+ *
+ * The list of application-layer protocols that the connection
+ * advertises that it is willing to speak. See
+ * g_tls_connection_set_advertised_protocols().
+ *
+ * Since: 2.60
+ */
+
+
+/**
  * GTlsConnection:base-io-stream:
  *
  * The #GIOStream that the connection wraps. The connection holds a reference
@@ -3734,6 +3766,16 @@
  * user for passwords where necessary.
  *
  * Since: 2.30
+ */
+
+
+/**
+ * GTlsConnection:negotiated-protocol:
+ *
+ * The application-layer protocol negotiated during the TLS
+ * handshake. See g_tls_connection_get_negotiated_protocol().
+ *
+ * Since: 2.60
  */
 
 
@@ -5162,13 +5204,13 @@
  *
  * A content type is a platform specific string that defines the type
  * of a file. On UNIX it is a
- * [mime type](http://www.wikipedia.org/wiki/Internet_media_type)
- * like "text/plain" or "image/png".
- * On Win32 it is an extension string like ".doc", ".txt" or a perceived
- * string like "audio". Such strings can be looked up in the registry at
- * HKEY_CLASSES_ROOT.
- * On OSX it is a [Uniform Type Identifier](https://en.wikipedia.org/wiki/Uniform_Type_Identifier)
- * such as "com.apple.application".
+ * [MIME type](http://www.wikipedia.org/wiki/Internet_media_type)
+ * like `text/plain` or `image/png`.
+ * On Win32 it is an extension string like `.doc`, `.txt` or a perceived
+ * string like `audio`. Such strings can be looked up in the registry at
+ * `HKEY_CLASSES_ROOT`.
+ * On macOS it is a [Uniform Type Identifier](https://en.wikipedia.org/wiki/Uniform_Type_Identifier)
+ * such as `com.apple.application`.
  */
 
 
@@ -7260,6 +7302,23 @@
 
 
 /**
+ * SECTION:gproxyaddressenumerator
+ * @short_description: Proxy wrapper enumerator for socket addresses
+ * @include: gio/gio.h
+ *
+ * #GProxyAddressEnumerator is a wrapper around #GSocketAddressEnumerator which
+ * takes the #GSocketAddress instances returned by the #GSocketAddressEnumerator
+ * and wraps them in #GProxyAddress instances, using the given
+ * #GProxyAddressEnumerator:proxy-resolver.
+ *
+ * This enumerator will be returned (for example, by
+ * g_socket_connectable_enumerate()) as appropriate when a proxy is configured;
+ * there should be no need to manually wrap a #GSocketAddressEnumerator instance
+ * with one.
+ */
+
+
+/**
  * SECTION:gproxyresolver
  * @short_description: Asynchronous and cancellable network proxy resolver
  * @include: gio/gio.h
@@ -8232,6 +8291,28 @@
  * #GSocketAddress is the equivalent of struct sockaddr in the BSD
  * sockets API. This is an abstract class; use #GInetSocketAddress
  * for internet sockets, or #GUnixSocketAddress for UNIX domain sockets.
+ */
+
+
+/**
+ * SECTION:gsocketaddressenumerator
+ * @short_description: Enumerator for socket addresses
+ * @include: gio/gio.h
+ *
+ * #GSocketAddressEnumerator is an enumerator type for #GSocketAddress
+ * instances. It is returned by enumeration functions such as
+ * g_socket_connectable_enumerate(), which returns a #GSocketAddressEnumerator
+ * to list all the #GSocketAddresses which could be used to connect to that
+ * #GSocketConnectable.
+ *
+ * Enumeration is typically a blocking operation, so the asynchronous methods
+ * g_socket_address_enumerator_next_async() and
+ * g_socket_address_enumerator_next_finish() should be used where possible.
+ *
+ * Each #GSocketAddressEnumerator can only be enumerated once. Once
+ * g_socket_address_enumerator_next() has returned %NULL (and no error), further
+ * enumeration with that #GSocketAddressEnumerator is not possible, and it can
+ * be unreffed.
  */
 
 
@@ -13488,6 +13569,19 @@
 
 
 /**
+ * g_content_type_get_mime_dirs:
+ *
+ * Get the list of directories which MIME data is loaded from. See
+ * g_content_type_set_mime_dirs() for details.
+ *
+ * Returns: (transfer none) (array zero-terminated=1): %NULL-terminated list of
+ *    directories to load MIME data from, including any `mime/` subdirectory,
+ *    and with the first directory to try listed first
+ * Since: 2.60
+ */
+
+
+/**
  * g_content_type_get_mime_type:
  * @type: a content type string
  *
@@ -13591,11 +13685,45 @@
 
 
 /**
+ * g_content_type_set_mime_dirs:
+ * @dirs: (array zero-terminated=1) (nullable): %NULL-terminated list of
+ *    directories to load MIME data from, including any `mime/` subdirectory,
+ *    and with the first directory to try listed first
+ *
+ * Set the list of directories used by GIO to load the MIME database.
+ * If @dirs is %NULL, the directories used are the default:
+ *
+ *  - the `mime` subdirectory of the directory in `$XDG_DATA_HOME`
+ *  - the `mime` subdirectory of every directory in `$XDG_DATA_DIRS`
+ *
+ * This function is intended to be used when writing tests that depend on
+ * information stored in the MIME database, in order to control the data.
+ *
+ * Typically, in case your tests use %G_TEST_OPTION_ISOLATE_DIRS, but they
+ * depend on the system’s MIME database, you should call this function
+ * with @dirs set to %NULL before calling g_test_init(), for instance:
+ *
+ * |[<!-- language="C" -->
+ *   // Load MIME data from the system
+ *   g_content_type_set_mime_dirs (NULL);
+ *   // Isolate the environment
+ *   g_test_init (&argc, &argv, G_TEST_OPTION_ISOLATE_DIRS, NULL);
+ *
+ *   …
+ *
+ *   return g_test_run ();
+ * ]|
+ *
+ * Since: 2.60
+ */
+
+
+/**
  * g_content_types_get_registered:
  *
  * Gets a list of strings containing all the registered content types
  * known to the system. The list and its data should be freed using
- * g_list_free_full (list, g_free).
+ * `g_list_free_full (list, g_free)`.
  *
  * Returns: (element-type utf8) (transfer full): list of the registered
  *     content types
@@ -15410,6 +15538,17 @@
  * Returns: whether the process is terminated when @connection is
  *     closed by the remote peer
  * Since: 2.26
+ */
+
+
+/**
+ * g_dbus_connection_get_flags:
+ * @connection: a #GDBusConnection
+ *
+ * Gets the flags used to construct this connection
+ *
+ * Returns: zero or more flags from the #GDBusConnectionFlags enumeration
+ * Since: 2.60
  */
 
 
@@ -20040,6 +20179,23 @@
 
 
 /**
+ * g_dtls_connection_get_negotiated_protocol:
+ * @conn: a #GDtlsConnection
+ *
+ * Gets the name of the application-layer protocol negotiated during
+ * the handshake.
+ *
+ * If the peer did not use the ALPN extension, or did not advertise a
+ * protocol that matched one of @conn's protocols, or the TLS backend
+ * does not support ALPN, then this will be %NULL. See
+ * g_dtls_connection_set_advertised_protocols().
+ *
+ * Returns: (nullable): the negotiated protocol, or %NULL
+ * Since: 2.60
+ */
+
+
+/**
  * g_dtls_connection_get_peer_certificate:
  * @conn: a #GDtlsConnection
  *
@@ -20158,6 +20314,27 @@
  * Returns: %TRUE on success, %FALSE on failure, in which
  * case @error will be set.
  * Since: 2.48
+ */
+
+
+/**
+ * g_dtls_connection_set_advertised_protocols:
+ * @conn: a #GDtlsConnection
+ * @protocols: (array zero-terminated=1) (nullable): a %NULL-terminated
+ *   array of ALPN protocol names (eg, "http/1.1", "h2"), or %NULL
+ *
+ * Sets the list of application-layer protocols to advertise that the
+ * caller is willing to speak on this connection. The
+ * Application-Layer Protocol Negotiation (ALPN) extension will be
+ * used to negotiate a compatible protocol with the peer; use
+ * g_dtls_connection_get_negotiated_protocol() to find the negotiated
+ * protocol after the handshake.  Specifying %NULL for the the value
+ * of @protocols will disable ALPN negotiation.
+ *
+ * See [IANA TLS ALPN Protocol IDs](https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xhtml#alpn-protocol-ids)
+ * for a list of registered protocol IDs.
+ *
+ * Since: 2.60
  */
 
 
@@ -36434,6 +36611,9 @@
  *
  * Like g_subprocess_communicate(), but validates the output of the
  * process as UTF-8, and returns it as a regular NUL terminated string.
+ *
+ * On error, @stdout_buf and @stderr_buf will be set to undefined values and
+ * should not be used.
  */
 
 
@@ -37149,6 +37329,9 @@
  * #GMainContext with @task's [priority][io-priority], and sets @source's
  * callback to @callback, with @task as the callback's `user_data`.
  *
+ * It will set the @source’s name to the task’s name (as set with
+ * g_task_set_name()), if one has been set.
+ *
  * This takes a reference on @task until @source is destroyed.
  *
  * Since: 2.36
@@ -37204,6 +37387,17 @@
  *
  * Returns: (transfer none): @task's #GMainContext
  * Since: 2.36
+ */
+
+
+/**
+ * g_task_get_name:
+ * @task: a #GTask
+ *
+ * Gets @task’s name. See g_task_set_name().
+ *
+ * Returns: (nullable) (transfer none): @task’s name, or %NULL
+ * Since: 2.60
  */
 
 
@@ -37603,6 +37797,25 @@
  * you must leave check-cancellable set %TRUE.
  *
  * Since: 2.36
+ */
+
+
+/**
+ * g_task_set_name:
+ * @task: a #GTask
+ * @name: (nullable): a human readable name for the task, or %NULL to unset it
+ *
+ * Sets @task’s name, used in debugging and profiling. The name defaults to
+ * %NULL.
+ *
+ * The task name should describe in a human readable way what the task does.
+ * For example, ‘Open file’ or ‘Connect to network host’. It is used to set the
+ * name of the #GSource used for idle completion of the task.
+ *
+ * This function may only be called before the @task is first used in a thread
+ * other than the one it was constructed in.
+ *
+ * Since: 2.60
  */
 
 
@@ -38453,6 +38666,23 @@
 
 
 /**
+ * g_tls_connection_get_negotiated_protocol:
+ * @conn: a #GTlsConnection
+ *
+ * Gets the name of the application-layer protocol negotiated during
+ * the handshake.
+ *
+ * If the peer did not use the ALPN extension, or did not advertise a
+ * protocol that matched one of @conn's protocols, or the TLS backend
+ * does not support ALPN, then this will be %NULL. See
+ * g_tls_connection_set_advertised_protocols().
+ *
+ * Returns: (nullable): the negotiated protocol, or %NULL
+ * Since: 2.60
+ */
+
+
+/**
  * g_tls_connection_get_peer_certificate:
  * @conn: a #GTlsConnection
  *
@@ -38587,6 +38817,27 @@
  * Returns: %TRUE on success, %FALSE on failure, in which
  * case @error will be set.
  * Since: 2.28
+ */
+
+
+/**
+ * g_tls_connection_set_advertised_protocols:
+ * @conn: a #GTlsConnection
+ * @protocols: (array zero-terminated=1) (nullable): a %NULL-terminated
+ *   array of ALPN protocol names (eg, "http/1.1", "h2"), or %NULL
+ *
+ * Sets the list of application-layer protocols to advertise that the
+ * caller is willing to speak on this connection. The
+ * Application-Layer Protocol Negotiation (ALPN) extension will be
+ * used to negotiate a compatible protocol with the peer; use
+ * g_tls_connection_get_negotiated_protocol() to find the negotiated
+ * protocol after the handshake.  Specifying %NULL for the the value
+ * of @protocols will disable ALPN negotiation.
+ *
+ * See [IANA TLS ALPN Protocol IDs](https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xhtml#alpn-protocol-ids)
+ * for a list of registered protocol IDs.
+ *
+ * Since: 2.60
  */
 
 
