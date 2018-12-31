@@ -169,7 +169,7 @@ if glib_dep.type_name() == 'pkgconfig'
     ]
   )
 
-  test_girs += custom_target('gir-utility',
+  utility_gir = custom_target('gir-utility',
     input: ['utility.c', 'utility.h'],
     output: 'Utility-1.0.gir',
     depends: [utility_lib] + typelibs,
@@ -195,11 +195,12 @@ if glib_dep.type_name() == 'pkgconfig'
       '@INPUT@',
     ]
   )
+  test_girs += utility_gir
 
   test_girs += custom_target('gir-gtkfrob',
     input: ['gtkfrob.c', 'gtkfrob.h'],
     output: 'GtkFrob-1.0.gir',
-    depends: [gtkfrob_lib] + typelibs,
+    depends: [gtkfrob_lib] + typelibs + [utility_gir],
     command: [
       python,
       girscanner,
