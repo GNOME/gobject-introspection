@@ -13,7 +13,7 @@ DOC_MAIN_SGML_FILE=gi-docs.xml
 # gtk-doc will search all .c and .h files beneath these paths
 # for inline comments documenting functions and macros.
 # e.g. DOC_SOURCE_DIR=$(top_srcdir)/gtk $(top_srcdir)/gdk
-DOC_SOURCE_DIR=$(top_srcdir)/girepository
+DOC_SOURCE_DIR=$(top_srcdir)/girepository $(top_builddir)/girepository
 
 # Extra options to pass to gtkdoc-scangobj. Not normally needed.
 SCANGOBJ_OPTIONS=
@@ -40,7 +40,7 @@ FIXXREF_OPTIONS=
 # Used for dependencies. The docs will be rebuilt if any of these change.
 # e.g. HFILE_GLOB=$(top_srcdir)/gtk/*.h
 # e.g. CFILE_GLOB=$(top_srcdir)/gtk/*.c
-HFILE_GLOB=$(top_srcdir)/girepository/*.h
+HFILE_GLOB=$(top_srcdir)/girepository/*.h $(top_builddir)/girepository/*.h
 CFILE_GLOB=$(top_srcdir)/girepository/*.c
 
 # Extra header to include when scanning, which are not under DOC_SOURCE_DIR
