@@ -37,6 +37,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # FIXME: https://github.com/Alexpux/MINGW-packages/pull/4064
 # Passing the full interpreter path works around the issue
 PYTHON="$(which python3)"
+export CFLAGS="-Werror"
 meson -Dcairo=true -Dpython="${PYTHON}" --buildtype debug _build
 cd _build
 ninja

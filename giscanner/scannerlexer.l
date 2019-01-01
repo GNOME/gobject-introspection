@@ -371,6 +371,15 @@ check_identifier (GISourceScanner *scanner,
 #define G_PATH_LENGTH 2048
 #endif
 
+#ifdef _WIN32
+/* We don't want to include <windows.h> as it clashes horribly
+ * with token names from scannerparser.h. So just declare
+ * GetFullPathNameA() here unless we already defined it, like
+ * in giscanner.c.
+ */
+extern unsigned long __stdcall GetFullPathNameA(const char*, int, char*, char**);
+#endif
+
 static inline char *
 _realpath (const char *path)
 {
@@ -379,12 +388,6 @@ _realpath (const char *path)
 
   return realpath (path, buffer) ? g_strdup (buffer) : NULL;
 #else
-  /* We don't want to include <windows.h> as it clashes horribly
-   * with token names from scannerparser.h. So just declare
-   * GetFullPathNameA() here unless we already defined it, like
-   * in giscanner.c.
-   */
-  extern unsigned long __stdcall GetFullPathNameA(const char*, int, char*, char**);
   char *buffer;
   char dummy;
   int rc, len;
