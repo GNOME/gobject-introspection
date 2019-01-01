@@ -211,7 +211,7 @@ if glib_dep.type_name() == 'pkgconfig'
   test_girs += custom_target('gir-gtkfrob',
     input: ['gtkfrob.c', 'gtkfrob.h'],
     output: 'GtkFrob-1.0.gir',
-    depends: [gtkfrob_lib] + typelibs + [utility_gir],
+    depends: [gtkfrob_lib] + typelibs,
     command: [
       python,
       girscanner,
@@ -329,7 +329,7 @@ if glib_dep.type_name() == 'pkgconfig'
     input: ['regress.c', 'regress.h', 'annotation.c', 'annotation.h',
             'foo.c', 'foo.h', 'drawable.c', 'drawable.h'],
     output: 'Regress-1.0.gir',
-    depends: [regress_lib] + typelibs,
+    depends: [regress_lib] + typelibs + [utility_gir],
     command: [
       python,
       girscanner,
