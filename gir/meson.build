@@ -365,7 +365,7 @@ endif
 # out of date.
 gio_files += files('gio-2.0.c')
 
-gir_files += custom_target('gir-gio',
+gio_gir = custom_target('gir-gio',
   input: gio_files,
   output: 'Gio-2.0.gir',
   depends: [gobject_gir, giscanner_pymod],
@@ -381,6 +381,8 @@ gir_files += custom_target('gir-gio',
     '@INPUT@',
   ]
 )
+
+gir_files += gio_gir
 
 # GIRepository
 
