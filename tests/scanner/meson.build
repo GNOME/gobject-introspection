@@ -19,6 +19,7 @@ foreach f : scanner_test_files
 endforeach
 
 test_girs = []
+test_typelibs = []
 
 custom_c_args = cc.get_supported_arguments([
   '-Wno-unused-parameter',
@@ -96,8 +97,14 @@ regress_lib = shared_library('regress-1.0',
 
 python_path = run_command(python, ['-c', 'import sys; sys.stdout.write(sys.executable)']).stdout()
 
+gircompiler_command = [
+  gircompiler, '-o', '@OUTPUT@', '@INPUT@',
+  '--includedir', join_paths(meson.build_root(), 'gir'),
+  '--includedir', meson.current_build_dir(),
+]
+
 if glib_dep.type_name() == 'pkgconfig'
-  test_girs += custom_target('gir-typedef',
+  typedef_gir = custom_target('gir-typedef',
     input: ['typedefs.c', 'typedefs.h'],
     output: 'Typedefs-1.0.gir',
     depends: [typedef_lib] + typelibs,
@@ -125,10 +132,19 @@ if glib_dep.type_name() == 'pkgconfig'
       '@INPUT@',
     ]
   )
+  test_girs += typedef_gir
+
+  test_typelibs += custom_target(
+    'generate-typelib-typedef',
+    input: typedef_gir,
+    output: '@BASENAME@.typelib',
+    depends: [gobject_gir],
+    command: gircompiler_command,
+  )
 
   # FIXME: Bar-1.0.gir
 
-  test_girs += custom_target('gir-sletter',
+  sletter_gir = custom_target('gir-sletter',
     input: ['sletter.c', 'sletter.h'],
     output: 'SLetter-1.0.gir',
     depends: [sletter_lib] + typelibs,
@@ -154,8 +170,17 @@ if glib_dep.type_name() == 'pkgconfig'
       '@INPUT@',
     ]
   )
+  test_girs += sletter_gir
 
-  test_girs += custom_target('gir-warnlib',
+  test_typelibs += custom_target(
+    'generate-typelib-sletter',
+    input: sletter_gir,
+    output: '@BASENAME@.typelib',
+    depends: [gio_gir],
+    command: gircompiler_command,
+  )
+
+  warnlib_gir = custom_target('gir-warnlib',
     input: ['warnlib.c', 'warnlib.h'],
     output: 'WarnLib-1.0.gir',
     depends: [warnlib_lib] + typelibs,
@@ -178,6 +203,15 @@ if glib_dep.type_name() == 'pkgconfig'
       '-I', join_paths(meson.current_source_dir(), '..'),
       '@INPUT@',
     ]
+  )
+  test_girs += warnlib_gir
+
+  test_typelibs += custom_target(
+    'generate-typelib-warnlib',
+    input: warnlib_gir,
+    output: '@BASENAME@.typelib',
+    depends: [gio_gir],
+    command: gircompiler_command,
   )
 
   utility_gir = custom_target('gir-utility',
@@ -208,7 +242,15 @@ if glib_dep.type_name() == 'pkgconfig'
   )
   test_girs += utility_gir
 
-  test_girs += custom_target('gir-gtkfrob',
+  test_typelibs += custom_target(
+    'generate-typelib-utility',
+    input: utility_gir,
+    output: '@BASENAME@.typelib',
+    depends: [gobject_gir],
+    command: gircompiler_command,
+  )
+
+  gtkfrob_gir = custom_target('gir-gtkfrob',
     input: ['gtkfrob.c', 'gtkfrob.h'],
     output: 'GtkFrob-1.0.gir',
     depends: [gtkfrob_lib] + typelibs,
@@ -235,8 +277,17 @@ if glib_dep.type_name() == 'pkgconfig'
       '@INPUT@',
     ]
   )
+  test_girs += gtkfrob_gir
 
-  test_girs += custom_target('gir-gettype',
+  test_typelibs += custom_target(
+    'generate-typelib-gtkfrob',
+    input: gtkfrob_gir,
+    output: '@BASENAME@.typelib',
+    depends: [gobject_gir],
+    command: gircompiler_command,
+  )
+
+  gettype_gir = custom_target('gir-gettype',
     input: ['gettype.c', 'gettype.h'],
     output: 'GetType-1.0.gir',
     depends: [gettype_lib] + typelibs,
@@ -262,8 +313,17 @@ if glib_dep.type_name() == 'pkgconfig'
       '@INPUT@',
     ]
   )
+  test_girs += gettype_gir
 
-  test_girs += custom_target('gir-symbolfilter',
+  test_typelibs += custom_target(
+    'generate-typelib-gettype',
+    input: gettype_gir,
+    output: '@BASENAME@.typelib',
+    depends: [gobject_gir],
+    command: gircompiler_command,
+  )
+
+  symbolfilter_gir = custom_target('gir-symbolfilter',
     input: ['symbolfilter.h'],
     output: 'Symbolfilter-1.0.gir',
     depends: typelibs,
@@ -280,8 +340,16 @@ if glib_dep.type_name() == 'pkgconfig'
       '@INPUT@',
     ]
   )
+  test_girs += symbolfilter_gir
 
-  test_girs += custom_target('gir-identfilter',
+  test_typelibs += custom_target(
+    'generate-typelib-symbolfilter',
+    input: symbolfilter_gir,
+    output: '@BASENAME@.typelib',
+    command: gircompiler_command,
+  )
+
+  identfilter_gir = custom_target('gir-identfilter',
     input: ['identfilter.h'],
     output: 'Identfilter-1.0.gir',
     depends: typelibs,
@@ -299,8 +367,16 @@ if glib_dep.type_name() == 'pkgconfig'
       '@INPUT@',
     ]
   )
+  test_girs += identfilter_gir
 
-  test_girs += custom_target('gir-headeronly',
+  test_typelibs += custom_target(
+    'generate-typelib-identfilter',
+    input: identfilter_gir,
+    output: '@BASENAME@.typelib',
+    command: gircompiler_command,
+  )
+
+  headeronly_gir = custom_target('gir-headeronly',
     input: ['headeronly.h'],
     output: 'Headeronly-1.0.gir',
     depends: typelibs,
@@ -317,6 +393,14 @@ if glib_dep.type_name() == 'pkgconfig'
       '--header-only',
       '@INPUT@',
     ]
+  )
+  test_girs += headeronly_gir
+
+  test_typelibs += custom_target(
+    'generate-typelib-headeronly',
+    input: headeronly_gir,
+    output: '@BASENAME@.typelib',
+    command: gircompiler_command,
   )
 
   if with_cairo
@@ -358,10 +442,19 @@ if glib_dep.type_name() == 'pkgconfig'
   if with_cairo
     test_girs += regress_gir
   endif
+
+  regress_typelib = custom_target(
+    'generate-typelib-regress',
+    input: regress_gir,
+    output: '@BASENAME@.typelib',
+    command: gircompiler_command,
+  )
+  test_typelibs += regress_typelib
 endif
 
+gi_tester = files(join_paths('..', 'gi-tester'))
+
 foreach gir : test_girs
-  gi_tester = files(join_paths('..', 'gi-tester'))
   gir_name = gir.full_path().split('/')[-1]
   test(
     'gi-tester-' + gir_name,
@@ -372,6 +465,16 @@ foreach gir : test_girs
       'srcdir=' + meson.current_source_dir(),
       'builddir=' + meson.current_build_dir(),
     ],
+  )
+endforeach
+
+foreach typelib : test_typelibs
+  typelib_name = typelib.full_path().split('/')[-1]
+  test(
+    'gi-tester-' + typelib_name,
+    python,
+    args: [gi_tester, typelib.full_path()],
+    depends: [typelib],
   )
 endforeach
 
