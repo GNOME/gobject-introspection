@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <girepository.h>
 #include "offsets.h"
 
@@ -48,10 +49,10 @@ introspected_struct (FILE *outfile, const gchar *name)
   if (!struct_info)
      g_error ("Can't find GIStructInfo for '%s'", name);
 
-  fprintf (outfile, "%s%s: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
-           namespace, name,
-           g_struct_info_get_size (struct_info),
-           g_struct_info_get_alignment (struct_info));
+  g_fprintf (outfile, "%s%s: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n",
+             namespace, name,
+             g_struct_info_get_size (struct_info),
+             g_struct_info_get_alignment (struct_info));
 
    n_fields = g_struct_info_get_n_fields (struct_info);
    for (i = 0; i != n_fields; ++i)
@@ -60,14 +61,14 @@ introspected_struct (FILE *outfile, const gchar *name)
 
        field_info = g_struct_info_get_field (struct_info, i);
 
-       fprintf (outfile, "%s %d\n",
-                g_base_info_get_name ((GIBaseInfo *) field_info),
-                g_field_info_get_offset (field_info));
+       g_fprintf (outfile, "%s %d\n",
+                  g_base_info_get_name ((GIBaseInfo *) field_info),
+                  g_field_info_get_offset (field_info));
 
        g_base_info_unref ((GIBaseInfo *)field_info);
      }
 
-  fprintf (outfile, "\n");
+  g_fprintf (outfile, "\n");
 
   g_base_info_unref ((GIBaseInfo *)struct_info);
 }
@@ -76,11 +77,11 @@ static void
 compiled (FILE *outfile)
 {
 #define ALIGNOF(type) G_STRUCT_OFFSET(struct {char a; type b;}, b)
-#define PRINT_TYPE(type) fprintf (outfile, \
-  "%s: size=%" G_GSIZE_FORMAT ", alignment=%" G_GSIZE_FORMAT "\n", \
+#define PRINT_TYPE(type) g_fprintf (outfile, \
+  "%s: size=%" G_GSIZE_FORMAT ", alignment=%ld\n", \
   #type, sizeof (type), ALIGNOF (type))
-#define PRINT_MEMBER(type, member) fprintf (outfile, \
-  "%s %" G_GSIZE_FORMAT "\n", \
+#define PRINT_MEMBER(type, member) g_fprintf (outfile, \
+  "%s %ld\n", \
   #member, G_STRUCT_OFFSET(type, member))
 
   PRINT_TYPE (OffsetsArray);
@@ -89,7 +90,7 @@ compiled (FILE *outfile)
   PRINT_MEMBER (OffsetsArray, some_doubles);
   PRINT_MEMBER (OffsetsArray, some_enum);
   PRINT_MEMBER (OffsetsArray, some_ptrs);
-  fprintf (outfile, "\n");
+  g_fprintf (outfile, "\n");
 
   PRINT_TYPE (OffsetsBasic);
   PRINT_MEMBER (OffsetsBasic, dummy1);
@@ -108,7 +109,7 @@ compiled (FILE *outfile)
   PRINT_MEMBER (OffsetsBasic, field_double);
   PRINT_MEMBER (OffsetsBasic, dummy8);
   PRINT_MEMBER (OffsetsBasic, field_size);
-  fprintf (outfile, "\n");
+  g_fprintf (outfile, "\n");
 
   PRINT_TYPE (OffsetsEnum);
   PRINT_MEMBER (OffsetsEnum, enum1);
@@ -123,7 +124,7 @@ compiled (FILE *outfile)
   PRINT_MEMBER (OffsetsEnum, dummy5);
   PRINT_MEMBER (OffsetsEnum, enum6);
   PRINT_MEMBER (OffsetsEnum, dummy6);
-  fprintf (outfile, "\n");
+  g_fprintf (outfile, "\n");
 
   PRINT_TYPE (OffsetsNested);
   PRINT_MEMBER (OffsetsNested, dummy1);
@@ -131,22 +132,22 @@ compiled (FILE *outfile)
   PRINT_MEMBER (OffsetsNested, dummy2);
   PRINT_MEMBER (OffsetsNested, nestee_union);
   PRINT_MEMBER (OffsetsNested, dummy3);
-  fprintf (outfile, "\n");
+  g_fprintf (outfile, "\n");
 
   PRINT_TYPE (OffsetsNestee);
   PRINT_MEMBER (OffsetsNestee, field1);
   PRINT_MEMBER (OffsetsNestee, field2);
   PRINT_MEMBER (OffsetsNestee, field3);
-  fprintf (outfile, "\n");
+  g_fprintf (outfile, "\n");
 
   PRINT_TYPE (OffsetsObj);
   PRINT_MEMBER (OffsetsObj, parent_instance);
   PRINT_MEMBER (OffsetsObj, other);
-  fprintf (outfile, "\n");
+  g_fprintf (outfile, "\n");
 
   PRINT_TYPE (OffsetsObjClass);
   PRINT_MEMBER (OffsetsObjClass, parent_class);
-  fprintf (outfile, "\n");
+  g_fprintf (outfile, "\n");
 
 #undef ALIGNOF
 #undef PRINT_TYPE
