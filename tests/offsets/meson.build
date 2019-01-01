@@ -11,9 +11,7 @@ test_offsets_lib = shared_library('offsets-1.0',
   version: '1.0.0',
 )
 
-# FIXME: See tests/meson.build
-# FIXME: gitestoffsets.exe fails with STATUS_DLL_NOT_FOUND
-if host_system != 'windows'
+if glib_dep.type_name() == 'pkgconfig'
 
   test_offsets_gir = custom_target('gir-offsets',
     input: test_offsets_sources + test_offsets_headers,
@@ -51,7 +49,7 @@ if host_system != 'windows'
     ],
   )
 
-  executable('gitestoffsets',
+  gitestoffsets_exe = executable('gitestoffsets',
     'gitestoffsets.c', 
     include_directories : test_offsets_inc,
     dependencies: [girepo_dep],
@@ -60,12 +58,15 @@ if host_system != 'windows'
   test_offsets_env = environment()
   test_offsets_env.set('top_builddir', join_paths(meson.build_root(), 'gir'))
   test_offsets_env.set('builddir', meson.current_build_dir())
-  
+  if host_system == 'windows'
+    test_offsets_env.prepend('PATH', join_paths(meson.build_root(), 'girepository'))
+  endif
+
   test('test_offsets.py',
     python, 
     args: files('test_offsets.py'),
     env: test_offsets_env,
-    depends: test_offsets_typelib,
+    depends: [gitestoffsets_exe, test_offsets_typelib],
   )
 
 endif
