@@ -1317,14 +1317,6 @@ void gi_marshalling_tests_union_inv (GIMarshallingTestsUnion *union_);
 
 
 _GI_TEST_EXTERN
-void gi_marshalling_tests_union_out (GIMarshallingTestsUnion **union_);
-
-
-_GI_TEST_EXTERN
-void gi_marshalling_tests_union_inout (GIMarshallingTestsUnion **union_);
-
-
-_GI_TEST_EXTERN
 void gi_marshalling_tests_union_method (GIMarshallingTestsUnion *union_);
 
  /* Object */
