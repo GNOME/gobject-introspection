@@ -142,7 +142,42 @@ if glib_dep.type_name() == 'pkgconfig'
     command: gircompiler_command,
   )
 
-  # FIXME: Bar-1.0.gir
+  bar_gir = custom_target('gir-bar',
+    input: ['barapp.c', 'barapp.h'],
+    output: 'Bar-1.0.gir',
+    depends: [barapp_lib] + typelibs,
+    command: [
+      python,
+      girscanner,
+      '--output=@OUTPUT@',
+      '--no-libtool',
+      '--reparse-validate',
+      '--add-include-path', join_paths(meson.source_root(), 'gir'),
+      '--add-include-path', join_paths(meson.build_root(), 'gir'),
+      '--warn-all',
+      '--warn-error',
+      '--namespace=Bar',
+      '--nsversion=1.0',
+      '--include=GObject-2.0',
+      '--pkg=gobject-2.0',
+      '--library=barapp-1.0',
+      '--accept-unprefixed',
+      '-L', meson.current_build_dir(),
+      '-L', join_paths(meson.build_root(), 'girepository'),
+      '-I', meson.current_source_dir(),
+      '-I', join_paths(meson.current_source_dir(), '..'),
+      '@INPUT@',
+    ]
+  )
+  test_girs += bar_gir
+
+  test_typelibs += custom_target(
+    'generate-typelib-bar',
+    input: bar_gir,
+    output: '@BASENAME@.typelib',
+    depends: [gobject_gir],
+    command: gircompiler_command,
+  )
 
   sletter_gir = custom_target('gir-sletter',
     input: ['sletter.c', 'sletter.h'],
