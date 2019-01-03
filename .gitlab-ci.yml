@@ -15,7 +15,7 @@ fedora-x86_64-meson:
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
     CFLAGS: "-Werror"
   script:
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dgtk-doc=true -Dcairo=true -Dpython=python3 _build .
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Ddoctool=true -Dgtk-doc=true -Dcairo=true -Dpython=python3 _build .
     - cd _build
     - ninja
     - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
