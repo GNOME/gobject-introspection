@@ -503,6 +503,64 @@ foreach gir : test_girs
   )
 endforeach
 
+if get_option('doctool') and glib_dep.type_name() == 'pkgconfig'
+  foreach language : ['C', 'Python', 'Gjs']
+    regress_docs = custom_target(
+      'generate-docs-' + language,
+      input: regress_gir,
+      depends: [doc_templates],
+      build_by_default: not with_cairo,
+      output: 'Regress-1.0-' + language,
+      command: [
+        python, girdoctool,
+        '--add-include-path=' + join_paths(meson.build_root(), 'gir'),
+        '--add-include-path=' + meson.current_build_dir(),
+        '--language', language,
+        '@INPUT@', '-o', '@OUTPUT@'],
+    )
+
+    if with_cairo
+      test(
+        'gi-tester-docs-Regress-1.0-' + language,
+        python,
+        args: [gi_tester, 'Regress-1.0-' + language],
+        depends: [regress_docs],
+        env: [
+          'srcdir=' + meson.current_source_dir(),
+          'builddir=' + meson.current_build_dir(),
+        ],
+      )
+    endif
+  endforeach
+
+  regress_sections = custom_target(
+    'generate-docs-sections',
+    input: regress_gir,
+    depends: [doc_templates],
+    build_by_default: not with_cairo,
+    output: 'Regress-1.0-sections.txt',
+    command: [
+      python, girdoctool,
+      '--add-include-path=' + join_paths(meson.build_root(), 'gir'),
+      '--add-include-path=' + meson.current_build_dir(),
+      '--write-sections-file',
+      '@INPUT@', '-o', '@OUTPUT@'],
+  )
+
+  if with_cairo
+    test(
+      'gi-tester-docs-Regress-1.0-sections.txt',
+      python,
+      args: [gi_tester, 'Regress-1.0-sections.txt'],
+      depends: [regress_sections],
+      env: [
+        'srcdir=' + meson.current_source_dir(),
+        'builddir=' + meson.current_build_dir(),
+      ],
+    )
+  endif
+endif
+
 foreach typelib : test_typelibs
   typelib_name = typelib.full_path().split('/')[-1]
   test(
