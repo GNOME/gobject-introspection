@@ -49,6 +49,18 @@ endforeach
 
 install_subdir('doctemplates', install_dir: giscannerdir)
 
+# XXX: this doesn't track the input, but there is nothing to copy many files
+# in meson.
+doc_templates = custom_target('copy-templates',
+  input : 'doctemplates',
+  output : 'doctemplates',
+  command : [
+    python, '-c',
+      'import sys, shutil;' +
+      'shutil.rmtree(sys.argv[2], ignore_errors=True);' +
+      'shutil.copytree(sys.argv[1], sys.argv[2])',
+    '@INPUT@', '@OUTPUT@'])
+
 flex = find_program('flex', 'win_flex')
 bison = find_program('bison', 'win_bison')
 
