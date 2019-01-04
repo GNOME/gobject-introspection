@@ -234,7 +234,8 @@ PYTESTS = \
 	test_pkgconfig.py \
 	test_sourcescanner.py \
 	test_transformer.py \
-	test_xmlwriter.py
+	test_xmlwriter.py \
+	test_docwriter.py
 
 TESTS = $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS) $(PYTESTS)
 TESTS_ENVIRONMENT = env srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddir) top_builddir=$(top_builddir) \
