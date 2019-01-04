@@ -1,3 +1,30 @@
+1.59.2 - 2019-01-04
+-------------------
+
+* Everything included in 1.58.3
+* meson: Various fixes and all tests have been ported (0.47+ is required now)
+  :mr:`114` :mr:`110` etc.
+  (:user:`Tomasz Miąsko <tmiasko>`, :user:`Emmanuele Bassi <ebassi>`,
+  :user:`Christoph Reiter <creiter>`)
+* scanner: Save preprocessor input and output files with ``save-temps``
+  :mr:`107` (:user:`Tomasz Miąsko <tmiasko>`)
+* automake: Use the wildcard function where needed
+  :mr:`100` (:user:`William Hua <williamhua>`)
+* build: extend ``PYTHONPATH`` instead of replacing it :mr:`101`
+* gir/cairo: add ``cairo_rectangle_t`` :issue:`74` :mr:`103` (Yeti)
+* Add a ``--version`` option to g-ir-compiler and g-ir-generate
+  :issue:`55` :mr:`106`
+* tests: various test improvements
+  :mr:`111` :mr:`117` :mr:`119` (:user:`Tomasz Miąsko <tmiasko>`)
+* ccompiler: don't use Python compiler flags
+  :issue:`150` :mr:`118` :mr:`120`
+  (:user:`Tomasz Miąsko <tmiasko>`, :user:`Christoph Reiter <creiter>`)
+* parser: Do not bail out when parsing GIR files without doc positions
+  :mr:`121` (:user:`Emmanuele Bassi <ebassi>`)
+* gimarshallingtests: Remove declarations of nonexistent functions
+  :mr:`123` (:user:`Philip Chimento <ptomato>`)
+
+
 1.58.3 - 2018-12-30
 -------------------
 
