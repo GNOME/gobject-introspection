@@ -616,6 +616,7 @@ struct _RegressTestStructF
   const gint    **const* data4;
   volatile gint  *const data5;
   const gint     *volatile data6;
+  volatile unsigned const char data7;
 };
 
 /* plain-old-data boxed types */

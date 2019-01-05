@@ -30,6 +30,11 @@ struct _OffsetsBasic {
   gdouble field_double;
   char dummy8;
   gsize field_size;
+  char dummy9;
+  guchar field_uchar1;
+  char dummy10;
+  unsigned char field_uchar2;
+  char dummy11;
 };
 
 typedef enum {

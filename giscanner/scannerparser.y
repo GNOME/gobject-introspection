@@ -211,7 +211,16 @@ static void
 set_or_merge_base_type (GISourceType *type,
                         GISourceType *base)
 {
-  if (base->type == CTYPE_INVALID)
+  /* combine basic types like unsigned int and long long */
+  if (base->type == CTYPE_BASIC_TYPE && type->type == CTYPE_BASIC_TYPE)
+    {
+      char *name = g_strdup_printf ("%s %s", type->name, base->name);
+      g_free (type->name);
+      type->name = name;
+
+      ctype_free (base);
+    }
+  else if (base->type == CTYPE_INVALID)
     {
       g_assert (base->base_type == NULL);
 
@@ -808,15 +817,7 @@ declaration_specifiers
 	| type_specifier declaration_specifiers
 	  {
 		$$ = $1;
-		/* combine basic types like unsigned int and long long */
-		if ($$->type == CTYPE_BASIC_TYPE && $2->type == CTYPE_BASIC_TYPE) {
-			char *name = g_strdup_printf ("%s %s", $$->name, $2->name);
-			g_free ($$->name);
-			$$->name = name;
-			ctype_free ($2);
-		} else {
-			set_or_merge_base_type ($1, $2);
-		}
+		set_or_merge_base_type ($1, $2);
 	  }
 	| type_specifier
 	| type_qualifier declaration_specifiers

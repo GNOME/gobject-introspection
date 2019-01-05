@@ -109,6 +109,11 @@ compiled (FILE *outfile)
   PRINT_MEMBER (OffsetsBasic, field_double);
   PRINT_MEMBER (OffsetsBasic, dummy8);
   PRINT_MEMBER (OffsetsBasic, field_size);
+  PRINT_MEMBER (OffsetsBasic, dummy9);
+  PRINT_MEMBER (OffsetsBasic, field_uchar1);
+  PRINT_MEMBER (OffsetsBasic, dummy10);
+  PRINT_MEMBER (OffsetsBasic, field_uchar2);
+  PRINT_MEMBER (OffsetsBasic, dummy11);
   g_fprintf (outfile, "\n");
 
   PRINT_TYPE (OffsetsEnum);

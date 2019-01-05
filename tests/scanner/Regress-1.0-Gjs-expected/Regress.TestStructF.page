@@ -20,6 +20,7 @@ let testStructF = new Regress.TestStructF({
     <link xref='Regress.TestStructF-data4'>data4</link>: value
     <link xref='Regress.TestStructF-data5'>data5</link>: value
     <link xref='Regress.TestStructF-data6'>data6</link>: value
+    <link xref='Regress.TestStructF-data7'>data7</link>: value
 });
   </code></synopsis>
 
