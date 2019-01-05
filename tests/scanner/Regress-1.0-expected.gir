@@ -5081,7 +5081,7 @@ the introspection client langage.</doc>
         <type name="gint" c:type="const gint* volatile"/>
       </field>
       <field name="data7" writable="1">
-        <type name="guint8" c:type="volatile unsigned char"/>
+        <type name="guint8" c:type="volatile const unsigned char"/>
       </field>
     </record>
     <record name="TestStructFixedArray" c:type="RegressTestStructFixedArray">

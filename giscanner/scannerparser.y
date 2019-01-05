@@ -218,6 +218,11 @@ set_or_merge_base_type (GISourceType *type,
       g_free (type->name);
       type->name = name;
 
+      type->storage_class_specifier |= base->storage_class_specifier;
+      type->type_qualifier |= base->type_qualifier;
+      type->function_specifier |= base->function_specifier;
+      type->is_bitfield |= base->is_bitfield;
+
       ctype_free (base);
     }
   else if (base->type == CTYPE_INVALID)
