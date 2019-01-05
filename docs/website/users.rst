@@ -32,6 +32,7 @@ Bindings based on GObject-Introspection
 * `gir2pascal <http://wiki.freepascal.org/gir2pascal>`__ - gir2pascal is a program to convert gir files into into pascal files
 * `PLGI <https://github.com/keriharris/plgi>`__ - Prolog bindings (runtime)
 * `hbgi <https://github.com/tuffnatty/hbgi>`__ - Harbour bindings for GObject Introspection (runtime)
+* `cppgir <https://www.gitlab.com/mnauw/cppgir>`__ - C++ bindings (compile time, using typelib)
 
 Projects using GObject Introspection
 ------------------------------------
