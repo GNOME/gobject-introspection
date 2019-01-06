@@ -15,7 +15,7 @@ from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Include, Namespace
 from giscanner.introspectablepass import IntrospectablePass
 from giscanner.maintransformer import MainTransformer
-from giscanner.message import MessageLogger, WARNING, ERROR, FATAL
+from giscanner.message import MessageLogger
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
 from giscanner.scannermain import process_packages
@@ -98,7 +98,7 @@ def check(args):
     output = ChunkedIO()
     namespace = Namespace('Test', '1.0')
     logger = MessageLogger.get(namespace=namespace, output=output)
-    logger.enable_warnings((WARNING, ERROR, FATAL))
+    logger.enable_warnings(True)
 
     transformer = Transformer(namespace)
     transformer.set_include_paths([

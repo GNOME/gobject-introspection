@@ -33,7 +33,7 @@ import xml.etree.ElementTree as etree
 
 from giscanner.annotationparser import GtkDocCommentBlockParser, GtkDocCommentBlockWriter
 from giscanner.ast import Namespace
-from giscanner.message import MessageLogger, WARNING, ERROR, FATAL
+from giscanner.message import MessageLogger
 
 
 XML_NS = 'http://schemas.gnome.org/gobject-introspection/2013/test'
@@ -410,7 +410,7 @@ def create_test_cases():
     # Initialize message logger
     namespace = Namespace('Test', '1.0')
     logger = MessageLogger.get(namespace=namespace)
-    logger.enable_warnings((WARNING, ERROR, FATAL))
+    logger.enable_warnings(True)
     test_cases = {}
 
     # Load test cases from disc

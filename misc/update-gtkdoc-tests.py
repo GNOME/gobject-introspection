@@ -189,7 +189,7 @@ if __name__ == '__main__':
                 logger = MessageLogger.get(namespace=None)
                 parser = GtkDocCommentBlockParser()
                 writer = GtkDocCommentBlockWriter(indent=True)
-                logger.enable_warnings((ERROR, FATAL))
+                logger.enable_warnings(True)
 
                 with io.open(path, 'r') as f:
                     lines = f.readlines()
