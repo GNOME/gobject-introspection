@@ -10,7 +10,7 @@ os.environ['GI_SCANNER_DISABLE_CACHE'] = '1'
 from giscanner import ast
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
-from giscanner.message import MessageLogger, WARNING, ERROR, FATAL
+from giscanner.message import MessageLogger
 
 
 def create_scanner_from_source_string(source):
@@ -85,7 +85,7 @@ class TestStructTypedefs(unittest.TestCase):
         # Hack to set logging singleton
         self.namespace = ast.Namespace('Test', '1.0')
         logger = MessageLogger.get(namespace=self.namespace)
-        logger.enable_warnings((WARNING, ERROR, FATAL))
+        logger.enable_warnings(True)
 
     def test_anonymous_typedef(self):
         load_namespace_from_source_string(self.namespace, """
@@ -280,7 +280,7 @@ class TestNestedStructs(unittest.TestCase):
         # Hack to set logging singleton
         self.namespace = ast.Namespace('Test', '1.0')
         logger = MessageLogger.get(namespace=self.namespace)
-        logger.enable_warnings((WARNING, ERROR, FATAL))
+        logger.enable_warnings(True)
 
     def test_nested_named(self):
         load_namespace_from_source_string(self.namespace, """
@@ -387,7 +387,7 @@ class TestUnions(unittest.TestCase):
         # Hack to set logging singleton
         self.namespace = ast.Namespace('Test', '1.0')
         logger = MessageLogger.get(namespace=self.namespace)
-        logger.enable_warnings((WARNING, ERROR, FATAL))
+        logger.enable_warnings(True)
 
     def test_union_with_struct(self):
         load_namespace_from_source_string(self.namespace, """
@@ -472,7 +472,7 @@ class TestCallbacks(unittest.TestCase):
         # Hack to set logging singleton
         self.namespace = ast.Namespace('Test', '1.0')
         logger = MessageLogger.get(namespace=self.namespace)
-        logger.enable_warnings((WARNING, ERROR, FATAL))
+        logger.enable_warnings(True)
 
     def test_union_with_struct(self):
         load_namespace_from_source_string(self.namespace, """

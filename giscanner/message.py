@@ -96,9 +96,8 @@ class MessageLogger(object):
         self._cwd = os.getcwd()
         self._output = output
         self._namespace = namespace
-        self._enable_warnings = []
+        self._enable_warnings = False
         self._warning_count = 0
-        self._error_count = 0
 
     @classmethod
     def get(cls, *args, **kwargs):
@@ -106,14 +105,11 @@ class MessageLogger(object):
             cls._instance = cls(*args, **kwargs)
         return cls._instance
 
-    def enable_warnings(self, log_types):
-        self._enable_warnings = log_types
+    def enable_warnings(self, value):
+        self._enable_warnings = bool(value)
 
     def get_warning_count(self):
         return self._warning_count
-
-    def get_error_count(self):
-        return self._error_count
 
     def log(self, log_type, text, positions=None, prefix=None, marker_pos=None, marker_line=None):
         """
@@ -124,7 +120,7 @@ class MessageLogger(object):
 
         self._warning_count += 1
 
-        if log_type not in self._enable_warnings:
+        if not self._enable_warnings:
             return
 
         if type(positions) == set:
@@ -143,7 +139,6 @@ class MessageLogger(object):
             error_type = "Warning"
         elif log_type == ERROR:
             error_type = "Error"
-            self._error_count += 1
         elif log_type == FATAL:
             error_type = "Fatal"
 
