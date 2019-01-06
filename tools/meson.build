@@ -5,7 +5,7 @@ tools = [
   ['g-ir-scanner', 'scannermain', 'scanner_main'],
   ['g-ir-annotation-tool', 'annotationmain', 'annotation_main'],
 ]
-if get_option('doctool')
+if with_doctool
   tools += [['g-ir-doc-tool', 'docmain', 'doc_main']]
 endif
 
@@ -39,7 +39,7 @@ foreach tool : tools
 endforeach
 
 girscanner = tool_output[0]
-if get_option('doctool')
+if with_doctool
   girdoctool = tool_output[-1]
 endif
 

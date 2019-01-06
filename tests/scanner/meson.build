@@ -503,7 +503,7 @@ foreach gir : test_girs
   )
 endforeach
 
-if get_option('doctool') and glib_dep.type_name() == 'pkgconfig'
+if with_doctool and glib_dep.type_name() == 'pkgconfig'
   foreach language : ['C', 'Python', 'Gjs']
     regress_docs = custom_target(
       'generate-docs-' + language,

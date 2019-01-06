@@ -3,7 +3,7 @@ option('cairo', type: 'boolean', value : false,
 )
 
 option('doctool', type: 'boolean', value : false,
-  description: 'Install g-ir-doc-tool'
+  description: 'Install g-ir-doc-tool and run related tests'
 )
 
 option('glib-src-dir', type: 'string',

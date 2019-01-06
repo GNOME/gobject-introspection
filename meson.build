@@ -151,6 +151,13 @@ if with_cairo
       cairo_gobject_dep = cc.find_library ('cairo-gobject')
     endif
   endif
+else
+  warning('Not building with cairo support, not all tests will be run')
+endif
+
+with_doctool = get_option('doctool')
+if not with_doctool
+  warning('Not building with doctool support, not all tests will be run')
 endif
 
 subdir('girepository')
