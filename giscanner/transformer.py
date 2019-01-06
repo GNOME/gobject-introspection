@@ -484,8 +484,6 @@ raise ValueError."""
                                   CTYPE_UNION,
                                   CTYPE_ENUM]:
             value = source_type.name
-            if not value:
-                value = 'gpointer'
             if const:
                 value = 'const ' + value
             if volatile:
@@ -553,7 +551,6 @@ raise ValueError."""
             # Special handling for fields; we don't have annotations on them
             # to apply later, yet.
             if source_type.type == CTYPE_ARRAY:
-                complete_ctype = self._create_complete_source_type(source_type)
                 # If the array contains anonymous unions, like in the GValue
                 # struct, we need to handle this specially.  This is necessary
                 # to be able to properly calculate the size of the compound
@@ -562,9 +559,10 @@ raise ValueError."""
                 if (source_type.base_type.type == CTYPE_UNION
                 and source_type.base_type.name is None):
                     synthesized_type = self._synthesize_union_type(symbol, parent_symbol)
-                    ftype = ast.Array(None, synthesized_type, complete_ctype=complete_ctype)
+                    ftype = ast.Array(None, synthesized_type)
                 else:
                     ctype = self._create_source_type(source_type)
+                    complete_ctype = self._create_complete_source_type(source_type)
                     from_ctype = self.create_type_from_ctype_string(ctype,
                                                                     complete_ctype=complete_ctype)
                     ftype = ast.Array(None, from_ctype)

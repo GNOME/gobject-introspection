@@ -5019,7 +5019,7 @@ the introspection client langage.</doc>
         <type name="GType" c:type="GType"/>
       </field>
       <field name="some_union" writable="1">
-        <array zero-terminated="0" c:type="gpointer" fixed-size="2">
+        <array zero-terminated="0" fixed-size="2">
           <type name="TestStructE__some_union__union"/>
         </array>
       </field>
