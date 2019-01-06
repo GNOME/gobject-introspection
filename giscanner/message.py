@@ -119,7 +119,7 @@ class MessageLogger(object):
 
         self._warning_count += 1
 
-        if not self._enable_warnings:
+        if not self._enable_warnings and log_type in (WARNING, ERROR):
             return
 
         if type(positions) == set:
