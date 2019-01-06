@@ -428,6 +428,7 @@ def create_source_scanner(options, args):
         filenames = extract_filelist(options)
     else:
         filenames = extract_filenames(args)
+    filenames = [os.path.realpath(f) for f in filenames]
 
     if platform.system() == 'Darwin':
         options.cpp_undefines.append('__BLOCKS__')
@@ -488,6 +489,26 @@ def write_output(data, options):
         output.write(data)
     except IOError as e:
         _error("while writing output: %s" % (e.strerror, ))
+
+
+def get_source_root_dirs(options, filenames):
+    if options.sources_top_dirs:
+        return options.sources_top_dir
+
+    # None passed, we need to guess
+    assert all(os.path.isabs(f) for f in filenames)
+    dirs = sorted(set([os.path.dirname(f) for f in filenames]))
+
+    # We need commonpath (3.5+), otherwise give up
+    if not hasattr(os.path, "commonpath"):
+        return dirs
+
+    common = os.path.commonpath(dirs)
+    # If the only common path is the root directory give up
+    if os.path.dirname(common) == common:
+        return dirs
+
+    return [common]
 
 
 def scanner_main(args):
@@ -579,9 +600,9 @@ def scanner_main(args):
 
     transformer.namespace.c_includes = options.c_includes
     transformer.namespace.exported_packages = exported_packages
-    if not options.sources_top_dirs:
-        options.sources_top_dirs = [os.path.commonprefix(filenames).rpartition(os.path.sep)[0]]
-    writer = Writer(transformer.namespace, options.sources_top_dirs)
+
+    sources_top_dirs = get_source_root_dirs(options, filenames)
+    writer = Writer(transformer.namespace, sources_top_dirs)
     data = writer.get_encoded_xml()
 
     write_output(data, options)
