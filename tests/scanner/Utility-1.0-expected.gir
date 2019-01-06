@@ -141,7 +141,7 @@ and/or use gtk-doc annotations.  -->
         <type name="guint" c:type="guint"/>
       </field>
       <field name="data" writable="1">
-        <array zero-terminated="0" c:type="guint8" fixed-size="16">
+        <array zero-terminated="0" fixed-size="16">
           <type name="guint8" c:type="guint8"/>
         </array>
       </field>

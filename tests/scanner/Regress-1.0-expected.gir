@@ -99,15 +99,13 @@ and/or use gtk-doc annotations.  -->
       <union>
         <source-position filename="regress.h" line="1480"/>
         <field name="a" writable="1">
-          <array zero-terminated="0"
-                 c:type="RegressLikeGnomeKeyringPasswordSchema"
-                 fixed-size="2">
+          <array zero-terminated="0" fixed-size="2">
             <type name="LikeGnomeKeyringPasswordSchema"
                   c:type="RegressLikeGnomeKeyringPasswordSchema*"/>
           </array>
         </field>
         <field name="padding" writable="1">
-          <array zero-terminated="0" c:type="guint" fixed-size="4">
+          <array zero-terminated="0" fixed-size="4">
             <type name="guint" c:type="guint"/>
           </array>
         </field>
@@ -1209,9 +1207,7 @@ it says it's pointer but it's actually a string.</doc>
            line="236">This is a test of an array of object in an field of a struct.</doc>
       <source-position filename="annotation.h" line="244"/>
       <field name="objects" writable="1">
-        <array zero-terminated="0"
-               c:type="RegressAnnotationObject"
-               fixed-size="10">
+        <array zero-terminated="0" fixed-size="10">
           <type name="AnnotationObject" c:type="RegressAnnotationObject*"/>
         </array>
       </field>
@@ -1235,7 +1231,7 @@ it says it's pointer but it's actually a string.</doc>
           </field>
         </record>
         <field name="padding" writable="1">
-          <array zero-terminated="0" c:type="guint" fixed-size="4">
+          <array zero-terminated="0" fixed-size="4">
             <type name="guint" c:type="guint"/>
           </array>
         </field>
@@ -2084,7 +2080,7 @@ uses a C sugar return type.</doc>
         </callback>
       </field>
       <field name="_reserved">
-        <array zero-terminated="0" c:type="GCallback" fixed-size="4">
+        <array zero-terminated="0" fixed-size="4">
           <type name="GObject.Callback" c:type="GCallback"/>
         </array>
       </field>
@@ -2421,7 +2417,7 @@ exposed to language bindings.</doc>
         <type name="gint" c:type="int"/>
       </field>
       <field name="lines" writable="1">
-        <array zero-terminated="0" c:type="char" fixed-size="80">
+        <array zero-terminated="0" fixed-size="80">
           <type name="gchar" c:type="char"/>
         </array>
       </field>
@@ -2510,7 +2506,7 @@ exposed to language bindings.</doc>
         <type name="gint" c:type="int"/>
       </field>
       <field name="attributes" writable="1">
-        <array zero-terminated="0" c:type="gpointer" fixed-size="32">
+        <array zero-terminated="0" fixed-size="32">
           <type name="gpointer" c:type="gpointer"/>
         </array>
       </field>
@@ -2521,7 +2517,7 @@ exposed to language bindings.</doc>
     <record name="LikeXklConfigItem" c:type="RegressLikeXklConfigItem">
       <source-position filename="regress.h" line="1415"/>
       <field name="name" writable="1">
-        <array zero-terminated="0" c:type="gchar" fixed-size="32">
+        <array zero-terminated="0" fixed-size="32">
           <type name="gchar" c:type="gchar"/>
         </array>
       </field>
@@ -5090,7 +5086,7 @@ the introspection client langage.</doc>
         <type name="gint" c:type="gint"/>
       </field>
       <field name="array" writable="1">
-        <array zero-terminated="0" c:type="gint" fixed-size="10">
+        <array zero-terminated="0" fixed-size="10">
           <type name="gint" c:type="gint"/>
         </array>
       </field>

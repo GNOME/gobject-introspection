@@ -565,20 +565,9 @@ raise ValueError."""
                     ftype = ast.Array(None, synthesized_type, complete_ctype=complete_ctype)
                 else:
                     ctype = self._create_source_type(source_type)
-                    canonical_ctype = self._canonicalize_ctype(ctype)
-                    if canonical_ctype[-1] == '*':
-                        derefed_name = canonical_ctype[:-1]
-                    else:
-                        derefed_name = canonical_ctype
-                    if complete_ctype[-1] == '*':
-                        derefed_complete_ctype = complete_ctype[:-1]
-                    else:
-                        derefed_complete_ctype = complete_ctype
                     from_ctype = self.create_type_from_ctype_string(ctype,
                                                                     complete_ctype=complete_ctype)
-                    ftype = ast.Array(None, from_ctype,
-                                      ctype=derefed_name,
-                                      complete_ctype=derefed_complete_ctype)
+                    ftype = ast.Array(None, from_ctype)
                 child_list = list(symbol.base_type.child_list)
                 ftype.zeroterminated = False
                 if child_list:
