@@ -92,6 +92,16 @@ compiled (FILE *outfile)
   PRINT_MEMBER (OffsetsArray, some_ptrs);
   g_fprintf (outfile, "\n");
 
+  PRINT_TYPE (OffsetsMultiDimArray);
+  PRINT_MEMBER (OffsetsMultiDimArray, ints);
+  PRINT_MEMBER (OffsetsMultiDimArray, chars);
+  PRINT_MEMBER (OffsetsMultiDimArray, floats);
+  PRINT_MEMBER (OffsetsMultiDimArray, pointers1);
+  PRINT_MEMBER (OffsetsMultiDimArray, pointers2);
+  PRINT_MEMBER (OffsetsMultiDimArray, pointers3);
+  PRINT_MEMBER (OffsetsMultiDimArray, dummy);
+  fprintf (outfile, "\n");
+
   PRINT_TYPE (OffsetsBasic);
   PRINT_MEMBER (OffsetsBasic, dummy1);
   PRINT_MEMBER (OffsetsBasic, field_int8);
@@ -183,6 +193,7 @@ int main(int argc, char **argv)
     g_error ("Cannot open '%s': %s'", argv[1], g_strerror(errno));
 
   introspected_struct (outfile, "Array");
+  introspected_struct (outfile, "MultiDimArray");
   introspected_struct (outfile, "Basic");
   introspected_struct (outfile, "Enum");
   introspected_struct (outfile, "Nested");

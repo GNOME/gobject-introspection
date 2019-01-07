@@ -124,6 +124,21 @@ struct _OffsetsArray
   gpointer some_ptrs[5];
 };
 
+/* Test multi-dimensional arrays */
+
+typedef struct _OffsetsMultiDimArray OffsetsMultiDimArray;
+
+struct _OffsetsMultiDimArray
+{
+  gint ints[10][2];
+  gchar chars[255][10];
+  float floats[11][13][17];
+  gchar* pointers1[3][5];
+  gpointer pointers2[7][9];
+  double** pointers3[2][3][4];
+  gchar dummy;
+};
+
 /* Test object offsets */
 
 typedef struct _OffsetsObj OffsetsObj;
