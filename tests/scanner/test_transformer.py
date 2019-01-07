@@ -483,5 +483,47 @@ class TestCallbacks(unittest.TestCase):
         self.assertTrue(isinstance(node, ast.Callback))
 
 
+class TestArrays(unittest.TestCase):
+    def setUp(self):
+        # Hack to set logging singleton
+        self.namespace = ast.Namespace('Test', '1.0')
+        logger = MessageLogger.get(namespace=self.namespace)
+        logger.enable_warnings((WARNING, ERROR, FATAL))
+
+    def test_multidimensional_arrays(self):
+        """Multidimensional arrays are flattend into a single dimension."""
+
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+              int data[2][3][5][7][11];
+            } TestMultiDimArray;
+            """)
+
+        node = self.namespace.get('MultiDimArray')
+        self.assertIsNotNone(node)
+
+        field = node.fields[0]
+        self.assertIsInstance(field, ast.Field)
+        self.assertIsInstance(field.type, ast.Array)
+        self.assertEqual(field.type.element_type, ast.TYPE_INT)
+        self.assertEqual(field.type.size, 2 * 3 * 5 * 7 * 11)
+
+    def test_flexible_array_member(self):
+        """Flexible array members don't break transformer.
+
+        They are generally unsupported, so nothing else is validated.
+        """
+
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct {
+              int length;
+              unsigned char data[];
+            } TestFlexibleArray;
+            """)
+
+        node = self.namespace.get('FlexibleArray')
+        self.assertIsNotNone(node)
+
+
 if __name__ == '__main__':
     unittest.main()

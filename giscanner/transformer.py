@@ -551,25 +551,32 @@ raise ValueError."""
             # Special handling for fields; we don't have annotations on them
             # to apply later, yet.
             if source_type.type == CTYPE_ARRAY:
+                # Determine flattened array size and its element type.
+                flattened_size = 1
+                while source_type.type == CTYPE_ARRAY:
+                    for child in source_type.child_list:
+                        if flattened_size is not None:
+                            flattened_size *= child.const_int
+                        break
+                    else:
+                        flattened_size = None
+                    source_type = source_type.base_type
+
                 # If the array contains anonymous unions, like in the GValue
                 # struct, we need to handle this specially.  This is necessary
                 # to be able to properly calculate the size of the compound
                 # type (e.g. GValue) that contains this array, see
                 # <https://bugzilla.gnome.org/show_bug.cgi?id=657040>.
-                if (source_type.base_type.type == CTYPE_UNION
-                and source_type.base_type.name is None):
-                    synthesized_type = self._synthesize_union_type(symbol, parent_symbol)
-                    ftype = ast.Array(None, synthesized_type)
+                if source_type.type == CTYPE_UNION and source_type.name is None:
+                    element_type = self._synthesize_union_type(symbol, parent_symbol)
                 else:
                     ctype = self._create_source_type(source_type)
                     complete_ctype = self._create_complete_source_type(source_type)
-                    from_ctype = self.create_type_from_ctype_string(ctype,
-                                                                    complete_ctype=complete_ctype)
-                    ftype = ast.Array(None, from_ctype)
-                child_list = list(symbol.base_type.child_list)
+                    element_type = self.create_type_from_ctype_string(ctype,
+                                                                      complete_ctype=complete_ctype)
+                ftype = ast.Array(None, element_type)
                 ftype.zeroterminated = False
-                if child_list:
-                    ftype.size = child_list[0].const_int
+                ftype.size = flattened_size
             else:
                 ftype = self._create_type_from_base(symbol.base_type)
             # ast.Fields are assumed to be read-write
