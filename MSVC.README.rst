@@ -54,7 +54,7 @@ builds is not (and will likely never be) supported.
 Open a Visual Studio command prompt and create an empty build directory (which needs
 to be on the same drive as the G-I sources).  In that directory, run the following::
 
-  python $(PythonInstallationPath)\scripts\meson.py $(G-I_srcdir) --buildtype=<build_configuration> --prefix=$(PREFIX) -Dcairo-libname=<DLL filename of cairo-gobject> -Dpython=<full path to Python interpreter to build _giscanner.pyd>
+  python $(PythonInstallationPath)\scripts\meson.py $(G-I_srcdir) --buildtype=<build_configuration> --prefix=$(PREFIX) -Dcairo_libname=<DLL filename of cairo-gobject> -Dpython=<full path to Python interpreter to build _giscanner.pyd>
 
 The -Dcairo-libname is likely necessary as the default DLL file name for Cairo-GObject
 may likely not match the default "libcairo-gobject-2.dll", which is the default

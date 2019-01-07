@@ -6,15 +6,15 @@ option('doctool', type: 'boolean', value : false,
   description: 'Install g-ir-doc-tool and run related tests'
 )
 
-option('glib-src-dir', type: 'string',
+option('glib_src_dir', type: 'string',
   description: 'Source directory for glib - needed to add docs to gir'
 )
 
-option('gtk-doc', type: 'boolean', value: false,
+option('gtk_doc', type: 'boolean', value: false,
   description: 'Build and install documentation'
 )
 
-option('cairo-libname', type: 'string',
+option('cairo_libname', type: 'string',
   description: 'Custom name for the cairo-gobject library name'
 )
 
@@ -22,6 +22,6 @@ option('python', type: 'string', value: 'python3',
   description: 'Path or name of the Python interpreter to build for'
 )
 
-option('gir-dir-prefix', type: 'string',
+option('gir_dir_prefix', type: 'string',
   description: 'Intermediate prefix for gir installation under ${prefix}'
 )

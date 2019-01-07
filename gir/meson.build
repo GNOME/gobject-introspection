@@ -1,6 +1,6 @@
 cairo_conf = configuration_data()
-if get_option('cairo-libname') != ''
-  cairo_library_name = get_option('cairo-libname')
+if get_option('cairo_libname') != ''
+  cairo_library_name = get_option('cairo_libname')
 elif host_machine.system() == 'win32'
   cairo_library_name = 'libcairo-gobject-2.dll'
 elif host_machine.system() == 'darwin'
@@ -98,7 +98,7 @@ if dep_type == 'pkgconfig'
   endif
   glib_headers = ret.stdout().strip().split('\n')
   # Get a list of all source files
-  glib_srcdir = get_option('glib-src-dir')
+  glib_srcdir = get_option('glib_src_dir')
   if glib_srcdir != ''
     ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'glib', '*.c')))
     if ret.returncode() != 0
