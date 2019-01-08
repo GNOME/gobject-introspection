@@ -493,10 +493,10 @@ def write_output(data, options):
 
 def get_source_root_dirs(options, filenames):
     if options.sources_top_dirs:
-        return options.sources_top_dir
+        return [os.path.realpath(p) for p in options.sources_top_dirs]
 
     # None passed, we need to guess
-    assert all(os.path.isabs(f) for f in filenames)
+    filenames = [os.path.realpath(p) for p in filenames]
     dirs = sorted(set([os.path.dirname(f) for f in filenames]))
 
     # We need commonpath (3.5+), otherwise give up
