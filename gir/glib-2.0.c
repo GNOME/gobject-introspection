@@ -2740,10 +2740,15 @@
  * G_ALIGNOF:
  * @a: a type-name
  *
- * Return the minimum alignment required by the platform ABI for values of the given
+ * Return the minimal alignment required by the platform ABI for values of the given
  * type. The address of a variable or struct member of the given type must always be
  * a multiple of this alignment. For example, most platforms require int variables
  * to be aligned at a 4-byte boundary, so `G_ALIGNOF (int)` is 4 on most platforms.
+ *
+ * Note this is not necessarily the same as the value returned by GCC’s
+ * `__alignof__` operator, which returns the preferred alignment for a type.
+ * The preferred alignment may be a stricter alignment than the minimal
+ * alignment.
  *
  * Since: 2.60
  */
@@ -24068,7 +24073,7 @@
 /**
  * g_option_context_parse_strv:
  * @context: a #GOptionContext
- * @arguments: (inout) (array null-terminated=1): a pointer to the
+ * @arguments: (inout) (array zero-terminated=1): a pointer to the
  *    command line arguments (which must be in UTF-8 on Windows)
  * @error: a return location for errors
  *
@@ -39373,6 +39378,15 @@
  * A standard boolean type.
  * Variables of this type should only contain the value
  * %TRUE or %FALSE.
+ *
+ * Never directly compare the contents of a #gboolean variable with the values
+ * %TRUE or %FALSE. Use `if (condition)` to check a #gboolean is "true", instead
+ * of `if (condition == TRUE)`. Likewise use `if (!condition)` to check a
+ * #gboolean is "false".
+ *
+ * There is no validation when assigning to a #gboolean variable and so it could
+ * contain any value represented by a #gint. This is why the use of `if
+ * (condition)` is recommended. All non-zero values in C evaluate to "true".
  */
 
 
