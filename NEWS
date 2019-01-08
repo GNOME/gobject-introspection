@@ -1,3 +1,22 @@
+1.59.3 - 2019-01-08
+-------------------
+
+* meson: use underscore as a separator in build options (gtk-doc -> gtk_doc etc)
+  :mr:`129`
+* website: add cppgir C++ binding
+  :mr:`124` (:user:`Mark Nauwelaerts <mnauw>`)
+* scanner: Merge specifiers and qualifiers when merging basic types.
+  Fixes "unsigned char" being wrongly parsed as "unsigned" etc.
+  :mr:`125` (:user:`Tomasz Miąsko <tmiasko>`)
+* meson: warn that not all tests will be run if building without cairo/doctool
+* scanner: rework source root directory guessing code to not depend on the
+  build directory
+* scanner: Remove incorrect c:type generated for array of synthesized unions
+  :mr:`127` (:user:`Tomasz Miąsko <tmiasko>`)
+* scanner: Flatten multi-dimensional arrays fields
+  :mr:`128` (:user:`Tomasz Miąsko <tmiasko>`)
+
+
 1.59.2 - 2019-01-04
 -------------------
 
