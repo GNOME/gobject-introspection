@@ -1503,4 +1503,22 @@ struct _RegressTestReferenceCounters {
   gatomicrefcount atomicrefcount;
 };
 
+_GI_TEST_EXTERN
+void regress_test_array_struct_out_none (RegressTestStructA **arr, gsize *len);
+
+_GI_TEST_EXTERN
+void regress_test_array_struct_out_container (RegressTestStructA **arr, gsize *len);
+
+_GI_TEST_EXTERN
+void regress_test_array_struct_out_full_fixed (RegressTestStructA **arr);
+
+_GI_TEST_EXTERN
+void regress_test_array_struct_out_caller_alloc (RegressTestStructA *arr, gsize len);
+
+_GI_TEST_EXTERN
+void regress_test_array_struct_in_full (RegressTestStructA *arr, gsize len);
+
+_GI_TEST_EXTERN
+void regress_test_array_struct_in_none (RegressTestStructA *arr, gsize len);
+
 #endif /* __GITESTTYPES_H__ */

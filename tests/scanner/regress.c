@@ -4491,3 +4491,126 @@ regress_get_variant (void)
 {
   return g_variant_new_int32 (42);
 }
+
+/**
+ * regress_test_array_struct_out_none:
+ * @arr: (out) (array length=len) (transfer none): An array
+ * @len: (out): Length of @arr
+ *
+ * Test flat array output with transfer none.
+ * 
+ * Similar to:
+ * - mm_modem_peek_ports() with structs
+ * - gdk_query_visual_types() with enums
+ * - gdk_event_get_axes() with doubles
+ */
+void
+regress_test_array_struct_out_none (RegressTestStructA **arr, gsize *len)
+{
+  static RegressTestStructA array[3] = {
+    {111},
+    {222},
+    {333},
+  };
+
+  *arr = array;
+  *len = 3;
+}
+
+/**
+ * regress_test_array_struct_out_container:
+ * @arr: (out) (array length=len) (transfer container): An array
+ * @len: (out): Length of @arr
+ *
+ * Test flat array output with transfer container.
+ *
+ * Similar to pango_layout_get_log_attrs().
+ */
+void
+regress_test_array_struct_out_container (RegressTestStructA **arr, gsize *len)
+{
+
+  *arr = g_new0 (RegressTestStructA, 5);
+  (*arr)[0].some_int = 11;
+  (*arr)[1].some_int = 13;
+  (*arr)[2].some_int = 17;
+  (*arr)[3].some_int = 19;
+  (*arr)[4].some_int = 23;
+  *len = 5;
+}
+
+/**
+ * regress_test_array_struct_out_full_fixed:
+ * @arr: (out) (array fixed-size=4) (transfer full): An array
+ *
+ * Test flat fixed-size array output with transfer full.
+ */
+void
+regress_test_array_struct_out_full_fixed (RegressTestStructA **arr)
+{
+  *arr = g_new0 (RegressTestStructA, 4);
+  (*arr)[0].some_int = 2;
+  (*arr)[1].some_int = 3;
+  (*arr)[2].some_int = 5;
+  (*arr)[3].some_int = 7;
+}
+
+/**
+ * regress_test_array_struct_out_caller_alloc:
+ * @arr: (out caller-allocates) (array length=len): An array
+ * @len: Length of @arr
+ *
+ * Test flat caller-allocated array output.
+ *
+ * Similar to g_main_context_query().
+ */
+void
+regress_test_array_struct_out_caller_alloc (RegressTestStructA *arr, gsize len)
+{
+  guint i;
+
+  g_assert (arr != NULL);
+
+  memset (arr, 0, sizeof (RegressTestStructA) * len);
+  for (i=0; i != len; ++i)
+    arr[i].some_int = 111 * (i + 1);
+}
+
+/**
+ * regress_test_array_struct_in_full:
+ * @arr: (in) (array length=len) (transfer full): An array
+ * @len: Length of @arr
+ *
+ * Test flat array input with transfer full.
+ *
+ * Similar to: 
+ * - gsf_property_settings_free() with structs but they contain pointers
+ * - g_byte_array_new_take() with guint8s
+ */
+void
+regress_test_array_struct_in_full (RegressTestStructA *arr, gsize len)
+{
+  g_assert_cmpint (len, ==, 2);
+  g_assert_cmpint (arr[0].some_int, ==, 201);
+  g_assert_cmpint (arr[1].some_int, ==, 202);
+  g_free (arr);
+}
+
+/**
+ * regress_test_array_struct_in_none:
+ * @arr: (in) (array length=len) (transfer none): An array.
+ * @len: Length of @arr
+ *
+ * Test flat array input with transfer none.
+ *
+ * Similar to g_main_context_check() or gtk_target_list_new().
+ */
+void
+regress_test_array_struct_in_none (RegressTestStructA *arr, gsize len)
+{
+  g_assert_cmpint (len, ==, 3);
+  g_assert_cmpint (arr[0].some_int, ==, 301);
+  g_assert_cmpint (arr[1].some_int, ==, 302);
+  g_assert_cmpint (arr[2].some_int, ==, 303);
+}
+

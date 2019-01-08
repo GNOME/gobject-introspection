@@ -6427,6 +6427,64 @@ libgnome-keyring.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_struct_in_full"
+              c:identifier="regress_test_array_struct_in_full">
+      <doc xml:space="preserve"
+           filename="regress.c"
+           line="4579">Test flat array input with transfer full.
+
+Similar to:
+- gsf_property_settings_free() with structs but they contain pointers
+- g_byte_array_new_take() with guint8s</doc>
+      <source-position filename="regress.h" line="1519"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr" transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4581">An array</doc>
+          <array length="1" zero-terminated="0" c:type="RegressTestStructA*">
+            <type name="TestStructA" c:type="RegressTestStructA"/>
+          </array>
+        </parameter>
+        <parameter name="len" transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4582">Length of @arr</doc>
+          <type name="gsize" c:type="gsize"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_struct_in_none"
+              c:identifier="regress_test_array_struct_in_none">
+      <doc xml:space="preserve"
+           filename="regress.c"
+           line="4599">Test flat array input with transfer none.
+
+Similar to g_main_context_check() or gtk_target_list_new().</doc>
+      <source-position filename="regress.h" line="1522"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr" transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4601">An array.</doc>
+          <array length="1" zero-terminated="0" c:type="RegressTestStructA*">
+            <type name="TestStructA" c:type="RegressTestStructA"/>
+          </array>
+        </parameter>
+        <parameter name="len" transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4602">Length of @arr</doc>
+          <type name="gsize" c:type="gsize"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_array_struct_out"
               c:identifier="regress_test_array_struct_out">
       <doc xml:space="preserve"
@@ -6450,6 +6508,136 @@ libgnome-keyring.</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <type name="gint" c:type="int*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_struct_out_caller_alloc"
+              c:identifier="regress_test_array_struct_out_caller_alloc">
+      <doc xml:space="preserve"
+           filename="regress.c"
+           line="4558">Test flat caller-allocated array output.
+
+Similar to g_main_context_query().</doc>
+      <source-position filename="regress.h" line="1516"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr"
+                   direction="out"
+                   caller-allocates="1"
+                   transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4560">An array</doc>
+          <array length="1" zero-terminated="0" c:type="RegressTestStructA*">
+            <type name="TestStructA" c:type="RegressTestStructA"/>
+          </array>
+        </parameter>
+        <parameter name="len"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4561">Length of @arr</doc>
+          <type name="gsize" c:type="gsize"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_struct_out_container"
+              c:identifier="regress_test_array_struct_out_container">
+      <doc xml:space="preserve"
+           filename="regress.c"
+           line="4520">Test flat array output with transfer container.
+
+Similar to pango_layout_get_log_attrs().</doc>
+      <source-position filename="regress.h" line="1510"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="container">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4522">An array</doc>
+          <array length="1" zero-terminated="0" c:type="RegressTestStructA**">
+            <type name="TestStructA" c:type="RegressTestStructA*"/>
+          </array>
+        </parameter>
+        <parameter name="len"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4523">Length of @arr</doc>
+          <type name="gsize" c:type="gsize*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_struct_out_full_fixed"
+              c:identifier="regress_test_array_struct_out_full_fixed">
+      <doc xml:space="preserve"
+           filename="regress.c"
+           line="4542">Test flat fixed-size array output with transfer full.</doc>
+      <source-position filename="regress.h" line="1513"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4544">An array</doc>
+          <array zero-terminated="0"
+                 c:type="RegressTestStructA**"
+                 fixed-size="4">
+            <type name="TestStructA" c:type="RegressTestStructA*"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_struct_out_none"
+              c:identifier="regress_test_array_struct_out_none">
+      <doc xml:space="preserve"
+           filename="regress.c"
+           line="4495">Test flat array output with transfer none.
+
+Similar to:
+- mm_modem_peek_ports() with structs
+- gdk_query_visual_types() with enums
+- gdk_event_get_axes() with doubles</doc>
+      <source-position filename="regress.h" line="1507"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4497">An array</doc>
+          <array length="1" zero-terminated="0" c:type="RegressTestStructA**">
+            <type name="TestStructA" c:type="RegressTestStructA*"/>
+          </array>
+        </parameter>
+        <parameter name="len"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="4498">Length of @arr</doc>
+          <type name="gsize" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
