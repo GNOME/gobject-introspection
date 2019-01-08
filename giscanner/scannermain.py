@@ -503,6 +503,9 @@ def get_source_root_dirs(options, filenames):
     if not hasattr(os.path, "commonpath"):
         return dirs
 
+    if not dirs:
+        return []
+
     common = os.path.commonpath(dirs)
     # If the only common path is the root directory give up
     if os.path.dirname(common) == common:
