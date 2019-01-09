@@ -13,6 +13,7 @@ scanner_test_files = [
   'test_pkgconfig.py',
   'test_docwriter.py',
   'test_scanner.py',
+  'test_maintransformer.py',
 ]
 
 foreach f : scanner_test_files 

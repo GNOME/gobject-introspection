@@ -236,7 +236,8 @@ PYTESTS = \
 	test_transformer.py \
 	test_xmlwriter.py \
 	test_docwriter.py \
-	test_scanner.py
+	test_scanner.py \
+	test_maintransformer.py
 
 TESTS = $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS) $(PYTESTS)
 TESTS_ENVIRONMENT = env srcdir=$(srcdir) top_srcdir=$(top_srcdir) builddir=$(builddir) top_builddir=$(top_builddir) \

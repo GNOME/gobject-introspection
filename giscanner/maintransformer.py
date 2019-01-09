@@ -229,9 +229,7 @@ class MainTransformer(object):
             name = self._get_annotation_name(node)
             section_name = 'SECTION:%s' % (name.lower(), )
             block = self._blocks.get(section_name)
-            if block and block.description:
-                node.doc = block.description
-                node.doc_position = block.position
+            self._apply_annotations_annotated(node, block)
         if isinstance(node, (ast.Class, ast.Interface)):
             for prop in node.properties:
                 self._apply_annotations_property(node, prop)
