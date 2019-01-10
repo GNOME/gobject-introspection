@@ -47,7 +47,7 @@ class MainTransformer(object):
 
     def transform(self):
         if not self._namespace.names:
-            message.fatal('Namespace is empty; likely causes are:\n'
+            message.error('Namespace is empty; likely causes are:\n'
                           '* Not including .h files to be scanned\n'
                           '* Broken --identifier-prefix')
 
