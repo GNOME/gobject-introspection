@@ -91,7 +91,10 @@ GIRS += SLetter-1.0.gir
 
 Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir Utility-1.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
-Regress_1_0_gir_CFLAGS = $(libregress_la_CPPFLAGS) $(libregress_la_CFLAGS) -include "glib.h"
+Regress_1_0_gir_CFLAGS = $(GI_SCANNER_CFLAGS)
+if !HAVE_CAIRO
+Regress_1_0_gir_CFLAGS += -D_GI_DISABLE_CAIRO
+endif
 Regress_1_0_gir_INCLUDES = Gio-2.0 Utility-1.0
 if HAVE_CAIRO
 Regress_1_0_gir_INCLUDES += cairo-1.0 
