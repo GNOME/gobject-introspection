@@ -657,11 +657,12 @@ class MainTransformer(object):
 
         if ANN_OPTIONAL in annotations:
             if (not isinstance(node, ast.Return) and
-                    node.direction == ast.PARAM_DIRECTION_OUT):
+                    node.direction in [ast.PARAM_DIRECTION_OUT,
+                                       ast.PARAM_DIRECTION_INOUT]):
                 node.optional = True
             else:
                 message.warn('invalid "optional" annotation: '
-                             'only valid for out parameters',
+                             'only valid for out and inout parameters',
                              annotations.position)
 
         if ANN_ALLOW_NONE in annotations:
