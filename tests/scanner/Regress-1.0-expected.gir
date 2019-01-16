@@ -1411,6 +1411,7 @@ it says it's pointer but it's actually a string.</doc>
     </class>
     <record name="FooBufferClass"
             c:type="RegressFooBufferClass"
+            disguised="1"
             glib:is-gtype-struct-for="FooBuffer">
       <source-position filename="foo.h" line="52"/>
     </record>
@@ -2095,6 +2096,7 @@ uses a C sugar return type.</doc>
     </class>
     <record name="FooOtherObjectClass"
             c:type="RegressFooOtherObjectClass"
+            disguised="1"
             glib:is-gtype-struct-for="FooOtherObject">
       <source-position filename="foo.h" line="54"/>
     </record>
@@ -2219,7 +2221,9 @@ exposed to language bindings.</doc>
         <type name="gint" c:type="int"/>
       </field>
     </record>
-    <record name="FooStructPrivate" c:type="RegressFooStructPrivate">
+    <record name="FooStructPrivate"
+            c:type="RegressFooStructPrivate"
+            disguised="1">
       <source-position filename="foo.h" line="325"/>
     </record>
     <interface name="FooSubInterface"
@@ -2483,7 +2487,7 @@ exposed to language bindings.</doc>
       <source-position filename="regress.h" line="520"/>
       <type name="gint" c:type="gint"/>
     </constant>
-    <record name="Intset" c:type="RegressIntset">
+    <record name="Intset" c:type="RegressIntset" disguised="1">
       <doc xml:space="preserve"
            filename="regress.h"
            line="1337">Like telepathy-glib's TpIntset.</doc>
@@ -2814,7 +2818,9 @@ use it should be.</doc>
         </parameters>
       </method>
     </record>
-    <record name="TestBoxedPrivate" c:type="RegressTestBoxedPrivate">
+    <record name="TestBoxedPrivate"
+            c:type="RegressTestBoxedPrivate"
+            disguised="1">
       <source-position filename="regress.h" line="666"/>
     </record>
     <callback name="TestCallback" c:type="RegressTestCallback">
