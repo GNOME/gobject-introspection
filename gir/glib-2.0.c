@@ -6962,7 +6962,7 @@
  *   // Rest of your application.
  * }
  * ]|
- * where `DATADIR` is as typically provided by automake.
+ * where `DATADIR` is as typically provided by automake or Meson.
  *
  * For a library, you only have to call bindtextdomain() and
  * bind_textdomain_codeset() in your initialization function. If your library
@@ -8624,9 +8624,9 @@
  * [TAP](https://testanything.org/) harness; GLib provides template files for
  * easily integrating with it:
  *
- *   - [glib-tap.mk](https://git.gnome.org/browse/glib/tree/glib-tap.mk)
- *   - [tap-test](https://git.gnome.org/browse/glib/tree/tap-test)
- *   - [tap-driver.sh](https://git.gnome.org/browse/glib/tree/tap-driver.sh)
+ *   - [glib-tap.mk](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/glib-tap.mk)
+ *   - [tap-test](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/tap-test)
+ *   - [tap-driver.sh](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/tap-driver.sh)
  *
  * You can copy these files in your own project's root directory, and then
  * set up your `Makefile.am` file to reference them, for instance:
@@ -8663,8 +8663,8 @@
  *
  * If you don't have access to the Autotools TAP harness, you can use the
  * [gtester][gtester] and [gtester-report][gtester-report] tools, and use
- * the [glib.mk](https://git.gnome.org/browse/glib/tree/glib.mk) Automake
- * template provided by GLib.
+ * the [glib.mk](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/glib.mk)
+ * Automake template provided by GLib.
  */
 
 
@@ -16723,7 +16723,9 @@
  * Formats a size (for example the size of a file) into a human readable
  * string.  Sizes are rounded to the nearest size prefix (kB, MB, GB)
  * and are displayed rounded to the nearest tenth. E.g. the file size
- * 3292528 bytes will be converted into the string "3.2 MB".
+ * 3292528 bytes will be converted into the string "3.2 MB". The returned string
+ * is UTF-8, and may use a non-breaking space to separate the number and units,
+ * to ensure they aren’t separated when line wrapped.
  *
  * The prefix units base is 1000 (i.e. 1 kB is 1000 bytes).
  *
@@ -25261,6 +25263,18 @@
  * dynamically-allocated memory, they should be freed first.
  *
  * Since: 2.14
+ */
+
+
+/**
+ * g_queue_clear_full:
+ * @queue: a pointer to a #GQueue
+ * @free_func: (nullable): the function to be called to free memory allocated
+ *
+ * Convenience method, which frees all the memory used by a #GQueue,
+ * and calls the provided @free_func on each item in the #GQueue.
+ *
+ * Since: 2.60
  */
 
 
@@ -37466,7 +37480,7 @@
  * string specifies what type of value is expected to be inside of the
  * variant. If the value inside the variant has a different type then
  * %NULL is returned. In the event that @dictionary has a value type other
- * than v then @expected_type must directly match the key type and it is
+ * than v then @expected_type must directly match the value type and it is
  * used to unpack the value directly or an error occurs.
  *
  * In either case, if @key is not found in @dictionary, %NULL is returned.

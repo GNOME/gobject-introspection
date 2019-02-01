@@ -1628,8 +1628,8 @@
  * let the user decide whether or not to accept the certificate, you
  * would have to return %FALSE from the signal handler on the first
  * attempt, and then after the connection attempt returns a
- * %G_TLS_ERROR_HANDSHAKE, you can interact with the user, and if
- * the user decides to accept the certificate, remember that fact,
+ * %G_TLS_ERROR_BAD_CERTIFICATE, you can interact with the user, and
+ * if the user decides to accept the certificate, remember that fact,
  * create a new connection, and return %TRUE from the signal handler
  * the next time.
  *
@@ -1992,6 +1992,45 @@
  * The `sin6_scope_id` field, for IPv6 addresses.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * GKeyfileSettingsBackend:default-dir:
+ *
+ * The directory where the system defaults and locks are located.
+ *
+ * Defaults to `/etc/glib-2.0/settings`.
+ */
+
+
+/**
+ * GKeyfileSettingsBackend:filename:
+ *
+ * The location where the settings are stored on disk.
+ *
+ * Defaults to `$XDG_CONFIG_HOME/glib-2.0/settings/keyfile`.
+ */
+
+
+/**
+ * GKeyfileSettingsBackend:root-group:
+ *
+ * If @root_group is non-%NULL then it specifies the name of the keyfile
+ * group used for keys that are written directly below the root path.
+ *
+ * Defaults to NULL.
+ */
+
+
+/**
+ * GKeyfileSettingsBackend:root-path:
+ *
+ * All settings read to or written from the backend must fall under the
+ * path given in @root_path (which must start and end with a slash and
+ * not contain two consecutive slashes).  @root_path may be "/".
+ *
+ * Defaults to "/".
  */
 
 
@@ -3696,8 +3735,8 @@
  * let the user decide whether or not to accept the certificate, you
  * would have to return %FALSE from the signal handler on the first
  * attempt, and then after the connection attempt returns a
- * %G_TLS_ERROR_HANDSHAKE, you can interact with the user, and if
- * the user decides to accept the certificate, remember that fact,
+ * %G_TLS_ERROR_BAD_CERTIFICATE, you can interact with the user, and
+ * if the user decides to accept the certificate, remember that fact,
  * create a new connection, and return %TRUE from the signal handler
  * the next time.
  *
@@ -11008,6 +11047,10 @@
  * is done on the uri to detect the type of the file if
  * required.
  *
+ * The D-Bus–activated applications don't have to be started if your application
+ * terminates too soon after this function. To prevent this, use
+ * g_app_info_launch_default_for_uri() instead.
+ *
  * Returns: %TRUE on success, %FALSE on error.
  */
 
@@ -11026,6 +11069,10 @@
  * error information in the case where the application is
  * sandboxed and the portal may present an application chooser
  * dialog to the user.
+ *
+ * This is also useful if you want to be sure that the D-Bus–activated
+ * applications are really started before termination and if you are interested
+ * in receiving error information from their activation.
  *
  * Since: 2.50
  */
@@ -11062,6 +11109,39 @@
  * no way to detect this.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
+ */
+
+
+/**
+ * g_app_info_launch_uris_async:
+ * @appinfo: a #GAppInfo
+ * @uris: (nullable) (element-type utf8): a #GList containing URIs to launch.
+ * @context: (nullable): a #GAppLaunchContext or %NULL
+ * @cancellable: (nullable): a #GCancellable
+ * @callback: (nullable): a #GAsyncReadyCallback to call when the request is done
+ * @user_data: (nullable): data to pass to @callback
+ *
+ * Async version of g_app_info_launch_uris().
+ *
+ * The @callback is invoked immediately after the application launch, but it
+ * waits for activation in case of D-Bus–activated applications and also provides
+ * extended error information for sandboxed applications, see notes for
+ * g_app_info_launch_default_for_uri_async().
+ *
+ * Since: 2.60
+ */
+
+
+/**
+ * g_app_info_launch_uris_finish:
+ * @appinfo: a #GAppInfo
+ * @result: a #GAsyncResult
+ * @error: (nullable): a #GError
+ *
+ * Finishes a g_app_info_launch_uris_async() operation.
+ *
+ * Returns: %TRUE on successful launch, %FALSE otherwise.
+ * Since: 2.60
  */
 
 
@@ -22543,7 +22623,8 @@
  * g_file_info_set_attribute_stringv:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key
- * @attr_value: (array) (element-type utf8): a %NULL terminated array of UTF-8 strings.
+ * @attr_value: (array zero-terminated=1) (element-type utf8): a %NULL
+ *   terminated array of UTF-8 strings.
  *
  * Sets the @attribute to contain the given @attr_value,
  * if possible.
@@ -23834,6 +23915,34 @@
  * Returns: (transfer full): a #GAppInfo if the handle was found,
  *     %NULL if there were errors.
  *     When you are done with it, release it with g_object_unref()
+ */
+
+
+/**
+ * g_file_query_default_handler_async:
+ * @file: a #GFile to open
+ * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @callback: (nullable): a #GAsyncReadyCallback to call when the request is done
+ * @user_data: (nullable): data to pass to @callback
+ *
+ * Async version of g_file_query_default_handler().
+ *
+ * Since: 2.60
+ */
+
+
+/**
+ * g_file_query_default_handler_finish:
+ * @file: a #GFile to open
+ * @result: a #GAsyncResult
+ * @error: (nullable): a #GError
+ *
+ * Finishes a g_file_query_default_handler_async() operation.
+ *
+ * Returns: (transfer full): a #GAppInfo if the handle was found,
+ *     %NULL if there were errors.
+ *     When you are done with it, release it with g_object_unref()
+ * Since: 2.60
  */
 
 
@@ -26746,6 +26855,11 @@
  * syntax of the key file format.  For example, if you have '[' or ']'
  * characters in your path names or '=' in your key names you may be in
  * trouble.
+ *
+ * The backend reads default values from a keyfile called `defaults` in
+ * the directory specified by the #GKeyfileSettingsBackend:defaults-dir property,
+ * and a list of locked keys from a text file with the name `locks` in
+ * the same location.
  *
  * Returns: (transfer full): a keyfile-backed #GSettingsBackend
  */
@@ -29970,6 +30084,197 @@
 
 
 /**
+ * g_output_stream_writev: (virtual writev_fn)
+ * @stream: a #GOutputStream.
+ * @vectors: (array length=n_vectors): the buffer containing the #GOutputVectors to write.
+ * @n_vectors: the number of vectors to write
+ * @bytes_written: (out) (optional): location to store the number of bytes that were
+ *     written to the stream
+ * @cancellable: (nullable): optional cancellable object
+ * @error: location to store the error occurring, or %NULL to ignore
+ *
+ * Tries to write the bytes contained in the @n_vectors @vectors into the
+ * stream. Will block during the operation.
+ *
+ * If @n_vectors is 0 or the sum of all bytes in @vectors is 0, returns 0 and
+ * does nothing.
+ *
+ * On success, the number of bytes written to the stream is returned.
+ * It is not an error if this is not the same as the requested size, as it
+ * can happen e.g. on a partial I/O error, or if there is not enough
+ * storage in the stream. All writes block until at least one byte
+ * is written or an error occurs; 0 is never returned (unless
+ * @n_vectors is 0 or the sum of all bytes in @vectors is 0).
+ *
+ * If @cancellable is not %NULL, then the operation can be cancelled by
+ * triggering the cancellable object from another thread. If the operation
+ * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned. If an
+ * operation was partially finished when the operation was cancelled the
+ * partial result will be returned, without an error.
+ *
+ * Some implementations of g_output_stream_writev() may have limitations on the
+ * aggregate buffer size, and will return %G_IO_ERROR_INVALID_ARGUMENT if these
+ * are exceeded. For example, when writing to a local file on UNIX platforms,
+ * the aggregate buffer size must not exceed %G_MAXSSIZE bytes.
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error
+ * Since: 2.60
+ */
+
+
+/**
+ * g_output_stream_writev_all:
+ * @stream: a #GOutputStream.
+ * @vectors: (array length=n_vectors): the buffer containing the #GOutputVectors to write.
+ * @n_vectors: the number of vectors to write
+ * @bytes_written: (out) (optional): location to store the number of bytes that were
+ *     written to the stream
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @error: location to store the error occurring, or %NULL to ignore
+ *
+ * Tries to write the bytes contained in the @n_vectors @vectors into the
+ * stream. Will block during the operation.
+ *
+ * This function is similar to g_output_stream_writev(), except it tries to
+ * write as many bytes as requested, only stopping on an error.
+ *
+ * On a successful write of all @n_vectors vectors, %TRUE is returned, and
+ * @bytes_written is set to the sum of all the sizes of @vectors.
+ *
+ * If there is an error during the operation %FALSE is returned and @error
+ * is set to indicate the error status.
+ *
+ * As a special exception to the normal conventions for functions that
+ * use #GError, if this function returns %FALSE (and sets @error) then
+ * @bytes_written will be set to the number of bytes that were
+ * successfully written before the error was encountered.  This
+ * functionality is only available from C. If you need it from another
+ * language then you must write your own loop around
+ * g_output_stream_write().
+ *
+ * The content of the individual elements of @vectors might be changed by this
+ * function.
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error
+ * Since: 2.60
+ */
+
+
+/**
+ * g_output_stream_writev_all_async:
+ * @stream: A #GOutputStream
+ * @vectors: (array length=n_vectors): the buffer containing the #GOutputVectors to write.
+ * @n_vectors: the number of vectors to write
+ * @io_priority: the I/O priority of the request
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Request an asynchronous write of the bytes contained in the @n_vectors @vectors into
+ * the stream. When the operation is finished @callback will be called.
+ * You can then call g_output_stream_writev_all_finish() to get the result of the
+ * operation.
+ *
+ * This is the asynchronous version of g_output_stream_writev_all().
+ *
+ * Call g_output_stream_writev_all_finish() to collect the result.
+ *
+ * Any outstanding I/O request with higher priority (lower numerical
+ * value) will be executed before an outstanding request with lower
+ * priority. Default priority is %G_PRIORITY_DEFAULT.
+ *
+ * Note that no copy of @vectors will be made, so it must stay valid
+ * until @callback is called. The content of the individual elements
+ * of @vectors might be changed by this function.
+ *
+ * Since: 2.60
+ */
+
+
+/**
+ * g_output_stream_writev_all_finish:
+ * @stream: a #GOutputStream
+ * @result: a #GAsyncResult
+ * @bytes_written: (out) (optional): location to store the number of bytes that were written to the stream
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
+ *
+ * Finishes an asynchronous stream write operation started with
+ * g_output_stream_writev_all_async().
+ *
+ * As a special exception to the normal conventions for functions that
+ * use #GError, if this function returns %FALSE (and sets @error) then
+ * @bytes_written will be set to the number of bytes that were
+ * successfully written before the error was encountered.  This
+ * functionality is only available from C.  If you need it from another
+ * language then you must write your own loop around
+ * g_output_stream_writev_async().
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error
+ * Since: 2.60
+ */
+
+
+/**
+ * g_output_stream_writev_async:
+ * @stream: A #GOutputStream.
+ * @vectors: (array length=n_vectors): the buffer containing the #GOutputVectors to write.
+ * @n_vectors: the number of vectors to write
+ * @io_priority: the I/O priority of the request.
+ * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Request an asynchronous write of the bytes contained in @n_vectors @vectors into
+ * the stream. When the operation is finished @callback will be called.
+ * You can then call g_output_stream_writev_finish() to get the result of the
+ * operation.
+ *
+ * During an async request no other sync and async calls are allowed,
+ * and will result in %G_IO_ERROR_PENDING errors.
+ *
+ * On success, the number of bytes written will be passed to the
+ * @callback. It is not an error if this is not the same as the
+ * requested size, as it can happen e.g. on a partial I/O error,
+ * but generally we try to write as many bytes as requested.
+ *
+ * You are guaranteed that this method will never fail with
+ * %G_IO_ERROR_WOULD_BLOCK — if @stream can't accept more data, the
+ * method will just wait until this changes.
+ *
+ * Any outstanding I/O request with higher priority (lower numerical
+ * value) will be executed before an outstanding request with lower
+ * priority. Default priority is %G_PRIORITY_DEFAULT.
+ *
+ * The asynchronous methods have a default fallback that uses threads
+ * to implement asynchronicity, so they are optional for inheriting
+ * classes. However, if you override one you must override all.
+ *
+ * For the synchronous, blocking version of this function, see
+ * g_output_stream_writev().
+ *
+ * Note that no copy of @vectors will be made, so it must stay valid
+ * until @callback is called.
+ *
+ * Since: 2.60
+ */
+
+
+/**
+ * g_output_stream_writev_finish:
+ * @stream: a #GOutputStream.
+ * @result: a #GAsyncResult.
+ * @bytes_written: (out) (optional): location to store the number of bytes that were written to the stream
+ * @error: a #GError location to store the error occurring, or %NULL to
+ * ignore.
+ *
+ * Finishes a stream writev operation.
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error
+ * Since: 2.60
+ */
+
+
+/**
  * g_permission_acquire:
  * @permission: a #GPermission instance
  * @cancellable: (nullable): a #GCancellable, or %NULL
@@ -30307,10 +30612,46 @@
  * to having been cancelled.
  *
  * Also note that if %G_IO_ERROR_WOULD_BLOCK is returned some underlying
- * transports like D/TLS require that you send the same @buffer and @count.
+ * transports like D/TLS require that you re-send the same @buffer and
+ * @count in the next write call.
  *
  * Returns: the number of bytes written, or -1 on error (including
  *   %G_IO_ERROR_WOULD_BLOCK).
+ */
+
+
+/**
+ * g_pollable_output_stream_writev_nonblocking: (virtual writev_nonblocking)
+ * @stream: a #GPollableOutputStream
+ * @vectors: (array length=n_vectors): the buffer containing the #GOutputVectors to write.
+ * @n_vectors: the number of vectors to write
+ * @bytes_written: (out) (optional): location to store the number of bytes that were
+ *     written to the stream
+ * @cancellable: (nullable): a #GCancellable, or %NULL
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Attempts to write the bytes contained in the @n_vectors @vectors to @stream,
+ * as with g_output_stream_writev(). If @stream is not currently writable,
+ * this will immediately return %@G_POLLABLE_RETURN_WOULD_BLOCK, and you can
+ * use g_pollable_output_stream_create_source() to create a #GSource
+ * that will be triggered when @stream is writable. @error will *not* be
+ * set in that case.
+ *
+ * Note that since this method never blocks, you cannot actually
+ * use @cancellable to cancel it. However, it will return an error
+ * if @cancellable has already been cancelled when you call, which
+ * may happen if you call this method after a source triggers due
+ * to having been cancelled.
+ *
+ * Also note that if %G_POLLABLE_RETURN_WOULD_BLOCK is returned some underlying
+ * transports like D/TLS require that you re-send the same @vectors and
+ * @n_vectors in the next write call.
+ *
+ * Returns: %@G_POLLABLE_RETURN_OK on success, %G_POLLABLE_RETURN_WOULD_BLOCK
+ * if the stream is not currently writable (and @error is *not* set), or
+ * %G_POLLABLE_RETURN_FAILED if there was an error in which case @error will
+ * be set.
+ * Since: 2.60
  */
 
 
@@ -34587,25 +34928,25 @@
  * g_socket_condition_timed_wait:
  * @socket: a #GSocket
  * @condition: a #GIOCondition mask to wait for
- * @timeout: the maximum time (in microseconds) to wait, or -1
+ * @timeout_us: the maximum time (in microseconds) to wait, or -1
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: a #GError pointer, or %NULL
  *
- * Waits for up to @timeout microseconds for @condition to become true
+ * Waits for up to @timeout_us microseconds for @condition to become true
  * on @socket. If the condition is met, %TRUE is returned.
  *
  * If @cancellable is cancelled before the condition is met, or if
- * @timeout (or the socket's #GSocket:timeout) is reached before the
+ * @timeout_us (or the socket's #GSocket:timeout) is reached before the
  * condition is met, then %FALSE is returned and @error, if non-%NULL,
  * is set to the appropriate value (%G_IO_ERROR_CANCELLED or
  * %G_IO_ERROR_TIMED_OUT).
  *
  * If you don't want a timeout, use g_socket_condition_wait().
- * (Alternatively, you can pass -1 for @timeout.)
+ * (Alternatively, you can pass -1 for @timeout_us.)
  *
- * Note that although @timeout is in microseconds for consistency with
+ * Note that although @timeout_us is in microseconds for consistency with
  * other GLib APIs, this function actually only has millisecond
- * resolution, and the behavior is undefined if @timeout is not an
+ * resolution, and the behavior is undefined if @timeout_us is not an
  * exact number of milliseconds.
  *
  * Returns: %TRUE if the condition was met, %FALSE otherwise
@@ -35753,7 +36094,7 @@
  *    which may be filled with an array of #GSocketControlMessages, or %NULL
  * @num_messages: (out): a pointer which will be filled with the number of
  *    elements in @messages, or %NULL
- * @flags: (inout): a pointer to an int containing #GSocketMsgFlags flags
+ * @flags: (type GSocketMsgFlags): (inout): a pointer to an int containing #GSocketMsgFlags flags
  * @cancellable: a %GCancellable or %NULL
  * @error: a #GError pointer, or %NULL
  *
@@ -35828,7 +36169,7 @@
  * @socket: a #GSocket
  * @messages: (array length=num_messages): an array of #GInputMessage structs
  * @num_messages: the number of elements in @messages
- * @flags: an int containing #GSocketMsgFlags flags for the overall operation
+ * @flags: (type GSocketMsgFlags): an int containing #GSocketMsgFlags flags for the overall operation
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore
  *
@@ -35949,7 +36290,7 @@
  * @messages: (array length=num_messages) (nullable): a pointer to an
  *   array of #GSocketControlMessages, or %NULL.
  * @num_messages: number of elements in @messages, or -1.
- * @flags: an int containing #GSocketMsgFlags flags
+ * @flags: (type GSocketMsgFlags): an int containing #GSocketMsgFlags flags
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -35998,11 +36339,41 @@
 
 
 /**
+ * g_socket_send_message_with_timeout:
+ * @socket: a #GSocket
+ * @address: (nullable): a #GSocketAddress, or %NULL
+ * @vectors: (array length=num_vectors): an array of #GOutputVector structs
+ * @num_vectors: the number of elements in @vectors, or -1
+ * @messages: (array length=num_messages) (nullable): a pointer to an
+ *   array of #GSocketControlMessages, or %NULL.
+ * @num_messages: number of elements in @messages, or -1.
+ * @flags: (type GSocketMsgFlags): an int containing #GSocketMsgFlags flags
+ * @timeout_us: the maximum time (in microseconds) to wait, or -1
+ * @bytes_written: (out) (optional): location to store the number of bytes that were written to the socket
+ * @cancellable: (nullable): a %GCancellable or %NULL
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * This behaves exactly the same as g_socket_send_message(), except that
+ * the choice of timeout behavior is determined by the @timeout_us argument
+ * rather than by @socket's properties.
+ *
+ * On error %G_POLLABLE_RETURN_FAILED is returned and @error is set accordingly, or
+ * if the socket is currently not writable %G_POLLABLE_RETURN_WOULD_BLOCK is
+ * returned. @bytes_written will contain 0 in both cases.
+ *
+ * Returns: %G_POLLABLE_RETURN_OK if all data was successfully written,
+ * %G_POLLABLE_RETURN_WOULD_BLOCK if the socket is currently not writable, or
+ * %G_POLLABLE_RETURN_FAILED if an error happened and @error is set.
+ * Since: 2.60
+ */
+
+
+/**
  * g_socket_send_messages:
  * @socket: a #GSocket
  * @messages: (array length=num_messages): an array of #GOutputMessage structs
  * @num_messages: the number of elements in @messages
- * @flags: an int containing #GSocketMsgFlags flags
+ * @flags: (type GSocketMsgFlags): an int containing #GSocketMsgFlags flags
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
