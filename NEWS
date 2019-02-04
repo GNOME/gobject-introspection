@@ -1,3 +1,17 @@
+1.59.4 - 2019-02-04
+-------------------
+
+* tests: Add functions using flat struct arrays. :mr:`130` (:user:`Tomasz Miąsko <tmiasko>`)
+* Clean shebangs out of non-executable scripts and drop exec perm from xmlwriter.py. :mr:`131` (:user:`Dominique Leuenberger <DimStar77>`)
+* maintransformer: parse deprecation annotations for section blocks. :issue:`213` :mr:`132`
+* repository: g_irepository_get_object_gtype_interfaces. :mr:`30` (:user:`Colin Walters <walters>`, :user:`Philip Chimento <ptomato>`)
+* message: handle fatal errors even if warnings are disabled. :issue:`229` :mr:`126`
+* autotools: Fix build with ``-Wl,--as-needed``. :issue:`226` :mr:`134`
+* maintransformer: Don't warn on (optional) annotations on (inout) :mr:`135` (:user:`Guido Günther <guidog>`)
+* girepository: Fix a possible use-after-free if g_mapped_file_new() fails
+  and fix possible leak of transitive dependency names. :mr:`136` (:user:`Elliott Sales de Andrade <QuLogic>`)
+
+
 1.59.3 - 2019-01-08
 -------------------
 
