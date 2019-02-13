@@ -45,6 +45,7 @@ Projects using GObject Introspection
  * `gir2xmi <https://github.com/jralls/gir2xmi>`__ - UML model generator for GObject-Introspection Gir files. 
  * `playerctl <https://github.com/acrisci/playerctl>`__ - a library and cli for controlling media players that implement the MPRIS DBus interface
  * `i3ipc-glib <https://github.com/acrisci/i3ipc-glib>`__ - a library for extensions to the i3 window manager
+ * `gabi <https://gitlab.gnome.org/tmiasko/gabi>`__ - a C/typelib ABI cross-validator
 
 Projects that could use GObject-Introspection
 ---------------------------------------------
