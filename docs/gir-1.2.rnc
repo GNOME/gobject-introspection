@@ -54,8 +54,11 @@ grammar {
     }
 
   Annotation =
+	## element defining an annotation from the source code, usually a user-defined annotation associated to a parameter or a return value
     element attribute {
+	  ## name of the attribute
       attribute name { xsd:string },
+	  ## value of the attribute
       attribute value { xsd:string }
     }
 
