@@ -30,6 +30,7 @@ from distutils.msvccompiler import MSVCCompiler
 from distutils.unixccompiler import UnixCCompiler
 from distutils.cygwinccompiler import Mingw32CCompiler
 from distutils.sysconfig import get_config_vars
+from distutils.sysconfig import customize_compiler as orig_customize_compiler
 
 from . import utils
 
@@ -39,6 +40,12 @@ def customize_compiler(compiler):
     any macOS specific bits and which tries to avoid using any Python specific
     defaults if alternatives through env vars are given.
     """
+
+    # The original customize_compiler() in distutils calls into macOS setup
+    # code the first time it is called. This makes sure we run that setup
+    # code as well.
+    dummy = distutils.ccompiler.new_compiler()
+    orig_customize_compiler(dummy)
 
     if compiler.compiler_type == "unix":
         (cc, cxx, ldshared, shlib_suffix, ar, ar_flags) = \
