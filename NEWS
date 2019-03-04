@@ -1,3 +1,11 @@
+1.59.5 - 2019-03-04
+-------------------
+
+* gir: Include C header in cairo gir file :mr:`138` (:user:`Tomasz Miąsko <tmiasko>`)
+* ccompiler: restore customize_compiler() setup for macOS. :issue:`268`
+* gir: skip glib-enumtypes.h for GObject-2.0 :mr:`140`
+
+
 1.59.4 - 2019-02-04
 -------------------
 
