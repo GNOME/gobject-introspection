@@ -4520,40 +4520,6 @@
 
 
 /**
- * G_MININT16:
- *
- * The minimum value which can be held in a #gint16.
- *
- * Since: 2.4
- */
-
-
-/**
- * G_MININT32:
- *
- * The minimum value which can be held in a #gint32.
- *
- * Since: 2.4
- */
-
-
-/**
- * G_MININT64:
- *
- * The minimum value which can be held in a #gint64.
- */
-
-
-/**
- * G_MININT8:
- *
- * The minimum value which can be held in a #gint8.
- *
- * Since: 2.4
- */
-
-
-/**
  * G_MINLONG:
  *
  * The minimum value which can be held in a #glong.
@@ -6025,6 +5991,8 @@
  * {
  *   gint fd;
  *   int saved_errno;
+ *
+ *   g_return_val_if_fail (error == NULL || *error == NULL, -1);
  *
  *   fd = open ("file.txt", O_RDONLY);
  *   saved_errno = errno;
@@ -11544,7 +11512,7 @@
 
 /**
  * g_base64_decode:
- * @text: zero-terminated string with base64 text to decode
+ * @text: (not nullable): zero-terminated string with base64 text to decode
  * @out_len: (out): The length of the decoded data is written here
  *
  * Decode a sequence of Base-64 encoded text into binary data.  Note
@@ -11598,7 +11566,7 @@
 
 /**
  * g_base64_encode:
- * @data: (array length=len) (element-type guint8): the binary data to encode
+ * @data: (array length=len) (element-type guint8) (nullable): the binary data to encode
  * @len: the length of @data
  *
  * Encode a sequence of binary data into its Base-64 stringified
@@ -29871,7 +29839,7 @@
  * a command line, and the C runtime startup code does a corresponding
  * reconstruction of an argument vector from the command line, to be
  * passed to main(). Complications arise when you have argument vector
- * elements that contain spaces of double quotes. The spawn*() functions
+ * elements that contain spaces or double quotes. The `spawn*()` functions
  * don't do any quoting or escaping, but on the other hand the startup
  * code does do unquoting and unescaping in order to enable receiving
  * arguments with embedded spaces or double quotes. To work around this
@@ -30690,15 +30658,17 @@
  * g_string_append_len:
  * @string: a #GString
  * @val: bytes to append
- * @len: number of bytes of @val to use
+ * @len: number of bytes of @val to use, or -1 for all of @val
  *
- * Appends @len bytes of @val to @string. Because @len is
- * provided, @val may contain embedded nuls and need not
- * be nul-terminated.
+ * Appends @len bytes of @val to @string.
  *
- * Since this function does not stop at nul bytes, it is
- * the caller's responsibility to ensure that @val has at
- * least @len addressable bytes.
+ * If @len is positive, @val may contain embedded nuls and need
+ * not be nul-terminated. It is the caller's responsibility to
+ * ensure that @val has at least @len addressable bytes.
+ *
+ * If @len is negative, @val must be nul-terminated and @len
+ * is considered to request the entire string length. This
+ * makes g_string_append_len() equivalent to g_string_append().
  *
  * Returns: (transfer none): @string
  */
@@ -31015,16 +30985,18 @@
  * @pos: position in @string where insertion should
  *       happen, or -1 for at the end
  * @val: bytes to insert
- * @len: number of bytes of @val to insert
+ * @len: number of bytes of @val to insert, or -1 for all of @val
  *
  * Inserts @len bytes of @val into @string at @pos.
- * Because @len is provided, @val may contain embedded
- * nuls and need not be nul-terminated. If @pos is -1,
- * bytes are inserted at the end of the string.
  *
- * Since this function does not stop at nul bytes, it is
- * the caller's responsibility to ensure that @val has at
- * least @len addressable bytes.
+ * If @len is positive, @val may contain embedded nuls and need
+ * not be nul-terminated. It is the caller's responsibility to
+ * ensure that @val has at least @len addressable bytes.
+ *
+ * If @len is negative, @val must be nul-terminated and @len
+ * is considered to request the entire string length.
+ *
+ * If @pos is -1, bytes are inserted at the end of the string.
  *
  * Returns: (transfer none): @string
  */
@@ -31128,15 +31100,17 @@
  * g_string_prepend_len:
  * @string: a #GString
  * @val: bytes to prepend
- * @len: number of bytes in @val to prepend
+ * @len: number of bytes in @val to prepend, or -1 for all of @val
  *
  * Prepends @len bytes of @val to @string.
- * Because @len is provided, @val may contain
- * embedded nuls and need not be nul-terminated.
  *
- * Since this function does not stop at nul bytes,
- * it is the caller's responsibility to ensure that
- * @val has at least @len addressable bytes.
+ * If @len is positive, @val may contain embedded nuls and need
+ * not be nul-terminated. It is the caller's responsibility to
+ * ensure that @val has at least @len addressable bytes.
+ *
+ * If @len is negative, @val must be nul-terminated and @len
+ * is considered to request the entire string length. This
+ * makes g_string_prepend_len() equivalent to g_string_prepend().
  *
  * Returns: (transfer none): @string
  */

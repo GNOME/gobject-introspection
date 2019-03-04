@@ -961,24 +961,6 @@
 
 
 /**
- * g_cclosure_marshal_BOOL__BOXED_BOXED:
- * @closure: A #GClosure.
- * @return_value: A #GValue to store the return value. May be %NULL
- *   if the callback of closure doesn't return a value.
- * @n_param_values: The length of the @param_values array.
- * @param_values: An array of #GValues holding the arguments
- *   on which to invoke the callback of closure.
- * @invocation_hint: The invocation hint given as the last argument to
- *   g_closure_invoke().
- * @marshal_data: Additional data specified when registering the
- *   marshaller, see g_closure_set_marshal() and
- *   g_closure_set_meta_marshal()
- *
- * An old alias for g_cclosure_marshal_BOOLEAN__BOXED_BOXED().
- */
-
-
-/**
  * g_cclosure_marshal_BOOL__FLAGS:
  *
  * Another name for g_cclosure_marshal_BOOLEAN__FLAGS().
