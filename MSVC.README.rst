@@ -83,9 +83,10 @@ On x64 builds, building girepository\girepository-1.0-1.dll may hang during comp
 If this happens, terminate all 'cl.exe' processes, which will terminate the build process.
 Open build.ninja and change the compiler flags by changing /O2 to /O1 for all the sources
 that hang during compilation.  At this time of writing, girepository\girwriter.c,
-girepository\girparser.c and girepository\girnode.c are affected--this is due to an issue
-in Visual Studio 2008's x64 compiler in regards to optimization.  Re-attempt the build, and
-the build should complete normally.  This does not affect Win32/x86 builds.
+girepository\girparser.c, girepository\girnode.c and tests\repository\gitypelibtest.c are
+affected--this is due to an issue in Visual Studio 2008's x64 compiler in regards to
+optimization.  Re-attempt the build, and the build should complete normally.  This does not
+affect Win32/x86 builds.
 
 On all Visual Studio 2008 builds, after successfully completing/installing the build, run
 the following so that we ensure the manifests are embedded to the built DLLs and EXEs::
