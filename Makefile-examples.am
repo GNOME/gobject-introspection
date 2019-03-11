@@ -1,9 +1,0 @@
-noinst_PROGRAMS += glib-print
-
-glib_print_SOURCES = examples/glib-print.c
-glib_print_CFLAGS = $(GOBJECT_CFLAGS) $(WARN_CFLAGS) -I$(top_srcdir)/girepository -I$(top_builddir)/girepository
-glib_print_LDFLAGS = $(WARN_LDFLAGS)
-glib_print_LDADD = libgirepository-1.0.la $(GOBJECT_LIBS)
-
-EXTRA_DIST += \
-	examples/meson.build
