@@ -85,7 +85,7 @@ class UnixCCompilerTest(unittest.TestCase):
                 # Don't actually do anything.
                 cc.compiler.dry_run = True
                 cc.compile(pkg_config_cflags, cpp_includes, [source], init_sections)
-        spawn.assert_called_once()
+        self.assertEqual(1, spawn.call_count)
         args, kwargs = spawn.call_args
         return args[0]
 
@@ -106,7 +106,7 @@ class UnixCCompilerTest(unittest.TestCase):
                 # Don't actually do anything.
                 cc.compiler.dry_run = True
                 cc.preprocess(source, output, cpp_options)
-        spawn.assert_called_once()
+        self.assertEqual(1, spawn.call_count)
         args, kwargs = spawn.call_args
         return args[0]
 
