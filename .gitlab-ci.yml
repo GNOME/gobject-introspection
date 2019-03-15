@@ -34,6 +34,27 @@ fedora-x86_64-meson:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - public
 
+fedora-x86_64-python3.5:
+  stage: build
+  variables:
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+    CFLAGS: "-Werror"
+    PYENV_VERSION: "3.5.6"
+  script:
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Ddoctool=true -Dgtk_doc=true -Dcairo=true -Dpython=python3 _build .
+    - cd _build
+    - ninja
+    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+  except:
+    - tags
+  artifacts:
+    when: always
+    name: "gi-_${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - public
+
 msys2-mingw32-meson:
   stage: build
   tags:
