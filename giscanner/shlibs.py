@@ -19,6 +19,7 @@
 #
 
 import os
+import sys
 import platform
 import re
 import subprocess
@@ -104,13 +105,25 @@ def _resolve_non_libtool(options, binary, libraries):
         if isinstance(output, bytes):
             output = output.decode("utf-8", "replace")
 
-        # Use absolute paths on OS X to conform to how libraries are usually
-        # referenced on OS X systems, and file names everywhere else.
-        basename = platform.system() != 'Darwin'
-        return resolve_from_ldd_output(libraries, output, basename=basename)
+        shlibs = resolve_from_ldd_output(libraries, output)
+        return list(map(sanitize_shlib_path, shlibs))
 
 
-def resolve_from_ldd_output(libraries, output, basename=False):
+def sanitize_shlib_path(lib):
+    # Use absolute paths on OS X to conform to how libraries are usually
+    # referenced on OS X systems, and file names everywhere else.
+    # In case we get relative paths on macOS (like @rpath) then we fall
+    # back to the basename as well:
+    # https://gitlab.gnome.org/GNOME/gobject-introspection/issues/222
+    if sys.platform == "darwin":
+        if not os.path.isabs(lib):
+            return os.path.basename(lib)
+        return lib
+    else:
+        return os.path.basename(lib)
+
+
+def resolve_from_ldd_output(libraries, output):
     patterns = {}
     for library in libraries:
         if not os.path.isfile(library):
@@ -138,8 +151,6 @@ def resolve_from_ldd_output(libraries, output, basename=False):
             "ERROR: can't resolve libraries to shared libraries: " +
             ", ".join(patterns.keys()))
 
-    if basename:
-        shlibs = list(map(os.path.basename, shlibs))
     return shlibs
 
 
