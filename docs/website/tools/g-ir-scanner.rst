@@ -75,6 +75,10 @@ OPTIONS
     header files. You need to pass to the scanner all the directories you'd
     normally pass to the compiler when using the specified source files.
 
+--c-include=C_INCLUDES
+    Headers which should be included in C programs. This option can be
+    specified multiple times to include more than one header.
+
 -n, --namespace=NAME
     The namespace name. This name should be capitalized, eg the first letter
     should be upper case. Examples: Gtk, Clutter, WebKit.
