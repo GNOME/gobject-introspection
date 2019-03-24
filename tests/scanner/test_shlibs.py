@@ -1,6 +1,8 @@
 import unittest
+import sys
+import os
 
-from giscanner.shlibs import resolve_from_ldd_output
+from giscanner.shlibs import resolve_from_ldd_output, sanitize_shlib_path
 
 
 class TestLddParser(unittest.TestCase):
@@ -17,6 +19,28 @@ class TestLddParser(unittest.TestCase):
         self.assertEqual(
             ['libglib-2.0.so.0', 'libgtk-3.so.0', 'libpango-1.0.so.0'],
             resolve_from_ldd_output(libraries, output))
+
+    @unittest.skipUnless(os.name == "posix", "posix only")
+    def test_resolve_from_ldd_output_macos_rpath(self):
+        output = '''\
+            @rpath/libbarapp-1.0.dylib (compatibility version 0.0.0, current version 0.0.0)
+            /foo/libgio-2.0.0.dylib (compatibility version 5801.0.0, current version 5801.3.0)
+            /foo/libgmodule-2.0.0.dylib (compatibility version 5801.0.0, current version 5801.3.0)'''
+
+        libraries = ['barapp-1.0']
+        shlibs = resolve_from_ldd_output(libraries, output)
+        self.assertEqual(shlibs, ['@rpath/libbarapp-1.0.dylib'])
+        self.assertEqual(sanitize_shlib_path(shlibs[0]), 'libbarapp-1.0.dylib')
+
+    @unittest.skipUnless(os.name == "posix", "posix only")
+    def test_sanitize_shlib_path(self):
+        self.assertEqual(
+            sanitize_shlib_path('@rpath/libbarapp-1.0.dylib'),
+            'libbarapp-1.0.dylib')
+
+        self.assertEqual(
+            sanitize_shlib_path('/foo/bar'),
+            '/foo/bar' if sys.platform == 'darwin' else 'bar')
 
     def test_unresolved_library(self):
         output = ''
@@ -87,10 +111,7 @@ class TestLddParser(unittest.TestCase):
 
         self.assertEqual(
             ['/usr/lib/libfoo.so'],
-            resolve_from_ldd_output(['foo'], output, basename=False))
-        self.assertEqual(
-            ['libfoo.so'],
-            resolve_from_ldd_output(['foo'], output, basename=True))
+            resolve_from_ldd_output(['foo'], output))
 
 
 if __name__ == '__main__':
