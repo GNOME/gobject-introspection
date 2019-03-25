@@ -168,7 +168,9 @@ if get_option('enable-introspection-data') == true
 endif
 subdir('examples')
 subdir('docs')
-subdir('tests')
+if not meson.is_cross_build()
+    subdir('tests')
+endif
 
 install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
 install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
