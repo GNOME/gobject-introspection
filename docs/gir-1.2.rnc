@@ -12,7 +12,7 @@ grammar {
       attribute version { xsd:string }?,
       ## prefixes to filter out from C identifiers for data structures and types. For example, GtkWindow will be Window. If c:symbol-prefixes is not used, then this element is used for both
       attribute c:identifier-prefixes { xsd:string }?,
-      ## prefixes to filter out from C functions. For example, gtk_window_new will loose gtk_
+      ## prefixes to filter out from C functions. For example, gtk_window_new will lose gtk_
       attribute c:symbol-prefixes { xsd:string }?,
 
       # Other elements a repository can contain
@@ -31,7 +31,7 @@ grammar {
       attribute version { xsd:string }?,
       ## prefixes to filter out from C identifiers for data structures and types. For example, GtkWindow will be Window. If c:symbol-prefixes is not used, then this element is used for both
       attribute c:identifier-prefixes { xsd:string }?,
-      ## prefixes to filter out from C functions. For example, gtk_window_new will loose gtk_
+      ## prefixes to filter out from C functions. For example, gtk_window_new will lose gtk_
       attribute c:symbol-prefixes { xsd:string }?,
       ## Deprecated: the same as c:identifier-prefixes. Only used for backward compatibility 
       attribute c:prefix { xsd:string }?,
@@ -117,7 +117,7 @@ grammar {
       attribute glib:type-name { xsd:string },
       ## Function to get the GObject compatible type of the interface 
       attribute glib:get-type { xsd:string },
-      ## prefix to filter out from C functions. For example, gtk_window_new will loose gtk_
+      ## prefix to filter out from C functions. For example, gtk_window_new will lose gtk_
       attribute c:symbol-prefix { xsd:string }?,
       ## Corresponding C type
       attribute c:type { xsd:string }?,
@@ -164,7 +164,7 @@ grammar {
       attribute glib:get-value-func { xsd:string }?,
       ## C type of the class
       attribute c:type { xsd:string }?,
-      ## prefix to filter out from C functions. For example, gtk_window_new will loose gtk_
+      ## prefix to filter out from C functions. For example, gtk_window_new will lose gtk_
       attribute c:symbol-prefix { xsd:string }?,
       ## Binary attribute to declare the class abstract or not
       attribute abstract { "0" | "1" }?,
@@ -193,7 +193,7 @@ grammar {
       Info.attrs,
       ## GObject compatible type name of the boxed type
       attribute glib:name { xsd:string },
-      ## prefix to filter out from C functions. For example, gtk_window_new will loose gtk_
+      ## prefix to filter out from C functions. For example, gtk_window_new will lose gtk_
       attribute c:symbol-prefix { xsd:string }?,
       ## GObject compatible type name of the boxed type
       attribute glib:type-name { xsd:string }?,
@@ -213,13 +213,14 @@ grammar {
       attribute name { xsd:string },
       ## Corresponding C type of the record
       attribute c:type { xsd:string }?,
-      ## Binary attribute to tell if the record is disguised, that is where the c:type is a typedef that doesn't look like a pointer, but is internally
+      ## Binary attribute to tell if the record is disguised, i.e. whether the c:type is a typedef that doesn't look like a pointer, but is one internally
+	  ## Its second meaning is "private" and is set when any typedef struct is parsed which doesn't also include a full struct with fields (https://gitlab.gnome.org/GNOME/gobject-introspection/issues/101)
       attribute disguised { "0" | "1" }?,
       ## GObject compatible C type of the record
       attribute glib:type-name { xsd:string }?,
       ## Function to get the GObject compatible type of the record
       attribute glib:get-type { xsd:string }?,
-      ## prefix to filter out from C functions. For example, gtk_window_new will loose gtk_
+      ## prefix to filter out from C functions. For example, gtk_window_new will lose gtk_
       attribute c:symbol-prefix { xsd:string }?,
       ## Binary attribute to tell if the record is foreign, that is it is not available in a g-i supported library
       attribute foreign { "0" | "1" }?,
@@ -453,7 +454,7 @@ grammar {
       attribute fixed-size { xsd:integer }?,
       ## Binary attribute which is "0" (false) if the element is not introspectable. It doesn't exist in the bindings, due in general to missing information in the annotations in the original C code
       attribute introspectable { "0" | "1" }?,
-      ## the initial length of the array. If the value is 0 (zero) it means the length is unknown (as it is the case with zero-terminated arrays)
+	  ## 0-based index of parameter element that specifies the length of the array
       attribute length { xsd:integer }?,
       ## the C representation of the array type
       attribute c:type { xsd:string }?,
@@ -615,7 +616,7 @@ grammar {
       attribute name { xsd:string }?,
       ## C type defining the union
       attribute c:type { xsd:string }?,
-      ## prefix to filter out from C functions. For example, gtk_window_new will loose gtk_
+      ## prefix to filter out from C functions. For example, gtk_window_new will lose gtk_
       attribute c:symbol-prefix { xsd:string }?,
       ## GObject compatible type name
       attribute glib:type-name { xsd:string }?,
@@ -660,7 +661,7 @@ grammar {
       attribute glib:type-name { xsd:string }?,
       ## function to retrieve the GObject compatible type of the element
       attribute glib:get-type { xsd:string }?,
-      ## Error domain of the enumeration, usually a string which can then be converted to a GQuark
+      ## Error domain of this enumeration in a stringified form
       attribute glib:error-domain { xsd:string }?,
 
       (Info.elements
