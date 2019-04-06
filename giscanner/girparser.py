@@ -542,7 +542,7 @@ class GIRParser(object):
     def _parse_field(self, node, parent):
         type_node = None
         anonymous_node = None
-        if node.tag in map(_corens, ('record', 'union')):
+        if node.tag in map(_corens, ('callback', 'record', 'union')):
             anonymous_elt = node
         else:
             anonymous_elt = self._find_first_child(node, _corens('callback'))
