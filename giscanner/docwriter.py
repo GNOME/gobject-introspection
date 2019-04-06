@@ -1209,7 +1209,7 @@ class DevDocsFormatterGjs(DocFormatterGjs):
         try:
             return super(DevDocsFormatterGjs, self).to_underscores(node)
         except Exception as e:
-            if e.message == 'invalid node':
+            if e.args[0] == 'invalid node':
                 print('warning: invalid node in', node.parent.name,
                     file=sys.stderr)
                 return node.parent.name + '_invalid_node'
