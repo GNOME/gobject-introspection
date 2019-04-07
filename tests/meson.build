@@ -52,6 +52,7 @@ test_everything_files = custom_target('everything',
   command: [
     python,
     girscanner,
+    '--quiet',
     '--generate-typelib-tests=Everything,@OUTPUT0@,@OUTPUT1@',
     '--function-decoration=_GI_TEST_EXTERN',
     '--include-first-in-src=config.h',
@@ -103,6 +104,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -127,6 +129,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',

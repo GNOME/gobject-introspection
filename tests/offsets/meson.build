@@ -20,6 +20,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
