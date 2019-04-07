@@ -1,3 +1,13 @@
+1.60.1 - 2019-04-07
+-------------------
+
+* Update glib annotations (glib-2-60)
+* shlibs: fall back to basename on macOS for relative paths :issue:`222`
+* meson: always pass --quiet to g-ir-scanner
+* docs: include '--c-include' in g-ir-scanner man page :issue:`275`
+* tests: Fix compatibility with Python 3.5 :issue:`274` (:user:`Tomasz Miąsko <tmiasko>`)
+
+
 1.60.0 - 2019-03-10
 -------------------
 
