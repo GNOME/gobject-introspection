@@ -113,6 +113,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -151,6 +152,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -188,6 +190,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -224,6 +227,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -258,6 +262,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -294,6 +299,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -331,6 +337,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -367,6 +374,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
@@ -393,6 +401,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--accept-unprefixed',
@@ -420,6 +429,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--warn-all',
@@ -454,6 +464,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: [
       python,
       girscanner,
+      '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',

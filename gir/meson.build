@@ -41,6 +41,7 @@ scanner_command = [
   girscanner,
   '--output=@OUTPUT@',
   '--no-libtool',
+  '--quiet',
   '--reparse-validate',
   '--add-include-path', join_paths(meson.current_build_dir()),
   '--add-include-path', join_paths(meson.current_source_dir()),
