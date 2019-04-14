@@ -23,6 +23,11 @@ and/or use gtk-doc annotations.  -->
       </member>
       <member name="code3" value="3" c:identifier="S_DBUS_ERROR_CODE3">
       </member>
+      <function name="quark" c:identifier="s_dbus_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
     </enumeration>
     <record name="Point" c:type="SPoint">
       <source-position filename="sletter.h" line="11"/>
@@ -43,8 +48,15 @@ and/or use gtk-doc annotations.  -->
       </member>
       <member name="code3" value="3" c:identifier="S_SPAWN_ERROR_CODE3">
       </member>
+      <function name="quark" c:identifier="s_spawn_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
     </enumeration>
-    <function name="dbus_error_quark" c:identifier="s_dbus_error_quark">
+    <function name="dbus_error_quark"
+              c:identifier="s_dbus_error_quark"
+              moved-to="DBusError.quark">
       <return-value transfer-ownership="none">
         <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>
@@ -55,7 +67,9 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
     </function>
-    <function name="spawn_error_quark" c:identifier="s_spawn_error_quark">
+    <function name="spawn_error_quark"
+              c:identifier="s_spawn_error_quark"
+              moved-to="SpawnError.quark">
       <return-value transfer-ownership="none">
         <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>
