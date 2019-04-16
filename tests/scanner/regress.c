@@ -3435,6 +3435,8 @@ regress_test_value_fundamental_object_collect (GValue      *value,
                                                GTypeCValue *collect_values,
                                                guint        collect_flags G_GNUC_UNUSED)
 {
+  g_assert (n_collect_values > 0);
+
   if (collect_values[0].v_pointer) {
     value->data[0].v_pointer =
         regress_test_fundamental_object_ref (collect_values[0].v_pointer);
@@ -3451,6 +3453,8 @@ regress_test_value_fundamental_object_lcopy (const GValue * value,
                                      GTypeCValue * collect_values,
                                      guint collect_flags)
 {
+  g_assert (n_collect_values > 0);
+
   gpointer *fundamental_object_p = collect_values[0].v_pointer;
 
   if (!fundamental_object_p) {
