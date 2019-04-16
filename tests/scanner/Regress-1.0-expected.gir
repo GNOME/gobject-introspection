@@ -3129,7 +3129,7 @@ use it should be.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4217">A new floating #RegressTestFloating</doc>
+               line="4223">A new floating #RegressTestFloating</doc>
           <type name="TestFloating" c:type="RegressTestFloating*"/>
         </return-value>
       </constructor>
@@ -3436,7 +3436,7 @@ use it should be.</doc>
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="regress.c"
-                 line="4076">the object to emit the signal</doc>
+                 line="4082">the object to emit the signal</doc>
             <type name="TestInterface" c:type="RegressTestInterface*"/>
           </instance-parameter>
         </parameters>
@@ -3455,7 +3455,7 @@ use it should be.</doc>
           <parameter name="ptr" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="regress.c"
-                 line="4057">the code must look up the signal with
+                 line="4063">the code must look up the signal with
   g_interface_info_find_signal() in order to get this to work.</doc>
             <type name="gint" c:type="gpointer"/>
           </parameter>
@@ -5940,7 +5940,7 @@ exposed to language bindings.</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="regress.c"
-             line="4493">A new variant</doc>
+             line="4499">A new variant</doc>
         <type name="GLib.Variant" c:type="GVariant*"/>
       </return-value>
     </function>
@@ -5966,7 +5966,7 @@ exposed to language bindings.</doc>
               c:identifier="regress_has_parameter_named_attrs">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4453">This test case mirrors GnomeKeyringPasswordSchema from
+           line="4459">This test case mirrors GnomeKeyringPasswordSchema from
 libgnome-keyring.</doc>
       <source-position filename="regress.h" line="1437"/>
       <return-value transfer-ownership="none">
@@ -5976,13 +5976,13 @@ libgnome-keyring.</doc>
         <parameter name="foo" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4455">some int</doc>
+               line="4461">some int</doc>
           <type name="gint" c:type="int"/>
         </parameter>
         <parameter name="attributes" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4456">list of attributes</doc>
+               line="4462">list of attributes</doc>
           <array zero-terminated="0" c:type="gpointer" fixed-size="32">
             <type name="guint32" c:type="gpointer"/>
           </array>
@@ -6431,7 +6431,7 @@ libgnome-keyring.</doc>
               c:identifier="regress_test_array_struct_in_full">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4585">Test flat array input with transfer full.
+           line="4591">Test flat array input with transfer full.
 
 Similar to:
 - gsf_property_settings_free() with structs but they contain pointers
@@ -6444,7 +6444,7 @@ Similar to:
         <parameter name="arr" transfer-ownership="full">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4587">An array</doc>
+               line="4593">An array</doc>
           <array length="1" zero-terminated="0" c:type="RegressTestStructA*">
             <type name="TestStructA" c:type="RegressTestStructA"/>
           </array>
@@ -6452,7 +6452,7 @@ Similar to:
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4588">Length of @arr</doc>
+               line="4594">Length of @arr</doc>
           <type name="gsize" c:type="gsize"/>
         </parameter>
       </parameters>
@@ -6461,7 +6461,7 @@ Similar to:
               c:identifier="regress_test_array_struct_in_none">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4605">Test flat array input with transfer none.
+           line="4611">Test flat array input with transfer none.
 
 Similar to g_main_context_check() or gtk_target_list_new().</doc>
       <source-position filename="regress.h" line="1522"/>
@@ -6472,7 +6472,7 @@ Similar to g_main_context_check() or gtk_target_list_new().</doc>
         <parameter name="arr" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4607">An array.</doc>
+               line="4613">An array.</doc>
           <array length="1" zero-terminated="0" c:type="RegressTestStructA*">
             <type name="TestStructA" c:type="RegressTestStructA"/>
           </array>
@@ -6480,7 +6480,7 @@ Similar to g_main_context_check() or gtk_target_list_new().</doc>
         <parameter name="len" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4608">Length of @arr</doc>
+               line="4614">Length of @arr</doc>
           <type name="gsize" c:type="gsize"/>
         </parameter>
       </parameters>
@@ -6515,7 +6515,7 @@ Similar to g_main_context_check() or gtk_target_list_new().</doc>
               c:identifier="regress_test_array_struct_out_caller_alloc">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4564">Test flat caller-allocated array output.
+           line="4570">Test flat caller-allocated array output.
 
 Similar to g_main_context_query().</doc>
       <source-position filename="regress.h" line="1516"/>
@@ -6529,7 +6529,7 @@ Similar to g_main_context_query().</doc>
                    transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4566">An array</doc>
+               line="4572">An array</doc>
           <array length="1" zero-terminated="0" c:type="RegressTestStructA*">
             <type name="TestStructA" c:type="RegressTestStructA"/>
           </array>
@@ -6540,7 +6540,7 @@ Similar to g_main_context_query().</doc>
                    transfer-ownership="full">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4567">Length of @arr</doc>
+               line="4573">Length of @arr</doc>
           <type name="gsize" c:type="gsize"/>
         </parameter>
       </parameters>
@@ -6549,7 +6549,7 @@ Similar to g_main_context_query().</doc>
               c:identifier="regress_test_array_struct_out_container">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4526">Test flat array output with transfer container.
+           line="4532">Test flat array output with transfer container.
 
 Similar to pango_layout_get_log_attrs().</doc>
       <source-position filename="regress.h" line="1510"/>
@@ -6563,7 +6563,7 @@ Similar to pango_layout_get_log_attrs().</doc>
                    transfer-ownership="container">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4528">An array</doc>
+               line="4534">An array</doc>
           <array length="1" zero-terminated="0" c:type="RegressTestStructA**">
             <type name="TestStructA" c:type="RegressTestStructA*"/>
           </array>
@@ -6574,7 +6574,7 @@ Similar to pango_layout_get_log_attrs().</doc>
                    transfer-ownership="full">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4529">Length of @arr</doc>
+               line="4535">Length of @arr</doc>
           <type name="gsize" c:type="gsize*"/>
         </parameter>
       </parameters>
@@ -6583,7 +6583,7 @@ Similar to pango_layout_get_log_attrs().</doc>
               c:identifier="regress_test_array_struct_out_full_fixed">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4548">Test flat fixed-size array output with transfer full.</doc>
+           line="4554">Test flat fixed-size array output with transfer full.</doc>
       <source-position filename="regress.h" line="1513"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
@@ -6595,7 +6595,7 @@ Similar to pango_layout_get_log_attrs().</doc>
                    transfer-ownership="full">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4550">An array</doc>
+               line="4556">An array</doc>
           <array zero-terminated="0"
                  c:type="RegressTestStructA**"
                  fixed-size="4">
@@ -6608,7 +6608,7 @@ Similar to pango_layout_get_log_attrs().</doc>
               c:identifier="regress_test_array_struct_out_none">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4501">Test flat array output with transfer none.
+           line="4507">Test flat array output with transfer none.
 
 Similar to:
 - mm_modem_peek_ports() with structs
@@ -6625,7 +6625,7 @@ Similar to:
                    transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4503">An array</doc>
+               line="4509">An array</doc>
           <array length="1" zero-terminated="0" c:type="RegressTestStructA**">
             <type name="TestStructA" c:type="RegressTestStructA*"/>
           </array>
@@ -6636,7 +6636,7 @@ Similar to:
                    transfer-ownership="full">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4504">Length of @arr</doc>
+               line="4510">Length of @arr</doc>
           <type name="gsize" c:type="gsize*"/>
         </parameter>
       </parameters>
@@ -6812,7 +6812,7 @@ Similar to:
               c:identifier="regress_test_callback_destroy_notify">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="3807">Notified - callback persists until a DestroyNotify delegate
+           line="3813">Notified - callback persists until a DestroyNotify delegate
 is invoked.</doc>
       <source-position filename="regress.h" line="1141"/>
       <return-value transfer-ownership="none">
@@ -6842,7 +6842,7 @@ is invoked.</doc>
               c:identifier="regress_test_callback_destroy_notify_no_user_data">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="3834">Adds a scope notified callback with no user data. This can invoke an error
+           line="3840">Adds a scope notified callback with no user data. This can invoke an error
 condition in bindings which needs to be tested.</doc>
       <source-position filename="regress.h" line="1146"/>
       <return-value transfer-ownership="none">
@@ -6885,14 +6885,14 @@ condition in bindings which needs to be tested.</doc>
               c:identifier="regress_test_callback_thaw_notifications">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="3848">Invokes all callbacks installed by #test_callback_destroy_notify(),
+           line="3854">Invokes all callbacks installed by #test_callback_destroy_notify(),
 adding up their return values, and removes them, invoking the
 corresponding destroy notfications.</doc>
       <source-position filename="regress.h" line="1150"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="regress.c"
-             line="3855">Sum of the return values of the invoked callbacks.</doc>
+             line="3861">Sum of the return values of the invoked callbacks.</doc>
         <type name="gint" c:type="int"/>
       </return-value>
     </function>
@@ -6900,7 +6900,7 @@ corresponding destroy notfications.</doc>
               c:identifier="regress_test_callback_user_data">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="3776">Call - callback parameter persists for the duration of the method
+           line="3782">Call - callback parameter persists for the duration of the method
 call and can be released on return.</doc>
       <source-position filename="regress.h" line="1134"/>
       <return-value transfer-ownership="none">
@@ -7538,7 +7538,7 @@ element-type annotation.</doc>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="3979">GHashTable that gets passed to callback</doc>
+               line="3985">GHashTable that gets passed to callback</doc>
           <type name="GLib.HashTable" c:type="GHashTable*">
             <type name="utf8"/>
             <type name="gint"/>
@@ -7690,7 +7690,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_multiline_doc_comments">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4361">This is a function.
+           line="4367">This is a function.
 
 It has multiple lines in the documentation.
 
@@ -7706,7 +7706,7 @@ You will give me your credit card number.</doc>
               c:identifier="regress_test_nested_parameter">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4377">&lt;informaltable&gt;
+           line="4383">&lt;informaltable&gt;
   &lt;tgroup cols="3"&gt;
     &lt;thead&gt;
       &lt;row&gt;
@@ -7742,7 +7742,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
         <parameter name="a" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4379">An integer</doc>
+               line="4385">An integer</doc>
           <type name="gint" c:type="int"/>
         </parameter>
       </parameters>
@@ -7860,7 +7860,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
               introspectable="0">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4029">Should not emit a warning:
+           line="4035">Should not emit a warning:
 https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
       <source-position filename="regress.h" line="1189"/>
       <return-value transfer-ownership="none">
@@ -7870,7 +7870,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
         <parameter name="callback" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
-               line="4031">No annotation here</doc>
+               line="4037">No annotation here</doc>
           <type name="TestCallback" c:type="RegressTestCallback"/>
         </parameter>
       </parameters>
@@ -8024,7 +8024,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
               throws="1">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4249">This function throws an error if m is odd.</doc>
+           line="4255">This function throws an error if m is odd.</doc>
       <source-position filename="regress.h" line="1279"/>
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
