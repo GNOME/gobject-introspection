@@ -1827,7 +1827,7 @@ const RegressTestSimpleBoxedA*
 regress_test_simple_boxed_a_const_return (void)
 {
   static RegressTestSimpleBoxedA simple_a = {
-    5, 6, 7.0
+    5, 6, 7.0, REGRESS_TEST_VALUE1
   };
 
   return &simple_a;
@@ -4514,9 +4514,9 @@ void
 regress_test_array_struct_out_none (RegressTestStructA **arr, gsize *len)
 {
   static RegressTestStructA array[3] = {
-    {111},
-    {222},
-    {333},
+    {.some_int = 111},
+    {.some_int = 222},
+    {.some_int = 333},
   };
 
   *arr = array;
