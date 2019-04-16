@@ -1111,7 +1111,7 @@ gi_marshalling_tests_utf8_full_out (gchar **utf8)
  * @utf8: (out) (transfer full):
  */
 void
-gi_marshalling_tests_utf8_dangling_out (gchar **utf8)
+gi_marshalling_tests_utf8_dangling_out (gchar **utf8 G_GNUC_UNUSED)
 {
   /* Intentionally don't touch the pointer to see how
      the bindings handle this case.  Bindings should be
@@ -1658,7 +1658,8 @@ gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length, gin
  * @chars: (array):
  */
 void
-gi_marshalling_tests_array_in_nonzero_nonlen (gint first, const guint8 *chars)
+gi_marshalling_tests_array_in_nonzero_nonlen (gint          first G_GNUC_UNUSED,
+                                              const guint8 *chars)
 {
   g_assert (chars[0] == 'a');
   g_assert (chars[1] == 'b');
@@ -3530,9 +3531,12 @@ _closure_return_42 (void)
 }
 
 static void
-_marshal_INT__VOID (GClosure *closure,
-                    GValue *return_value,
-                    guint n_param_values, const GValue *param_values, gpointer invocation_hint, gpointer marshal_data)
+_marshal_INT__VOID (GClosure     *closure,
+                    GValue       *return_value,
+                    guint         n_param_values G_GNUC_UNUSED,
+                    const GValue *param_values G_GNUC_UNUSED,
+                    gpointer      invocation_hint G_GNUC_UNUSED,
+                    gpointer      marshal_data G_GNUC_UNUSED)
 {
   typedef gint (*GMarshalFunc_INT__VOID) (void);
   register GMarshalFunc_INT__VOID callback;
@@ -4120,7 +4124,7 @@ static void
 G_DEFINE_TYPE (GIMarshallingTestsObject, gi_marshalling_tests_object, G_TYPE_OBJECT);
 
 static void
-gi_marshalling_tests_object_init (GIMarshallingTestsObject *object)
+gi_marshalling_tests_object_init (GIMarshallingTestsObject *self G_GNUC_UNUSED)
 {
 }
 
@@ -4210,7 +4214,8 @@ gi_marshalling_tests_object_new (gint int_)
 }
 
 GIMarshallingTestsObject *
-gi_marshalling_tests_object_new_fail (gint int_, GError **error)
+gi_marshalling_tests_object_new_fail (gint     int_ G_GNUC_UNUSED,
+                                      GError **error)
 {
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
@@ -4227,7 +4232,9 @@ gi_marshalling_tests_object_new_fail (gint int_, GError **error)
  * @ints: (array length=length):
  */
 void
-gi_marshalling_tests_object_method_array_in (GIMarshallingTestsObject *object, const gint *ints, gint length)
+gi_marshalling_tests_object_method_array_in (GIMarshallingTestsObject *self G_GNUC_UNUSED,
+                                             const gint               *ints,
+                                             gint                      length)
 {
   g_assert_cmpint (length, ==, 4);
   g_assert_cmpint (ints[0], ==, -1);
@@ -4241,7 +4248,9 @@ gi_marshalling_tests_object_method_array_in (GIMarshallingTestsObject *object, c
  * @ints: (out) (array length=length) (transfer none):
  */
 void
-gi_marshalling_tests_object_method_array_out (GIMarshallingTestsObject *object, gint **ints, gint *length)
+gi_marshalling_tests_object_method_array_out (GIMarshallingTestsObject *self G_GNUC_UNUSED,
+                                              gint                    **ints,
+                                              gint                     *length)
 {
   static gint values[] = { -1, 0, 1, 2 };
 
@@ -4255,7 +4264,9 @@ gi_marshalling_tests_object_method_array_out (GIMarshallingTestsObject *object, 
  * @length: (inout):
  */
 void
-gi_marshalling_tests_object_method_array_inout (GIMarshallingTestsObject *object, gint **ints, gint *length)
+gi_marshalling_tests_object_method_array_inout (GIMarshallingTestsObject *self G_GNUC_UNUSED,
+                                                gint                    **ints,
+                                                gint                     *length)
 {
   static gint values[] = { -2, -1, 0, 1, 2 };
 
@@ -4275,7 +4286,8 @@ gi_marshalling_tests_object_method_array_inout (GIMarshallingTestsObject *object
  * Returns: (array length=length):
  */
 const gint *
-gi_marshalling_tests_object_method_array_return (GIMarshallingTestsObject *object, gint *length)
+gi_marshalling_tests_object_method_array_return (GIMarshallingTestsObject *self G_GNUC_UNUSED,
+                                                 gint                     *length)
 {
   static gint ints[] = { -1, 0, 1, 2 };
 
@@ -4359,8 +4371,9 @@ static void
  * @callback_data: (allow-none):
  */
 void
-gi_marshalling_tests_object_vfunc_with_callback (GIMarshallingTestsObject *
-                                                 object, GIMarshallingTestsCallbackIntInt callback, void *callback_data)
+gi_marshalling_tests_object_vfunc_with_callback (GIMarshallingTestsObject        *self G_GNUC_UNUSED,
+                                                 GIMarshallingTestsCallbackIntInt callback G_GNUC_UNUSED,
+                                                 void                            *callback_data G_GNUC_UNUSED)
 {
 
 }
@@ -4731,7 +4744,8 @@ void
 }
 
 static void
-_vfunc_in_object_destroy_callback (gboolean *destroy_called, GObject *where_the_object_was)
+_vfunc_in_object_destroy_callback (gboolean *destroy_called,
+                                   GObject  *where_the_object_was G_GNUC_UNUSED)
 {
   *destroy_called = TRUE;
 }
@@ -4807,7 +4821,7 @@ void
 G_DEFINE_TYPE (GIMarshallingTestsSubObject, gi_marshalling_tests_sub_object, GI_MARSHALLING_TESTS_TYPE_OBJECT);
 
 static void
-gi_marshalling_tests_sub_object_init (GIMarshallingTestsSubObject *object)
+gi_marshalling_tests_sub_object_init (GIMarshallingTestsSubObject *self G_GNUC_UNUSED)
 {
 }
 
@@ -4848,18 +4862,19 @@ G_DEFINE_TYPE (GIMarshallingTestsSubSubObject,
                gi_marshalling_tests_sub_sub_object, GI_MARSHALLING_TESTS_TYPE_SUB_OBJECT);
 
 static void
-gi_marshalling_tests_sub_sub_object_init (GIMarshallingTestsSubSubObject *object)
+gi_marshalling_tests_sub_sub_object_init (GIMarshallingTestsSubSubObject *self G_GNUC_UNUSED)
 {
 }
 
-static void gi_marshalling_tests_sub_sub_object_class_init (GIMarshallingTestsSubSubObjectClass *klass)
+static void gi_marshalling_tests_sub_sub_object_class_init (GIMarshallingTestsSubSubObjectClass *klass G_GNUC_UNUSED)
 {
 }
 
 /* Interfaces */
 
 static void
-gi_marshalling_tests_interface_class_init (void *g_iface, void *data)
+gi_marshalling_tests_interface_class_init (void *g_iface G_GNUC_UNUSED,
+                                           void *data G_GNUC_UNUSED)
 {
 }
 
@@ -4907,7 +4922,8 @@ G_DEFINE_TYPE_WITH_CODE (GIMarshallingTestsInterfaceImpl, gi_marshalling_tests_i
                          G_IMPLEMENT_INTERFACE(GI_MARSHALLING_TESTS_TYPE_INTERFACE, test_interface_init))
 
 static void
-gi_marshalling_tests_interface_impl_test_int8_in (GIMarshallingTestsInterface *self, gint8 in)
+gi_marshalling_tests_interface_impl_test_int8_in (GIMarshallingTestsInterface *self G_GNUC_UNUSED,
+                                                  gint8                        in G_GNUC_UNUSED)
 {
 }
 
@@ -4917,12 +4933,12 @@ static void test_interface_init (GIMarshallingTestsInterfaceIface *iface)
 }
 
 static void
-gi_marshalling_tests_interface_impl_init (GIMarshallingTestsInterfaceImpl *object)
+gi_marshalling_tests_interface_impl_init (GIMarshallingTestsInterfaceImpl *self G_GNUC_UNUSED)
 {
 }
 
 static void
-gi_marshalling_tests_interface_impl_class_init (GIMarshallingTestsInterfaceImplClass *klass)
+gi_marshalling_tests_interface_impl_class_init (GIMarshallingTestsInterfaceImplClass *klass G_GNUC_UNUSED)
 {
 }
 
@@ -4938,7 +4954,8 @@ gi_marshalling_tests_interface_impl_get_as_interface (GIMarshallingTestsInterfac
 }
 
 static void
-gi_marshalling_tests_interface2_class_init (void *g_iface, void *data)
+gi_marshalling_tests_interface2_class_init (void *g_iface G_GNUC_UNUSED,
+                                            void *data G_GNUC_UNUSED)
 {
 }
 
@@ -4959,7 +4976,8 @@ gi_marshalling_tests_interface2_get_type (void)
 }
 
 static void
-gi_marshalling_tests_interface3_class_init (void *g_iface, void *data)
+gi_marshalling_tests_interface3_class_init (void *g_iface G_GNUC_UNUSED,
+                                            void *data G_GNUC_UNUSED)
 {
 }
 
@@ -5123,7 +5141,8 @@ gi_marshalling_tests_gerror (GError **error)
  * @in_ints: (array zero-terminated):
  */
 void
-gi_marshalling_tests_gerror_array_in (gint *in_ints, GError **error)
+gi_marshalling_tests_gerror_array_in (gint    *in_ints G_GNUC_UNUSED,
+                                      GError **error)
 {
   GQuark quark = g_quark_from_static_string (GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN);
   g_set_error_literal (error, quark,
@@ -5226,7 +5245,7 @@ gi_marshalling_tests_overrides_struct_new (void)
   return g_slice_new (GIMarshallingTestsOverridesStruct);
 }
 
-glong gi_marshalling_tests_overrides_struct_method (GIMarshallingTestsOverridesStruct *struct_)
+glong gi_marshalling_tests_overrides_struct_method (GIMarshallingTestsOverridesStruct *self G_GNUC_UNUSED)
 {
   return 42;
 }
@@ -5247,7 +5266,7 @@ gi_marshalling_tests_overrides_struct_returnv (void)
 G_DEFINE_TYPE (GIMarshallingTestsOverridesObject, gi_marshalling_tests_overrides_object, G_TYPE_OBJECT);
 
 static void
-gi_marshalling_tests_overrides_object_init (GIMarshallingTestsOverridesObject *object)
+gi_marshalling_tests_overrides_object_init (GIMarshallingTestsOverridesObject *self G_GNUC_UNUSED)
 {
 }
 
@@ -5273,7 +5292,7 @@ gi_marshalling_tests_overrides_object_new (void)
   return g_object_new (GI_MARSHALLING_TESTS_TYPE_OVERRIDES_OBJECT, NULL);
 }
 
-glong gi_marshalling_tests_overrides_object_method (GIMarshallingTestsOverridesObject *object)
+glong gi_marshalling_tests_overrides_object_method (GIMarshallingTestsOverridesObject *self G_GNUC_UNUSED)
 {
   return 42;
 }
@@ -5361,7 +5380,7 @@ enum
 
 G_DEFINE_TYPE (GIMarshallingTestsPropertiesObject, gi_marshalling_tests_properties_object, G_TYPE_OBJECT);
 
-static void gi_marshalling_tests_properties_object_init (GIMarshallingTestsPropertiesObject *self)
+static void gi_marshalling_tests_properties_object_init (GIMarshallingTestsPropertiesObject *self G_GNUC_UNUSED)
 {
 }
 
