@@ -106,8 +106,12 @@ class CacheStore(object):
         return os.path.join(self._directory, hexdigest)
 
     def _cache_is_valid(self, store_filename, filename):
-        return (os.stat(store_filename).st_mtime >=
-                os.stat(filename).st_mtime)
+        try:
+            store_mtime = os.stat(store_filename).st_mtime
+        except FileNotFoundError:
+            return False
+
+        return store_mtime >= os.stat(filename).st_mtime
 
     def _remove_filename(self, filename):
         try:
@@ -130,7 +134,7 @@ class CacheStore(object):
         if store_filename is None:
             return
 
-        if (os.path.exists(store_filename) and self._cache_is_valid(store_filename, filename)):
+        if self._cache_is_valid(store_filename, filename):
             return None
 
         tmp_fd, tmp_filename = tempfile.mkstemp(prefix='g-ir-scanner-cache-')
