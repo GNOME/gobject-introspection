@@ -25,6 +25,16 @@ class TestScanner(unittest.TestCase):
         paths = get_source_root_dirs(options, [])
         self.assertEqual(paths, [])
 
+    @unittest.skipUnless(os.name == "nt", "Windows only")
+    def test_get_source_root_dirs_different_drives(self):
+        options = optparse.Values({"sources_top_dirs": []})
+        names = [
+            os.path.join("X:", os.sep, "foo"),
+            os.path.join("Y:", os.sep, "bar"),
+        ]
+        paths = get_source_root_dirs(options, names)
+        self.assertEqual(paths, list(map(os.path.dirname, names)))
+
 
 if __name__ == '__main__':
     unittest.main()

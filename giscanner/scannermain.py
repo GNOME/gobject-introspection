@@ -505,7 +505,12 @@ def get_source_root_dirs(options, filenames):
     if not dirs:
         return []
 
-    common = os.path.commonpath(dirs)
+    try:
+        common = os.path.commonpath(dirs)
+    except ValueError:
+        # ValueError: On Windows in case the paths are on different drives
+        return dirs
+
     # If the only common path is the root directory give up
     if os.path.dirname(common) == common:
         return dirs
