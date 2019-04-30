@@ -93,7 +93,7 @@ def main(argv):
         # Ignore this field when determining whether the output succeeded.
         ignore = ['shared-library=".*"$']
         expected = os.path.join(
-            srcdir, os.path.splitext(targetname)[0] + "-expected.gir")
+            srcdir, os.path.splitext(targetbase)[0] + "-expected.gir")
         actual = os.path.join(builddir, targetname)
         assert_no_diff(expected, actual, ignore=ignore)
     elif targetname.rsplit("-")[-1] in ("C", "Python", "Gjs"):
