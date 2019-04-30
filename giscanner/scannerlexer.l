@@ -34,6 +34,8 @@
 #include <string.h>
 #ifndef _WIN32
 #include <limits.h>
+#else
+#include <io.h>
 #endif
 
 #include <glib.h>
