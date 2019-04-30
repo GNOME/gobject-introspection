@@ -23,9 +23,12 @@ endforeach
 test_girs = []
 test_typelibs = []
 
-custom_c_args = cc.get_supported_arguments([
-  '-Wno-unused-parameter',
-])
+custom_c_args = []
+if cc.get_id() != 'msvc'
+  custom_c_args = cc.get_supported_arguments([
+    '-Wno-unused-parameter',
+  ])
+endif
 
 typedef_lib = shared_library('typedef-1.0',
   sources: ['typedefs.c'],
@@ -76,11 +79,13 @@ barapp_lib = shared_library('barapp-1.0',
   dependencies: [gobject_dep, girepo_dep],
 )
 
-custom_c_args = cc.get_supported_arguments([
-  '-Wno-unused-parameter',
-  '-Wno-old-style-definition',
-  '-Wno-missing-field-initializers',
-])
+if cc.get_id() != 'msvc'
+  custom_c_args = cc.get_supported_arguments([
+    '-Wno-unused-parameter',
+    '-Wno-old-style-definition',
+    '-Wno-missing-field-initializers',
+  ])
+endif
 
 if with_cairo
   regress_deps = [cairo_dep, cairo_gobject_dep]

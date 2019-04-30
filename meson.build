@@ -63,6 +63,10 @@ if cc.get_id() != 'msvc'
     project_c_args += [
       '-fno-strict-aliasing',
     ]
+else
+    project_c_args += [
+      '-FImsvc_recommended_pragmas.h',
+    ]
 endif
 
 project_c_args = cc.get_supported_arguments(project_c_args)
