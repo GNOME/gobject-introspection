@@ -92,8 +92,9 @@ def main(argv):
         # For example, on OSX, shared libraries have the extension .dylib.
         # Ignore this field when determining whether the output succeeded.
         ignore = ['shared-library=".*"$']
+        target_basename = os.path.splitext(targetname)[0].split(os.sep)[-1]
         expected = os.path.join(
-            srcdir, os.path.splitext(targetname)[0] + "-expected.gir")
+            srcdir, target_basename + "-expected.gir")
         actual = os.path.join(builddir, targetname)
         assert_no_diff(expected, actual, ignore=ignore)
     elif targetname.rsplit("-")[-1] in ("C", "Python", "Gjs"):
