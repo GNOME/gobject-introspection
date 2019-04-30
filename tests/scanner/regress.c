@@ -4520,9 +4520,9 @@ void
 regress_test_array_struct_out_none (RegressTestStructA **arr, gsize *len)
 {
   static RegressTestStructA array[3] = {
-    {.some_int = 111},
-    {.some_int = 222},
-    {.some_int = 333},
+    {111,}, /* {.some_int = 111} */
+    {222,}, /* {.some_int = 222} */
+    {333,}, /* {.some_int = 333} */
   };
 
   *arr = array;
