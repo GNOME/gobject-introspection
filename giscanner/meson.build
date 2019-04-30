@@ -82,10 +82,14 @@ if not cc.has_header('unistd.h')
   giscanner_args += '-DYY_NO_UNISTD_H'
 endif
 
-custom_c_args = cc.get_supported_arguments([
-  '-Wno-missing-field-initializers',
-  '-Wno-unused-parameter',
-])
+custom_c_args = []
+if cc.get_id() != 'msvc'
+  custom_c_args = cc.get_supported_arguments([
+    '-Wno-missing-field-initializers',
+    '-Wno-unused-parameter',
+  ])
+endif
+
 giscanner_lib = static_library('giscanner',
   sources: [
     'sourcescanner.c',
