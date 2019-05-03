@@ -26,6 +26,7 @@ gir_files = [
   'freetype2-2.0.gir',
   'GL-1.0.gir',
   'libxml2-2.0.gir',
+  'Vulkan-1.0.gir',
   'xft-2.0.gir',
   'xlib-2.0.gir',
   'xfixes-4.0.gir',
