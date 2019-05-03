@@ -21,6 +21,7 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-glib2 \
     mingw-w64-$MSYS2_ARCH-gtk-doc
 
+export PYTHON="$(which python3)"
 ./autogen.sh
 
 make -j6
