@@ -100,7 +100,7 @@ def _resolve_non_libtool(options, binary, libraries):
         if platform_system == 'Darwin':
             args.extend(['otool', '-L', binary.args[0]])
         else:
-            args.extend(['ldd', binary.args[0]])
+            args.extend(['ldd', binary.args[0].replace('\\', '/')])
         output = subprocess.check_output(args)
         if isinstance(output, bytes):
             output = output.decode("utf-8", "replace")
