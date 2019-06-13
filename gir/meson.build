@@ -2,7 +2,11 @@ cairo_conf = configuration_data()
 if get_option('cairo_libname') != ''
   cairo_library_name = get_option('cairo_libname')
 elif host_machine.system() == 'windows'
-  cairo_library_name = 'libcairo-gobject-2.dll'
+  if cc.get_id() == 'msvc'
+    cairo_library_name = 'cairo-gobject.dll'
+  else
+    cairo_library_name = 'libcairo-gobject-2.dll'
+  endif
 elif host_machine.system() == 'darwin'
   cairo_library_name = 'libcairo-gobject.2.dylib'
 else
