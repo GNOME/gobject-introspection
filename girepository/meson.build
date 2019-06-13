@@ -174,6 +174,43 @@ girepo_lib = shared_library('girepository-1.0',
   install: true,
 )
 
+pkg = import('pkgconfig')
+
+if host_system == 'windows' or host_system == 'cygwin'
+  exeext = '.exe'
+else
+  exeext = ''
+endif
+
+foreach noexport : [false, true]
+  if noexport
+    pc_base = 'gobject-introspection-no-export-1.0'
+    extravars = []
+  else
+    pc_base = 'gobject-introspection-1.0'
+    extravars = ['gidatadir=${datadir}/gobject-introspection-1.0']
+  endif
+
+  pkg.generate(
+    name: 'gobject-introspection',
+    description: 'GObject Introspection',
+    filebase: pc_base,
+    subdirs: ['gobject-introspection-1.0'],
+    libraries: [girepo_lib],
+    requires: [glib_dep, gobject_dep],
+    requires_private: [gmodule_dep, libffi_dep],
+    variables: [
+      'bindir=${prefix}/' + get_option('bindir'),
+      'datadir=${prefix}/' + get_option('datadir'),
+      'g_ir_scanner=${bindir}/g-ir-scanner',
+      'g_ir_compiler=${bindir}/g-ir-compiler' + exeext,
+      'g_ir_generate=${bindir}/g-ir-generate' + exeext,
+      'girdir=' + gir_dir_pc_prefix + '/gir-1.0',
+      'typelibdir=${libdir}/girepository-1.0',
+    ] + extravars,
+  )
+endforeach
+
 # Copy to builddir for use with giscanner/dumper.py when running uninstalled
 configure_file(input : 'gdump.c',
   output : 'gdump.c',

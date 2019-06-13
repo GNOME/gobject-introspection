@@ -1,6 +1,6 @@
 project('gobject-introspection', 'c',
   version: '1.61.1',
-  meson_version: '>= 0.47.0',
+  meson_version: '>= 0.49.0',
   default_options: [
     'warning_level=1',
     'buildtype=debugoptimized',
@@ -174,46 +174,3 @@ subdir('tests')
 
 install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
 install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
-
-prefix = get_option('prefix')
-pkgconfig_conf = configuration_data()
-pkgconfig_conf.set('prefix', prefix)
-pkgconfig_conf.set('exec_prefix', '${prefix}')
-pkgconfig_conf.set('bindir', join_paths('${exec_prefix}', get_option('bindir')))
-pkgconfig_conf.set('libdir', join_paths('${exec_prefix}', get_option('libdir')))
-pkgconfig_conf.set('datarootdir', join_paths('${prefix}', get_option('datadir')))
-pkgconfig_conf.set('datadir', '${datarootdir}')
-pkgconfig_conf.set('includedir', join_paths('${prefix}', get_option('includedir')))
-pkgconfig_conf.set('GIR_PC_DIR', join_paths(gir_dir_pc_prefix, 'gir-1.0'))
-if host_system == 'windows' or host_system == 'cygwin'
-  pkgconfig_conf.set('EXEEXT', '.exe')
-else
-  pkgconfig_conf.set('EXEEXT', '')
-endif
-pkgconfig_conf.set('VERSION', meson.project_version())
-pkgconfig_conf.set('FFI_PC_PACKAGES', 'libffi')
-if libffi_dep.type_name() == 'pkgconfig'
-  pkgconfig_conf.set('FFI_PC_CFLAGS', libffi_dep.get_pkgconfig_variable('Cflags'))
-  pkgconfig_conf.set('FFI_PC_LIBS', libffi_dep.get_pkgconfig_variable('Libs'))
-else
-  # XXX: We can't know the correct values for these, needs meson API. Maybe we
-  # should use meson's pkgconfig module to generate the whole file.
-  pkgconfig_conf.set('FFI_PC_CFLAGS', '')
-  pkgconfig_conf.set('FFI_PC_LIBS', '-lffi')
-endif
-
-configure_file(
-  input: 'gobject-introspection-no-export-1.0.pc.in',
-  output: 'gobject-introspection-no-export-1.0.pc',
-  configuration: pkgconfig_conf,
-  install: true,
-  install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
-)
-
-configure_file(
-  input: 'gobject-introspection-1.0.pc.in',
-  output: 'gobject-introspection-1.0.pc',
-  configuration: pkgconfig_conf,
-  install: true,
-  install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
-)
