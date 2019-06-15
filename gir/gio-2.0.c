@@ -7075,6 +7075,10 @@
  * then attempt to connect to that host, handling the possibility of
  * multiple IP addresses and multiple address families.
  *
+ * The enumeration results of resolved addresses *may* be cached as long
+ * as this object is kept alive which may have unexpected results if
+ * alive for too long.
+ *
  * See #GSocketConnectable for an example of using the connectable
  * interface.
  */
@@ -42518,6 +42522,14 @@
  * GetLogicalDrives() is returned.
  *
  * Returns: bitmask with same meaning as returned by GetLogicalDrives()
+ */
+
+
+/**
+ * inet_addresses_to_inet_socket_addresses:
+ * @addresses: (transfer full): #GList of #GInetAddress
+ *
+ * Returns: (transfer full): #GList of #GInetSocketAddress
  */
 
 
