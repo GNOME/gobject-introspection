@@ -2004,29 +2004,6 @@
 
 
 /**
- * GTestTrapFlags:
- * @G_TEST_TRAP_SILENCE_STDOUT: Redirect stdout of the test child to
- *     `/dev/null` so it cannot be observed on the console during test
- *     runs. The actual output is still captured though to allow later
- *     tests with g_test_trap_assert_stdout().
- * @G_TEST_TRAP_SILENCE_STDERR: Redirect stderr of the test child to
- *     `/dev/null` so it cannot be observed on the console during test
- *     runs. The actual output is still captured though to allow later
- *     tests with g_test_trap_assert_stderr().
- * @G_TEST_TRAP_INHERIT_STDIN: If this flag is given, stdin of the
- *     child process is shared with stdin of its parent process.
- *     It is redirected to `/dev/null` otherwise.
- *
- * Test traps are guards around forked tests.
- * These flags determine what traps to set.
- *
- * Deprecated: #GTestTrapFlags is used only with g_test_trap_fork(),
- * which is deprecated. g_test_trap_subprocess() uses
- * #GTestSubprocessFlags.
- */
-
-
-/**
  * GThread:
  *
  * The #GThread struct represents a running thread. This struct
@@ -2098,6 +2075,9 @@
  * time (&ttime);
  * gtime = (GTime)ttime;
  * ]|
+ *
+ * Deprecated: 2.62: This is not [Y2038-safe](https://en.wikipedia.org/wiki/Year_2038_problem).
+ *    Use #GDateTime or #time_t instead.
  */
 
 
@@ -2737,24 +2717,6 @@
 
 
 /**
- * G_ALIGNOF:
- * @a: a type-name
- *
- * Return the minimal alignment required by the platform ABI for values of the given
- * type. The address of a variable or struct member of the given type must always be
- * a multiple of this alignment. For example, most platforms require int variables
- * to be aligned at a 4-byte boundary, so `G_ALIGNOF (int)` is 4 on most platforms.
- *
- * Note this is not necessarily the same as the value returned by GCC’s
- * `__alignof__` operator, which returns the preferred alignment for a type.
- * The preferred alignment may be a stricter alignment than the minimal
- * alignment.
- *
- * Since: 2.60
- */
-
-
-/**
  * G_APPROX_VALUE:
  * @a: a numeric value
  * @b: a numeric value
@@ -2827,23 +2789,6 @@
  * The host byte order.
  * This can be either #G_LITTLE_ENDIAN or #G_BIG_ENDIAN (support for
  * #G_PDP_ENDIAN may be added in future.)
- */
-
-
-/**
- * G_CONST_RETURN:
- *
- * If %G_DISABLE_CONST_RETURNS is defined, this macro expands
- * to nothing. By default, the macro expands to const. The macro
- * can be used in place of const for functions that return a value
- * that should not be modified. The purpose of this macro is to allow
- * us to turn on const for returned constant strings by default, while
- * allowing programmers who find that annoying to turn it off. This macro
- * should only be used for return values and for "out" parameters, it
- * doesn't make sense for "in" parameters.
- *
- * Deprecated: 2.30: API providers should replace all existing uses with
- * const and API consumers should adjust their code accordingly
  */
 
 
@@ -2925,7 +2870,7 @@
  * The function will not be called if the variable to be cleaned up
  * contains %NULL.
  *
- * This will typically be the _free() or _unref() function for the given
+ * This will typically be the `_free()` or `_unref()` function for the given
  * type.
  *
  * With this definition, it will be possible to use g_autoptr() with
@@ -2949,7 +2894,7 @@
  *
  * Defines the appropriate cleanup function for a type.
  *
- * This will typically be the _clear() function for the given type.
+ * This will typically be the `_clear()` function for the given type.
  *
  * With this definition, it will be possible to use g_auto() with
  * @TypeName.
@@ -2982,7 +2927,7 @@
  * and file descriptors.
  *
  * @none specifies the "none" value for the type in question.  It is
- * probably something like %NULL or -1.  If the variable is found to
+ * probably something like %NULL or `-1`.  If the variable is found to
  * contain this value then the free function will not be called.
  *
  * |[
@@ -3020,6 +2965,11 @@
  * meant to be portable across different compilers and must be placed
  * before the function declaration.
  *
+ * |[<!-- language="C" --
+ * G_DEPRECATED
+ * int my_mistake (void);
+ * ]|
+ *
  * Since: 2.32
  */
 
@@ -3032,6 +2982,11 @@
  * functions declarations as deprecated. Unlike %G_GNUC_DEPRECATED_FOR, it
  * is meant to be portable across different compilers and must be placed
  * before the function declaration.
+ *
+ * |[<!-- language="C" --
+ * G_DEPRECATED_FOR(my_replacement)
+ * int my_mistake (void);
+ * ]|
  *
  * Since: 2.32
  */
@@ -3195,43 +3150,6 @@
 
 
 /**
- * G_GNUC_ALLOC_SIZE:
- * @x: the index of the argument specifying the allocation size
- *
- * Expands to the GNU C alloc_size function attribute if the compiler
- * is a new enough gcc. This attribute tells the compiler that the
- * function returns a pointer to memory of a size that is specified
- * by the @xth function parameter.
- *
- * Place the attribute after the function declaration, just before the
- * semicolon.
- *
- * See the GNU C documentation for more details.
- *
- * Since: 2.18
- */
-
-
-/**
- * G_GNUC_ALLOC_SIZE2:
- * @x: the index of the argument specifying one factor of the allocation size
- * @y: the index of the argument specifying the second factor of the allocation size
- *
- * Expands to the GNU C alloc_size function attribute if the compiler is a
- * new enough gcc. This attribute tells the compiler that the function returns
- * a pointer to memory of a size that is specified by the product of two
- * function parameters.
- *
- * Place the attribute after the function declaration, just before the
- * semicolon.
- *
- * See the GNU C documentation for more details.
- *
- * Since: 2.18
- */
-
-
-/**
  * G_GNUC_BEGIN_IGNORE_DEPRECATIONS:
  *
  * Tells gcc (if it is a new enough version) to temporarily stop emitting
@@ -3245,7 +3163,54 @@
  * has any effect.)
  *
  * This macro can be used either inside or outside of a function body,
- * but must appear on a line by itself.
+ * but must appear on a line by itself. Both this macro and the corresponding
+ * %G_GNUC_END_IGNORE_DEPRECATIONS are considered statements, so they
+ * should not be used around branching or loop conditions; for instance,
+ * this use is invalid:
+ *
+ * |[<!-- language="C" -->
+ *   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+ *   if (check == some_deprecated_function ())
+ *   G_GNUC_END_IGNORE_DEPRECATIONS
+ *     {
+ *       do_something ();
+ *     }
+ * ]|
+ *
+ * and you should move the deprecated section outside the condition
+ *
+ * |[<!-- language="C" -->
+ *
+ *   // Solution A
+ *   some_data_t *res;
+ *
+ *   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+ *   res = some_deprecated_function ();
+ *   G_GNUC_END_IGNORE_DEPRECATIONS
+ *
+ *   if (check == res)
+ *     {
+ *       do_something ();
+ *     }
+ *
+ *   // Solution B
+ *   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+ *   if (check == some_deprecated_function ())
+ *     {
+ *       do_something ();
+ *     }
+ *   G_GNUC_END_IGNORE_DEPRECATIONS
+ * ]|
+ *
+ * |[<!-- language="C" --
+ * static void
+ * test_deprecated_function (void)
+ * {
+ *   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+ *   g_assert_cmpint (my_mistake (), ==, 42);
+ *   G_GNUC_END_IGNORE_DEPRECATIONS
+ * }
+ * ]|
  *
  * Since: 2.32
  */
@@ -3270,62 +3235,6 @@
 
 
 /**
- * G_GNUC_CONST:
- *
- * Expands to the GNU C const function attribute if the compiler is gcc.
- * Declaring a function as const enables better optimization of calls to
- * the function. A const function doesn't examine any values except its
- * parameters, and has no effects except its return value.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the GNU C documentation for more details.
- *
- * A function that has pointer arguments and examines the data pointed to
- * must not be declared const. Likewise, a function that calls a non-const
- * function usually must not be const. It doesn't make sense for a const
- * function to return void.
- */
-
-
-/**
- * G_GNUC_DEPRECATED:
- *
- * Expands to the GNU C deprecated attribute if the compiler is gcc.
- * It can be used to mark typedefs, variables and functions as deprecated.
- * When called with the `-Wdeprecated-declarations` option,
- * gcc will generate warnings when deprecated interfaces are used.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the GNU C documentation for more details.
- *
- * Since: 2.2
- */
-
-
-/**
- * G_GNUC_DEPRECATED_FOR:
- * @f: the intended replacement for the deprecated symbol,
- *     such as the name of a function
- *
- * Like %G_GNUC_DEPRECATED, but names the intended replacement for the
- * deprecated symbol if the version of gcc in use is new enough to support
- * custom deprecation messages.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the GNU C documentation for more details.
- *
- * Note that if @f is a macro, it will be expanded in the warning message.
- * You can enclose it in quotes to prevent this. (The quotes will show up
- * in the warning, but it's better than showing the macro expansion.)
- *
- * Since: 2.26
- */
-
-
-/**
  * G_GNUC_END_IGNORE_DEPRECATIONS:
  *
  * Undoes the effect of %G_GNUC_BEGIN_IGNORE_DEPRECATIONS, telling
@@ -3345,56 +3254,6 @@
  * Expands to __extension__ when gcc is used as the compiler. This simply
  * tells gcc not to warn about the following non-standard code when compiling
  * with the `-pedantic` option.
- */
-
-
-/**
- * G_GNUC_FALLTHROUGH:
- *
- * Expands to the GNU C fallthrough statement attribute if the compiler is gcc.
- * This allows declaring case statement to explicitly fall through in switch
- * statements. To enable this feature, use -Wimplicit-fallthrough during
- * compilation.
- *
- * Put the attribute right before the case statement you want to fall through
- * to.
- *
- * See the GNU C documentation for more details.
- *
- * Since: 2.60
- */
-
-
-/**
- * G_GNUC_FORMAT:
- * @arg_idx: the index of the argument
- *
- * Expands to the GNU C format_arg function attribute if the compiler
- * is gcc. This function attribute specifies that a function takes a
- * format string for a printf(), scanf(), strftime() or strfmon() style
- * function and modifies it, so that the result can be passed to a printf(),
- * scanf(), strftime() or strfmon() style function (with the remaining
- * arguments to the format function the same as they would have been
- * for the unmodified string).
- *
- * Place the attribute after the function declaration, just before the
- * semicolon.
- *
- * See the GNU C documentation for more details.
- *
- * |[<!-- language="C" -->
- * gchar *g_dgettext (gchar *domain_name, gchar *msgid) G_GNUC_FORMAT (2);
- * ]|
- */
-
-
-/**
- * G_GNUC_FUNCTION:
- *
- * Expands to "" on all modern compilers, and to  __FUNCTION__ on gcc
- * version 2.x. Don't use it.
- *
- * Deprecated: 2.16: Use G_STRFUNC() instead
  */
 
 
@@ -3424,237 +3283,6 @@
  * ]|
  *
  * Since: 2.6
- */
-
-
-/**
- * G_GNUC_MALLOC:
- *
- * Expands to the
- * [GNU C `malloc` function attribute](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-functions-that-behave-like-malloc)
- * if the compiler is gcc.
- * Declaring a function as `malloc` enables better optimization of the function,
- * but must only be done if the allocation behaviour of the function is fully
- * understood, otherwise miscompilation can result.
- *
- * A function can have the `malloc` attribute if it returns a pointer which is
- * guaranteed to not alias with any other pointer valid when the function
- * returns, and moreover no pointers to valid objects occur in any storage
- * addressed by the returned pointer.
- *
- * In practice, this means that `G_GNUC_MALLOC` can be used with any function
- * which returns unallocated or zeroed-out memory, but not with functions which
- * return initialised structures containing other pointers, or with functions
- * that reallocate memory. This definition changed in GLib 2.58 to match the
- * stricter definition introduced around GCC 5.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the
- * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-functions-that-behave-like-malloc)
- * for more details.
- *
- * Since: 2.6
- */
-
-
-/**
- * G_GNUC_MAY_ALIAS:
- *
- * Expands to the GNU C may_alias type attribute if the compiler is gcc.
- * Types with this attribute will not be subjected to type-based alias
- * analysis, but are assumed to alias with any other type, just like char.
- *
- * See the GNU C documentation for details.
- *
- * Since: 2.14
- */
-
-
-/**
- * G_GNUC_NORETURN:
- *
- * Expands to the GNU C noreturn function attribute if the compiler is gcc.
- * It is used for declaring functions which never return. It enables
- * optimization of the function, and avoids possible compiler warnings.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the GNU C documentation for more details.
- */
-
-
-/**
- * G_GNUC_NO_INLINE:
- *
- * Expands to the GNU C `noinline` function attribute if the compiler is gcc.
- * If the compiler is not gcc, this macro expands to nothing.
- *
- * Declaring a function as `noinline` prevents the function from being
- * considered for inlining.
- *
- * The attribute may be placed before the declaration, right before the
- * `static` keyword.
- *
- * See the
- * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-noinline-function-attribute)
- * for more details.
- *
- * Since: 2.58
- */
-
-
-/**
- * G_GNUC_NO_INSTRUMENT:
- *
- * Expands to the GNU C no_instrument_function function attribute if the
- * compiler is gcc. Functions with this attribute will not be instrumented
- * for profiling, when the compiler is called with the
- * `-finstrument-functions` option.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the GNU C documentation for more details.
- */
-
-
-/**
- * G_GNUC_NULL_TERMINATED:
- *
- * Expands to the GNU C sentinel function attribute if the compiler is gcc.
- * This function attribute only applies to variadic functions and instructs
- * the compiler to check that the argument list is terminated with an
- * explicit %NULL.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the GNU C documentation for more details.
- *
- * Since: 2.8
- */
-
-
-/**
- * G_GNUC_PRETTY_FUNCTION:
- *
- * Expands to "" on all modern compilers, and to __PRETTY_FUNCTION__
- * on gcc version 2.x. Don't use it.
- *
- * Deprecated: 2.16: Use G_STRFUNC() instead
- */
-
-
-/**
- * G_GNUC_PRINTF:
- * @format_idx: the index of the argument corresponding to the
- *     format string (the arguments are numbered from 1)
- * @arg_idx: the index of the first of the format arguments, or 0 if
- *     there are no format arguments
- *
- * Expands to the GNU C format function attribute if the compiler is gcc.
- * This is used for declaring functions which take a variable number of
- * arguments, with the same syntax as printf(). It allows the compiler
- * to type-check the arguments passed to the function.
- *
- * Place the attribute after the function declaration, just before the
- * semicolon.
- *
- * See the
- * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-Wformat-3288)
- * for more details.
- *
- * |[<!-- language="C" -->
- * gint g_snprintf (gchar  *string,
- *                  gulong       n,
- *                  gchar const *format,
- *                  ...) G_GNUC_PRINTF (3, 4);
- * ]|
- */
-
-
-/**
- * G_GNUC_PURE:
- *
- * Expands to the GNU C pure function attribute if the compiler is gcc.
- * Declaring a function as pure enables better optimization of calls to
- * the function. A pure function has no effects except its return value
- * and the return value depends only on the parameters and/or global
- * variables.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the GNU C documentation for more details.
- */
-
-
-/**
- * G_GNUC_SCANF:
- * @format_idx: the index of the argument corresponding to
- *     the format string (the arguments are numbered from 1)
- * @arg_idx: the index of the first of the format arguments, or 0 if
- *     there are no format arguments
- *
- * Expands to the GNU C format function attribute if the compiler is gcc.
- * This is used for declaring functions which take a variable number of
- * arguments, with the same syntax as scanf(). It allows the compiler
- * to type-check the arguments passed to the function.
- *
- * See the
- * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-Wformat-3288)
- * for details.
- */
-
-
-/**
- * G_GNUC_STRFTIME:
- * @format_idx: the index of the argument corresponding to
- *     the format string (the arguments are numbered from 1)
- *
- * Expands to the GNU C strftime format function attribute if the compiler
- * is gcc. This is used for declaring functions which take a format argument
- * which is passed to strftime() or an API implementing its formats. It allows
- * the compiler check the format passed to the function.
- *
- * See the
- * [GNU C documentation](https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-Wformat-3288)
- * for details.
- *
- * Since: 2.60
- */
-
-
-/**
- * G_GNUC_UNUSED:
- *
- * Expands to the GNU C unused function attribute if the compiler is gcc.
- * It is used for declaring functions and arguments which may never be used.
- * It avoids possible compiler warnings.
- *
- * For functions, place the attribute after the declaration, just before the
- * semicolon. For arguments, place the attribute at the beginning of the
- * argument declaration.
- *
- * |[<!-- language="C" -->
- * void my_unused_function (G_GNUC_UNUSED gint unused_argument,
- *                          gint other_argument) G_GNUC_UNUSED;
- * ]|
- *
- * See the GNU C documentation for more details.
- */
-
-
-/**
- * G_GNUC_WARN_UNUSED_RESULT:
- *
- * Expands to the GNU C warn_unused_result function attribute if the compiler
- * is gcc. This function attribute makes the compiler emit a warning if the
- * result of a function call is ignored.
- *
- * Place the attribute after the declaration, just before the semicolon.
- *
- * See the GNU C documentation for more details.
- *
- * Since: 2.10
  */
 
 
@@ -3872,21 +3500,6 @@
  * G_IEEE754_FLOAT_BIAS:
  *
  * The bias by which exponents in single-precision floats are offset.
- */
-
-
-/**
- * G_INLINE_FUNC:
- *
- * This macro used to be used to conditionally define inline functions
- * in a compatible way before this feature was supported in all
- * compilers.  These days, GLib requires inlining support from the
- * compiler, so your GLib-using programs can safely assume that the
- * "inline" keywork works properly.
- *
- * Never use this macro anymore.  Just say "static inline".
- *
- * Deprecated: 2.48: Use "static inline" instead
  */
 
 
@@ -5247,7 +4860,7 @@
  *   g_atomic_rc_box_release_full (data, (GDestroyNotify) my_data_struct_clear);
  * }
  *
- * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_clear)
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_release)
  * ]|
  *
  * Since: 2.58.
@@ -6590,7 +6203,7 @@
  * type information would be allocated.
  *
  * The type information cache, additionally, uses a #GHashTable to
- * store and lookup the cached items and stores a pointer to this
+ * store and look up the cached items and stores a pointer to this
  * hash table in static storage.  The hash table is freed when there
  * are zero items in the type cache.
  *
@@ -6833,7 +6446,7 @@
  * To insert a key and value into a #GHashTable, use
  * g_hash_table_insert().
  *
- * To lookup a value corresponding to a given key, use
+ * To look up a value corresponding to a given key, use
  * g_hash_table_lookup() and g_hash_table_lookup_extended().
  *
  * g_hash_table_lookup_extended() can also be used to simply
@@ -8131,7 +7744,7 @@
  *   g_rc_box_release_full (data, (GDestroyNotify) my_data_struct_clear);
  * }
  *
- * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_clear)
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_release)
  * ]|
  *
  * Since: 2.58.
@@ -8457,7 +8070,6 @@
  * SECTION:testing
  * @title: Testing
  * @short_description: a test framework
- * @see_also: [gtester][gtester], [gtester-report][gtester-report]
  *
  * GLib provides a framework for writing and maintaining unit tests
  * in parallel to the code they are testing. The API is designed according
@@ -8632,7 +8244,10 @@
  * If you don't have access to the Autotools TAP harness, you can use the
  * [gtester][gtester] and [gtester-report][gtester-report] tools, and use
  * the [glib.mk](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/glib.mk)
- * Automake template provided by GLib.
+ * Automake template provided by GLib. Note, however, that since GLib 2.62,
+ * [gtester][gtester] and [gtester-report][gtester-report] have been deprecated
+ * in favour of using TAP. The `--tap` argument to tests is enabled by default
+ * as of GLib 2.62.
  */
 
 
@@ -8855,7 +8470,7 @@
  *
  * To insert a key/value pair into a #GTree use g_tree_insert().
  *
- * To lookup the value corresponding to a given key, use
+ * To look up the value corresponding to a given key, use
  * g_tree_lookup() and g_tree_lookup_extended().
  *
  * To find out the number of nodes in a #GTree, use g_tree_nnodes(). To
@@ -11174,7 +10789,7 @@
  * @block_size: the number of bytes to copy, must be greater than 0
  * @mem_block: (not nullable): the memory to copy
  *
- * Allocates a new block of data with atomit reference counting
+ * Allocates a new block of data with atomic reference counting
  * semantics, and copies @block_size bytes of @mem_block
  * into it.
  *
@@ -11322,7 +10937,7 @@
  * This macro can be used to avoid having to do explicit cleanups of
  * local variables when exiting functions.  It often vastly simplifies
  * handling of error conditions, removing the need for various tricks
- * such as 'goto out' or repeating of cleanup code.  It is also helpful
+ * such as `goto out` or repeating of cleanup code.  It is also helpful
  * for non-error cases.
  *
  * Consider the following example:
@@ -11349,8 +10964,8 @@
  * }
  * ]|
  *
- * You must initialize the variable in some way -- either by use of an
- * initialiser or by ensuring that an _init function will be called on
+ * You must initialize the variable in some way — either by use of an
+ * initialiser or by ensuring that an `_init` function will be called on
  * it unconditionally before it goes out of scope.
  *
  * Since: 2.44
@@ -11370,7 +10985,7 @@
  * This means it's useful for any type that is returned from
  * g_malloc().
  *
- * Otherwise, this macro has similar constraints as g_autoptr() - only
+ * Otherwise, this macro has similar constraints as g_autoptr(): only
  * supported on GCC and clang, the variable must be initialized, etc.
  *
  * |[
@@ -11406,13 +11021,13 @@
  * are intended to be portable to those compilers.
  *
  * This is meant to be used to declare lists of a type with a cleanup
- * function.  The type of the variable is a GList *.  You
- * must not add your own '*'.
+ * function.  The type of the variable is a `GList *`.  You
+ * must not add your own `*`.
  *
  * This macro can be used to avoid having to do explicit cleanups of
  * local variables when exiting functions.  It often vastly simplifies
  * handling of error conditions, removing the need for various tricks
- * such as 'goto out' or repeating of cleanup code.  It is also helpful
+ * such as `goto out` or repeating of cleanup code.  It is also helpful
  * for non-error cases.
  *
  * See also g_autoslist(), g_autoptr() and g_steal_pointer().
@@ -11436,12 +11051,12 @@
  *
  * This is meant to be used to declare pointers to types with cleanup
  * functions.  The type of the variable is a pointer to @TypeName.  You
- * must not add your own '*'.
+ * must not add your own `*`.
  *
  * This macro can be used to avoid having to do explicit cleanups of
  * local variables when exiting functions.  It often vastly simplifies
  * handling of error conditions, removing the need for various tricks
- * such as 'goto out' or repeating of cleanup code.  It is also helpful
+ * such as `goto out` or repeating of cleanup code.  It is also helpful
  * for non-error cases.
  *
  * Consider the following example:
@@ -11471,13 +11086,42 @@
  * }
  * ]|
  *
- * You must initialise the variable in some way -- either by use of an
+ * You must initialise the variable in some way — either by use of an
  * initialiser or by ensuring that it is assigned to unconditionally
  * before it goes out of scope.
  *
  * See also g_auto(), g_autofree() and g_steal_pointer().
  *
  * Since: 2.44
+ */
+
+
+/**
+ * g_autoqueue:
+ * @TypeName: a supported variable type
+ *
+ * Helper to declare a double-ended queue variable with automatic deep cleanup.
+ *
+ * The queue is deeply freed, in a way appropriate to the specified type, when the
+ * variable goes out of scope.  The type must support this.
+ *
+ * This feature is only supported on GCC and clang.  This macro is not
+ * defined on other compilers and should not be used in programs that
+ * are intended to be portable to those compilers.
+ *
+ * This is meant to be used to declare queues of a type with a cleanup
+ * function.  The type of the variable is a `GQueue *`.  You
+ * must not add your own `*`.
+ *
+ * This macro can be used to avoid having to do explicit cleanups of
+ * local variables when exiting functions.  It often vastly simplifies
+ * handling of error conditions, removing the need for various tricks
+ * such as `goto out` or repeating of cleanup code.  It is also helpful
+ * for non-error cases.
+ *
+ * See also g_autolist(), g_autoptr() and g_steal_pointer().
+ *
+ * Since: 2.62
  */
 
 
@@ -11495,13 +11139,13 @@
  * are intended to be portable to those compilers.
  *
  * This is meant to be used to declare lists of a type with a cleanup
- * function.  The type of the variable is a GSList *.  You
- * must not add your own '*'.
+ * function.  The type of the variable is a `GSList *`.  You
+ * must not add your own `*`.
  *
  * This macro can be used to avoid having to do explicit cleanups of
  * local variables when exiting functions.  It often vastly simplifies
  * handling of error conditions, removing the need for various tricks
- * such as 'goto out' or repeating of cleanup code.  It is also helpful
+ * such as `goto out` or repeating of cleanup code.  It is also helpful
  * for non-error cases.
  *
  * See also g_autolist(), g_autoptr() and g_steal_pointer().
@@ -16849,6 +16493,34 @@
 
 
 /**
+ * g_get_console_charset:
+ * @charset: (out) (optional) (transfer none): return location for character set
+ *   name, or %NULL.
+ *
+ * Obtains the character set used by the console attached to the process,
+ * which is suitable for printing output to the terminal.
+ *
+ * Usually this matches the result returned by g_get_charset(), but in
+ * environments where the locale's character set does not match the encoding
+ * of the console this function tries to guess a more suitable value instead.
+ *
+ * On Windows the character set returned by this function is the
+ * output code page used by the console associated with the calling process.
+ * If the codepage can't be determined (for example because there is no
+ * console attached) UTF-8 is assumed.
+ *
+ * The return value is %TRUE if the locale's encoding is UTF-8, in that
+ * case you can perhaps avoid calling g_convert().
+ *
+ * The string returned in @charset is not allocated, and should not be
+ * freed.
+ *
+ * Returns: %TRUE if the returned charset is UTF-8
+ * Since: 2.62
+ */
+
+
+/**
  * g_get_current_dir:
  *
  * Gets the current directory.
@@ -17091,7 +16763,8 @@
  * #GtkApplication::startup handler. The program name is found by
  * taking the last component of @argv[0].
  *
- * Returns: the name of the program. The returned string belongs
+ * Returns: (nullable): the name of the program, or %NULL if it has not been
+ *     set yet. The returned string belongs
  *     to GLib and must not be modified or freed.
  */
 
@@ -18668,6 +18341,10 @@
  * using strcmp(). g_intern_static_string() does not copy the string,
  * therefore @string must not be freed or modified.
  *
+ * This function must not be used before library constructors have finished
+ * running. In particular, this means it cannot be used to initialize global
+ * variables in C++.
+ *
  * Returns: a canonical representation for the string
  * Since: 2.10
  */
@@ -18680,6 +18357,10 @@
  * Returns a canonical representation for @string. Interned strings
  * can be compared for equality by comparing the pointers, instead of
  * using strcmp().
+ *
+ * This function must not be used before library constructors have finished
+ * running. In particular, this means it cannot be used to initialize global
+ * variables in C++.
  *
  * Returns: a canonical representation for the string
  * Since: 2.10
@@ -20492,6 +20173,21 @@
 
 
 /**
+ * g_list_insert_before_link:
+ * @list: a pointer to a #GList, this must point to the top of the list
+ * @sibling: (nullable): the list element before which the new element
+ *     is inserted or %NULL to insert at the end of the list
+ * @link_: the list element to be added, which must not be part of
+ *     any other list
+ *
+ * Inserts @link_ into the list before the given position.
+ *
+ * Returns: the (possibly changed) start of the #GList
+ * Since: 2.62
+ */
+
+
+/**
  * g_list_insert_sorted:
  * @list: a pointer to a #GList, this must point to the top of the
  *     already sorted list
@@ -21498,7 +21194,7 @@
  *
  * Finds a #GSource given a pair of context and ID.
  *
- * It is a programmer error to attempt to lookup a non-existent source.
+ * It is a programmer error to attempt to look up a non-existent source.
  *
  * More specifically: source IDs can be reissued after a source has been
  * destroyed and therefore it is never valid to use this function with a
@@ -25192,6 +24888,10 @@
  * expect to ever unload the module again (e.g. do not use this
  * function in GTK+ theme engines).
  *
+ * This function must not be used before library constructors have finished
+ * running. In particular, this means it cannot be used to initialize global
+ * variables in C++.
+ *
  * Returns: the #GQuark identifying the string, or 0 if @string is %NULL
  */
 
@@ -25203,6 +24903,10 @@
  * Gets the #GQuark identifying the given string. If the string does
  * not currently have an associated #GQuark, a new #GQuark is created,
  * using a copy of the string.
+ *
+ * This function must not be used before library constructors have finished
+ * running. In particular, this means it cannot be used to initialize global
+ * variables in C++.
  *
  * Returns: the #GQuark identifying the string, or 0 if @string is %NULL
  */
@@ -25227,6 +24931,9 @@
  *
  * If you want the GQuark to be created if it doesn't already exist,
  * use g_quark_from_string() or g_quark_from_static_string().
+ *
+ * This function must not be used before library constructors have finished
+ * running.
  *
  * Returns: the #GQuark associated with the string, or 0 if @string is
  *     %NULL or there is no #GQuark associated with it
@@ -25410,6 +25117,21 @@
 
 
 /**
+ * g_queue_insert_after_link:
+ * @queue: a #GQueue
+ * @sibling: (nullable): a #GList link that must be part of @queue, or %NULL to
+ *   push at the head of the queue.
+ * @link_: a #GList link to insert which must not be part of any other list.
+ *
+ * Inserts @link_ into @queue after @sibling.
+ *
+ * @sibling must be part of @queue.
+ *
+ * Since: 2.62
+ */
+
+
+/**
  * g_queue_insert_before:
  * @queue: a #GQueue
  * @sibling: (nullable): a #GList link that must be part of @queue, or %NULL to
@@ -25422,6 +25144,21 @@
  * data at the tail of the queue.
  *
  * Since: 2.4
+ */
+
+
+/**
+ * g_queue_insert_before_link:
+ * @queue: a #GQueue
+ * @sibling: (nullable): a #GList link that must be part of @queue, or %NULL to
+ *   push at the tail of the queue.
+ * @link_: a #GList link to insert which must not be part of any other list.
+ *
+ * Inserts @link_ into @queue before @sibling.
+ *
+ * @sibling must be part of @queue.
+ *
+ * Since: 2.62
  */
 
 
@@ -27129,8 +26866,10 @@
  * @rw_lock: a #GRWLock
  *
  * Obtain a read lock on @rw_lock. If another thread currently holds
- * the write lock on @rw_lock or blocks waiting for it, the current
- * thread will block. Read locks can be taken recursively.
+ * the write lock on @rw_lock, the current thread will block. If another thread
+ * does not hold the write lock, but is waiting for it, it is implementation
+ * defined whether the reader or writer will block. Read locks can be taken
+ * recursively.
  *
  * It is implementation-defined how many threads are allowed to
  * hold read locks on the same lock simultaneously. If the limit is hit,
@@ -27818,7 +27557,7 @@
 /**
  * g_sequence_lookup:
  * @seq: a #GSequence
- * @data: data to lookup
+ * @data: data to look up
  * @cmp_func: the function used to compare items in the sequence
  * @cmp_data: user data passed to @cmp_func
  *
@@ -27846,7 +27585,7 @@
 /**
  * g_sequence_lookup_iter:
  * @seq: a #GSequence
- * @data: data to lookup
+ * @data: data to look up
  * @iter_cmp: the function used to compare iterators in the sequence
  * @cmp_data: user data passed to @iter_cmp
  *
@@ -29157,6 +28896,9 @@
  * destroyed.  The source cannot be subsequently added to another
  * context. It is safe to call this on sources which have already been
  * removed from their context.
+ *
+ * This does not unref the #GSource: if you still hold a reference, use
+ * g_source_unref() to drop it.
  */
 
 
@@ -30388,6 +30130,13 @@
  *   g_ascii_strup (g_strcanon (str, "abc", '?'))
  * ]|
  *
+ * In order to modify a copy, you may use `g_strdup()`:
+ * |[<!-- language="C" -->
+ *   reformatted = g_strcanon (g_strdup (const_str), "abc", '?');
+ *   ...
+ *   g_free (reformatted);
+ * ]|
+ *
  * Returns: @string
  */
 
@@ -30504,6 +30253,13 @@
  * allow nesting such as
  * |[<!-- language="C" -->
  *   g_ascii_strup (g_strdelimit (str, "abc", '?'))
+ * ]|
+ *
+ * In order to modify a copy, you may use `g_strdup()`:
+ * |[<!-- language="C" -->
+ *   reformatted = g_strdelimit (g_strdup (const_str), "abc", '?');
+ *   ...
+ *   g_free (reformatted);
  * ]|
  *
  * Returns: @string
@@ -31722,7 +31478,8 @@
  * Bug URIs are constructed from a base URI set with g_test_bug_base()
  * and @bug_uri_snippet.
  *
- * Since: 2.16
+ * Since: 2.16:
+ * See also: g_test_summary()
  */
 
 
@@ -32440,6 +32197,23 @@
  * Adds @nestedsuite to @suite.
  *
  * Since: 2.16
+ */
+
+
+/**
+ * g_test_summary:
+ * @summary: One or two sentences summarising what the test checks, and how it
+ *    checks it.
+ *
+ * Set the summary for a test, which describes what the test checks, and how it
+ * goes about checking it. This may be included in test report output, and is
+ * useful documentation for anyone reading the source code or modifying a test
+ * in future. It must be a single line.
+ *
+ * This should be called at the top of a test function.
+ *
+ * Since: 2.62:
+ * See also: g_test_bug()
  */
 
 
@@ -36185,7 +35959,7 @@
 /**
  * g_variant_dict_contains:
  * @dict: a #GVariantDict
- * @key: the key to lookup in the dictionary
+ * @key: the key to look up in the dictionary
  *
  * Checks if @key exists in @dict.
  *
@@ -36270,7 +36044,7 @@
 /**
  * g_variant_dict_lookup:
  * @dict: a #GVariantDict
- * @key: the key to lookup in the dictionary
+ * @key: the key to look up in the dictionary
  * @format_string: a GVariant format string
  * @...: the arguments to unpack the value into
  *
@@ -36293,7 +36067,7 @@
 /**
  * g_variant_dict_lookup_value:
  * @dict: a #GVariantDict
- * @key: the key to lookup in the dictionary
+ * @key: the key to look up in the dictionary
  * @expected_type: (nullable): a #GVariantType, or %NULL
  *
  * Looks up a value in a #GVariantDict.
@@ -37424,7 +37198,7 @@
 /**
  * g_variant_lookup: (skip)
  * @dictionary: a dictionary #GVariant
- * @key: the key to lookup in the dictionary
+ * @key: the key to look up in the dictionary
  * @format_string: a GVariant format string
  * @...: the arguments to unpack the value into
  *
@@ -37451,7 +37225,7 @@
 /**
  * g_variant_lookup_value:
  * @dictionary: a dictionary #GVariant
- * @key: the key to lookup in the dictionary
+ * @key: the key to look up in the dictionary
  * @expected_type: (nullable): a #GVariantType, or %NULL
  *
  * Looks up a value in a dictionary #GVariant.
@@ -39350,6 +39124,39 @@
  * Returns: The converted filename, or %NULL on conversion
  * failure and lack of short names.
  * Since: 2.8
+ */
+
+
+/**
+ * g_win32_readlink_utf8:
+ * @filename: (type filename): a pathname in UTF-8
+ * @buf: (array length=buf_size): a buffer to receive the reparse point
+ *                                 target path. Mutually-exclusive
+ *                                 with @alloc_buf.
+ * @buf_size: size of the @buf, in bytes
+ * @alloc_buf: points to a location where internally-allocated buffer
+ *             pointer will be written. That buffer receives the
+ *             link data. Mutually-exclusive with @buf.
+ * @terminate: ensures that the buffer is NUL-terminated if
+ *             it isn't already. If %FALSE, the returned string
+ *             might not be NUL-terminated (depends entirely on
+ *             what the contents of the filesystem are).
+ *
+ * Tries to read the reparse point indicated by @filename, filling
+ * @buf or @alloc_buf with the path that the reparse point redirects to.
+ * The path will be UTF-8-encoded, and an extended path prefix
+ * or a NT object manager prefix will be removed from it, if
+ * possible, but otherwise the path is returned as-is. Specifically,
+ * it could be a "\\\\Volume{GUID}\\" path. It also might use
+ * backslashes as path separators.
+ *
+ * Returns: -1 on error (sets errno), 0 if there's no (recognizable)
+ * path in the reparse point (@alloc_buf will not be allocated in that case,
+ * and @buf will be left unmodified),
+ * or the number of bytes placed into @buf otherwise,
+ * including NUL-terminator (if present or if @terminate is TRUE).
+ * The buffer returned via @alloc_buf should be freed with g_free().
+ * Since: 2.60
  */
 
 

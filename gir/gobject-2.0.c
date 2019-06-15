@@ -245,13 +245,24 @@
  * @see_also: #GParamSpecBoxed, g_param_spec_boxed()
  * @title: Boxed Types
  *
- * GBoxed is a generic wrapper mechanism for arbitrary C structures. The only
- * thing the type system needs to know about the structures is how to copy and
- * free them, beyond that they are treated as opaque chunks of memory.
+ * #GBoxed is a generic wrapper mechanism for arbitrary C structures. The only
+ * thing the type system needs to know about the structures is how to copy them
+ * (a #GBoxedCopyFunc) and how to free them (a #GBoxedFreeFunc) — beyond that
+ * they are treated as opaque chunks of memory.
  *
  * Boxed types are useful for simple value-holder structures like rectangles or
- * points. They can also be used for wrapping structures defined in non-GObject
- * based libraries.
+ * points. They can also be used for wrapping structures defined in non-#GObject
+ * based libraries. They allow arbitrary structures to be handled in a uniform
+ * way, allowing uniform copying (or referencing) and freeing (or unreferencing)
+ * of them, and uniform representation of the type of the contained structure.
+ * In turn, this allows any type which can be boxed to be set as the data in a
+ * #GValue, which allows for polymorphic handling of a much wider range of data
+ * types, and hence usage of such types as #GObject property values.
+ *
+ * #GBoxed is designed so that reference counted types can be boxed. Use the
+ * type’s ‘ref’ function as the #GBoxedCopyFunc, and its ‘unref’ function as the
+ * #GBoxedFreeFunc. For example, for #GBytes, the #GBoxedCopyFunc is
+ * g_bytes_ref(), and the #GBoxedFreeFunc is g_bytes_unref().
  */
 
 
@@ -567,6 +578,13 @@
  *
  * ## Floating references # {#floating-ref}
  *
+ * **Note**: Floating references are a C convenience API and should not be
+ * used in modern GObject code. Language bindings in particular find the
+ * concept highly problematic, as floating references are not identifiable
+ * through annotations, and neither are deviations from the floating reference
+ * behavior, like types that inherit from #GInitiallyUnowned and still return
+ * a full reference from g_object_new().
+ *
  * GInitiallyUnowned is derived from GObject. The only difference between
  * the two is that the initial reference of a GInitiallyUnowned is flagged
  * as a "floating" reference. This means that it is not specifically
@@ -597,7 +615,23 @@
  * Since floating references are useful almost exclusively for C convenience,
  * language bindings that provide automated reference and memory ownership
  * maintenance (such as smart pointers or garbage collection) should not
- * expose floating references in their API.
+ * expose floating references in their API. The best practice for handling
+ * types that have initially floating references is to immediately sink those
+ * references after g_object_new() returns, by checking if the #GType
+ * inherits from #GInitiallyUnowned. For instance:
+ *
+ * |[<!-- language="C" -->
+ * GObject *res = g_object_new_with_properties (gtype,
+ *                                              n_props,
+ *                                              prop_names,
+ *                                              prop_values);
+ *
+ * // or: if (g_type_is_a (gtype, G_TYPE_INITIALLY_UNOWNED))
+ * if (G_IS_INITIALLY_UNOWNED (res))
+ *   g_object_ref_sink (res);
+ *
+ * return res;
+ * ]|
  *
  * Some object implementations may need to save an objects floating state
  * across certain code portions (an example is #GtkMenu), to achieve this,
@@ -757,6 +791,9 @@
  *   GArray *array = g_array_sized_new (FALSE, TRUE, sizeof (GValue), 10);
  *   g_array_set_clear_func (array, (GDestroyNotify) g_value_unset);
  * ]|
+ *
+ * Deprecated: 2.32: Use #GArray instead, if possible for the given use case,
+ *    as described above.
  */
 
 
@@ -1776,6 +1813,24 @@
 
 
 /**
+ * g_clear_signal_handler:
+ * @handler_id_ptr: A pointer to a handler ID (of type #gulong) of the handler to be disconnected.
+ * @instance: (type GObject.Object): The instance to remove the signal handler from.
+ *
+ * Disconnects a handler from @instance so it will not be called during
+ * any future or currently ongoing emissions of the signal it has been
+ * connected to. The @handler_id_ptr is then set to zero, which is never a valid handler ID value (see g_signal_connect()).
+ *
+ * If the handler ID is 0 then this function does nothing.
+ *
+ * A macro is also included that allows this function to be used without
+ * pointer casts.
+ *
+ * Since: 2.62
+ */
+
+
+/**
  * g_closure_add_finalize_notifier: (skip)
  * @closure: a #GClosure
  * @notify_data: (closure notify_func): data to pass to @notify_func
@@ -2748,9 +2803,15 @@
  * @property_name: the name of the property to get
  * @value: return location for the property value
  *
- * Gets a property of an object. @value must have been initialized to the
- * expected type of the property (or a type to which the expected type can be
- * transformed) using g_value_init().
+ * Gets a property of an object.
+ *
+ * The @value can be:
+ *
+ *  - an empty #GValue initialized by %G_VALUE_INIT, which will be
+ *    automatically initialized with the expected type of the property
+ *  - a #GValue initialized with the expected type of the property
+ *  - a #GValue initialized with a type to which the expected type
+ *    of the property can be transformed
  *
  * In general, a copy is made of the property contents and the caller is
  * responsible for freeing the memory by calling g_value_unset().
@@ -2809,7 +2870,7 @@
  * g_object_interface_find_property:
  * @g_iface: (type GObject.TypeInterface): any interface vtable for the
  *  interface, or the default vtable for the interface
- * @property_name: name of a property to lookup.
+ * @property_name: name of a property to look up.
  *
  * Find the #GParamSpec with the given name for an
  * interface. Generally, the interface vtable passed in as @g_iface
@@ -3106,6 +3167,9 @@
  * or may not include using @old_destroy as sometimes replacement
  * should not destroy the object in the normal way.
  *
+ * See g_object_set_data() for guidance on using a small, bounded set of values
+ * for @key.
+ *
  * Returns: %TRUE if the existing value for @key was replaced
  *  by @newval, %FALSE otherwise.
  * Since: 2.34
@@ -3178,6 +3242,11 @@
  *
  * If the object already had an association with that name,
  * the old association will be destroyed.
+ *
+ * Internally, the @key is converted to a #GQuark using g_quark_from_string().
+ * This means a copy of @key is kept permanently (even after @object has been
+ * finalized) — so it is recommended to only use a small, bounded set of values
+ * for @key in your program, to avoid the #GQuark storage growing unbounded.
  */
 
 
@@ -5387,9 +5456,9 @@
 
 /**
  * g_type_from_name:
- * @name: type name to lookup
+ * @name: type name to look up
  *
- * Lookup the type ID from a given type name, returning 0 if no type
+ * Look up the type ID from a given type name, returning 0 if no type
  * has been registered under this name (this is the preferred method
  * to find out by name whether a specific type has been registered
  * yet).
@@ -6758,8 +6827,8 @@
  * @v_boxed: (nullable): duplicated unowned boxed value to be set
  *
  * Sets the contents of a %G_TYPE_BOXED derived #GValue to @v_boxed
- * and takes over the ownership of the callers reference to @v_boxed;
- * the caller doesn't have to unref it any more.
+ * and takes over the ownership of the caller’s reference to @v_boxed;
+ * the caller doesn’t have to unref it any more.
  *
  * Since: 2.4
  */
@@ -6771,8 +6840,8 @@
  * @v_object: (nullable): object value to be set
  *
  * Sets the contents of a %G_TYPE_OBJECT derived #GValue to @v_object
- * and takes over the ownership of the callers reference to @v_object;
- * the caller doesn't have to unref it any more (i.e. the reference
+ * and takes over the ownership of the caller’s reference to @v_object;
+ * the caller doesn’t have to unref it any more (i.e. the reference
  * count of the object is not increased).
  *
  * If you want the #GValue to hold its own reference to @v_object, use
@@ -6788,8 +6857,8 @@
  * @param: (nullable): the #GParamSpec to be set
  *
  * Sets the contents of a %G_TYPE_PARAM #GValue to @param and takes
- * over the ownership of the callers reference to @param; the caller
- * doesn't have to unref it any more.
+ * over the ownership of the caller’s reference to @param; the caller
+ * doesn’t have to unref it any more.
  *
  * Since: 2.4
  */

@@ -1486,6 +1486,9 @@
  *
  * #GDesktopAppInfoLookup is an opaque data structure and can only be accessed
  * using the following functions.
+ *
+ * Deprecated: 2.28: The #GDesktopAppInfoLookup interface is deprecated and
+ *    unused by GIO.
  */
 
 
@@ -5457,11 +5460,37 @@
  * signals you are interested in. Note that new signals may be added
  * in the future
  *
- * ## Controlling Authentication # {#auth-observer}
+ * ## Controlling Authentication Mechanisms
  *
- * For example, if you only want to allow D-Bus connections from
- * processes owned by the same uid as the server, you would use a
- * signal handler like the following:
+ * By default, a #GDBusServer or server-side #GDBusConnection will allow
+ * any authentication mechanism to be used. If you only
+ * want to allow D-Bus connections with the `EXTERNAL` mechanism,
+ * which makes use of credentials passing and is the recommended
+ * mechanism for modern Unix platforms such as Linux and the BSD family,
+ * you would use a signal handler like this:
+ *
+ * |[<!-- language="C" -->
+ * static gboolean
+ * on_allow_mechanism (GDBusAuthObserver *observer,
+ *                     const gchar       *mechanism,
+ *                     gpointer           user_data)
+ * {
+ *   if (g_strcmp0 (mechanism, "EXTERNAL") == 0)
+ *     {
+ *       return TRUE;
+ *     }
+ *
+ *   return FALSE;
+ * }
+ * ]|
+ *
+ * ## Controlling Authorization # {#auth-observer}
+ *
+ * By default, a #GDBusServer or server-side #GDBusConnection will accept
+ * connections from any successfully authenticated user (but not from
+ * anonymous connections using the `ANONYMOUS` mechanism). If you only
+ * want to allow D-Bus connections from processes owned by the same uid
+ * as the server, you would use a signal handler like the following:
  *
  * |[<!-- language="C" -->
  * static gboolean
@@ -5949,6 +5978,11 @@
  *
  * An example of peer-to-peer communication with G-DBus can be found
  * in [gdbus-example-peer.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-peer.c).
+ *
+ * Note that a minimal #GDBusServer will accept connections from any
+ * peer. In many use-cases it will be necessary to add a #GDBusAuthObserver
+ * that only accepts connections that have successfully authenticated
+ * as the same user that is running the #GDBusServer.
  */
 
 
@@ -7074,6 +7108,10 @@
  * #GNetworkAddress provides an easy way to resolve a hostname and
  * then attempt to connect to that host, handling the possibility of
  * multiple IP addresses and multiple address families.
+ *
+ * The enumeration results of resolved addresses *may* be cached as long
+ * as this object is kept alive which may have unexpected results if
+ * alive for too long.
  *
  * See #GSocketConnectable for an example of using the connectable
  * interface.
@@ -8341,7 +8379,7 @@
  * #GSocketAddressEnumerator is an enumerator type for #GSocketAddress
  * instances. It is returned by enumeration functions such as
  * g_socket_connectable_enumerate(), which returns a #GSocketAddressEnumerator
- * to list all the #GSocketAddresses which could be used to connect to that
+ * to list each #GSocketAddress which could be used to connect to that
  * #GSocketConnectable.
  *
  * Enumeration is typically a blocking operation, so the asynchronous methods
@@ -9429,7 +9467,7 @@
  * @short_description: TLS database type
  * @include: gio/gio.h
  *
- * #GTlsDatabase is used to lookup certificates and other information
+ * #GTlsDatabase is used to look up certificates and other information
  * from a certificate or key store. It is an abstract base class which
  * TLS library specific subtypes override.
  *
@@ -9559,7 +9597,7 @@
  * descriptors that it contains, closing them when finalized.
  *
  * It may be wrapped in a #GUnixFDMessage and sent over a #GSocket in
- * the %G_SOCKET_ADDRESS_UNIX family by using g_socket_send_message()
+ * the %G_SOCKET_FAMILY_UNIX family by using g_socket_send_message()
  * and received using g_socket_receive_message().
  *
  * Note that `<gio/gunixfdlist.h>` belongs to the UNIX-specific GIO
@@ -9578,7 +9616,7 @@
  * This #GSocketControlMessage contains a #GUnixFDList.
  * It may be sent using g_socket_send_message() and received using
  * g_socket_receive_message() over UNIX sockets (ie: sockets in the
- * %G_SOCKET_ADDRESS_UNIX family). The file descriptors are copied
+ * %G_SOCKET_FAMILY_UNIX family). The file descriptors are copied
  * between processes by the kernel.
  *
  * For an easier way to send and receive file descriptors over
@@ -11049,7 +11087,7 @@
  *
  * The D-Bus–activated applications don't have to be started if your application
  * terminates too soon after this function. To prevent this, use
- * g_app_info_launch_default_for_uri() instead.
+ * g_app_info_launch_default_for_uri_async() instead.
  *
  * Returns: %TRUE on success, %FALSE on error.
  */
@@ -18330,8 +18368,8 @@
 /**
  * g_dbus_object_manager_get_interface:
  * @manager: A #GDBusObjectManager.
- * @object_path: Object path to lookup.
- * @interface_name: D-Bus interface name to lookup.
+ * @object_path: Object path to look up.
+ * @interface_name: D-Bus interface name to look up.
  *
  * Gets the interface proxy for @interface_name at @object_path, if
  * any.
@@ -18345,7 +18383,7 @@
 /**
  * g_dbus_object_manager_get_object:
  * @manager: A #GDBusObjectManager.
- * @object_path: Object path to lookup.
+ * @object_path: Object path to look up.
  *
  * Gets the #GDBusObjectProxy at @object_path, if any.
  *
@@ -19214,6 +19252,10 @@
  * Once constructed, you can use g_dbus_server_get_client_address() to
  * get a D-Bus address string that clients can use to connect.
  *
+ * To have control over the available authentication mechanisms and
+ * the users that are authorized to connect, it is strongly recommended
+ * to provide a non-%NULL #GDBusAuthObserver.
+ *
  * Connect to the #GDBusServer::new-connection signal to handle
  * incoming connections.
  *
@@ -19222,8 +19264,8 @@
  *
  * #GDBusServer is used in this [example][gdbus-peer-to-peer].
  *
- * This is a synchronous failable constructor. See
- * g_dbus_server_new() for the asynchronous version.
+ * This is a synchronous failable constructor. There is currently no
+ * asynchronous version.
  *
  * Returns: A #GDBusServer or %NULL if @error is set. Free with
  * g_object_unref().
@@ -19474,7 +19516,7 @@
  * Returns: (array zero-terminated=1 length=length) (element-type utf8) (transfer full):
  *  a %NULL-terminated string array or %NULL if the specified
  *  key cannot be found. The array should be freed with g_strfreev().
- * Since: 2.60.0
+ * Since: 2.60
  */
 
 
@@ -19600,16 +19642,17 @@
  * @uri_scheme: a string containing a URI scheme.
  *
  * Gets the default application for launching applications
- * using this URI scheme for a particular GDesktopAppInfoLookup
+ * using this URI scheme for a particular #GDesktopAppInfoLookup
  * implementation.
  *
- * The GDesktopAppInfoLookup interface and this function is used
+ * The #GDesktopAppInfoLookup interface and this function is used
  * to implement g_app_info_get_default_for_uri_scheme() backends
  * in a GIO module. There is no reason for applications to use it
  * directly. Applications should use g_app_info_get_default_for_uri_scheme().
  *
  * Returns: (transfer full): #GAppInfo for given @uri_scheme or %NULL on error.
- * Deprecated: The #GDesktopAppInfoLookup interface is deprecated and unused by gio.
+ * Deprecated: 2.28: The #GDesktopAppInfoLookup interface is deprecated and
+ *    unused by GIO.
  */
 
 
@@ -20819,7 +20862,7 @@
 /**
  * g_file_attribute_info_list_lookup:
  * @list: a #GFileAttributeInfoList.
- * @name: the name of the attribute to lookup.
+ * @name: the name of the attribute to look up.
  *
  * Gets the file attribute with the name @name from @list.
  *
@@ -22125,9 +22168,10 @@
  *
  * Gets the value of a attribute, formated as a string.
  * This escapes things as needed to make the string valid
- * utf8.
+ * UTF-8.
  *
- * Returns: a UTF-8 string associated with the given @attribute.
+ * Returns: (nullable): a UTF-8 string associated with the given @attribute, or
+ *    %NULL if the attribute wasn’t set.
  *    When you're done with the string it must be freed with g_free().
  */
 
@@ -23258,7 +23302,7 @@
  *
  * By default, errors are only reported against the toplevel file
  * itself.  Errors found while recursing are silently ignored, unless
- * %G_FILE_DISK_USAGE_REPORT_ALL_ERRORS is given in @flags.
+ * %G_FILE_MEASURE_REPORT_ANY_ERROR is given in @flags.
  *
  * The returned size, @disk_usage, is in bytes and should be formatted
  * with g_format_size() in order to get something reasonable for showing
@@ -23921,6 +23965,7 @@
 /**
  * g_file_query_default_handler_async:
  * @file: a #GFile to open
+ * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: optional #GCancellable object, %NULL to ignore
  * @callback: (nullable): a #GAsyncReadyCallback to call when the request is done
  * @user_data: (nullable): data to pass to @callback
@@ -25894,8 +25939,8 @@
 /**
  * g_input_stream_read:
  * @stream: a #GInputStream.
- * @buffer: (array length=count) (element-type guint8): a buffer to
- *     read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
+ *     a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -25929,8 +25974,8 @@
 /**
  * g_input_stream_read_all:
  * @stream: a #GInputStream.
- * @buffer: (array length=count) (element-type guint8): a buffer to
- *     read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
+ *     a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @bytes_read: (out): location to store the number of bytes that was read from the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
@@ -25963,8 +26008,8 @@
 /**
  * g_input_stream_read_all_async:
  * @stream: A #GInputStream
- * @buffer: (array length=count) (element-type guint8): a buffer to
- *     read data into (which should be at least count bytes long)
+ * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
+ *     a buffer to read data into (which should be at least count bytes long)
  * @count: the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore
@@ -26011,8 +26056,8 @@
 /**
  * g_input_stream_read_async:
  * @stream: A #GInputStream.
- * @buffer: (array length=count) (element-type guint8): a buffer to
- *     read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
+ *     a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority]
  * of the request.
@@ -26228,7 +26273,7 @@
  *
  * Finishes a stream skip operation.
  *
- * Returns: the size of the bytes skipped, or %-1 on error.
+ * Returns: the size of the bytes skipped, or `-1` on error.
  */
 
 
@@ -28647,7 +28692,7 @@
  * Gets a choice from the mount operation.
  *
  * Returns: an integer containing an index of the user's choice from
- * the choice's list, or %0.
+ * the choice's list, or `0`.
  */
 
 
@@ -29037,7 +29082,7 @@
  * resolving `localhost`, and an IPv6 address for `localhost6`.
  *
  * g_network_address_get_hostname() will always return `localhost` for
- * #GNetworkAddresses created with this constructor.
+ * a #GNetworkAddress created with this constructor.
  *
  * Returns: (transfer full) (type GNetworkAddress): the new #GNetworkAddress
  * Since: 2.44
@@ -30953,8 +30998,8 @@
  * g_proxy_get_default_for_protocol:
  * @protocol: the proxy protocol name (e.g. http, socks, etc)
  *
- * Lookup "gio-proxy" extension point for a proxy implementation that supports
- * specified protocol.
+ * Find the `gio-proxy` extension point for a proxy implementation that supports
+ * the specified protocol.
  *
  * Returns: (transfer full): return a #GProxy or NULL if protocol
  *               is not supported.
@@ -31349,8 +31394,8 @@
 /**
  * g_resolver_lookup_records:
  * @resolver: a #GResolver
- * @rrname: the DNS name to lookup the record for
- * @record_type: the type of DNS record to lookup
+ * @rrname: the DNS name to look up the record for
+ * @record_type: the type of DNS record to look up
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: return location for a #GError, or %NULL
  *
@@ -31376,8 +31421,8 @@
 /**
  * g_resolver_lookup_records_async:
  * @resolver: a #GResolver
- * @rrname: the DNS name to lookup the record for
- * @record_type: the type of DNS record to lookup
+ * @rrname: the DNS name to look up the record for
+ * @record_type: the type of DNS record to look up
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: (scope async): callback to call after resolution completes
  * @user_data: (closure): data for @callback
@@ -32573,7 +32618,8 @@
  * You should free the return value with g_strfreev() when you are done
  * with it.
  *
- * Returns: (transfer full) (element-type utf8): a list of the children on @settings
+ * Returns: (transfer full) (element-type utf8): a list of the children on
+ *    @settings, in no defined order
  */
 
 
@@ -32590,7 +32636,9 @@
  * You should free the return value with g_strfreev() when you are done
  * with it.
  *
- * Returns: (transfer full) (element-type utf8): a list of the keys on @settings
+ * Returns: (transfer full) (element-type utf8): a list of the keys on
+ *    @settings, in no defined order
+ * Deprecated: 2.46: Use g_settings_schema_list_keys instead().
  */
 
 
@@ -32600,8 +32648,8 @@
  * Deprecated.
  *
  * Returns: (element-type utf8) (transfer none): a list of relocatable
- *   #GSettings schemas that are available.  The list must not be
- *   modified or freed.
+ *   #GSettings schemas that are available, in no defined order.  The list must
+ *   not be modified or freed.
  * Since: 2.28
  * Deprecated: 2.40: Use g_settings_schema_source_list_schemas() instead
  */
@@ -32613,8 +32661,8 @@
  * Deprecated.
  *
  * Returns: (element-type utf8) (transfer none): a list of #GSettings
- *   schemas that are available.  The list must not be modified or
- *   freed.
+ *   schemas that are available, in no defined order.  The list must not be
+ *   modified or freed.
  * Since: 2.26
  * Deprecated: 2.40: Use g_settings_schema_source_list_schemas() instead.
  * If you used g_settings_list_schemas() to check for the presence of
@@ -33007,7 +33055,8 @@
  * You should free the return value with g_strfreev() when you are done
  * with it.
  *
- * Returns: (transfer full) (element-type utf8): a list of the children on @settings
+ * Returns: (transfer full) (element-type utf8): a list of the children on
+ *    @settings, in no defined order
  * Since: 2.44
  */
 
@@ -33023,7 +33072,7 @@
  * function is intended for introspection reasons.
  *
  * Returns: (transfer full) (element-type utf8): a list of the keys on
- *   @schema
+ *   @schema, in no defined order
  * Since: 2.46
  */
 
@@ -33066,9 +33115,9 @@
  * @source: a #GSettingsSchemaSource
  * @recursive: if we should recurse
  * @non_relocatable: (out) (transfer full) (array zero-terminated=1): the
- *   list of non-relocatable schemas
+ *   list of non-relocatable schemas, in no defined order
  * @relocatable: (out) (transfer full) (array zero-terminated=1): the list
- *   of relocatable schemas
+ *   of relocatable schemas, in no defined order
  *
  * Lists the schemas in a given source.
  *
@@ -34759,7 +34808,7 @@
  * The sockets created by this object will use of the specified
  * protocol.
  *
- * If @protocol is %0 that means to use the default
+ * If @protocol is %G_SOCKET_PROTOCOL_DEFAULT that means to use the default
  * protocol for the socket family and type.
  *
  * Since: 2.22
@@ -35022,7 +35071,7 @@
  * @connectable: a #GSocketConnectable
  *
  * Creates a #GSocketAddressEnumerator for @connectable that will
- * return #GProxyAddresses for addresses that you must connect
+ * return a #GProxyAddress for each of its addresses that you must connect
  * to via a proxy.
  *
  * If @connectable does not implement
@@ -35363,6 +35412,13 @@
  * If this operation isn't supported on the OS, the method fails with
  * the %G_IO_ERROR_NOT_SUPPORTED error. On Linux this is implemented
  * by reading the %SO_PEERCRED option on the underlying socket.
+ *
+ * This method can be expected to be available on the following platforms:
+ *
+ * - Linux since GLib 2.26
+ * - OpenBSD since GLib 2.30
+ * - Solaris, Illumos and OpenSolaris since GLib 2.40
+ * - NetBSD since GLib 2.42
  *
  * Other ways to obtain credentials from a foreign peer includes the
  * #GUnixCredentialsMessage type and
@@ -36094,7 +36150,9 @@
  *    which may be filled with an array of #GSocketControlMessages, or %NULL
  * @num_messages: (out): a pointer which will be filled with the number of
  *    elements in @messages, or %NULL
- * @flags: (type GSocketMsgFlags) (inout): a pointer to an int containing #GSocketMsgFlags flags
+ * @flags: (inout): a pointer to an int containing #GSocketMsgFlags flags,
+ *    which may additionally contain
+ *    [other platform specific flags](http://man7.org/linux/man-pages/man2/recv.2.html)
  * @cancellable: a %GCancellable or %NULL
  * @error: a #GError pointer, or %NULL
  *
@@ -36169,7 +36227,9 @@
  * @socket: a #GSocket
  * @messages: (array length=num_messages): an array of #GInputMessage structs
  * @num_messages: the number of elements in @messages
- * @flags: (type GSocketMsgFlags): an int containing #GSocketMsgFlags flags for the overall operation
+ * @flags: an int containing #GSocketMsgFlags flags for the overall operation,
+ *    which may additionally contain
+ *    [other platform specific flags](http://man7.org/linux/man-pages/man2/recv.2.html)
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore
  *
@@ -36290,7 +36350,8 @@
  * @messages: (array length=num_messages) (nullable): a pointer to an
  *   array of #GSocketControlMessages, or %NULL.
  * @num_messages: number of elements in @messages, or -1.
- * @flags: (type GSocketMsgFlags): an int containing #GSocketMsgFlags flags
+ * @flags: an int containing #GSocketMsgFlags flags, which may additionally
+ *    contain [other platform specific flags](http://man7.org/linux/man-pages/man2/recv.2.html)
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -36347,7 +36408,8 @@
  * @messages: (array length=num_messages) (nullable): a pointer to an
  *   array of #GSocketControlMessages, or %NULL.
  * @num_messages: number of elements in @messages, or -1.
- * @flags: (type GSocketMsgFlags): an int containing #GSocketMsgFlags flags
+ * @flags: an int containing #GSocketMsgFlags flags, which may additionally
+ *    contain [other platform specific flags](http://man7.org/linux/man-pages/man2/recv.2.html)
  * @timeout_us: the maximum time (in microseconds) to wait, or -1
  * @bytes_written: (out) (optional): location to store the number of bytes that were written to the socket
  * @cancellable: (nullable): a %GCancellable or %NULL
@@ -36373,7 +36435,8 @@
  * @socket: a #GSocket
  * @messages: (array length=num_messages): an array of #GOutputMessage structs
  * @num_messages: the number of elements in @messages
- * @flags: (type GSocketMsgFlags): an int containing #GSocketMsgFlags flags
+ * @flags: an int containing #GSocketMsgFlags flags, which may additionally
+ *    contain [other platform specific flags](http://man7.org/linux/man-pages/man2/recv.2.html)
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -37053,6 +37116,11 @@
  *
  * On UNIX, returns the process ID as a decimal string.
  * On Windows, returns the result of GetProcessId() also as a string.
+ * If the subprocess has terminated, this will return %NULL.
+ *
+ * Returns: (nullable): the subprocess identifier, or %NULL if the subprocess
+ *    has terminated
+ * Since: 2.40
  */
 
 
@@ -39391,7 +39459,7 @@
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: (nullable): a #GError, or %NULL
  *
- * Lookup a certificate by its handle.
+ * Look up a certificate by its handle.
  *
  * The handle should have been created by calling
  * g_tls_database_create_certificate_handle() on a #GTlsDatabase object of
@@ -39420,7 +39488,7 @@
  * @callback: callback to call when the operation completes
  * @user_data: the data to pass to the callback function
  *
- * Asynchronously lookup a certificate by its handle in the database. See
+ * Asynchronously look up a certificate by its handle in the database. See
  * g_tls_database_lookup_certificate_for_handle() for more information.
  *
  * Since: 2.30
@@ -39434,7 +39502,7 @@
  * @error: a #GError pointer, or %NULL
  *
  * Finish an asynchronous lookup of a certificate by its handle. See
- * g_tls_database_lookup_certificate_by_handle() for more information.
+ * g_tls_database_lookup_certificate_for_handle() for more information.
  *
  * If the handle is no longer valid, or does not point to a certificate in
  * this database, then %NULL will be returned.
@@ -39454,7 +39522,7 @@
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: (nullable): a #GError, or %NULL
  *
- * Lookup the issuer of @certificate in the database.
+ * Look up the issuer of @certificate in the database.
  *
  * The #GTlsCertificate:issuer property
  * of @certificate is not modified, and the two certificates are not hooked
@@ -39479,7 +39547,7 @@
  * @callback: callback to call when the operation completes
  * @user_data: the data to pass to the callback function
  *
- * Asynchronously lookup the issuer of @certificate in the database. See
+ * Asynchronously look up the issuer of @certificate in the database. See
  * g_tls_database_lookup_certificate_issuer() for more information.
  *
  * Since: 2.30
@@ -39510,7 +39578,7 @@
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: (nullable): a #GError, or %NULL
  *
- * Lookup certificates issued by this issuer in the database.
+ * Look up certificates issued by this issuer in the database.
  *
  * This function can block, use g_tls_database_lookup_certificates_issued_by_async() to perform
  * the lookup operation asynchronously.
@@ -39531,7 +39599,7 @@
  * @callback: callback to call when the operation completes
  * @user_data: the data to pass to the callback function
  *
- * Asynchronously lookup certificates issued by this issuer in the database. See
+ * Asynchronously look up certificates issued by this issuer in the database. See
  * g_tls_database_lookup_certificates_issued_by() for more information.
  *
  * The database may choose to hold a reference to the issuer byte array for the duration
@@ -40062,6 +40130,14 @@
  * single byte from the stream, as this is required for credentials
  * passing to work on some implementations.
  *
+ * This method can be expected to be available on the following platforms:
+ *
+ * - Linux since GLib 2.26
+ * - FreeBSD since GLib 2.26
+ * - GNU/kFreeBSD since GLib 2.36
+ * - Solaris, Illumos and OpenSolaris since GLib 2.40
+ * - GNU/Hurd since GLib 2.40
+ *
  * Other ways to exchange credentials with a foreign peer includes the
  * #GUnixCredentialsMessage type and g_socket_get_credentials() function.
  *
@@ -40138,6 +40214,14 @@
  * As well as sending the credentials this also writes a single NUL
  * byte to the stream, as this is required for credentials passing to
  * work on some implementations.
+ *
+ * This method can be expected to be available on the following platforms:
+ *
+ * - Linux since GLib 2.26
+ * - FreeBSD since GLib 2.26
+ * - GNU/kFreeBSD since GLib 2.36
+ * - Solaris, Illumos and OpenSolaris since GLib 2.40
+ * - GNU/Hurd since GLib 2.40
  *
  * Other ways to exchange credentials with a foreign peer includes the
  * #GUnixCredentialsMessage type and g_socket_get_credentials() function.
@@ -40581,6 +40665,9 @@
  * is set, it will be filled with a unix timestamp for checking
  * if the mounts have changed since with g_unix_mounts_changed_since().
  *
+ * If more mounts have the same mount path, the last matching mount
+ * is returned.
+ *
  * Returns: (transfer full): a #GUnixMountEntry.
  */
 
@@ -40616,6 +40703,9 @@
  * Gets a #GUnixMountEntry for a given file path. If @time_read
  * is set, it will be filled with a unix timestamp for checking
  * if the mounts have changed since with g_unix_mounts_changed_since().
+ *
+ * If more mounts have the same mount path, the last matching mount
+ * is returned.
  *
  * Returns: (transfer full): a #GUnixMountEntry.
  * Since: 2.52
@@ -42518,6 +42608,14 @@
  * GetLogicalDrives() is returned.
  *
  * Returns: bitmask with same meaning as returned by GetLogicalDrives()
+ */
+
+
+/**
+ * inet_addresses_to_inet_socket_addresses:
+ * @addresses: (transfer full): #GList of #GInetAddress
+ *
+ * Returns: (transfer full): #GList of #GInetSocketAddress
  */
 
 
