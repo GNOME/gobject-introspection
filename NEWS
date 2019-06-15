@@ -1,3 +1,16 @@
+1.60.2 - 2019-06-15
+-------------------
+
+* docwriter: Fix Exception message attribute :mr:`146` (:user:`Philip Chimento <ptomato>`)
+* meson: fix default cairo DLL name on Windows
+* scanner: Fix error on Windows in case source files are on different drives
+* gi-test: Fix gir file tests with MSVC :mr:`151` (:user:`Chun-wei Fan <fanc999>`)
+* MSVC.README.rst: Update VS 2008/x64 build notes :mr:`152` (:user:`Chun-wei Fan <fanc999>`)
+* giscanner/scannerlexer.l: Include io.h on Windows (:user:`Chun-wei Fan <fanc999>`)
+* build: Force-include msvc_recommended_pragmas.h on Visual Studio :mr:`152` (:user:`Chun-wei Fan <fanc999>`)
+* Update glib annotations (2.60.4)
+
+
 1.60.1 - 2019-04-07
 -------------------
 
