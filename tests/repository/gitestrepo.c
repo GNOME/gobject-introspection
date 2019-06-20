@@ -57,6 +57,29 @@ test_type_info_get_name (GIRepository *repo)
   g_base_info_unref ((GIBaseInfo*)typeinfo);
 }
 
+static void
+test_get_gtype_interfaces (GIRepository *repo)
+{
+  GIInterfaceInfo **interfaces;
+  guint n_interfaces, ix;
+  gboolean found_initable = FALSE, found_async_initable = FALSE;
+
+  g_irepository_get_object_gtype_interfaces (repo, G_TYPE_DBUS_CONNECTION, &n_interfaces, &interfaces);
+
+  g_assert_cmpuint (n_interfaces, ==, 2);
+
+  for (ix = 0; ix < n_interfaces; ix++)
+    {
+      const gchar *name = g_base_info_get_name(*(interfaces + ix));
+      if (strcmp (name, "Initable") == 0)
+        found_initable = TRUE;
+      else if (strcmp (name, "AsyncInitable") == 0)
+        found_async_initable = TRUE;
+    }
+
+  g_assert_true (found_initable);
+  g_assert_true (found_async_initable);
+}
 
 int
 main(int argc, char **argv)
@@ -161,6 +184,7 @@ main(int argc, char **argv)
   }
 
   test_type_info_get_name (repo);
+  test_get_gtype_interfaces (repo);
 
   /* Error quark tests */
   errorinfo = g_irepository_find_by_error_domain (repo, G_RESOLVER_ERROR);
