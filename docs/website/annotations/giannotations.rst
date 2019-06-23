@@ -123,13 +123,13 @@ Support for GObject closures
     -
   * - ``(closure)``
     - parameters
-    - The parameter is a "``user_data``" for callbacks.
-      Many bindings can pass ``NULL`` here.
+    - The parameter is a callback and has a corresponding "``user_data``"
+      parameter which many bindings can pass ``NULL``.
     -
   * - ``(closure CLOSURE)``
     - parameters
-    - The parameter is a "``user_data``" for callbacks, the ``CLOSURE`` option
-      points to a different parameter that is the actual callback.
+    - The parameter is a callback, the ``CLOSURE`` option points to a different
+      parameter that is the "``user_data``" parameter returned by the callback.
     -
 
 
