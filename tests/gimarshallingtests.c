@@ -1955,6 +1955,29 @@ gi_marshalling_tests_garray_utf8_full_return (void)
 }
 
 /**
+ * gi_marshalling_tests_garray_struct_full_return:
+ *
+ * Returns: (element-type GIMarshallingTestsBoxedStruct) (transfer full):
+ */
+GArray *
+gi_marshalling_tests_garray_struct_full_return (void)
+{
+  GArray *array = NULL;
+  static const glong long_values[] = { 42, 43, 44 };
+  gint i;
+
+  array = g_array_new (TRUE, TRUE, sizeof (GIMarshallingTestsBoxedStruct));
+  for (i = 0; i < 3; i++)
+    {
+      GIMarshallingTestsBoxedStruct *new_struct = gi_marshalling_tests_boxed_struct_new ();
+      new_struct->long_ = long_values[i];
+      g_array_append_val (array, *new_struct);
+    }
+
+  return array;
+}
+
+/**
  * gi_marshalling_tests_garray_int_none_in:
  * @array_: (element-type gint) (transfer none):
  */
@@ -2240,6 +2263,29 @@ gi_marshalling_tests_gptrarray_utf8_full_return (void)
     {
       gchar *str = g_strdup (values[i]);
       g_ptr_array_add (parray, (gpointer) str);
+    }
+
+  return parray;
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_struct_full_return:
+ *
+ * Returns: (element-type GIMarshallingTestsBoxedStruct) (transfer full):
+ */
+GPtrArray *
+gi_marshalling_tests_gptrarray_struct_full_return (void)
+{
+  GPtrArray *parray = NULL;
+  static const glong long_values[] = { 42, 43, 44 };
+  gint i;
+
+  parray = g_ptr_array_new ();
+  for (i = 0; i < 3; i++)
+    {
+      GIMarshallingTestsBoxedStruct *new_struct = gi_marshalling_tests_boxed_struct_new ();
+      new_struct->long_ = long_values[i];
+      g_ptr_array_add (parray, (gpointer) new_struct);
     }
 
   return parray;
