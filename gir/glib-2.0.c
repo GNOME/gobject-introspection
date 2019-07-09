@@ -8826,6 +8826,18 @@
 
 
 /**
+ * g_array_copy:
+ * @array: A #GArray.
+ *
+ * Create a shallow copy of a #GArray. If the array elements consist of
+ * pointers to data, the pointers are copied but the actual data is not.
+ *
+ * Returns: (transfer container): A copy of @array.
+ * Since: 2.62
+ */
+
+
+/**
  * g_array_free:
  * @array: a #GArray
  * @free_segment: if %TRUE the actual element data is freed as well
@@ -10925,6 +10937,8 @@
  *
  * The variable is cleaned up in a way appropriate to its type when the
  * variable goes out of scope.  The type must support this.
+ * The way to clean up the type must have been defined using one of the macros
+ * G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC() or G_DEFINE_AUTO_CLEANUP_FREE_FUNC().
  *
  * This feature is only supported on GCC and clang.  This macro is not
  * defined on other compilers and should not be used in programs that
@@ -11044,6 +11058,8 @@
  *
  * The variable is cleaned up in a way appropriate to its type when the
  * variable goes out of scope.  The type must support this.
+ * The way to clean up the type must have been defined using the macro
+ * G_DEFINE_AUTOPTR_CLEANUP_FUNC().
  *
  * This feature is only supported on GCC and clang.  This macro is not
  * defined on other compilers and should not be used in programs that
@@ -24489,6 +24505,70 @@
 
 
 /**
+ * g_ptr_array_copy:
+ * @array: #GPtrArray to duplicate
+ * @func: (nullable): a copy function used to copy every element in the array
+ * @user_data: user data passed to the copy function @func, or %NULL
+ *
+ * Makes a full (deep) copy of a #GPtrArray.
+ *
+ * @func, as a #GCopyFunc, takes two arguments, the data to be copied
+ * and a @user_data pointer. On common processor architectures, it's safe to
+ * pass %NULL as @user_data if the copy function takes only one argument. You
+ * may get compiler warnings from this though if compiling with GCC’s
+ * `-Wcast-function-type` warning.
+ *
+ * If @func is %NULL, then only the pointers (and not what they are
+ * pointing to) are copied to the new #GPtrArray.
+ *
+ * Returns: (transfer full): a deep copy of the initial #GPtrArray.
+ * Since: 2.62
+ */
+
+
+/**
+ * g_ptr_array_extend:
+ * @array_to_extend: a #GPtrArray.
+ * @array: (transfer none): a #GPtrArray to add to the end of @array_to_extend.
+ * @func: (nullable): a copy function used to copy every element in the array
+ * @user_data: user data passed to the copy function @func, or %NULL
+ *
+ * Adds all pointers of @array to the end of the array @array_to_extend.
+ * The array will grow in size automatically if needed. @array_to_extend is
+ * modified in-place.
+ *
+ * @func, as a #GCopyFunc, takes two arguments, the data to be copied
+ * and a @user_data pointer. On common processor architectures, it's safe to
+ * pass %NULL as @user_data if the copy function takes only one argument. You
+ * may get compiler warnings from this though if compiling with GCC’s
+ * `-Wcast-function-type` warning.
+ *
+ * If @func is %NULL, then only the pointers (and not what they are
+ * pointing to) are copied to the new #GPtrArray.
+ *
+ * Since: 2.62
+ */
+
+
+/**
+ * g_ptr_array_extend_and_steal:
+ * @array_to_extend: (transfer none): a #GPtrArray.
+ * @array: (transfer container): a #GPtrArray to add to the end of
+ *     @array_to_extend.
+ *
+ * Adds all the pointers in @array to the end of @array_to_extend, transferring
+ * ownership of each element from @array to @array_to_extend and modifying
+ * @array_to_extend in-place. @array is then freed.
+ *
+ * As with g_ptr_array_free(), @array will be destroyed if its reference count
+ * is 1. If its reference count is higher, it will be decremented and the
+ * length of @array set to zero.
+ *
+ * Since: 2.62
+ */
+
+
+/**
  * g_ptr_array_find: (skip)
  * @haystack: pointer array to be searched
  * @needle: pointer to look for
@@ -33498,6 +33578,17 @@
 
 
 /**
+ * g_timer_is_active:
+ * @timer: a #GTimer.
+ *
+ * Exposes whether the timer is currently active.
+ *
+ * Returns: %TRUE if the timer is running, %FALSE otherwise
+ * Since: 2.62
+ */
+
+
+/**
  * g_timer_new:
  *
  * Creates a new timer, and starts timing (i.e. g_timer_start() is
@@ -33947,7 +34038,7 @@
  * Convert a string from UCS-4 to UTF-16. A 0 character will be
  * added to the result after the converted text.
  *
- * Returns: a pointer to a newly allocated UTF-16 string.
+ * Returns: (transfer full): a pointer to a newly allocated UTF-16 string.
  *     This value must be freed with g_free(). If an error occurs,
  *     %NULL will be returned and @error set.
  */
@@ -33970,7 +34061,7 @@
  * Convert a string from a 32-bit fixed width representation as UCS-4.
  * to UTF-8. The result will be terminated with a 0 byte.
  *
- * Returns: a pointer to a newly allocated UTF-8 string.
+ * Returns: (transfer full): a pointer to a newly allocated UTF-8 string.
  *     This value must be freed with g_free(). If an error occurs,
  *     %NULL will be returned and @error set. In that case, @items_read
  *     will be set to the position of the first invalid input character.
@@ -34079,7 +34170,7 @@
  * g_unichar_compose:
  * @a: a Unicode character
  * @b: a Unicode character
- * @ch: return location for the composed character
+ * @ch: (out) (not optional): return location for the composed character
  *
  * Performs a single composition step of the
  * Unicode canonical composition algorithm.
@@ -34106,8 +34197,8 @@
 /**
  * g_unichar_decompose:
  * @ch: a Unicode character
- * @a: return location for the first component of @ch
- * @b: return location for the second component of @ch
+ * @a: (out) (not optional): return location for the first component of @ch
+ * @b: (out) (not optional): return location for the second component of @ch
  *
  * Performs a single decomposition step of the
  * Unicode canonical decomposition algorithm.
@@ -34154,7 +34245,7 @@
  * g_unichar_fully_decompose:
  * @ch: a Unicode character.
  * @compat: whether perform canonical or compatibility decomposition
- * @result: (nullable): location to store decomposed result, or %NULL
+ * @result: (optional) (out caller-allocates): location to store decomposed result, or %NULL
  * @result_len: length of @result
  *
  * Computes the canonical or compatibility decomposition of a
@@ -34937,7 +35028,7 @@
  * Convert a string from UTF-16 to UCS-4. The result will be
  * nul-terminated.
  *
- * Returns: a pointer to a newly allocated UCS-4 string.
+ * Returns: (transfer full): a pointer to a newly allocated UCS-4 string.
  *     This value must be freed with g_free(). If an error occurs,
  *     %NULL will be returned and @error set.
  */
@@ -34973,7 +35064,7 @@
  * be correctly interpreted as UTF-16, i.e. it doesn't contain
  * things unpaired surrogates.
  *
- * Returns: a pointer to a newly allocated UTF-8 string.
+ * Returns: (transfer full): a pointer to a newly allocated UTF-8 string.
  *     This value must be freed with g_free(). If an error occurs,
  *     %NULL will be returned and @error set.
  */
@@ -35078,7 +35169,7 @@
  * @end is non-%NULL, the return value will be %NULL if the end of the string
  * is reached.
  *
- * Returns: (nullable): a pointer to the found character or %NULL if @end is
+ * Returns: (transfer none) (nullable): a pointer to the found character or %NULL if @end is
  *    set and is reached
  */
 
@@ -35096,7 +35187,7 @@
  * is made to see if the character found is actually valid other than
  * it starts with an appropriate byte.
  *
- * Returns: a pointer to the found character or %NULL.
+ * Returns: (transfer none) (nullable): a pointer to the found character or %NULL.
  */
 
 
@@ -35190,9 +35281,9 @@
  * a legacy encoding or pass it to a system with
  * less capable Unicode handling.
  *
- * Returns: a newly allocated string, that is the
- *   normalized form of @str, or %NULL if @str is not
- *   valid UTF-8.
+ * Returns: (nullable): a newly allocated string, that
+ *   is the normalized form of @str, or %NULL if @str
+ *   is not valid UTF-8.
  */
 
 
@@ -35215,7 +35306,7 @@
  * This limitation exists as this function is called frequently during
  * text rendering and therefore has to be as fast as possible.
  *
- * Returns: the resulting pointer
+ * Returns: (transfer none): the resulting pointer
  */
 
 
@@ -35245,7 +35336,7 @@
  * it starts with an appropriate byte. If @p might be the first
  * character of the string, you must use g_utf8_find_prev_char() instead.
  *
- * Returns: a pointer to the found character
+ * Returns: (transfer none) (not nullable): a pointer to the found character
  */
 
 
@@ -35259,7 +35350,7 @@
  * in a UTF-8 encoded string, while limiting the search to @len bytes.
  * If @len is -1, allow unbounded search.
  *
- * Returns: %NULL if the string does not contain the character,
+ * Returns: (transfer none) (nullable): %NULL if the string does not contain the character,
  *     otherwise, a pointer to the start of the leftmost occurrence
  *     of the character in the string.
  */
@@ -35299,7 +35390,7 @@
 
 /**
  * g_utf8_strncpy:
- * @dest: buffer to fill with characters from @src
+ * @dest: (transfer none): buffer to fill with characters from @src
  * @src: UTF-8 encoded string
  * @n: character count
  *
@@ -35311,7 +35402,7 @@
  * Note you must ensure @dest is at least 4 * @n to fit the
  * largest possible UTF-8 characters
  *
- * Returns: @dest
+ * Returns: (transfer none): @dest
  */
 
 
@@ -35325,7 +35416,7 @@
  * in a UTF-8 encoded string, while limiting the search to @len bytes.
  * If @len is -1, allow unbounded search.
  *
- * Returns: %NULL if the string does not contain the character,
+ * Returns: (transfer none) (nullable): %NULL if the string does not contain the character,
  *     otherwise, a pointer to the start of the rightmost occurrence
  *     of the character in the string.
  */
@@ -35351,7 +35442,7 @@
  * newly-allocated memory, which should be freed with g_free() when
  * no longer needed.
  *
- * Returns: a newly-allocated string which is the reverse of @str
+ * Returns: (transfer full): a newly-allocated string which is the reverse of @str
  * Since: 2.2
  */
 
@@ -35381,7 +35472,7 @@
  * Copies a substring out of a UTF-8 encoded string.
  * The substring will contain @end_pos - @start_pos characters.
  *
- * Returns: a newly allocated copy of the requested
+ * Returns: (transfer full): a newly allocated copy of the requested
  *     substring. Free with g_free() when no longer needed.
  * Since: 2.30
  */
@@ -35409,7 +35500,7 @@
  * representation as UCS-4. A trailing 0 character will be added to the
  * string after the converted text.
  *
- * Returns: a pointer to a newly allocated UCS-4 string.
+ * Returns: (transfer full): a pointer to a newly allocated UCS-4 string.
  *     This value must be freed with g_free(). If an error occurs,
  *     %NULL will be returned and @error set.
  */
@@ -35429,7 +35520,7 @@
  * but does no error checking on the input. A trailing 0 character
  * will be added to the string after the converted text.
  *
- * Returns: a pointer to a newly allocated UCS-4 string.
+ * Returns: (transfer full): a pointer to a newly allocated UCS-4 string.
  *     This value must be freed with g_free().
  */
 
@@ -35453,7 +35544,7 @@
  * Convert a string from UTF-8 to UTF-16. A 0 character will be
  * added to the result after the converted text.
  *
- * Returns: a pointer to a newly allocated UTF-16 string.
+ * Returns: (transfer full): a pointer to a newly allocated UTF-16 string.
  *     This value must be freed with g_free(). If an error occurs,
  *     %NULL will be returned and @error set.
  */

@@ -2052,9 +2052,12 @@
  * @removed: the number of items removed
  * @added: the number of items added
  *
- * This signal is emitted whenever items were added or removed to
- * @list. At @position, @removed items were removed and @added items
- * were added in their place.
+ * This signal is emitted whenever items were added to or removed
+ * from @list. At @position, @removed items were removed and @added
+ * items were added in their place.
+ *
+ * Note: If @removed != @added, the positions of all later items
+ * in the model change.
  *
  * Since: 2.44
  */
@@ -5525,7 +5528,7 @@
  * The #GDBusConnection type is used for D-Bus connections to remote
  * peers such as a message buses. It is a low-level API that offers a
  * lot of flexibility. For instance, it lets you establish a connection
- * over any transport that can by represented as an #GIOStream.
+ * over any transport that can by represented as a #GIOStream.
  *
  * This class is rarely used directly in D-Bus clients. If you are writing
  * a D-Bus client, it is often easier to use the g_bus_own_name(),
@@ -7493,7 +7496,7 @@
  *
  * `to-pixdata` which will use the gdk-pixbuf-pixdata command to convert
  * images to the GdkPixdata format, which allows you to create pixbufs directly using the data inside
- * the resource file, rather than an (uncompressed) copy if it. For this, the gdk-pixbuf-pixdata
+ * the resource file, rather than an (uncompressed) copy of it. For this, the gdk-pixbuf-pixdata
  * program must be in the PATH, or the `GDK_PIXBUF_PIXDATA` environment variable must be
  * set to the full path to the gdk-pixbuf-pixdata executable; otherwise the resource compiler will
  * abort.
@@ -12975,7 +12978,7 @@
  * When the operation is finished, @callback will be invoked. You can
  * then call g_bus_get_finish() to get the result of the operation.
  *
- * This is a asynchronous failable function. See g_bus_get_sync() for
+ * This is an asynchronous failable function. See g_bus_get_sync() for
  * the synchronous version.
  *
  * Since: 2.26
@@ -16225,8 +16228,8 @@
  * more details.
  *
  * Note that this function should be used with care. Most modern UNIX
- * desktops tie the notion of a user session the session bus, and expect
- * all of a users applications to quit when their bus connection goes away.
+ * desktops tie the notion of a user session with the session bus, and expect
+ * all of a user's applications to quit when their bus connection goes away.
  * If you are setting @exit_on_close to %FALSE for the shared session
  * bus connection, you should make sure that your application exits
  * when the user session ends.
@@ -21823,9 +21826,9 @@
  *
  * Gets a #GMount for the #GFile.
  *
- * If the #GFileIface for @file does not have a mount (e.g.
- * possibly a remote share), @error will be set to %G_IO_ERROR_NOT_FOUND
- * and %NULL will be returned.
+ * #GMount is returned only for user interesting locations, see
+ * #GVolumeMonitor. If the #GFileIface for @file does not have a #mount,
+ * @error will be set to %G_IO_ERROR_NOT_FOUND and %NULL #will be returned.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -36015,7 +36018,9 @@
  * @listener: a #GSocketListener
  * @listen_backlog: an integer
  *
- * Sets the listen backlog on the sockets in the listener.
+ * Sets the listen backlog on the sockets in the listener. This must be called
+ * before adding any sockets, addresses or ports to the #GSocketListener (for
+ * example, by calling g_socket_listener_add_inet_port()) to be effective.
  *
  * See g_socket_set_listen_backlog() for details
  *
@@ -38415,7 +38420,7 @@
  * Stop the session bus started by g_test_dbus_up().
  *
  * This will wait for the singleton returned by g_bus_get() or g_bus_get_sync()
- * is destroyed. This is done to ensure that the next unit test won't get a
+ * to be destroyed. This is done to ensure that the next unit test won't get a
  * leaked singleton from this test.
  */
 
