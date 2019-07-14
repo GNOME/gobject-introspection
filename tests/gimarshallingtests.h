@@ -834,6 +834,9 @@ GArray *gi_marshalling_tests_garray_utf8_container_return (void);
 _GI_TEST_EXTERN
 GArray *gi_marshalling_tests_garray_utf8_full_return (void);
 
+_GI_TEST_EXTERN
+GArray *gi_marshalling_tests_garray_boxed_struct_full_return (void);
+
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_garray_int_none_in (GArray *array_);
@@ -883,6 +886,9 @@ GPtrArray *gi_marshalling_tests_gptrarray_utf8_container_return (void);
 
 _GI_TEST_EXTERN
 GPtrArray *gi_marshalling_tests_gptrarray_utf8_full_return (void);
+
+_GI_TEST_EXTERN
+GPtrArray *gi_marshalling_tests_gptrarray_boxed_struct_full_return (void);
 
 
 _GI_TEST_EXTERN
