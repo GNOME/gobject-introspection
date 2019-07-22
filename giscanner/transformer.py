@@ -459,6 +459,10 @@ raise ValueError."""
     def _create_function_macro(self, symbol):
         if symbol.ident.startswith('_'):
             return None
+
+        if (symbol.source_filename is None or not symbol.source_filename.endswith('.h')):
+            return None
+
         parameters = list(self._create_parameters(symbol, symbol.base_type))
         name = self._strip_symbol(symbol)
         macro = ast.FunctionMacro(name, parameters, symbol.ident)

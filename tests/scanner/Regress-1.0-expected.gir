@@ -1340,15 +1340,6 @@ it says it's pointer but it's actually a string.</doc>
         </parameter>
       </parameters>
     </function-macro>
-    <function-macro name="FOO_IS_TILE_HANDLER"
-                    c:identifier="REGRESS_FOO_IS_TILE_HANDLER"
-                    introspectable="0">
-      <source-position filename="foo.c" line="630"/>
-      <parameters>
-        <parameter name="object">
-        </parameter>
-      </parameters>
-    </function-macro>
     <function-macro name="FOO_OBJECT"
                     c:identifier="REGRESS_FOO_OBJECT"
                     introspectable="0">
@@ -1406,15 +1397,6 @@ it says it's pointer but it's actually a string.</doc>
       <source-position filename="foo.h" line="10"/>
       <type name="gint" c:type="gint"/>
     </constant>
-    <function-macro name="FOO_TILE_HANDLER"
-                    c:identifier="REGRESS_FOO_TILE_HANDLER"
-                    introspectable="0">
-      <source-position filename="foo.c" line="629"/>
-      <parameters>
-        <parameter name="object">
-        </parameter>
-      </parameters>
-    </function-macro>
     <enumeration name="FooASingle" c:type="RegressFooASingle">
       <source-position filename="foo.h" line="534"/>
       <member name="foo_some_single_enum"
