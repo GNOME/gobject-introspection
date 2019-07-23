@@ -546,6 +546,149 @@ the following are automatically nullable:
                            gpointer  tag);
 
 
+Nullable and optional
+*********************
+``(in)`` parameters have, compared to ``(out)`` or ``(inout)`` parameters, one level of
+pointer redirection less.  That is, to pass the string ``char *x = strdup("A")``
+as ``(in)``, one will call ``f(x)``, but to pass the same string as ``(out)`` or ``(inout)``,
+the call will be ``f(&x)``.
+
+The examples below are for input/output of type ``char*``.  If the type were ``int``,
+then ``(in) (nullable)`` for a parameter ``x`` of ``f ()`` means, that ``f (0)`` is valid and the
+function prototype is ``f (int)``.  Likewise `(inout) (nullable)` for an `int` parameter
+implies function prototype ``g (int *x)`` and ``int *x = NULL; g(&x)`` is valid.
+
+::
+
+   /**
+    * f1_in:
+    * @x: (in) (nullable): means, that NULL can be passed as parameter.
+    *     f1_in (NULL) is valid.
+    */
+    void f1_in (char *x);
+
+::
+
+   /**
+    * f2_in:
+    * @x: (in) (not nullable): means, that NULL cannot be passed as
+    *     parameter.  f2_in (NULL) is invalid.
+    */
+    void f2_in (char *x);
+
+::
+
+   /**
+    * f1_out:
+    * @x: (out) (nullable) (optional): means, that NULL can be passed
+    *     as parameter (because of optional).  If NULL is not passed
+    *     as parameter, the value pointed to by the parameter after
+    *     the function returns, can be NULL (because of nullable).
+    *     Whether the passed parameter points to NULL before the call
+    *     is for the (out) parameter irrelevant, as this is no
+    *     input for the function.  f1_out (NULL) is valid.  char *x;
+    *     f1_out (&x); is valid.  After the last call @x can be NULL.
+    */
+    void f1_out (char **x);
+
+::
+
+   /**
+    * f2_out:
+    * @x: (out) (not nullable) (optional): means, that NULL can be passed
+    *     as parameter (because of optional).  If NULL is not passed
+    *     as parameter, the value pointed to by the parameter after
+    *     the function returns, cannot be NULL (because of not nullable).
+    *     Whether the passed parameter points to NULL before the call
+    *     is for the (out) parameter irrelevant, as this is no
+    *     input for the function.  f2_out (NULL) is valid.  char *x;
+    *     f2_out (&x); is valid, and then @x is not NULL.
+    */
+    void f2_out(char **x);
+
+::
+
+   /**
+    * f3_out:
+    * @x: (out) (nullable): means, that NULL cannot be passed
+    *     as parameter (because it is not optional).  The value
+    *     pointed to by the parameter after the function returns,
+    *     can be NULL (because of nullable).  Whether the passed
+    *     parameter points to NULL before the call is for the (out)
+    *     parameter irrelevant, as this is no input for the
+    *     function.  f3_out (NULL) is not valid.  char *x;
+    *     f3_out (&x); is valid and then @x can be NULL.
+    */
+    void f3_out (char **x);
+
+::
+
+    * f4_out:
+    * @x: (out) (not nullable): means, that NULL cannot be passed
+    *     as parameter (because it is not optional).  The value
+    *     pointed to by the parameter after the function returns,
+    *     cannot be NULL (because of not nullable).  Whether the
+    *     passed parameter points to NULL before the call is for
+    *     the (out) parameter irrelevant, as this is no input for
+    *     the function.  f4_out (NULL) is invalid.  char *x;
+    *     f4_out (&x); is valid and then @x is not NULL.
+    */
+    void f4_out (char **x);
+
+::
+
+   /**
+    * f1_inout:
+    * @x: (inout) (nullable) (optional): means, that NULL can be passed
+    *     as parameter (because of optional).  If NULL is not passed
+    *     as parameter, the value pointed to by the parameter before
+    *     the call can be NULL (because of nullable).  The annotations
+    *     do not make a statement, whether after f1_inout returns @x
+    *     can point to NULL. f1_inout (NULL) is valid.
+    *     char *x = NULL; f1_inout (&x); is valid.
+    */
+    void f1_inout (char **x);
+
+::
+
+   /**
+    * f2_inout:
+    * @x: (inout) (not nullable) (optional): means, that NULL can be passed
+    *     as parameter (because of optional).  If NULL is not passed
+    *     as parameter, the value pointed to by the parameter before
+    *     the call cannot be NULL (because of not nullable).  The annotations
+    *     do not make a statement, whether after f2_inout returns @x can
+    *     point to %NULL. f2_inout (NULL) is valid.  char *x = NULL;
+    *     f2_inout (&x); is invalid.
+    */
+    void f2_inout (char **x);
+
+::
+
+   /**
+    * f3_inout:
+    * @x: (inout) (nullable): means, that NULL cannot be passed
+    *     as parameter (because of not optional).  The value pointed to by
+    *     the parameter before the call can be NULL (because of nullable).
+    *     The annotations do not make a statement, whether after f3_inout
+    *     returns @x can point to NULL. f3_inout (NULL) is invalid.
+    *     char *x = NULL; f3_inout (&x); is valid.
+    */
+    void f3_inout (char **x);
+
+::
+
+   /**
+    * f4_inout:
+    * @x: (inout) (not nullable): means, that NULL cannot be passed
+    *     as parameter (because of not optional).  The value pointed to by
+    *     the parameter before the call cannot be NULL (because of not nullable).
+    *     The annotations do not make a statement, whether after f4_inout
+    *     returns @x can point to NULL. f4_inout (NULL) is invalid.
+    *     char *x = NULL; f4_inout (&x); is invalid.
+    */
+    void f4_inout (char **x);
+
 G(S)List contained types
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
