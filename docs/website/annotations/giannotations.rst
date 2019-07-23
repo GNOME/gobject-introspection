@@ -193,7 +193,10 @@ Type signature
   * - ``(optional)``
     - parameters
     - For ``(out)`` or ``(inout)`` parameters, signifies that the caller
-      can pass ``NULL`` to ignore this output parameter.
+      can pass ``NULL`` to ignore this output parameter.  ``(nullable)``
+      means that the callee can set the value the passed in parameter points
+      to to ``NULL``, in contrast to ``(optional)``, where the caller can set
+      the parameter as ``NULL``.
     - :commit:`1.42 <1459ff3e>`
       :bzbug:`660879`
   * - ``(in)``
