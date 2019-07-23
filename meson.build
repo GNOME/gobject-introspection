@@ -22,6 +22,7 @@ if not python_version.version_compare(python_version_req)
 endif
 
 cc = meson.get_compiler('c')
+prog_pkgconfig = find_program('pkg-config')
 
 project_c_args = []
 if cc.get_id() != 'msvc'
@@ -193,8 +194,8 @@ endif
 pkgconfig_conf.set('VERSION', meson.project_version())
 pkgconfig_conf.set('FFI_PC_PACKAGES', 'libffi')
 if libffi_dep.type_name() == 'pkgconfig'
-  pkgconfig_conf.set('FFI_PC_CFLAGS', libffi_dep.get_pkgconfig_variable('Cflags'))
-  pkgconfig_conf.set('FFI_PC_LIBS', libffi_dep.get_pkgconfig_variable('Libs'))
+  pkgconfig_conf.set('FFI_PC_CFLAGS', run_command(prog_pkgconfig, ['libffi', '--cflags-only-I']).stdout())
+  pkgconfig_conf.set('FFI_PC_LIBS', run_command(prog_pkgconfig, ['libffi', '--libs-only-l']).stdout())
 else
   # XXX: We can't know the correct values for these, needs meson API. Maybe we
   # should use meson's pkgconfig module to generate the whole file.
