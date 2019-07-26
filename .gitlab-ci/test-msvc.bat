@@ -9,7 +9,7 @@ py -3 -c "import urllib.request, sys; urllib.request.urlretrieve(*sys.argv[1:])"
 
 SET PATH=%CD%;%CD%\win_flex_bison;%PATH%
 
-pip3 install --upgrade --user meson==0.49.0 || goto :error
+pip3 install --upgrade --user meson==0.49.2 || goto :error
 meson _build || goto :error
 ninja -C _build || goto :error
 
