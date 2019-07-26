@@ -108,6 +108,11 @@ else
   python_ext_dep = python.dependency().partial_dependency(compile_args: true)
 endif
 
+if not python_ext_dep.found()
+  # For example if Python is 32bit but we require a 64bit variant
+  error('Python installation not useable')
+endif
+
 giscanner_pymod = python.extension_module('_giscanner', ['giscannermodule.c'],
   link_with: giscanner_lib,
   c_args: gi_hidden_visibility_cflags + custom_c_args,
