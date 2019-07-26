@@ -37,12 +37,10 @@ giscanner_conf_data = configuration_data()
 giscanner_conf_data.set('VERSION', meson.project_version())
 giscanner_built_files += configure_file(input: '_version.py.in',
                                         output: '_version.py',
-                                        install : true,
                                         install_dir : giscannerdir,
                                         configuration: giscanner_conf_data)
 foreach f : giscanner_files
   giscanner_built_files += configure_file(input : f, output : f,
-                                          install : true,
                                           install_dir : giscannerdir,
                                           configuration : giscanner_conf_data)
 endforeach
