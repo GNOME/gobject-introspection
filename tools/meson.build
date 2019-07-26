@@ -30,7 +30,6 @@ foreach tool : tools
     input: 'g-ir-tool-template.in',
     output: tool[0],
     configuration: tools_conf,
-    install: true,
     install_dir: get_option('bindir'),
   )
   tool_output += tool_bin

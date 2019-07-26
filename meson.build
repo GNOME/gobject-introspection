@@ -207,7 +207,6 @@ configure_file(
   input: 'gobject-introspection-no-export-1.0.pc.in',
   output: 'gobject-introspection-no-export-1.0.pc',
   configuration: pkgconfig_conf,
-  install: true,
   install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
 )
 
@@ -215,6 +214,5 @@ configure_file(
   input: 'gobject-introspection-1.0.pc.in',
   output: 'gobject-introspection-1.0.pc',
   configuration: pkgconfig_conf,
-  install: true,
   install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
 )
