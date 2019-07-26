@@ -15009,8 +15009,8 @@
  * The returned address will be in the
  * [D-Bus address format](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
  *
- * Returns: a valid D-Bus address string for @bus_type or %NULL if
- *     @error is set
+ * Returns: (transfer full): a valid D-Bus address string for @bus_type or
+ *     %NULL if @error is set
  * Since: 2.26
  */
 
@@ -15790,7 +15790,7 @@
  * then call g_dbus_connection_new_finish() to get the result of the
  * operation.
  *
- * This is a asynchronous failable constructor. See
+ * This is an asynchronous failable constructor. See
  * g_dbus_connection_new_sync() for the synchronous
  * version.
  *
@@ -15833,13 +15833,13 @@
  * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_ALLOW_ANONYMOUS flags.
  *
  * When the operation is finished, @callback will be invoked. You can
- * then call g_dbus_connection_new_finish() to get the result of the
- * operation.
+ * then call g_dbus_connection_new_for_address_finish() to get the result of
+ * the operation.
  *
  * If @observer is not %NULL it may be used to control the
  * authentication process.
  *
- * This is a asynchronous failable constructor. See
+ * This is an asynchronous failable constructor. See
  * g_dbus_connection_new_for_address_sync() for the synchronous
  * version.
  *
@@ -32809,7 +32809,7 @@
  * Resets @key to its default value.
  *
  * This call resets the key, as much as possible, to its default value.
- * That might the value specified in the schema or the one set by the
+ * That might be the value specified in the schema or the one set by the
  * administrator.
  */
 
@@ -42613,14 +42613,6 @@
  * GetLogicalDrives() is returned.
  *
  * Returns: bitmask with same meaning as returned by GetLogicalDrives()
- */
-
-
-/**
- * inet_addresses_to_inet_socket_addresses:
- * @addresses: (transfer full): #GList of #GInetAddress
- *
- * Returns: (transfer full): #GList of #GInetSocketAddress
  */
 
 

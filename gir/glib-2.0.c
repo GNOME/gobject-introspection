@@ -4863,7 +4863,7 @@
  * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_release)
  * ]|
  *
- * Since: 2.58.
+ * Since: 2.58
  */
 
 
@@ -7747,7 +7747,7 @@
  * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_release)
  * ]|
  *
- * Since: 2.58.
+ * Since: 2.58
  */
 
 
@@ -8822,6 +8822,46 @@
  * Adds @len elements onto the end of the array.
  *
  * Returns: the #GArray
+ */
+
+
+/**
+ * g_array_binary_search:
+ * @array: a #GArray.
+ * @target: a pointer to the item to look up.
+ * @compare_func: A #GCompareFunc used to locate @target.
+ * @out_match_index: (optional) (out caller-allocates): return location
+ *    for the index of the element, if found.
+ *
+ * Checks whether @target exists in @array by performing a binary
+ * search based on the given comparison function @compare_func which
+ * get pointers to items as arguments. If the element is found, %TRUE
+ * is returned and the element’s index is returned in @out_match_index
+ * (if non-%NULL). Otherwise, %FALSE is returned and @out_match_index
+ * is undefined. If @target exists multiple times in @array, the index
+ * of the first instance is returned. This search is using a binary
+ * search, so the @array must absolutely be sorted to return a correct
+ * result (if not, the function may produce false-negative).
+ *
+ * This example defines a comparison function and search an element in a #GArray:
+ * |[<!-- language="C" -->
+ * static gint*
+ * cmpint (gconstpointer a, gconstpointer b)
+ * {
+ *   const gint *_a = a;
+ *   const gint *_b = b;
+ *
+ *   return *_a - *_b;
+ * }
+ * ...
+ * gint i = 424242;
+ * guint matched_index;
+ * gboolean result = g_array_binary_search (garray, &i, cmpint, &matched_index);
+ * ...
+ * ]|
+ *
+ * Returns: %TRUE if @target is one of the elements of @array, %FALSE otherwise.
+ * Since: 2.62
  */
 
 
@@ -21392,7 +21432,7 @@
 /**
  * g_main_context_prepare:
  * @context: a #GMainContext
- * @priority: location to store priority of highest priority
+ * @priority: (out) (optional): location to store priority of highest priority
  *            source already ready.
  *
  * Prepares to poll sources within a main loop. The resulting information
@@ -24520,6 +24560,9 @@
  *
  * If @func is %NULL, then only the pointers (and not what they are
  * pointing to) are copied to the new #GPtrArray.
+ *
+ * The copy of @array will have the same #GDestroyNotify for its elements as
+ * @array.
  *
  * Returns: (transfer full): a deep copy of the initial #GPtrArray.
  * Since: 2.62
@@ -32292,6 +32335,18 @@
  *
  * This should be called at the top of a test function.
  *
+ * For example:
+ * |[<!-- language="C" -->
+ * static void
+ * test_array_sort (void)
+ * {
+ *   g_test_summary ("Test my_array_sort() sorts the array correctly and stably, "
+ *                   "including testing zero length and one-element arrays.");
+ *
+ *   …
+ * }
+ * ]|
+ *
  * Since: 2.62:
  * See also: g_test_bug()
  */
@@ -33758,8 +33813,8 @@
  * g_tree_lookup_extended:
  * @tree: a #GTree
  * @lookup_key: the key to look up
- * @orig_key: (optional) (nullable): returns the original key
- * @value: (optional) (nullable): returns the value associated with the key
+ * @orig_key: (out) (optional) (nullable): returns the original key
+ * @value: (out) (optional) (nullable): returns the value associated with the key
  *
  * Looks up a key in the #GTree, returning the original key and the
  * associated value. This is useful if you need to free the memory
