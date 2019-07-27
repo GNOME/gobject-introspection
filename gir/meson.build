@@ -342,6 +342,7 @@ foreach h : gio_headers
 endforeach
 
 if giounix_dep.found()
+  dep_type = giounix_dep.type_name()
   if dep_type == 'pkgconfig'
     gio_command += ['--pkg=gio-unix-2.0']
     giounix_includedir = join_paths(giounix_dep.get_pkgconfig_variable('includedir'), 'gio-unix-2.0')
