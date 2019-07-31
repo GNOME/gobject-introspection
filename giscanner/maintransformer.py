@@ -774,22 +774,26 @@ class MainTransformer(object):
 
             destroy_annotation = annotations.get(ANN_DESTROY)
             if destroy_annotation:
-                param.destroy_name = self._get_validate_parameter_name(parent,
-                                                                       destroy_annotation[0],
-                                                                       param)
-                if param.destroy_name is not None:
+                destroy_param = parent.get_parameter(destroy_annotation[0])
+                if destroy_param:
+                    destroy_param.destroy_name = param.argname
                     param.scope = ast.PARAM_SCOPE_NOTIFIED
-                    destroy_param = parent.get_parameter(param.destroy_name)
                     # This is technically bogus; we're setting the scope on the destroy
                     # itself.  But this helps avoid tripping a warning from finaltransformer,
                     # since we don't have a way right now to flag this callback a destroy.
                     destroy_param.scope = ast.PARAM_SCOPE_NOTIFIED
+                else:
+                    message.warn('%s: unable to find parameter %s' % (param.argname, destroy_annotation[0],),
+                                 tag.position)
 
             closure_annotation = annotations.get(ANN_CLOSURE)
             if closure_annotation and len(closure_annotation) == 1:
-                param.closure_name = self._get_validate_parameter_name(parent,
-                                                                   closure_annotation[0],
-                                                                   param)
+                closure_param = parent.get_parameter(closure_annotation[0])
+                if closure_param:
+                    closure_param.closure_name = param.argname
+                else:
+                    message.warn('%s: unable to find parameter %s' % (param.argname, closure_annotation[0],),
+                                 tag.position)
         elif isinstance(parent, ast.Callback):
             if ANN_CLOSURE in annotations:
                 # For callbacks, (closure) appears without an
