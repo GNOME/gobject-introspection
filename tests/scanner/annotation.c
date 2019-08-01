@@ -714,7 +714,9 @@ regress_annotation_object_extra_annos (RegressAnnotationObject *object)
 
 /**
  * regress_annotation_custom_destroy:
- * @callback: (destroy destroy) (closure data): Destroy notification
+ * @callback: Destroy notification
+ * @destroy: (destroy callback):
+ * @data: (closure callback):
  *
  * Test messing up the heuristic of closure/destroy-notification
  * detection, and fixing it via annotations.
