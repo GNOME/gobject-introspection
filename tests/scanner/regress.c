@@ -2300,6 +2300,7 @@ enum {
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_UINT64_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INTARRAY_RET,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INOUT_INT,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_GERROR,
   N_REGRESS_TEST_OBJ_SIGNALS
 };
 
@@ -2570,6 +2571,26 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                   G_TYPE_NONE,
                   1,
                   G_TYPE_POINTER);
+
+  /**
+   * RegressTestObj::sig-with-gerror:
+   * @self: The object that emitted the signal
+   * @error: (nullable) (type GLib.Error): A #GError if something went wrong
+   *   internally in @self. You must not free this #GError.
+   *
+   * This signal is modeled after #GstDiscoverer::discovered, and is added to
+   * exercise the path of a #GError being marshalled as a boxed type instead of
+   * an exception in the introspected language.
+   *
+   * Use via regress_test_obj_emit_sig_with_error() and
+   * regress_test_obj_emit_sig_with_null_error(), or emit via the introspected
+   * language.
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_GERROR] =
+      g_signal_new ("sig-with-gerror", G_TYPE_FROM_CLASS (klass),
+                    G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+                    g_cclosure_marshal_generic, G_TYPE_NONE, 1,
+                    G_TYPE_ERROR | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   gobject_class->set_property = regress_test_obj_set_property;
   gobject_class->get_property = regress_test_obj_get_property;
@@ -2870,6 +2891,28 @@ regress_test_obj_emit_sig_with_inout_int (RegressTestObj *obj)
   int inout = 42;
   g_signal_emit_by_name (obj, "sig-with-inout-int", &inout);
   g_assert_cmpint (inout, ==, 43);
+}
+
+/**
+ * regress_test_obj_emit_sig_with_error:
+ * @self: The object to emit the signal.
+ */
+void
+regress_test_obj_emit_sig_with_error (RegressTestObj *self)
+{
+  g_autoptr(GError) err = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_FAILED,
+                                               "Something failed");
+  g_signal_emit_by_name (self, "sig-with-gerror", err);
+}
+
+/**
+ * regress_test_obj_emit_sig_with_null_error:
+ * @self: The object to emit the signal.
+ */
+void
+regress_test_obj_emit_sig_with_null_error (RegressTestObj *self)
+{
+  g_signal_emit_by_name (self, "sig-with-gerror", NULL);
 }
 
 int
