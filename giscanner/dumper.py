@@ -25,6 +25,7 @@ import shlex
 import subprocess
 import tempfile
 
+from distutils import sysconfig
 from .gdumpparser import IntrospectionBinary
 from . import pkgconfig, utils
 from .ccompiler import CCompiler
@@ -94,7 +95,8 @@ class DumpCompiler(object):
         if self._compiler.check_is_msvc():
             self._linker_cmd = ['link.exe']
         else:
-            self._linker_cmd = shlex.split(os.environ.get('CC', 'cc'))
+            cc = sysconfig.get_config_var('CC')
+            self._linker_cmd = shlex.split(os.environ.get('CC', cc))
 
     # Public API
 
