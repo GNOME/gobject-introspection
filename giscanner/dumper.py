@@ -94,7 +94,7 @@ class DumpCompiler(object):
         if self._compiler.check_is_msvc():
             self._linker_cmd = ['link.exe']
         else:
-            self._linker_cmd = shlex.split(os.environ.get('CC', 'cc'))
+            self._linker_cmd = self._compiler.compiler.linker_exe
 
     # Public API
 
