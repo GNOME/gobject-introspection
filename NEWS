@@ -1,3 +1,22 @@
+1.61.1 - 2019-08-07
+-------------------
+
+* Drop autotools build system :mr:`143`
+* meson: require 0.49.2
+* Update glib annotations (:user:`Rico Tzschichholz <ricotz>`)
+* Add documentation to the RelaxNG schema :mr:`139` (:user:`David Bellot <yimyom>`)
+* Unused variable fixes :mr:`147` (:user:`Philip Chimento <ptomato>`)
+* cachestore: handle cache getting deleted while loading it :mr:`148`
+* Visual Studio builds: Use msvc_recommended_pragmas.h from GLib :mr:`150` (:user:`Chun-wei Fan <fanc999>`)
+* Add Vulkan gir :mr:`155` (:user:`Matthew Waters <ystreet00>`)
+* Make g_irepository_get_object_gtype_interfaces actually work :mr:`157` (:user:`Philip Chimento <ptomato>`)
+* gimarshallingtests: Add a marshalling test case for GPtrArrays and GArrays of structures :mr:`160` (:user:`Stéphane Seng <stephaneseng>`)
+* scanner: parse and expose function macros :mr:`159` (:user:`Mathieu Duponchelle <mathieudu>`)
+* meson: use pkg-config directly for libffi cflags and libs :mr:`162` (:user:`Aaron Boxer <boxerab>`)
+* meson: Fix wrong dependency type check for gio-unix :issue:`166` (:user:`Brook Milligan <brook-milligan>`)
+* regress: Add regression test for signal with GError param :mr:`169` (:user:`Philip Chimento <ptomato>`)
+
+
 1.60.2 - 2019-06-15
 -------------------
 
