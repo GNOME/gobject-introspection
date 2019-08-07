@@ -2809,6 +2809,7 @@
  *
  *  - an empty #GValue initialized by %G_VALUE_INIT, which will be
  *    automatically initialized with the expected type of the property
+ *    (since GLib 2.60)
  *  - a #GValue initialized with the expected type of the property
  *  - a #GValue initialized with a type to which the expected type
  *    of the property can be transformed

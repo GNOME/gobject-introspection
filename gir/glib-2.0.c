@@ -2057,12 +2057,12 @@
 /**
  * GTime:
  *
- * Simply a replacement for time_t. It has been deprecated
- * since it is not equivalent to time_t on 64-bit platforms
- * with a 64-bit time_t. Unrelated to #GTimer.
+ * Simply a replacement for `time_t`. It has been deprecated
+ * since it is not equivalent to `time_t` on 64-bit platforms
+ * with a 64-bit `time_t`. Unrelated to #GTimer.
  *
  * Note that #GTime is defined to always be a 32-bit integer,
- * unlike time_t which may be 64-bit on some systems. Therefore,
+ * unlike `time_t` which may be 64-bit on some systems. Therefore,
  * #GTime will overflow in the year 2038, and you cannot use the
  * address of a #GTime variable as argument to the UNIX time()
  * function.
@@ -2090,11 +2090,13 @@
  * Similar to the struct timeval returned by the gettimeofday()
  * UNIX system call.
  *
- * GLib is attempting to unify around the use of 64bit integers to
+ * GLib is attempting to unify around the use of 64-bit integers to
  * represent microsecond-precision time. As such, this type will be
  * removed from a future version of GLib. A consequence of using `glong` for
  * `tv_sec` is that on 32-bit systems `GTimeVal` is subject to the year 2038
  * problem.
+ *
+ * Deprecated: 2.62: Use #GDateTime or #guint64 instead.
  */
 
 
@@ -10331,7 +10333,7 @@
  *
  * If no data is received before @end_time, %NULL is returned.
  *
- * To easily calculate @end_time, a combination of g_get_current_time()
+ * To easily calculate @end_time, a combination of g_get_real_time()
  * and g_time_val_add() can be used.
  *
  * Returns: data from the queue or %NULL, when no data is
@@ -10350,7 +10352,7 @@
  *
  * If no data is received before @end_time, %NULL is returned.
  *
- * To easily calculate @end_time, a combination of g_get_current_time()
+ * To easily calculate @end_time, a combination of g_get_real_time()
  * and g_time_val_add() can be used.
  *
  * This function must be called while holding the @queue's lock.
@@ -14405,6 +14407,8 @@
  * The time to date conversion is done using the user's current timezone.
  *
  * Since: 2.10
+ * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use g_date_set_time_t()
+ *    instead.
  */
 
 
@@ -14767,6 +14771,21 @@
  *     not being supported in the current locale). The string
  *     should be freed with g_free().
  * Since: 2.26
+ */
+
+
+/**
+ * g_date_time_format_iso8601:
+ * @datetime: A #GDateTime
+ *
+ * Format @datetime in [ISO 8601 format](https://en.wikipedia.org/wiki/ISO_8601),
+ * including the date, time and time zone, and return that as a UTF-8 encoded
+ * string.
+ *
+ * Returns: a newly allocated string formatted in ISO 8601 format
+ *     or %NULL in the case that there was an error. The string
+ *     should be freed with g_free().
+ * Since: 2.62
  */
 
 
@@ -15145,6 +15164,8 @@
  *
  * Returns: a new #GDateTime, or %NULL
  * Since: 2.26
+ * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use
+ *    g_date_time_new_from_unix_local() instead.
  */
 
 
@@ -15165,6 +15186,8 @@
  *
  * Returns: a new #GDateTime, or %NULL
  * Since: 2.26
+ * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use
+ *    g_date_time_new_from_unix_utc() instead.
  */
 
 
@@ -15343,6 +15366,8 @@
  *
  * Returns: %TRUE if successful, else %FALSE
  * Since: 2.26
+ * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use
+ *    g_date_time_to_unix() instead.
  */
 
 
@@ -16601,6 +16626,9 @@
  * Equivalent to the UNIX gettimeofday() function, but portable.
  *
  * You may find g_get_real_time() to be more convenient.
+ *
+ * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use g_get_real_time()
+ *    instead.
  */
 
 
@@ -33065,6 +33093,9 @@
  *
  * Adds the given number of microseconds to @time_. @microseconds can
  * also be negative to decrease the value of @time_.
+ *
+ * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use `guint64` for
+ *    representing microseconds since the epoch, or use #GDateTime.
  */
 
 
@@ -33083,8 +33114,18 @@
  *
  * Any leading or trailing space in @iso_date is ignored.
  *
+ * This function was deprecated, along with #GTimeVal itself, in GLib 2.62.
+ * Equivalent functionality is available using code like:
+ * |[
+ * GDateTime *dt = g_date_time_new_from_iso8601 (iso8601_string, NULL);
+ * gint64 time_val = g_date_time_to_unix (dt);
+ * g_date_time_unref (dt);
+ * ]|
+ *
  * Returns: %TRUE if the conversion was successful.
  * Since: 2.12
+ * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use
+ *    g_date_time_new_from_iso8601() instead.
  */
 
 
@@ -33116,7 +33157,13 @@
  * If @time_ represents a date which is too large to fit into a `struct tm`,
  * %NULL will be returned. This is platform dependent. Note also that since
  * `GTimeVal` stores the number of seconds as a `glong`, on 32-bit systems it
- * is subject to the year 2038 problem.
+ * is subject to the year 2038 problem. Accordingly, since GLib 2.62, this
+ * function has been deprecated. Equivalent functionality is available using:
+ * |[
+ * GDateTime *dt = g_date_time_new_from_unix_utc (time_val);
+ * iso8601_string = g_date_time_format_iso8601 (dt);
+ * g_date_time_unref (dt);
+ * ]|
  *
  * The return value of g_time_val_to_iso8601() has been nullable since GLib
  * 2.54; before then, GLib would crash under the same conditions.
@@ -33124,6 +33171,8 @@
  * Returns: (nullable): a newly allocated string containing an ISO 8601 date,
  *    or %NULL if @time_ was too large
  * Since: 2.12
+ * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use
+ *    g_date_time_format_iso8601(dt) instead.
  */
 
 

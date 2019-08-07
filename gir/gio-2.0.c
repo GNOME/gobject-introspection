@@ -22442,12 +22442,27 @@
 
 
 /**
+ * g_file_info_get_modification_date_time:
+ * @info: a #GFileInfo.
+ *
+ * Gets the modification time of the current @info and returns it as a
+ * #GDateTime.
+ *
+ * Returns: (transfer full) (nullable): modification time, or %NULL if unknown
+ * Since: 2.62
+ */
+
+
+/**
  * g_file_info_get_modification_time:
  * @info: a #GFileInfo.
  * @result: (out caller-allocates): a #GTimeVal.
  *
  * Gets the modification time of the current @info and sets it
  * in @result.
+ *
+ * Deprecated: 2.62: Use g_file_info_get_modification_date_time() instead, as
+ *    #GTimeVal is deprecated due to the year 2038 problem.
  */
 
 
@@ -22773,12 +22788,27 @@
 
 
 /**
+ * g_file_info_set_modification_date_time:
+ * @info: a #GFileInfo.
+ * @mtime: (not nullable): a #GDateTime.
+ *
+ * Sets the %G_FILE_ATTRIBUTE_TIME_MODIFIED attribute in the file
+ * info to the given date/time value.
+ *
+ * Since: 2.62
+ */
+
+
+/**
  * g_file_info_set_modification_time:
  * @info: a #GFileInfo.
  * @mtime: a #GTimeVal.
  *
  * Sets the %G_FILE_ATTRIBUTE_TIME_MODIFIED attribute in the file
  * info to the given time value.
+ *
+ * Deprecated: 2.62: Use g_file_info_set_modification_date_time() instead, as
+ *    #GTimeVal is deprecated due to the year 2038 problem.
  */
 
 
