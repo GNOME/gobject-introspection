@@ -62,6 +62,11 @@ class UnixCCompilerTest(unittest.TestCase):
             except ValueError:
                 self.fail('%r is not a subsequence of %r' % (list1, list2))
 
+    def test_link_cmd(self):
+        with Environ(dict(CC="foobar")):
+            compiler = CCompiler()
+            self.assertEqual(compiler.linker_cmd[0], "foobar")
+
     def test_link_args_override(self):
         with Environ(dict(CC="foobar")):
             compiler = CCompiler()

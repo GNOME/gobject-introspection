@@ -91,10 +91,6 @@ class DumpCompiler(object):
         self._uninst_srcdir = os.environ.get('UNINSTALLED_INTROSPECTION_SRCDIR')
         self._packages = ['gio-2.0', 'gmodule-2.0']
         self._packages.extend(options.packages)
-        if self._compiler.check_is_msvc():
-            self._linker_cmd = ['link.exe']
-        else:
-            self._linker_cmd = self._compiler.compiler.linker_exe
 
     # Public API
 
@@ -202,7 +198,7 @@ class DumpCompiler(object):
             if self._options.quiet:
                 args.append('--silent')
 
-        args.extend(self._linker_cmd)
+        args.extend(self._compiler.linker_cmd)
 
         # We can use -o for the Microsoft compiler/linker,
         # but it is considered deprecated usage

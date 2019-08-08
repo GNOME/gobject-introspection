@@ -413,6 +413,15 @@ class CCompiler(object):
                 ", ".join(not_resolved))
         return shlibs
 
+    @property
+    def linker_cmd(self):
+        if self.check_is_msvc():
+            if not self.compiler.initialized:
+                self.compiler.initialize()
+            return [self.compiler.linker]
+        else:
+            return self.compiler.linker_exe
+
     def check_is_msvc(self):
         return isinstance(self.compiler, MSVCCompiler)
 
