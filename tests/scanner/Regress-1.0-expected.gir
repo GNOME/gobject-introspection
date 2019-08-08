@@ -5654,14 +5654,14 @@ the introspection client langage.</doc>
         <attribute name="yet.another.annotation" value="another_value"/>
         <doc xml:space="preserve"
              filename="annotation.c"
-             line="764">The return value.</doc>
+             line="766">The return value.</doc>
         <type name="gint" c:type="gint"/>
       </return-value>
       <parameters>
         <parameter name="object" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="annotation.c"
-               line="761">A #RegressAnnotationObject.</doc>
+               line="763">A #RegressAnnotationObject.</doc>
           <type name="AnnotationObject" c:type="RegressAnnotationObject*"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">
@@ -5669,7 +5669,7 @@ the introspection client langage.</doc>
           <attribute name="another.annotation" value="blahvalue"/>
           <doc xml:space="preserve"
                filename="annotation.c"
-               line="762">Some data.</doc>
+               line="764">Some data.</doc>
           <type name="utf8" c:type="const gchar*"/>
         </parameter>
       </parameters>
@@ -5716,7 +5716,7 @@ detection, and fixing it via annotations.</doc>
       <return-value transfer-ownership="full">
         <doc xml:space="preserve"
              filename="annotation.c"
-             line="732">Source file</doc>
+             line="734">Source file</doc>
         <type name="filename" c:type="char*"/>
       </return-value>
     </function>
@@ -5758,7 +5758,7 @@ detection, and fixing it via annotations.</doc>
         <parameter name="foo" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="annotation.c"
-               line="775">some text (e.g. example) or else</doc>
+               line="777">some text (e.g. example) or else</doc>
           <type name="gint" c:type="int"/>
         </parameter>
       </parameters>
@@ -5773,7 +5773,7 @@ detection, and fixing it via annotations.</doc>
         <parameter name="array" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="annotation.c"
-               line="752">the array</doc>
+               line="754">the array</doc>
           <array name="GLib.PtrArray" c:type="GPtrArray*">
             <type name="GObject.Value"/>
           </array>
@@ -5809,7 +5809,7 @@ detection, and fixing it via annotations.</doc>
       <return-value transfer-ownership="full">
         <doc xml:space="preserve"
              filename="annotation.c"
-             line="814">An annotated filename</doc>
+             line="816">An annotated filename</doc>
         <type name="filename" c:type="gchar*"/>
       </return-value>
     </function>
@@ -5823,7 +5823,7 @@ detection, and fixing it via annotations.</doc>
         <parameter name="fname" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="annotation.c"
-               line="742">Source file</doc>
+               line="744">Source file</doc>
           <type name="filename" c:type="const char*"/>
         </parameter>
       </parameters>
@@ -5832,7 +5832,7 @@ detection, and fixing it via annotations.</doc>
               c:identifier="regress_annotation_space_after_comment_bug631690">
       <doc xml:space="preserve"
            filename="annotation.c"
-           line="801">Explicitly test having a space after the ** here.</doc>
+           line="803">Explicitly test having a space after the ** here.</doc>
       <source-position filename="annotation.h" line="271"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
@@ -5888,12 +5888,12 @@ detection, and fixing it via annotations.</doc>
               c:identifier="regress_annotation_test_parsing_bug630862">
       <doc xml:space="preserve"
            filename="annotation.c"
-           line="787">See https://bugzilla.gnome.org/show_bug.cgi?id=630862</doc>
+           line="789">See https://bugzilla.gnome.org/show_bug.cgi?id=630862</doc>
       <source-position filename="annotation.h" line="267"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="annotation.c"
-             line="792">An object, note the colon:in here</doc>
+             line="794">An object, note the colon:in here</doc>
         <type name="GObject.Object" c:type="GObject*"/>
       </return-value>
     </function>
@@ -5903,14 +5903,14 @@ detection, and fixing it via annotations.</doc>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="annotation.c"
-             line="826">A floating object</doc>
+             line="828">A floating object</doc>
         <type name="GObject.Object" c:type="GObject*"/>
       </return-value>
       <parameters>
         <parameter name="object" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="annotation.c"
-               line="824">an object</doc>
+               line="826">an object</doc>
           <type name="GObject.Object" c:type="GObject*"/>
         </parameter>
       </parameters>
