@@ -21,7 +21,7 @@ and/or use gtk-doc annotations.  -->
     <record name="Buffer" c:type="UtilityBuffer">
       <source-position filename="utility.h" line="54"/>
       <field name="data" writable="1">
-        <doc xml:space="preserve" filename="utility.c" line="10">the data</doc>
+        <doc xml:space="preserve" filename="utility.c" line="14">the data</doc>
         <type name="gpointer"/>
       </field>
       <field name="length" writable="1">

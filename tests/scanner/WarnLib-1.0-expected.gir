@@ -50,7 +50,7 @@ and/or use gtk-doc annotations.  -->
       <virtual-method name="do_boo" invoker="do_boo">
         <doc xml:space="preserve"
              filename="warnlib.c"
-             line="35">Does boo.</doc>
+             line="38">Does boo.</doc>
         <source-position filename="warnlib.h" line="35"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -59,13 +59,13 @@ and/or use gtk-doc annotations.  -->
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="warnlib.c"
-                 line="37">a WarnLibWhatever</doc>
+                 line="40">a WarnLibWhatever</doc>
             <type name="Whatever" c:type="WarnLibWhatever*"/>
           </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="warnlib.c"
-                 line="38">x parameter</doc>
+                 line="41">x parameter</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="y"
@@ -74,7 +74,7 @@ and/or use gtk-doc annotations.  -->
                      allow-none="1">
             <doc xml:space="preserve"
                  filename="warnlib.c"
-                 line="39">y parameter</doc>
+                 line="42">y parameter</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -102,7 +102,7 @@ and/or use gtk-doc annotations.  -->
       <method name="do_boo" c:identifier="warnlib_whatever_do_boo">
         <doc xml:space="preserve"
              filename="warnlib.c"
-             line="35">Does boo.</doc>
+             line="38">Does boo.</doc>
         <source-position filename="warnlib.h" line="41"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -111,7 +111,7 @@ and/or use gtk-doc annotations.  -->
           <instance-parameter name="self" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="warnlib.c"
-                 line="37">a WarnLibWhatever</doc>
+                 line="40">a WarnLibWhatever</doc>
             <type name="Whatever" c:type="WarnLibWhatever*"/>
           </instance-parameter>
           <parameter name="arg1" transfer-ownership="none">
@@ -185,13 +185,13 @@ and/or use gtk-doc annotations.  -->
             <parameter name="self" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="warnlib.c"
-                   line="37">a WarnLibWhatever</doc>
+                   line="40">a WarnLibWhatever</doc>
               <type name="Whatever" c:type="WarnLibWhatever*"/>
             </parameter>
             <parameter name="x" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="warnlib.c"
-                   line="38">x parameter</doc>
+                   line="41">x parameter</doc>
               <type name="gint" c:type="int"/>
             </parameter>
             <parameter name="y"
@@ -200,7 +200,7 @@ and/or use gtk-doc annotations.  -->
                        allow-none="1">
               <doc xml:space="preserve"
                    filename="warnlib.c"
-                   line="39">y parameter</doc>
+                   line="42">y parameter</doc>
               <type name="gpointer" c:type="gpointer"/>
             </parameter>
           </parameters>
