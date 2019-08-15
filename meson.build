@@ -90,6 +90,7 @@ endif
 girdir = join_paths(gir_dir_prefix, 'gir-1.0')
 config.set_quoted('GIR_DIR', girdir)
 config.set_quoted('GOBJECT_INTROSPECTION_LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
+config.set_quoted('UNINSTALLED_GIR_DIR', join_paths(meson.current_build_dir(), 'gir'))
 
 foreach type : ['char', 'short', 'int', 'long']
   size = cc.sizeof(type)
