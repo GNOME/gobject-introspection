@@ -1,3 +1,12 @@
+1.61.2 - 2019-08-17
+-------------------
+
+* dumper: Use the distutils linker :mr:`170` (:user:`David Demelier <markand>`)
+* structinfo: Fix offset in find_method() :mr:`171` (:user:`Florian Müllner <fmuellner>`)
+* tests: Don't include "config.h" in installed files :mr:`172` (:user:`Philip Chimento <ptomato>`)
+* meson: Make meson.override_find_program working on more complex use cases :mr:`173` (:user:`Thibault Saunier <thiblahute>`)
+
+
 1.61.1 - 2019-08-07
 -------------------
 
