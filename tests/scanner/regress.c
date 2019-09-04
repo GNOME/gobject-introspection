@@ -865,6 +865,16 @@ regress_test_array_fixed_size_int_return (void)
 }
 
 /**
+ * regress_test_array_static_in_int
+ * @x: (in) (array fixed-size=10): a list of 10 integers
+ */
+void
+regress_test_array_static_in_int (int x[static 10])
+{
+
+}
+
+/**
  * regress_test_strv_out_c:
  *
  * Returns: (transfer none):

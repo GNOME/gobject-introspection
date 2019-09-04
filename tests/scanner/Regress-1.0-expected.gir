@@ -6816,6 +6816,23 @@ libgnome-keyring.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_static_in_int"
+              c:identifier="regress_test_array_static_in_int">
+      <source-position filename="regress.h" line="871"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regress.c"
+               line="869">a list of 10 integers</doc>
+          <array zero-terminated="0" c:type="int*" fixed-size="10">
+            <type name="gint" c:type="int"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_array_struct_in_full"
               c:identifier="regress_test_array_struct_in_full">
       <doc xml:space="preserve"
