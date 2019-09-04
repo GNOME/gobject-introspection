@@ -1091,6 +1091,12 @@ enum_keyword
           }
         ;
 
+static_keyword
+        : STATIC
+          {
+          }
+        ;
+
 enumerator_list
 	:
 	  {
@@ -1174,6 +1180,11 @@ direct_declarator
 	  {
 		$$ = $2;
 	  }
+        | direct_declarator '[' static_keyword assignment_expression ']'
+          {
+                $$ = $1;
+                gi_source_symbol_merge_type ($$, gi_source_array_new ($4));
+          }
 	| direct_declarator '[' assignment_expression ']'
 	  {
 		$$ = $1;
