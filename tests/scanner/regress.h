@@ -867,6 +867,8 @@ void       regress_forced_method (RegressTestObj *obj);
 _GI_TEST_EXTERN
 void regress_test_array_fixed_out_objects (RegressTestObj ***objs);
 
+_GI_TEST_EXTERN
+void regress_test_array_static_in_int (int x[static 10]);
 
 _GI_TEST_EXTERN
 void regress_test_obj_torture_signature_0 (RegressTestObj    *obj,
