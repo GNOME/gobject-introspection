@@ -865,6 +865,22 @@ regress_test_array_fixed_size_int_return (void)
 }
 
 /**
+ * regress_test_array_static_in_int
+ * @x: (array fixed-size=10): a list of 10 integers
+ */
+#if (defined(__GNUC__) || defined(__clang__)) && defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+void
+regress_test_array_static_in_int (int x[static 10])
+{
+}
+#else
+void
+regress_test_array_static_in_int (int x[10])
+{
+}
+#endif
+
+/**
  * regress_test_strv_out_c:
  *
  * Returns: (transfer none):
