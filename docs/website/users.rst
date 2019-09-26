@@ -16,7 +16,7 @@ Bindings based on GObject-Introspection
 * `Seed <https://wiki.gnome.org/Projects/Seed>`__ -  Javascript (JSCore, WebKit JS engine) bindings (runtime)
 * `sbank <http://live.gnome.org/sbank>`__ - Scheme binding for gobject-introspection (runtime)
 * `GObjectIntrospection/GObjectConsume <https://wiki.gnome.org/Projects/GObjectIntrospection/GObjectConsume>`__ - Qt bindings (compile time)
-* `GirFFI <http://wiki.github.com/mvz/ruby-gir-ffi>`__ - Ruby bindings (runtime)
+* `GirFFI <http://github.com/mvz/ruby-gir-ffi>`__ - Ruby bindings (runtime)
 * `lgob <http://oproj.tuxfamily.org/wiki/doku.php?id=lgob>`__ - Lua bindings (compile time?)
 * `guile-gir <http://gitorious.org/guile-gir>`__ - Guile bindings (runtime)
 * `factor-gir <http://github.com/ex-rzr/factor-gir>`__ - Factor bindings (runtime)
