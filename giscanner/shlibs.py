@@ -161,8 +161,8 @@ def resolve_from_ldd_output(libraries, output):
 # is linking against.
 #
 def resolve_shlibs(options, binary, libraries):
-    libtool = filter(lambda x: x.endswith(".la"), libraries)
-    non_libtool = filter(lambda x: not x.endswith(".la"), libraries)
+    libtool = list(filter(lambda x: x.endswith(".la"), libraries))
+    non_libtool = list(filter(lambda x: not x.endswith(".la"), libraries))
 
     return (_resolve_libtool(options, binary, libtool) +
             _resolve_non_libtool(options, binary, non_libtool))
