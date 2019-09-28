@@ -144,19 +144,31 @@ endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
 
-with_cairo = get_option('cairo')
+# cairo
+cairo_option = get_option('cairo')
+if cc.get_id() == 'msvc'
+  if cairo_option.disabled()
+    req = cairo_option
+  else
+    req = false
+  endif
 
-if with_cairo
-  cairo_dep = dependency('cairo', required: cc.get_id() != 'msvc')
-  cairo_gobject_dep = dependency('cairo-gobject', required: cc.get_id() != 'msvc')
+  cairo_dep = dependency('cairo', required: req)
+  cairo_gobject_dep = dependency('cairo-gobject', required: req)
 
-  if cc.get_id() == 'msvc' and (not cairo_gobject_dep.found() or not cairo_dep.found())
+  if not cairo_gobject_dep.found() or not cairo_dep.found()
     if cc.has_header('cairo.h') and cc.has_header ('cairo-gobject.h')
-      cairo_dep = cc.find_library ('cairo')
-      cairo_gobject_dep = cc.find_library ('cairo-gobject')
+      cairo_dep = cc.find_library('cairo', required: cairo_option)
+      cairo_gobject_dep = cc.find_library('cairo-gobject', required: cairo_option)
     endif
   endif
 else
+  cairo_dep = dependency('cairo', required: cairo_option)
+  cairo_gobject_dep = dependency('cairo-gobject', required: cairo_option)
+endif
+cairo_deps_found = cairo_gobject_dep.found() and cairo_dep.found()
+
+if not cairo_deps_found
   warning('Not building with cairo support, not all tests will be run')
 endif
 
