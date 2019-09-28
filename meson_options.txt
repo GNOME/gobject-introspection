@@ -2,7 +2,7 @@ option('cairo', type: 'feature', value : 'auto',
   description: 'Use cairo for tests'
 )
 
-option('doctool', type: 'boolean', value : false,
+option('doctool', type: 'feature', value : 'auto',
   description: 'Install g-ir-doc-tool and run related tests'
 )
 

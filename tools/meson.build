@@ -38,8 +38,10 @@ foreach tool : tools
 endforeach
 
 girscanner = tool_output[0]
+has_girdoctool = false
 if with_doctool
   girdoctool = tool_output[-1]
+  has_girdoctool = true
 endif
 
 custom_c_args = []
