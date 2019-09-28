@@ -1,4 +1,4 @@
-option('cairo', type: 'boolean', value : false,
+option('cairo', type: 'feature', value : 'auto',
   description: 'Use cairo for tests'
 )
 

@@ -38,7 +38,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # Passing the full interpreter path works around the issue
 PYTHON="$(which python3)"
 export CFLAGS="-Werror"
-meson -Dcairo=true -Ddoctool=true -Dpython="${PYTHON}" --buildtype debug _build
+meson -Dcairo=enabled -Ddoctool=true -Dpython="${PYTHON}" --buildtype debug _build
 cd _build
 ninja
 

@@ -87,7 +87,7 @@ if cc.get_id() != 'msvc'
   ])
 endif
 
-if with_cairo
+if cairo_deps_found
   regress_deps = [cairo_dep, cairo_gobject_dep]
   regress_c_args = []
 else
@@ -455,7 +455,7 @@ if glib_dep.type_name() == 'pkgconfig'
     command: gircompiler_command,
   )
 
-  if with_cairo
+  if cairo_deps_found
     regress_scanner_cairo_args = ['--include=cairo-1.0']
   else
     regress_scanner_cairo_args = ['-D_GI_DISABLE_CAIRO',]
@@ -492,7 +492,7 @@ if glib_dep.type_name() == 'pkgconfig'
 
   # The reference gir is generated with cairo support, so we can only compare
   # things if we build with cairo as well
-  if with_cairo
+  if cairo_deps_found
     test_girs += regress_gir
   endif
 
@@ -527,7 +527,7 @@ if with_doctool and glib_dep.type_name() == 'pkgconfig'
       'generate-docs-' + language,
       input: regress_gir,
       depends: [doc_templates],
-      build_by_default: not with_cairo,
+      build_by_default: not cairo_deps_found,
       output: 'Regress-1.0-' + language,
       command: [
         python, girdoctool,
@@ -537,7 +537,7 @@ if with_doctool and glib_dep.type_name() == 'pkgconfig'
         '@INPUT@', '-o', '@OUTPUT@'],
     )
 
-    if with_cairo
+    if cairo_deps_found
       test(
         'gi-tester-docs-Regress-1.0-' + language,
         python,
@@ -555,7 +555,7 @@ if with_doctool and glib_dep.type_name() == 'pkgconfig'
     'generate-docs-sections',
     input: regress_gir,
     depends: [doc_templates],
-    build_by_default: not with_cairo,
+    build_by_default: not cairo_deps_found,
     output: 'Regress-1.0-sections.txt',
     command: [
       python, girdoctool,
@@ -565,7 +565,7 @@ if with_doctool and glib_dep.type_name() == 'pkgconfig'
       '@INPUT@', '-o', '@OUTPUT@'],
   )
 
-  if with_cairo
+  if cairo_deps_found
     test(
       'gi-tester-docs-Regress-1.0-sections.txt',
       python,
