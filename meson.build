@@ -160,7 +160,24 @@ else
   warning('Not building with cairo support, not all tests will be run')
 endif
 
-with_doctool = get_option('doctool')
+# doctool
+doctool_option = get_option('doctool')
+
+with_doctool = true
+if doctool_option.disabled()
+  with_doctool = false
+else
+  has_mako = run_command(python, ['-c', 'import mako']).returncode() == 0
+  has_markdown = run_command(python, ['-c', 'import markdown']).returncode() == 0
+  if not has_mako or not has_markdown
+    if doctool_option.enabled()
+      error('doctool requires markdown and mako')
+    else
+      with_doctool = false
+    endif
+  endif
+endif
+
 if not with_doctool
   warning('Not building with doctool support, not all tests will be run')
 endif
