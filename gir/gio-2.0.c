@@ -2458,7 +2458,7 @@
 /**
  * GNativeSocketAddress:
  *
- * An socket address, corresponding to a general struct
+ * A socket address, corresponding to a general struct
  * sockadd address of a type not otherwise handled by glib.
  */
 
@@ -3594,6 +3594,19 @@
 
 
 /**
+ * GTlsCertificate:pkcs11-uri: (nullable)
+ *
+ * A URI referencing the PKCS \#11 objects containing an X.509 certificate
+ * and optionally a private key.
+ *
+ * If %NULL the certificate is either not backed by PKCS \#11 or the
+ * #GTlsBackend does not support PKCS \#11.
+ *
+ * Since: 2.64
+ */
+
+
+/**
  * GTlsCertificate:private-key:
  *
  * The DER (binary) encoded representation of the certificate's
@@ -3625,6 +3638,15 @@
  * tool to convert PKCS#8 keys to PKCS#1.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * GTlsCertificate:private-key-pkcs11-uri: (nullable)
+ *
+ * A URI referencing a PKCS \#11 object containing a private key.
+ *
+ * Since: 2.64
  */
 
 
@@ -4604,7 +4626,7 @@
  * As of GLib 2.20, URIs will always be converted to POSIX paths
  * (using g_file_get_path()) when using g_app_info_launch() even if
  * the application requested an URI and not a POSIX path. For example
- * for an desktop-file based application with Exec key `totem
+ * for a desktop-file based application with Exec key `totem
  * %U` and a single URI, `sftp://foo/file.avi`, then
  * `/home/user/.gvfs/sftp on foo/file.avi` will be passed. This will
  * only work if a set of suitable GIO extensions (such as gvfs 2.26
@@ -7099,7 +7121,7 @@
  * @short_description: Native GSocketAddress
  * @include: gio/gio.h
  *
- * An socket address of some unknown native type.
+ * A socket address of some unknown native type.
  */
 
 
@@ -10681,7 +10703,7 @@
 
 /**
  * g_action_name_is_valid:
- * @action_name: an potential action name
+ * @action_name: a potential action name
  *
  * Checks if @action_name is valid.
  *
@@ -13098,7 +13120,7 @@
  * Simply register objects to be exported in @bus_acquired_handler and
  * unregister the objects (if any) in @name_lost_handler.
  *
- * Returns: an identifier (never 0) that an be used with
+ * Returns: an identifier (never 0) that can be used with
  *     g_bus_unown_name() to stop owning the name.
  * Since: 2.26
  */
@@ -13117,7 +13139,7 @@
  * Like g_bus_own_name() but takes a #GDBusConnection instead of a
  * #GBusType.
  *
- * Returns: an identifier (never 0) that an be used with
+ * Returns: an identifier (never 0) that can be used with
  *     g_bus_unown_name() to stop owning the name
  * Since: 2.26
  */
@@ -13136,7 +13158,7 @@
  * Version of g_bus_own_name_on_connection() using closures instead of
  * callbacks for easier binding in other languages.
  *
- * Returns: an identifier (never 0) that an be used with
+ * Returns: an identifier (never 0) that can be used with
  *     g_bus_unown_name() to stop owning the name.
  * Since: 2.26
  */
@@ -13157,7 +13179,7 @@
  * Version of g_bus_own_name() using closures instead of callbacks for
  * easier binding in other languages.
  *
- * Returns: an identifier (never 0) that an be used with
+ * Returns: an identifier (never 0) that can be used with
  *     g_bus_unown_name() to stop owning the name.
  * Since: 2.26
  */
@@ -13195,7 +13217,7 @@
  *
  * Starts watching @name on the bus specified by @bus_type and calls
  * @name_appeared_handler and @name_vanished_handler when the name is
- * known to have a owner respectively known to lose its
+ * known to have an owner respectively known to lose its
  * owner. Callbacks will be invoked in the
  * [thread-default main context][g-main-context-push-thread-default]
  * of the thread you are calling this function from.
@@ -13223,7 +13245,7 @@
  * @name_appeared_handler and destroy them again (if any) in
  * @name_vanished_handler.
  *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that can be used with
  * g_bus_unwatch_name() to stop watching the name.
  * Since: 2.26
  */
@@ -13242,7 +13264,7 @@
  * Like g_bus_watch_name() but takes a #GDBusConnection instead of a
  * #GBusType.
  *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that can be used with
  * g_bus_unwatch_name() to stop watching the name.
  * Since: 2.26
  */
@@ -13261,7 +13283,7 @@
  * Version of g_bus_watch_name_on_connection() using closures instead of callbacks for
  * easier binding in other languages.
  *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that can be used with
  * g_bus_unwatch_name() to stop watching the name.
  * Since: 2.26
  */
@@ -13280,7 +13302,7 @@
  * Version of g_bus_watch_name() using closures instead of callbacks for
  * easier binding in other languages.
  *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that can be used with
  * g_bus_unwatch_name() to stop watching the name.
  * Since: 2.26
  */
@@ -13551,7 +13573,7 @@
 
 
 /**
- * g_cancellable_source_new: (skip)
+ * g_cancellable_source_new:
  * @cancellable: (nullable): a #GCancellable, or %NULL
  *
  * Creates a source that triggers if @cancellable is cancelled and
@@ -14017,7 +14039,7 @@
  * Gets a pointer to native credentials of type @native_type from
  * @credentials.
  *
- * It is a programming error (which will cause an warning to be
+ * It is a programming error (which will cause a warning to be
  * logged) to use this method if there is no #GCredentials support for
  * the OS or if @native_type isn't supported by the OS.
  *
@@ -14100,7 +14122,7 @@
  * Copies the native credentials of type @native_type from @native
  * into @credentials.
  *
- * It is a programming error (which will cause an warning to be
+ * It is a programming error (which will cause a warning to be
  * logged) to use this method if there is no #GCredentials support for
  * the OS or if @native_type isn't supported by the OS.
  *
@@ -15766,7 +15788,7 @@
 /**
  * g_dbus_connection_new:
  * @stream: a #GIOStream
- * @guid: (nullable): the GUID to use if a authenticating as a server or %NULL
+ * @guid: (nullable): the GUID to use if authenticating as a server or %NULL
  * @flags: flags describing how to make the connection
  * @observer: (nullable): a #GDBusAuthObserver or %NULL
  * @cancellable: (nullable): a #GCancellable or %NULL
@@ -15895,7 +15917,7 @@
 /**
  * g_dbus_connection_new_sync:
  * @stream: a #GIOStream
- * @guid: (nullable): the GUID to use if a authenticating as a server or %NULL
+ * @guid: (nullable): the GUID to use if authenticating as a server or %NULL
  * @flags: flags describing how to make the connection
  * @observer: (nullable): a #GDBusAuthObserver or %NULL
  * @cancellable: (nullable): a #GCancellable or %NULL
@@ -16468,7 +16490,7 @@
 
 /**
  * g_dbus_error_register_error:
- * @error_domain: A #GQuark for a error domain.
+ * @error_domain: A #GQuark for an error domain.
  * @error_code: An error code.
  * @dbus_error_name: A D-Bus error name.
  *
@@ -16545,7 +16567,7 @@
 
 /**
  * g_dbus_error_unregister_error:
- * @error_domain: A #GQuark for a error domain.
+ * @error_domain: A #GQuark for an error domain.
  * @error_code: An error code.
  * @dbus_error_name: A D-Bus error name.
  *
@@ -20965,7 +20987,7 @@
  * the number of references falls to 0, the #GFileAttributeMatcher is
  * automatically destroyed.
  *
- * The @attribute string should be formatted with specific keys separated
+ * The @attributes string should be formatted with specific keys separated
  * from namespaces with a double colon. Several "namespace::key" strings may be
  * concatenated with a single comma (e.g. "standard::type,standard::is-hidden").
  * The wildcard "*" may be used to match all keys and namespaces, or
@@ -22080,7 +22102,7 @@
  * filesystem point of view), because the prefix of @file is an alias
  * of @prefix.
  *
- * Returns: %TRUE if the @files's parent, grandparent, etc is @prefix,
+ * Returns: %TRUE if the @file's parent, grandparent, etc is @prefix,
  *     %FALSE otherwise.
  */
 
@@ -22239,7 +22261,7 @@
  * @attribute: a file attribute key.
  *
  * Gets a signed 64-bit integer contained within the attribute. If the
- * attribute does not contain an signed 64-bit integer, or is invalid,
+ * attribute does not contain a signed 64-bit integer, or is invalid,
  * 0 will be returned.
  *
  * Returns: a signed 64-bit integer from the attribute.
@@ -22448,6 +22470,10 @@
  * Gets the modification time of the current @info and returns it as a
  * #GDateTime.
  *
+ * This requires the %G_FILE_ATTRIBUTE_TIME_MODIFIED attribute. If
+ * %G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC is provided, the resulting #GDateTime
+ * will have microsecond precision.
+ *
  * Returns: (transfer full) (nullable): modification time, or %NULL if unknown
  * Since: 2.62
  */
@@ -22525,7 +22551,7 @@
  *
  * Checks if a file info structure has an attribute named @attribute.
  *
- * Returns: %TRUE if @Ginfo has an attribute named @attribute,
+ * Returns: %TRUE if @info has an attribute named @attribute,
  *     %FALSE otherwise.
  */
 
@@ -22538,7 +22564,7 @@
  * Checks if a file info structure has an attribute in the
  * specified @name_space.
  *
- * Returns: %TRUE if @Ginfo has an attribute in @name_space,
+ * Returns: %TRUE if @info has an attribute in @name_space,
  *     %FALSE otherwise.
  * Since: 2.22
  */
@@ -22792,8 +22818,9 @@
  * @info: a #GFileInfo.
  * @mtime: (not nullable): a #GDateTime.
  *
- * Sets the %G_FILE_ATTRIBUTE_TIME_MODIFIED attribute in the file
- * info to the given date/time value.
+ * Sets the %G_FILE_ATTRIBUTE_TIME_MODIFIED and
+ * %G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC attributes in the file info to the
+ * given date/time value.
  *
  * Since: 2.62
  */
@@ -22804,8 +22831,9 @@
  * @info: a #GFileInfo.
  * @mtime: a #GTimeVal.
  *
- * Sets the %G_FILE_ATTRIBUTE_TIME_MODIFIED attribute in the file
- * info to the given time value.
+ * Sets the %G_FILE_ATTRIBUTE_TIME_MODIFIED and
+ * %G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC attributes in the file info to the
+ * given time value.
  *
  * Deprecated: 2.62: Use g_file_info_set_modification_date_time() instead, as
  *    #GTimeVal is deprecated due to the year 2038 problem.
@@ -23108,7 +23136,7 @@
  *
  * Loads the content of the file into memory. The data is always
  * zero-terminated, but this is not included in the resultant @length.
- * The returned @content should be freed with g_free() when no longer
+ * The returned @contents should be freed with g_free() when no longer
  * needed.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
@@ -23156,7 +23184,7 @@
  *
  * Finishes an asynchronous load of the @file's contents.
  * The contents are placed in @contents, and @length is set to the
- * size of the @contents string. The @content should be freed with
+ * size of the @contents string. The @contents should be freed with
  * g_free() when no longer needed. If @etag_out is present, it will be
  * set to the new entity tag for the @file.
  *
@@ -23204,7 +23232,7 @@
  * Finishes an asynchronous partial load operation that was started
  * with g_file_load_partial_contents_async(). The data is always
  * zero-terminated, but this is not included in the resultant @length.
- * The returned @content should be freed with g_free() when no longer
+ * The returned @contents should be freed with g_free() when no longer
  * needed.
  *
  * Returns: %TRUE if the load was successful. If %FALSE and @error is
@@ -24491,7 +24519,7 @@
  * If @make_backup is %TRUE, this function will attempt to
  * make a backup of @file.
  *
- * Note that no copy of @content will be made, so it must stay valid
+ * Note that no copy of @contents will be made, so it must stay valid
  * until @callback is called. See g_file_replace_contents_bytes_async()
  * for a #GBytes version that will automatically hold a reference to the
  * contents (without copying) for the duration of the call.
@@ -24652,7 +24680,7 @@
  *     %NULL to ignore
  * @error: a #GError, or %NULL
  *
- * Sets an attribute in the file with attribute name @attribute to @value.
+ * Sets an attribute in the file with attribute name @attribute to @value_p.
  *
  * Some attributes can be unset by setting @type to
  * %G_FILE_ATTRIBUTE_TYPE_INVALID and @value_p to %NULL.
@@ -24997,7 +25025,7 @@
  * @result: a #GAsyncResult
  * @error: a #GError, or %NULL
  *
- * Finishes an stop operation, see g_file_stop_mountable() for details.
+ * Finishes a stop operation, see g_file_stop_mountable() for details.
  *
  * Finish an asynchronous stop operation that was started
  * with g_file_stop_mountable().
@@ -28665,7 +28693,7 @@
  * [shared-mime-info](http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec)
  * specification for more on x-content types.
  *
- * This is an synchronous operation and as such may block doing IO;
+ * This is a synchronous operation and as such may block doing IO;
  * see g_mount_guess_content_type() for the asynchronous version.
  *
  * Returns: (transfer full) (element-type utf8): a %NULL-terminated array of content types or %NULL on error.
@@ -32397,7 +32425,7 @@
  * to the flags value that it represents.
  *
  * In order to use this function the type of the value must be an array
- * of strings and it must be marked in the schema file as an flags type.
+ * of strings and it must be marked in the schema file as a flags type.
  *
  * It is a programmer error to give a @key that isn't contained in the
  * schema for @settings or is not marked as a flags type.
@@ -32671,7 +32699,7 @@
  *
  * Returns: (transfer full) (element-type utf8): a list of the keys on
  *    @settings, in no defined order
- * Deprecated: 2.46: Use g_settings_schema_list_keys instead().
+ * Deprecated: 2.46: Use g_settings_schema_list_keys() instead.
  */
 
 
@@ -37293,7 +37321,7 @@
 
 /**
  * g_subprocess_launcher_getenv:
- * @self: a #GSubprocess
+ * @self: a #GSubprocessLauncher
  * @variable: (type filename): the environment variable to get
  *
  * Returns the value of the environment variable @variable in the
@@ -37349,7 +37377,7 @@
 
 /**
  * g_subprocess_launcher_set_cwd:
- * @self: a #GSubprocess
+ * @self: a #GSubprocessLauncher
  * @cwd: (type filename): the cwd for launched processes
  *
  * Sets the current working directory that processes will be launched
@@ -37364,7 +37392,7 @@
 
 /**
  * g_subprocess_launcher_set_environ:
- * @self: a #GSubprocess
+ * @self: a #GSubprocessLauncher
  * @env: (array zero-terminated=1) (element-type filename) (transfer none):
  *     the replacement environment
  *
@@ -37481,7 +37509,7 @@
 
 /**
  * g_subprocess_launcher_setenv:
- * @self: a #GSubprocess
+ * @self: a #GSubprocessLauncher
  * @variable: (type filename): the environment variable to set,
  *     must not contain '='
  * @value: (type filename): the new value for the variable
@@ -37629,7 +37657,7 @@
 
 /**
  * g_subprocess_launcher_unsetenv:
- * @self: a #GSubprocess
+ * @self: a #GSubprocessLauncher
  * @variable: (type filename): the environment variable to unset,
  *     must not contain '='
  *
@@ -38911,6 +38939,41 @@
 
 
 /**
+ * g_tls_certificate_new_from_pkcs11_uris:
+ * @pkcs11_uri: A PKCS \#11 URI
+ * @private_key_pkcs11_uri: (nullable): A PKCS \#11 URI
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Creates a #GTlsCertificate from a PKCS \#11 URI.
+ *
+ * An example @pkcs11_uri would be `pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01`
+ *
+ * Where the token’s layout is:
+ *
+ * ```
+ * Object 0:
+ *   URL: pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01;object=private%20key;type=private
+ *   Type: Private key (RSA-2048)
+ *   ID: 01
+ *
+ * Object 1:
+ *   URL: pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01;object=Certificate%20for%20Authentication;type=cert
+ *   Type: X.509 Certificate (RSA-2048)
+ *   ID: 01
+ * ```
+ *
+ * In this case the certificate and private key would both be detected and used as expected.
+ * @pkcs_uri may also just reference an X.509 certificate object and then optionally
+ * @private_key_pkcs11_uri allows using a private key exposed under a different URI.
+ *
+ * Note that the private key is not accessed until usage and may fail or require a PIN later.
+ *
+ * Returns: (transfer full): the new certificate, or %NULL on error
+ * Since: 2.64
+ */
+
+
+/**
  * g_tls_certificate_verify:
  * @cert: a #GTlsCertificate
  * @identity: (nullable): the expected peer identity
@@ -39980,7 +40043,7 @@
  * @result: the result passed to the callback
  * @error: an optional location to place an error on failure
  *
- * Complete an request certificate user interaction request. This should be once
+ * Complete a request certificate user interaction request. This should be once
  * the g_tls_interaction_request_certificate_async() completion callback is called.
  *
  * If %G_TLS_INTERACTION_HANDLED is returned, then the #GTlsConnection

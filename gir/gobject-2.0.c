@@ -332,7 +332,7 @@
  * of a type identifier and a specific value of that type.
  * The type identifier within a #GValue structure always determines the
  * type of the associated value.
- * To create a undefined #GValue structure, simply create a zero-filled
+ * To create an undefined #GValue structure, simply create a zero-filled
  * #GValue structure. To initialize the #GValue, use the g_value_init()
  * function. A #GValue cannot be used until it is initialized.
  * The basic type operations (such as freeing and copying) are determined
@@ -2621,7 +2621,7 @@
  *
  * The signal specs expected by this function have the form
  * "modifier::signal_name", where modifier can be one of the following:
- * * - signal: equivalent to g_signal_connect_data (..., NULL, 0)
+ * - signal: equivalent to g_signal_connect_data (..., NULL, 0)
  * - object-signal, object_signal: equivalent to g_signal_connect_object (..., 0)
  * - swapped-signal, swapped_signal: equivalent to g_signal_connect_data (..., NULL, G_CONNECT_SWAPPED)
  * - swapped_object_signal, swapped-object-signal: equivalent to g_signal_connect_object (..., G_CONNECT_SWAPPED)
@@ -4713,6 +4713,10 @@
  *
  * Also tries the ancestors of the given type.
  *
+ * The type class passed as @itype must already have been instantiated (for
+ * example, using g_type_class_ref()) for this function to work, as signals are
+ * always installed during class initialization.
+ *
  * See g_signal_new() for details on allowed signal names.
  *
  * Returns: the signal's identifying number, or 0 if no signal was found.
@@ -5075,7 +5079,7 @@
 
 /**
  * g_type_add_class_private:
- * @class_type: GType of an classed type
+ * @class_type: GType of a classed type
  * @private_size: size of private structure
  *
  * Registers a private class structure for a classed type;
@@ -5119,7 +5123,7 @@
  * @interface_type: #GType value of an interface type
  * @plugin: #GTypePlugin structure to retrieve the #GInterfaceInfo from
  *
- * Adds the dynamic @interface_type to @instantiable_type. The information
+ * Adds @interface_type to the dynamic @instantiable_type. The information
  * contained in the #GTypePlugin structure pointed to by @plugin
  * is used to manage the relationship.
  */
@@ -5132,7 +5136,7 @@
  * @info: #GInterfaceInfo structure for this
  *        (@instance_type, @interface_type) combination
  *
- * Adds the static @interface_type to @instantiable_type.
+ * Adds @interface_type to the static @instantiable_type.
  * The information contained in the #GInterfaceInfo structure
  * pointed to by @info is used to manage the relationship.
  */
@@ -5405,7 +5409,7 @@
 /**
  * g_type_default_interface_unref:
  * @g_iface: (type GObject.TypeInterface): the default vtable
- *     structure for a interface, as returned by g_type_default_interface_ref()
+ *     structure for an interface, as returned by g_type_default_interface_ref()
  *
  * Decrements the reference count for the type corresponding to the
  * interface default vtable @g_iface. If the type is dynamic, then

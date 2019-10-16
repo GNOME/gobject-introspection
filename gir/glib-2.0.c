@@ -3223,7 +3223,7 @@
  * @major: major version to check against
  * @minor: minor version to check against
  *
- * Expands to a a check for a compiler with __GNUC__ defined and a version
+ * Expands to a check for a compiler with __GNUC__ defined and a version
  * greater than or equal to the major and minor numbers provided. For example,
  * the following would only match on compilers such as GCC 4.8 or newer.
  *
@@ -5595,6 +5595,13 @@
  * function (the file being opened, or whatever - though in the
  * g_file_get_contents() case, the @message already contains a filename).
  *
+ * Note, however, that many error messages are too technical to display to the
+ * user in an application, so prefer to use g_error_matches() to categorize errors
+ * from called functions, and build an appropriate error message for the context
+ * within your application. Error messages from a #GError are more appropriate
+ * to be printed in system logs or on the command line. They are typically
+ * translated.
+ *
  * When implementing a function that can report errors, the basic
  * tool is g_set_error(). Typically, if a fatal error occurs you
  * want to g_set_error(), then return immediately. g_set_error()
@@ -6457,7 +6464,7 @@
  * To remove a key and value, use g_hash_table_remove().
  *
  * To call a function for each key and value pair use
- * g_hash_table_foreach() or use a iterator to iterate over the
+ * g_hash_table_foreach() or use an iterator to iterate over the
  * key/value pairs in the hash table, see #GHashTableIter.
  *
  * To destroy a #GHashTable use g_hash_table_destroy().
@@ -7075,6 +7082,9 @@
  * new with delete and new[] with delete[]. Otherwise bad things can happen,
  * since these allocators may use different memory pools (and new/delete call
  * constructors and destructors).
+ *
+ * Since GLib 2.46 g_malloc() is hardcoded to always use the system malloc
+ * implementation.
  */
 
 
@@ -8162,7 +8172,6 @@
  *   setlocale (LC_ALL, "");
  *
  *   g_test_init (&argc, &argv, NULL);
- *   g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=");
  *
  *   // Define the tests.
  *   g_test_add ("/my-object/test1", MyObjectFixture, "some-user-data",
@@ -9160,6 +9169,37 @@
 
 
 /**
+ * g_array_steal:
+ * @array: a #GArray.
+ * @len: (optional) (out caller-allocates): pointer to retrieve the number of
+ *    elements of the original array
+ *
+ * Frees the data in the array and resets the size to zero, while
+ * the underlying array is preserved for use elsewhere and returned
+ * to the caller.
+ *
+ * If the array was created with the @zero_terminate property
+ * set to %TRUE, the returned data is zero terminated too.
+ *
+ * If array elements contain dynamically-allocated memory,
+ * the array elements should also be freed by the caller.
+ *
+ * A short example of use:
+ * |[<!-- language="C" -->
+ * ...
+ * gpointer data;
+ * gsize data_len;
+ * data = g_array_steal (some_array, &data_len);
+ * ...
+ * ]|
+ *
+ * Returns: (transfer full): the element data, which should be
+ *     freed using g_free().
+ * Since: 2.64
+ */
+
+
+/**
  * g_array_unref:
  * @array: A #GArray
  *
@@ -9727,7 +9767,7 @@
 
 /**
  * g_assert_cmpfloat:
- * @n1: an floating point number
+ * @n1: a floating point number
  * @cmp: The comparison operator to use.
  *     One of `==`, `!=`, `<`, `>`, `<=`, `>=`.
  * @n2: another floating point number
@@ -9745,7 +9785,7 @@
 
 /**
  * g_assert_cmpfloat_with_epsilon:
- * @n1: an floating point number
+ * @n1: a floating point number
  * @n2: another floating point number
  * @epsilon: a numeric value that expresses the expected tolerance
  *   between @n1 and @n2
@@ -9797,9 +9837,9 @@
 
 /**
  * g_assert_cmpmem:
- * @m1: pointer to a buffer
+ * @m1: (nullable): pointer to a buffer
  * @l1: length of @m1
- * @m2: pointer to another buffer
+ * @m2: (nullable): pointer to another buffer
  * @l2: length of @m2
  *
  * Debugging macro to compare memory regions. If the comparison fails,
@@ -9810,6 +9850,8 @@
  * the same as `g_assert_true (l1 == l2 && memcmp (m1, m2, l1) == 0)`.
  * The advantage of this macro is that it can produce a message that
  * includes the actual values of @l1 and @l2.
+ *
+ * @m1 may be %NULL if (and only if) @l1 is zero; similarly for @m2 and @l2.
  *
  * |[<!-- language="C" -->
  *   g_assert_cmpmem (buf->data, buf->len, expected, sizeof (expected));
@@ -12457,6 +12499,22 @@
 
 
 /**
+ * g_byte_array_steal:
+ * @array: a #GByteArray.
+ * @len: (optional) (out caller-allocates): pointer to retrieve the number of
+ *    elements of the original array
+ *
+ * Frees the data in the array and resets the size to zero, while
+ * the underlying array is preserved for use elsewhere and returned
+ * to the caller.
+ *
+ * Returns: (transfer full): the element data, which should be
+ *     freed using g_free().
+ * Since: 2.64
+ */
+
+
+/**
  * g_byte_array_unref:
  * @array: A #GByteArray
  *
@@ -12799,7 +12857,7 @@
  * g_checksum_get_string:
  * @checksum: a #GChecksum
  *
- * Gets the digest as an hexadecimal string.
+ * Gets the digest as a hexadecimal string.
  *
  * Once this function has been called the #GChecksum can no longer be
  * updated with g_checksum_update().
@@ -15106,9 +15164,13 @@
  *
  * Creates a #GDateTime corresponding to the given
  * [ISO 8601 formatted string](https://en.wikipedia.org/wiki/ISO_8601)
- * @text. ISO 8601 strings of the form <date><sep><time><tz> are supported.
+ * @text. ISO 8601 strings of the form <date><sep><time><tz> are supported, with
+ * some extensions from [RFC 3339](https://tools.ietf.org/html/rfc3339) as
+ * mentioned below.
  *
- * <sep> is the separator and can be either 'T', 't' or ' '.
+ * <sep> is the separator and can be either 'T', 't' or ' '. The latter two
+ * separators are an extension from
+ * [RFC 3339](https://tools.ietf.org/html/rfc3339#section-5.6).
  *
  * <date> is in the form:
  *
@@ -16380,8 +16442,8 @@
  * the program is found, the return value contains the full name
  * including the type suffix.
  *
- * Returns: (type filename): a newly-allocated string with the absolute path,
- *     or %NULL
+ * Returns: (type filename) (transfer full) (nullable): a newly-allocated
+ *   string with the absolute path, or %NULL
  */
 
 
@@ -16427,8 +16489,8 @@
  * See g_format_size_full() for more options about how the size might be
  * formatted.
  *
- * Returns: a newly-allocated formatted string containing a human readable
- *     file size
+ * Returns: (transfer full): a newly-allocated formatted string containing
+ *   a human readable file size
  * Since: 2.30
  */
 
@@ -16447,8 +16509,8 @@
  *
  * This string should be freed with g_free() when not needed any longer.
  *
- * Returns: a newly-allocated formatted string containing a human
- *     readable file size
+ * Returns: (transfer full): a newly-allocated formatted string
+ *   containing a human readable file size
  * Since: 2.16
  * Deprecated: 2.30: This function is broken due to its use of SI
  *     suffixes to denote IEC units. Use g_format_size() instead.
@@ -16465,8 +16527,8 @@
  * This function is similar to g_format_size() but allows for flags
  * that modify the output. See #GFormatSizeFlags.
  *
- * Returns: a newly-allocated formatted string containing a human
- *     readable file size
+ * Returns: (transfer full): a newly-allocated formatted string
+ *   containing a human readable file size
  * Since: 2.30
  */
 
@@ -16518,6 +16580,22 @@
 
 
 /**
+ * g_fsync:
+ * @fd: a file descriptor
+ *
+ * A wrapper for the POSIX fsync() function (_commit() on Windows).
+ * The fsync() function is used to synchronize a file's in-core
+ * state with that of the disk.
+ *
+ * See the C library manual for more details about fsync().
+ *
+ * Returns: 0 on success, or -1 if an error occurred.
+ * The return value can be used exactly like the return value from fsync().
+ * Since: 2.64
+ */
+
+
+/**
  * g_get_application_name:
  *
  * Gets a human-readable name for the application, as set by
@@ -16528,7 +16606,8 @@
  * g_get_prgname() (which may be %NULL if g_set_prgname() has also not
  * been called).
  *
- * Returns: human-readable application name. may return %NULL
+ * Returns: (transfer none) (nullable): human-readable application
+ *   name. May return %NULL
  * Since: 2.2
  */
 
@@ -16711,7 +16790,7 @@
  * should either directly check the `HOME` environment variable yourself
  * or unset it before calling any functions in GLib.
  *
- * Returns: (type filename): the current user's home directory
+ * Returns: (type filename) (transfer none): the current user's home directory
  */
 
 
@@ -16733,7 +16812,7 @@
  *
  * The encoding of the returned string is UTF-8.
  *
- * Returns: the host name of the machine.
+ * Returns: (transfer none): the host name of the machine.
  * Since: 2.8
  */
 
@@ -16836,6 +16915,25 @@
 
 
 /**
+ * g_get_os_info:
+ * @key_name: a key for the OS info being requested, for example %G_OS_INFO_KEY_NAME.
+ *
+ * Get information about the operating system.
+ *
+ * On Linux this comes from the /etc/os-release file. On other systems, it may
+ * come from a variety of sources. You can either use the standard key names
+ * like %G_OS_INFO_KEY_NAME or pass any UTF-8 string key name. For example,
+ * /etc/os-release provides a number of other less commonly used values that may
+ * be useful. No key is guaranteed to be provided, so the caller should always
+ * check if the result is %NULL.
+ *
+ * Returns: (nullable): The associated value for the requested key or %NULL if
+ *   this information is not provided.
+ * Since: 2.64
+ */
+
+
+/**
  * g_get_prgname:
  *
  * Gets the name of the program. This name should not be localized,
@@ -16847,9 +16945,9 @@
  * #GtkApplication::startup handler. The program name is found by
  * taking the last component of @argv[0].
  *
- * Returns: (nullable): the name of the program, or %NULL if it has not been
- *     set yet. The returned string belongs
- *     to GLib and must not be modified or freed.
+ * Returns: (nullable) (transfer none): the name of the program,
+ *   or %NULL if it has not been set yet. The returned string belongs
+ *   to GLib and must not be modified or freed.
  */
 
 
@@ -16862,7 +16960,7 @@
  * real user name cannot be determined, the string "Unknown" is
  * returned.
  *
- * Returns: (type filename): the user's real name.
+ * Returns: (type filename) (transfer none): the user's real name.
  */
 
 
@@ -16972,7 +17070,7 @@
  * it is always UTF-8. The return value is never %NULL or the empty
  * string.
  *
- * Returns: (type filename): the directory to use for temporary files.
+ * Returns: (type filename) (transfer none): the directory to use for temporary files.
  */
 
 
@@ -16993,8 +17091,8 @@
  * `C:\Documents and Settings\username\Local Settings\Temporary Internet Files`.
  * See the [documentation for `CSIDL_INTERNET_CACHE`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb762494%28v=vs.85%29.aspx#csidl_internet_cache).
  *
- * Returns: (type filename): a string owned by GLib that must not be modified
- *               or freed.
+ * Returns: (type filename) (transfer none): a string owned by GLib that
+ *   must not be modified or freed.
  * Since: 2.6
  */
 
@@ -17017,8 +17115,8 @@
  * Note that in this case on Windows it will be  the same
  * as what g_get_user_data_dir() returns.
  *
- * Returns: (type filename): a string owned by GLib that must not be modified
- *               or freed.
+ * Returns: (type filename) (transfer none): a string owned by GLib that
+ *   must not be modified or freed.
  * Since: 2.6
  */
 
@@ -17041,8 +17139,8 @@
  * Note that in this case on Windows it will be the same
  * as what g_get_user_config_dir() returns.
  *
- * Returns: (type filename): a string owned by GLib that must not be modified
- *               or freed.
+ * Returns: (type filename) (transfer none): a string owned by GLib that must
+ *   not be modified or freed.
  * Since: 2.6
  */
 
@@ -17055,7 +17153,7 @@
  * encoding, or something else, and there is no guarantee that it is even
  * consistent on a machine. On Windows, it is always UTF-8.
  *
- * Returns: (type filename): the user name of the current user.
+ * Returns: (type filename) (transfer none): the user name of the current user.
  */
 
 
@@ -17722,7 +17820,7 @@
  * g_hmac_get_string:
  * @hmac: a #GHmac
  *
- * Gets the HMAC as an hexadecimal string.
+ * Gets the HMAC as a hexadecimal string.
  *
  * Once this function has been called the #GHmac can no longer be
  * updated with g_hmac_update().
@@ -19102,6 +19200,9 @@
  * given @channel. For example, if condition is #G_IO_IN, the source will
  * be dispatched when there's data available for reading.
  *
+ * The callback function invoked by the #GSource should be added with
+ * g_source_set_callback(), but it has type #GIOFunc (not #GSourceFunc).
+ *
  * g_io_add_watch() is a simpler interface to this same functionality, for
  * the case where you want to add the source to the default main loop context
  * at the default priority.
@@ -19785,7 +19886,7 @@
  * @key_file: a #GKeyFile
  * @group_name: a group name
  * @key: a key
- * @value: an double value
+ * @value: a double value
  *
  * Associates a new double value with @key under @group_name.
  * If @key cannot be found then it is created.
@@ -22178,8 +22279,8 @@
 /**
  * g_markup_parse_context_get_position:
  * @context: a #GMarkupParseContext
- * @line_number: (nullable): return location for a line number, or %NULL
- * @char_number: (nullable): return location for a char-on-line number, or %NULL
+ * @line_number: (out) (optional): return location for a line number, or %NULL
+ * @char_number: (out) (optional): return location for a char-on-line number, or %NULL
  *
  * Retrieves the current line number and the number of the character on
  * that line. Intended for use in error messages; there are no strict
@@ -22779,7 +22880,7 @@
  *
  * Checks whether the allocator used by g_malloc() is the system's
  * malloc implementation. If it returns %TRUE memory allocated with
- * malloc() can be used interchangeable with memory allocated using g_malloc().
+ * malloc() can be used interchangeably with memory allocated using g_malloc().
  * This function is useful for avoiding an extra copy of allocated memory returned
  * by a non-GLib-based API.
  *
@@ -23833,8 +23934,10 @@
 /**
  * g_option_context_parse_strv:
  * @context: a #GOptionContext
- * @arguments: (inout) (array zero-terminated=1): a pointer to the
- *    command line arguments (which must be in UTF-8 on Windows)
+ * @arguments: (inout) (array null-terminated=1) (optional): a pointer
+ *    to the command line arguments (which must be in UTF-8 on Windows).
+ *    Starting with GLib 2.62, @arguments can be %NULL, which matches
+ *    g_option_context_parse().
  * @error: a return location for errors
  *
  * Parses the command line arguments.
@@ -24939,7 +25042,32 @@
  *
  * Note that the comparison function for g_ptr_array_sort() doesn't
  * take the pointers from the array as arguments, it takes pointers to
- * the pointers in the array.
+ * the pointers in the array. Here is a full example of usage:
+ *
+ * |[<!-- language="C" -->
+ * typedef struct
+ * {
+ *   gchar *name;
+ *   gint size;
+ * } FileListEntry;
+ *
+ * static gint
+ * sort_filelist (gconstpointer a, gconstpointer b)
+ * {
+ *   const FileListEntry *entry1 = *((FileListEntry **) a);
+ *   const FileListEntry *entry2 = *((FileListEntry **) b);
+ *
+ *   return g_ascii_strcasecmp (entry1->name, entry2->name);
+ * }
+ *
+ * …
+ * g_autoptr (GPtrArray) file_list = NULL;
+ *
+ * // initialize file_list array and load with many FileListEntry entries
+ * ...
+ * // now sort it with
+ * g_ptr_array_sort (file_list, (GCompareFunc) sort_filelist);
+ * ]|
  *
  * This is guaranteed to be a stable sort since version 2.32.
  */
@@ -24956,9 +25084,74 @@
  *
  * Note that the comparison function for g_ptr_array_sort_with_data()
  * doesn't take the pointers from the array as arguments, it takes
- * pointers to the pointers in the array.
+ * pointers to the pointers in the array. Here is a full example of use:
+ *
+ * |[<!-- language="C" -->
+ * typedef enum { SORT_NAME, SORT_SIZE } SortMode;
+ *
+ * typedef struct
+ * {
+ *   gchar *name;
+ *   gint size;
+ * } FileListEntry;
+ *
+ * static gint
+ * sort_filelist (gconstpointer a, gconstpointer b, gpointer user_data)
+ * {
+ *   gint order;
+ *   const SortMode *sort_mode = GPOINTER_TO_INT (user_data);
+ *   const FileListEntry *entry1 = *((FileListEntry **) a);
+ *   const FileListEntry *entry2 = *((FileListEntry **) b);
+ *
+ *   switch (*sort_mode)
+ *     {
+ *     case SORT_NAME:
+ *       order = g_ascii_strcasecmp (entry1->name, entry2->name);
+ *       break;
+ *     case SORT_SIZE:
+ *       order = entry1->size - entry2->size;
+ *       break;
+ *     default:
+ *       order = 0;
+ *       break;
+ *     }
+ *   return order;
+ * }
+ *
+ * ...
+ * g_autoptr (GPtrArray) file_list = NULL;
+ * SortMode sort_mode;
+ *
+ * // initialize file_list array and load with many FileListEntry entries
+ * ...
+ * // now sort it with
+ * sort_mode = SORT_NAME;
+ * g_ptr_array_sort_with_data (file_list,
+ *                             (GCompareFunc) sort_filelist,
+ *                             GINT_TO_POINTER (sort_mode));
+ * ]|
  *
  * This is guaranteed to be a stable sort since version 2.32.
+ */
+
+
+/**
+ * g_ptr_array_steal:
+ * @array: a #GPtrArray.
+ * @len: (optional) (out caller-allocates): pointer to retrieve the number of
+ *    elements of the original array
+ *
+ * Frees the data in the array and resets the size to zero, while
+ * the underlying array is preserved for use elsewhere and returned
+ * to the caller.
+ *
+ * Even if set, the #GDestroyNotify function will never be called
+ * on the current contents of the array and the caller is
+ * responsible for freeing the array elements.
+ *
+ * Returns: (transfer full): the element data, which should be
+ *     freed using g_free().
+ * Since: 2.64
  */
 
 
@@ -25632,7 +25825,7 @@
  * @rand_: a #GRand
  *
  * Returns a random #gboolean from @rand_.
- * This corresponds to a unbiased coin toss.
+ * This corresponds to an unbiased coin toss.
  *
  * Returns: a random #gboolean
  */
@@ -25772,7 +25965,7 @@
  * g_random_boolean:
  *
  * Returns a random #gboolean.
- * This corresponds to a unbiased coin toss.
+ * This corresponds to an unbiased coin toss.
  *
  * Returns: a random #gboolean
  */
@@ -26766,7 +26959,7 @@
  *
  * As a special case, the result of splitting the empty string "" is an
  * empty vector, not a vector containing a single string. The reason for
- * this special case is that being able to represent a empty vector is
+ * this special case is that being able to represent an empty vector is
  * typically more useful than consistent handling of empty elements. If
  * you do need to represent empty elements, you'll need to check for the
  * empty string before calling this function.
@@ -26801,7 +26994,7 @@
  *
  * As a special case, the result of splitting the empty string "" is an
  * empty vector, not a vector containing a single string. The reason for
- * this special case is that being able to represent a empty vector is
+ * this special case is that being able to represent an empty vector is
  * typically more useful than consistent handling of empty elements. If
  * you do need to represent empty elements, you'll need to check for the
  * empty string before calling this function.
@@ -26846,7 +27039,7 @@
  * As a special case, the result of splitting the empty string ""
  * is an empty vector, not a vector containing a single string.
  * The reason for this special case is that being able to represent
- * a empty vector is typically more useful than consistent handling
+ * an empty vector is typically more useful than consistent handling
  * of empty elements. If you do need to represent empty elements,
  * you'll need to check for the empty string before calling this
  * function.
@@ -30444,7 +30637,7 @@
 
 /**
  * g_strdup_printf:
- * @format: a standard printf() format string, but notice
+ * @format: (not nullable): a standard printf() format string, but notice
  *     [string precision pitfalls][string-precision]
  * @...: the parameters to insert into the format string
  *
@@ -30453,13 +30646,17 @@
  * the result. The returned string should be freed with g_free() when no
  * longer needed.
  *
+ * The returned string is guaranteed to be non-NULL, unless @format
+ * contains `%lc` or `%ls` conversions, which can fail if no multibyte
+ * representation is available for the given character.
+ *
  * Returns: a newly-allocated string holding the result
  */
 
 
 /**
  * g_strdup_vprintf:
- * @format: a standard printf() format string, but notice
+ * @format: (not nullable): a standard printf() format string, but notice
  *     [string precision pitfalls][string-precision]
  * @args: the list of parameters to insert into the format string
  *
@@ -30467,6 +30664,10 @@
  * calculates the maximum space required and allocates memory to hold
  * the result. The returned string should be freed with g_free() when
  * no longer needed.
+ *
+ * The returned string is guaranteed to be non-NULL, unless @format
+ * contains `%lc` or `%ls` conversions, which can fail if no multibyte
+ * representation is available for the given character.
  *
  * See also g_vasprintf(), which offers the same functionality, but
  * additionally returns the length of the allocated string.
@@ -30634,7 +30835,7 @@
 /**
  * g_string_append_vprintf:
  * @string: a #GString
- * @format: the string format. See the printf() documentation
+ * @format: (not nullable): the string format. See the printf() documentation
  * @args: the list of arguments to insert in the output
  *
  * Appends a formatted string onto the end of a #GString.
@@ -31145,7 +31346,7 @@
 /**
  * g_string_vprintf:
  * @string: a #GString
- * @format: the string format. See the printf() documentation
+ * @format: (not nullable): the string format. See the printf() documentation
  * @args: the parameters to insert into the format string
  *
  * Writes a formatted string into a #GString.
@@ -31393,7 +31594,7 @@
  *
  * As a special case, the result of splitting the empty string "" is an empty
  * vector, not a vector containing a single string. The reason for this
- * special case is that being able to represent a empty vector is typically
+ * special case is that being able to represent an empty vector is typically
  * more useful than consistent handling of empty elements. If you do need
  * to represent empty elements, you'll need to check for the empty string
  * before calling g_strsplit().
@@ -31425,7 +31626,7 @@
  *
  * As a special case, the result of splitting the empty string "" is an empty
  * vector, not a vector containing a single string. The reason for this
- * special case is that being able to represent a empty vector is typically
+ * special case is that being able to represent an empty vector is typically
  * more useful than consistent handling of empty elements. If you do need
  * to represent empty elements, you'll need to check for the empty string
  * before calling g_strsplit_set().
@@ -31627,7 +31828,9 @@
  * This function adds a message to test reports that
  * associates a bug URI with a test case.
  * Bug URIs are constructed from a base URI set with g_test_bug_base()
- * and @bug_uri_snippet.
+ * and @bug_uri_snippet. If g_test_bug_base() has not been called, it is
+ * assumed to be the empty string, so a full URI can be provided to
+ * g_test_bug() instead.
  *
  * Since: 2.16:
  * See also: g_test_summary()
@@ -31649,6 +31852,9 @@
  * Bug URIs are constructed by appending a bug specific URI
  * portion to @uri_pattern, or by replacing the special string
  * '\%s' within @uri_pattern if that is present.
+ *
+ * If g_test_bug_base() is not called, bug URIs are formed solely
+ * from the value provided by g_test_bug().
  *
  * Since: 2.16
  */
@@ -33210,7 +33416,7 @@
  * @type: the #GTimeType of @time_
  * @time_: a number of seconds since January 1, 1970
  *
- * Finds an the interval within @tz that corresponds to the given @time_.
+ * Finds an interval within @tz that corresponds to the given @time_.
  * The meaning of @time_ depends on @type.
  *
  * If @type is %G_TIME_TYPE_UNIVERSAL then this function will always
@@ -34688,7 +34894,7 @@
  * Converts a character to uppercase.
  *
  * Returns: the result of converting @c to uppercase.
- *               If @c is not an lowercase or titlecase character,
+ *               If @c is not a lowercase or titlecase character,
  *               or has no upper case equivalent @c is returned unchanged.
  */
 
@@ -35419,7 +35625,7 @@
  * @str: a UTF-8 encoded string
  * @pos: a pointer to a position within @str
  *
- * Converts from a pointer to position within a string to a integer
+ * Converts from a pointer to position within a string to an integer
  * character offset.
  *
  * Since 2.10, this function allows @pos to be before @str, and returns
@@ -36733,7 +36939,7 @@
 
 /**
  * g_variant_get_int16:
- * @value: a int16 #GVariant instance
+ * @value: an int16 #GVariant instance
  *
  * Returns the 16-bit signed integer value of @value.
  *
@@ -36747,7 +36953,7 @@
 
 /**
  * g_variant_get_int32:
- * @value: a int32 #GVariant instance
+ * @value: an int32 #GVariant instance
  *
  * Returns the 32-bit signed integer value of @value.
  *
@@ -36761,7 +36967,7 @@
 
 /**
  * g_variant_get_int64:
- * @value: a int64 #GVariant instance
+ * @value: an int64 #GVariant instance
  *
  * Returns the 64-bit signed integer value of @value.
  *
@@ -38825,8 +39031,8 @@
 
 /**
  * g_vasprintf:
- * @string: the return location for the newly-allocated string.
- * @format: a standard printf() format string, but notice
+ * @string: (not optional) (nullable): the return location for the newly-allocated string.
+ * @format: (not nullable): a standard printf() format string, but notice
  *          [string precision pitfalls][string-precision]
  * @args: the list of arguments to insert in the output.
  *
@@ -38835,6 +39041,10 @@
  * This function is similar to g_vsprintf(), except that it allocates a
  * string to hold the output, instead of putting the output in a buffer
  * you allocate in advance.
+ *
+ * The returned value in @string is guaranteed to be non-NULL, unless
+ * @format contains `%lc` or `%ls` conversions, which can fail if no
+ * multibyte representation is available for the given character.
  *
  * `glib/gprintf.h` must be explicitly included in order to use this function.
  *
