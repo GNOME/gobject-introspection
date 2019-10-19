@@ -14,6 +14,10 @@ if glib_dep.type_name() == 'pkgconfig'
     join_paths(meson.build_root(), 'tests'),
     join_paths(meson.build_root(), 'tests', 'scanner'),
   )
+  repository_test_env.prepend(
+    'LD_LIBRARY_PATH',
+    join_paths(meson.build_root(), 'tests', 'scanner'),
+  )
   if host_system == 'windows'
     repository_test_env.prepend(
       'PATH', join_paths(meson.build_root(), 'tests', 'scanner'))
