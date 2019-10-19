@@ -163,7 +163,7 @@ test_fundamental_get_ref_function_pointer (GIRepository * repo)
 
   g_assert (g_irepository_require (repo, "Regress", NULL, 0, NULL));
   info = g_irepository_find_by_name (repo, "Regress", "TestFundamentalObject");
-  g_object_info_get_ref_function_pointer (info);
+  g_assert_nonnull (g_object_info_get_ref_function_pointer (info));
   g_base_info_unref (info);
 }
 
@@ -307,6 +307,8 @@ int
 main (int argc, char **argv)
 {
   GIRepository *repo;
+
+  g_log_set_always_fatal (G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL);
 
   repo = g_irepository_get_default ();
 
