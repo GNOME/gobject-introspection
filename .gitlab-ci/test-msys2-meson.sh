@@ -34,11 +34,8 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 pip3 install --upgrade --user meson==0.49.2 flake8
 export PATH="$HOME/.local/bin:$PATH"
 
-# FIXME: https://github.com/Alexpux/MINGW-packages/pull/4064
-# Passing the full interpreter path works around the issue
-PYTHON="$(which python3)"
 export CFLAGS="-Werror"
-meson -Dcairo=enabled -Ddoctool=enabled -Dpython="${PYTHON}" --buildtype debug _build
+meson -Dcairo=enabled -Ddoctool=enabled --buildtype debug _build
 cd _build
 ninja
 
