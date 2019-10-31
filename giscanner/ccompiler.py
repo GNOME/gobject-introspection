@@ -444,6 +444,13 @@ class CCompiler(object):
                 else:
                     macro_name = macro[:macro_index]
                     macro_value = macro[macro_index + 1:]
+
+                    # Somehow the quotes used in defining
+                    # macros for compiling using distutils
+                    # get dropped for MSVC builds, so
+                    # escape the escape character.
+                    if isinstance(self.compiler, MSVCCompiler):
+                        macro_value = macro_value.replace('\"', '\\\"')
                 macros.append((macro_name, macro_value))
             elif option.startswith('-U'):
                 macros.append((option[len('-U'):],))
