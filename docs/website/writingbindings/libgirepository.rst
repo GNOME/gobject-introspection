@@ -12,5 +12,5 @@ For more information about libgirepository see the `API documentation
 The following example shows how to call the ``g_assertion_message()`` function
 from libglib-2.0:
 
-.. literalinclude:: ../../../examples/glib-print.c
+.. literalinclude:: ../../../examples/girepository/glib-print.c
     :language: c
