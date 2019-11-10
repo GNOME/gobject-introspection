@@ -8,6 +8,43 @@ dnl
 
 # serial 1
 
+dnl Usage:
+dnl   See AS_AC_EXPAND
+m4_define([_GOBJECT_INTROSPECTION_AS_AC_EXPAND],
+[
+  EXP_VAR=[$1]
+  FROM_VAR=[$2]
+
+  dnl first expand prefix and exec_prefix if necessary
+  prefix_save=$prefix
+  exec_prefix_save=$exec_prefix
+
+  dnl if no prefix given, then use /usr/local, the default prefix
+  if test "x$prefix" = "xNONE"; then
+    prefix="$ac_default_prefix"
+  fi
+  dnl if no exec_prefix given, then use prefix
+  if test "x$exec_prefix" = "xNONE"; then
+    exec_prefix=$prefix
+  fi
+
+  full_var="$FROM_VAR"
+  dnl loop until it doesn't change anymore
+  while true; do
+    new_full_var="`eval echo $full_var`"
+    if test "x$new_full_var" = "x$full_var"; then break; fi
+    full_var=$new_full_var
+  done
+
+  dnl clean up
+  full_var=$new_full_var
+  AC_SUBST([$1], "$full_var")
+
+  dnl restore prefix and exec_prefix
+  prefix=$prefix_save
+  exec_prefix=$exec_prefix_save
+])
+
 m4_define([_GOBJECT_INTROSPECTION_CHECK_INTERNAL],
 [
     AC_BEFORE([AC_PROG_LIBTOOL],[$0])dnl setup libtool first
@@ -50,6 +87,11 @@ m4_define([_GOBJECT_INTROSPECTION_CHECK_INTERNAL],
 
     AC_MSG_RESULT([$found_introspection])
 
+    dnl expand datadir/libdir so we can pass them to pkg-config
+    dnl and get paths relative to our target directories
+    _GOBJECT_INTROSPECTION_AS_AC_EXPAND(_GI_EXP_DATADIR, "$datadir")
+    _GOBJECT_INTROSPECTION_AS_AC_EXPAND(_GI_EXP_LIBDIR, "$libdir")
+
     INTROSPECTION_SCANNER=
     INTROSPECTION_COMPILER=
     INTROSPECTION_GENERATE=
@@ -59,8 +101,8 @@ m4_define([_GOBJECT_INTROSPECTION_CHECK_INTERNAL],
        INTROSPECTION_SCANNER=`$PKG_CONFIG --variable=g_ir_scanner gobject-introspection-1.0`
        INTROSPECTION_COMPILER=`$PKG_CONFIG --variable=g_ir_compiler gobject-introspection-1.0`
        INTROSPECTION_GENERATE=`$PKG_CONFIG --variable=g_ir_generate gobject-introspection-1.0`
-       INTROSPECTION_GIRDIR=`$PKG_CONFIG --variable=girdir gobject-introspection-1.0`
-       INTROSPECTION_TYPELIBDIR="$($PKG_CONFIG --variable=typelibdir gobject-introspection-1.0)"
+       INTROSPECTION_GIRDIR=`$PKG_CONFIG --define-variable=datadir="${_GI_EXP_DATADIR}" --variable=girdir gobject-introspection-1.0`
+       INTROSPECTION_TYPELIBDIR="$($PKG_CONFIG --define-variable=libdir="${_GI_EXP_LIBDIR}" --variable=typelibdir gobject-introspection-1.0)"
        INTROSPECTION_CFLAGS=`$PKG_CONFIG --cflags gobject-introspection-1.0`
        INTROSPECTION_LIBS=`$PKG_CONFIG --libs gobject-introspection-1.0`
        INTROSPECTION_MAKEFILE=`$PKG_CONFIG --variable=datadir gobject-introspection-1.0`/gobject-introspection-1.0/Makefile.introspection
