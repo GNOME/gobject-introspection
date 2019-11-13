@@ -121,6 +121,13 @@ DllMain (HINSTANCE hinstDLL,
 #endif
 
 static void
+check_base_info_unref (GIBaseInfo *base_info)
+{
+  if (base_info)
+    g_base_info_unref (base_info);
+}
+
+static void
 g_irepository_init (GIRepository *repository)
 {
   repository->priv = g_irepository_get_instance_private (repository);
@@ -135,7 +142,7 @@ g_irepository_init (GIRepository *repository)
   repository->priv->info_by_gtype
     = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                              (GDestroyNotify) NULL,
-                             (GDestroyNotify) g_base_info_unref);
+                             (GDestroyNotify) check_base_info_unref);
   repository->priv->info_by_error_domain
     = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                              (GDestroyNotify) NULL,
@@ -808,11 +815,15 @@ g_irepository_find_by_gtype (GIRepository *repository,
 
   repository = get_repository (repository);
 
-  cached = g_hash_table_lookup (repository->priv->info_by_gtype,
-				(gpointer)gtype);
+  if (g_hash_table_lookup_extended (repository->priv->info_by_gtype,
+                                    (gpointer)gtype,
+                                    NULL, (gpointer*)&cached))
+    {
+      if (!cached)
+        return NULL;
 
-  if (cached != NULL)
-    return g_base_info_ref (cached);
+      return g_base_info_ref (cached);
+    }
 
   data.gtype_name = g_type_name (gtype);
   data.result_typelib = NULL;
@@ -849,7 +860,12 @@ g_irepository_find_by_gtype (GIRepository *repository,
 			   g_base_info_ref (cached));
       return cached;
     }
-  return NULL;
+  else
+    {
+      g_hash_table_insert (repository->priv->info_by_gtype,
+                           (gpointer) gtype, NULL);
+      return NULL;
+    }
 }
 
 /**
