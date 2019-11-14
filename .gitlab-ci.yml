@@ -35,6 +35,26 @@ fedora-x86_64-meson:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - public
 
+fedora-x86_64-subprojects:
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v1
+  stage: build
+  variables:
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+  script:
+    - meson _build .
+    - cd _build
+    - ninja
+    - meson test --print-errorlogs --suite=gobject-introspection
+  except:
+    - tags
+  artifacts:
+    when: always
+    name: "gi-_${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - public
+
 fedora-x86_64-python3.5:
   stage: build
   variables:
