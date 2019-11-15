@@ -4213,7 +4213,8 @@
 /**
  * g_param_value_set_default:
  * @pspec: a valid #GParamSpec
- * @value: a #GValue of correct type for @pspec
+ * @value: a #GValue of correct type for @pspec; since 2.64, you
+ *   can also pass an empty #GValue, initialized with %G_VALUE_INIT
  *
  * Sets @value to its default value as specified in @pspec.
  */

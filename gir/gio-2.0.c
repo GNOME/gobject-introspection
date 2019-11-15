@@ -11362,7 +11362,7 @@
  * `DESKTOP_STARTUP_ID` for the launched operation, if supported.
  *
  * Startup notification IDs are defined in the
- * [FreeDesktop.Org Startup Notifications standard](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt").
+ * [FreeDesktop.Org Startup Notifications standard](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt).
  *
  * Returns: a startup notification ID for the application, or %NULL if
  *     not supported.
@@ -39296,15 +39296,16 @@
  *
  * On the client side, it is never necessary to call this method;
  * although the connection needs to perform a handshake after
- * connecting (or after sending a "STARTTLS"-type command) and may
- * need to rehandshake later if the server requests it,
+ * connecting (or after sending a "STARTTLS"-type command),
  * #GTlsConnection will handle this for you automatically when you try
- * to send or receive data on the connection. However, you can call
- * g_tls_connection_handshake() manually if you want to know for sure
- * whether the initial handshake succeeded or failed (as opposed to
- * just immediately trying to write to @conn's output stream, in which
- * case if it fails, it may not be possible to tell if it failed
- * before or after completing the handshake).
+ * to send or receive data on the connection. You can call
+ * g_tls_connection_handshake() manually if you want to know whether
+ * the initial handshake succeeded or failed (as opposed to just
+ * immediately trying to use @conn to read or write, in which case,
+ * if it fails, it may not be possible to tell if it failed before or
+ * after completing the handshake), but beware that servers may reject
+ * client authentication after the handshake has completed, so a
+ * successful handshake does not indicate the connection will be usable.
  *
  * Likewise, on the server side, although a handshake is necessary at
  * the beginning of the communication, you do not need to call this
@@ -39318,6 +39319,10 @@
  * undefined, except it is guaranteed to be reasonable and
  * nondestructive so as to preserve compatibility with code written for
  * older versions of GLib.
+ *
+ * When using a #GTlsConnection created by #GSocketClient, the
+ * #GSocketClient performs the initial handshake, so calling this
+ * function manually is not recommended.
  *
  * #GTlsConnection::accept_certificate may be emitted during the
  * handshake.

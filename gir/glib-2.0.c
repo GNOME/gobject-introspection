@@ -2713,6 +2713,7 @@
  * @G_VARIANT_PARSE_ERROR_UNKNOWN_KEYWORD: an unknown keyword was encountered
  * @G_VARIANT_PARSE_ERROR_UNTERMINATED_STRING_CONSTANT: unterminated string constant
  * @G_VARIANT_PARSE_ERROR_VALUE_EXPECTED: no value given
+ * @G_VARIANT_PARSE_ERROR_RECURSION: variant was too deeply nested; #GVariant is only guaranteed to handle nesting up to 64 levels (Since: 2.64)
  *
  * Error codes returned by parsing text-format GVariants.
  */
@@ -6910,8 +6911,10 @@
  *
  * To allow multiple independent sets of sources to be handled in
  * different threads, each source is associated with a #GMainContext.
- * A GMainContext can only be running in a single thread, but
- * sources can be added to it and removed from it from other threads.
+ * A #GMainContext can only be running in a single thread, but
+ * sources can be added to it and removed from it from other threads. All
+ * functions which operate on a #GMainContext or a built-in #GSource are
+ * thread-safe.
  *
  * Each event source is assigned a priority. The default priority,
  * #G_PRIORITY_DEFAULT, is 0. Values less than 0 denote higher priorities.
@@ -16867,10 +16870,15 @@
  * Returns a list of derived variants of @locale, which can be used to
  * e.g. construct locale-dependent filenames or search paths. The returned
  * list is sorted from most desirable to least desirable.
- * This function handles territory, charset and extra locale modifiers.
+ * This function handles territory, charset and extra locale modifiers. See
+ * [`setlocale(3)`](man:setlocale) for information about locales and their format.
  *
- * For example, if @locale is "fr_BE", then the returned list
- * is "fr_BE", "fr".
+ * @locale itself is guaranteed to be returned in the output.
+ *
+ * For example, if @locale is `fr_BE`, then the returned list
+ * is `fr_BE`, `fr`. If @locale is `en_GB.UTF-8@euro`, then the returned list
+ * is `en_GB.UTF-8@euro`, `en_GB.UTF-8`, `en_GB@euro`, `en_GB`, `en.UTF-8@euro`,
+ * `en.UTF-8`, `en@euro`, `en`.
  *
  * If you need the list of variants for the current locale,
  * use g_get_language_names().
@@ -16920,10 +16928,10 @@
  *
  * Get information about the operating system.
  *
- * On Linux this comes from the /etc/os-release file. On other systems, it may
+ * On Linux this comes from the `/etc/os-release` file. On other systems, it may
  * come from a variety of sources. You can either use the standard key names
  * like %G_OS_INFO_KEY_NAME or pass any UTF-8 string key name. For example,
- * /etc/os-release provides a number of other less commonly used values that may
+ * `/etc/os-release` provides a number of other less commonly used values that may
  * be useful. No key is guaranteed to be provided, so the caller should always
  * check if the result is %NULL.
  *
@@ -23747,7 +23755,7 @@
 /**
  * g_option_context_add_main_entries:
  * @context: a #GOptionContext
- * @entries: a %NULL-terminated array of #GOptionEntrys
+ * @entries: (array zero-terminated=1): a %NULL-terminated array of #GOptionEntrys
  * @translation_domain: (nullable): a translation domain to use for translating
  *    the `--help` output for the options in @entries
  *    with gettext(), or %NULL
@@ -24114,7 +24122,7 @@
 /**
  * g_option_group_add_entries:
  * @group: a #GOptionGroup
- * @entries: a %NULL-terminated array of #GOptionEntrys
+ * @entries: (array zero-terminated=1): a %NULL-terminated array of #GOptionEntrys
  *
  * Adds the options specified in @entries to @group.
  *
@@ -25066,7 +25074,7 @@
  * // initialize file_list array and load with many FileListEntry entries
  * ...
  * // now sort it with
- * g_ptr_array_sort (file_list, (GCompareFunc) sort_filelist);
+ * g_ptr_array_sort (file_list, sort_filelist);
  * ]|
  *
  * This is guaranteed to be a stable sort since version 2.32.
@@ -25099,11 +25107,11 @@
  * sort_filelist (gconstpointer a, gconstpointer b, gpointer user_data)
  * {
  *   gint order;
- *   const SortMode *sort_mode = GPOINTER_TO_INT (user_data);
+ *   const SortMode sort_mode = GPOINTER_TO_INT (user_data);
  *   const FileListEntry *entry1 = *((FileListEntry **) a);
  *   const FileListEntry *entry2 = *((FileListEntry **) b);
  *
- *   switch (*sort_mode)
+ *   switch (sort_mode)
  *     {
  *     case SORT_NAME:
  *       order = g_ascii_strcasecmp (entry1->name, entry2->name);
@@ -25127,7 +25135,7 @@
  * // now sort it with
  * sort_mode = SORT_NAME;
  * g_ptr_array_sort_with_data (file_list,
- *                             (GCompareFunc) sort_filelist,
+ *                             sort_filelist,
  *                             GINT_TO_POINTER (sort_mode));
  * ]|
  *
@@ -29227,6 +29235,9 @@
  * Adds a #GSource to a @context so that it will be executed within
  * that context. Remove it by calling g_source_destroy().
  *
+ * This function is safe to call from any thread, regardless of which thread
+ * the @context is running in.
+ *
  * Returns: the ID (greater than 0) for the source within the
  *   #GMainContext.
  */
@@ -29243,6 +29254,9 @@
  *
  * This does not unref the #GSource: if you still hold a reference, use
  * g_source_unref() to drop it.
+ *
+ * This function is safe to call from any thread, regardless of which thread
+ * the #GMainContext is running in.
  */
 
 
@@ -33526,7 +33540,8 @@
  * the local time.
  *
  * In UNIX, the `TZ` environment variable typically corresponds
- * to the name of a file in the zoneinfo database, or string in
+ * to the name of a file in the zoneinfo database, an absolute path to a file
+ * somewhere else, or a string in
  * "std offset [dst [offset],start[/time],end[/time]]" (POSIX) format.
  * There  are  no spaces in the specification. The name of standard
  * and daylight savings time zone must be three or more alphabetic
@@ -33682,6 +33697,8 @@
  * context. You can do these steps manually if you need greater control or to
  * use a custom main context.
  *
+ * It is safe to call this function from any thread.
+ *
  * The interval given is in terms of monotonic time, not wall clock
  * time.  See g_get_monotonic_time().
  *
@@ -33744,6 +33761,8 @@
  * using g_source_attach(). You can do these steps manually if you need
  * greater control. Also see g_timeout_add_seconds_full().
  *
+ * It is safe to call this function from any thread.
+ *
  * Note that the first call of the timer may not be precise for timeouts
  * of one second. If you need finer precision and have such a timeout,
  * you may want to use g_timeout_add() instead.
@@ -33801,6 +33820,8 @@
  * g_timeout_source_new_seconds() and attaches it to the main loop context
  * using g_source_attach(). You can do these steps manually if you need
  * greater control.
+ *
+ * It is safe to call this function from any thread.
  *
  * The interval given is in terms of monotonic time, not wall clock
  * time.  See g_get_monotonic_time().
@@ -38326,6 +38347,10 @@
  *
  * Officially, the language understood by the parser is "any string
  * produced by g_variant_print()".
+ *
+ * There may be implementation specific restrictions on deeply nested values,
+ * which would result in a %G_VARIANT_PARSE_ERROR_RECURSION error. #GVariant is
+ * guaranteed to handle nesting up to at least 64 levels.
  *
  * Returns: a non-floating reference to a #GVariant, or %NULL
  */
