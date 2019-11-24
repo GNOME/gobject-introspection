@@ -1,3 +1,23 @@
+1.63.1 - 2019-11-24
+-------------------
+
+* Update glib annotations (:user:`Rico Tzschichholz <ricotz>`)
+* build: require meson 0.50.1
+* build: use proper dylib versioning on macOS :mr:`177` (:user:`Tom Schoonjans  <tschoonj>`)
+* scanner: Support array arguments with static keyword :mr:`176` (:user:`Emmanuele Bassi <ebassi>`)
+* website: Add Ruby-GNOME to user list :mr:`178` (:user:`kojix2`)
+* Fix non-libtool code being run with no nob-libtool dependencies :mr:`179` (:user:`Alistair Buxton <ali1234>`)
+* meson: change "cairo" from a boolean to a feature option :mr:`180`
+* meson: change "doctool" from a boolean to a feature option :mr:`181`
+* Fix a memory leak in g_irepository_get_object_gtype_interfaces() :mr:`182` (:user:`Philip Chimento <ptomato>`)
+* ccompiler.py: Fix macro defines with quotes on MSVC :mr:`183` (:user:`Chun-wei Fan <fanc999>`)
+* tests: Actually test libregress by specifying the LD_LIBRARY_PATH :mr:`174` (:user:`Corentin Noël <tintou>`)
+* examples: Make self contained and add build system integration examples :mr:`189`
+* autotools: Make INTROSPECTION_GIRDIR/INTROSPECTION_TYPELIBDIR respect prefix/datadir/libdir :mr:`190`
+* girepository: Also store GType cache misses :mr:`191` (:user:`Carlos Garnacho <carlosg>`)
+* docs: Document GI_CROSS_LAUNCHER envvar :mr:`175` (:user:`Emmanuele Bassi <ebassi>`)
+
+
 1.62.0 - 2019-09-09
 -------------------
 
