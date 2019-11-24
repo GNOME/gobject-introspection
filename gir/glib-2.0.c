@@ -15171,6 +15171,10 @@
  * some extensions from [RFC 3339](https://tools.ietf.org/html/rfc3339) as
  * mentioned below.
  *
+ * Note that as #GDateTime "is oblivious to leap seconds", leap seconds information
+ * in an ISO-8601 string will be ignored, so a `23:59:60` time would be parsed as
+ * `23:59:59`.
+ *
  * <sep> is the separator and can be either 'T', 't' or ' '. The latter two
  * separators are an extension from
  * [RFC 3339](https://tools.ietf.org/html/rfc3339#section-5.6).

@@ -3700,13 +3700,11 @@
 /**
  * GTlsClientConnection:use-ssl3:
  *
- * If %TRUE, forces the connection to use a fallback version of TLS
- * or SSL, rather than trying to negotiate the best version of TLS
- * to use. See g_tls_client_connection_set_use_ssl3().
+ * SSL 3.0 is no longer supported. See
+ * g_tls_client_connection_set_use_ssl3() for details.
  *
  * Since: 2.28
- * Deprecated: 2.56: SSL 3.0 is insecure, and this property does not
- * generally enable or disable it, despite its name.
+ * Deprecated: 2.56: SSL 3.0 is insecure.
  */
 
 
@@ -3882,6 +3880,7 @@
  * g_tls_connection_set_rehandshake_mode().
  *
  * Since: 2.28
+ * Deprecated: 2.60: The rehandshake mode is ignored.
  */
 
 
@@ -38072,6 +38071,28 @@
 
 
 /**
+ * g_task_propagate_value:
+ * @task: a #GTask
+ * @value: (out) (caller-allocates): return location for the #GValue
+ * @error: return location for a #GError
+ *
+ * Gets the result of @task as a #GValue, and transfers ownership of
+ * that value to the caller. As with g_task_return_value(), this is
+ * a generic low-level method; g_task_propagate_pointer() and the like
+ * will usually be more useful for C code.
+ *
+ * If the task resulted in an error, or was cancelled, then this will
+ * instead set @error and return %FALSE.
+ *
+ * Since this method transfers ownership of the return value (or
+ * error) to the caller, you may only call it once.
+ *
+ * Returns: %TRUE if @task succeeded, %FALSE on error.
+ * Since: 2.64
+ */
+
+
+/**
  * g_task_report_error:
  * @source_object: (nullable) (type GObject): the #GObject that owns
  *   this task, or %NULL.
@@ -38230,9 +38251,28 @@
 
 
 /**
+ * g_task_return_value:
+ * @task: a #GTask
+ * @result: (nullable) (transfer none): the #GValue result of
+ *                                      a task function
+ *
+ * Sets @task's result to @result (by copying it) and completes the task.
+ *
+ * If @result is %NULL then a #GValue of type #G_TYPE_POINTER
+ * with a value of %NULL will be used for the result.
+ *
+ * This is a very generic low-level method intended primarily for use
+ * by language bindings; for C code, g_task_return_pointer() and the
+ * like will normally be much easier to use.
+ *
+ * Since: 2.64
+ */
+
+
+/**
  * g_task_run_in_thread:
  * @task: a #GTask
- * @task_func: a #GTaskThreadFunc
+ * @task_func: (scope async): a #GTaskThreadFunc
  *
  * Runs @task_func in another thread. When @task_func returns, @task's
  * #GAsyncReadyCallback will be invoked in @task's #GMainContext.
@@ -38254,7 +38294,7 @@
 /**
  * g_task_run_in_thread_sync:
  * @task: a #GTask
- * @task_func: a #GTaskThreadFunc
+ * @task_func: (scope async): a #GTaskThreadFunc
  *
  * Runs @task_func in another thread, and waits for it to return or be
  * cancelled. You can use g_task_propagate_pointer(), etc, afterward
@@ -39009,12 +39049,34 @@
  * @conn: a #GTlsClientConnection
  * @source: a #GTlsClientConnection
  *
- * Copies session state from one connection to another. This is
- * not normally needed, but may be used when the same session
- * needs to be used between different endpoints as is required
- * by some protocols such as FTP over TLS. @source should have
- * already completed a handshake, and @conn should not have
- * completed a handshake.
+ * Possibly copies session state from one connection to another, for use
+ * in TLS session resumption. This is not normally needed, but may be
+ * used when the same session needs to be used between different
+ * endpoints, as is required by some protocols, such as FTP over TLS.
+ * @source should have already completed a handshake and, since TLS 1.3,
+ * it should have been used to read data at least once. @conn should not
+ * have completed a handshake.
+ *
+ * It is not possible to know whether a call to this function will
+ * actually do anything. Because session resumption is normally used
+ * only for performance benefit, the TLS backend might not implement
+ * this function. Even if implemented, it may not actually succeed in
+ * allowing @conn to resume @source's TLS session, because the server
+ * may not have sent a session resumption token to @source, or it may
+ * refuse to accept the token from @conn. There is no way to know
+ * whether a call to this function is actually successful.
+ *
+ * Using this function is not required to benefit from session
+ * resumption. If the TLS backend supports session resumption, the
+ * session will be resumed automatically if it is possible to do so
+ * without weakening the privacy guarantees normally provided by TLS,
+ * without need to call this function. For example, with TLS 1.3,
+ * a session ticket will be automatically copied from any
+ * #GTlsClientConnection that has previously received session tickets
+ * from the server, provided a ticket is available that has not
+ * previously been used for session resumption, since session ticket
+ * reuse would be a privacy weakness. Using this function causes the
+ * ticket to be copied without regard for privacy considerations.
  *
  * Since: 2.46
  */
@@ -39056,14 +39118,12 @@
  * g_tls_client_connection_get_use_ssl3:
  * @conn: the #GTlsClientConnection
  *
- * Gets whether @conn will force the lowest-supported TLS protocol
- * version rather than attempt to negotiate the highest mutually-
- * supported version of TLS; see g_tls_client_connection_set_use_ssl3().
+ * SSL 3.0 is no longer supported. See
+ * g_tls_client_connection_set_use_ssl3() for details.
  *
- * Returns: whether @conn will use the lowest-supported TLS protocol version
+ * Returns: %FALSE
  * Since: 2.28
- * Deprecated: 2.56: SSL 3.0 is insecure, and this function does not
- * actually indicate whether it is enabled.
+ * Deprecated: 2.56: SSL 3.0 is insecure.
  */
 
 
@@ -39115,25 +39175,21 @@
 /**
  * g_tls_client_connection_set_use_ssl3:
  * @conn: the #GTlsClientConnection
- * @use_ssl3: whether to use the lowest-supported protocol version
+ * @use_ssl3: a #gboolean, ignored
  *
- * Since 2.42.1, if @use_ssl3 is %TRUE, this forces @conn to use the
- * lowest-supported TLS protocol version rather than trying to properly
- * negotiate the highest mutually-supported protocol version with the
- * peer. Be aware that SSL 3.0 is generally disabled by the
- * #GTlsBackend, so the lowest-supported protocol version is probably
- * not SSL 3.0.
+ * Since GLib 2.42.1, SSL 3.0 is no longer supported.
  *
- * Since 2.58, this may additionally cause an RFC 7507 fallback SCSV to
- * be sent to the server, causing modern TLS servers to immediately
- * terminate the connection. You should generally only use this function
- * if you need to connect to broken servers that exhibit TLS protocol
- * version intolerance, and when an initial attempt to connect to a
- * server normally has already failed.
+ * From GLib 2.42.1 through GLib 2.62, this function could be used to
+ * force use of TLS 1.0, the lowest-supported TLS protocol version at
+ * the time. In the past, this was needed to connect to broken TLS
+ * servers that exhibited protocol version intolerance. Such servers
+ * are no longer common, and using TLS 1.0 is no longer considered
+ * acceptable.
+ *
+ * Since GLib 2.64, this function does nothing.
  *
  * Since: 2.28
- * Deprecated: 2.56: SSL 3.0 is insecure, and this function does not
- * generally enable or disable it, despite its name.
+ * Deprecated: 2.56: SSL 3.0 is insecure.
  */
 
 
@@ -39252,7 +39308,7 @@
  * Gets @conn rehandshaking mode. See
  * g_tls_connection_set_rehandshake_mode() for details.
  *
- * Returns: @conn's rehandshaking mode
+ * Returns: %G_TLS_REHANDSHAKE_SAFELY
  * Since: 2.28
  * Deprecated: 2.60.: Changing the rehandshake mode is no longer
  *   required for compatibility. Also, rehandshaking has been removed
@@ -39450,27 +39506,17 @@
  * @conn: a #GTlsConnection
  * @mode: the rehandshaking mode
  *
- * Sets how @conn behaves with respect to rehandshaking requests, when
- * TLS 1.2 or older is in use.
+ * Since GLib 2.64, changing the rehandshake mode is no longer supported
+ * and will have no effect.
  *
- * %G_TLS_REHANDSHAKE_NEVER means that it will never agree to
- * rehandshake after the initial handshake is complete. (For a client,
- * this means it will refuse rehandshake requests from the server, and
- * for a server, this means it will close the connection with an error
- * if the client attempts to rehandshake.)
- *
- * %G_TLS_REHANDSHAKE_SAFELY means that the connection will allow a
- * rehandshake only if the other end of the connection supports the
- * TLS `renegotiation_info` extension. This is the default behavior,
- * but means that rehandshaking will not work against older
+ * With TLS 1.2, the connection will allow a rehandshake only if the
+ * other end of the connection supports the TLS `renegotiation_info`
+ * extension. This means that rehandshaking will not work against older
  * implementations that do not support that extension.
  *
- * %G_TLS_REHANDSHAKE_UNSAFELY means that the connection will allow
- * rehandshaking even without the `renegotiation_info` extension. On
- * the server side in particular, this is not recommended, since it
- * leaves the server open to certain attacks. However, this mode is
- * necessary if you need to allow renegotiation with older client
- * software.
+ * With TLS 1.3, rehandshaking has been removed from the TLS protocol,
+ * replaced by separate post-handshake authentication and rekey
+ * operations.
  *
  * Since: 2.28
  * Deprecated: 2.60.: Changing the rehandshake mode is no longer
