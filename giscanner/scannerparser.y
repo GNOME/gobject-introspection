@@ -246,7 +246,7 @@ set_or_merge_base_type (GISourceType *type,
 
 %}
 
-%error-verbose
+%define parse.error verbose
 %union {
   char *str;
   GList *list;
