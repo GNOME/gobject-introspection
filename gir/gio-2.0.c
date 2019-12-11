@@ -2111,6 +2111,42 @@
 
 
 /**
+ * GMemoryMonitor:
+ *
+ * #GMemoryMonitor monitors system memory and indicates when
+ * the system is low on memory.
+ *
+ * Since: 2.64
+ */
+
+
+/**
+ * GMemoryMonitor::low-memory-warning:
+ * @monitor: a #GMemoryMonitor
+ * @level: the #GMemoryMonitorWarningLevel warning level
+ *
+ * Emitted when the system is running low on free memory. The signal
+ * handler should then take the appropriate action depending on the
+ * warning level. See the #GMemoryMonitorWarningLevel documentation for
+ * details.
+ *
+ * Since: 2.64
+ */
+
+
+/**
+ * GMemoryMonitorInterface:
+ * @g_iface: The parent interface.
+ * @low_memory_warning: the virtual function pointer for the
+ *  #GMemoryMonitor::low-memory-warning signal.
+ *
+ * The virtual function table for #GMemoryMonitor.
+ *
+ * Since: 2.64
+ */
+
+
+/**
  * GMemoryOutputStream:data:
  *
  * Pointer to buffer where data will be written.
@@ -6885,6 +6921,32 @@
  *
  * As of GLib 2.34, #GMemoryInputStream implements
  * #GPollableInputStream.
+ */
+
+
+/**
+ * SECTION:gmemorymonitor
+ * @title: GMemoryMonitor
+ * @short_description: Memory usage monitor
+ * @include: gio/gio.h
+ *
+ * #GMemoryMonitor will monitor system memory and suggest to the application
+ * when to free memory so as to leave more room for other applications.
+ * It is implemented on Linux using the [Low Memory Monitor](https://gitlab.freedesktop.org/hadess/low-memory-monitor/)
+ * ([API documentation](https://hadess.pages.freedesktop.org/low-memory-monitor/)).
+ *
+ * There is also an implementation for use inside Flatpak sandboxes.
+ *
+ * Possible actions to take when the signal is received are:
+ * - Free caches
+ * - Save files that haven't been looked at in a while to disk, ready to be reopened when needed
+ * - Run a garbage collection cycle
+ * - Try and compress fragmented allocations
+ * - Exit on idle if the process has no reason to stay around
+ *
+ * See #GMemoryMonitorWarningLevel for details on the various warning levels.
+ *
+ * Since: 2.64
  */
 
 
@@ -27304,6 +27366,16 @@
  * Creates a new #GMemoryInputStream with data in memory of a given size.
  *
  * Returns: new #GInputStream read from @data of @len bytes.
+ */
+
+
+/**
+ * g_memory_monitor_dup_default:
+ *
+ * Gets a reference to the default #GMemoryMonitor for the system.
+ *
+ * Returns: (transfer full): a new reference to the default #GMemoryMonitor
+ * Since: 2.64
  */
 
 
