@@ -120,6 +120,15 @@ def _get_option_parser():
     parser.add_option("", "--program",
                       action="store", dest="program", default=None,
                       help="program to execute")
+    parser.add_option("", "--use-binary-wrapper",
+                      action="store", dest="wrapper", default=None,
+                      help="wrapper to use for running programs (useful when cross-compiling)")
+    parser.add_option("", "--use-ldd-wrapper",
+                      action="store", dest="ldd_wrapper", default=None,
+                      help="wrapper to use instead of ldd (useful when cross-compiling)")
+    parser.add_option("", "--lib-dirs-envvar",
+                      action="store", dest="lib_dirs_envvar", default=None,
+                      help="environment variable to write a list of library directories to (for running the transient binary), instead of standard LD_LIBRARY_PATH")
     parser.add_option("", "--program-arg",
                       action="append", dest="program_args", default=[],
                       help="extra arguments to program")
@@ -417,6 +426,17 @@ def create_binary(transformer, options, args):
                                               gdump_parser.get_error_quark_functions())
 
     shlibs = resolve_shlibs(options, binary, options.libraries)
+    if options.wrapper:
+        # The wrapper needs the binary itself, not the libtool wrapper script,
+        # so we check if libtool has sneaked the binary into .libs subdirectory
+        # and adjust the path accordingly
+        import os.path
+        dir_name, binary_name = os.path.split(binary.args[0])
+        libtool_binary = os.path.join(dir_name, '.libs', binary_name)
+        if os.path.exists(libtool_binary):
+            binary.args[0] = libtool_binary
+        # Then prepend the wrapper to the command line to execute
+        binary.args = [options.wrapper] + binary.args
     gdump_parser.set_introspection_binary(binary)
     gdump_parser.parse()
     return shlibs

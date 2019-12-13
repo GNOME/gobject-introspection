@@ -174,7 +174,7 @@ class CCompiler(object):
 
             self._cflags_no_deprecation_warnings = "-Wno-deprecated-declarations"
 
-    def get_internal_link_flags(self, args, libtool, libraries, extra_libraries, libpaths):
+    def get_internal_link_flags(self, args, libtool, libraries, extra_libraries, libpaths, lib_dirs_envvar):
         # An "internal" link is where the library to be introspected
         # is being built in the current directory.
 
@@ -184,7 +184,7 @@ class CCompiler(object):
         if os.name == 'nt':
             runtime_path_envvar = ['LIB', 'PATH']
         else:
-            runtime_path_envvar = ['LD_LIBRARY_PATH', 'DYLD_FALLBACK_LIBRARY_PATH']
+            runtime_path_envvar = ['LD_LIBRARY_PATH', 'DYLD_FALLBACK_LIBRARY_PATH'] if not lib_dirs_envvar else [lib_dirs_envvar]
             # Search the current directory first
             # (This flag is not supported nor needed for Visual C++)
             args.append('-L.')

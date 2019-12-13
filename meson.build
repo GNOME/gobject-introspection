@@ -196,9 +196,20 @@ endif
 subdir('girepository')
 subdir('tools')
 subdir('giscanner')
-subdir('gir')
+
+# Not building gir data might be useful in cross-compilation
+# scenarios where running target binaries through software emulation
+# is not possible (due to the SW emulation missing support for target HW).
+if get_option('build_introspection_data') == true
+    subdir('gir')
+endif
 subdir('docs')
-subdir('tests')
+
+# The tests will also run, which is not possible if they
+# were built for a different architecture.
+if not meson.is_cross_build()
+    subdir('tests')
+endif
 
 install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
 install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
