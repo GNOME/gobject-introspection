@@ -196,10 +196,17 @@ endif
 subdir('girepository')
 subdir('tools')
 subdir('giscanner')
-if get_option('enable-introspection-data') == true
+
+# Not building gir data might be useful in cross-compilation
+# scenarios where running target binaries through software emulation
+# is not possible (due to the SW emulation missing support for target HW).
+if get_option('build_introspection_data') == true
     subdir('gir')
 endif
 subdir('docs')
+
+# The tests will also run, which is not possible if they
+# were built for a different architecture.
 if not meson.is_cross_build()
     subdir('tests')
 endif
