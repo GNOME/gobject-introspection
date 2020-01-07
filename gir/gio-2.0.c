@@ -10538,7 +10538,7 @@
  * The return value (if non-%NULL) should be freed with
  * g_variant_unref() when it is no longer required.
  *
- * Returns: (nullable): the current state of the action
+ * Returns: (nullable) (transfer full): the current state of the action
  * Since: 2.28
  */
 
@@ -20465,15 +20465,15 @@
  *
  * On the client side, it is never necessary to call this method;
  * although the connection needs to perform a handshake after
- * connecting (or after sending a "STARTTLS"-type command) and may
- * need to rehandshake later if the server requests it,
- * #GDtlsConnection will handle this for you automatically when you try
- * to send or receive data on the connection. However, you can call
- * g_dtls_connection_handshake() manually if you want to know for sure
- * whether the initial handshake succeeded or failed (as opposed to
- * just immediately trying to write to @conn, in which
- * case if it fails, it may not be possible to tell if it failed
- * before or after completing the handshake).
+ * connecting, #GDtlsConnection will handle this for you automatically
+ * when you try to send or receive data on the connection. You can call
+ * g_dtls_connection_handshake() manually if you want to know whether
+ * the initial handshake succeeded or failed (as opposed to just
+ * immediately trying to use @conn to read or write, in which case,
+ * if it fails, it may not be possible to tell if it failed before
+ * or after completing the handshake), but beware that servers may reject
+ * client authentication after the handshake has completed, so a
+ * successful handshake does not indicate the connection will be usable.
  *
  * Likewise, on the server side, although a handshake is necessary at
  * the beginning of the communication, you do not need to call this
@@ -27144,6 +27144,43 @@
 
 
 /**
+ * g_list_store_find:
+ * @store: a #GListStore
+ * @item: (type GObject): an item
+ * @position: (out) (optional): the first position of @item, if it was found.
+ *
+ * Looks up the given @item in the list store by looping over the items until
+ * the first occurrence of @item. If @item was not found, then @position will
+ * not be set, and this method will return %FALSE.
+ *
+ * If you need to compare the two items with a custom comparison function, use
+ * g_list_store_find_with_equal_func() with a custom #GEqualFunc instead.
+ *
+ * Returns: Whether @store contains @item. If it was found, @position will be
+ * set to the position where @item occurred for the first time.
+ * Since: 2.64
+ */
+
+
+/**
+ * g_list_store_find_with_equal_func:
+ * @store: a #GListStore
+ * @item: (type GObject): an item
+ * @equal_func: (scope call): A custom equality check function
+ * @position: (out) (optional): the first position of @item, if it was found.
+ *
+ * Looks up the given @item in the list store by looping over the items and
+ * comparing them with @compare_func until the first occurrence of @item which
+ * matches. If @item was not found, then @position will not be set, and this
+ * method will return %FALSE.
+ *
+ * Returns: Whether @store contains @item. If it was found, @position will be
+ * set to the position where @item occurred for the first time.
+ * Since: 2.64
+ */
+
+
+/**
  * g_list_store_insert:
  * @store: a #GListStore
  * @position: the position at which to insert the new item
@@ -32992,7 +33029,7 @@
  * database: those located at the path returned by this function.
  *
  * Relocatable schemas can be referenced by other schemas and can
- * threfore describe multiple sets of keys at different locations.  For
+ * therefore describe multiple sets of keys at different locations.  For
  * relocatable schemas, this function will return %NULL.
  *
  * Returns: (transfer none): the path of the schema, or %NULL
@@ -38145,7 +38182,7 @@
 /**
  * g_task_propagate_value:
  * @task: a #GTask
- * @value: (out) (caller-allocates): return location for the #GValue
+ * @value: (out caller-allocates): return location for the #GValue
  * @error: return location for a #GError
  *
  * Gets the result of @task as a #GValue, and transfers ownership of

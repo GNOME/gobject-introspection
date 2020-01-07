@@ -24,7 +24,10 @@
  * GBinding:source-property:
  *
  * The name of the property of #GBinding:source that should be used
- * as the source of the binding
+ * as the source of the binding.
+ *
+ * This should be in [canonical form][canonical-parameter-names] to get the
+ * best performance.
  *
  * Since: 2.26
  */
@@ -43,7 +46,10 @@
  * GBinding:target-property:
  *
  * The name of the property of #GBinding:target that should be used
- * as the target of the binding
+ * as the target of the binding.
+ *
+ * This should be in [canonical form][canonical-parameter-names] to get the
+ * best performance.
  *
  * Since: 2.26
  */
@@ -413,11 +419,14 @@
  *
  * ## Parameter names # {#canonical-parameter-names}
  *
- * Parameter names need to start with a letter (a-z or A-Z).
- * Subsequent characters can be letters, numbers or a '-'.
- * All other characters are replaced by a '-' during construction.
- * The result of this replacement is called the canonical name of
- * the parameter.
+ * A property name consists of segments consisting of ASCII letters and
+ * digits, separated by either the `-` or `_` character. The first
+ * character of a property name must be a letter. These are the same rules as
+ * for signal naming (see g_signal_new()).
+ *
+ * When creating and looking up a #GParamSpec, either separator can be
+ * used, but they cannot be mixed. Using `-` is considerably more
+ * efficient, and is the ‘canonical form’. Using `_` is discouraged.
  */
 
 
@@ -734,6 +743,10 @@
  * Specification of no detail argument for signal handlers (omission of the
  * detail part of the signal specification upon connection) serves as a
  * wildcard and matches any detail argument passed in to emission.
+ *
+ * While the @detail argument is typically used to pass an object property name
+ * (as with #GObject::notify), no specific format is mandated for the detail
+ * string, other than that it must be non-empty.
  *
  * ## Memory management of signal handlers # {#signal-memory-management}
  *
@@ -2768,20 +2781,22 @@
  * of three properties: an integer, a string and an object:
  * |[<!-- language="C" -->
  *  gint intval;
+ *  guint64 uint64val;
  *  gchar *strval;
  *  GObject *objval;
  *
  *  g_object_get (my_object,
  *                "int-property", &intval,
+ *                "uint64-property", &uint64val,
  *                "str-property", &strval,
  *                "obj-property", &objval,
  *                NULL);
  *
- *  // Do something with intval, strval, objval
+ *  // Do something with intval, uint64val, strval, objval
  *
  *  g_free (strval);
  *  g_object_unref (objval);
- *  ]|
+ * ]|
  */
 
 
@@ -2956,6 +2971,20 @@
  *
  * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
+ *
+ * Note that in C, small integer types in variable argument lists are promoted
+ * up to #gint or #guint as appropriate, and read back accordingly. #gint is 32
+ * bits on every platform on which GLib is currently supported. This means that
+ * you can use C expressions of type #gint with g_object_new() and properties of
+ * type #gint or #guint or smaller. Specifically, you can use integer literals
+ * with these property types.
+ *
+ * When using property types of #gint64 or #guint64, you must ensure that the
+ * value that you provide is 64 bit. This means that you should use a cast or
+ * make use of the %G_GINT64_CONSTANT or %G_GUINT64_CONSTANT macros.
+ *
+ * Similarly, #gfloat is promoted to #gdouble, so you must ensure that the value
+ * you provide is a #gdouble, even for a property of type #gfloat.
  *
  * Returns: (transfer full) (type GObject.Object): a new instance of
  *   @object_type
@@ -3225,6 +3254,11 @@
  *  name/value pairs, followed by %NULL
  *
  * Sets properties on an object.
+ *
+ * The same caveats about passing integer literals as varargs apply as with
+ * g_object_new(). In particular, any integer literals set as the values for
+ * properties of type #gint64 or #guint64 must be 64 bits wide, using the
+ * %G_GINT64_CONSTANT or %G_GUINT64_CONSTANT macros.
  *
  * Note that the "notify" signals are queued and only emitted (in
  * reverse order) after all properties have been set. See
@@ -3747,15 +3781,9 @@
  *
  * Creates a new #GParamSpec instance.
  *
- * A property name consists of segments consisting of ASCII letters and
- * digits, separated by either the '-' or '_' character. The first
- * character of a property name must be a letter. Names which violate these
- * rules lead to undefined behaviour.
- *
- * When creating and looking up a #GParamSpec, either separator can be
- * used, but they cannot be mixed. Using '-' is considerably more
- * efficient and in fact required when using property names as detail
- * strings for signals.
+ * See [canonical parameter names][canonical-parameter-names] for details of
+ * the rules for @name. Names which violate these rules lead to undefined
+ * behaviour.
  *
  * Beyond the name, #GParamSpecs have two more descriptive
  * strings associated with them, the @nick, which should be suitable
@@ -4759,12 +4787,14 @@
  * Creates a new signal. (This is usually done in the class initializer.)
  *
  * A signal name consists of segments consisting of ASCII letters and
- * digits, separated by either the '-' or '_' character. The first
+ * digits, separated by either the `-` or `_` character. The first
  * character of a signal name must be a letter. Names which violate these
- * rules lead to undefined behaviour of the GSignal system.
+ * rules lead to undefined behaviour. These are the same rules as for property
+ * naming (see g_param_spec_internal()).
  *
  * When registering a signal and looking up a signal, either separator can
- * be used, but they cannot be mixed.
+ * be used, but they cannot be mixed. Using `-` is considerably more efficient.
+ * Using `_` is discouraged.
  *
  * If 0 is used for @class_offset subclasses cannot override the class handler
  * in their class_init method by doing super_class->signal_handler = my_signal_handler.

@@ -13103,6 +13103,19 @@
 
 
 /**
+ * g_clear_list: (skip)
+ * @list_ptr: (not nullable): a #GList return location
+ * @destroy: (nullable): the function to pass to g_list_free_full() or %NULL to not free elements
+ *
+ * Clears a pointer to a #GList, freeing it and, optionally, freeing its elements using @destroy.
+ *
+ * @list_ptr must be a valid pointer. If @list_ptr points to a null #GList, this does nothing.
+ *
+ * Since: 2.64
+ */
+
+
+/**
  * g_clear_pointer: (skip)
  * @pp: (not nullable): a pointer to a variable, struct member etc. holding a
  *    pointer
@@ -13124,6 +13137,19 @@
  * will experience undefined behaviour.
  *
  * Since: 2.34
+ */
+
+
+/**
+ * g_clear_slist: (skip)
+ * @slist_ptr: (not nullable): a #GSList return location
+ * @destroy: (nullable): the function to pass to g_slist_free_full() or %NULL to not free elements
+ *
+ * Clears a pointer to a #GSList, freeing it and, optionally, freeing its elements using @destroy.
+ *
+ * @slist_ptr must be a valid pointer. If @slist_ptr points to a null #GSList, this does nothing.
+ *
+ * Since: 2.64
  */
 
 
@@ -16460,19 +16486,24 @@
  *     (UTF-8 on Windows)
  * @mode: a string describing the mode in which the file should be opened
  *
- * A wrapper for the stdio fopen() function. The fopen() function
+ * A wrapper for the stdio `fopen()` function. The `fopen()` function
  * opens a file and associates a new stream with it.
  *
  * Because file descriptors are specific to the C library on Windows,
- * and a file descriptor is part of the FILE struct, the FILE* returned
+ * and a file descriptor is part of the `FILE` struct, the `FILE*` returned
  * by this function makes sense only to functions in the same C library.
  * Thus if the GLib-using code uses a different C library than GLib does,
  * the FILE* returned by this function cannot be passed to C library
- * functions like fprintf() or fread().
+ * functions like `fprintf()` or `fread()`.
  *
- * See your C library manual for more details about fopen().
+ * See your C library manual for more details about `fopen()`.
  *
- * Returns: A FILE* if the file was successfully opened, or %NULL if
+ * As `close()` and `fclose()` are part of the C library, this implies that it is
+ * currently impossible to close a file if the application C library and the C library
+ * used by GLib are different. Convenience functions like g_file_set_contents()
+ * avoid this problem.
+ *
+ * Returns: A `FILE*` if the file was successfully opened, or %NULL if
  *     an error occurred
  * Since: 2.6
  */
@@ -25161,6 +25192,39 @@
  * on the current contents of the array and the caller is
  * responsible for freeing the array elements.
  *
+ * An example of use:
+ * |[<!-- language="C" -->
+ * g_autoptr(GPtrArray) chunk_buffer = g_ptr_array_new_with_free_func (g_bytes_unref);
+ *
+ * // Some part of your application appends a number of chunks to the pointer array.
+ * g_ptr_array_add (chunk_buffer, g_bytes_new_static ("hello", 5));
+ * g_ptr_array_add (chunk_buffer, g_bytes_new_static ("world", 5));
+ *
+ * …
+ *
+ * // Periodically, the chunks need to be sent as an array-and-length to some
+ * // other part of the program.
+ * GBytes **chunks;
+ * gsize n_chunks;
+ *
+ * chunks = g_ptr_array_steal (chunk_buffer, &n_chunks);
+ * for (gsize i = 0; i < n_chunks; i++)
+ *   {
+ *     // Do something with each chunk here, and then free them, since
+ *     // g_ptr_array_steal() transfers ownership of all the elements and the
+ *     // array to the caller.
+ *     …
+ *
+ *     g_bytes_unref (chunks[i]);
+ *   }
+ *
+ * g_free (chunks);
+ *
+ * // After calling g_ptr_array_steal(), the pointer array can be reused for the
+ * // next set of chunks.
+ * g_assert (chunk_buffer->len == 0);
+ * ]|
+ *
  * Returns: (transfer full): the element data, which should be
  *     freed using g_free().
  * Since: 2.64
@@ -29682,6 +29746,32 @@
  * %TRUE, then while the source is being dispatched then this source
  * will be processed normally. Otherwise, all processing of this
  * source is blocked until the dispatch function returns.
+ */
+
+
+/**
+ * g_source_set_dispose_function:
+ * @source: A #GSource to set the dispose function on
+ * @dispose: #GSourceDisposeFunc to set on the source
+ *
+ * Set @dispose as dispose function on @source. @dispose will be called once
+ * the reference count of @source reaches 0 but before any of the state of the
+ * source is freed, especially before the finalize function is called.
+ *
+ * This means that at this point @source is still a valid #GSource and it is
+ * allow for the reference count to increase again until @dispose returns.
+ *
+ * The dispose function can be used to clear any "weak" references to the
+ * @source in other data structures in a thread-safe way where it is possible
+ * for another thread to increase the reference count of @source again while
+ * it is being freed.
+ *
+ * The finalize function can not be used for this purpose as at that point
+ * @source is already partially freed and not valid anymore.
+ *
+ * This should only ever be called from #GSource implementations.
+ *
+ * Since: 2.64
  */
 
 
@@ -35089,6 +35179,29 @@
 
 
 /**
+ * g_unix_get_passwd_entry:
+ * @user_name: the username to get the passwd file entry for
+ * @error: return location for a #GError, or %NULL
+ *
+ * Get the `passwd` file entry for the given @user_name using `getpwnam_r()`.
+ * This can fail if the given @user_name doesn’t exist.
+ *
+ * The returned `struct passwd` has been allocated using g_malloc() and should
+ * be freed using g_free(). The strings referenced by the returned struct are
+ * included in the same allocation, so are valid until the `struct passwd` is
+ * freed.
+ *
+ * This function is safe to call from multiple threads concurrently.
+ *
+ * You will need to include `pwd.h` to get the definition of `struct passwd`.
+ *
+ * Returns: (transfer full): passwd entry, or %NULL on error; free the returned
+ *    value with g_free()
+ * Since: 2.64
+ */
+
+
+/**
  * g_unix_open_pipe:
  * @fds: Array of two integers
  * @flags: Bitfield of file descriptor flags, as for fcntl()
@@ -35965,7 +36078,9 @@
 /**
  * g_uuid_string_random:
  *
- * Generates a random UUID (RFC 4122 version 4) as a string.
+ * Generates a random UUID (RFC 4122 version 4) as a string. It has the same
+ * randomness guarantees as #GRand, so must not be used for cryptographic
+ * purposes such as key generation, nonces, salts or one-time pads.
  *
  * Returns: (transfer full): A string that should be freed with g_free().
  * Since: 2.52
