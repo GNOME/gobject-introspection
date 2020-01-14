@@ -66,11 +66,20 @@ if cc.get_id() != 'msvc'
 else
     project_c_args += [
       '-FImsvc_recommended_pragmas.h',
+      '-utf-8',
     ]
 endif
 
 project_c_args = cc.get_supported_arguments(project_c_args)
 add_project_arguments(project_c_args, language: 'c')
+
+if cc.get_id() == 'msvc' and project_c_args.contains('-utf-8')
+  extra_giscanner_cflags = ['-utf-8']
+  extra_giscanner_args = ['--cflags-begin'] + extra_giscanner_cflags + ['--cflags-end']
+else
+  extra_giscanner_cflags = []
+  extra_giscanner_args = []
+endif
 
 config = configuration_data()
 

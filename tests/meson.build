@@ -125,6 +125,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '--library=everything-1.0',
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -151,6 +152,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '--library=gimarshallingtests-1.0',
       '-L' + meson.current_build_dir(),
       '--c-include="tests/gimarshallingtests.h"',
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
