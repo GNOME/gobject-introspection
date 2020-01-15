@@ -24,13 +24,16 @@ import tempfile
 from .libtoolimporter import LibtoolImporter
 from .message import Position
 from .ccompiler import CCompiler
-from .utils import have_debug_flag
+from .utils import have_debug_flag, dll_dirs
 
 with LibtoolImporter(None, None):
+    dlldirs = dll_dirs()
+    dlldirs.add_dll_dirs(['gio-2.0'])
     if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
         from _giscanner import SourceScanner as CSourceScanner
     else:
         from giscanner._giscanner import SourceScanner as CSourceScanner
+    dlldirs.cleanup_dll_dirs()
 
 HEADER_EXTS = ['.h', '.hpp', '.hxx']
 SOURCE_EXTS = ['.c', '.cpp', '.cc', '.cxx']
