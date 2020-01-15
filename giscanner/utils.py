@@ -24,6 +24,7 @@ import subprocess
 import platform
 import shutil
 import time
+import giscanner.pkgconfig
 
 
 _debugflags = None
@@ -282,3 +283,39 @@ def rmtree(*args, **kwargs):
             continue
         else:
             return
+
+
+# Mainly used for builds against Python 3.8.x and later on Windows where we need to be
+# more explicit on where dependent DLLs are located, via the use of
+# os.add_dll_directory().  So, we make use of the envvar GI_EXTRA_BASE_DLL_DIRS and the
+# newly-added bindir() method of our pkgconfig module to acquire the paths where dependent
+# DLLs could be found
+class dll_dirs():
+    _cached_dll_dirs = None
+    _cached_added_dll_dirs = None
+
+    def __init__(self):
+        if os.name == 'nt' and hasattr(os, 'add_dll_directory'):
+            self._cached_dll_dirs = []
+            self._cached_added_dll_dirs = []
+
+
+    def add_dll_dirs(self, pkgs):
+        if os.name == 'nt' and hasattr(os, 'add_dll_directory'):
+            if 'GI_EXTRA_BASE_DLL_DIRS' in os.environ:
+                for path in os.environ.get('GI_EXTRA_BASE_DLL_DIRS').split(os.pathsep):
+                    if path not in self._cached_dll_dirs:
+                        self._cached_dll_dirs.append(path)
+                        self._cached_added_dll_dirs.append(os.add_dll_directory(path))
+
+            for path in giscanner.pkgconfig.bindir(pkgs):
+                if path not in self._cached_dll_dirs:
+                    self._cached_dll_dirs.append(path)
+                    self._cached_added_dll_dirs.append(os.add_dll_directory(path))
+
+    def cleanup_dll_dirs(self):
+        if self._cached_added_dll_dirs is not None:
+            for added_dll_dir in self._cached_added_dll_dirs:
+                added_dll_dir.close()
+        if self._cached_dll_dirs is not None:
+            self._cached_dll_dirs.clear()
