@@ -137,6 +137,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -175,6 +176,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', join_paths(meson.build_root(), 'girepository'),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -212,6 +214,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -247,6 +250,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -284,6 +288,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -322,6 +327,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -359,6 +365,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -387,6 +394,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '--nsversion=1.0',
       '--header-only',
       '--symbol-filter-cmd=' + python_path + ' ' +  join_paths(meson.current_source_dir(), 'symbolfilter.py'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -415,6 +423,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '--nsversion=1.0',
       '--header-only',
       '--identifier-filter-cmd=' + python_path + ' ' +  join_paths(meson.current_source_dir(), 'identfilter.py'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -443,6 +452,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '--namespace=Headeronly',
       '--nsversion=1.0',
       '--header-only',
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
@@ -485,6 +495,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      extra_giscanner_args,
       ] + regress_scanner_cairo_args + [
       '@INPUT@',
     ]

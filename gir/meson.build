@@ -196,7 +196,7 @@ glib_gir = custom_target('gir-glib',
   install: true,
   install_dir: girdir,
   command: glib_command + [
-    '--cflags-begin'] + glib_includes + [
+    '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
     '-DGLIB_COMPILATION',
     '-D__G_I18N_LIB_H__',
     '-DGETTEXT_PACKAGE=Dummy',
@@ -260,7 +260,7 @@ gobject_gir = custom_target('gir-gobject',
   install_dir: girdir,
   command: gobject_command + [
     '--include-uninstalled=' + glib_gir.full_path(),
-    '--cflags-begin'] + glib_includes + [
+    '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
     '-DGOBJECT_COMPILATION',
     '--cflags-end',
     '@INPUT@',
@@ -307,7 +307,7 @@ gir_files += custom_target('gir-gmodule',
   install_dir: girdir,
   command: gmodule_command + [
     '--include-uninstalled=' + glib_gir.full_path(),
-    '--cflags-begin'] + glib_includes + [
+    '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
     '--cflags-end',
     '@INPUT@',
   ]
@@ -396,7 +396,7 @@ gio_gir = custom_target('gir-gio',
   install_dir: girdir,
   command: gio_command + [
     '--include-uninstalled=' + gobject_gir.full_path(),
-    '--cflags-begin'] + glib_includes + [
+    '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
     '-DGIO_COMPILATION',
     '-DG_SETTINGS_ENABLE_BACKEND',
     '--cflags-end',
@@ -433,7 +433,7 @@ gir_files += custom_target('gir-girepository',
   install_dir: girdir,
   command: girepository_command + [
     '--include-uninstalled=' + gobject_gir.full_path(),
-    '--cflags-begin'] + glib_includes + [
+    '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
     '-I' + meson.current_source_dir() + '/../girepository',
     '-I' + meson.current_build_dir() + '/../girepository',
     '-DGI_COMPILATION',

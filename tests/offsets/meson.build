@@ -35,6 +35,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.source_root(), 'tests'),
+      extra_giscanner_args,
       '@INPUT@',
     ]
   )
