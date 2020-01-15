@@ -252,6 +252,9 @@ class DumpCompiler(object):
             for ldflag in shlex.split(os.environ.get('LDFLAGS', '')):
                 args.append(ldflag)
 
+        dll_dirs = utils.dll_dirs()
+        dll_dirs.add_dll_dirs(self._packages)
+
         if not self._options.quiet:
             print("g-ir-scanner: link: %s" % (
                 subprocess.list2cmdline(args), ))
@@ -278,6 +281,7 @@ class DumpCompiler(object):
         finally:
             if msys:
                 os.remove(tf_name)
+            dll_dirs.cleanup_dll_dirs()
 
 
 def compile_introspection_binary(options, get_type_functions,
