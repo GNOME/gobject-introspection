@@ -68,6 +68,22 @@ Note that for this setting, Python-2.7.x or Python-3.4.x or later is supported.
 When Meson completes configuring and generating the build files, proceed building
 using Ninja or the generated Visual Studio projects.
 
+Additional notes for building and running against Python 3.8.x and later
+------------------------------------------------------------------------
+Python 3.8.x and later made restrictions on where DLLs are searched for third-party
+modules, which will therefore affect how the Python tools in tools/ look for dependent
+DLLs, as they rely on a C Python module, _giscanner.pyd, as the paths in %PATH% are
+no longer referred to, except for system-supplied DLLs in their designated locations
+on the system.  In order to cope with this, DLLs are being searched for in the
+locations indicated by the 'bindir' entry in the pkg-config files that are being
+required for the individual packages, followed by locations (note the plural form-multiple
+paths are supported by GI_EXTRA_BASE_DLL_DIRS, separated by Python's os.pathsep, which is
+';' on Windows cmd.exe) that are indicated through the envvar GI_EXTRA_BASE_DLL_DIRS.
+This means, if there are any DLLs required (including their dependent non-system DLLs) for
+the .gir files being generated or queried, they must be in the locations indicated by the
+'bindir' entries in the dependent packages' .pc files of the current package, and/or in
+the locations indicated by GI_EXTRA_BASE_DLL_DIRS.
+
 Additional notes for building with Visual Studio 2008 only
 ----------------------------------------------------------
 Due to its use of security manifests, after Meson completes configuring and
