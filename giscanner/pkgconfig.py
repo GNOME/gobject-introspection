@@ -56,3 +56,12 @@ def libs(packages, msvc_syntax=False, ignore_errors=True, command=None):
     flags.extend(packages)
     out = check_output(flags, ignore_errors, command)
     return shlex.split(out)
+
+
+def bindir(packages, ignore_errors=True, command=None):
+    flags = []
+    flags.append('--variable')
+    flags.append('bindir')
+    flags.extend(packages)
+    out = check_output(flags, ignore_errors, command)
+    return shlex.split(out)

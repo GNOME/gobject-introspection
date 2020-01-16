@@ -96,5 +96,9 @@ if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner' + py_mod_
 
 sys.path.insert(0, pylibdir)
 
+from giscanner.utils import dll_dirs
+dll_dirs = dll_dirs()
+dll_dirs.add_dll_dirs(['gio-2.0'])
+
 from giscanner.@TOOL_MODULE@ import @TOOL_FUNCTION@
 sys.exit(@TOOL_FUNCTION@(sys.argv))
