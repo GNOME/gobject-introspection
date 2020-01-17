@@ -1,3 +1,15 @@
+1.63.2 - 2020-01-17
+-------------------
+
+* Update glib annotations (:user:`Rico Tzschichholz <ricotz>`)
+* Add GMemoryMonitor to glib annotations :mr:`193` (:user:`Bastien Nocera <hadess>`)
+* Fix build reproducibility :mr:`192` (:user:`Joshua Watt <jpewhacker>`)
+* Drop deprecated xml.etree.ElementTree.Element.getchildren() calls :mr:`194` (:user:`Miro Hrončok <hroncok>`)
+* Support Python 3.8.x+ on Windows :mr:`195` (:user:`Chun-wei Fan <fanc999>`)
+* Cross compile support :mr:`64` (:user:`Alexander Kanavin <alex.kanavin>`)
+* meson: Visual Studio builds: Use -utf-8 where available :mr:`196` (:user:`Chun-wei Fan <fanc999>`)
+
+
 1.63.1 - 2019-11-24
 -------------------
 
