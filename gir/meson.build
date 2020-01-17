@@ -41,7 +41,7 @@ gir_files = [
 typelibdir = join_paths(get_option('libdir'), 'girepository-1.0')
 install_data(gir_files, install_dir: girdir)
 
-if get_option('cross_use_host_gi')
+if get_option('gi_cross_use_host_gi')
     scanner_command = [
       'g-ir-scanner',
     ]
@@ -72,11 +72,11 @@ if dep_type == 'internal'
                       '--extra-library=glib-2.0', '--extra-library=gobject-2.0']
 endif
 
-if get_option('cross_gi_binary_wrapper') != ''
-  scanner_command += ['--use-binary-wrapper=' + get_option('cross_gi_binary_wrapper')]
+if get_option('gi_cross_binary_wrapper') != ''
+  scanner_command += ['--use-binary-wrapper=' + get_option('gi_cross_binary_wrapper')]
 endif
-if get_option('cross_gi_ldd_wrapper') != ''
-  scanner_command += ['--use-ldd-wrapper=' + get_option('cross_gi_ldd_wrapper')]
+if get_option('gi_cross_ldd_wrapper') != ''
+  scanner_command += ['--use-ldd-wrapper=' + get_option('gi_cross_ldd_wrapper')]
 endif
 # Take a glob and print to newlines
 globber = '''
@@ -104,8 +104,8 @@ glib_command = scanner_command + [
 
 if dep_type == 'pkgconfig'
   glib_command += ['--external-library', '--pkg=glib-2.0']
-  glib_libdir = get_option('cross_pkgconfig_sysroot_path') + glib_dep.get_pkgconfig_variable('libdir')
-  glib_incdir = get_option('cross_pkgconfig_sysroot_path') + join_paths(glib_dep.get_pkgconfig_variable('includedir'), 'glib-2.0')
+  glib_libdir = get_option('gi_cross_pkgconfig_sysroot_path') + glib_dep.get_pkgconfig_variable('libdir')
+  glib_incdir = get_option('gi_cross_pkgconfig_sysroot_path') + join_paths(glib_dep.get_pkgconfig_variable('includedir'), 'glib-2.0')
   glib_libincdir = join_paths(glib_libdir, 'glib-2.0', 'include')
   glib_files += join_paths(glib_incdir, 'gobject', 'glib-types.h')
   glib_files += join_paths(glib_libincdir, 'glibconfig.h')
@@ -360,7 +360,7 @@ if giounix_dep.found()
   dep_type = giounix_dep.type_name()
   if dep_type == 'pkgconfig'
     gio_command += ['--pkg=gio-unix-2.0']
-    giounix_includedir = get_option('cross_pkgconfig_sysroot_path') + join_paths(giounix_dep.get_pkgconfig_variable('includedir'), 'gio-unix-2.0')
+    giounix_includedir = get_option('gi_cross_pkgconfig_sysroot_path') + join_paths(giounix_dep.get_pkgconfig_variable('includedir'), 'gio-unix-2.0')
     # Get the installed gio-unix header list
     ret = run_command(python, '-c', globber.format(join_paths(giounix_includedir, 'gio', '*.h')))
     if ret.returncode() != 0
@@ -443,8 +443,8 @@ gir_files += custom_target('gir-girepository',
 )
 
 typelibs = []
-if get_option('cross_gi_binary_wrapper') != ''
-    gircompiler_command = [get_option('cross_gi_binary_wrapper'), gircompiler.full_path(), ]
+if get_option('gi_cross_binary_wrapper') != ''
+    gircompiler_command = [get_option('gi_cross_binary_wrapper'), gircompiler.full_path(), ]
 else
     gircompiler_command = [gircompiler, ]
 endif
