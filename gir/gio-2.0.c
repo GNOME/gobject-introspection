@@ -1747,9 +1747,7 @@
  * g_dtls_connection_set_rehandshake_mode().
  *
  * Since: 2.48
- * Deprecated: 2.60.: Changing the rehandshake mode is no longer
- *   required for compatibility. Also, rehandshaking has been removed
- *   from the TLS protocol in TLS 1.3.
+ * Deprecated: 2.60: The rehandshake mode is ignored.
  */
 
 
@@ -6945,6 +6943,29 @@
  * - Exit on idle if the process has no reason to stay around
  *
  * See #GMemoryMonitorWarningLevel for details on the various warning levels.
+ *
+ * |[<!-- language="C" -->
+ * static void
+ * warning_cb (GMemoryMonitor *m, GMemoryMonitorWarningLevel level)
+ * {
+ *   g_debug ("Warning level: %d", level);
+ *   if (warning_level > G_MEMORY_MONITOR_WARNING_LEVEL_LOW)
+ *     drop_caches ();
+ * }
+ *
+ * static GMemoryMonitor *
+ * monitor_low_memory (void)
+ * {
+ *   GMemoryMonitor *m;
+ *   m = g_memory_monitor_dup_default ();
+ *   g_signal_connect (G_OBJECT (m), "low-memory-warning",
+ *                     G_CALLBACK (warning_cb), NULL);
+ *   return m;
+ * }
+ * ]|
+ *
+ * Don't forget to disconnect the #GMemoryMonitor::low-memory-warning
+ * signal, and unref the #GMemoryMonitor itself when exiting.
  *
  * Since: 2.64
  */
@@ -20437,8 +20458,11 @@
  * Gets @conn rehandshaking mode. See
  * g_dtls_connection_set_rehandshake_mode() for details.
  *
- * Returns: @conn's rehandshaking mode
+ * Returns: %G_TLS_REHANDSHAKE_SAFELY
  * Since: 2.48
+ * Deprecated: 2.64.: Changing the rehandshake mode is no longer
+ *   required for compatibility. Also, rehandshaking has been removed
+ *   from the TLS protocol in TLS 1.3.
  */
 
 
@@ -20479,14 +20503,11 @@
  * the beginning of the communication, you do not need to call this
  * function explicitly unless you want clearer error reporting.
  *
- * If TLS 1.2 or older is in use, you may call
- * g_dtls_connection_handshake() after the initial handshake to
- * rehandshake; however, this usage is deprecated because rehandshaking
- * is no longer part of the TLS protocol in TLS 1.3. Accordingly, the
- * behavior of calling this function after the initial handshake is now
- * undefined, except it is guaranteed to be reasonable and
- * nondestructive so as to preserve compatibility with code written for
- * older versions of GLib.
+ * Previously, calling g_dtls_connection_handshake() after the initial
+ * handshake would trigger a rehandshake; however, this usage was
+ * deprecated in GLib 2.60 because rehandshaking was removed from the
+ * TLS protocol in TLS 1.3. Since GLib 2.64, calling this function after
+ * the initial handshake will no longer do anything.
  *
  * #GDtlsConnection::accept_certificate may be emitted during the
  * handshake.
@@ -20614,26 +20635,10 @@
  * @conn: a #GDtlsConnection
  * @mode: the rehandshaking mode
  *
- * Sets how @conn behaves with respect to rehandshaking requests.
- *
- * %G_TLS_REHANDSHAKE_NEVER means that it will never agree to
- * rehandshake after the initial handshake is complete. (For a client,
- * this means it will refuse rehandshake requests from the server, and
- * for a server, this means it will close the connection with an error
- * if the client attempts to rehandshake.)
- *
- * %G_TLS_REHANDSHAKE_SAFELY means that the connection will allow a
- * rehandshake only if the other end of the connection supports the
- * TLS `renegotiation_info` extension. This is the default behavior,
- * but means that rehandshaking will not work against older
- * implementations that do not support that extension.
- *
- * %G_TLS_REHANDSHAKE_UNSAFELY means that the connection will allow
- * rehandshaking even without the `renegotiation_info` extension. On
- * the server side in particular, this is not recommended, since it
- * leaves the server open to certain attacks. However, this mode is
- * necessary if you need to allow renegotiation with older client
- * software.
+ * Since GLib 2.64, changing the rehandshake mode is no longer supported
+ * and will have no effect. With TLS 1.3, rehandshaking has been removed from
+ * the TLS protocol, replaced by separate post-handshake authentication and
+ * rekey operations.
  *
  * Since: 2.48
  * Deprecated: 2.60.: Changing the rehandshake mode is no longer
@@ -39476,14 +39481,11 @@
  * the beginning of the communication, you do not need to call this
  * function explicitly unless you want clearer error reporting.
  *
- * If TLS 1.2 or older is in use, you may call
- * g_tls_connection_handshake() after the initial handshake to
- * rehandshake; however, this usage is deprecated because rehandshaking
- * is no longer part of the TLS protocol in TLS 1.3. Accordingly, the
- * behavior of calling this function after the initial handshake is now
- * undefined, except it is guaranteed to be reasonable and
- * nondestructive so as to preserve compatibility with code written for
- * older versions of GLib.
+ * Previously, calling g_tls_connection_handshake() after the initial
+ * handshake would trigger a rehandshake; however, this usage was
+ * deprecated in GLib 2.60 because rehandshaking was removed from the
+ * TLS protocol in TLS 1.3. Since GLib 2.64, calling this function after
+ * the initial handshake will no longer do anything.
  *
  * When using a #GTlsConnection created by #GSocketClient, the
  * #GSocketClient performs the initial handshake, so calling this
@@ -39616,16 +39618,9 @@
  * @mode: the rehandshaking mode
  *
  * Since GLib 2.64, changing the rehandshake mode is no longer supported
- * and will have no effect.
- *
- * With TLS 1.2, the connection will allow a rehandshake only if the
- * other end of the connection supports the TLS `renegotiation_info`
- * extension. This means that rehandshaking will not work against older
- * implementations that do not support that extension.
- *
- * With TLS 1.3, rehandshaking has been removed from the TLS protocol,
- * replaced by separate post-handshake authentication and rekey
- * operations.
+ * and will have no effect. With TLS 1.3, rehandshaking has been removed from
+ * the TLS protocol, replaced by separate post-handshake authentication and
+ * rekey operations.
  *
  * Since: 2.28
  * Deprecated: 2.60.: Changing the rehandshake mode is no longer

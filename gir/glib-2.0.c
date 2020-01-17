@@ -11366,10 +11366,10 @@
  * be written to it. Due to the way base64 encodes you will need
  * at least: (@len / 3 + 1) * 4 + 4 bytes (+ 4 may be needed in case of
  * non-zero state). If you enable line-breaking you will need at least:
- * ((@len / 3 + 1) * 4 + 4) / 72 + 1 bytes of extra space.
+ * ((@len / 3 + 1) * 4 + 4) / 76 + 1 bytes of extra space.
  *
  * @break_lines is typically used when putting base64-encoded data in emails.
- * It breaks the lines at 72 columns instead of putting all of the text on
+ * It breaks the lines at 76 columns instead of putting all of the text on
  * the same line. This avoids problems with long lines in the email system.
  * Note however that it breaks the lines with `LF` characters, not
  * `CR LF` sequences, so the result cannot be passed directly to SMTP
@@ -33045,6 +33045,14 @@
  *
  * To free the struct returned by this function, use g_thread_unref().
  * Note that g_thread_join() implicitly unrefs the #GThread as well.
+ *
+ * New threads by default inherit their scheduler policy (POSIX) or thread
+ * priority (Windows) of the thread creating the new thread.
+ *
+ * This behaviour changed in GLib 2.64: before threads on Windows were not
+ * inheriting the thread priority but were spawned with the default priority.
+ * Starting with GLib 2.64 the behaviour is now consistent between Windows and
+ * POSIX and all threads inherit their parent thread's priority.
  *
  * Returns: the new #GThread
  * Since: 2.32
