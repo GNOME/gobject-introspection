@@ -6818,7 +6818,7 @@ libgnome-keyring.</doc>
     </function>
     <function name="test_array_static_in_int"
               c:identifier="regress_test_array_static_in_int">
-      <source-position filename="regress.h" line="872"/>
+      <source-position filename="regress.h" line="876"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
