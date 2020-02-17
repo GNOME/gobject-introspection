@@ -3628,19 +3628,6 @@
 
 
 /**
- * GTlsCertificate:pkcs11-uri: (nullable)
- *
- * A URI referencing the PKCS \#11 objects containing an X.509 certificate
- * and optionally a private key.
- *
- * If %NULL the certificate is either not backed by PKCS \#11 or the
- * #GTlsBackend does not support PKCS \#11.
- *
- * Since: 2.64
- */
-
-
-/**
  * GTlsCertificate:private-key:
  *
  * The DER (binary) encoded representation of the certificate's
@@ -3672,15 +3659,6 @@
  * tool to convert PKCS#8 keys to PKCS#1.
  *
  * Since: 2.28
- */
-
-
-/**
- * GTlsCertificate:private-key-pkcs11-uri: (nullable)
- *
- * A URI referencing a PKCS \#11 object containing a private key.
- *
- * Since: 2.64
  */
 
 
@@ -16389,6 +16367,24 @@
  * signal is unsubscribed from, and may be called after @connection
  * has been destroyed.)
  *
+ * As @callback is potentially invoked in a different thread from where it’s
+ * emitted, it’s possible for this to happen after
+ * g_dbus_connection_signal_unsubscribe() has been called in another thread.
+ * Due to this, @user_data should have a strong reference which is freed with
+ * @user_data_free_func, rather than pointing to data whose lifecycle is tied
+ * to the signal subscription. For example, if a #GObject is used to store the
+ * subscription ID from g_dbus_connection_signal_subscribe(), a strong reference
+ * to that #GObject must be passed to @user_data, and g_object_unref() passed to
+ * @user_data_free_func. You are responsible for breaking the resulting
+ * reference count cycle by explicitly unsubscribing from the signal when
+ * dropping the last external reference to the #GObject. Alternatively, a weak
+ * reference may be used.
+ *
+ * It is guaranteed that if you unsubscribe from a signal using
+ * g_dbus_connection_signal_unsubscribe() from the same thread which made the
+ * corresponding g_dbus_connection_signal_subscribe() call, @callback will not
+ * be invoked after g_dbus_connection_signal_unsubscribe() returns.
+ *
  * The returned subscription identifier is an opaque value which is guaranteed
  * to never be zero.
  *
@@ -23714,10 +23710,6 @@
  * If the flag #G_FILE_COPY_OVERWRITE is specified an already
  * existing @destination file is overwritten.
  *
- * If the flag #G_FILE_COPY_NOFOLLOW_SYMLINKS is specified then symlinks
- * will be copied as symlinks, otherwise the target of the
- * @source symlink will be copied.
- *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
@@ -29319,7 +29311,7 @@
 /**
  * g_network_monitor_base_add_network:
  * @monitor: the #GNetworkMonitorBase
- * @network: a #GInetAddressMask
+ * @network: (transfer none): a #GInetAddressMask
  *
  * Adds @network to @monitor's list of available networks.
  *
@@ -39089,41 +39081,6 @@
  *
  * Returns: the new certificate, or %NULL if @data is invalid
  * Since: 2.28
- */
-
-
-/**
- * g_tls_certificate_new_from_pkcs11_uris:
- * @pkcs11_uri: A PKCS \#11 URI
- * @private_key_pkcs11_uri: (nullable): A PKCS \#11 URI
- * @error: #GError for error reporting, or %NULL to ignore.
- *
- * Creates a #GTlsCertificate from a PKCS \#11 URI.
- *
- * An example @pkcs11_uri would be `pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01`
- *
- * Where the token’s layout is:
- *
- * ```
- * Object 0:
- *   URL: pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01;object=private%20key;type=private
- *   Type: Private key (RSA-2048)
- *   ID: 01
- *
- * Object 1:
- *   URL: pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01;object=Certificate%20for%20Authentication;type=cert
- *   Type: X.509 Certificate (RSA-2048)
- *   ID: 01
- * ```
- *
- * In this case the certificate and private key would both be detected and used as expected.
- * @pkcs_uri may also just reference an X.509 certificate object and then optionally
- * @private_key_pkcs11_uri allows using a private key exposed under a different URI.
- *
- * Note that the private key is not accessed until usage and may fail or require a PIN later.
- *
- * Returns: (transfer full): the new certificate, or %NULL on error
- * Since: 2.64
  */
 
 

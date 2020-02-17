@@ -17264,11 +17264,15 @@
 /**
  * g_hash_table_add:
  * @hash_table: a #GHashTable
- * @key: a key to insert
+ * @key: (transfer full): a key to insert
  *
  * This is a convenience function for using a #GHashTable as a set.  It
  * is equivalent to calling g_hash_table_replace() with @key as both the
  * key and the value.
+ *
+ * In particular, this means that if @key already exists in the hash table, then
+ * the old copy of @key in the hash table is freed and @key replaces it in the
+ * table.
  *
  * When a hash table only ever contains keys that have themselves as the
  * corresponding value it is able to be stored more efficiently.  See
@@ -20323,6 +20327,13 @@
  *
  * If list elements contain dynamically-allocated memory, you should
  * either use g_list_free_full() or free them manually first.
+ *
+ * It can be combined with g_steal_pointer() to ensure the list head pointer
+ * is not left dangling:
+ * |[<!-- language="C" -->
+ * GList *list_of_borrowed_things = …;  /<!-- -->* (transfer container) *<!-- -->/
+ * g_list_free (g_steal_pointer (&list_of_borrowed_things));
+ * ]|
  */
 
 
@@ -20355,6 +20366,15 @@
  *
  * @free_func must not modify the list (eg, by removing the freed
  * element from it).
+ *
+ * It can be combined with g_steal_pointer() to ensure the list head pointer
+ * is not left dangling ­— this also has the nice property that the head pointer
+ * is cleared before any of the list elements are freed, to prevent double frees
+ * from @free_func:
+ * |[<!-- language="C" -->
+ * GList *list_of_owned_things = …;  /<!-- -->* (transfer full) (element-type GObject) *<!-- -->/
+ * g_list_free_full (g_steal_pointer (&list_of_owned_things), g_object_unref);
+ * ]|
  *
  * Since: 2.28
  */
@@ -28900,6 +28920,13 @@
  * If list elements contain dynamically-allocated memory,
  * you should either use g_slist_free_full() or free them manually
  * first.
+ *
+ * It can be combined with g_steal_pointer() to ensure the list head pointer
+ * is not left dangling:
+ * |[<!-- language="C" -->
+ * GSList *list_of_borrowed_things = …;  /<!-- -->* (transfer container) *<!-- -->/
+ * g_slist_free (g_steal_pointer (&list_of_borrowed_things));
+ * ]|
  */
 
 
@@ -28931,6 +28958,15 @@
  *
  * @free_func must not modify the list (eg, by removing the freed
  * element from it).
+ *
+ * It can be combined with g_steal_pointer() to ensure the list head pointer
+ * is not left dangling ­— this also has the nice property that the head pointer
+ * is cleared before any of the list elements are freed, to prevent double frees
+ * from @free_func:
+ * |[<!-- language="C" -->
+ * GSList *list_of_owned_things = …;  /<!-- -->* (transfer full) (element-type GObject) *<!-- -->/
+ * g_slist_free_full (g_steal_pointer (&list_of_owned_things), g_object_unref);
+ * ]|
  *
  * Since: 2.28
  */
