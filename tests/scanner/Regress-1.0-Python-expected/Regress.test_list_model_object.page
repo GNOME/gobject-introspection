@@ -9,14 +9,14 @@
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>[Regress.TestObj]</api:type>
+        <api:type>Gio.ListModel(item_type=Regress.TestObj)</api:type>
       </api:returns>
       <api:name>regress_test_list_model_object</api:name>
     </api:function>
   </info>
   <title>Regress.test_list_model_object</title>
   <synopsis><code mime="text/x-python">
-@returns([Regress.TestObj])
+@returns(Gio.ListModel(item_type=Regress.TestObj))
 def test_list_model_object():
     # Python wrapper for regress_test_list_model_object()
   </code></synopsis>
