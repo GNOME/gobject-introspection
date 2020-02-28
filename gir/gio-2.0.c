@@ -4795,7 +4795,7 @@
  * initialization for all of these in a single place.
  *
  * Regardless of which of these entry points is used to start the
- * application, GApplication passes some "platform data from the
+ * application, GApplication passes some ‘platform data’ from the
  * launching instance to the primary instance, in the form of a
  * #GVariant dictionary mapping strings to variants. To use platform
  * data, override the @before_emit or @after_emit virtual functions
@@ -11570,14 +11570,14 @@
  *
  * It is important to use the proper GVariant format when retrieving
  * the options with g_variant_dict_lookup():
- * - for %G_OPTION_ARG_NONE, use b
- * - for %G_OPTION_ARG_STRING, use &s
- * - for %G_OPTION_ARG_INT, use i
- * - for %G_OPTION_ARG_INT64, use x
- * - for %G_OPTION_ARG_DOUBLE, use d
- * - for %G_OPTION_ARG_FILENAME, use ^ay
- * - for %G_OPTION_ARG_STRING_ARRAY, use &as
- * - for %G_OPTION_ARG_FILENAME_ARRAY, use ^aay
+ * - for %G_OPTION_ARG_NONE, use `b`
+ * - for %G_OPTION_ARG_STRING, use `&s`
+ * - for %G_OPTION_ARG_INT, use `i`
+ * - for %G_OPTION_ARG_INT64, use `x`
+ * - for %G_OPTION_ARG_DOUBLE, use `d`
+ * - for %G_OPTION_ARG_FILENAME, use `^&ay`
+ * - for %G_OPTION_ARG_STRING_ARRAY, use `^a&s`
+ * - for %G_OPTION_ARG_FILENAME_ARRAY, use `^a&ay`
  *
  * Since: 2.40
  */
@@ -13251,6 +13251,13 @@
  *
  * Stops owning a name.
  *
+ * Note that there may still be D-Bus traffic to process (relating to owning
+ * and unowning the name) in the current thread-default #GMainContext after
+ * this function has returned. You should continue to iterate the #GMainContext
+ * until the #GDestroyNotify function passed to g_bus_own_name() is called, in
+ * order to avoid memory leaks through callbacks queued on the #GMainContext
+ * after it’s stopped being iterated.
+ *
  * Since: 2.26
  */
 
@@ -13260,6 +13267,13 @@
  * @watcher_id: An identifier obtained from g_bus_watch_name()
  *
  * Stops watching a name.
+ *
+ * Note that there may still be D-Bus traffic to process (relating to watching
+ * and unwatching the name) in the current thread-default #GMainContext after
+ * this function has returned. You should continue to iterate the #GMainContext
+ * until the #GDestroyNotify function passed to g_bus_watch_name() is called, in
+ * order to avoid memory leaks through callbacks queued on the #GMainContext
+ * after it’s stopped being iterated.
  *
  * Since: 2.26
  */
@@ -16402,6 +16416,14 @@
  *     g_dbus_connection_signal_subscribe()
  *
  * Unsubscribes from signals.
+ *
+ * Note that there may still be D-Bus traffic to process (relating to this
+ * signal subscription) in the current thread-default #GMainContext after this
+ * function has returned. You should continue to iterate the #GMainContext
+ * until the #GDestroyNotify function passed to
+ * g_dbus_connection_signal_subscribe() is called, in order to avoid memory
+ * leaks through callbacks queued on the #GMainContext after it’s stopped being
+ * iterated.
  *
  * Since: 2.26
  */
