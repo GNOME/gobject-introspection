@@ -1,3 +1,11 @@
+1.64.0 - 2020-03-07
+-------------------
+
+* Update glib annotations (:user:`Rico Tzschichholz <ricotz>`)
+* Fix regress scanner tests for non-gcc/clang compilers :mr:`197` (:user:`Chun-wei Fan <fanc999>`)
+* Document how to update glib GIR :mr:`199` (:user:`Bastien Nocera <hadess>`)
+
+
 1.63.2 - 2020-01-17
 -------------------
 
