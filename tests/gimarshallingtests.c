@@ -3167,13 +3167,13 @@ gi_marshalling_tests_ghashtable_double_in (GHashTable *hash_table)
   double *value;
 
   value = g_hash_table_lookup (hash_table, "-1");
-  g_assert_cmpfloat (*value, ==, -0.1);
+  g_assert_cmpfloat_with_epsilon (*value, -0.1, 0.01);
   value = g_hash_table_lookup (hash_table, "0");
   g_assert_cmpfloat (*value, ==, 0.0);
   value = g_hash_table_lookup (hash_table, "1");
-  g_assert_cmpfloat (*value, ==, 0.1);
+  g_assert_cmpfloat_with_epsilon (*value, 0.1, 0.01);
   value = g_hash_table_lookup (hash_table, "2");
-  g_assert_cmpfloat (*value, ==, 0.2);
+  g_assert_cmpfloat_with_epsilon (*value, 0.2, 0.01);
 }
 
 /**
@@ -3188,13 +3188,13 @@ gi_marshalling_tests_ghashtable_float_in (GHashTable *hash_table)
   float *value;
 
   value = g_hash_table_lookup (hash_table, "-1");
-  g_assert_cmpfloat (*value, ==, -0.1f);
+  g_assert_cmpfloat_with_epsilon (*value, -0.1f, 0.01f);
   value = g_hash_table_lookup (hash_table, "0");
   g_assert_cmpfloat (*value, ==, 0.0f);
   value = g_hash_table_lookup (hash_table, "1");
-  g_assert_cmpfloat (*value, ==, 0.1f);
+  g_assert_cmpfloat_with_epsilon (*value, 0.1f, 0.01f);
   value = g_hash_table_lookup (hash_table, "2");
-  g_assert_cmpfloat (*value, ==, 0.2f);
+  g_assert_cmpfloat_with_epsilon (*value, 0.2f, 0.01f);
 }
 
 /**
