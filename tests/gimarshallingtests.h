@@ -1410,6 +1410,19 @@ struct _GIMarshallingTestsObjectClass
     void  (* vfunc_multiple_out_parameters) (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
 
     /**
+     * GIMarshallingTestsObjectClass::vfunc_one_inout_parameter:
+     * @a: (inout):
+     */
+    void  (* vfunc_one_inout_parameter) (GIMarshallingTestsObject *self, gfloat *a);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_multiple_inout_parameters:
+     * @a: (inout):
+     * @b: (inout):
+     */
+    void  (* vfunc_multiple_inout_parameters) (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
+
+    /**
      * GIMarshallingTestsObjectClass::vfunc_caller_allocated_out_parameter:
      * @a: (out):
      */
@@ -1433,6 +1446,19 @@ struct _GIMarshallingTestsObjectClass
      * @b: (out):
      */
     glong (* vfunc_return_value_and_multiple_out_parameters) (GIMarshallingTestsObject *self, glong *a, glong *b);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_value_and_one_inout_parameter:
+     * @a: (inout):
+     */
+    glong (* vfunc_return_value_and_one_inout_parameter) (GIMarshallingTestsObject *self, glong *a);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_value_and_multiple_inout_parameters:
+     * @a: (inout):
+     * @b: (inout):
+     */
+    glong (* vfunc_return_value_and_multiple_inout_parameters) (GIMarshallingTestsObject *self, glong *a, glong *b);
 
     /**
      * GIMarshallingTestsObjectClass::vfunc_meth_with_err:
@@ -1561,6 +1587,12 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_multiple_out_parameters (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
 
 _GI_TEST_EXTERN
+void gi_marshalling_tests_object_vfunc_one_inout_parameter (GIMarshallingTestsObject *self, gfloat *a);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_object_vfunc_multiple_inout_parameters (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_caller_allocated_out_parameter (GIMarshallingTestsObject *self, GValue *a);
 
 _GI_TEST_EXTERN
@@ -1571,6 +1603,12 @@ glong gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter (GIMa
 
 _GI_TEST_EXTERN
 glong gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters (GIMarshallingTestsObject *self, glong *a, glong *b);
+
+_GI_TEST_EXTERN
+glong gi_marshalling_tests_object_vfunc_return_value_and_one_inout_parameter (GIMarshallingTestsObject *self, glong *a);
+
+_GI_TEST_EXTERN
+glong gi_marshalling_tests_object_vfunc_return_value_and_multiple_inout_parameters (GIMarshallingTestsObject *self, glong *a, glong *b);
 
 _GI_TEST_EXTERN
 gboolean gi_marshalling_tests_object_vfunc_meth_with_error (GIMarshallingTestsObject *object, gint x, GError **error);
