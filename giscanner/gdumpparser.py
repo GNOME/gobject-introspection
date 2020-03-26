@@ -22,7 +22,7 @@ import os
 import sys
 import tempfile
 import subprocess
-from xml.etree.cElementTree import parse
+from xml.etree.ElementTree import parse
 
 from . import ast
 from . import message

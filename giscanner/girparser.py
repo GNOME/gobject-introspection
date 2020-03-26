@@ -21,7 +21,7 @@
 import os
 
 from collections import OrderedDict
-from xml.etree.cElementTree import parse
+from xml.etree.ElementTree import parse
 
 from . import ast
 from .girwriter import COMPATIBLE_GIR_VERSION
