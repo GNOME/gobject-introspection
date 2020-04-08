@@ -103,7 +103,7 @@ class IntrospectablePass(object):
                 parent,
                 node,
                 "Missing (scope) annotation for callback without "
-                "GDestroyNotify (valid: %s, %s)" % (ast.PARAM_SCOPE_CALL, ast.PARAM_SCOPE_ASYNC))
+                "GDestroyNotify (valid: %s, %s, %s)" % (ast.PARAM_SCOPE_CALL, ast.PARAM_SCOPE_ASYNC, ast.PARAM_SCOPE_FOREVER))
 
             parent.introspectable = False
             return
