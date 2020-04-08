@@ -1221,6 +1221,8 @@ start_parameter (GMarkupParseContext *context,
     param->scope = GI_SCOPE_TYPE_ASYNC;
   else if (scope && strcmp (scope, "notified") == 0)
     param->scope = GI_SCOPE_TYPE_NOTIFIED;
+  else if (scope && strcmp (scope, "forever") == 0)
+    param->scope = GI_SCOPE_TYPE_FOREVER;
   else
     param->scope = GI_SCOPE_TYPE_INVALID;
 

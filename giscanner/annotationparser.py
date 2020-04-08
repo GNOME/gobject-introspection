@@ -277,10 +277,12 @@ NOT_OPTIONS = [OPT_NOT_NULLABLE]
 OPT_SCOPE_ASYNC = 'async'
 OPT_SCOPE_CALL = 'call'
 OPT_SCOPE_NOTIFIED = 'notified'
+OPT_SCOPE_FOREVER = 'forever'
 
 SCOPE_OPTIONS = [OPT_SCOPE_ASYNC,
                  OPT_SCOPE_CALL,
-                 OPT_SCOPE_NOTIFIED]
+                 OPT_SCOPE_NOTIFIED,
+                 OPT_SCOPE_FOREVER]
 
 # (transfer) annotation options
 OPT_TRANSFER_CONTAINER = 'container'
