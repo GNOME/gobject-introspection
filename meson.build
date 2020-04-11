@@ -152,6 +152,9 @@ endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
 
+# python headers
+cc.check_header('Python.h', dependencies: [python.dependency()], required: true)
+
 # cairo
 cairo_option = get_option('cairo')
 if cc.get_id() == 'msvc'
