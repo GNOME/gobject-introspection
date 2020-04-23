@@ -223,46 +223,41 @@ endif
 install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
 install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
 
-prefix = join_paths(get_option('prefix'))
-pkgconfig_conf = configuration_data()
-pkgconfig_conf.set('prefix', prefix)
-pkgconfig_conf.set('exec_prefix', '${prefix}')
-pkgconfig_conf.set('bindir', join_paths('${exec_prefix}', get_option('bindir')))
-pkgconfig_conf.set('libdir', join_paths('${exec_prefix}', get_option('libdir')))
-pkgconfig_conf.set('datarootdir', join_paths('${prefix}', get_option('datadir')))
-pkgconfig_conf.set('datadir', '${datarootdir}')
-pkgconfig_conf.set('includedir', join_paths('${prefix}', get_option('includedir')))
-pkgconfig_conf.set('GIR_PC_DIR', join_paths(gir_dir_pc_prefix, 'gir-1.0'))
-if host_system == 'windows' or host_system == 'cygwin'
-  pkgconfig_conf.set('EXEEXT', '.exe')
-else
-  pkgconfig_conf.set('EXEEXT', '')
-endif
-pkgconfig_conf.set('VERSION', meson.project_version())
-pkgconfig_conf.set('FFI_PC_PACKAGES', 'libffi')
-if libffi_dep.type_name() == 'pkgconfig'
-  prog_pkgconfig = find_program('pkg-config')
-  pkgconfig_conf.set('FFI_PC_CFLAGS', run_command(prog_pkgconfig, ['libffi', '--cflags-only-I']).stdout())
-  pkgconfig_conf.set('FFI_PC_LIBS', run_command(prog_pkgconfig, ['libffi', '--libs-only-l']).stdout())
-else
-  # XXX: We can't know the correct values for these, needs meson API. Maybe we
-  # should use meson's pkgconfig module to generate the whole file.
-  pkgconfig_conf.set('FFI_PC_CFLAGS', '')
-  pkgconfig_conf.set('FFI_PC_LIBS', '-lffi')
-endif
+pkg = import('pkgconfig')
 
-configure_file(
-  input: 'gobject-introspection-no-export-1.0.pc.in',
-  output: 'gobject-introspection-no-export-1.0.pc',
-  configuration: pkgconfig_conf,
-  install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
+pkgconfig_variables = [
+  'datadir=' + '${prefix}' / get_option('datadir'),
+  'bindir=' + '${prefix}' / get_option('bindir'),
+  'g_ir_scanner=${bindir}/g-ir-scanner',
+  'g_ir_compiler=${bindir}/g-ir-compiler',
+  'g_ir_generate=${bindir}/g-ir-generate',
+  'gidatadir=${datadir}/gobject-introspection-1.0',
+  'girdir=' + gir_dir_pc_prefix / 'gir-1.0',
+  'typelibdir=${libdir}/girepository-1.0',
+]
+
+pkg.generate(girepo_lib,
+  name : 'gobject-introspection',
+  filebase : 'gobject-introspection-1.0',
+  description : 'GObject Introspection',
+  variables : pkgconfig_variables,
+  requires : [glib_dep, gobject_dep],
 )
 
-configure_file(
-  input: 'gobject-introspection-1.0.pc.in',
-  output: 'gobject-introspection-1.0.pc',
-  configuration: pkgconfig_conf,
-  install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
+# This is legacy for backward compat. It is identical to the pc file generated
+# above because we actually never had a pc file that has `-Wl,--export-dynamic`.
+# The reason is `gmodule-2.0` was in `Requires.private` so its libs flags are
+# only included when doing `pkg-config gobject-introspection-1.0 --libs --static`
+# which makes no sense since we don't even build static girepository library.
+# Users who need `-Wl,--export-dynamic` can add `gmodule-2.0` explicitly in their
+# dependencies in addition to `gobject-introspection-1.0`.
+pkg.generate(
+  libraries : girepo_lib,
+  name : 'gobject-introspection',
+  filebase : 'gobject-introspection-no-export-1.0',
+  description : 'GObject Introspection',
+  variables : pkgconfig_variables,
+  requires : [glib_dep, gobject_dep],
 )
 
 # Dependency object used by Meson's GNOME module. This dependency variable must
