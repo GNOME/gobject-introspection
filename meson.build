@@ -1,6 +1,6 @@
 project('gobject-introspection', 'c',
   version: '1.64.1',
-  meson_version: '>= 0.54.0',
+  meson_version: '>= 0.50.1',
   default_options: [
     'warning_level=1',
     'buildtype=debugoptimized',
@@ -264,16 +264,3 @@ configure_file(
   configuration: pkgconfig_conf,
   install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
 )
-
-# Dependency object used by Meson's GNOME module. This dependency variable must
-# be named girepo_dep for backward compatibility with projects that where already
-# using that name as fallback: dependency('gobject-introspection-1.0',
-# fallback : ['gobject-introspection', 'girepo_dep'])
-girepo_dep = declare_dependency(
-  sources: typelibs,
-  dependencies: girepo_dep,
-  variables: {
-    'girdir': meson.current_build_dir() / 'gir',
-  },
-)
-meson.override_dependency('gobject-introspection-1.0', girepo_dep)

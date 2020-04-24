@@ -2,7 +2,7 @@
 
 set -e
 
-TAG="registry.gitlab.gnome.org/gnome/gobject-introspection:min-v2"
+TAG="registry.gitlab.gnome.org/gnome/gobject-introspection:min-v1"
 
 sudo docker build --build-arg HOST_USER_ID="$UID" --tag "${TAG}" \
     --file "minimal.Dockerfile" .

@@ -15,7 +15,7 @@ RUN dnf -y install \
     libmount-devel \
  && dnf clean all
 
-RUN pip3 install meson==0.54.0
+RUN pip3 install meson==0.52.0
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
