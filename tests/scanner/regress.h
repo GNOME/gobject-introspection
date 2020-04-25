@@ -1535,9 +1535,6 @@ _GI_TEST_EXTERN
 void regress_test_array_struct_in_none (RegressTestStructA *arr, gsize len);
 
 _GI_TEST_EXTERN
-GListModel *regress_test_list_model_none (void);
-
-_GI_TEST_EXTERN
 GListModel *regress_test_list_model_object (void);
 
 #endif /* __GITESTTYPES_H__ */
