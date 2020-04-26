@@ -1,5 +1,5 @@
 project('gobject-introspection', 'c',
-  version: '1.64.1',
+  version: '1.65.1',
   meson_version: '>= 0.50.1',
   default_options: [
     'warning_level=1',
@@ -151,6 +151,9 @@ else
 endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
+
+# python headers
+cc.check_header('Python.h', dependencies: [python.dependency()], required: true)
 
 # cairo
 cairo_option = get_option('cairo')
