@@ -9,14 +9,14 @@
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>Gio.ListModel({item_type: Regress.TestObj})</api:type>
+        <api:type>Array(Regress.TestObj)</api:type>
       </api:returns>
       <api:name>regress_test_list_model_object</api:name>
     </api:function>
   </info>
   <title>Regress.test_list_model_object</title>
   <synopsis><code mime="text/x-gjs">
-function test_list_model_object(): Gio.ListModel({item_type: Regress.TestObj}) {
+function test_list_model_object(): Array(<link xref="Regress.TestObj">Regress.TestObj</link>) {
     // Gjs wrapper for regress_test_list_model_object()
 }
   </code></synopsis>
