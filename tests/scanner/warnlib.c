@@ -48,3 +48,18 @@ warnlib_whatever_do_boo (WarnLibWhatever *self, int x, gpointer y)
 {
   WARNLIB_WHATEVER_GET_IFACE(self)->do_boo (self, x, y);
 }
+
+/**
+ * warnlib_test_list_model_none:
+ *
+ * Test GListModel with no annotation.
+ *
+ * Returns: (transfer full): a GListModel
+ */
+GListModel *
+warnlib_test_list_model_none (void)
+{
+  GListStore *res = g_list_store_new (G_TYPE_INT);
+
+  return G_LIST_MODEL (res);
+}

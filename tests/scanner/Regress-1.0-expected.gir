@@ -8041,32 +8041,16 @@ element-type annotation.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="test_list_model_none"
-              c:identifier="regress_test_list_model_none"
-              introspectable="0">
-      <doc xml:space="preserve"
-           filename="regress.c"
-           line="4689">Test GListModel with no annotation.</doc>
-      <source-position filename="regress.h" line="1538"/>
-      <return-value transfer-ownership="full">
-        <doc xml:space="preserve"
-             filename="regress.c"
-             line="4694">a GListModel</doc>
-        <type name="Gio.ListModel" c:type="GListModel*">
-          <type name="gpointer" c:type="gpointer"/>
-        </type>
-      </return-value>
-    </function>
     <function name="test_list_model_object"
               c:identifier="regress_test_list_model_object">
       <doc xml:space="preserve"
            filename="regress.c"
-           line="4704">Test GListModel return value with an element type annotation.</doc>
-      <source-position filename="regress.h" line="1541"/>
+           line="4689">Test GListModel return value with an element type annotation.</doc>
+      <source-position filename="regress.h" line="1538"/>
       <return-value transfer-ownership="full">
         <doc xml:space="preserve"
              filename="regress.c"
-             line="4709">a GListModel
+             line="4694">a GListModel
   containing RegressTestObj values</doc>
         <type name="Gio.ListModel" c:type="GListModel*">
           <type name="TestObj"/>

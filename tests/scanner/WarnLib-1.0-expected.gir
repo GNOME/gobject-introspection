@@ -207,6 +207,22 @@ and/or use gtk-doc annotations.  -->
         </callback>
       </field>
     </record>
+    <function name="test_list_model_none"
+              c:identifier="warnlib_test_list_model_none"
+              introspectable="0">
+      <doc xml:space="preserve"
+           filename="warnlib.c"
+           line="52">Test GListModel with no annotation.</doc>
+      <source-position filename="warnlib.h" line="47"/>
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve"
+             filename="warnlib.c"
+             line="57">a GListModel</doc>
+        <type name="Gio.ListModel" c:type="GListModel*">
+          <type name="gpointer" c:type="gpointer"/>
+        </type>
+      </return-value>
+    </function>
     <function name="throw_unpaired"
               c:identifier="warnlib_throw_unpaired"
               throws="1">

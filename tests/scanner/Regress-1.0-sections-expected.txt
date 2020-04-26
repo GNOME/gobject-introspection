@@ -159,7 +159,6 @@ regress_test_int64
 regress_test_int8
 regress_test_int_out_utf8
 regress_test_int_value_arg
-regress_test_list_model_none
 regress_test_list_model_object
 regress_test_long
 regress_test_multi_callback

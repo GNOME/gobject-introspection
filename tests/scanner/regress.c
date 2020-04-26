@@ -4687,21 +4687,6 @@ regress_test_array_struct_in_none (RegressTestStructA *arr, gsize len)
 }
 
 /**
- * regress_test_list_model_none:
- *
- * Test GListModel with no annotation.
- *
- * Returns: (transfer full): a GListModel
- */
-GListModel *
-regress_test_list_model_none (void)
-{
-  GListStore *res = g_list_store_new (regress_test_obj_get_type ());
-
-  return G_LIST_MODEL (res);
-}
-
-/**
  * regress_test_list_model_object:
  *
  * Test GListModel return value with an element type annotation.

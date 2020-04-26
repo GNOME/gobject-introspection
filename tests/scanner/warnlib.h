@@ -43,4 +43,7 @@ void warnlib_whatever_do_boo (WarnLibWhatever *self, int, gpointer);
 _GI_TEST_EXTERN
 GType warnlib_whatever_get_type (void) G_GNUC_CONST;
 
+_GI_TEST_EXTERN
+GListModel *warnlib_test_list_model_none (void);
+
 #endif
