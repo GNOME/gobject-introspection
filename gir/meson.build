@@ -41,24 +41,14 @@ gir_files = [
 typelibdir = join_paths(get_option('libdir'), 'girepository-1.0')
 install_data(gir_files, install_dir: girdir)
 
-if get_option('gi_cross_use_host_gi')
-    scanner_command = [
-      'g-ir-scanner',
-    ]
-else
-    scanner_command = [
-      python,
-      girscanner,
-    ]
-endif
-
-scanner_command += [
-      '--output=@OUTPUT@',
-      '--no-libtool',
-      '--quiet',
-      '--reparse-validate',
-      '--add-include-path', join_paths(meson.current_build_dir()),
-      '--add-include-path', join_paths(meson.current_source_dir()),
+scanner_command = [
+  find_program('g-ir-scanner', native: true),
+  '--output=@OUTPUT@',
+  '--no-libtool',
+  '--quiet',
+  '--reparse-validate',
+  '--add-include-path', join_paths(meson.current_build_dir()),
+  '--add-include-path', join_paths(meson.current_source_dir()),
 ]
 
 dep_type = glib_dep.type_name()
