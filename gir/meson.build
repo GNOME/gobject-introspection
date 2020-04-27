@@ -41,7 +41,7 @@ gir_files = [
 typelibdir = join_paths(get_option('libdir'), 'girepository-1.0')
 install_data(gir_files, install_dir: girdir)
 
-if get_option('gi_cross_use_host_gi')
+if get_option('gi_cross_use_prebuilt_gi')
     scanner_command = [
       'g-ir-scanner',
     ]
