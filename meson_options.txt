@@ -26,8 +26,8 @@ option('gir_dir_prefix', type: 'string',
   description: 'Intermediate prefix for gir installation under ${prefix}'
 )
 
-option('gi_cross_use_host_gi', type: 'boolean', value : false,
-  description: 'Use gobject introspection tools installed in the host system (useful when cross-compiling)'
+option('gi_cross_use_prebuilt_gi', type: 'boolean', value : false,
+  description: 'Use gobject introspection tools installed in the build system (useful when cross-compiling)'
 )
 
 option('gi_cross_binary_wrapper', type: 'string',
