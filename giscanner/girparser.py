@@ -492,7 +492,7 @@ class GIRParser(object):
                 if ctype is None:
                     return ast.TypeUnknown()
                 return ast.Type(ctype=ctype)
-            elif name in ['GLib.List', 'GLib.SList', 'Gio.ListModel']:
+            elif name in ['GLib.List', 'GLib.SList']:
                 subchild = self._find_first_child(typenode,
                                                   list(map(_corens, ('callback', 'array',
                                                                 '    varargs', 'type'))))

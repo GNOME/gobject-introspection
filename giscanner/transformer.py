@@ -698,9 +698,6 @@ raise ValueError."""
         elif base in ('GHashTable', 'GLib.HashTable', 'GObject.HashTable'):
             return ast.Map(ast.TYPE_ANY, ast.TYPE_ANY, ctype=ctype, is_const=is_const,
                            complete_ctype=complete_ctype)
-        elif base in ('GListModel', 'Gio.ListModel'):
-            return ast.List('Gio.ListModel', ast.TYPE_ANY, ctype=ctype,
-                            is_const=is_const, complete_ctype=complete_ctype)
         return None
 
     def create_type_from_ctype_string(self, ctype, is_const=False,
