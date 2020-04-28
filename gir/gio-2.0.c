@@ -1649,7 +1649,7 @@
 
 
 /**
- * GDtlsConnection:advertised-protocols:
+ * GDtlsConnection:advertised-protocols: (nullable)
  *
  * The list of application-layer protocols that the connection
  * advertises that it is willing to speak. See
@@ -1680,7 +1680,7 @@
 
 
 /**
- * GDtlsConnection:database:
+ * GDtlsConnection:database: (nullable)
  *
  * The certificate database to use when verifying this TLS connection.
  * If no certificate database is set, then the default database will be
@@ -1691,7 +1691,7 @@
 
 
 /**
- * GDtlsConnection:interaction:
+ * GDtlsConnection:interaction: (nullable)
  *
  * A #GTlsInteraction object to be used when the connection or certificate
  * database need to interact with the user. This will be used to prompt the
@@ -1712,7 +1712,7 @@
 
 
 /**
- * GDtlsConnection:peer-certificate:
+ * GDtlsConnection:peer-certificate: (nullable)
  *
  * The connection's peer's certificate, after the TLS handshake has
  * completed and the certificate has been accepted. Note in
@@ -3791,7 +3791,7 @@
 
 
 /**
- * GTlsConnection:advertised-protocols:
+ * GTlsConnection:advertised-protocols: (nullable)
  *
  * The list of application-layer protocols that the connection
  * advertises that it is willing to speak. See
@@ -3825,7 +3825,7 @@
 
 
 /**
- * GTlsConnection:database:
+ * GTlsConnection:database: (nullable)
  *
  * The certificate database to use when verifying this TLS connection.
  * If no certificate database is set, then the default database will be
@@ -3836,7 +3836,7 @@
 
 
 /**
- * GTlsConnection:interaction:
+ * GTlsConnection:interaction: (nullable)
  *
  * A #GTlsInteraction object to be used when the connection or certificate
  * database need to interact with the user. This will be used to prompt the
@@ -3857,7 +3857,7 @@
 
 
 /**
- * GTlsConnection:peer-certificate:
+ * GTlsConnection:peer-certificate: (nullable)
  *
  * The connection's peer's certificate, after the TLS handshake has
  * completed and the certificate has been accepted. Note in
@@ -4736,7 +4736,7 @@
  * arguments are passed through platform communication to the already
  * running program. The already running instance of the program is
  * called the "primary instance"; for non-unique applications this is
- * the always the current instance. On Linux, the D-Bus session bus
+ * always the current instance. On Linux, the D-Bus session bus
  * is used for communication.
  *
  * The use of #GApplication differs from some other commonly-used
@@ -6919,6 +6919,13 @@
  * - Run a garbage collection cycle
  * - Try and compress fragmented allocations
  * - Exit on idle if the process has no reason to stay around
+ * - Call [`malloc_trim(3)`](man:malloc_trim) to return cached heap pages to
+ *   the kernel (if supported by your libc)
+ *
+ * Note that some actions may not always improve system performance, and so
+ * should be profiled for your application. `malloc_trim()`, for example, may
+ * make future heap allocations slower (due to releasing cached heap pages back
+ * to the kernel).
  *
  * See #GMemoryMonitorWarningLevel for details on the various warning levels.
  *
@@ -20396,7 +20403,7 @@
  * Gets @conn's certificate, as set by
  * g_dtls_connection_set_certificate().
  *
- * Returns: (transfer none): @conn's certificate, or %NULL
+ * Returns: (transfer none) (nullable): @conn's certificate, or %NULL
  * Since: 2.48
  */
 
@@ -20408,7 +20415,7 @@
  * Gets the certificate database that @conn uses to verify
  * peer certificates. See g_dtls_connection_set_database().
  *
- * Returns: (transfer none): the certificate database that @conn uses or %NULL
+ * Returns: (transfer none) (nullable): the certificate database that @conn uses or %NULL
  * Since: 2.48
  */
 
@@ -20421,7 +20428,7 @@
  * for things like prompting the user for passwords. If %NULL is returned, then
  * no user interaction will occur for this connection.
  *
- * Returns: (transfer none): The interaction object.
+ * Returns: (transfer none) (nullable): The interaction object.
  * Since: 2.48
  */
 
@@ -20451,7 +20458,7 @@
  * (It is not set during the emission of
  * #GDtlsConnection::accept-certificate.)
  *
- * Returns: (transfer none): @conn's peer's certificate, or %NULL
+ * Returns: (transfer none) (nullable): @conn's peer's certificate, or %NULL
  * Since: 2.48
  */
 
@@ -20617,7 +20624,7 @@
 /**
  * g_dtls_connection_set_database:
  * @conn: a #GDtlsConnection
- * @database: a #GTlsDatabase
+ * @database: (nullable): a #GTlsDatabase
  *
  * Sets the certificate database that is used to verify peer certificates.
  * This is set to the default database by default. See
@@ -25372,7 +25379,7 @@
 
 /**
  * g_icon_deserialize:
- * @value: a #GVariant created with g_icon_serialize()
+ * @value: (transfer none): a #GVariant created with g_icon_serialize()
  *
  * Deserializes a #GIcon previously serialized using g_icon_serialize().
  *
@@ -25431,7 +25438,7 @@
  * makes sense to transfer the #GVariant between processes on the same machine,
  * (as opposed to over the network), and within the same file system namespace.
  *
- * Returns: (transfer full): a #GVariant, or %NULL when serialization fails.
+ * Returns: (transfer full): a #GVariant, or %NULL when serialization fails. The #GVariant will not be floating.
  * Since: 2.38
  */
 
@@ -25747,8 +25754,8 @@
  *
  * Parses @string as an IP address and creates a new #GInetAddress.
  *
- * Returns: a new #GInetAddress corresponding to @string, or %NULL if
- * @string could not be parsed.
+ * Returns: (nullable) (transfer full): a new #GInetAddress corresponding
+ * to @string, or %NULL if @string could not be parsed.
  *     Free the returned object with g_object_unref().
  * Since: 2.22
  */
@@ -25861,8 +25868,8 @@
  * If @address is an IPv6 address, it can also contain a scope ID
  * (separated from the address by a `%`).
  *
- * Returns: a new #GInetSocketAddress, or %NULL if @address cannot be
- * parsed.
+ * Returns: (nullable) (transfer full): a new #GInetSocketAddress,
+ * or %NULL if @address cannot be parsed.
  * Since: 2.40
  */
 
@@ -39321,7 +39328,7 @@
  * Gets @conn's certificate, as set by
  * g_tls_connection_set_certificate().
  *
- * Returns: (transfer none): @conn's certificate, or %NULL
+ * Returns: (transfer none) (nullable): @conn's certificate, or %NULL
  * Since: 2.28
  */
 
@@ -39333,7 +39340,7 @@
  * Gets the certificate database that @conn uses to verify
  * peer certificates. See g_tls_connection_set_database().
  *
- * Returns: (transfer none): the certificate database that @conn uses or %NULL
+ * Returns: (transfer none) (nullable): the certificate database that @conn uses or %NULL
  * Since: 2.30
  */
 
@@ -39346,7 +39353,7 @@
  * for things like prompting the user for passwords. If %NULL is returned, then
  * no user interaction will occur for this connection.
  *
- * Returns: (transfer none): The interaction object.
+ * Returns: (transfer none) (nullable): The interaction object.
  * Since: 2.30
  */
 
@@ -39376,7 +39383,7 @@
  * (It is not set during the emission of
  * #GTlsConnection::accept-certificate.)
  *
- * Returns: (transfer none): @conn's peer's certificate, or %NULL
+ * Returns: (transfer none) (nullable): @conn's peer's certificate, or %NULL
  * Since: 2.28
  */
 
@@ -39560,7 +39567,7 @@
 /**
  * g_tls_connection_set_database:
  * @conn: a #GTlsConnection
- * @database: a #GTlsDatabase
+ * @database: (nullable): a #GTlsDatabase
  *
  * Sets the certificate database that is used to verify peer certificates.
  * This is set to the default database by default. See
