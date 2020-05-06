@@ -9,6 +9,8 @@ project('gobject-introspection', 'c',
 
 host_system = host_machine.system()
 gi_versions = meson.project_version().split('.')
+build_root = meson.current_build_dir()
+source_root = meson.current_source_dir()
 
 configinc = include_directories('.')
 
