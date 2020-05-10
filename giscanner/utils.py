@@ -255,7 +255,7 @@ def get_system_data_dirs():
     If any changes are made to that function they'll need to be copied here.
     '''
     xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(os.pathsep)]
-    if not xdg_data_dirs and os.name != 'nt':
+    if not any(xdg_data_dirs) and os.name != 'nt':
         xdg_data_dirs.append('/usr/local/share')
         xdg_data_dirs.append('/usr/share')
 
