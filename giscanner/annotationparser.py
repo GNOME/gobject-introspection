@@ -566,7 +566,7 @@ class GtkDocAnnotatable(object):
         self.annotations = GtkDocAnnotations()
 
     def __repr__(self):
-        return "<GtkDocAnnotatable '%s' %r>" % (self.annotations, )
+        return "<GtkDocAnnotatable '%s'>" % (self.annotations, )
 
     def validate(self):
         '''
