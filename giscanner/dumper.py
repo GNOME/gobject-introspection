@@ -126,7 +126,7 @@ class DumpCompiler(object):
             if len(self._get_type_functions) > 0:
                 for func in self._get_type_functions:
                     f.write("extern GType " + func + "(void);\n")
-                f.write("GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
+                f.write("G_MODULE_EXPORT GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
                 first = True
                 for func in self._get_type_functions:
                     if first:
@@ -138,7 +138,7 @@ class DumpCompiler(object):
             if len(self._error_quark_functions) > 0:
                 for func in self._error_quark_functions:
                     f.write("extern GQuark " + func + "(void);\n")
-                f.write("GQuark (*GI_ERROR_QUARK_FUNCS_[])(void) = {\n")
+                f.write("G_MODULE_EXPORT GQuark (*GI_ERROR_QUARK_FUNCS_[])(void) = {\n")
                 first = True
                 for func in self._error_quark_functions:
                     if first:
@@ -206,11 +206,6 @@ class DumpCompiler(object):
             args.extend(['-out:' + output])
         else:
             args.extend(['-o', output])
-            if libtool:
-                if utils.host_os() == 'nt':
-                    args.append('-Wl,--export-all-symbols')
-                else:
-                    args.append('-export-dynamic')
 
         if not self._compiler.check_is_msvc():
             # These envvars are not used for MSVC Builds!
