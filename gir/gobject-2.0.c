@@ -419,8 +419,8 @@
  *
  * ## Parameter names # {#canonical-parameter-names}
  *
- * A property name consists of segments consisting of ASCII letters and
- * digits, separated by either the `-` or `_` character. The first
+ * A property name consists of one or more segments consisting of ASCII letters
+ * and digits, separated by either the `-` or `_` character. The first
  * character of a property name must be a letter. These are the same rules as
  * for signal naming (see g_signal_new()).
  *
@@ -3796,6 +3796,22 @@
 
 
 /**
+ * g_param_spec_is_valid_name:
+ * @name: the canonical name of the property
+ *
+ * Validate a property name for a #GParamSpec. This can be useful for
+ * dynamically-generated properties which need to be validated at run-time
+ * before actually trying to create them.
+ *
+ * See [canonical parameter names][canonical-parameter-names] for details of
+ * the rules for valid names.
+ *
+ * Returns: %TRUE if @name is a valid property name, %FALSE otherwise.
+ * Since: 2.66
+ */
+
+
+/**
  * g_param_spec_long:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
@@ -4715,6 +4731,22 @@
  *
  * Returns: %TRUE if a handler is connected to the signal, %FALSE
  *          otherwise.
+ */
+
+
+/**
+ * g_signal_is_valid_name:
+ * @name: the canonical name of the signal
+ *
+ * Validate a signal name. This can be useful for dynamically-generated signals
+ * which need to be validated at run-time before actually trying to create them.
+ *
+ * See [canonical parameter names][canonical-parameter-names] for details of
+ * the rules for valid names. The rules for signal names are the same as those
+ * for property names.
+ *
+ * Returns: %TRUE if @name is a valid signal name, %FALSE otherwise.
+ * Since: 2.66
  */
 
 

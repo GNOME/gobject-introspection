@@ -10,17 +10,17 @@ if glib_dep.type_name() == 'pkgconfig'
   repository_test_env = environment()
   repository_test_env.prepend(
     'GI_TYPELIB_PATH',
-    join_paths(meson.build_root(), 'gir'),
-    join_paths(meson.build_root(), 'tests'),
-    join_paths(meson.build_root(), 'tests', 'scanner'),
+    join_paths(build_root, 'gir'),
+    join_paths(build_root, 'tests'),
+    join_paths(build_root, 'tests', 'scanner'),
   )
   repository_test_env.prepend(
     'LD_LIBRARY_PATH',
-    join_paths(meson.build_root(), 'tests', 'scanner'),
+    join_paths(build_root, 'tests', 'scanner'),
   )
   if host_system == 'windows'
     repository_test_env.prepend(
-      'PATH', join_paths(meson.build_root(), 'tests', 'scanner'))
+      'PATH', join_paths(build_root, 'tests', 'scanner'))
   endif
 
   custom_c_args = cc.get_supported_arguments([

@@ -4889,14 +4889,15 @@
  * To create a new array use g_array_new().
  *
  * To add elements to an array, use g_array_append_val(),
- * g_array_append_vals(), g_array_prepend_val(), and
- * g_array_prepend_vals().
+ * g_array_append_vals(), g_array_prepend_val(), g_array_prepend_vals(),
+ * g_array_insert_val() and g_array_insert_vals().
  *
- * To access an element of an array, use g_array_index().
+ * To access an element of an array (to read it or write it),
+ * use g_array_index().
  *
  * To set the size of an array, use g_array_set_size().
  *
- * To free an array, use g_array_free().
+ * To free an array, use g_array_unref() or g_array_free().
  *
  * Here is an example that stores integers in a #GArray:
  * |[<!-- language="C" -->
@@ -8633,9 +8634,23 @@
  * The implementations of the Unicode functions in GLib are based
  * on the Unicode Character Data tables, which are available from
  * [www.unicode.org](http://www.unicode.org/).
- * GLib 2.8 supports Unicode 4.0, GLib 2.10 supports Unicode 4.1,
- * GLib 2.12 supports Unicode 5.0, GLib 2.16.3 supports Unicode 5.1,
- * GLib 2.30 supports Unicode 6.0.
+ *
+ *  * Unicode 4.0 was added in GLib 2.8
+ *  * Unicode 4.1 was added in GLib 2.10
+ *  * Unicode 5.0 was added in GLib 2.12
+ *  * Unicode 5.1 was added in GLib 2.16.3
+ *  * Unicode 6.0 was added in GLib 2.30
+ *  * Unicode 6.1 was added in GLib 2.32
+ *  * Unicode 6.2 was added in GLib 2.36
+ *  * Unicode 6.3 was added in GLib 2.40
+ *  * Unicode 7.0 was added in GLib 2.42
+ *  * Unicode 8.0 was added in GLib 2.48
+ *  * Unicode 9.0 was added in GLib 2.50.1
+ *  * Unicode 10.0 was added in GLib 2.54
+ *  * Unicode 11.10 was added in GLib 2.58
+ *  * Unicode 12.0 was added in GLib 2.62
+ *  * Unicode 12.1 was added in GLib 2.62
+ *  * Unicode 13.0 was added in GLib 2.66
  */
 
 
@@ -8935,14 +8950,29 @@
  * @i: the index of the element to return
  *
  * Returns the element of a #GArray at the given index. The return
- * value is cast to the given type.
+ * value is cast to the given type. This is the main way to read or write an
+ * element in a #GArray.
  *
- * This example gets a pointer to an element in a #GArray:
+ * Writing an element is typically done by reference, as in the following
+ * example. This example gets a pointer to an element in a #GArray, and then
+ * writes to a field in it:
  * |[<!-- language="C" -->
  *   EDayViewEvent *event;
  *   // This gets a pointer to the 4th element in the array of
  *   // EDayViewEvent structs.
  *   event = &g_array_index (events, EDayViewEvent, 3);
+ *   event->start_time = g_get_current_time ();
+ * ]|
+ *
+ * This example reads from and writes to an array of integers:
+ * |[<!-- language="C" -->
+ *   g_autoptr(GArray) int_array = g_array_new (FALSE, FALSE, sizeof (guint));
+ *   for (guint i = 0; i < 10; i++)
+ *     g_array_append_val (int_array, i);
+ *
+ *   guint *my_int = &g_array_index (int_array, guint, 1);
+ *   g_print ("Int at index 1 is %u; decrementing it\n", *my_int);
+ *   *my_int = *my_int - 1;
  * ]|
  *
  * Returns: the element of the #GArray at the index given by @i
@@ -8978,6 +9008,10 @@
  * The elements between the old end of the array and the newly inserted elements
  * will be initialised to zero if the array was configured to clear elements;
  * otherwise their values will be undefined.
+ *
+ * If @index_ is less than the array’s current length, new entries will be
+ * inserted into the array, and the existing entries above @index_ will be moved
+ * upwards.
  *
  * @data may be %NULL if (and only if) @len is zero. If @len is zero, this
  * function is a no-op.
@@ -36996,6 +37030,12 @@
  *
  * The returned value is never floating.  You should free it with
  * g_variant_unref() when you're done with it.
+ *
+ * Note that values borrowed from the returned child are not guaranteed to
+ * still be valid after the child is freed even if you still hold a reference
+ * to @value, if @value has not been serialised at the time this function is
+ * called. To avoid this, you can serialize @value by calling
+ * g_variant_get_data() and optionally ignoring the return value.
  *
  * There may be implementation specific restrictions on deeply nested values,
  * which would result in the unit tuple being returned as the child value,

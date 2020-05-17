@@ -1,5 +1,5 @@
 project('gobject-introspection', 'c',
-  version: '1.64.1',
+  version: '1.65.1',
   meson_version: '>= 0.50.1',
   default_options: [
     'warning_level=1',
@@ -9,6 +9,8 @@ project('gobject-introspection', 'c',
 
 host_system = host_machine.system()
 gi_versions = meson.project_version().split('.')
+build_root = meson.current_build_dir()
+source_root = meson.current_source_dir()
 
 configinc = include_directories('.')
 
@@ -152,6 +154,9 @@ endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
 
+# python headers
+cc.check_header('Python.h', dependencies: [python.dependency()], required: true)
+
 # cairo
 cairo_option = get_option('cairo')
 if cc.get_id() == 'msvc'
@@ -264,3 +269,21 @@ configure_file(
   configuration: pkgconfig_conf,
   install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
 )
+
+# Dependency object used by Meson's GNOME module. This dependency variable must
+# be named girepo_dep for backward compatibility with projects that where already
+# using that name as fallback: dependency('gobject-introspection-1.0',
+# fallback : ['gobject-introspection', 'girepo_dep'])
+# FIXME: meson.override_dependency() and declare_dependency()'s variable arguments
+# are new in Meson 0.54.0, older versions of Meson won't be able to use g-i as
+# subproject anyway
+if meson.version().version_compare('>=0.54.0')
+  girepo_dep = declare_dependency(
+    sources: typelibs,
+    dependencies: girepo_dep,
+    variables: {
+      'girdir': meson.current_build_dir() / 'gir',
+    },
+  )
+  meson.override_dependency('gobject-introspection-1.0', girepo_dep)
+endif
