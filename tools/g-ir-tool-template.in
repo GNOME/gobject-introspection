@@ -55,12 +55,7 @@ builtins.__dict__['DATADIR'] = datadir
 
 # Respect gir_dir_prefix for meson and autotools
 girdir = ''
-# for meson
-if '@gir_dir_prefix@' and not '@gir_dir_prefix@'.startswith('@'):
-    girdir = os.path.abspath(os.path.join(filedir, '..', '@gir_dir_prefix@'))
-# for autotools
-elif '@GIR_DIR@' and not '@GIR_DIR@'.startswith('@'):
-    girdir = os.path.dirname(os.path.abspath('@GIR_DIR@'))
+girdir = os.path.abspath(os.path.join(filedir, '..', '@gir_dir_prefix@'))
 builtins.__dict__['GIRDIR'] = [girdir]
 
 # Again, relative paths first so that the installation prefix is relocatable
