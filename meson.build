@@ -210,7 +210,6 @@ endif
 subdir('girepository')
 subdir('c-tools')
 subdir('py-tools')
-subdir('giscanner')
 
 # Not building gir data might be useful in cross-compilation
 # scenarios where running target binaries through software emulation
