@@ -208,7 +208,8 @@ if not with_doctool
 endif
 
 subdir('girepository')
-subdir('tools')
+subdir('c-tools')
+subdir('py-tools')
 subdir('giscanner')
 
 # Not building gir data might be useful in cross-compilation
