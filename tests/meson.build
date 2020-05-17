@@ -13,7 +13,7 @@ endif
 if libffi_dep.type_name() == 'internal' and host_system == 'windows'
   test_env_common_path += [join_paths(sub_build_root, 'libffi',  'src')]
 endif
-test_env_common_pypath = [meson.build_root()]
+test_env_common_pypath = [join_paths(meson.build_root(), 'py-tools')]
 
 
 test_regress_sources = files('scanner/regress.c')

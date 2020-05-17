@@ -76,12 +76,12 @@ if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner' + py_mod_
         if srcdir:
             # For the giscanner python files
             pylibdir = srcdir
-    elif os.path.isdir(os.path.join(filedir, '..', 'giscanner')):
+    elif os.path.isdir(os.path.join(filedir, 'giscanner')):
         # We're running uninstalled inside meson
         builddir = os.path.abspath(os.path.join(filedir, '..'))
         pylibdir = builddir
         builtins.__dict__['GIRDIR'].append(os.path.join(filedir, os.pardir, 'gir'))
-        gdump_path = os.path.join(builddir, 'girepository', 'gdump.c')
+        gdump_path = os.path.join(builddir, 'py-tools', 'giscanner', 'gdump.c')
         if os.path.isfile(gdump_path):
             builtins.__dict__['GDUMP_PATH'] = gdump_path
     else:
