@@ -102,7 +102,7 @@ class DumpCompiler(object):
 
         tpl_args = {}
         if self._uninst_srcdir is not None:
-            gdump_path = os.path.join(self._uninst_srcdir, 'girepository', 'gdump.c')
+            gdump_path = os.path.join(self._uninst_srcdir, 'py-tools', 'giscanner', 'gdump.c')
         else:
             try:
                 gdump_path = GDUMP_PATH
