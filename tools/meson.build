@@ -22,7 +22,6 @@ foreach tool : tools
   tools_conf.set('datarootdir', datadir_abs)
   tools_conf.set('gir_dir_prefix', gir_dir_prefix)
   tools_conf.set('PYTHON_CMD', python_cmd)
-  tools_conf.set('GIR_DIR', girdir)
 
   tools_conf.set('TOOL_MODULE', tool[1])
   tools_conf.set('TOOL_FUNCTION', tool[2])
