@@ -44,3 +44,5 @@ if with_doctool
   girdoctool = tool_output[-1]
   has_girdoctool = true
 endif
+
+subdir('giscanner')
