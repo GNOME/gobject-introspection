@@ -18,8 +18,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Offsets-1.0.gir',
     depends: [test_offsets_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',

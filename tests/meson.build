@@ -45,13 +45,16 @@ test_install_dir = join_paths(get_option('datadir'), 'gobject-introspection-1.0'
 
 install_data(installed_sources, install_dir: test_install_dir)
 
+# Will be overridden to newly built one in common-case regular, non-cross
+# build.
+test_girscanner = find_program('g-ir-scanner', native: true, required : false)
+
 # Generate everything.h and everything.c:
 test_everything_files = custom_target('everything',
   output: ['everything.h', 'everything.c'],
   depends: typelibs,
   command: [
-    python,
-    girscanner,
+    test_girscanner,
     '--quiet',
     '--generate-typelib-tests=Everything,@OUTPUT0@,@OUTPUT1@',
     '--function-decoration=_GI_TEST_EXTERN',
@@ -103,14 +106,13 @@ test_typelibs = []
 # well. Though, this could work differently altogether. Instead one could
 # generate appropriate pkg-config files and point PKG_CONFIG_PATH to them,
 # leaving all invocations of g-ir-scanner as is.
-if glib_dep.type_name() == 'pkgconfig'
-  test_gir_files += custom_target('gir-everything',
+if glib_dep.type_name() == 'pkgconfig' and test_girscanner.found()
+  test_gir_files += [custom_target('gir-everything',
     input: test_everything_sources + test_everything_headers,
     output: 'Everything-1.0.gir',
     depends: [everything_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -128,15 +130,14 @@ if glib_dep.type_name() == 'pkgconfig'
       extra_giscanner_args,
       '@INPUT@',
     ]
-  )
+  )]
 
-  test_gir_files += custom_target('gir-gimarshallingtests',
+  test_gir_files += [custom_target('gir-gimarshallingtests',
     input: test_marshalling_sources + test_marshalling_headers,
     output: 'GIMarshallingTests-1.0.gir',
     depends: [gimarshallingtests_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -155,7 +156,7 @@ if glib_dep.type_name() == 'pkgconfig'
       extra_giscanner_args,
       '@INPUT@',
     ]
-  )
+  )]
 
   foreach gir : test_gir_files
     test_typelibs += custom_target('generate-typelib-@0@'.format(gir).underscorify(),
@@ -183,6 +184,10 @@ if glib_dep.type_name() == 'pkgconfig'
 endif
 
 subdir('offsets')
-subdir('warn')
-subdir('scanner')
+if get_option('build_python_tools') == true
+  subdir('warn')
+  subdir('scanner')
+else
+  regress_typelib = disabler()
+endif
 subdir('repository')

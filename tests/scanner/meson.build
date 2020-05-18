@@ -116,8 +116,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Typedefs-1.0.gir',
     depends: [typedef_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -156,8 +155,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Bar-1.0.gir',
     depends: [barapp_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -195,8 +193,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'SLetter-1.0.gir',
     depends: [sletter_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -233,8 +230,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'WarnLib-1.0.gir',
     depends: [warnlib_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -269,8 +265,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Utility-1.0.gir',
     depends: [utility_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -307,8 +302,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'GtkFrob-1.0.gir',
     depends: [gtkfrob_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -346,8 +340,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'GetType-1.0.gir',
     depends: [gettype_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -384,8 +377,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Symbolfilter-1.0.gir',
     depends: typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -412,8 +404,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Identfilter-1.0.gir',
     depends: typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -441,8 +432,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Headeronly-1.0.gir',
     depends: typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -477,8 +467,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Regress-1.0.gir',
     depends: [regress_lib] + typelibs + [utility_gir],
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',

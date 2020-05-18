@@ -209,14 +209,20 @@ endif
 
 subdir('girepository')
 subdir('c-tools')
-subdir('py-tools')
-subdir('giscanner')
+if get_option('build_python_tools') == true
+  subdir('py-tools')
+  subdir('giscanner')
+endif
 
 # Not building gir data might be useful in cross-compilation
 # scenarios where running target binaries through software emulation
 # is not possible (due to the SW emulation missing support for target HW).
 if get_option('build_introspection_data') == true
-    subdir('gir')
+  subdir('gir')
+else
+  # for tests
+  typelibs = disabler()
+  gobject_gir = disabler()
 endif
 subdir('docs')
 
