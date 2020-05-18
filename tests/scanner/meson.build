@@ -105,12 +105,12 @@ regress_lib = shared_library('regress-1.0',
 python_path = run_command(python, ['-c', 'import sys; sys.stdout.write(sys.executable)']).stdout()
 
 gircompiler_command = [
-  gircompiler, '-o', '@OUTPUT@', '@INPUT@',
+  test_gircompiler, '-o', '@OUTPUT@', '@INPUT@',
   '--includedir', join_paths(build_root, 'gir'),
   '--includedir', meson.current_build_dir(),
 ]
 
-if glib_dep.type_name() == 'pkgconfig'
+if glib_dep.type_name() == 'pkgconfig' and get_option('build_library_and_c_tools')
   typedef_gir = custom_target('gir-typedef',
     input: ['typedefs.c', 'typedefs.h'],
     output: 'Typedefs-1.0.gir',
@@ -521,7 +521,9 @@ foreach gir : test_girs
   )
 endforeach
 
-if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
+if (has_girdoctool and
+    glib_dep.type_name() == 'pkgconfig' and
+    get_option('build_library_and_c_tools'))
   foreach language : ['C', 'Python', 'Gjs']
     regress_docs = custom_target(
       'generate-docs-' + language,

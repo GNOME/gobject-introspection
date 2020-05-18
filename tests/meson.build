@@ -48,6 +48,7 @@ install_data(installed_sources, install_dir: test_install_dir)
 # Will be overridden to newly built one in common-case regular, non-cross
 # build.
 test_girscanner = find_program('g-ir-scanner', native: true, required : false)
+test_gircompiler = find_program('g-ir-compiler', native: false, required : false)
 
 # Generate everything.h and everything.c:
 test_everything_files = custom_target('everything',
@@ -106,7 +107,9 @@ test_typelibs = []
 # well. Though, this could work differently altogether. Instead one could
 # generate appropriate pkg-config files and point PKG_CONFIG_PATH to them,
 # leaving all invocations of g-ir-scanner as is.
-if glib_dep.type_name() == 'pkgconfig' and test_girscanner.found()
+if (glib_dep.type_name() == 'pkgconfig' and
+    test_girscanner.found() and
+    get_option('build_library_and_c_tools'))
   test_gir_files += [custom_target('gir-everything',
     input: test_everything_sources + test_everything_headers,
     output: 'Everything-1.0.gir',
@@ -163,7 +166,7 @@ if glib_dep.type_name() == 'pkgconfig' and test_girscanner.found()
       input: gir,
       output: '@BASENAME@.typelib',
       depends: [gobject_gir, ],
-      command: [gircompiler, '-o', '@OUTPUT@', '@INPUT@',
+      command: [test_gircompiler, '-o', '@OUTPUT@', '@INPUT@',
                 '--includedir', join_paths(build_root, 'gir'),
                 '--includedir', meson.current_build_dir()
       ],
@@ -185,9 +188,13 @@ endif
 
 subdir('offsets')
 if get_option('build_python_tools') == true
-  subdir('warn')
+  if get_option('build_introspection_data') == true
+    subdir('warn')
+  endif
   subdir('scanner')
 else
   regress_typelib = disabler()
 endif
-subdir('repository')
+if get_option('build_library_and_c_tools') == true
+  subdir('repository')
+endif
