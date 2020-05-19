@@ -21,6 +21,10 @@ example-meson:
     - ninja -C _build
     - sudo ninja -C _build install
     - g-ir-inspect --print-typelibs --print-shlibs GISample
+    # also build a small program using libgirepository
+    - cd ../girepository
+    - meson _build
+    - ninja -C _build
 
 example-autotools:
   stage: build
