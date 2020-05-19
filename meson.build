@@ -245,6 +245,7 @@ pkg.generate(girepo_lib,
   name : 'gobject-introspection',
   filebase : 'gobject-introspection-1.0',
   description : 'GObject Introspection',
+  subdirs: ['gobject-introspection-1.0'],
   variables : pkgconfig_variables,
   libraries : [glib_dep, gobject_dep],
 )
@@ -260,6 +261,7 @@ pkg.generate(
   name : 'gobject-introspection',
   filebase : 'gobject-introspection-no-export-1.0',
   description : 'GObject Introspection',
+  subdirs: ['gobject-introspection-1.0'],
   variables : pkgconfig_variables,
   libraries : [girepo_lib, glib_dep, gobject_dep],
 )
