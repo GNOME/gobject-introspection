@@ -2,11 +2,39 @@ stages:
   - build
   - deploy
 
-image: registry.gitlab.gnome.org/gnome/gobject-introspection:v6
+image: registry.gitlab.gnome.org/gnome/gobject-introspection:v7
 
 cache:
   paths:
     - _ccache/
+
+example-meson:
+  stage: build
+  script:
+    - python3 -m pip install --user mako markdown
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Ddoctool=enabled -Dgtk_doc=true -Dcairo=enabled -Dpython=python3 _build .
+    - ninja -C _build
+    - sudo ninja -C _build install
+    - g-ir-scanner --version
+    - cd examples/library
+    - meson --prefix /usr --default-library both _build
+    - ninja -C _build
+    - sudo ninja -C _build install
+    - g-ir-inspect --print-typelibs --print-shlibs GISample
+
+example-autotools:
+  stage: build
+  script:
+    - python3 -m pip install --user mako markdown
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Ddoctool=enabled -Dgtk_doc=true -Dcairo=enabled -Dpython=python3 _build .
+    - ninja -C _build
+    - sudo ninja -C _build install
+    - g-ir-scanner --version
+    - cd examples/library
+    - ./autogen.sh --prefix /usr
+    - make -j
+    - sudo make install
+    - g-ir-inspect --print-typelibs --print-shlibs GISample
 
 fedora-x86_64-meson:
   stage: build
