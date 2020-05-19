@@ -214,8 +214,8 @@ else
   girepo_dep = disabler()
 endif
 if get_option('build_python_tools') == true
-  subdir('py-tools')
   subdir('giscanner')
+  subdir('py-tools')
 endif
 
 # Not building gir data might be useful in cross-compilation

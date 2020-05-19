@@ -30,6 +30,11 @@ foreach tool : tools
     output: tool[0],
     configuration: tools_conf,
     install_dir: get_option('bindir'),
+    # Not yet supported, but put here to document intention.
+    # depends: [
+    #   giscanner_pymod
+    # ],
+    # depend_files: giscanner_built_files,
   )
   tool_output += tool_bin
   # Provide tools for others when we're a subproject and they use the Meson GNOME module
