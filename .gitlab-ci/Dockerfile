@@ -43,6 +43,7 @@ RUN dnf -y install \
     python3-wheel \
     readline-devel \
     redhat-rpm-config \
+    sudo \
     sqlite-devel \
     systemtap-sdt-devel \
     zlib-devel \
@@ -53,6 +54,7 @@ RUN pip3 install meson==0.50.1
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
 RUN useradd -u $HOST_USER_ID -ms /bin/bash user
+RUN echo 'user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER user
 WORKDIR /home/user
