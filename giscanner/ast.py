@@ -660,6 +660,11 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
         pass
 
 
+class DocSection(Node):
+    def __init__(self, name=None):
+        Node.__init__(self, name)
+
+
 class Registered:
     """A node that (possibly) has gtype_name and get_type."""
     def __init__(self, gtype_name, get_type):
