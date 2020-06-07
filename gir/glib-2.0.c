@@ -5161,7 +5161,7 @@
  *
  * The important caveat of bookmark files is that when you add a new
  * bookmark you must also add the application that is registering it, using
- * g_bookmark_file_add_application() or g_bookmark_file_set_app_info().
+ * g_bookmark_file_add_application() or g_bookmark_file_set_application_info().
  * If a bookmark has no applications then it won't be dumped when creating
  * the on disk representation, using g_bookmark_file_to_data() or
  * g_bookmark_file_to_file().
@@ -7076,10 +7076,14 @@
  * If any call to allocate memory using functions g_new(), g_new0(), g_renew(),
  * g_malloc(), g_malloc0(), g_malloc0_n(), g_realloc(), and g_realloc_n()
  * fails, the application is terminated. This also means that there is no
- * need to check if the call succeeded. On the other hand, g_try_...() family
+ * need to check if the call succeeded. On the other hand, the `g_try_...()` family
  * of functions returns %NULL on failure that can be used as a check
  * for unsuccessful memory allocation. The application is not terminated
  * in this case.
+ *
+ * As all GLib functions and data structures use `g_malloc()` internally, unless
+ * otherwise specified, any allocation failure will result in the application
+ * being terminated.
  *
  * It's important to match g_malloc() (and wrappers such as g_new()) with
  * g_free(), g_slice_alloc() (and wrappers such as g_slice_new()) with
@@ -10004,6 +10008,25 @@
 
 
 /**
+ * g_assert_no_errno:
+ * @expr: the expression to check
+ *
+ * Debugging macro to check that an expression has a non-negative return value,
+ * as used by traditional POSIX functions (such as `rmdir()`) to indicate
+ * success.
+ *
+ * If the assertion fails (i.e. the @expr returns a negative value), an error
+ * message is logged and the testcase is marked as failed. The error message
+ * will contain the value of `errno` and its human-readable message from
+ * g_strerror().
+ *
+ * This macro will clear the value of `errno` before executing @expr.
+ *
+ * Since: 2.66
+ */
+
+
+/**
  * g_assert_no_error:
  * @err: a #GError, possibly %NULL
  *
@@ -11610,6 +11633,24 @@
  *
  * Returns: a timestamp
  * Since: 2.12
+ * Deprecated: 2.66: Use g_bookmark_file_get_added_date_time() instead, as
+ *    `time_t` is deprecated due to the year 2038 problem.
+ */
+
+
+/**
+ * g_bookmark_file_get_added_date_time:
+ * @bookmark: a #GBookmarkFile
+ * @uri: a valid URI
+ * @error: return location for a #GError, or %NULL
+ *
+ * Gets the time the bookmark for @uri was added to @bookmark
+ *
+ * In the event the URI cannot be found, %NULL is returned and
+ * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ *
+ * Returns: (transfer none): a #GDateTime
+ * Since: 2.66
  */
 
 
@@ -11624,7 +11665,7 @@
  * @error: return location for a #GError, or %NULL
  *
  * Gets the registration information of @app_name for the bookmark for
- * @uri.  See g_bookmark_file_set_app_info() for more information about
+ * @uri.  See g_bookmark_file_set_application_info() for more information about
  * the returned data.
  *
  * The string returned in @app_exec must be freed.
@@ -11639,6 +11680,37 @@
  *
  * Returns: %TRUE on success.
  * Since: 2.12
+ * Deprecated: 2.66: Use g_bookmark_file_get_application_info() instead, as
+ *    `time_t` is deprecated due to the year 2038 problem.
+ */
+
+
+/**
+ * g_bookmark_file_get_application_info:
+ * @bookmark: a #GBookmarkFile
+ * @uri: a valid URI
+ * @name: an application's name
+ * @exec: (out) (optional): return location for the command line of the application, or %NULL
+ * @count: (out) (optional): return location for the registration count, or %NULL
+ * @stamp: (out) (optional) (transfer none): return location for the last registration time, or %NULL
+ * @error: return location for a #GError, or %NULL
+ *
+ * Gets the registration information of @app_name for the bookmark for
+ * @uri.  See g_bookmark_file_set_application_info() for more information about
+ * the returned data.
+ *
+ * The string returned in @app_exec must be freed.
+ *
+ * In the event the URI cannot be found, %FALSE is returned and
+ * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
+ * event that no application with name @app_name has registered a bookmark
+ * for @uri,  %FALSE is returned and error is set to
+ * #G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED. In the event that unquoting
+ * the command line fails, an error of the #G_SHELL_ERROR domain is
+ * set and %FALSE is returned.
+ *
+ * Returns: %TRUE on success.
+ * Since: 2.66
  */
 
 
@@ -11768,6 +11840,24 @@
  *
  * Returns: a timestamp
  * Since: 2.12
+ * Deprecated: 2.66: Use g_bookmark_file_get_modified_date_time() instead, as
+ *    `time_t` is deprecated due to the year 2038 problem.
+ */
+
+
+/**
+ * g_bookmark_file_get_modified_date_time:
+ * @bookmark: a #GBookmarkFile
+ * @uri: a valid URI
+ * @error: return location for a #GError, or %NULL
+ *
+ * Gets the time when the bookmark for @uri was last modified.
+ *
+ * In the event the URI cannot be found, %NULL is returned and
+ * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ *
+ * Returns: (transfer none): a #GDateTime
+ * Since: 2.66
  */
 
 
@@ -11829,6 +11919,24 @@
  *
  * Returns: a timestamp.
  * Since: 2.12
+ * Deprecated: 2.66: Use g_bookmark_file_get_visited_date_time() instead, as
+ *    `time_t` is deprecated due to the year 2038 problem.
+ */
+
+
+/**
+ * g_bookmark_file_get_visited_date_time:
+ * @bookmark: a #GBookmarkFile
+ * @uri: a valid URI
+ * @error: return location for a #GError, or %NULL
+ *
+ * Gets the time the bookmark for @uri was last visited.
+ *
+ * In the event the URI cannot be found, %NULL is returned and
+ * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ *
+ * Returns: (transfer none): a #GDateTime
+ * Since: 2.66
  */
 
 
@@ -12030,6 +12138,22 @@
  * If no bookmark for @uri is found then it is created.
  *
  * Since: 2.12
+ * Deprecated: 2.66: Use g_bookmark_file_set_added_date_time() instead, as
+ *    `time_t` is deprecated due to the year 2038 problem.
+ */
+
+
+/**
+ * g_bookmark_file_set_added_date_time:
+ * @bookmark: a #GBookmarkFile
+ * @uri: a valid URI
+ * @added: a #GDateTime
+ *
+ * Sets the time the bookmark for @uri was added into @bookmark.
+ *
+ * If no bookmark for @uri is found then it is created.
+ *
+ * Since: 2.66
  */
 
 
@@ -12056,7 +12180,7 @@
  * be expanded as the local file name retrieved from the bookmark's
  * URI; "\%u", which will be expanded as the bookmark's URI.
  * The expansion is done automatically when retrieving the stored
- * command line using the g_bookmark_file_get_app_info() function.
+ * command line using the g_bookmark_file_get_application_info() function.
  * @count is the number of times the application has registered the
  * bookmark; if is < 0, the current registration count will be increased
  * by one, if is 0, the application with @name will be removed from
@@ -12075,6 +12199,53 @@
  * Returns: %TRUE if the application's meta-data was successfully
  *   changed.
  * Since: 2.12
+ * Deprecated: 2.66: Use g_bookmark_file_set_application_info() instead, as
+ *    `time_t` is deprecated due to the year 2038 problem.
+ */
+
+
+/**
+ * g_bookmark_file_set_application_info:
+ * @bookmark: a #GBookmarkFile
+ * @uri: a valid URI
+ * @name: an application's name
+ * @exec: an application's command line
+ * @count: the number of registrations done for this application
+ * @stamp: (nullable): the time of the last registration for this application,
+ *    which may be %NULL if @count is 0
+ * @error: return location for a #GError or %NULL
+ *
+ * Sets the meta-data of application @name inside the list of
+ * applications that have registered a bookmark for @uri inside
+ * @bookmark.
+ *
+ * You should rarely use this function; use g_bookmark_file_add_application()
+ * and g_bookmark_file_remove_application() instead.
+ *
+ * @name can be any UTF-8 encoded string used to identify an
+ * application.
+ * @exec can have one of these two modifiers: "\%f", which will
+ * be expanded as the local file name retrieved from the bookmark's
+ * URI; "\%u", which will be expanded as the bookmark's URI.
+ * The expansion is done automatically when retrieving the stored
+ * command line using the g_bookmark_file_get_application_info() function.
+ * @count is the number of times the application has registered the
+ * bookmark; if is < 0, the current registration count will be increased
+ * by one, if is 0, the application with @name will be removed from
+ * the list of registered applications.
+ * @stamp is the Unix time of the last registration.
+ *
+ * If you try to remove an application by setting its registration count to
+ * zero, and no bookmark for @uri is found, %FALSE is returned and
+ * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND; similarly,
+ * in the event that no application @name has registered a bookmark
+ * for @uri,  %FALSE is returned and error is set to
+ * #G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED.  Otherwise, if no bookmark
+ * for @uri is found, one is created.
+ *
+ * Returns: %TRUE if the application's meta-data was successfully
+ *   changed.
+ * Since: 2.66
  */
 
 
@@ -12169,9 +12340,30 @@
  * The "modified" time should only be set when the bookmark's meta-data
  * was actually changed.  Every function of #GBookmarkFile that
  * modifies a bookmark also changes the modification time, except for
- * g_bookmark_file_set_visited().
+ * g_bookmark_file_set_visited_date_time().
  *
  * Since: 2.12
+ * Deprecated: 2.66: Use g_bookmark_file_set_modified_date_time() instead, as
+ *    `time_t` is deprecated due to the year 2038 problem.
+ */
+
+
+/**
+ * g_bookmark_file_set_modified_date_time:
+ * @bookmark: a #GBookmarkFile
+ * @uri: a valid URI
+ * @modified: a #GDateTime
+ *
+ * Sets the last time the bookmark for @uri was last modified.
+ *
+ * If no bookmark for @uri is found then it is created.
+ *
+ * The "modified" time should only be set when the bookmark's meta-data
+ * was actually changed.  Every function of #GBookmarkFile that
+ * modifies a bookmark also changes the modification time, except for
+ * g_bookmark_file_set_visited_date_time().
+ *
+ * Since: 2.66
  */
 
 
@@ -12203,12 +12395,34 @@
  * If no bookmark for @uri is found then it is created.
  *
  * The "visited" time should only be set if the bookmark was launched,
- * either using the command line retrieved by g_bookmark_file_get_app_info()
+ * either using the command line retrieved by g_bookmark_file_get_application_info()
  * or by the default application for the bookmark's MIME type, retrieved
  * using g_bookmark_file_get_mime_type().  Changing the "visited" time
  * does not affect the "modified" time.
  *
  * Since: 2.12
+ * Deprecated: 2.66: Use g_bookmark_file_set_visited_date_time() instead, as
+ *    `time_t` is deprecated due to the year 2038 problem.
+ */
+
+
+/**
+ * g_bookmark_file_set_visited_date_time:
+ * @bookmark: a #GBookmarkFile
+ * @uri: a valid URI
+ * @visited: a #GDateTime
+ *
+ * Sets the time the bookmark for @uri was last visited.
+ *
+ * If no bookmark for @uri is found then it is created.
+ *
+ * The "visited" time should only be set if the bookmark was launched,
+ * either using the command line retrieved by g_bookmark_file_get_application_info()
+ * or by the default application for the bookmark's MIME type, retrieved
+ * using g_bookmark_file_get_mime_type().  Changing the "visited" time
+ * does not affect the "modified" time.
+ *
+ * Since: 2.66
  */
 
 
@@ -14612,8 +14826,8 @@
  *
  * Creates a copy of @datetime and adds the specified timespan to the copy.
  *
- * Returns: the newly created #GDateTime which should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14626,8 +14840,8 @@
  * Creates a copy of @datetime and adds the specified number of days to the
  * copy. Add negative values to subtract days.
  *
- * Returns: the newly created #GDateTime which should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14645,8 +14859,8 @@
  * Creates a new #GDateTime adding the specified values to the current date and
  * time in @datetime. Add negative values to subtract.
  *
- * Returns: the newly created #GDateTime that should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14659,8 +14873,8 @@
  * Creates a copy of @datetime and adds the specified number of hours.
  * Add negative values to subtract hours.
  *
- * Returns: the newly created #GDateTime which should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14673,8 +14887,8 @@
  * Creates a copy of @datetime adding the specified number of minutes.
  * Add negative values to subtract minutes.
  *
- * Returns: the newly created #GDateTime which should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14692,8 +14906,8 @@
  * 31st January 2018, the result would be 28th February 2018. In 2020 (a leap
  * year), the result would be 29th February.
  *
- * Returns: the newly created #GDateTime which should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14706,8 +14920,8 @@
  * Creates a copy of @datetime and adds the specified number of seconds.
  * Add negative values to subtract seconds.
  *
- * Returns: the newly created #GDateTime which should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14720,8 +14934,8 @@
  * Creates a copy of @datetime and adds the specified number of weeks to the
  * copy. Add negative values to subtract weeks.
  *
- * Returns: the newly created #GDateTime which should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14737,8 +14951,8 @@
  * As with g_date_time_add_months(), if the resulting date would be 29th
  * February on a non-leap year, the day will be clamped to 28th February.
  *
- * Returns: the newly created #GDateTime which should be freed with
- *   g_date_time_unref().
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -14833,10 +15047,14 @@
  * - \%M: the minute as a decimal number (range 00 to 59)
  * - \%p: either "AM" or "PM" according to the given time value, or the
  *   corresponding  strings for the current locale.  Noon is treated as
- *   "PM" and midnight as "AM".
+ *   "PM" and midnight as "AM". Use of this format specifier is discouraged, as
+ *   many locales have no concept of AM/PM formatting. Use \%c or \%X instead.
  * - \%P: like \%p but lowercase: "am" or "pm" or a corresponding string for
- *   the current locale
- * - \%r: the time in a.m. or p.m. notation
+ *   the current locale. Use of this format specifier is discouraged, as
+ *   many locales have no concept of AM/PM formatting. Use \%c or \%X instead.
+ * - \%r: the time in a.m. or p.m. notation. Use of this format specifier is
+ *   discouraged, as many locales have no concept of AM/PM formatting. Use \%c
+ *   or \%X instead.
  * - \%R: the time in 24-hour notation (\%H:\%M)
  * - \%s: the number of seconds since the Epoch, that is, since 1970-01-01
  *   00:00:00 UTC
@@ -14888,10 +15106,10 @@
  * strftime() extension expected to be added to the future POSIX specification,
  * \%Ob and \%Oh are GNU strftime() extensions. Since: 2.56
  *
- * Returns: a newly allocated string formatted to the requested format
- *     or %NULL in the case that there was an error (such as a format specifier
- *     not being supported in the current locale). The string
- *     should be freed with g_free().
+ * Returns: (transfer full) (nullable): a newly allocated string formatted to
+ *    the requested format or %NULL in the case that there was an error (such
+ *    as a format specifier not being supported in the current locale). The
+ *    string should be freed with g_free().
  * Since: 2.26
  */
 
@@ -14904,9 +15122,9 @@
  * including the date, time and time zone, and return that as a UTF-8 encoded
  * string.
  *
- * Returns: a newly allocated string formatted in ISO 8601 format
- *     or %NULL in the case that there was an error. The string
- *     should be freed with g_free().
+ * Returns: (transfer full) (nullable): a newly allocated string formatted in
+ *   ISO 8601 format or %NULL in the case that there was an error. The string
+ *   should be freed with g_free().
  * Since: 2.62
  */
 
@@ -15177,7 +15395,7 @@
 
 
 /**
- * g_date_time_new:
+ * g_date_time_new: (constructor)
  * @tz: a #GTimeZone
  * @year: the year component of the date
  * @month: the month component of the date
@@ -15215,13 +15433,13 @@
  * You should release the return value by calling g_date_time_unref()
  * when you are done with it.
  *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
  * Since: 2.26
  */
 
 
 /**
- * g_date_time_new_from_iso8601:
+ * g_date_time_new_from_iso8601: (constructor)
  * @text: an ISO 8601 formatted time string.
  * @default_tz: (nullable): a #GTimeZone to use if the text doesn't contain a
  *                          timezone, or %NULL.
@@ -15276,7 +15494,7 @@
 
 
 /**
- * g_date_time_new_from_timeval_local:
+ * g_date_time_new_from_timeval_local: (constructor)
  * @tv: a #GTimeVal
  *
  * Creates a #GDateTime corresponding to the given #GTimeVal @tv in the
@@ -15292,7 +15510,7 @@
  * You should release the return value by calling g_date_time_unref()
  * when you are done with it.
  *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
  * Since: 2.26
  * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use
  *    g_date_time_new_from_unix_local() instead.
@@ -15300,7 +15518,7 @@
 
 
 /**
- * g_date_time_new_from_timeval_utc:
+ * g_date_time_new_from_timeval_utc: (constructor)
  * @tv: a #GTimeVal
  *
  * Creates a #GDateTime corresponding to the given #GTimeVal @tv in UTC.
@@ -15314,7 +15532,7 @@
  * You should release the return value by calling g_date_time_unref()
  * when you are done with it.
  *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
  * Since: 2.26
  * Deprecated: 2.62: #GTimeVal is not year-2038-safe. Use
  *    g_date_time_new_from_unix_utc() instead.
@@ -15322,7 +15540,7 @@
 
 
 /**
- * g_date_time_new_from_unix_local:
+ * g_date_time_new_from_unix_local: (constructor)
  * @t: the Unix time
  *
  * Creates a #GDateTime corresponding to the given Unix time @t in the
@@ -15337,13 +15555,13 @@
  * You should release the return value by calling g_date_time_unref()
  * when you are done with it.
  *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
  * Since: 2.26
  */
 
 
 /**
- * g_date_time_new_from_unix_utc:
+ * g_date_time_new_from_unix_utc: (constructor)
  * @t: the Unix time
  *
  * Creates a #GDateTime corresponding to the given Unix time @t in UTC.
@@ -15357,13 +15575,13 @@
  * You should release the return value by calling g_date_time_unref()
  * when you are done with it.
  *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
  * Since: 2.26
  */
 
 
 /**
- * g_date_time_new_local:
+ * g_date_time_new_local: (constructor)
  * @year: the year component of the date
  * @month: the month component of the date
  * @day: the day component of the date
@@ -15377,13 +15595,13 @@
  * This call is equivalent to calling g_date_time_new() with the time
  * zone returned by g_time_zone_new_local().
  *
- * Returns: a #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a #GDateTime, or %NULL
  * Since: 2.26
  */
 
 
 /**
- * g_date_time_new_now:
+ * g_date_time_new_now: (constructor)
  * @tz: a #GTimeZone
  *
  * Creates a #GDateTime corresponding to this exact instant in the given
@@ -15397,13 +15615,13 @@
  * You should release the return value by calling g_date_time_unref()
  * when you are done with it.
  *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
  * Since: 2.26
  */
 
 
 /**
- * g_date_time_new_now_local:
+ * g_date_time_new_now_local: (constructor)
  *
  * Creates a #GDateTime corresponding to this exact instant in the local
  * time zone.
@@ -15411,26 +15629,26 @@
  * This is equivalent to calling g_date_time_new_now() with the time
  * zone returned by g_time_zone_new_local().
  *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
  * Since: 2.26
  */
 
 
 /**
- * g_date_time_new_now_utc:
+ * g_date_time_new_now_utc: (constructor)
  *
  * Creates a #GDateTime corresponding to this exact instant in UTC.
  *
  * This is equivalent to calling g_date_time_new_now() with the time
  * zone returned by g_time_zone_new_utc().
  *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a new #GDateTime, or %NULL
  * Since: 2.26
  */
 
 
 /**
- * g_date_time_new_utc:
+ * g_date_time_new_utc: (constructor)
  * @year: the year component of the date
  * @month: the month component of the date
  * @day: the day component of the date
@@ -15444,7 +15662,7 @@
  * This call is equivalent to calling g_date_time_new() with the time
  * zone returned by g_time_zone_new_utc().
  *
- * Returns: a #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): a #GDateTime, or %NULL
  * Since: 2.26
  */
 
@@ -15470,7 +15688,8 @@
  * This call is equivalent to calling g_date_time_to_timezone() with the
  * time zone returned by g_time_zone_new_local().
  *
- * Returns: the newly created #GDateTime
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -15513,10 +15732,8 @@
  * example, converting 0001-01-01 00:00:00 UTC to a time zone west of
  * Greenwich will fail (due to the year 0 being out of range).
  *
- * You should release the return value by calling g_date_time_unref()
- * when you are done with it.
- *
- * Returns: a new #GDateTime, or %NULL
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -15546,7 +15763,8 @@
  * This call is equivalent to calling g_date_time_to_timezone() with the
  * time zone returned by g_time_zone_new_utc().
  *
- * Returns: the newly created #GDateTime
+ * Returns: (transfer full) (nullable): the newly created #GDateTime which
+ *   should be freed with g_date_time_unref(), or %NULL
  * Since: 2.26
  */
 
@@ -32659,16 +32877,14 @@
 /**
  * g_test_set_nonfatal_assertions:
  *
- * Changes the behaviour of g_assert_cmpstr(), g_assert_cmpint(),
- * g_assert_cmpuint(), g_assert_cmphex(), g_assert_cmpfloat(),
- * g_assert_true(), g_assert_false(), g_assert_null(), g_assert_no_error(),
- * g_assert_error(), g_test_assert_expected_messages() and the various
- * g_test_trap_assert_*() macros to not abort to program, but instead
+ * Changes the behaviour of the various `g_assert_*()` macros,
+ * g_test_assert_expected_messages() and the various
+ * `g_test_trap_assert_*()` macros to not abort to program, but instead
  * call g_test_fail() and continue. (This also changes the behavior of
  * g_test_fail() so that it will not cause the test program to abort
  * after completing the failed test.)
  *
- * Note that the g_assert_not_reached() and g_assert() are not
+ * Note that the g_assert_not_reached() and g_assert() macros are not
  * affected by this.
  *
  * This function can only be called after g_test_init().
@@ -33075,7 +33291,7 @@
 
 /**
  * g_thread_join:
- * @thread: a #GThread
+ * @thread: (transfer full): a #GThread
  *
  * Waits until @thread finishes, i.e. the function @func, as
  * given to g_thread_new(), returns or g_thread_exit() is called.
@@ -33094,15 +33310,15 @@
  * to be freed. Use g_thread_ref() to obtain an extra reference if you
  * want to keep the GThread alive beyond the g_thread_join() call.
  *
- * Returns: the return value of the thread
+ * Returns: (transfer full): the return value of the thread
  */
 
 
 /**
  * g_thread_new:
  * @name: (nullable): an (optional) name for the new thread
- * @func: a function to execute in the new thread
- * @data: an argument to supply to the new thread
+ * @func: (closure data) (scope async): a function to execute in the new thread
+ * @data: (nullable): an argument to supply to the new thread
  *
  * This function creates a new thread. The new thread starts by invoking
  * @func with the argument data. The thread will run until @func returns
@@ -33132,7 +33348,7 @@
  * Starting with GLib 2.64 the behaviour is now consistent between Windows and
  * POSIX and all threads inherit their parent thread's priority.
  *
- * Returns: the new #GThread
+ * Returns: (transfer full): the new #GThread
  * Since: 2.32
  */
 
@@ -33408,7 +33624,7 @@
  *
  * Increase the reference count on @thread.
  *
- * Returns: a new reference to @thread
+ * Returns: (transfer full): a new reference to @thread
  * Since: 2.32
  */
 
@@ -33426,7 +33642,7 @@
  * (i.e. comparisons) but you must not use GLib functions (such
  * as g_thread_join()) on these threads.
  *
- * Returns: the #GThread representing the current thread
+ * Returns: (transfer none): the #GThread representing the current thread
  */
 
 
@@ -33446,8 +33662,8 @@
 /**
  * g_thread_try_new:
  * @name: (nullable): an (optional) name for the new thread
- * @func: a function to execute in the new thread
- * @data: an argument to supply to the new thread
+ * @func: (closure data) (scope async): a function to execute in the new thread
+ * @data: (nullable): an argument to supply to the new thread
  * @error: return location for error, or %NULL
  *
  * This function is the same as g_thread_new() except that
@@ -33456,14 +33672,14 @@
  * If a thread can not be created (due to resource limits),
  * @error is set and %NULL is returned.
  *
- * Returns: the new #GThread, or %NULL if an error occurred
+ * Returns: (transfer full): the new #GThread, or %NULL if an error occurred
  * Since: 2.32
  */
 
 
 /**
  * g_thread_unref:
- * @thread: a #GThread
+ * @thread: (transfer full): a #GThread
  *
  * Decrease the reference count on @thread, possibly freeing all
  * resources associated with it.
