@@ -111,7 +111,6 @@ gircompiler_command = [
 ]
 
 if (glib_dep.type_name() == 'pkgconfig' and
-    get_option('build_library_and_c_tools') == true and
     get_option('build_introspection_data') == true)
   typedef_gir = custom_target('gir-typedef',
     input: ['typedefs.c', 'typedefs.h'],
@@ -525,9 +524,7 @@ foreach gir : test_girs
   )
 endforeach
 
-if (has_girdoctool and
-    glib_dep.type_name() == 'pkgconfig' and
-    get_option('build_library_and_c_tools'))
+if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
   foreach language : ['C', 'Python', 'Gjs']
     regress_docs = custom_target(
       'generate-docs-' + language,
