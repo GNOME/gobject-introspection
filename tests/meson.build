@@ -188,14 +188,10 @@ if (glib_dep.type_name() == 'pkgconfig' and
 endif
 
 subdir('offsets')
-if get_option('build_python_tools') == true
-  if get_option('build_introspection_data') == true
-    subdir('warn')
-  endif
-  subdir('scanner')
-else
-  regress_typelib = disabler()
+if get_option('build_introspection_data') == true
+  subdir('warn')
 endif
+subdir('scanner')
 if (get_option('build_library_and_c_tools') == true and
     get_option('build_introspection_data') == true)
   subdir('repository')
