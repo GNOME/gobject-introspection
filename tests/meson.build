@@ -108,8 +108,7 @@ test_typelibs = []
 # generate appropriate pkg-config files and point PKG_CONFIG_PATH to them,
 # leaving all invocations of g-ir-scanner as is.
 if (glib_dep.type_name() == 'pkgconfig' and
-    test_girscanner.found() and
-    get_option('build_library_and_c_tools'))
+    test_girscanner.found())
   test_gir_files += [custom_target('gir-everything',
     input: test_everything_sources + test_everything_headers,
     output: 'Everything-1.0.gir',
@@ -191,6 +190,4 @@ if get_option('build_introspection_data') == true
   subdir('warn')
 endif
 subdir('scanner')
-if get_option('build_library_and_c_tools') == true
-  subdir('repository')
-endif
+subdir('repository')
