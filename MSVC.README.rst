@@ -71,7 +71,7 @@ using Ninja or the generated Visual Studio projects.
 Additional notes for building and running against Python 3.8.x and later
 ------------------------------------------------------------------------
 Python 3.8.x and later made restrictions on where DLLs are searched for third-party
-modules, which will therefore affect how the Python tools in ``py-tools/`` look for dependent
+modules, which will therefore affect how the Python tools in ``tools/`` look for dependent
 DLLs, as they rely on a C Python module, _giscanner.pyd, as the paths in %PATH% are
 no longer referred to, except for system-supplied DLLs in their designated locations
 on the system.  In order to cope with this, DLLs are being searched for in the
