@@ -87,7 +87,7 @@ fedora-x86_64-subprojects:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - public
 
-fedora-x86_64-no-py-tools:
+fedora-x86_64-no-introspection-data:
   stage: build
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
@@ -95,7 +95,7 @@ fedora-x86_64-no-py-tools:
     CFLAGS: "-Werror"
   script:
     - python3 -m pip install --user mako markdown
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dbuild_introspection_data=false -Dbuild_python_tools=false -Dpython=python3 _build .
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dbuild_introspection_data=false -Dpython=python3 _build .
     - cd _build
     - ninja
     - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
