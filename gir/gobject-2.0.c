@@ -6727,6 +6727,19 @@
 
 
 /**
+ * g_value_set_interned_string:
+ * @value: a valid #GValue of type %G_TYPE_STRING
+ * @v_string: (nullable): static string to be set
+ *
+ * Set the contents of a %G_TYPE_STRING #GValue to @v_string.  The string is
+ * assumed to be static and interned (canonical, for example from
+ * g_intern_string()), and is thus not duplicated when setting the #GValue.
+ *
+ * Since: 2.66
+ */
+
+
+/**
  * g_value_set_long:
  * @value: a valid #GValue of type %G_TYPE_LONG
  * @v_long: long integer value to be set
@@ -6824,6 +6837,9 @@
  * Set the contents of a %G_TYPE_STRING #GValue to @v_string.
  * The string is assumed to be static, and is thus not duplicated
  * when setting the #GValue.
+ *
+ * If the the string is a canonical string, using g_value_set_interned_string()
+ * is more appropriate.
  */
 
 

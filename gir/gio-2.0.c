@@ -1582,7 +1582,7 @@
  * GDtlsClientConnection:validation-flags:
  *
  * What steps to perform when validating a certificate received from
- * a server. Server certificates that fail to validate in all of the
+ * a server. Server certificates that fail to validate in any of the
  * ways indicated here will be rejected unless the application
  * overrides the default via #GDtlsConnection::accept-certificate.
  *
@@ -3562,7 +3562,7 @@
  * GThreadedSocketService::run:
  * @service: the #GThreadedSocketService.
  * @connection: a new #GSocketConnection object.
- * @source_object: the source_object passed to g_socket_listener_add_address().
+ * @source_object: (nullable): the source_object passed to g_socket_listener_add_address().
  *
  * The ::run signal is emitted in a worker thread in response to an
  * incoming connection. This thread is dedicated to handling
@@ -3724,7 +3724,7 @@
  * GTlsClientConnection:validation-flags:
  *
  * What steps to perform when validating a certificate received from
- * a server. Server certificates that fail to validate in all of the
+ * a server. Server certificates that fail to validate in any of the
  * ways indicated here will be rejected unless the application
  * overrides the default via #GTlsConnection::accept-certificate.
  *
@@ -5356,22 +5356,26 @@
  * #GUnixCredentialsMessage, g_unix_connection_send_credentials() and
  * g_unix_connection_receive_credentials() for details.
  *
- * On Linux, the native credential type is a struct ucred - see the
+ * On Linux, the native credential type is a `struct ucred` - see the
  * unix(7) man page for details. This corresponds to
  * %G_CREDENTIALS_TYPE_LINUX_UCRED.
  *
+ * On Apple operating systems (including iOS, tvOS, and macOS),
+ * the native credential type is a `struct xucred`.
+ * This corresponds to %G_CREDENTIALS_TYPE_APPLE_XUCRED.
+ *
  * On FreeBSD, Debian GNU/kFreeBSD, and GNU/Hurd, the native
- * credential type is a struct cmsgcred. This corresponds
+ * credential type is a `struct cmsgcred`. This corresponds
  * to %G_CREDENTIALS_TYPE_FREEBSD_CMSGCRED.
  *
- * On NetBSD, the native credential type is a struct unpcbid.
+ * On NetBSD, the native credential type is a `struct unpcbid`.
  * This corresponds to %G_CREDENTIALS_TYPE_NETBSD_UNPCBID.
  *
- * On OpenBSD, the native credential type is a struct sockpeercred.
+ * On OpenBSD, the native credential type is a `struct sockpeercred`.
  * This corresponds to %G_CREDENTIALS_TYPE_OPENBSD_SOCKPEERCRED.
  *
  * On Solaris (including OpenSolaris and its derivatives), the native
- * credential type is a ucred_t. This corresponds to
+ * credential type is a `ucred_t`. This corresponds to
  * %G_CREDENTIALS_TYPE_SOLARIS_UCRED.
  */
 
@@ -10989,7 +10993,7 @@
  *
  * Gets the default #GAppInfo for a given content type.
  *
- * Returns: (transfer full): #GAppInfo for given @content_type or
+ * Returns: (transfer full) (nullable): #GAppInfo for given @content_type or
  *     %NULL on error.
  */
 
@@ -11003,7 +11007,8 @@
  * of the URI, up to but not including the ':', e.g. "http",
  * "ftp" or "sip".
  *
- * Returns: (transfer full): #GAppInfo for given @uri_scheme or %NULL on error.
+ * Returns: (transfer full) (nullable): #GAppInfo for given @uri_scheme or
+ *     %NULL on error.
  */
 
 
@@ -14142,7 +14147,8 @@
  *
  * This operation can fail if #GCredentials is not supported on the
  * OS or if the native credentials type does not contain information
- * about the UNIX process ID.
+ * about the UNIX process ID (for example this is the case for
+ * %G_CREDENTIALS_TYPE_APPLE_XUCRED).
  *
  * Returns: The UNIX process ID, or -1 if @error is set.
  * Since: 2.36
@@ -19782,7 +19788,8 @@
  * in a GIO module. There is no reason for applications to use it
  * directly. Applications should use g_app_info_get_default_for_uri_scheme().
  *
- * Returns: (transfer full): #GAppInfo for given @uri_scheme or %NULL on error.
+ * Returns: (transfer full) (nullable): #GAppInfo for given @uri_scheme or
+ *    %NULL on error.
  * Deprecated: 2.28: The #GDesktopAppInfoLookup interface is deprecated and
  *    unused by GIO.
  */
@@ -19843,6 +19850,13 @@
  * best-matching applications, and so on.
  * The algorithm for determining matches is undefined and may change at
  * any time.
+ *
+ * None of the search results are subjected to the normal validation
+ * checks performed by g_desktop_app_info_new() (for example, checking that
+ * the executable referenced by a result exists), and so it is possible for
+ * g_desktop_app_info_new() to return %NULL when passed an app ID returned by
+ * this function. It is expected that calling code will do this when
+ * subsequently creating a #GDesktopAppInfo for each result.
  *
  * Returns: (array zero-terminated=1) (element-type GStrv) (transfer full): a
  *   list of strvs.  Free each item with g_strfreev() and free the outer
@@ -21038,7 +21052,7 @@
  *
  * Gets the next matched attribute from a #GFileAttributeMatcher.
  *
- * Returns: a string containing the next attribute or %NULL if
+ * Returns: (nullable): a string containing the next attribute or, %NULL if
  * no more attribute exist.
  */
 
@@ -22312,7 +22326,7 @@
  * Gets the value of a byte string attribute. If the attribute does
  * not contain a byte string, %NULL will be returned.
  *
- * Returns: the contents of the @attribute value as a byte string, or
+ * Returns: (nullable): the contents of the @attribute value as a byte string, or
  * %NULL otherwise.
  */
 
@@ -22367,8 +22381,8 @@
  * Gets the value of a #GObject attribute. If the attribute does
  * not contain a #GObject, %NULL will be returned.
  *
- * Returns: (transfer none): a #GObject associated with the given @attribute, or
- * %NULL otherwise.
+ * Returns: (transfer none) (nullable): a #GObject associated with the given @attribute,
+ * or %NULL otherwise.
  */
 
 
@@ -22392,8 +22406,8 @@
  * Gets the value of a string attribute. If the attribute does
  * not contain a string, %NULL will be returned.
  *
- * Returns: the contents of the @attribute value as a UTF-8 string, or
- * %NULL otherwise.
+ * Returns: (nullable): the contents of the @attribute value as a UTF-8 string,
+ * or %NULL otherwise.
  */
 
 
@@ -22405,8 +22419,8 @@
  * Gets the value of a stringv attribute. If the attribute does
  * not contain a stringv, %NULL will be returned.
  *
- * Returns: (transfer none): the contents of the @attribute value as a stringv, or
- * %NULL otherwise. Do not free. These returned strings are UTF-8.
+ * Returns: (transfer none) (nullable): the contents of the @attribute value as a stringv,
+ * or %NULL otherwise. Do not free. These returned strings are UTF-8.
  * Since: 2.22
  */
 
@@ -22455,7 +22469,8 @@
  *
  * Gets the file's content type.
  *
- * Returns: a string containing the file's content type.
+ * Returns: (nullable): a string containing the file's content type,
+ * or %NULL if unknown.
  */
 
 
@@ -22467,7 +22482,7 @@
  * available in G_FILE_ATTRIBUTE_TRASH_DELETION_DATE. If the
  * G_FILE_ATTRIBUTE_TRASH_DELETION_DATE attribute is unset, %NULL is returned.
  *
- * Returns: a #GDateTime, or %NULL.
+ * Returns: (nullable): a #GDateTime, or %NULL.
  * Since: 2.36
  */
 
@@ -35614,6 +35629,7 @@
  * - OpenBSD since GLib 2.30
  * - Solaris, Illumos and OpenSolaris since GLib 2.40
  * - NetBSD since GLib 2.42
+ * - macOS, tvOS, iOS since GLib 2.66
  *
  * Other ways to obtain credentials from a foreign peer includes the
  * #GUnixCredentialsMessage type and
@@ -39890,9 +39906,13 @@
  * which means that the certificate is being used to authenticate a server
  * (and we are acting as the client).
  *
- * The @identity is used to check for pinned certificates (trust exceptions)
- * in the database. These will override the normal verification process on a
- * host by host basis.
+ * The @identity is used to ensure the server certificate is valid for
+ * the expected peer identity. If the identity does not match the
+ * certificate, %G_TLS_CERTIFICATE_BAD_IDENTITY will be set in the
+ * return value. If @identity is %NULL, that bit will never be set in
+ * the return value. The peer identity may also be used to check for
+ * pinned certificates (trust exceptions) in the database. These may
+ * override the normal verification process on a host-by-host basis.
  *
  * Currently there are no @flags, and %G_TLS_DATABASE_VERIFY_NONE should be
  * used.
@@ -42181,6 +42201,28 @@
 
 
 /**
+ * g_win32_registry_get_os_dirs:
+ *
+ * Returns a list of directories for DLL lookups.
+ * Can be used with g_win32_registry_key_get_value().
+ *
+ * Returns: (array zero-terminated=1) (transfer none): a %NULL-terminated array of UTF-8 strings.
+ * Since: 2.66
+ */
+
+
+/**
+ * g_win32_registry_get_os_dirs_w:
+ *
+ * Returns a list of directories for DLL lookups.
+ * Can be used with g_win32_registry_key_get_value_w().
+ *
+ * Returns: (array zero-terminated=1) (transfer none): a %NULL-terminated array of UTF-16 strings.
+ * Since: 2.66
+ */
+
+
+/**
  * g_win32_registry_key_erase_change_indicator:
  * @key: (in) (transfer none): a #GWin32RegistryKey
  *
@@ -42246,6 +42288,10 @@
 /**
  * g_win32_registry_key_get_value:
  * @key: (in) (transfer none): a #GWin32RegistryKey
+ * @mui_dll_dirs: (in) (transfer none) (array zero-terminated=1) (optional): a %NULL-terminated
+ *     array of directory names where the OS
+ *     should look for a DLL indicated in a MUI string, if the
+ *     DLL path in the string is not absolute
  * @auto_expand: (in): %TRUE to automatically expand G_WIN32_REGISTRY_VALUE_EXPAND_STR
  *     to G_WIN32_REGISTRY_VALUE_STR.
  * @value_name: (in) (transfer none): name of the value to get (in UTF-8).
@@ -42259,14 +42305,37 @@
  * Get data from a value of a key. String data is guaranteed to be
  * appropriately terminated and will be in UTF-8.
  *
+ * When not %NULL, @mui_dll_dirs indicates that `RegLoadMUIStringW()` API
+ * should be used instead of the usual `RegQueryValueExW()`. This implies
+ * that the value being queried is of type `REG_SZ` or `REG_EXPAND_SZ` (if it is not, the function
+ * falls back to `RegQueryValueExW()`), and that this string must undergo special processing
+ * (see [`SHLoadIndirectString()` documentation](https://docs.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-shloadindirectstring) for an explanation on what
+ * kinds of strings are processed) to get the result.
+ *
+ * If no specific MUI DLL directories need to be used, pass
+ * the return value of g_win32_registry_get_os_dirs() as @mui_dll_dirs
+ * (as an bonus, the value from g_win32_registry_get_os_dirs()
+ * does not add any extra UTF8->UTF16 conversion overhead).
+ *
+ * @auto_expand works with @mui_dll_dirs, but only affects the processed
+ * string, making it somewhat useless. The unprocessed string is always expanded
+ * internally, if its type is `REG_EXPAND_SZ` - there is no need to enable
+ * @auto_expand for this to work.
+ *
+ * The API for this function changed in GLib 2.66 to add the @mui_dll_dirs argument.
+ *
  * Returns: %TRUE on success, %FALSE on failure.
- * Since: 2.46
+ * Since: 2.66
  */
 
 
 /**
  * g_win32_registry_key_get_value_w:
  * @key: (in) (transfer none): a #GWin32RegistryKey
+ * @mui_dll_dirs: (in) (transfer none) (array zero-terminated=1) (optional): a %NULL-terminated
+ *     array of directory names where the OS
+ *     should look for a DLL indicated in a MUI string, if the
+ *     DLL path in the string is not absolute
  * @auto_expand: (in): %TRUE to automatically expand G_WIN32_REGISTRY_VALUE_EXPAND_STR
  *     to G_WIN32_REGISTRY_VALUE_STR.
  * @value_name: (in) (transfer none): name of the value to get (in UTF-16).
@@ -42277,8 +42346,6 @@
  *   by @value_data.
  * @error: (nullable): a pointer to %NULL #GError, or %NULL
  *
- * Get data from a value of a key.
- *
  * Get data from a value of a key. String data is guaranteed to be
  * appropriately terminated and will be in UTF-16.
  *
@@ -42288,8 +42355,25 @@
  * termination cannot be checked and fixed unless the data is retreived
  * too.
  *
+ * When not %NULL, @mui_dll_dirs indicates that `RegLoadMUIStringW()` API
+ * should be used instead of the usual `RegQueryValueExW()`. This implies
+ * that the value being queried is of type `REG_SZ` or `REG_EXPAND_SZ` (if it is not, the function
+ * falls back to `RegQueryValueExW()`), and that this string must undergo special processing
+ * (see [`SHLoadIndirectString()` documentation](https://docs.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-shloadindirectstring) for an explanation on what
+ * kinds of strings are processed) to get the result.
+ *
+ * If no specific MUI DLL directories need to be used, pass
+ * the return value of g_win32_registry_get_os_dirs_w() as @mui_dll_dirs.
+ *
+ * @auto_expand works with @mui_dll_dirs, but only affects the processed
+ * string, making it somewhat useless. The unprocessed string is always expanded
+ * internally, if its type is `REG_EXPAND_SZ` - there is no need to enable
+ * @auto_expand for this to work.
+ *
+ * The API for this function changed in GLib 2.66 to add the @mui_dll_dirs argument.
+ *
  * Returns: %TRUE on success, %FALSE on failure.
- * Since: 2.46
+ * Since: 2.66
  */
 
 
