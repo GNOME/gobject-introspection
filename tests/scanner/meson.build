@@ -110,7 +110,9 @@ gircompiler_command = [
   '--includedir', meson.current_build_dir(),
 ]
 
-if glib_dep.type_name() == 'pkgconfig' and get_option('build_library_and_c_tools')
+if (glib_dep.type_name() == 'pkgconfig' and
+    get_option('build_library_and_c_tools') and
+    get_option('build_introspection_data'))
   typedef_gir = custom_target('gir-typedef',
     input: ['typedefs.c', 'typedefs.h'],
     output: 'Typedefs-1.0.gir',

@@ -109,7 +109,8 @@ test_typelibs = []
 # leaving all invocations of g-ir-scanner as is.
 if (glib_dep.type_name() == 'pkgconfig' and
     test_girscanner.found() and
-    get_option('build_library_and_c_tools'))
+    get_option('build_library_and_c_tools') and
+    get_option('build_introspection_data'))
   test_gir_files += [custom_target('gir-everything',
     input: test_everything_sources + test_everything_headers,
     output: 'Everything-1.0.gir',
@@ -195,6 +196,7 @@ if get_option('build_python_tools') == true
 else
   regress_typelib = disabler()
 endif
-if get_option('build_library_and_c_tools') == true
+if (get_option('build_library_and_c_tools') == true and
+    get_option('build_introspection_data') == true)
   subdir('repository')
 endif
