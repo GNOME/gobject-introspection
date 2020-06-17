@@ -45,6 +45,13 @@ foreach f : giscanner_files
                                           configuration : giscanner_conf_data)
 endforeach
 
+# Copy to builddir for use with dumper.py when running uninstalled
+configure_file(input : '../girepository/gdump.c',
+  output : 'gdump.c',
+  copy: true,
+  install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'),
+)
+
 install_subdir('doctemplates', install_dir: giscannerdir)
 
 # XXX: this doesn't track the input, but there is nothing to copy many files

@@ -87,6 +87,69 @@ fedora-x86_64-subprojects:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - public
 
+fedora-x86_64-no-introspection-data:
+  stage: build
+  variables:
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+    CFLAGS: "-Werror"
+  script:
+    - python3 -m pip install --user mako markdown
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dbuild_introspection_data=false -Dpython=python3 _build .
+    - cd _build
+    - ninja
+    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+  except:
+    - tags
+  artifacts:
+    when: always
+    name: "gi-_${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - public
+
+fedora-x86_64-no-py-tools:
+  stage: build
+  variables:
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+    CFLAGS: "-Werror"
+  script:
+    - python3 -m pip install --user mako markdown
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dbuild_introspection_data=false -Dbuild_python_tools=false -Dpython=python3 _build .
+    - cd _build
+    - ninja
+    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+  except:
+    - tags
+  artifacts:
+    when: always
+    name: "gi-_${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - public
+
+fedora-x86_64-only-py-tools:
+  stage: build
+  variables:
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+    CFLAGS: "-Werror"
+  script:
+    - python3 -m pip install --user mako markdown
+    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dbuild_introspection_data=false -Dbuild_library_and_c_tools=false -Dpython=python3 _build .
+    - cd _build
+    - ninja
+    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+  except:
+    - tags
+  artifacts:
+    when: always
+    name: "gi-_${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - public
+
 fedora-x86_64-python3.5:
   stage: build
   variables:

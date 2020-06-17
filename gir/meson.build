@@ -178,11 +178,21 @@ endforeach
 # out of date.
 glib_files += files('glib-2.0.c')
 
+gir_giscanner_pymod = []
+gir_giscanner_built_files = []
+if not get_option('gi_cross_use_prebuilt_gi')
+  # The right thing to do is just make these dependencies of the
+  # `configure_file` python executable, but that isn't yet supported.
+  warning('asdf asdf asdf')
+  gir_giscanner_pymod = giscanner_pymod
+  gir_giscanner_built_files = giscanner_built_files
+endif
+
 glib_gir = custom_target('gir-glib',
   input: glib_files,
   output: 'GLib-2.0.gir',
-  depends: giscanner_pymod,
-  depend_files: giscanner_built_files,
+  depends: gir_giscanner_pymod,
+  depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
   command: glib_command + [
@@ -244,8 +254,8 @@ gobject_files += files('gobject-2.0.c')
 gobject_gir = custom_target('gir-gobject',
   input: gobject_files,
   output: 'GObject-2.0.gir',
-  depends: [glib_gir, giscanner_pymod],
-  depend_files: giscanner_built_files,
+  depends: [glib_gir, gir_giscanner_pymod],
+  depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
   command: gobject_command + [
@@ -291,8 +301,8 @@ gmodule_files += files('gmodule-2.0.c')
 gir_files += custom_target('gir-gmodule',
   input: gmodule_files,
   output: 'GModule-2.0.gir',
-  depends: [glib_gir, giscanner_pymod],
-  depend_files: giscanner_built_files,
+  depends: [glib_gir, gir_giscanner_pymod],
+  depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
   command: gmodule_command + [
@@ -380,8 +390,8 @@ gio_files += files('gio-2.0.c')
 gio_gir = custom_target('gir-gio',
   input: gio_files,
   output: 'Gio-2.0.gir',
-  depends: [gobject_gir, giscanner_pymod],
-  depend_files: giscanner_built_files,
+  depends: [gobject_gir, gir_giscanner_pymod],
+  depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
   command: gio_command + [
@@ -417,8 +427,8 @@ endif
 gir_files += custom_target('gir-girepository',
   input: girepo_gir_sources,
   output: 'GIRepository-2.0.gir',
-  depends: [gobject_gir, giscanner_pymod, girepo_lib],
-  depend_files: giscanner_built_files,
+  depends: [gobject_gir, gir_giscanner_pymod, girepo_lib],
+  depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
   command: girepository_command + [

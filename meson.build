@@ -207,79 +207,93 @@ if not with_doctool
   warning('Not building with doctool support, not all tests will be run')
 endif
 
-subdir('girepository')
-subdir('tools')
-subdir('giscanner')
+if get_option('build_library_and_c_tools') == true
+  subdir('girepository')
+  subdir('c-tools')
+else
+  girepo_dep = disabler()
+endif
+if get_option('build_python_tools') == true
+  subdir('giscanner')
+  subdir('py-tools')
+endif
 
 # Not building gir data might be useful in cross-compilation
 # scenarios where running target binaries through software emulation
 # is not possible (due to the SW emulation missing support for target HW).
 if get_option('build_introspection_data') == true
-    subdir('gir')
+  subdir('gir')
+else
+  # for tests
+  typelibs = disabler()
+  gobject_gir = disabler()
+  gio_gir = disabler()
 endif
 subdir('docs')
 
 # The tests will also run, which is not possible if they
 # were built for a different architecture.
 if not meson.is_cross_build()
-    subdir('tests')
+  subdir('tests')
 endif
 
-install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
-install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
+if get_option('build_library_and_c_tools') == true
+  install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
+  install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
 
-pkg = import('pkgconfig')
+  pkg = import('pkgconfig')
 
-pkgconfig_variables = [
-  'datadir=' + '${prefix}' / get_option('datadir'),
-  'bindir=' + '${prefix}' / get_option('bindir'),
-  'g_ir_scanner=${bindir}/g-ir-scanner',
-  'g_ir_compiler=${bindir}/g-ir-compiler',
-  'g_ir_generate=${bindir}/g-ir-generate',
-  'gidatadir=${datadir}/gobject-introspection-1.0',
-  'girdir=' + gir_dir_pc_prefix / 'gir-1.0',
-  'typelibdir=${libdir}/girepository-1.0',
-]
+  pkgconfig_variables = [
+    'datadir=' + '${prefix}' / get_option('datadir'),
+    'bindir=' + '${prefix}' / get_option('bindir'),
+    'g_ir_scanner=${bindir}/g-ir-scanner',
+    'g_ir_compiler=${bindir}/g-ir-compiler',
+    'g_ir_generate=${bindir}/g-ir-generate',
+    'gidatadir=${datadir}/gobject-introspection-1.0',
+    'girdir=' + gir_dir_pc_prefix / 'gir-1.0',
+    'typelibdir=${libdir}/girepository-1.0',
+  ]
 
-pkg.generate(girepo_lib,
-  name : 'gobject-introspection',
-  filebase : 'gobject-introspection-1.0',
-  description : 'GObject Introspection',
-  subdirs: ['gobject-introspection-1.0'],
-  variables : pkgconfig_variables,
-  libraries : [glib_dep, gobject_dep],
-)
-
-# This is legacy for backward compat. It is identical to the pc file generated
-# above because we actually never had a pc file that has `-Wl,--export-dynamic`.
-# The reason is `gmodule-2.0` was in `Requires.private` so its libs flags are
-# only included when doing `pkg-config gobject-introspection-1.0 --libs --static`
-# which makes no sense since we don't even build static girepository library.
-# Users who need `-Wl,--export-dynamic` can add `gmodule-2.0` explicitly in their
-# dependencies in addition to `gobject-introspection-1.0`.
-pkg.generate(
-  name : 'gobject-introspection',
-  filebase : 'gobject-introspection-no-export-1.0',
-  description : 'GObject Introspection',
-  subdirs: ['gobject-introspection-1.0'],
-  variables : pkgconfig_variables,
-  libraries : [girepo_lib, glib_dep, gobject_dep],
-)
-
-# Dependency object used by Meson's GNOME module. This dependency variable must
-# be named girepo_dep for backward compatibility with projects that where already
-# using that name as fallback: dependency('gobject-introspection-1.0',
-# fallback : ['gobject-introspection', 'girepo_dep'])
-# FIXME: meson.override_dependency() and declare_dependency()'s variable arguments
-# are new in Meson 0.54.0, older versions of Meson won't be able to use g-i as
-# subproject anyway
-if meson.version().version_compare('>=0.54.0')
-  girepo_dep = declare_dependency(
-    sources: typelibs,
-    dependencies: girepo_dep,
-    variables: {
-      'girdir': meson.current_build_dir() / 'gir',
-    },
+  pkg.generate(girepo_lib,
+    name : 'gobject-introspection',
+    filebase : 'gobject-introspection-1.0',
+    description : 'GObject Introspection',
+    subdirs: ['gobject-introspection-1.0'],
+    variables : pkgconfig_variables,
+    libraries : [glib_dep, gobject_dep],
   )
-  meson.override_dependency('gobject-introspection-1.0', girepo_dep)
+
+  # This is legacy for backward compat. It is identical to the pc file generated
+  # above because we actually never had a pc file that has `-Wl,--export-dynamic`.
+  # The reason is `gmodule-2.0` was in `Requires.private` so its libs flags are
+  # only included when doing `pkg-config gobject-introspection-1.0 --libs --static`
+  # which makes no sense since we don't even build static girepository library.
+  # Users who need `-Wl,--export-dynamic` can add `gmodule-2.0` explicitly in their
+  # dependencies in addition to `gobject-introspection-1.0`.
+  pkg.generate(
+    name : 'gobject-introspection',
+    filebase : 'gobject-introspection-no-export-1.0',
+    description : 'GObject Introspection',
+    subdirs: ['gobject-introspection-1.0'],
+    variables : pkgconfig_variables,
+    libraries : [girepo_lib, glib_dep, gobject_dep],
+  )
+
+  # Dependency object used by Meson's GNOME module. This dependency variable must
+  # be named girepo_dep for backward compatibility with projects that where already
+  # using that name as fallback: dependency('gobject-introspection-1.0',
+  # fallback : ['gobject-introspection', 'girepo_dep'])
+  # FIXME: meson.override_dependency() and declare_dependency()'s variable arguments
+  # are new in Meson 0.54.0, older versions of Meson won't be able to use g-i as
+  # subproject anyway
+  if meson.version().version_compare('>=0.54.0')
+    girepo_dep = declare_dependency(
+      sources: typelibs,
+      dependencies: girepo_dep,
+      variables: {
+        'girdir': meson.current_build_dir() / 'gir',
+      },
+    )
+    meson.override_dependency('gobject-introspection-1.0', girepo_dep)
+  endif
 endif

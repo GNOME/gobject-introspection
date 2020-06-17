@@ -105,19 +105,20 @@ regress_lib = shared_library('regress-1.0',
 python_path = run_command(python, ['-c', 'import sys; sys.stdout.write(sys.executable)']).stdout()
 
 gircompiler_command = [
-  gircompiler, '-o', '@OUTPUT@', '@INPUT@',
+  test_gircompiler, '-o', '@OUTPUT@', '@INPUT@',
   '--includedir', join_paths(build_root, 'gir'),
   '--includedir', meson.current_build_dir(),
 ]
 
-if glib_dep.type_name() == 'pkgconfig'
+if (glib_dep.type_name() == 'pkgconfig' and
+    get_option('build_library_and_c_tools') == true and
+    get_option('build_introspection_data') == true)
   typedef_gir = custom_target('gir-typedef',
     input: ['typedefs.c', 'typedefs.h'],
     output: 'Typedefs-1.0.gir',
     depends: [typedef_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -156,8 +157,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Bar-1.0.gir',
     depends: [barapp_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -195,8 +195,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'SLetter-1.0.gir',
     depends: [sletter_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -233,8 +232,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'WarnLib-1.0.gir',
     depends: [warnlib_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -269,8 +267,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Utility-1.0.gir',
     depends: [utility_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -307,8 +304,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'GtkFrob-1.0.gir',
     depends: [gtkfrob_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -346,8 +342,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'GetType-1.0.gir',
     depends: [gettype_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -384,8 +379,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Symbolfilter-1.0.gir',
     depends: typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -412,8 +406,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Identfilter-1.0.gir',
     depends: typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -441,8 +434,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Headeronly-1.0.gir',
     depends: typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -477,8 +469,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Regress-1.0.gir',
     depends: [regress_lib] + typelibs + [utility_gir],
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -514,6 +505,8 @@ if glib_dep.type_name() == 'pkgconfig'
     command: gircompiler_command,
   )
   test_typelibs += regress_typelib
+else
+  regress_gir = disabler()
 endif
 
 gi_tester = files(join_paths('..', 'gi-tester'))
@@ -532,7 +525,9 @@ foreach gir : test_girs
   )
 endforeach
 
-if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
+if (has_girdoctool and
+    glib_dep.type_name() == 'pkgconfig' and
+    get_option('build_library_and_c_tools'))
   foreach language : ['C', 'Python', 'Gjs']
     regress_docs = custom_target(
       'generate-docs-' + language,

@@ -42,6 +42,14 @@ option('build_introspection_data', type: 'boolean', value : true,
   description: 'Build introspection data (.gir and .typelib files) in addition to library and tools'
 )
 
+option('build_python_tools', type: 'boolean', value : true,
+  description: 'Build gobject introspection python tools. You almost certainly want to do this except for advanced cross-compiling situations.'
+)
+
+option('build_library_and_c_tools', type: 'boolean', value : true,
+  description: 'Build all of gobject introspection besides the python tools. (The python tools are controlled independently.) You almost certainly want to do this except for advanced cross-compiling situations.'
+)
+
 option('gi_cross_pkgconfig_sysroot_path', type: 'string',
   description: 'Specify a sysroot path to prepend to pkgconfig output (useful when cross-compiling)'
 )
