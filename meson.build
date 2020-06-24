@@ -230,12 +230,19 @@ install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'
 
 pkg = import('pkgconfig')
 
+# We must put in the '.exe' extension for .exe executables
+exe_ext = ''
+
+if host_system == 'windows' or host_system == 'cygwin'
+  exe_ext = '.exe'
+endif
+
 pkgconfig_variables = [
   'datadir=' + '${prefix}' / get_option('datadir'),
   'bindir=' + '${prefix}' / get_option('bindir'),
   'g_ir_scanner=${bindir}/g-ir-scanner',
-  'g_ir_compiler=${bindir}/g-ir-compiler',
-  'g_ir_generate=${bindir}/g-ir-generate',
+  'g_ir_compiler=${bindir}/g-ir-compiler@0@'.format(exe_ext),
+  'g_ir_generate=${bindir}/g-ir-generate@0@'.format(exe_ext),
   'gidatadir=${datadir}/gobject-introspection-1.0',
   'girdir=' + gir_dir_pc_prefix / 'gir-1.0',
   'typelibdir=${libdir}/girepository-1.0',
