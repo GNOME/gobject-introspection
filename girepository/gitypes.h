@@ -362,8 +362,10 @@ typedef enum  {
  * @GI_SCOPE_TYPE_ASYNC: The callback and associated user_data is
  * only used until the callback is invoked, and the callback.
  * is invoked always exactly once.
- * @GI_SCOPE_TYPE_NOTIFIED: The callback and and associated
+ * @GI_SCOPE_TYPE_NOTIFIED: The callback and associated
  * user_data is used until the caller is notfied via the destroy_notify.
+ * @GI_SCOPE_TYPE_FOREVER: The callback and associated user_data is
+ * is used until the process terminates
  *
  * Scope type of a #GIArgInfo representing callback, determines how the
  * callback is invoked and is used to decided when the invoke structs
@@ -373,7 +375,8 @@ typedef enum {
   GI_SCOPE_TYPE_INVALID,
   GI_SCOPE_TYPE_CALL,
   GI_SCOPE_TYPE_ASYNC,
-  GI_SCOPE_TYPE_NOTIFIED
+  GI_SCOPE_TYPE_NOTIFIED,
+  GI_SCOPE_TYPE_FOREVER
 } GIScopeType;
 
 /**
