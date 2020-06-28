@@ -144,12 +144,15 @@ gmodule_dep = dependency('gmodule-2.0', version : glib_version,
 if host_system != 'windows'
   giounix_dep = dependency('gio-unix-2.0', version : glib_version,
     fallback: ['glib', 'libgiounix_dep'])
+  giowin_dep = dependency('', required : false)
 else
   # Don't even try to look for gio-unix-2.0 on Windows because Meson will
   # fruitlessly try to find it in the glib subproject even when we don't want
   # it to look in the subproject at all. Just use a not-found dependency.
   giounix_dep = dependency('', required : false)
   # XXX: Autotools doesn't build girs for gio-win32-2.0, but maybe we should?
+  giowin_dep = dependency('gio-windows-2.0', version : glib_version,
+    fallback: ['glib', 'libgiowin32_dep'])
 endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
