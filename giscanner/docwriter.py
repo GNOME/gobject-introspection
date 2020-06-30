@@ -793,7 +793,11 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
         return fundamental_types.get(name, name)
 
     def format_type(self, type_, link=False):
-        if isinstance(type_, (ast.List, ast.Array)):
+        if isinstance(type_, ast.List):
+            if type_.name == 'Gio.ListModel':
+                return 'Gio.ListModel(item_type=' + self.format_type(type_.element_type) + ')'
+            return '[' + self.format_type(type_.element_type) + ']'
+        elif isinstance(type_, ast.Array):
             return '[' + self.format_type(type_.element_type) + ']'
         elif isinstance(type_, ast.Map):
             return '{%s: %s}' % (self.format_type(type_.key_type),
@@ -930,10 +934,14 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         return fundamental_types.get(name, name)
 
     def format_type(self, type_, link=False):
-        if isinstance(type_, ast.Array) and \
-           type_.element_type.target_fundamental in ('gint8', 'guint8'):
-            return 'ByteArray'
-        elif isinstance(type_, (ast.List, ast.Array)):
+        if isinstance(type_, ast.Array):
+            if type_.element_type.target_fundamental in ('gint8', 'guint8'):
+                return 'ByteArray'
+            else:
+                return 'Array(' + self.format_type(type_.element_type, link) + ')'
+        elif isinstance(type_, ast.List):
+            if type_.name == 'Gio.ListModel':
+                return 'Gio.ListModel({item_type: ' + self.format_type(type_.element_type) + '})'
             return 'Array(' + self.format_type(type_.element_type, link) + ')'
         elif isinstance(type_, ast.Map):
             return '{%s: %s}' % (self.format_type(type_.key_type, link),

@@ -89,7 +89,8 @@ class IntrospectablePass(object):
             return
 
         if (isinstance(node.type, (ast.List, ast.Array))
-        and node.type.element_type == ast.TYPE_ANY):
+        and node.type.element_type == ast.TYPE_ANY
+        and not (isinstance(node.type, ast.List) and node.type.name == 'Gio.ListModel')):
             self._parameter_warning(parent, node, "Missing (element-type) annotation")
             parent.introspectable = False
             return

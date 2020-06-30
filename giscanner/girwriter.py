@@ -378,10 +378,15 @@ class GIRWriter(XMLWriter):
             with self.tagcontext('array', attrs):
                 self._write_type(ntype.element_type)
         elif isinstance(ntype, ast.List):
-            if ntype.name:
+            # GListModel element-type annotations are not mandatory
+            if ntype.name in ('Gio.ListModel', 'GListModel') and ntype.element_type is ast.TYPE_ANY:
                 attrs.insert(0, ('name', ntype.name))
-            with self.tagcontext('type', attrs):
-                self._write_type(ntype.element_type)
+                self.write_tag('type', attrs)
+            else:
+                if ntype.name:
+                    attrs.insert(0, ('name', ntype.name))
+                with self.tagcontext('type', attrs):
+                    self._write_type(ntype.element_type)
         elif isinstance(ntype, ast.Map):
             attrs.insert(0, ('name', 'GLib.HashTable'))
             with self.tagcontext('type', attrs):
