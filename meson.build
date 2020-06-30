@@ -141,13 +141,17 @@ gio_dep = dependency('gio-2.0', version : glib_version,
   fallback: ['glib', 'libgio_dep'])
 gmodule_dep = dependency('gmodule-2.0', version : glib_version,
   fallback: ['glib', 'libgmodule_dep'])
-if host_system != 'windows'
+if host_system != 'windows' and host_system != 'darwin'
   giounix_dep = dependency('gio-unix-2.0', version : glib_version,
     fallback: ['glib', 'libgiounix_dep'])
 else
   # Don't even try to look for gio-unix-2.0 on Windows because Meson will
   # fruitlessly try to find it in the glib subproject even when we don't want
   # it to look in the subproject at all. Just use a not-found dependency.
+  #
+  # Don't even try to look for gio-unix-2.0 on Darwin, because even
+  # though the header files are installed libgio does not define any
+  # of the symbols.
   giounix_dep = dependency('', required : false)
   # XXX: Autotools doesn't build girs for gio-win32-2.0, but maybe we should?
 endif
