@@ -461,6 +461,27 @@ ACTION_RE = re.compile(
     ''',
     re.UNICODE | re.VERBOSE)
 
+# Pattern matching struct fields.
+FIELD_RE = re.compile(
+    r'''
+    ^                                                    # start
+    \s*                                                  # 0 or more whitespace characters
+    (?P<class_name>[\w]+)                                # class name
+    \s*                                                  # 0 or more whitespace characters
+    \.{1}                                                # 1 required dot
+    \s*                                                  # 0 or more whitespace characters
+    (?P<field_name>[\w-]*\w)                             # field name
+    \s*                                                  # 0 or more whitespace characters
+    (?P<delimiter>:?)                                    # delimiter
+    \s*                                                  # 0 or more whitespace characters
+    (?P<fields>.*?)                                      # annotations + description
+    \s*                                                  # 0 or more whitespace characters
+    :?                                                   # invalid delimiter
+    \s*                                                  # 0 or more whitespace characters
+    $                                                    # end
+    ''',
+    re.UNICODE | re.VERBOSE)
+
 # Pattern matching parameters.
 PARAMETER_RE = re.compile(
     r'''
@@ -1368,13 +1389,22 @@ class GtkDocCommentBlockParser(object):
                                 identifier_fields = None
                                 identifier_fields_start = None
                             else:
-                                result = SYMBOL_RE.match(line)
+                                result = FIELD_RE.match(line)
 
                                 if result:
-                                    identifier_name = '%s' % (result.group('symbol_name'), )
+                                    identifier_name = '%s.%s' % (result.group('class_name'),
+                                                                  result.group('field_name'))
                                     identifier_delimiter = result.group('delimiter')
                                     identifier_fields = result.group('fields')
                                     identifier_fields_start = result.start('fields')
+                                else:
+                                    result = SYMBOL_RE.match(line)
+
+                                    if result:
+                                        identifier_name = '%s' % (result.group('symbol_name'), )
+                                        identifier_delimiter = result.group('delimiter')
+                                        identifier_fields = result.group('fields')
+                                        identifier_fields_start = result.start('fields')
 
                 if result:
                     in_part = PART_IDENTIFIER

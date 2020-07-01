@@ -858,19 +858,28 @@ class MainTransformer(object):
         self._apply_annotations_params(node, node.parameters, block)
         self._apply_annotations_return(node, node.retval, block)
 
-    def _apply_annotations_field(self, parent, block, field):
-        if not block:
+    def _apply_annotations_field(self, parent, parent_block, field):
+        block = self._blocks.get('%s.%s' % (self._get_annotation_name(parent), field.name))
+
+        # Prioritize block level documentation
+        if block:
+            self._apply_annotations_annotated(field, block)
+            annotations = block.annotations
+        elif not parent_block:
             return
-        tag = block.params.get(field.name)
-        if not tag:
-            return
-        type_annotation = tag.annotations.get(ANN_TYPE)
+        else:
+            tag = parent_block.params.get(field.name)
+            if not tag:
+                return
+            annotations = tag.annotations
+            field.doc = tag.description
+            field.doc_position = tag.position
+
+        type_annotation = annotations.get(ANN_TYPE)
         if type_annotation:
             field.type = self._transformer.create_type_from_user_string(type_annotation[0])
-        field.doc = tag.description
-        field.doc_position = tag.position
         try:
-            self._adjust_container_type(parent, field, tag.annotations)
+            self._adjust_container_type(parent, field, annotations)
         except AttributeError as ex:
             print(ex)
 
@@ -938,15 +947,21 @@ class MainTransformer(object):
         if value_annotation:
             node.value = value_annotation[0]
 
-    def _apply_annotations_enum_members(self, node, block):
-        if block is None:
-            return
-
+    def _apply_annotations_enum_members(self, node, parent_block):
         for m in node.members:
-            param = block.params.get(m.symbol, None)
-            if param and param.description:
-                m.doc = param.description
-                m.doc_position = param.position
+            block = self._blocks.get(m.symbol)
+            # Prioritize block-level documentation
+            if block:
+                self._apply_annotations_annotated(m, block)
+            elif parent_block:
+                param = parent_block.params.get(m.symbol)
+
+                if not param:
+                    continue
+
+                if param.description:
+                    m.doc = param.description
+                    m.doc_position = param.position
 
     def _pass_read_annotations2(self, node, chain):
         if isinstance(node, ast.Function):

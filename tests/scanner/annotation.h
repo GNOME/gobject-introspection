@@ -8,7 +8,13 @@
 typedef enum /*< flags,prefix=ANN >*/
 {
   ANN_FLAG_FOO = 1,
-  ANN_FLAG_BAR = 2
+  ANN_FLAG_BAR = 2,
+  /**
+   * ANN_FLAG_FOOBAR:
+   *
+   * Since: 1.4
+   */
+  ANN_FLAG_FOOBAR = 3,
 } RegressAnnotationBitfield;
 
 /**
@@ -256,8 +262,16 @@ struct RegressAnnotationFields
   int field1;
   guchar *arr;
   gulong len;
+  guint field4;
 };
 
+/**
+ * RegressAnnotationFields.field4:
+ *
+ * A new field, breaking ABI is fun!
+ *
+ * Since: 1.4
+ */
 
 _GI_TEST_EXTERN
 void    regress_annotation_ptr_array (GPtrArray *array);
