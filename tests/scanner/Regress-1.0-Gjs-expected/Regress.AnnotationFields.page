@@ -16,6 +16,7 @@ let annotationFields = new Regress.AnnotationFields({
     <link xref='Regress.AnnotationFields-field1'>field1</link>: value
     <link xref='Regress.AnnotationFields-arr'>arr</link>: value
     <link xref='Regress.AnnotationFields-len'>len</link>: value
+    <link xref='Regress.AnnotationFields-field4'>field4</link>: value
 });
   </code></synopsis>
   <p>This is a struct for testing field documentation and annotations</p>
