@@ -437,6 +437,7 @@ class GIRWriter(XMLWriter):
         attrs = [('name', member.name),
                  ('value', str(member.value)),
                  ('c:identifier', member.symbol)]
+        self._append_version(member, attrs)
         if member.nick is not None:
             attrs.append(('glib:nick', member.nick))
         with self.tagcontext('member', attrs):
@@ -626,6 +627,7 @@ class GIRWriter(XMLWriter):
                 raise AssertionError("Unknown field anonymous: %r" % (field.anonymous_node, ))
         else:
             attrs = [('name', field.name)]
+            self._append_version(field, attrs)
             self._append_node_generic(field, attrs)
             # Fields are assumed to be read-only
             # (see also girparser.c and generate.c)
