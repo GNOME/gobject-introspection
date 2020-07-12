@@ -18,8 +18,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: 'Offsets-1.0.gir',
     depends: [test_offsets_lib] + typelibs,
     command: [
-      python,
-      girscanner,
+      test_girscanner,
       '--quiet',
       '--output=@OUTPUT@',
       '--no-libtool',
@@ -45,7 +44,7 @@ if glib_dep.type_name() == 'pkgconfig'
     input: test_offsets_gir,
     output: '@BASENAME@.typelib',
     depends: [gobject_gir, ],
-    command: [gircompiler, '-o', '@OUTPUT@', '@INPUT@',
+    command: [test_gircompiler, '-o', '@OUTPUT@', '@INPUT@',
               '--includedir', join_paths(meson.build_root(), 'gir'),
               '--includedir', meson.current_build_dir()
     ],

@@ -30,6 +30,11 @@ foreach tool : tools
     output: tool[0],
     configuration: tools_conf,
     install_dir: get_option('bindir'),
+    # Not yet supported, but put here to document intention.
+    # depends: [
+    #   giscanner_pymod
+    # ],
+    # depend_files: giscanner_built_files,
   )
   tool_output += tool_bin
   # Provide tools for others when we're a subproject and they use the Meson GNOME module
@@ -59,6 +64,7 @@ gircompiler = executable('g-ir-compiler', 'compiler.c',
   install: true,
   c_args: custom_c_args,
 )
+meson.override_find_program('g-ir-compiler', gircompiler)
 
 girgenerate = executable('g-ir-generate', 'generate.c',
   dependencies: [
@@ -68,15 +74,11 @@ girgenerate = executable('g-ir-generate', 'generate.c',
   install: true,
   c_args: custom_c_args,
 )
+meson.override_find_program('g-ir-generate', girgenerate)
 
 girinspect = executable('g-ir-inspect', 'g-ir-inspect.c',
   dependencies: girepo_dep,
   install: true,
   c_args: custom_c_args,
 )
-
-if not get_option('gi_cross_use_prebuilt_gi')
-  meson.override_find_program('g-ir-compiler', gircompiler)
-  meson.override_find_program('g-ir-generate', girgenerate)
-  meson.override_find_program('g-ir-inspect', girinspect)
-endif
+meson.override_find_program('g-ir-inspect', girinspect)
