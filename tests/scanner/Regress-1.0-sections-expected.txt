@@ -389,3 +389,6 @@ RegressTestWi8021xClass
 regress_test_wi_802_1x_get_testbool
 regress_test_wi_802_1x_set_testbool
 regress_test_wi_802_1x_static_method
+
+<SECTION>
+<TITLE>standalone_section</TITLE>

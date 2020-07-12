@@ -138,6 +138,7 @@ class GIRParser(object):
             _corens('interface'): self._parse_object_interface,
             _corens('record'): self._parse_record,
             _corens('union'): self._parse_union,
+            _corens('docsection'): self._parse_doc_section,
             _glibns('boxed'): self._parse_boxed}
 
         if not self._types_only:
@@ -149,6 +150,11 @@ class GIRParser(object):
             method = parser_methods.get(node.tag)
             if method is not None:
                 method(node)
+
+    def _parse_doc_section(self, node):
+        docsection = ast.DocSection(node.attrib["name"])
+        self._parse_generic_attribs(node, docsection)
+        self._namespace.append(docsection)
 
     def _parse_include(self, node):
         include = ast.Include(node.attrib['name'], node.attrib['version'])

@@ -148,5 +148,7 @@ def generate_sections_file(transformer):
                 append_symbol(section, meth.symbol)
             for meth in node.static_methods:
                 append_symbol(section, meth.symbol)
+        elif isinstance(node, ast.DocSection):
+            section = new_section(None, node.name)
 
     return SectionsFile(sections)

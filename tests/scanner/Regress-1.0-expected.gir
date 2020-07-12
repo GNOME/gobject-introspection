@@ -1865,13 +1865,13 @@ it says it's pointer but it's actually a string.</doc>
                 c:identifier="regress_foo_object_get_default">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="330">This function is intended to match clutter_stage_get_default which
+             line="337">This function is intended to match clutter_stage_get_default which
 uses a C sugar return type.</doc>
         <source-position filename="foo.h" line="205"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="foo.c"
-               line="336">The global #RegressFooSubobject</doc>
+               line="343">The global #RegressFooSubobject</doc>
           <type name="FooSubobject" c:type="RegressFooObject*"/>
         </return-value>
       </function>
@@ -1885,22 +1885,22 @@ uses a C sugar return type.</doc>
       <virtual-method name="read_fn" invoker="read">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="291">Read some stuff.</doc>
+             line="298">Read some stuff.</doc>
         <source-position filename="foo.h" line="117"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
-            <doc xml:space="preserve" filename="foo.c" line="293">obj</doc>
+            <doc xml:space="preserve" filename="foo.c" line="300">obj</doc>
             <type name="FooObject" c:type="RegressFooObject*"/>
           </instance-parameter>
           <parameter name="offset" transfer-ownership="none">
-            <doc xml:space="preserve" filename="foo.c" line="294">offset</doc>
+            <doc xml:space="preserve" filename="foo.c" line="301">offset</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="length" transfer-ownership="none">
-            <doc xml:space="preserve" filename="foo.c" line="295">length</doc>
+            <doc xml:space="preserve" filename="foo.c" line="302">length</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
@@ -1923,7 +1923,7 @@ uses a C sugar return type.</doc>
               c:identifier="regress_foo_object_append_new_stack_layer">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="779">This shouldn't be scanned as a constructor.</doc>
+             line="786">This shouldn't be scanned as a constructor.</doc>
         <source-position filename="foo.h" line="581"/>
         <return-value transfer-ownership="none">
           <type name="FooOtherObject" c:type="RegressFooOtherObject*"/>
@@ -1954,14 +1954,14 @@ uses a C sugar return type.</doc>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="foo.c"
-               line="240">%NULL always</doc>
+               line="247">%NULL always</doc>
           <type name="Utility.Object" c:type="UtilityObject*"/>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="foo.c"
-                 line="238">a #RegressFooObject</doc>
+                 line="245">a #RegressFooObject</doc>
             <type name="FooObject" c:type="RegressFooObject*"/>
           </instance-parameter>
         </parameters>
@@ -2012,7 +2012,7 @@ uses a C sugar return type.</doc>
               introspectable="0">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="266">Not sure why this test is here...</doc>
+             line="273">Not sure why this test is here...</doc>
         <source-position filename="foo.h" line="152"/>
         <return-value transfer-ownership="none">
           <type name="FooObjectCookie" c:type="RegressFooObjectCookie"/>
@@ -2029,22 +2029,22 @@ uses a C sugar return type.</doc>
       <method name="read" c:identifier="regress_foo_object_read">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="291">Read some stuff.</doc>
+             line="298">Read some stuff.</doc>
         <source-position filename="foo.h" line="176"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
-            <doc xml:space="preserve" filename="foo.c" line="293">obj</doc>
+            <doc xml:space="preserve" filename="foo.c" line="300">obj</doc>
             <type name="FooObject" c:type="RegressFooObject*"/>
           </instance-parameter>
           <parameter name="offset" transfer-ownership="none">
-            <doc xml:space="preserve" filename="foo.c" line="294">offset</doc>
+            <doc xml:space="preserve" filename="foo.c" line="301">offset</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="length" transfer-ownership="none">
-            <doc xml:space="preserve" filename="foo.c" line="295">length</doc>
+            <doc xml:space="preserve" filename="foo.c" line="302">length</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
@@ -2054,14 +2054,14 @@ uses a C sugar return type.</doc>
               introspectable="0">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="305">This is only useful from C.</doc>
+             line="312">This is only useful from C.</doc>
         <source-position filename="foo.h" line="184"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
-            <doc xml:space="preserve" filename="foo.c" line="307">obj</doc>
+            <doc xml:space="preserve" filename="foo.c" line="314">obj</doc>
             <type name="FooObject" c:type="RegressFooObject*"/>
           </instance-parameter>
         </parameters>
@@ -2187,19 +2187,19 @@ uses a C sugar return type.</doc>
           </return-value>
           <parameters>
             <parameter name="object" transfer-ownership="none">
-              <doc xml:space="preserve" filename="foo.c" line="293">obj</doc>
+              <doc xml:space="preserve" filename="foo.c" line="300">obj</doc>
               <type name="FooObject" c:type="RegressFooObject*"/>
             </parameter>
             <parameter name="offset" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="foo.c"
-                   line="294">offset</doc>
+                   line="301">offset</doc>
               <type name="gint" c:type="int"/>
             </parameter>
             <parameter name="length" transfer-ownership="none">
               <doc xml:space="preserve"
                    filename="foo.c"
-                   line="295">length</doc>
+                   line="302">length</doc>
               <type name="gint" c:type="int"/>
             </parameter>
           </parameters>
@@ -2252,13 +2252,13 @@ uses a C sugar return type.</doc>
                               transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="foo.c"
-                 line="559">add to this rect</doc>
+                 line="566">add to this rect</doc>
             <type name="FooRectangle" c:type="RegressFooRectangle*"/>
           </instance-parameter>
           <parameter name="r2" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="foo.c"
-                 line="560">source rectangle</doc>
+                 line="567">source rectangle</doc>
             <type name="FooRectangle" c:type="const RegressFooRectangle*"/>
           </parameter>
         </parameters>
@@ -2268,7 +2268,7 @@ uses a C sugar return type.</doc>
                 introspectable="0">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="540">This is a C convenience constructor; we have to (skip)
+             line="547">This is a C convenience constructor; we have to (skip)
 it because it's not a boxed type.</doc>
         <source-position filename="foo.h" line="357"/>
         <return-value>
@@ -6060,7 +6060,7 @@ detection, and fixing it via annotations.</doc>
               c:identifier="regress_foo_not_a_constructor_new">
       <doc xml:space="preserve"
            filename="foo.c"
-           line="792">This should be scanned as a top-level function, and shouldn't cause
+           line="799">This should be scanned as a top-level function, and shouldn't cause
 a "Can't find matching type for constructor" warning.</doc>
       <source-position filename="foo.h" line="221"/>
       <return-value transfer-ownership="none">
@@ -6073,7 +6073,7 @@ a "Can't find matching type for constructor" warning.</doc>
               introspectable="0">
       <doc xml:space="preserve"
            filename="foo.c"
-           line="540">This is a C convenience constructor; we have to (skip)
+           line="547">This is a C convenience constructor; we have to (skip)
 it because it's not a boxed type.</doc>
       <source-position filename="foo.h" line="357"/>
       <return-value>
@@ -6099,7 +6099,7 @@ it because it's not a boxed type.</doc>
               introspectable="0">
       <doc xml:space="preserve"
            filename="foo.c"
-           line="719">Does something that's only interesting from C and should not be
+           line="726">Does something that's only interesting from C and should not be
 exposed to language bindings.</doc>
       <source-position filename="foo.h" line="556"/>
       <return-value transfer-ownership="none">
@@ -6109,7 +6109,7 @@ exposed to language bindings.</doc>
         <parameter name="fs" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="foo.c"
-               line="721">a #RegressFooSkippable</doc>
+               line="728">a #RegressFooSkippable</doc>
           <type name="FooSkippable" c:type="RegressFooSkippable"/>
         </parameter>
       </parameters>
@@ -6434,6 +6434,12 @@ libgnome-keyring.</doc>
         </parameter>
       </parameters>
     </function>
+    <docsection name="standalone_section">
+      <doc xml:space="preserve"
+           filename="foo.c"
+           line="8">This documentation section isn't associated with an object
+in particular, but it should be serialized in the gir nevertheless.</doc>
+    </docsection>
     <function name="test_abc_error_quark"
               c:identifier="regress_test_abc_error_quark"
               moved-to="TestABCError.quark">
