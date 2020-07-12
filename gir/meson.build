@@ -183,7 +183,6 @@ gir_giscanner_built_files = []
 if not get_option('gi_cross_use_prebuilt_gi')
   # The right thing to do is just make these dependencies of the
   # `configure_file` python executable, but that isn't yet supported.
-  warning('asdf asdf asdf')
   gir_giscanner_pymod = giscanner_pymod
   gir_giscanner_built_files = giscanner_built_files
 endif
