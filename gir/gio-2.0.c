@@ -1715,9 +1715,8 @@
  * GDtlsConnection:peer-certificate: (nullable)
  *
  * The connection's peer's certificate, after the TLS handshake has
- * completed and the certificate has been accepted. Note in
- * particular that this is not yet set during the emission of
- * #GDtlsConnection::accept-certificate.
+ * completed or failed. Note in particular that this is not yet set
+ * during the emission of #GDtlsConnection::accept-certificate.
  *
  * (You can watch for a #GObject::notify signal on this property to
  * detect when a handshake has occurred.)
@@ -1729,7 +1728,7 @@
 /**
  * GDtlsConnection:peer-certificate-errors:
  *
- * The errors noticed-and-ignored while verifying
+ * The errors noticed while verifying
  * #GDtlsConnection:peer-certificate. Normally this should be 0, but
  * it may not be if #GDtlsClientConnection:validation-flags is not
  * %G_TLS_CERTIFICATE_VALIDATE_ALL, or if
@@ -2246,7 +2245,7 @@
  * @removed: the number of items removed
  * @added: the number of items added
  *
- * Emitted when a change has occured to the menu.
+ * Emitted when a change has occurred to the menu.
  *
  * The only changes that can occur to a menu is that items are removed
  * or added.  Items may not change (except by being removed and added
@@ -2383,7 +2382,7 @@
 /**
  * GMountOperation::show-unmount-progress:
  * @op: a #GMountOperation:
- * @message: string containing a mesage to display to the user
+ * @message: string containing a message to display to the user
  * @time_left: the estimated time left before the operation completes,
  *     in microseconds, or -1
  * @bytes_left: the amount of bytes to be written before the operation
@@ -3860,9 +3859,8 @@
  * GTlsConnection:peer-certificate: (nullable)
  *
  * The connection's peer's certificate, after the TLS handshake has
- * completed and the certificate has been accepted. Note in
- * particular that this is not yet set during the emission of
- * #GTlsConnection::accept-certificate.
+ * completed or failed. Note in particular that this is not yet set
+ * during the emission of #GTlsConnection::accept-certificate.
  *
  * (You can watch for a #GObject::notify signal on this property to
  * detect when a handshake has occurred.)
@@ -3874,7 +3872,7 @@
 /**
  * GTlsConnection:peer-certificate-errors:
  *
- * The errors noticed-and-ignored while verifying
+ * The errors noticed while verifying
  * #GTlsConnection:peer-certificate. Normally this should be 0, but
  * it may not be if #GTlsClientConnection:validation-flags is not
  * %G_TLS_CERTIFICATE_VALIDATE_ALL, or if
@@ -6068,7 +6066,7 @@
  *
  * If the #GDrive reports that media isn't automatically detected, one
  * can poll for media; typically one should not do this periodically
- * as a poll for media operation is potententially expensive and may
+ * as a poll for media operation is potentially expensive and may
  * spin up the drive creating noise.
  *
  * #GDrive supports starting and stopping drives with authentication
@@ -6268,7 +6266,7 @@
  *
  * Keys are strings that contain a key namespace and a key name, separated
  * by a colon, e.g. "namespace::keyname". Namespaces are included to sort
- * key-value pairs by namespaces for relevance. Keys can be retrived
+ * key-value pairs by namespaces for relevance. Keys can be retrieved
  * using wildcards, e.g. "standard::*" will return all of the keys in the
  * "standard" namespace.
  *
@@ -6693,7 +6691,7 @@
  * unreferenced).
  *
  * For bindings in languages where the native constructor supports
- * exceptions the binding could check for objects implemention %GInitable
+ * exceptions the binding could check for objects implementing %GInitable
  * during normal construction and automatically initialize them, throwing
  * an exception on failure.
  */
@@ -6853,7 +6851,7 @@
  * it are gone.
  *
  * On the other side, a consumer is expected only to hold references on
- * objects that are currently "user visible", in order to faciliate the
+ * objects that are currently "user visible", in order to facilitate the
  * maximum level of laziness in the implementation of the list and to
  * reduce the required number of signal connections at a given time.
  *
@@ -8483,7 +8481,7 @@
  * g_socket_address_enumerator_next_finish() should be used where possible.
  *
  * Each #GSocketAddressEnumerator can only be enumerated once. Once
- * g_socket_address_enumerator_next() has returned %NULL (and no error), further
+ * g_socket_address_enumerator_next() has returned %NULL, further
  * enumeration with that #GSocketAddressEnumerator is not possible, and it can
  * be unreffed.
  */
@@ -12006,7 +12004,7 @@
  * Gets the application's current busy state, as set through
  * g_application_mark_busy() or g_application_bind_busy_property().
  *
- * Returns: %TRUE if @application is currenty marked as busy
+ * Returns: %TRUE if @application is currently marked as busy
  * Since: 2.44
  */
 
@@ -20124,9 +20122,9 @@
  * g_drive_is_media_check_automatic:
  * @drive: a #GDrive.
  *
- * Checks if @drive is capabable of automatically detecting media changes.
+ * Checks if @drive is capable of automatically detecting media changes.
  *
- * Returns: %TRUE if the @drive is capabable of automatically detecting
+ * Returns: %TRUE if the @drive is capable of automatically detecting
  *     media changes, %FALSE otherwise.
  */
 
@@ -20423,6 +20421,33 @@
 
 
 /**
+ * g_dtls_connection_get_channel_binding_data:
+ * @conn: a #GDtlsConnection
+ * @type: #GTlsChannelBindingType type of data to fetch
+ * @data: (out callee-allocates) (optional) (transfer none): #GByteArray is
+ *        filled with the binding data, or %NULL
+ * @error: a #GError pointer, or %NULL
+ *
+ * Query the TLS backend for TLS channel binding data of @type for @conn.
+ *
+ * This call retrieves TLS channel binding data as specified in RFC
+ * [5056](https://tools.ietf.org/html/rfc5056), RFC
+ * [5929](https://tools.ietf.org/html/rfc5929), and related RFCs.  The
+ * binding data is returned in @data.  The @data is resized by the callee
+ * using #GByteArray buffer management and will be freed when the @data
+ * is destroyed by g_byte_array_unref(). If @data is %NULL, it will only
+ * check whether TLS backend is able to fetch the data (e.g. whether @type
+ * is supported by the TLS backend). It does not guarantee that the data
+ * will be available though.  That could happen if TLS connection does not
+ * support @type or the binding data is not available yet due to additional
+ * negotiation or input required.
+ *
+ * Returns: %TRUE on success, %FALSE otherwise
+ * Since: 2.66
+ */
+
+
+/**
  * g_dtls_connection_get_database:
  * @conn: a #GDtlsConnection
  *
@@ -20468,8 +20493,8 @@
  * g_dtls_connection_get_peer_certificate:
  * @conn: a #GDtlsConnection
  *
- * Gets @conn's peer's certificate after the handshake has completed.
- * (It is not set during the emission of
+ * Gets @conn's peer's certificate after the handshake has completed
+ * or failed. (It is not set during the emission of
  * #GDtlsConnection::accept-certificate.)
  *
  * Returns: (transfer none) (nullable): @conn's peer's certificate, or %NULL
@@ -20482,8 +20507,8 @@
  * @conn: a #GDtlsConnection
  *
  * Gets the errors associated with validating @conn's peer's
- * certificate, after the handshake has completed. (It is not set
- * during the emission of #GDtlsConnection::accept-certificate.)
+ * certificate, after the handshake has completed or failed. (It is
+ * not set during the emission of #GDtlsConnection::accept-certificate.)
  *
  * Returns: @conn's peer's certificate errors
  * Since: 2.48
@@ -22296,7 +22321,7 @@
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
  *
- * Gets the value of a attribute, formated as a string.
+ * Gets the value of a attribute, formatted as a string.
  * This escapes things as needed to make the string valid
  * UTF-8.
  *
@@ -26716,7 +26741,7 @@
  *
  * This may not actually load and initialize all the types in each
  * module, some modules may be lazily loaded and initialized when
- * an extension point it implementes is used with e.g.
+ * an extension point it implements is used with e.g.
  * g_io_extension_point_get_extensions() or
  * g_io_extension_point_get_extension_by_name().
  *
@@ -26738,7 +26763,7 @@
  *
  * This may not actually load and initialize all the types in each
  * module, some modules may be lazily loaded and initialized when
- * an extension point it implementes is used with e.g.
+ * an extension point it implements is used with e.g.
  * g_io_extension_point_get_extensions() or
  * g_io_extension_point_get_extension_by_name().
  *
@@ -26987,7 +27012,7 @@
  * @callback: (scope async): a #GAsyncReadyCallback.
  * @user_data: (closure): user data passed to @callback.
  *
- * Asyncronously splice the output stream of @stream1 to the input stream of
+ * Asynchronously splice the output stream of @stream1 to the input stream of
  * @stream2, and splice the output stream of @stream2 to the input stream of
  * @stream1.
  *
@@ -29541,7 +29566,7 @@
  * g_network_service_get_scheme:
  * @srv: a #GNetworkService
  *
- * Get's the URI scheme used to resolve proxies. By default, the service name
+ * Gets the URI scheme used to resolve proxies. By default, the service name
  * is used as scheme.
  *
  * Returns: @srv's scheme name
@@ -32109,7 +32134,7 @@
  *
  * Sets the length of the stream to @offset. If the stream was previously
  * larger than @offset, the extra data is discarded. If the stream was
- * previouly shorter than @offset, it is extended with NUL ('\0') bytes.
+ * previously shorter than @offset, it is extended with NUL ('\0') bytes.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -38545,7 +38570,7 @@
  * g_task_return_error_if_cancelled() and then returned.
  *
  * This allows you to create a cancellable wrapper around an
- * uninterruptable function. The #GTaskThreadFunc just needs to be
+ * uninterruptible function. The #GTaskThreadFunc just needs to be
  * careful that it does not modify any externally-visible state after
  * it has been cancelled. To do that, the thread should call
  * g_task_set_return_on_cancel() again to (atomically) set
@@ -38634,7 +38659,7 @@
  * g_tcp_wrapper_connection_get_base_io_stream:
  * @conn: a #GTcpWrapperConnection
  *
- * Get's @conn's base #GIOStream
+ * Gets @conn's base #GIOStream
  *
  * Returns: (transfer none): @conn's base #GIOStream
  */
@@ -39161,6 +39186,16 @@
 
 
 /**
+ * g_tls_channel_binding_error_quark:
+ *
+ * Gets the TLS channel binding error quark.
+ *
+ * Returns: a #GQuark.
+ * Since: 2.66
+ */
+
+
+/**
  * g_tls_client_connection_copy_session_state:
  * @conn: a #GTlsClientConnection
  * @source: a #GTlsClientConnection
@@ -39350,6 +39385,33 @@
 
 
 /**
+ * g_tls_connection_get_channel_binding_data:
+ * @conn: a #GTlsConnection
+ * @type: #GTlsChannelBindingType type of data to fetch
+ * @data: (out callee-allocates) (optional) (transfer none): #GByteArray is
+ *        filled with the binding data, or %NULL
+ * @error: a #GError pointer, or %NULL
+ *
+ * Query the TLS backend for TLS channel binding data of @type for @conn.
+ *
+ * This call retrieves TLS channel binding data as specified in RFC
+ * [5056](https://tools.ietf.org/html/rfc5056), RFC
+ * [5929](https://tools.ietf.org/html/rfc5929), and related RFCs.  The
+ * binding data is returned in @data.  The @data is resized by the callee
+ * using #GByteArray buffer management and will be freed when the @data
+ * is destroyed by g_byte_array_unref(). If @data is %NULL, it will only
+ * check whether TLS backend is able to fetch the data (e.g. whether @type
+ * is supported by the TLS backend). It does not guarantee that the data
+ * will be available though.  That could happen if TLS connection does not
+ * support @type or the binding data is not available yet due to additional
+ * negotiation or input required.
+ *
+ * Returns: %TRUE on success, %FALSE otherwise
+ * Since: 2.66
+ */
+
+
+/**
  * g_tls_connection_get_database:
  * @conn: a #GTlsConnection
  *
@@ -39395,8 +39457,8 @@
  * g_tls_connection_get_peer_certificate:
  * @conn: a #GTlsConnection
  *
- * Gets @conn's peer's certificate after the handshake has completed.
- * (It is not set during the emission of
+ * Gets @conn's peer's certificate after the handshake has completed
+ * or failed. (It is not set during the emission of
  * #GTlsConnection::accept-certificate.)
  *
  * Returns: (transfer none) (nullable): @conn's peer's certificate, or %NULL
@@ -39409,8 +39471,8 @@
  * @conn: a #GTlsConnection
  *
  * Gets the errors associated with validating @conn's peer's
- * certificate, after the handshake has completed. (It is not set
- * during the emission of #GTlsConnection::accept-certificate.)
+ * certificate, after the handshake has completed or failed. (It is
+ * not set during the emission of #GTlsConnection::accept-certificate.)
  *
  * Returns: @conn's peer's certificate errors
  * Since: 2.28
@@ -42352,7 +42414,7 @@
  * When calling with value_data == NULL (to get data size without getting
  * the data itself) remember that returned size corresponds to possibly
  * unterminated string data (if value is some kind of string), because
- * termination cannot be checked and fixed unless the data is retreived
+ * termination cannot be checked and fixed unless the data is retrieved
  * too.
  *
  * When not %NULL, @mui_dll_dirs indicates that `RegLoadMUIStringW()` API
