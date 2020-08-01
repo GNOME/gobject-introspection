@@ -217,6 +217,162 @@
 
 
 /**
+ * GAppInfo:can-delete:
+ *
+ * %TRUE if it makes sense to call g_app_info_delete() for this
+ * #GAppInfo.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:commandline: (nullable)
+ *
+ * The commandline with which the application will be launched.
+ *
+ * In #GAppInfos created from [desktop files](https://specifications.freedesktop.org/desktop-entry-spec/latest/),
+ * this is the value of the `Exec` key.
+ *
+ * May be %NULL, depending on how the #GAppInfo has been constructed.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:description: (nullable)
+ *
+ * A human-readable description of the application.
+ *
+ * In #GAppInfos created from [desktop files](https://specifications.freedesktop.org/desktop-entry-spec/latest/),
+ * this is the value of the `Comment` key.
+ *
+ * May be %NULL, depending on how the #GAppInfo has been constructed.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:display-name: (nullable)
+ *
+ * The display name of the application.
+ *
+ * This string is meant to be displayed to the user; it is often more
+ * descriptive than #GAppInfo:name.
+ *
+ * In #GAppInfos created from [desktop files](https://specifications.freedesktop.org/desktop-entry-spec/latest/),
+ * this is the value of the `X-GNOME-FullName` key, falling back to the `Name` key.
+ *
+ * May be %NULL, depending on how the #GAppInfo has been constructed.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:executable: (nullable)
+ *
+ * The executable's name for the application.
+ *
+ * In #GAppInfos created from [desktop files](https://specifications.freedesktop.org/desktop-entry-spec/latest/),
+ * this is the first word of the `Exec` key.
+ *
+ * May be %NULL, depending on how the #GAppInfo has been constructed.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:icon: (nullable)
+ *
+ * The icon for the application.
+ *
+ * May be %NULL, depending on how the #GAppInfo has been constructed.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:id: (nullable)
+ *
+ * The ID of an application -- a string that identifies the application.
+ *
+ * The exact format of the ID is platform dependent. For instance,
+ * on Unix this is the desktop file ID from the xdg menu specification.
+ *
+ * May be %NULL, depending on how the GAppInfo has been constructed.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:name:
+ *
+ * The name of the application.
+ *
+ * In #GAppInfos created from [desktop files](https://specifications.freedesktop.org/desktop-entry-spec/latest/),
+ * this is the value of the `Name` key.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:should-show:
+ *
+ * %TRUE if the application should be shown in menus that list
+ * available applications.
+ *
+ * In #GAppInfos created from [desktop files](https://specifications.freedesktop.org/desktop-entry-spec/latest/),
+ * this is the (inverted) value of the `NoDisplay` key.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:supported-types:
+ *
+ * The list of content types that the application claims to support.
+ * Note that this property does not take into account associations
+ * added with g_app_info_add_supports_type(), but only those exported
+ * directly by the application.
+ *
+ * In #GAppInfos created from [desktop files](https://specifications.freedesktop.org/desktop-entry-spec/latest/),
+ * this is the value of the `MimeType` key.
+ *
+ * May be %NULL, depending on how the #GAppInfo has been constructed.
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:supports-files:
+ *
+ * %TRUE if the application supports files as arguments when launched.
+ * See g_app_info_launch_uris().
+ *
+ * Since: 2.66
+ */
+
+
+/**
+ * GAppInfo:supports-uris:
+ *
+ * %TRUE if the application supports reading files and directories
+ * from URIs when launched. See g_app_info_launch_uris().
+ *
+ * Since: 2.66
+ */
+
+
+/**
  * GAppInfoMonitor:
  *
  * The only thing you can do with this is to get it via
@@ -5054,6 +5210,7 @@
  *   GTask *task;
  *
  *   task = g_task_new (initable, cancellable, callback, user_data);
+ *   g_task_set_name (task, G_STRFUNC);
  *
  *   switch (self->priv->state)
  *     {
@@ -22516,9 +22673,9 @@
  * g_file_info_get_display_name:
  * @info: a #GFileInfo.
  *
- * Gets a display name for a file.
+ * Gets a display name for a file. This is guaranteed to always be set.
  *
- * Returns: a string containing the display name.
+ * Returns: (not nullable): a string containing the display name.
  */
 
 
@@ -22627,9 +22784,9 @@
  * g_file_info_get_name:
  * @info: a #GFileInfo.
  *
- * Gets the name for a file.
+ * Gets the name for a file. This is guaranteed to always be set.
  *
- * Returns: (type filename): a string containing the file name.
+ * Returns: (type filename) (not nullable): a string containing the file name.
  */
 
 

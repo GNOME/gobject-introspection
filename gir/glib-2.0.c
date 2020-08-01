@@ -2587,7 +2587,10 @@
  *   g_assert_error(err, G_URI_ERROR, G_URI_ERROR_BAD_QUERY);
  * ]|
  *
- * (you should pass %G_URI_FLAGS_ENCODED if you need to handle that case manually).
+ * You should pass %G_URI_FLAGS_ENCODED or %G_URI_FLAGS_ENCODED_QUERY if you
+ * need to handle that case manually. In particular, if the query string
+ * contains '=' characters that are '%'-encoded, you should let
+ * g_uri_parse_params() do the decoding once of the query.
  *
  * #GUri is immutable once constructed, and can safely be accessed from
  * multiple threads. Its reference counting is atomic.
@@ -16571,11 +16574,43 @@
  * @length: length of @contents, or -1 if @contents is a nul-terminated string
  * @error: return location for a #GError, or %NULL
  *
+ * Writes all of @contents to a file named @filename. This is a convenience
+ * wrapper around calling g_file_set_contents() with `flags` set to
+ * `G_FILE_SET_CONTENTS_CONSISTENT | G_FILE_SET_CONTENTS_ONLY_EXISTING` and
+ * `mode` set to `0666`.
+ *
+ * Returns: %TRUE on success, %FALSE if an error occurred
+ * Since: 2.8
+ */
+
+
+/**
+ * g_file_set_contents_full:
+ * @filename: (type filename): name of a file to write @contents to, in the GLib file name
+ *   encoding
+ * @contents: (array length=length) (element-type guint8): string to write to the file
+ * @length: length of @contents, or -1 if @contents is a nul-terminated string
+ * @flags: flags controlling the safety vs speed of the operation
+ * @mode: file mode, as passed to `open()`; typically this will be `0666`
+ * @error: return location for a #GError, or %NULL
+ *
  * Writes all of @contents to a file named @filename, with good error checking.
  * If a file called @filename already exists it will be overwritten.
  *
- * This write is atomic in the sense that it is first written to a temporary
- * file which is then renamed to the final name. Notes:
+ * @flags control the properties of the write operation: whether it’s atomic,
+ * and what the tradeoff is between returning quickly or being resilient to
+ * system crashes.
+ *
+ * As this function performs file I/O, it is recommended to not call it anywhere
+ * where blocking would cause problems, such as in the main loop of a graphical
+ * application. In particular, if @flags has any value other than
+ * %G_FILE_SET_CONTENTS_NONE then this function may call `fsync()`.
+ *
+ * If %G_FILE_SET_CONTENTS_CONSISTENT is set in @flags, the operation is atomic
+ * in the sense that it is first written to a temporary file which is then
+ * renamed to the final name.
+ *
+ * Notes:
  *
  * - On UNIX, if @filename already exists hard links to @filename will break.
  *   Also since the file is recreated, existing permissions, access control
@@ -16583,15 +16618,17 @@
  *   the link itself will be replaced, not the linked file.
  *
  * - On UNIX, if @filename already exists and is non-empty, and if the system
- *   supports it (via a journalling filesystem or equivalent), the fsync()
- *   call (or equivalent) will be used to ensure atomic replacement: @filename
+ *   supports it (via a journalling filesystem or equivalent), and if
+ *   %G_FILE_SET_CONTENTS_CONSISTENT is set in @flags, the `fsync()` call (or
+ *   equivalent) will be used to ensure atomic replacement: @filename
  *   will contain either its old contents or @contents, even in the face of
  *   system power loss, the disk being unsafely removed, etc.
  *
  * - On UNIX, if @filename does not already exist or is empty, there is a
  *   possibility that system power loss etc. after calling this function will
  *   leave @filename empty or full of NUL bytes, depending on the underlying
- *   filesystem.
+ *   filesystem, unless %G_FILE_SET_CONTENTS_DURABLE and
+ *   %G_FILE_SET_CONTENTS_CONSISTENT are set in @flags.
  *
  * - On Windows renaming a file will not remove an existing file with the
  *   new name, so on Windows there is a race condition between the existing
@@ -16608,8 +16645,12 @@
  * Note that the name for the temporary file is constructed by appending up
  * to 7 characters to @filename.
  *
+ * If the file didn’t exist before and is created, it will be given the
+ * permissions from @mode. Otherwise, the permissions of the existing file may
+ * be changed to @mode depending on @flags, or they may remain unchanged.
+ *
  * Returns: %TRUE on success, %FALSE if an error occurred
- * Since: 2.8
+ * Since: 2.66
  */
 
 
@@ -16872,7 +16913,7 @@
  *
  * As `close()` and `fclose()` are part of the C library, this implies that it is
  * currently impossible to close a file if the application C library and the C library
- * used by GLib are different. Convenience functions like g_file_set_contents()
+ * used by GLib are different. Convenience functions like g_file_set_contents_full()
  * avoid this problem.
  *
  * Returns: A `FILE*` if the file was successfully opened, or %NULL if
@@ -16993,9 +17034,12 @@
  * g_fsync:
  * @fd: a file descriptor
  *
- * A wrapper for the POSIX fsync() function (_commit() on Windows).
- * The fsync() function is used to synchronize a file's in-core
+ * A wrapper for the POSIX `fsync()` function. On Windows, `_commit()` will be
+ * used. On macOS, `fcntl(F_FULLFSYNC)` will be used.
+ * The `fsync()` function is used to synchronize a file's in-core
  * state with that of the disk.
+ *
+ * This wrapper will handle retrying on `EINTR`.
  *
  * See the C library manual for more details about fsync().
  *
@@ -20245,7 +20289,9 @@
  * @error: a pointer to a %NULL #GError, or %NULL
  *
  * Writes the contents of @key_file to @filename using
- * g_file_set_contents().
+ * g_file_set_contents(). If you need stricter guarantees about durability of
+ * the written file than are provided by g_file_set_contents(), use
+ * g_file_set_contents_full() with the return value of g_key_file_to_data().
  *
  * This function can fail for any of the reasons that
  * g_file_set_contents() may fail.
@@ -32131,7 +32177,8 @@
  * g_strsplit_set:
  * @string: The string to be tokenized
  * @delimiters: A nul-terminated string containing bytes that are used
- *     to split the string.
+ *     to split the string (it can accept an empty string, which will result
+ *     in no string splitting).
  * @max_tokens: The maximum number of tokens to split @string into.
  *     If this is less than 1, the string is split completely
  *
@@ -32426,8 +32473,11 @@
  * @data_test: (scope async): the actual test function
  * @data_teardown: (scope async): the function to teardown the fixture data
  *
- * Create a new #GTestCase, named @test_name, this API is fairly
- * low level, calling g_test_add() or g_test_add_func() is preferable.
+ * Create a new #GTestCase, named @test_name.
+ *
+ * This API is fairly low level, and calling g_test_add() or g_test_add_func()
+ * is preferable.
+ *
  * When this test is executed, a fixture structure of size @data_size
  * will be automatically allocated and filled with zeros. Then @data_setup is
  * called to initialize the fixture. After fixture setup, the actual test
@@ -32436,10 +32486,10 @@
  * after that the memory is automatically released by the test framework.
  *
  * Splitting up a test run into fixture setup, test function and
- * fixture teardown is most useful if the same fixture is used for
+ * fixture teardown is most useful if the same fixture type is used for
  * multiple tests. In this cases, g_test_create_case() will be
- * called with the same fixture, but varying @test_name and
- * @data_test arguments.
+ * called with the same type of fixture (the @data_size argument), but varying
+ * @test_name and @data_test arguments.
  *
  * Returns: a newly allocated #GTestCase.
  * Since: 2.16
@@ -33582,6 +33632,10 @@
  * newly created or reused thread now executes the function @func
  * with the two arguments. The first one is the parameter to
  * g_thread_pool_push() and the second one is @user_data.
+ *
+ * Pass g_get_num_processors() to @max_threads to create as many threads as
+ * there are logical processors on the system. This will not pin each thread to
+ * a specific processor.
  *
  * The parameter @exclusive determines whether the thread pool owns
  * all threads exclusive or shares them with other thread pools.
@@ -36111,16 +36165,20 @@
  * @params: a `%`-encoded string containing "attribute=value"
  *   parameters
  * @length: the length of @params, or -1 if it is NUL-terminated
- * @separator: the separator character between parameters.
- *   (usually ';', but sometimes '&')
- * @case_insensitive: whether parameter names are case insensitive
+ * @separators: the separator byte character set between parameters. (usually
+ *   "&", but sometimes ";" or both "&;"). Note that this function works on
+ *   bytes not characters, so it can't be used to delimit UTF-8 strings for
+ *   anything but ASCII characters. You may pass an empty set, in which case
+ *   no splitting will occur.
+ * @flags: flags to modify the way the parameters are handled.
+ * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Many URI schemes include one or more attribute/value pairs as part of the URI
  * value. This method can be used to parse them into a hash table.
  *
  * The @params string is assumed to still be `%`-encoded, but the returned
  * values will be fully decoded. (Thus it is possible that the returned values
- * may contain '=' or @separator, if the value was encoded in the input.)
+ * may contain '=' or @separators, if the value was encoded in the input.)
  * Invalid `%`-encoding is treated as with the non-%G_URI_FLAGS_PARSE_STRICT
  * rules for g_uri_parse(). (However, if @params is the path or query string
  * from a #GUri that was parsed with %G_URI_FLAGS_PARSE_STRICT and
@@ -36129,7 +36187,7 @@
  *
  * Returns: (transfer full) (element-type utf8 utf8): a hash table of
  * attribute/value pairs. Both names and values will be fully-decoded. If
- * @params cannot be parsed (eg, it contains two @separator characters in a
+ * @params cannot be parsed (eg, it contains two @separators characters in a
  * row), then %NULL is returned.
  * Since: 2.66
  */
@@ -36362,15 +36420,24 @@
  * @escaped_string: A URI-escaped string
  * @length: the length of @escaped_string to escape, or -1 if it
  *   is NUL-terminated.
+ * @illegal_characters: (nullable): a string of illegal characters
+ *   not to be allowed, or %NULL.
+ * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Unescapes a segment of an escaped string as binary data.
  *
  * Note that in contrast to g_uri_unescape_string(), this does allow
  * `NUL` bytes to appear in the output.
  *
- * Returns: (transfer full): an unescaped version of @escaped_string
- * or %NULL on error. The returned #GBytes should be unreffed when no
- * longer needed.
+ * If any of the characters in @illegal_characters or the NUL
+ * character appears as an escaped character in @escaped_string, then
+ * that is an error and %NULL will be returned. This is useful if you
+ * want to avoid for instance having a slash being expanded in an
+ * escaped path element, which might confuse pathname handling.
+ *
+ * Returns: (transfer full): an unescaped version of @escaped_string or %NULL on
+ * error (if decoding failed, using %G_URI_ERROR_MISC error code). The returned
+ * #GBytes should be unreffed when no longer needed.
  * Since: 2.66
  */
 
@@ -36390,6 +36457,9 @@
  * that is an error and %NULL will be returned. This is useful if you
  * want to avoid for instance having a slash being expanded in an
  * escaped path element, which might confuse pathname handling.
+ *
+ * Note: `NUL` byte is not accepted in the output, in contrast to
+ * g_uri_unescape_bytes().
  *
  * Returns: an unescaped version of @escaped_string or %NULL on error.
  * The returned string should be freed when no longer needed.  As a
