@@ -141,6 +141,15 @@ Error domain quarks should always be named in the form
     GQuark foo_bar_errors_quark();
 
 
+Don't have properties and methods with the same name
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some bindings for dynamic languages expose GObject properties and methods in the
+same way, as properties on an object instance. So don't make a GObject property
+with the same name as a method, e.g. a property named ``add-feature`` on a class
+named ``SoupSession`` which also has a method ``soup_session_add_feature()``.
+
+
 Custom code in constructors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
