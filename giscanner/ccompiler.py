@@ -163,9 +163,11 @@ class CCompiler(object):
                 elif os.environ.get('VCInstallDir'):
                     os.environ['MSSdk'] = os.environ.get('VCInstallDir')
 
-            self.compiler_cmd = 'cl.exe'
-
-            self._cflags_no_deprecation_warnings = "-wd4996"
+            if self.compiler.check_is_clang_cl():
+                self.compiler_cmd = os.environ.get('CC').split()[0]
+            else:
+                self.compiler_cmd = 'cl.exe'
+                self._cflags_no_deprecation_warnings = "-wd4996"
         else:
             if (isinstance(self.compiler, Mingw32CCompiler)):
                 self.compiler_cmd = self.compiler.compiler[0]
@@ -263,7 +265,7 @@ class CCompiler(object):
         # Define these macros when using Visual C++ to silence many warnings,
         # and prevent stepping on many Visual Studio-specific items, so that
         # we don't have to handle them specifically in scannerlexer.l
-        if self.check_is_msvc():
+        if self.check_is_msvc() and not self.compiler.check_is_clang_cl():
             macros.append(('_USE_DECLSPECS_FOR_SAL', None))
             macros.append(('_CRT_SECURE_NO_WARNINGS', None))
             macros.append(('_CRT_NONSTDC_NO_WARNINGS', None))
@@ -318,7 +320,7 @@ class CCompiler(object):
         args = []
         libsearch = []
 
-        # When we are using Visual C++...
+        # When we are using Visual C++ or clang-cl...
         if self.check_is_msvc():
             # The search path of the .lib's on Visual C++
             # is dependent on the LIB environmental variable,
@@ -336,7 +338,7 @@ class CCompiler(object):
             args.append('dumpbin.exe')
             args.append('-symbols')
 
-        # When we are not using Visual C++ (i.e. we are using GCC)...
+        # When we are not using Visual C++ nor clang-cl (i.e. we are using GCC)...
         else:
             libtool = utils.get_libtool_command(options)
             if libtool:
