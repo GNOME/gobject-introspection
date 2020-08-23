@@ -7593,6 +7593,13 @@
  * set to the full path to the gdk-pixbuf-pixdata executable; otherwise the resource compiler will
  * abort.
  *
+ * `json-stripblanks` which will use the `json-glib-format` command to strip
+ * ignorable whitespace from the JSON file. For this to work, the
+ * `JSON_GLIB_FORMAT` environment variable must be set to the full path to the
+ * `json-glib-format` executable, or it must be in the `PATH`;
+ * otherwise the preprocessing step is skipped. In addition, at least version
+ * 1.6 of `json-glib-format` is required.
+ *
  * Resource files will be exported in the GResource namespace using the
  * combination of the given `prefix` and the filename from the `file` element.
  * The `alias` attribute can be used to alter the filename to expose them at a
@@ -21487,6 +21494,21 @@
  * Deletes a file. If the @file is a directory, it will only be
  * deleted if it is empty. This has the same semantics as g_unlink().
  *
+ * If @file doesn’t exist, %G_IO_ERROR_NOT_FOUND will be returned. This allows
+ * for deletion to be implemented avoiding
+ * [time-of-check to time-of-use races](https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use):
+ * |[
+ * g_autoptr(GError) local_error = NULL;
+ * if (!g_file_delete (my_file, my_cancellable, &local_error) &&
+ *     !g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND))
+ *   {
+ *     // deletion failed for some reason other than the file not existing:
+ *     // so report the error
+ *     g_warning ("Failed to delete %s: %s",
+ *                g_file_peek_path (my_file), local_error->message);
+ *   }
+ * ]|
+ *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
@@ -25188,7 +25210,9 @@
  * Sends @file to the "Trashcan", if possible. This is similar to
  * deleting it, but the user can recover it before emptying the trashcan.
  * Not all file systems support trashing, so this call can return the
- * %G_IO_ERROR_NOT_SUPPORTED error.
+ * %G_IO_ERROR_NOT_SUPPORTED error. Since GLib 2.66, the `x-gvfs-notrash` unix
+ * mount option can be used to disable g_file_trash() support for certain
+ * mounts, the %G_IO_ERROR_NOT_SUPPORTED error will be returned in that case.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -36317,8 +36341,8 @@
 /**
  * g_socket_receive:
  * @socket: a #GSocket
- * @buffer: (array length=size) (element-type guint8): a buffer to
- *     read data into (which should be at least @size bytes long).
+ * @buffer: (array length=size) (element-type guint8) (out caller-allocates):
+ *     a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read from the socket
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
@@ -36358,8 +36382,8 @@
  * @socket: a #GSocket
  * @address: (out) (optional): a pointer to a #GSocketAddress
  *     pointer, or %NULL
- * @buffer: (array length=size) (element-type guint8): a buffer to
- *     read data into (which should be at least @size bytes long).
+ * @buffer: (array length=size) (element-type guint8) (out caller-allocates):
+ *     a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read from the socket
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
@@ -36533,8 +36557,8 @@
 /**
  * g_socket_receive_with_blocking:
  * @socket: a #GSocket
- * @buffer: (array length=size) (element-type guint8): a buffer to
- *     read data into (which should be at least @size bytes long).
+ * @buffer: (array length=size) (element-type guint8) (out caller-allocates):
+ *     a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read from the socket
  * @blocking: whether to do blocking or non-blocking I/O
  * @cancellable: (nullable): a %GCancellable or %NULL
@@ -41240,6 +41264,24 @@
  *
  * Since: 2.18
  * Deprecated: 2.44: This function does nothing.  Don't call it.
+ */
+
+
+/**
+ * g_unix_mount_point_at:
+ * @mount_path: (type filename): path for a possible unix mount point.
+ * @time_read: (out) (optional): guint64 to contain a timestamp.
+ *
+ * Gets a #GUnixMountPoint for a given mount path. If @time_read is set, it
+ * will be filled with a unix timestamp for checking if the mount points have
+ * changed since with g_unix_mount_points_changed_since().
+ *
+ * If more mount points have the same mount path, the last matching mount point
+ * is returned.
+ *
+ * Returns: (transfer full) (nullable): a #GUnixMountPoint, or %NULL if no match
+ * is found.
+ * Since: 2.66
  */
 
 
