@@ -3445,6 +3445,8 @@ gi_marshalling_tests_gvalue_in_with_modification (GValue *value)
 void
 gi_marshalling_tests_gvalue_in_enum (GValue *value)
 {
+  if (!G_VALUE_HOLDS_ENUM (value))
+    g_critical ("Expected enum, got %s", G_VALUE_TYPE_NAME (value));
   g_assert (g_value_get_enum (value) == GI_MARSHALLING_TESTS_ENUM_VALUE3);
 }
 
@@ -3455,6 +3457,8 @@ gi_marshalling_tests_gvalue_in_enum (GValue *value)
 void
 gi_marshalling_tests_gvalue_in_flags (GValue *value)
 {
+  if (!G_VALUE_HOLDS_FLAGS (value))
+    g_critical ("Expected flags, got %s", G_VALUE_TYPE_NAME (value));
   g_assert_cmpint (g_value_get_flags (value), ==, GI_MARSHALLING_TESTS_FLAGS_VALUE3);
 }
 
