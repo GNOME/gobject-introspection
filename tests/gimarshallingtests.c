@@ -1523,6 +1523,20 @@ gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *v, gint length)
 }
 
 /**
+ * gi_marshalling_tests_array_flags_in:
+ * @flags: (array length=length) (transfer none):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_flags_in (GIMarshallingTestsFlags *v, gint length)
+{
+  g_assert_cmpint (length, ==, 3);
+  g_assert_cmpint (v[0], ==, GI_MARSHALLING_TESTS_FLAGS_VALUE1);
+  g_assert_cmpint (v[1], ==, GI_MARSHALLING_TESTS_FLAGS_VALUE2);
+  g_assert_cmpint (v[2], ==, GI_MARSHALLING_TESTS_FLAGS_VALUE3);
+}
+
+/**
  * gi_marshalling_tests_array_in_guint64_len:
  * @ints: (array length=length) (transfer none):
  * @length:
@@ -3432,6 +3446,16 @@ void
 gi_marshalling_tests_gvalue_in_enum (GValue *value)
 {
   g_assert (g_value_get_enum (value) == GI_MARSHALLING_TESTS_ENUM_VALUE3);
+}
+
+/**
+ * gi_marshalling_tests_gvalue_in_flags:
+ * @value: (transfer none):
+ */
+void
+gi_marshalling_tests_gvalue_in_flags (GValue *value)
+{
+  g_assert_cmpint (g_value_get_flags (value), ==, GI_MARSHALLING_TESTS_FLAGS_VALUE3);
 }
 
 /**

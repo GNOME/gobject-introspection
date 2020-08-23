@@ -749,6 +749,9 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length);
 
 _GI_TEST_EXTERN
+void gi_marshalling_tests_array_flags_in (GIMarshallingTestsFlags *flags, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_guint64_len (const gint *ints, guint64 length);
 
 _GI_TEST_EXTERN
@@ -1116,6 +1119,9 @@ void gi_marshalling_tests_gvalue_in_with_modification (GValue *value);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_in_enum (GValue *value);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_gvalue_in_flags (GValue *value);
 
 
 _GI_TEST_EXTERN
