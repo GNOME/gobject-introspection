@@ -4767,6 +4767,33 @@ gi_marshalling_tests_object_vfunc_out_enum (GIMarshallingTestsObject *self, GIMa
   g_assert_cmpint (local, ==, 0x12345678);
 }
 
+/**
+ * gi_marshalling_tests_object_vfunc_return_flags:
+ */
+GIMarshallingTestsFlags
+gi_marshalling_tests_object_vfunc_return_flags (GIMarshallingTestsObject *self)
+{
+  /* make sure that local variables don't get smashed */
+  GIMarshallingTestsFlags return_value;
+  glong local = 0x12345678;
+  return_value = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_flags (self);
+  g_assert_cmpint (local, ==, 0x12345678);
+  return return_value;
+}
+
+/**
+ * gi_marshalling_tests_object_vfunc_out_flags:
+ * @flags: (out):
+ */
+void
+gi_marshalling_tests_object_vfunc_out_flags (GIMarshallingTestsObject *self, GIMarshallingTestsFlags *flags)
+{
+  /* make sure that local variables don't get smashed */
+  gulong local = 0x12345678;
+  GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_out_flags (self, flags);
+  g_assert_cmpuint (local, ==, 0x12345678);
+}
+
 
 /* NOTE:
  *
