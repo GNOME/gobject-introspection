@@ -109,3 +109,12 @@ the following so that we ensure the manifests are embedded to the built DLLs and
 
   for /r %f in (*.dll.manifest) do if exist $(PREFIX)\bin\%~nf mt /manifest %f /outputresource:$(PREFIX)\bin\%~nf;2
   for /r %f in (*.exe.manifest) do if exist $(PREFIX)\bin\%~nf mt /manifest %f /outputresource:$(PREFIX)\bin\%~nf;1
+
+Additional notes on using clang-cl (LLVM/CLang's Visual Studio compiler emulation)
+----------------------------------------------------------------------------------
+Support has been added to build GObject-Introspection with clang-cl, specifically for
+running g-ir-scanner with clang-cl and lld-link as the compiler and linker.  To enable
+such support, you need to set *both* the environment variables CC and CXX to clang-cl
+prior to building GObject-Introspection or running g-ir-scanner.  This is in line with
+building with clang-cl in place of using the stock Visual Studio compiler to perform
+builds with the Meson build system.
