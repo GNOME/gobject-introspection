@@ -4966,16 +4966,20 @@
  *
  * To create a new array use g_array_new().
  *
- * To add elements to an array, use g_array_append_val(),
- * g_array_append_vals(), g_array_prepend_val(), g_array_prepend_vals(),
- * g_array_insert_val() and g_array_insert_vals().
+ * To add elements to an array with a cost of O(n) at worst, use
+ * g_array_append_val(), g_array_append_vals(), g_array_prepend_val(),
+ * g_array_prepend_vals(), g_array_insert_val() and g_array_insert_vals().
  *
- * To access an element of an array (to read it or write it),
+ * To access an element of an array in O(1) (to read it or to write it),
  * use g_array_index().
  *
  * To set the size of an array, use g_array_set_size().
  *
  * To free an array, use g_array_unref() or g_array_free().
+ *
+ * All the sort functions are internally calling a quick-sort (or similar)
+ * function with an average cost of O(n log(n)) and a worst case
+ * cost of O(n^2).
  *
  * Here is an example that stores integers in a #GArray:
  * |[<!-- language="C" -->
@@ -6617,13 +6621,14 @@
  *     given a key the value can be found quickly
  *
  * A #GHashTable provides associations between keys and values which is
- * optimized so that given a key, the associated value can be found
- * very quickly.
+ * optimized so that given a key, the associated value can be found,
+ * inserted or removed in amortized O(1). All operations going through
+ * each element take O(n) time (list all keys/values, table resize, etc.).
  *
  * Note that neither keys nor values are copied when inserted into the
  * #GHashTable, so they must exist for the lifetime of the #GHashTable.
  * This means that the use of static strings is OK, but temporary
- * strings (i.e. those created in buffers and those returned by GTK+
+ * strings (i.e. those created in buffers and those returned by GTK
  * widgets) should be copied with g_strdup() before being inserted.
  *
  * If keys or values are dynamically allocated, you must be careful to
@@ -6942,7 +6947,12 @@
  * @short_description: linked lists that can be iterated over in both directions
  *
  * The #GList structure and its associated functions provide a standard
- * doubly-linked list data structure.
+ * doubly-linked list data structure. The benefit of this data-structure
+ * is to provide insertion/deletion operations in O(1) complexity where
+ * access/search operations are in O(n). The benefit of #GList over
+ * #GSList (singly linked list) is that the worst case on access/search
+ * operations is divided by two which comes at a cost in space as we need
+ * to retain two pointers in place of one.
  *
  * Each element in the list contains a piece of data, together with
  * pointers which link to the previous and next elements in the list.
@@ -7022,7 +7032,12 @@
  * @short_description: linked lists that can be iterated in one direction
  *
  * The #GSList structure and its associated functions provide a
- * standard singly-linked list data structure.
+ * standard singly-linked list data structure. The benefit of this
+ * data-structure is to provide insertion/deletion operations in O(1)
+ * complexity where access/search operations are in O(n). The benefit
+ * of #GSList over #GList (doubly linked list) is that they are lighter
+ * in space as they only need to retain one pointer but it double the
+ * cost of the worst case access/search operations.
  *
  * Each element in the list contains a piece of data, together with a
  * pointer which links to the next element in the list. Using this
@@ -7748,7 +7763,8 @@
  *
  * The #GQueue structure and its associated functions provide a standard
  * queue data structure. Internally, GQueue uses the same data structure
- * as #GList to store elements.
+ * as #GList to store elements with the same complexity over
+ * insertion/deletion (O(1)) and access/search (O(n)) operations.
  *
  * The data contained in each element can be either integer values, by
  * using one of the [Type Conversion Macros][glib-Type-Conversion-Macros],
@@ -8064,7 +8080,10 @@
  *
  * The #GSequence data structure has the API of a list, but is
  * implemented internally with a balanced binary tree. This means that
- * it is possible to maintain a sorted list of n elements in time O(n log n).
+ * most of the operations  (access, search, insertion, deletion, ...) on
+ * #GSequence are O(log(n)) in average and O(n) in worst case for time
+ * complexity. But, note that maintaining a balanced sorted list of n
+ * elements is done in time O(n log(n)).
  * The data contained in each element can be either integer values, by using
  * of the [Type Conversion Macros][glib-Type-Conversion-Macros], or simply
  * pointers to any type of data.
@@ -8666,11 +8685,17 @@
  *
  * The #GTree structure and its associated functions provide a sorted
  * collection of key/value pairs optimized for searching and traversing
- * in order.
+ * in order. This means that most of the operations  (access, search,
+ * insertion, deletion, ...) on #GTree are O(log(n)) in average and O(n)
+ * in worst case for time complexity. But, note that maintaining a
+ * balanced sorted #GTree of n elements is done in time O(n log(n)).
  *
  * To create a new #GTree use g_tree_new().
  *
- * To insert a key/value pair into a #GTree use g_tree_insert().
+ * To insert a key/value pair into a #GTree use g_tree_insert()
+ * (O(n log(n))).
+ *
+ * To remove a key/value pair use g_tree_remove() (O(n log(n))).
  *
  * To look up the value corresponding to a given key, use
  * g_tree_lookup() and g_tree_lookup_extended().
@@ -8680,8 +8705,6 @@
  *
  * To traverse a #GTree, calling a function for each node visited in
  * the traversal, use g_tree_foreach().
- *
- * To remove a key/value pair use g_tree_remove().
  *
  * To destroy a #GTree, use g_tree_destroy().
  */
@@ -34701,6 +34724,9 @@
  *
  * The tree is automatically 'balanced' as new key/value pairs are added,
  * so that the distance from the root to every leaf is as small as possible.
+ * The cost of maintaining a balanced tree while inserting new key/value
+ * result in a O(n log(n)) operation where most of the other operations
+ * are O(log(n)).
  */
 
 
@@ -34813,6 +34839,10 @@
  * are freed using the supplied destroy functions, otherwise you have to
  * make sure that any dynamically allocated values are freed yourself.
  * If the key does not exist in the #GTree, the function does nothing.
+ *
+ * The cost of maintaining a balanced tree while removing a key/value
+ * result in a O(n log(n)) operation where most of the other operations
+ * are O(log(n)).
  *
  * Returns: %TRUE if the key was found (prior to 2.8, this function
  *     returned nothing)
