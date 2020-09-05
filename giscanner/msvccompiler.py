@@ -36,6 +36,7 @@ def get_msvc_compiler():
 class MSVCCompiler(distutils.msvccompiler.MSVCCompiler):
 
     def __init__(self, verbose=0, dry_run=0, force=0):
+        super(distutils.msvccompiler.MSVCCompiler, self).__init__()
         CCompiler.__init__(self, verbose, dry_run, force)
         self.__paths = []
         self.__arch = None  # deprecated name
@@ -44,6 +45,16 @@ class MSVCCompiler(distutils.msvccompiler.MSVCCompiler):
                 self.__version = distutils.msvc9compiler.VERSION
         self.initialized = False
         self.preprocess_options = None
+        if self.check_is_clang_cl():
+            cc_cmd = os.environ.get('CC').split()
+            self.cc = cc_cmd[0]
+            self.linker = 'lld-link'
+            self.compile_options = []
+            # Add any arguments added to clang-cl to self.compile_options
+            # such as cross-compilation flags
+            if len(cc_cmd) > 1:
+                self.compile_options.extend(cc_cmd[1:])
+            self.initialized = True
 
     def preprocess(self,
                    source,
@@ -98,3 +109,14 @@ class MSVCCompiler(distutils.msvccompiler.MSVCCompiler):
             return filename[filename.rfind('\\') + 1:]
         else:
             return filename[filename.rfind('\\') + 1:filename.rfind('.')]
+
+    def check_is_clang_cl(self):
+        # To run g-ir-scanner under Windows using clang-cl, set both `CC` and
+        # `CXX` to `clang-cl [<arch_args>]` and ensure that clang-cl.exe and
+        # lld-link.exe are in the PATH in a Visual Studio command prompt.  Note
+        # that the Windows SDK is still needed in this case.  This is in line
+        # with what is done in Meson
+        return (os.environ.get('CC') is not None and
+                os.environ.get('CXX') is not None and
+                os.environ.get('CC').split()[0] == 'clang-cl' and
+                os.environ.get('CXX').split()[0] == 'clang-cl')
