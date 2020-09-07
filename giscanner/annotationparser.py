@@ -1357,7 +1357,12 @@ class GtkDocCommentBlockParser(object):
                 result = SECTION_RE.match(line)
 
                 if result:
-                    identifier_name = 'SECTION:%s' % (result.group('section_name'), )
+                    # Some projects use kebab-case or CamelCase for section
+                    # names. Convert them all to flat case so we can match
+                    # them easily later on.
+                    identifier_name = 'SECTION:%s' % (result.group('section_name')
+                                                            .replace("-", "")
+                                                            .lower(), )
                     identifier_delimiter = None
                     identifier_fields = None
                     identifier_fields_start = None
