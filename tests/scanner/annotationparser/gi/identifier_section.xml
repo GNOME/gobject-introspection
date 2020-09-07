@@ -329,4 +329,38 @@ returns nothing.</description>
  */</output>
 </test>
 
+
+<test>
+  <!--
+    Section name in different case styles
+    See https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/350
+  -->
+  <input>/**
+ * SECTION:Meep-App
+ * @short_description: module for gtk-doc unit test
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:meepapp</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>module for gtk-doc unit test</description>
+        </parameter>
+      </parameters>
+      <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
+    </docblock>
+  </parser>
+  <output>/**
+ * SECTION:meepapp
+ * @short_description: module for gtk-doc unit test
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</output>
+</test>
+
 </tests>
