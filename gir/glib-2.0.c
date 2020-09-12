@@ -5557,7 +5557,7 @@
 
 
 /**
- * SECTION:date-time
+ * SECTION:datetime
  * @title: GDateTime
  * @short_description: a structure representing Date and Time
  * @see_also: #GTimeZone
@@ -8678,7 +8678,7 @@
 
 
 /**
- * SECTION:trees-binary
+ * SECTION:treesbinary
  * @title: Balanced Binary Trees
  * @short_description: a sorted collection of key/value pairs optimized
  *                     for searching and traversing in order
@@ -8711,7 +8711,7 @@
 
 
 /**
- * SECTION:trees-nary
+ * SECTION:treesnary
  * @title: N-ary Trees
  * @short_description: trees of data with any number of branches
  *
