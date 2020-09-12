@@ -1,3 +1,26 @@
+1.66.0 - 2020-09-12
+-------------------
+
+* Support the gtk-doc action syntax :mr:`203`
+* Meson fixes with glib and/or g-i is a subproject :mr:`206` :mr:`208`
+* GITypeInfo storage type utility API :mr:`205`
+* Meson: Fix build as subproject :mr:`214`
+* Fixing XDG_DATA_DIRS logic :mr:`215`
+* libgirepository: Add a couple missing nullable annotations :mr:`217` :mr:`225`
+* dumper: Fix missing symbols in LTO case or with overridden symbol visibility settings :mr:`216`
+* Documentation improvements: :mr:`220` :mr:`232`
+* Remove old autoconf fallback code for the python tools :mr:`221`
+* meson: Rename option `gi_cross_use_{host -> prebuilt}_gi` mr:`211`
+* meson: Don't override finding executables when using pre-built tools. :mr:`212`
+* meson: gir: add a dependency for g-ir-compiler for building .girs :mr:`228`
+* meson: Use pkgconfig generator :mr:`207`
+* Fix gi-dump-types.c to build on Windows :mr:`218`
+* giscanner: parse block comments for members and fields :mr:`230`
+* Add the notion of standalone doc sections :mr:`226`
+* giscanner: Add support for using clang-cl :mr:`234`
+* giscanner: Fix section matching for documentation :mr:`237`
+
+
 1.64.1 - 2020-04-05
 -------------------
 
