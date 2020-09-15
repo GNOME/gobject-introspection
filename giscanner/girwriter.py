@@ -228,6 +228,8 @@ class GIRWriter(XMLWriter):
             attrs.append(('glib:set-property', func.set_property))
         if func.get_property is not None:
             attrs.append(('glib:get-property', func.get_property))
+        if func.is_inline:
+            attrs.append(('is-inline', '1'))
         self._write_callable(func, tag_name, attrs)
 
     def _write_function_macro(self, macro):

@@ -755,6 +755,7 @@ class Function(Callable):
         self.internal_skipped = False   # if True, this func will not be written to GIR
         self.set_property = None        # Property name
         self.get_property = None        # Property name
+        self.is_inline = False
 
     def clone(self):
         clone = copy.copy(self)

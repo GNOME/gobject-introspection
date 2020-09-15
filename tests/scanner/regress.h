@@ -1612,4 +1612,26 @@ void regress_test_array_struct_in_full (RegressTestStructA *arr, gsize len);
 _GI_TEST_EXTERN
 void regress_test_array_struct_in_none (RegressTestStructA *arr, gsize len);
 
+static inline gboolean regress_test_inline_function(gboolean foo);
+/*
+ * regress_test_inline_function:
+ *
+ * An inline function that should be exposed as such
+ */
+static inline gboolean regress_test_inline_function (gboolean foo)
+{
+  return foo;
+}
+
+static inline gboolean regress_test_obj_inline_method(RegressTestObj *obj, gboolean foo);
+/*
+ * regress_test_obj_inline_method:
+ *
+ * An inline function that should be exposed as such
+ */
+static inline gboolean regress_test_obj_inline_method (RegressTestObj *obj, gboolean foo)
+{
+  return foo;
+}
+
 #endif /* __GITESTTYPES_H__ */

@@ -117,7 +117,7 @@ def ctype_name(ctype):
 
 class SourceType(object):
     __members__ = ['type', 'base_type', 'name', 'type_qualifier',
-                   'child_list', 'is_bitfield']
+                   'child_list', 'is_bitfield', 'function_specifier']
 
     def __init__(self, scanner, stype):
         self._scanner = scanner
@@ -156,6 +156,10 @@ class SourceType(object):
     @property
     def is_bitfield(self):
         return self._stype.is_bitfield
+
+    @property
+    def function_specifier(self):
+        return self._stype.function_specifier
 
 
 class SourceSymbol(object):

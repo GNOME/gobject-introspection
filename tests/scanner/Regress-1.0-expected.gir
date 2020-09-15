@@ -4326,6 +4326,22 @@ case.</doc>
           </instance-parameter>
         </parameters>
       </method>
+      <method name="inline_method"
+              c:identifier="regress_test_obj_inline_method"
+              is-inline="1">
+        <source-position filename="regress.h" line="1626"/>
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+          <parameter name="foo" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="instance_method"
               c:identifier="regress_test_obj_instance_method">
         <source-position filename="regress.h" line="883"/>
@@ -8247,6 +8263,19 @@ element-type annotation.</doc>
         <parameter name="callback" transfer-ownership="none" scope="call">
           <type name="TestCallbackHashtable"
                 c:type="RegressTestCallbackHashtable"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_inline_function"
+              c:identifier="regress_test_inline_function"
+              is-inline="1">
+      <source-position filename="regress.h" line="1615"/>
+      <return-value transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="foo" transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
         </parameter>
       </parameters>
     </function>

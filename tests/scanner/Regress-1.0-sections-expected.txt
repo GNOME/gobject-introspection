@@ -152,6 +152,7 @@ regress_test_gvariant_i
 regress_test_gvariant_s
 regress_test_gvariant_v
 regress_test_hash_table_callback
+regress_test_inline_function
 regress_test_int
 regress_test_int16
 regress_test_int32
@@ -372,6 +373,7 @@ regress_test_obj_emit_sig_with_obj_full
 regress_test_obj_emit_sig_with_uint64
 regress_forced_method
 regress_test_obj_get_string
+regress_test_obj_inline_method
 regress_test_obj_instance_method
 regress_test_obj_instance_method_callback
 regress_test_obj_instance_method_full

@@ -34,7 +34,7 @@ from .sourcescanner import (
     CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_FUNCTION_MACRO, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
-    TYPE_QUALIFIER_CONST, TYPE_QUALIFIER_VOLATILE)
+    TYPE_QUALIFIER_CONST, TYPE_QUALIFIER_VOLATILE, FUNCTION_INLINE)
 
 
 class TransformerException(Exception):
@@ -451,7 +451,10 @@ raise ValueError."""
         parameters = list(self._create_parameters(symbol, symbol.base_type))
         return_ = self._create_return(symbol.base_type.base_type)
         name = self._strip_symbol(symbol)
+
         func = ast.Function(name, return_, parameters, False, symbol.ident)
+        if symbol.base_type.base_type.function_specifier & FUNCTION_INLINE:
+            func.is_inline = True
         func.add_symbol_reference(symbol)
         return func
 
