@@ -749,6 +749,9 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length);
 
 _GI_TEST_EXTERN
+void gi_marshalling_tests_array_flags_in (GIMarshallingTestsFlags *flags, gint length);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_in_guint64_len (const gint *ints, guint64 length);
 
 _GI_TEST_EXTERN
@@ -1116,6 +1119,9 @@ void gi_marshalling_tests_gvalue_in_with_modification (GValue *value);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_in_enum (GValue *value);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_gvalue_in_flags (GValue *value);
 
 
 _GI_TEST_EXTERN
@@ -1515,6 +1521,17 @@ struct _GIMarshallingTestsObjectClass
      * @object: (in) (transfer full):
      */
     void (* vfunc_in_object_transfer_full) (GIMarshallingTestsObject *self, GObject *object);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_flags:
+     */
+    GIMarshallingTestsFlags (* vfunc_return_flags) (GIMarshallingTestsObject *self);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_out_flags:
+     * @flags: (out):
+     */
+    void (* vfunc_out_flags) (GIMarshallingTestsObject *self, GIMarshallingTestsFlags *flags);
 };
 
 struct _GIMarshallingTestsObject
@@ -1619,6 +1636,12 @@ GIMarshallingTestsEnum gi_marshalling_tests_object_vfunc_return_enum (GIMarshall
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_object_vfunc_out_enum (GIMarshallingTestsObject *self, GIMarshallingTestsEnum *_enum);
+
+_GI_TEST_EXTERN
+GIMarshallingTestsFlags gi_marshalling_tests_object_vfunc_return_flags (GIMarshallingTestsObject *self);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_object_vfunc_out_flags (GIMarshallingTestsObject *self, GIMarshallingTestsFlags *flags);
 
 
 _GI_TEST_EXTERN

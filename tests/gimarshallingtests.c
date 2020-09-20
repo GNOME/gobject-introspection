@@ -1523,6 +1523,20 @@ gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *v, gint length)
 }
 
 /**
+ * gi_marshalling_tests_array_flags_in:
+ * @flags: (array length=length) (transfer none):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_flags_in (GIMarshallingTestsFlags *v, gint length)
+{
+  g_assert_cmpint (length, ==, 3);
+  g_assert_cmpint (v[0], ==, GI_MARSHALLING_TESTS_FLAGS_VALUE1);
+  g_assert_cmpint (v[1], ==, GI_MARSHALLING_TESTS_FLAGS_VALUE2);
+  g_assert_cmpint (v[2], ==, GI_MARSHALLING_TESTS_FLAGS_VALUE3);
+}
+
+/**
  * gi_marshalling_tests_array_in_guint64_len:
  * @ints: (array length=length) (transfer none):
  * @length:
@@ -3431,7 +3445,21 @@ gi_marshalling_tests_gvalue_in_with_modification (GValue *value)
 void
 gi_marshalling_tests_gvalue_in_enum (GValue *value)
 {
+  if (!G_VALUE_HOLDS_ENUM (value))
+    g_critical ("Expected enum, got %s", G_VALUE_TYPE_NAME (value));
   g_assert (g_value_get_enum (value) == GI_MARSHALLING_TESTS_ENUM_VALUE3);
+}
+
+/**
+ * gi_marshalling_tests_gvalue_in_flags:
+ * @value: (transfer none):
+ */
+void
+gi_marshalling_tests_gvalue_in_flags (GValue *value)
+{
+  if (!G_VALUE_HOLDS_FLAGS (value))
+    g_critical ("Expected flags, got %s", G_VALUE_TYPE_NAME (value));
+  g_assert_cmpint (g_value_get_flags (value), ==, GI_MARSHALLING_TESTS_FLAGS_VALUE3);
 }
 
 /**
@@ -4765,6 +4793,33 @@ gi_marshalling_tests_object_vfunc_out_enum (GIMarshallingTestsObject *self, GIMa
   gulong local = 0x12345678;
   GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_out_enum (self, _enum);
   g_assert_cmpint (local, ==, 0x12345678);
+}
+
+/**
+ * gi_marshalling_tests_object_vfunc_return_flags:
+ */
+GIMarshallingTestsFlags
+gi_marshalling_tests_object_vfunc_return_flags (GIMarshallingTestsObject *self)
+{
+  /* make sure that local variables don't get smashed */
+  GIMarshallingTestsFlags return_value;
+  glong local = 0x12345678;
+  return_value = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_flags (self);
+  g_assert_cmpint (local, ==, 0x12345678);
+  return return_value;
+}
+
+/**
+ * gi_marshalling_tests_object_vfunc_out_flags:
+ * @flags: (out):
+ */
+void
+gi_marshalling_tests_object_vfunc_out_flags (GIMarshallingTestsObject *self, GIMarshallingTestsFlags *flags)
+{
+  /* make sure that local variables don't get smashed */
+  gulong local = 0x12345678;
+  GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_out_flags (self, flags);
+  g_assert_cmpuint (local, ==, 0x12345678);
 }
 
 
