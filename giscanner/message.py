@@ -75,8 +75,14 @@ class Position(object):
                                         self.column or -1)
 
     def format(self, cwd):
-        filename = os.path.relpath(os.path.realpath(self.filename),
-                                   os.path.realpath(cwd))
+        # Windows: We may be using different drives self.filename and cwd,
+        #          which leads to a ValuError when using os.path.relpath().
+        #          In that case, just use the entire path of self.filename
+        try:
+            filename = os.path.relpath(os.path.realpath(self.filename),
+                                       os.path.realpath(cwd))
+        except ValueError:
+            filename = os.path.realpath(self.filename)
 
         if self.column is not None:
             return '%s:%d:%d' % (filename, self.line, self.column)
