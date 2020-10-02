@@ -5557,7 +5557,7 @@
 
 
 /**
- * SECTION:datetime
+ * SECTION:date-time
  * @title: GDateTime
  * @short_description: a structure representing Date and Time
  * @see_also: #GTimeZone
@@ -8678,7 +8678,7 @@
 
 
 /**
- * SECTION:treesbinary
+ * SECTION:trees-binary
  * @title: Balanced Binary Trees
  * @short_description: a sorted collection of key/value pairs optimized
  *                     for searching and traversing in order
@@ -8711,7 +8711,7 @@
 
 
 /**
- * SECTION:treesnary
+ * SECTION:trees-nary
  * @title: N-ary Trees
  * @short_description: trees of data with any number of branches
  *
@@ -20832,7 +20832,7 @@
 
 /**
  * g_list_free:
- * @list: a #GList
+ * @list: the first link of a #GList
  *
  * Frees all of the memory used by a #GList.
  * The freed elements are returned to the slice allocator.
@@ -20870,7 +20870,7 @@
 
 /**
  * g_list_free_full:
- * @list: a pointer to a #GList
+ * @list: the first link of a #GList
  * @free_func: the function to be called to free each element's data
  *
  * Convenience method, which frees all the memory used by a #GList,
@@ -29424,7 +29424,7 @@
 
 /**
  * g_slist_free:
- * @list: a #GSList
+ * @list: the first link of a #GSList
  *
  * Frees all of the memory used by a #GSList.
  * The freed elements are returned to the slice allocator.
@@ -29462,7 +29462,7 @@
 
 /**
  * g_slist_free_full:
- * @list: a pointer to a #GSList
+ * @list: the first link of a #GSList
  * @free_func: the function to be called to free each element's data
  *
  * Convenience method, which frees all the memory used by a #GSList, and
@@ -36781,7 +36781,7 @@
  * string; it may e.g. include embedded NUL characters. The only
  * validation done by this function is to ensure that the input can
  * be correctly interpreted as UTF-16, i.e. it doesn't contain
- * things unpaired surrogates.
+ * unpaired surrogates or partial character sequences.
  *
  * Returns: (transfer full): a pointer to a newly allocated UTF-8 string.
  *     This value must be freed with g_free(). If an error occurs,
