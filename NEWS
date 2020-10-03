@@ -1,3 +1,12 @@
+1.66.1 - 2020-10-03
+-------------------
+
+* Update glib annotations
+* Windows: Fix running on different drives :mr:`239`
+* gimarshallingtests: Add more tests for flags :mr:`235`
+* Revert "giscanner: Fix section matching for documentation :mr:`237`" see :issue:`360`
+
+
 1.66.0 - 2020-09-12
 -------------------
 
