@@ -22,6 +22,7 @@
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include "sourcescanner.h"
 
