@@ -3731,7 +3731,15 @@ regress_test_create_fundamental_hidden_class_instance (void)
   return (RegressTestFundamentalObject *) g_type_create_instance (_regress_test_fundamental_hidden_sub_object_get_type());
 }
 
-
+/**
+ * regress_test_get_fundamental_sub_object_data:
+ *
+ * Return value: (transfer full): UTF-8 string
+ */
+char*
+regress_test_get_fundamental_sub_object_data (RegressTestFundamentalSubObject * fundamental_sub_object) {
+  return g_strdup(fundamental_sub_object->data);
+}
 
 /**
  * regress_test_callback:
