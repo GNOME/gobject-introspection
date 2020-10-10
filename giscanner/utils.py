@@ -23,6 +23,7 @@ import os
 import subprocess
 import platform
 import shutil
+import sys
 import time
 import giscanner.pkgconfig
 
@@ -318,3 +319,32 @@ class dll_dirs():
                 added_dll_dir.close()
         if self._cached_dll_dirs is not None:
             self._cached_dll_dirs.clear()
+
+
+# monkey patch distutils.cygwinccompiler
+# somehow distutils returns runtime library only up to
+# VS2010 / MSVC 10.0 (msc_ver 1600)
+def get_msvcr_overwrite():
+    try:
+        return orig_get_msvcr()
+    except ValueError:
+        pass
+
+    msc_pos = sys.version.find('MSC v.')
+    if msc_pos != -1:
+        msc_ver = sys.version[msc_pos + 6:msc_pos + 10]
+
+        if msc_ver == '1700':
+            # VS2012
+            return ['msvcr110']
+        elif msc_ver == '1800':
+            # VS2013
+            return ['msvcr120']
+        elif msc_ver >= '1900':
+            # VS2015
+            return ['vcruntime140']
+
+
+import distutils.cygwinccompiler
+orig_get_msvcr = distutils.cygwinccompiler.get_msvcr
+distutils.cygwinccompiler.get_msvcr = get_msvcr_overwrite
