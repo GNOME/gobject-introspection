@@ -20080,7 +20080,7 @@
  *
  * Returns the name of the start group of the file.
  *
- * Returns: The start group of the key file.
+ * Returns: (nullable): The start group of the key file.
  * Since: 2.6
  */
 
@@ -22007,7 +22007,7 @@
  * If you need to hold a reference on the context, use
  * g_main_context_ref_thread_default() instead.
  *
- * Returns: (transfer none): the thread-default #GMainContext, or
+ * Returns: (transfer none) (nullable): the thread-default #GMainContext, or
  * %NULL if the thread-default context is the global default context.
  * Since: 2.22
  */
@@ -22346,7 +22346,7 @@
  *
  * Returns the currently firing source for this thread.
  *
- * Returns: (transfer none): The currently firing source or %NULL.
+ * Returns: (transfer none) (nullable): The currently firing source or %NULL.
  * Since: 2.12
  */
 
@@ -29943,7 +29943,7 @@
  * Gets a name for the source, used in debugging and profiling.  The
  * name may be #NULL if it has never been set with g_source_set_name().
  *
- * Returns: the name of the source
+ * Returns: (nullable): the name of the source
  * Since: 2.26
  */
 
@@ -35934,7 +35934,7 @@
  * See also g_uri_build_with_user(), which allows specifying the
  * components of the "userinfo" separately.
  *
- * Returns: (transfer full): a new #GUri
+ * Returns: (not nullable) (transfer full): a new #GUri
  * Since: 2.66
  */
 
@@ -35961,7 +35961,7 @@
  * of the ‘userinfo’ field separately. Note that @user must be non-%NULL
  * if either @password or @auth_params is non-%NULL.
  *
- * Returns: (transfer full): a new #GUri
+ * Returns: (not nullable) (transfer full): a new #GUri
  * Since: 2.66
  */
 
@@ -35985,8 +35985,8 @@
  * Though technically incorrect, this will also allow escaping nul
  * bytes as `%``00`.
  *
- * Returns: (transfer full): an escaped version of @unescaped. The returned
- *     string should be freed when no longer needed.
+ * Returns: (not nullable) (transfer full): an escaped version of @unescaped.
+ *     The returned string should be freed when no longer needed.
  * Since: 2.66
  */
 
@@ -36007,8 +36007,8 @@
  * in the URI specification, since those are allowed unescaped in some
  * portions of a URI.
  *
- * Returns: an escaped version of @unescaped. The returned string
- * should be freed when no longer needed.
+ * Returns: (not nullable): an escaped version of @unescaped. The
+ * returned string should be freed when no longer needed.
  * Since: 2.16
  */
 
@@ -36207,7 +36207,7 @@
  * %G_URI_FLAGS_HAS_PASSWORD and %G_URI_FLAGS_HAS_AUTH_PARAMS are ignored if set
  * in @flags.
  *
- * Returns: (transfer full): an absolute URI string
+ * Returns: (not nullable) (transfer full): an absolute URI string
  * Since: 2.66
  */
 
@@ -36237,7 +36237,7 @@
  * %G_URI_FLAGS_HAS_PASSWORD and %G_URI_FLAGS_HAS_AUTH_PARAMS are ignored if set
  * in @flags.
  *
- * Returns: (transfer full): an absolute URI string
+ * Returns: (not nullable) (transfer full): an absolute URI string
  * Since: 2.66
  */
 
@@ -36343,7 +36343,7 @@
  * valid [absolute URI][relative-absolute-uris], it will be discarded, and an
  * error returned.
  *
- * Returns: (transfer full): a new #GUri.
+ * Returns: (transfer full): a new #GUri, or NULL on error.
  * Since: 2.66
  */
 
@@ -36386,9 +36386,9 @@
  * If @params cannot be parsed (for example, it contains two @separators
  * characters in a row), then @error is set and %NULL is returned.
  *
- * Returns: (transfer full) (element-type utf8 utf8): A hash table of
- *     attribute/value pairs, with both names and values fully-decoded; or %NULL
- *     on error.
+ * Returns: (transfer full) (element-type utf8 utf8):
+ *     A hash table of attribute/value pairs, with both names and values
+ *     fully-decoded; or %NULL on error.
  * Since: 2.66
  */
 
@@ -36405,7 +36405,7 @@
  * If the result is not a valid absolute URI, it will be discarded, and an error
  * returned.
  *
- * Returns: (transfer full): a new #GUri.
+ * Returns: (transfer full): a new #GUri, or NULL on error.
  * Since: 2.66
  */
 
@@ -36476,7 +36476,8 @@
  * (If @base_uri_string is %NULL, this just returns @uri_ref, or
  * %NULL if @uri_ref is invalid or not absolute.)
  *
- * Returns: (transfer full): the resolved URI string.
+ * Returns: (transfer full): the resolved URI string,
+ * or NULL on error.
  * Since: 2.66
  */
 
@@ -36608,8 +36609,8 @@
  * or private data in its query string, and the returned string is going to be
  * logged, then consider using g_uri_to_string_partial() to redact parts.
  *
- * Returns: (transfer full): a string representing @uri, which the caller
- *     must free.
+ * Returns: (not nullable) (transfer full): a string representing @uri,
+ *     which the caller must free.
  * Since: 2.66
  */
 
@@ -36622,8 +36623,8 @@
  * Returns a string representing @uri, subject to the options in
  * @flags. See g_uri_to_string() and #GUriHideFlags for more details.
  *
- * Returns: (transfer full): a string representing @uri, which the caller
- *     must free.
+ * Returns: (not nullable) (transfer full): a string representing
+ *     @uri, which the caller must free.
  * Since: 2.66
  */
 
@@ -36648,9 +36649,9 @@
  * being expanded in an escaped path element, which might confuse pathname
  * handling.
  *
- * Returns: (transfer full): an unescaped version of @escaped_string or %NULL on
- *     error (if decoding failed, using %G_URI_ERROR_FAILED error code). The
- *     returned #GBytes should be unreffed when no longer needed.
+ * Returns: (transfer full): an unescaped version of @escaped_string
+ *     or %NULL on error (if decoding failed, using %G_URI_ERROR_FAILED error
+ *     code). The returned #GBytes should be unreffed when no longer needed.
  * Since: 2.66
  */
 
@@ -36674,10 +36675,10 @@
  * Note: `NUL` byte is not accepted in the output, in contrast to
  * g_uri_unescape_bytes().
  *
- * Returns: an unescaped version of @escaped_string or %NULL on error.
- * The returned string should be freed when no longer needed.  As a
- * special case if %NULL is given for @escaped_string, this function
- * will return %NULL.
+ * Returns: (nullable): an unescaped version of @escaped_string,
+ * or %NULL on error. The returned string should be freed when no longer
+ * needed.  As a special case if %NULL is given for @escaped_string, this
+ * function will return %NULL.
  * Since: 2.16
  */
 
@@ -36696,8 +36697,8 @@
  * want to avoid for instance having a slash being expanded in an
  * escaped path element, which might confuse pathname handling.
  *
- * Returns: an unescaped version of @escaped_string. The returned string
- * should be freed when no longer needed.
+ * Returns: (nullable): an unescaped version of @escaped_string.
+ * The returned string should be freed when no longer needed.
  * Since: 2.16
  */
 
