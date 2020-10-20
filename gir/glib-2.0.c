@@ -6075,6 +6075,27 @@
 
 
 /**
+ * SECTION:gstrvbuilder
+ * @title: GStrvBuilder
+ * @short_description: Helper to create NULL-terminated string arrays.
+ *
+ * #GStrvBuilder is a method of easily building dynamically sized
+ * NULL-terminated string arrays.
+ *
+ * The following example shows how to build a two element array:
+ *
+ * |[<!-- language="C" -->
+ *   g_autoptr(GStrvBuilder) builder = g_strv_builder_new ();
+ *   g_strv_builder_add (builder, "hello");
+ *   g_strv_builder_add (builder, "world");
+ *   g_auto(GStrv) array = g_strv_builder_end (builder);
+ * ]|
+ *
+ * Since: 2.68
+ */
+
+
+/**
  * SECTION:gunix
  * @title: UNIX-specific utilities and integration
  * @short_description: pipes, signal handling
@@ -7475,7 +7496,8 @@
  * It is recommended that custom log writer functions re-use the
  * `G_MESSAGES_DEBUG` environment variable, rather than inventing a custom one,
  * so that developers can re-use the same debugging techniques and tools across
- * projects.
+ * projects. Since GLib 2.68, this can be implemented by dropping messages
+ * for which g_log_writer_default_would_drop() returns %TRUE.
  *
  * ## Testing for Messages ## {#testing-for-messages}
  *
@@ -13491,7 +13513,7 @@
  * * the application must not wait for @pid to exit by any other
  *   mechanism, including `waitpid(pid, ...)` or a second child-watch
  *   source for the same @pid
- * * the application must not ignore SIGCHILD
+ * * the application must not ignore `SIGCHLD`
  *
  * If any of those conditions are not met, this and related APIs will
  * not work correctly. This can often be diagnosed via a GLib warning
@@ -20080,7 +20102,7 @@
  *
  * Returns the name of the start group of the file.
  *
- * Returns: The start group of the key file.
+ * Returns: (nullable): The start group of the key file.
  * Since: 2.6
  */
 
@@ -21358,7 +21380,8 @@
  *
  * stderr is used for levels %G_LOG_LEVEL_ERROR, %G_LOG_LEVEL_CRITICAL,
  * %G_LOG_LEVEL_WARNING and %G_LOG_LEVEL_MESSAGE. stdout is used for
- * the rest.
+ * the rest, unless stderr was requested by
+ * g_log_writer_default_set_use_stderr().
  *
  * This has no effect if structured logging is enabled; see
  * [Using Structured Logging][using-structured-logging].
@@ -21700,8 +21723,75 @@
  * messages unless their log domain (or `all`) is listed in the space-separated
  * `G_MESSAGES_DEBUG` environment variable.
  *
+ * g_log_writer_default() uses the mask set by g_log_set_always_fatal() to
+ * determine which messages are fatal. When using a custom writer func instead it is
+ * up to the writer function to determine which log messages are fatal.
+ *
  * Returns: %G_LOG_WRITER_HANDLED on success, %G_LOG_WRITER_UNHANDLED otherwise
  * Since: 2.50
+ */
+
+
+/**
+ * g_log_writer_default_set_use_stderr:
+ * @use_stderr: If %TRUE, use `stderr` for log messages that would
+ *  normally have appeared on `stdout`
+ *
+ * Configure whether the built-in log functions
+ * (g_log_default_handler() for the old-style API, and both
+ * g_log_writer_default() and g_log_writer_standard_streams() for the
+ * structured API) will output all log messages to `stderr`.
+ *
+ * By default, log messages of levels %G_LOG_LEVEL_INFO and
+ * %G_LOG_LEVEL_DEBUG are sent to `stdout`, and other log messages are
+ * sent to `stderr`. This is problematic for applications that intend
+ * to reserve `stdout` for structured output such as JSON or XML.
+ *
+ * This function sets global state. It is not thread-aware, and should be
+ * called at the very start of a program, before creating any other threads
+ * or creating objects that could create worker threads of their own.
+ *
+ * Since: 2.68
+ */
+
+
+/**
+ * g_log_writer_default_would_drop:
+ * @log_domain: (nullable): log domain
+ * @log_level: log level, either from #GLogLevelFlags, or a user-defined
+ *    level
+ *
+ * Check whether g_log_writer_default() and g_log_default_handler() would
+ * ignore a message with the given domain and level.
+ *
+ * As with g_log_default_handler(), this function drops debug and informational
+ * messages unless their log domain (or `all`) is listed in the space-separated
+ * `G_MESSAGES_DEBUG` environment variable.
+ *
+ * This can be used when implementing log writers with the same filtering
+ * behaviour as the default, but a different destination or output format:
+ *
+ * |[<!-- language="C" -->
+ *   if (g_log_writer_default_would_drop (log_level, log_domain))
+ *     return G_LOG_WRITER_HANDLED;
+ * ]|
+ *
+ * or to skip an expensive computation if it is only needed for a debugging
+ * message, and `G_MESSAGES_DEBUG` is not set:
+ *
+ * |[<!-- language="C" -->
+ *   if (!g_log_writer_default_would_drop (G_LOG_LEVEL_DEBUG, G_LOG_DOMAIN))
+ *     {
+ *       gchar *result = expensive_computation (my_object);
+ *
+ *       g_debug ("my_object result: %s", result);
+ *       g_free (result);
+ *     }
+ * ]|
+ *
+ * Returns: %TRUE if the log message would be dropped by GLib's
+ *  default log handlers
+ * Since: 2.68
  */
 
 
@@ -21785,7 +21875,9 @@
  *
  * Format a structured log message and print it to either `stdout` or `stderr`,
  * depending on its log level. %G_LOG_LEVEL_INFO and %G_LOG_LEVEL_DEBUG messages
- * are sent to `stdout`; all other log levels are sent to `stderr`. Only fields
+ * are sent to `stdout`, or to `stderr` if requested by
+ * g_log_writer_default_set_use_stderr();
+ * all other log levels are sent to `stderr`. Only fields
  * which are understood by this function are included in the formatted string
  * which is printed.
  *
@@ -22007,7 +22099,7 @@
  * If you need to hold a reference on the context, use
  * g_main_context_ref_thread_default() instead.
  *
- * Returns: (transfer none): the thread-default #GMainContext, or
+ * Returns: (transfer none) (nullable): the thread-default #GMainContext, or
  * %NULL if the thread-default context is the global default context.
  * Since: 2.22
  */
@@ -22346,7 +22438,7 @@
  *
  * Returns the currently firing source for this thread.
  *
- * Returns: (transfer none): The currently firing source or %NULL.
+ * Returns: (transfer none) (nullable): The currently firing source or %NULL.
  * Since: 2.12
  */
 
@@ -29943,7 +30035,7 @@
  * Gets a name for the source, used in debugging and profiling.  The
  * name may be #NULL if it has never been set with g_source_set_name().
  *
- * Returns: the name of the source
+ * Returns: (nullable): the name of the source
  * Since: 2.26
  */
 
@@ -32361,6 +32453,67 @@
 
 
 /**
+ * g_strv_builder_add:
+ * @builder: a #GStrvBuilder
+ * @value: a string.
+ *
+ * Add a string to the end of the array.
+ *
+ * Since 2.68
+ */
+
+
+/**
+ * g_strv_builder_end:
+ * @builder: a #GStrvBuilder
+ *
+ * Ends the builder process and returns the constructed NULL-terminated string
+ * array. The returned value should be freed with g_strfreev() when no longer
+ * needed.
+ *
+ * Returns: (transfer full): the constructed string array.
+ *
+ * Since 2.68
+ */
+
+
+/**
+ * g_strv_builder_new:
+ *
+ * Creates a new #GStrvBuilder with a reference count of 1.
+ * Use g_strv_builder_unref() on the returned value when no longer needed.
+ *
+ * Returns: (transfer full): the new #GStrvBuilder
+ * Since: 2.68
+ */
+
+
+/**
+ * g_strv_builder_ref:
+ * @builder: (transfer none): a #GStrvBuilder
+ *
+ * Atomically increments the reference count of @builder by one.
+ * This function is thread-safe and may be called from any thread.
+ *
+ * Returns: (transfer full): The passed in #GStrvBuilder
+ * Since: 2.68
+ */
+
+
+/**
+ * g_strv_builder_unref:
+ * @builder: (transfer full): a #GStrvBuilder allocated by g_strv_builder_new()
+ *
+ * Decreases the reference count on @builder.
+ *
+ * In the event that there are no more references, releases all memory
+ * associated with the #GStrvBuilder.
+ *
+ * Since: 2.68
+ */
+
+
+/**
  * g_strv_contains:
  * @strv: a %NULL-terminated array of strings
  * @str: a string
@@ -34695,6 +34848,26 @@
 
 
 /**
+ * g_tree_foreach_node:
+ * @tree: a #GTree
+ * @func: the function to call for each node visited.
+ *     If this function returns %TRUE, the traversal is stopped.
+ * @user_data: user data to pass to the function
+ *
+ * Calls the given function for each of the nodes in the #GTree.
+ * The function is passed the pointer to the particular node, and the given
+ * @data parameter. The tree traversal happens in-order.
+ *
+ * The tree may not be modified while iterating over it (you can't
+ * add/remove items). To remove all items matching a predicate, you need
+ * to add each item to a list in your #GTraverseFunc as you walk over
+ * the tree, then walk the list and remove each item.
+ *
+ * Since: 2.68
+ */
+
+
+/**
  * g_tree_height:
  * @tree: a #GTree
  *
@@ -34716,6 +34889,19 @@
  *
  * Inserts a key/value pair into a #GTree.
  *
+ * Inserts a new key and value into a #GTree as g_tree_insert_node() does,
+ * only this function does not return the inserted or set node.
+ */
+
+
+/**
+ * g_tree_insert_node:
+ * @tree: a #GTree
+ * @key: the key to insert
+ * @value: the value corresponding to the key
+ *
+ * Inserts a key/value pair into a #GTree.
+ *
  * If the given key already exists in the #GTree its corresponding value
  * is set to the new value. If you supplied a @value_destroy_func when
  * creating the #GTree, the old value is freed using that function. If
@@ -34727,6 +34913,9 @@
  * The cost of maintaining a balanced tree while inserting new key/value
  * result in a O(n log(n)) operation where most of the other operations
  * are O(log(n)).
+ *
+ * Returns: (transfer none): the inserted (or set) node.
+ * Since: 2.68
  */
 
 
@@ -34757,6 +34946,40 @@
  * g_tree_remove().
  *
  * Returns: %TRUE if the key was found in the #GTree
+ */
+
+
+/**
+ * g_tree_lookup_node:
+ * @tree: a #GTree
+ * @key: the key to look up
+ *
+ * Gets the tree node corresponding to the given key. Since a #GTree is
+ * automatically balanced as key/value pairs are added, key lookup
+ * is O(log n) (where n is the number of key/value pairs in the tree).
+ *
+ * Returns: (nullable) (transfer none): the tree node corresponding to
+ *          the key, or %NULL if the key was not found
+ * Since: 2.68
+ */
+
+
+/**
+ * g_tree_lower_bound:
+ * @tree: a #GTree
+ * @key: the key to calculate the lower bound for
+ *
+ * Gets the lower bound node corresponding to the given key,
+ * or %NULL if the tree is empty or all the nodes in the tree
+ * have keys that are strictly lower than the searched key.
+ *
+ * The lower bound is the first node that has its key greater
+ * than or equal to the searched key.
+ *
+ * Returns: (nullable) (transfer none): the tree node corresponding to
+ *          the lower bound, or %NULL if the tree is empty or has only
+ *          keys strictly lower than the searched key.
+ * Since: 2.68
  */
 
 
@@ -34816,6 +35039,76 @@
 
 
 /**
+ * g_tree_node_first:
+ * @tree: a #GTree
+ *
+ * Returns the first in-order node of the tree, or %NULL
+ * for an empty tree.
+ *
+ * Returns: (nullable) (transfer none): the first node in the tree
+ * Since: 2.68
+ */
+
+
+/**
+ * g_tree_node_key:
+ * @node: a #GTree node
+ *
+ * Gets the key stored at a particular tree node.
+ *
+ * Returns: (nullable) (transfer none): the key at the node.
+ * Since: 2.68
+ */
+
+
+/**
+ * g_tree_node_last:
+ * @tree: a #GTree
+ *
+ * Returns the last in-order node of the tree, or %NULL
+ * for an empty tree.
+ *
+ * Returns: (nullable) (transfer none): the last node in the tree
+ * Since: 2.68
+ */
+
+
+/**
+ * g_tree_node_next:
+ * @node: a #GTree node
+ *
+ * Returns the next in-order node of the tree, or %NULL
+ * if the passed node was already the last one.
+ *
+ * Returns: (nullable) (transfer none): the next node in the tree
+ * Since: 2.68
+ */
+
+
+/**
+ * g_tree_node_previous:
+ * @node: a #GTree node
+ *
+ * Returns the previous in-order node of the tree, or %NULL
+ * if the passed node was already the first one.
+ *
+ * Returns: (nullable) (transfer none): the previous node in the tree
+ * Since: 2.68
+ */
+
+
+/**
+ * g_tree_node_value:
+ * @node: a #GTree node
+ *
+ * Gets the value stored at a particular tree node.
+ *
+ * Returns: (nullable) (transfer none): the value at the node.
+ * Since: 2.68
+ */
+
+
+/**
  * g_tree_ref:
  * @tree: a #GTree
  *
@@ -34855,7 +35148,18 @@
  * @key: the key to insert
  * @value: the value corresponding to the key
  *
- * Inserts a new key and value into a #GTree similar to g_tree_insert().
+ * Inserts a new key and value into a #GTree as g_tree_replace_node() does,
+ * only this function does not return the inserted or set node.
+ */
+
+
+/**
+ * g_tree_replace_node:
+ * @tree: a #GTree
+ * @key: the key to insert
+ * @value: the value corresponding to the key
+ *
+ * Inserts a new key and value into a #GTree similar to g_tree_insert_node().
  * The difference is that if the key already exists in the #GTree, it gets
  * replaced by the new key. If you supplied a @value_destroy_func when
  * creating the #GTree, the old value is freed using that function. If you
@@ -34864,6 +35168,9 @@
  *
  * The tree is automatically 'balanced' as new key/value pairs are added,
  * so that the distance from the root to every leaf is as small as possible.
+ *
+ * Returns: (transfer none): the inserted (or set) node.
+ * Since: 2.68
  */
 
 
@@ -34885,6 +35192,28 @@
  *
  * Returns: the value corresponding to the found key, or %NULL
  *     if the key was not found
+ */
+
+
+/**
+ * g_tree_search_node:
+ * @tree: a #GTree
+ * @search_func: a function used to search the #GTree
+ * @user_data: the data passed as the second argument to @search_func
+ *
+ * Searches a #GTree using @search_func.
+ *
+ * The @search_func is called with a pointer to the key of a key/value
+ * pair in the tree, and the passed in @user_data. If @search_func returns
+ * 0 for a key/value pair, then the corresponding node is returned as
+ * the result of g_tree_search(). If @search_func returns -1, searching
+ * will proceed among the key/value pairs that have a smaller key; if
+ * @search_func returns 1, searching will proceed among the key/value
+ * pairs that have a larger key.
+ *
+ * Returns: (nullable) (transfer none): the node corresponding to the
+ *          found key, or %NULL if the key was not found
+ * Since: 2.68
  */
 
 
@@ -34933,6 +35262,25 @@
  * It is safe to call this function from any thread.
  *
  * Since: 2.22
+ */
+
+
+/**
+ * g_tree_upper_bound:
+ * @tree: a #GTree
+ * @key: the key to calculate the upper bound for
+ *
+ * Gets the upper bound node corresponding to the given key,
+ * or %NULL if the tree is empty or all the nodes in the tree
+ * have keys that are lower than or equal to the searched key.
+ *
+ * The upper bound is the first node that has its key strictly greater
+ * than the searched key.
+ *
+ * Returns: (nullable) (transfer none): the tree node corresponding to the
+ *          upper bound, or %NULL if the tree is empty or has only keys
+ *          lower than or equal to the searched key.
+ * Since: 2.68
  */
 
 
@@ -35934,7 +36282,7 @@
  * See also g_uri_build_with_user(), which allows specifying the
  * components of the "userinfo" separately.
  *
- * Returns: (transfer full): a new #GUri
+ * Returns: (not nullable) (transfer full): a new #GUri
  * Since: 2.66
  */
 
@@ -35961,7 +36309,7 @@
  * of the ‘userinfo’ field separately. Note that @user must be non-%NULL
  * if either @password or @auth_params is non-%NULL.
  *
- * Returns: (transfer full): a new #GUri
+ * Returns: (not nullable) (transfer full): a new #GUri
  * Since: 2.66
  */
 
@@ -35985,8 +36333,8 @@
  * Though technically incorrect, this will also allow escaping nul
  * bytes as `%``00`.
  *
- * Returns: (transfer full): an escaped version of @unescaped. The returned
- *     string should be freed when no longer needed.
+ * Returns: (not nullable) (transfer full): an escaped version of @unescaped.
+ *     The returned string should be freed when no longer needed.
  * Since: 2.66
  */
 
@@ -36007,8 +36355,8 @@
  * in the URI specification, since those are allowed unescaped in some
  * portions of a URI.
  *
- * Returns: an escaped version of @unescaped. The returned string
- * should be freed when no longer needed.
+ * Returns: (not nullable): an escaped version of @unescaped. The
+ * returned string should be freed when no longer needed.
  * Since: 2.16
  */
 
@@ -36207,7 +36555,7 @@
  * %G_URI_FLAGS_HAS_PASSWORD and %G_URI_FLAGS_HAS_AUTH_PARAMS are ignored if set
  * in @flags.
  *
- * Returns: (transfer full): an absolute URI string
+ * Returns: (not nullable) (transfer full): an absolute URI string
  * Since: 2.66
  */
 
@@ -36237,7 +36585,7 @@
  * %G_URI_FLAGS_HAS_PASSWORD and %G_URI_FLAGS_HAS_AUTH_PARAMS are ignored if set
  * in @flags.
  *
- * Returns: (transfer full): an absolute URI string
+ * Returns: (not nullable) (transfer full): an absolute URI string
  * Since: 2.66
  */
 
@@ -36343,7 +36691,7 @@
  * valid [absolute URI][relative-absolute-uris], it will be discarded, and an
  * error returned.
  *
- * Returns: (transfer full): a new #GUri.
+ * Returns: (transfer full): a new #GUri, or NULL on error.
  * Since: 2.66
  */
 
@@ -36386,9 +36734,9 @@
  * If @params cannot be parsed (for example, it contains two @separators
  * characters in a row), then @error is set and %NULL is returned.
  *
- * Returns: (transfer full) (element-type utf8 utf8): A hash table of
- *     attribute/value pairs, with both names and values fully-decoded; or %NULL
- *     on error.
+ * Returns: (transfer full) (element-type utf8 utf8):
+ *     A hash table of attribute/value pairs, with both names and values
+ *     fully-decoded; or %NULL on error.
  * Since: 2.66
  */
 
@@ -36405,7 +36753,7 @@
  * If the result is not a valid absolute URI, it will be discarded, and an error
  * returned.
  *
- * Returns: (transfer full): a new #GUri.
+ * Returns: (transfer full): a new #GUri, or NULL on error.
  * Since: 2.66
  */
 
@@ -36476,7 +36824,8 @@
  * (If @base_uri_string is %NULL, this just returns @uri_ref, or
  * %NULL if @uri_ref is invalid or not absolute.)
  *
- * Returns: (transfer full): the resolved URI string.
+ * Returns: (transfer full): the resolved URI string,
+ * or NULL on error.
  * Since: 2.66
  */
 
@@ -36608,8 +36957,8 @@
  * or private data in its query string, and the returned string is going to be
  * logged, then consider using g_uri_to_string_partial() to redact parts.
  *
- * Returns: (transfer full): a string representing @uri, which the caller
- *     must free.
+ * Returns: (not nullable) (transfer full): a string representing @uri,
+ *     which the caller must free.
  * Since: 2.66
  */
 
@@ -36622,8 +36971,8 @@
  * Returns a string representing @uri, subject to the options in
  * @flags. See g_uri_to_string() and #GUriHideFlags for more details.
  *
- * Returns: (transfer full): a string representing @uri, which the caller
- *     must free.
+ * Returns: (not nullable) (transfer full): a string representing
+ *     @uri, which the caller must free.
  * Since: 2.66
  */
 
@@ -36648,9 +36997,9 @@
  * being expanded in an escaped path element, which might confuse pathname
  * handling.
  *
- * Returns: (transfer full): an unescaped version of @escaped_string or %NULL on
- *     error (if decoding failed, using %G_URI_ERROR_FAILED error code). The
- *     returned #GBytes should be unreffed when no longer needed.
+ * Returns: (transfer full): an unescaped version of @escaped_string
+ *     or %NULL on error (if decoding failed, using %G_URI_ERROR_FAILED error
+ *     code). The returned #GBytes should be unreffed when no longer needed.
  * Since: 2.66
  */
 
@@ -36674,10 +37023,10 @@
  * Note: `NUL` byte is not accepted in the output, in contrast to
  * g_uri_unescape_bytes().
  *
- * Returns: an unescaped version of @escaped_string or %NULL on error.
- * The returned string should be freed when no longer needed.  As a
- * special case if %NULL is given for @escaped_string, this function
- * will return %NULL.
+ * Returns: (nullable): an unescaped version of @escaped_string,
+ * or %NULL on error. The returned string should be freed when no longer
+ * needed.  As a special case if %NULL is given for @escaped_string, this
+ * function will return %NULL.
  * Since: 2.16
  */
 
@@ -36696,8 +37045,8 @@
  * want to avoid for instance having a slash being expanded in an
  * escaped path element, which might confuse pathname handling.
  *
- * Returns: an unescaped version of @escaped_string. The returned string
- * should be freed when no longer needed.
+ * Returns: (nullable): an unescaped version of @escaped_string.
+ * The returned string should be freed when no longer needed.
  * Since: 2.16
  */
 

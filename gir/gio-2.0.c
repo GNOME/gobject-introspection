@@ -3365,7 +3365,7 @@
  * multiple times (or not at all) for a given connectable (in
  * particular, if @client ends up attempting to connect to more than
  * one address). However, if @client emits the #GSocketClient::event
- * signal at all for a given connectable, that it will always emit
+ * signal at all for a given connectable, then it will always emit
  * it with %G_SOCKET_CLIENT_COMPLETE when it is done.
  *
  * Note that there may be additional #GSocketClientEvent values in
@@ -3627,6 +3627,19 @@
 
 
 /**
+ * GTlsCertificate:pkcs11-uri: (nullable)
+ *
+ * A URI referencing the PKCS \#11 objects containing an X.509 certificate
+ * and optionally a private key.
+ *
+ * If %NULL the certificate is either not backed by PKCS \#11 or the
+ * #GTlsBackend does not support PKCS \#11.
+ *
+ * Since: 2.68
+ */
+
+
+/**
  * GTlsCertificate:private-key:
  *
  * The DER (binary) encoded representation of the certificate's
@@ -3658,6 +3671,15 @@
  * tool to convert PKCS#8 keys to PKCS#1.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * GTlsCertificate:private-key-pkcs11-uri: (nullable)
+ *
+ * A URI referencing a PKCS \#11 object containing a private key.
+ *
+ * Since: 2.68
  */
 
 
@@ -21216,6 +21238,30 @@
 
 
 /**
+ * g_file_build_attribute_list_for_copy:
+ * @file: a #GFile to copy attributes to
+ * @flags: a set of #GFileCopyFlags
+ * @cancellable: (nullable): optional #GCancellable object,
+ *     %NULL to ignore
+ * @error: a #GError, %NULL to ignore
+ *
+ * Prepares the file attribute query string for copying to @file.
+ *
+ * This function prepares an attribute query string to be
+ * passed to g_file_query_info() to get a list of attributes
+ * normally copied with the file (see g_file_copy_attributes()
+ * for the detailed description). This function is used by the
+ * implementation of g_file_copy_attributes() and is useful
+ * when one needs to query and set the attributes in two
+ * stages (e.g., for recursive move of a directory).
+ *
+ * Returns: an attribute query string for g_file_query_info(),
+ *     or %NULL if an error occurs.
+ * Since: 2.68
+ */
+
+
+/**
  * g_file_copy:
  * @source: input #GFile
  * @destination: destination #GFile
@@ -34665,6 +34711,15 @@
  *
  * This is the asynchronous version of g_socket_client_connect().
  *
+ * You may wish to prefer the asynchronous version even in synchronous
+ * command line programs because, since 2.60, it implements
+ * [RFC 8305](https://tools.ietf.org/html/rfc8305) "Happy Eyeballs"
+ * recommendations to work around long connection timeouts in networks
+ * where IPv6 is broken by performing an IPv4 connection simultaneously
+ * without waiting for IPv6 to time out, which is not supported by the
+ * synchronous call. (This is not an API guarantee, and may change in
+ * the future.)
+ *
  * When the operation is finished @callback will be
  * called. You can then call g_socket_client_connect_finish() to get
  * the result of the operation.
@@ -37526,6 +37581,25 @@
 
 
 /**
+ * g_subprocess_launcher_close:
+ * @self: a #GSubprocessLauncher
+ *
+ * Closes all the file descriptors previously passed to the object with
+ * g_subprocess_launcher_take_fd(), g_subprocess_launcher_take_stderr_fd(), etc.
+ *
+ * After calling this method, any subsequent calls to g_subprocess_launcher_spawn() or g_subprocess_launcher_spawnv() will
+ * return %G_IO_ERROR_CLOSED. This method is idempotent if
+ * called more than once.
+ *
+ * This function is called automatically when the #GSubprocessLauncher
+ * is disposed, but is provided separately so that garbage collected
+ * language bindings can call it earlier to guarantee when FDs are closed.
+ *
+ * Since: 2.68
+ */
+
+
+/**
  * g_subprocess_launcher_getenv:
  * @self: a #GSubprocessLauncher
  * @variable: (type filename): the environment variable to get
@@ -39182,6 +39256,41 @@
  *
  * Returns: the new certificate, or %NULL if @data is invalid
  * Since: 2.28
+ */
+
+
+/**
+ * g_tls_certificate_new_from_pkcs11_uris:
+ * @pkcs11_uri: A PKCS \#11 URI
+ * @private_key_pkcs11_uri: (nullable): A PKCS \#11 URI
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Creates a #GTlsCertificate from a PKCS \#11 URI.
+ *
+ * An example @pkcs11_uri would be `pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01`
+ *
+ * Where the token’s layout is:
+ *
+ * ```
+ * Object 0:
+ *   URL: pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01;object=private%20key;type=private
+ *   Type: Private key (RSA-2048)
+ *   ID: 01
+ *
+ * Object 1:
+ *   URL: pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01;object=Certificate%20for%20Authentication;type=cert
+ *   Type: X.509 Certificate (RSA-2048)
+ *   ID: 01
+ * ```
+ *
+ * In this case the certificate and private key would both be detected and used as expected.
+ * @pkcs_uri may also just reference an X.509 certificate object and then optionally
+ * @private_key_pkcs11_uri allows using a private key exposed under a different URI.
+ *
+ * Note that the private key is not accessed until usage and may fail or require a PIN later.
+ *
+ * Returns: (transfer full): the new certificate, or %NULL on error
+ * Since: 2.68
  */
 
 
