@@ -110,6 +110,7 @@ import os
 import re
 import operator
 
+from typing import Tuple
 from operator import ne, gt, lt
 from collections import namedtuple, Counter, OrderedDict
 
@@ -575,7 +576,7 @@ class GtkDocAnnotatable(object):
     #: A :class:`tuple` of annotation name constants that are valid for this object. Annotation
     #: names not in this :class:`tuple` will be reported as *unknown* by :func:`validate`. The
     #: :attr:`valid_annotations` class attribute should be overridden by subclasses.
-    valid_annotations = ()
+    valid_annotations = ()  # type: Tuple[str,...]
 
     def __init__(self, position=None):
         #: A :class:`giscanner.message.Position` instance specifying the location of the

@@ -346,5 +346,5 @@ def get_msvcr_overwrite():
 
 
 import distutils.cygwinccompiler
-orig_get_msvcr = distutils.cygwinccompiler.get_msvcr
-distutils.cygwinccompiler.get_msvcr = get_msvcr_overwrite
+orig_get_msvcr = distutils.cygwinccompiler.get_msvcr  # type: ignore
+distutils.cygwinccompiler.get_msvcr = get_msvcr_overwrite  # type: ignore

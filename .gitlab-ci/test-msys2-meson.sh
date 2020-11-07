@@ -31,7 +31,7 @@ pacman --noconfirm -S --needed \
 export CCACHE_BASEDIR="${CI_PROJECT_DIR}"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
-pip3 install --upgrade --user meson==0.50.1 flake8
+pip3 install --upgrade --user meson==0.50.1 flake8 mypy
 export PATH="$HOME/.local/bin:$PATH"
 
 export CFLAGS="-Werror"
@@ -43,3 +43,4 @@ meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
 cd ..
 
 python3 -m flake8 --count
+python3 -m mypy .
