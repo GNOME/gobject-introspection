@@ -24,7 +24,7 @@ def show_func_defs(filename, output, extra_cpp_args=None):
     ast = parse_file(filename, use_cpp=True,
                      cpp_args=extra_cpp_args)
 
-    with open(output, 'w') as f:
+    with open(output, 'w', encoding='utf-8') as f:
         f.write("""<?xml version="1.0"?>
 <repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"

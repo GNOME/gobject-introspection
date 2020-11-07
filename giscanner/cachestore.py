@@ -65,7 +65,7 @@ class CacheStore(object):
         current_hash = _get_versionhash()
         version = os.path.join(self._directory, _CACHE_VERSION_FILENAME)
         try:
-            with open(version, 'r') as version_file:
+            with open(version, 'r', encoding='utf-8') as version_file:
                 cache_hash = version_file.read()
         except (IOError, OSError) as e:
             # File does not exist
@@ -81,7 +81,7 @@ class CacheStore(object):
 
         tmp_fd, tmp_filename = tempfile.mkstemp(prefix='g-ir-scanner-cache-version-')
         try:
-            with os.fdopen(tmp_fd, 'w') as tmp_file:
+            with os.fdopen(tmp_fd, 'w', encoding='utf-8') as tmp_file:
                 tmp_file.write(current_hash)
 
             # On Unix, this would just be os.rename() but Windows
@@ -169,12 +169,14 @@ class CacheStore(object):
                 return None
             else:
                 raise
-        if not self._cache_is_valid(store_filename, filename):
-            return None
-        try:
-            data = pickle.load(fd)
-        except Exception:
-            # Broken cache entry, remove it
-            self._remove_filename(store_filename)
-            data = None
-        return data
+
+        with fd:
+            if not self._cache_is_valid(store_filename, filename):
+                return None
+            try:
+                data = pickle.load(fd)
+            except Exception:
+                # Broken cache entry, remove it
+                self._remove_filename(store_filename)
+                data = None
+            return data

@@ -78,7 +78,7 @@ def _diff(a, b):
 
 
 def _extract_expected(filename):
-    fd = open(filename, 'r')
+    fd = open(filename, 'r', encoding='utf-8')
     data = fd.read()
     fd.close()
 

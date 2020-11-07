@@ -161,8 +161,8 @@ class CCodeGenerator(object):
         self._function_bodies[node] = body
 
     def codegen(self):
-        self.out_h = open(self.out_h_filename, 'w')
-        self.out_c = open(self.out_c_filename, 'w')
+        self.out_h = open(self.out_h_filename, 'w', encoding='utf-8')
+        self.out_c = open(self.out_c_filename, 'w', encoding='utf-8')
 
         self._codegen_start()
 
