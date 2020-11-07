@@ -84,7 +84,7 @@ _libtool_pat = re.compile("dlname='([A-z0-9\\.\\-\\+]+)'\n")
 
 
 def _extract_dlname_field(la_file):
-    with open(la_file) as f:
+    with open(la_file, encoding='utf-8') as f:
         data = f.read()
     m = _libtool_pat.search(data)
     if m:
@@ -97,7 +97,7 @@ _libtool_libdir_pat = re.compile("libdir='([^']+)'")
 
 
 def _extract_libdir_field(la_file):
-    with open(la_file) as f:
+    with open(la_file, encoding='utf-8') as f:
         data = f.read()
     m = _libtool_libdir_pat.search(data)
     if m:

@@ -334,7 +334,7 @@ def extract_filelist(options):
     filenames = []
     if not os.path.exists(options.filelist):
         _error('%s: no such filelist file' % (options.filelist, ))
-    with open(options.filelist, "r") as filelist_file:
+    with open(options.filelist, "r", encoding=None) as filelist_file:
         lines = filelist_file.readlines()
     for line in lines:
         # We don't support real C++ parsing yet, but we should be able

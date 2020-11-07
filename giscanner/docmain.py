@@ -71,7 +71,7 @@ def doc_main(args):
     if args.format == 'sections':
         sections_file = generate_sections_file(transformer)
 
-        with open(args.output, 'w') as fp:
+        with open(args.output, 'w', encoding='utf-8') as fp:
             write_sections_file(fp, sections_file)
     else:
         writer = DocWriter(transformer, args.language, args.format)

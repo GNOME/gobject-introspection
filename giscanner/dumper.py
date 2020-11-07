@@ -111,13 +111,13 @@ class DumpCompiler(object):
                                           'gobject-introspection-1.0', 'gdump.c')
         if not os.path.isfile(gdump_path):
             raise SystemExit("Couldn't find %r" % (gdump_path, ))
-        with open(gdump_path) as gdump_file:
+        with open(gdump_path, encoding='utf-8') as gdump_file:
             gdump_contents = gdump_file.read()
         tpl_args['gdump_include'] = gdump_contents
         tpl_args['init_sections'] = "\n".join(self._options.init_sections)
 
         c_path = self._generate_tempfile(tmpdir, '.c')
-        with open(c_path, 'w') as f:
+        with open(c_path, 'w', encoding='utf-8') as f:
             f.write(_PROGRAM_TEMPLATE % tpl_args)
 
             # We need to reference our get_type and error_quark functions

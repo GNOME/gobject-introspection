@@ -18,7 +18,7 @@ def create_scanner_from_source_string(source):
     tmp_fd, tmp_name = tempfile.mkstemp(suffix='.h', text=True)
 
     try:
-        with os.fdopen(tmp_fd, 'wt') as file:
+        with os.fdopen(tmp_fd, 'w', encoding='utf-8') as file:
             file.write(source)
         ss.parse_files([tmp_name])
     finally:

@@ -144,7 +144,7 @@ class GDumpParser(object):
         """Load the library (or executable), returning an XML
 blob containing data gleaned from GObject's primitive introspection."""
         in_path = os.path.join(self._binary.tmpdir, 'functions.txt')
-        with open(in_path, 'w') as f:
+        with open(in_path, 'w', encoding='utf-8') as f:
             for func in self._get_type_functions:
                 f.write('get-type:')
                 f.write(func)
