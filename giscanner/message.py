@@ -19,15 +19,23 @@
 # 02110-1301, USA.
 #
 
+import operator
 import os
 import sys
-import operator
+from enum import Enum
+from typing import TYPE_CHECKING, Callable, Iterable, Optional, TextIO, Tuple, Union
 
 from . import utils
 
-(WARNING,
- ERROR,
- FATAL) = range(3)
+if TYPE_CHECKING:
+    from .ast import Namespace, Node
+    from .sourcescanner import SourceSymbol
+
+
+class LogType(Enum):
+    WARNING = 0
+    ERROR = 1
+    FATAL = 2
 
 
 class Position(object):
@@ -38,43 +46,65 @@ class Position(object):
 
     __slots__ = ('filename', 'line', 'column', 'is_typedef')
 
-    def __init__(self, filename=None, line=None, column=None, is_typedef=False):
+    def __init__(
+        self,
+        filename: str,
+        line: Optional[int] = None,
+        column: Optional[int] = None,
+        is_typedef: bool = False,
+    ):
         self.filename = filename
         self.line = line
         self.column = column
         self.is_typedef = is_typedef
 
-    def _compare(self, other, op):
-        return op((self.filename, self.line, self.column),
-                  (other.filename, other.line, other.column))
+    def _compare(
+        self,
+        other: "Position",
+        op: Callable[
+            [
+                Tuple[str, Optional[int], Optional[int]],
+                Tuple[str, Optional[int], Optional[int]],
+            ],
+            bool,
+        ],
+    ) -> bool:
+        return op(
+            (self.filename, self.line, self.column),
+            (other.filename, other.line, other.column),
+        )
 
-    def __lt__(self, other):
+    def __lt__(self, other: "Position") -> bool:
         return self._compare(other, operator.lt)
 
-    def __gt__(self, other):
+    def __gt__(self, other: "Position") -> bool:
         return self._compare(other, operator.gt)
 
-    def __ge__(self, other):
+    def __ge__(self, other: "Position") -> bool:
         return self._compare(other, operator.ge)
 
-    def __le__(self, other):
+    def __le__(self, other: "Position") -> bool:
         return self._compare(other, operator.le)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Position):
+            return False
         return self._compare(other, operator.eq)
 
-    def __ne__(self, other):
+    def __ne__(self, other: object) -> bool:
+        if not isinstance(other, Position):
+            return True
         return self._compare(other, operator.ne)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.filename, self.line, self.column))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '<Position %s:%d:%d>' % (os.path.basename(self.filename),
                                         self.line or -1,
                                         self.column or -1)
 
-    def format(self, cwd):
+    def format(self, cwd: str) -> str:
         # Windows: We may be using different drives self.filename and cwd,
         #          which leads to a ValuError when using os.path.relpath().
         #          In that case, just use the entire path of self.filename
@@ -84,7 +114,7 @@ class Position(object):
         except ValueError:
             filename = os.path.realpath(self.filename)
 
-        if self.column is not None:
+        if self.column is not None and self.line is not None:
             return '%s:%d:%d' % (filename, self.line, self.column)
         elif self.line is not None:
             return '%s:%d' % (filename, self.line, )
@@ -95,7 +125,7 @@ class Position(object):
 class MessageLogger(object):
     _instance = None
 
-    def __init__(self, namespace=None, output=None):
+    def __init__(self, namespace: Optional["Namespace"] = None, output: TextIO = None):
         if output is None:
             output = sys.stderr
         self._cwd = os.getcwd()
@@ -105,18 +135,26 @@ class MessageLogger(object):
         self._warning_count = 0
 
     @classmethod
-    def get(cls, *args, **kwargs):
+    def get(cls, *args, **kwargs) -> "MessageLogger":
         if cls._instance is None:
             cls._instance = cls(*args, **kwargs)
         return cls._instance
 
-    def enable_warnings(self, value):
-        self._enable_warnings = bool(value)
+    def enable_warnings(self, value: bool) -> None:
+        self._enable_warnings = value
 
-    def get_warning_count(self):
+    def get_warning_count(self) -> int:
         return self._warning_count
 
-    def log(self, log_type, text, positions=None, prefix=None, marker_pos=None, marker_line=None):
+    def log(
+        self,
+        log_type: LogType,
+        text: str,
+        positions: Optional[Union[Iterable[Position], Position]] = None,
+        prefix: str = None,
+        marker_pos: Optional[int] = None,
+        marker_line: Optional[str] = None,
+    ) -> None:
         """
         Log a warning, using optional file positioning information.
         If the warning is related to a ast.Node type, see log_node().
@@ -125,26 +163,24 @@ class MessageLogger(object):
 
         self._warning_count += 1
 
-        if not self._enable_warnings and log_type in (WARNING, ERROR):
+        if not self._enable_warnings and log_type in (LogType.WARNING, LogType.ERROR):
             return
 
-        if type(positions) == set:
-            positions = list(positions)
-        if isinstance(positions, Position):
-            positions = [positions]
-
         if not positions:
-            positions = [Position('<unknown>')]
+            positions = [Position("<unknown>")]
+        elif isinstance(positions, Position):
+            positions = [positions]
+        elif not isinstance(positions, list):
+            positions = list(positions)
 
         for position in positions[:-1]:
             self._output.write("%s:\n" % (position.format(cwd=self._cwd), ))
         last_position = positions[-1].format(cwd=self._cwd)
 
-        if log_type == WARNING:
-            error_type = "Warning"
-        elif log_type == ERROR:
+        error_type = "Warning"
+        if log_type == LogType.ERROR:
             error_type = "Error"
-        elif log_type == FATAL:
+        elif log_type == LogType.FATAL:
             error_type = "Fatal"
 
         if marker_pos is not None and marker_line is not None:
@@ -166,11 +202,18 @@ class MessageLogger(object):
 
         self._output.write(text)
 
-        if log_type == FATAL:
+        if log_type == LogType.FATAL:
             utils.break_on_debug_flag('fatal')
             raise SystemExit(text)
 
-    def log_node(self, log_type, node, text, context=None, positions=None):
+    def log_node(
+        self,
+        log_type: LogType,
+        node: "Node",
+        text: str,
+        context=None,
+        positions: Optional[Union[Iterable[Position], Position]] = None,
+    ) -> None:
         """
         Log a warning, using information about file positions from
         the given node.  The optional context argument, if given, should be
@@ -194,40 +237,74 @@ class MessageLogger(object):
 
         self.log(log_type, text, positions)
 
-    def log_symbol(self, log_type, symbol, text):
+    def log_symbol(self, log_type: LogType, symbol: "SourceSymbol", text: str) -> None:
         """Log a warning in the context of the given symbol."""
         self.log(log_type, text, symbol.position,
                  prefix="symbol='%s'" % (symbol.ident, ))
 
 
-def log_node(log_type, node, text, context=None, positions=None):
+def log_node(
+    log_type: LogType,
+    node: "Node",
+    text: str,
+    context=None,
+    positions: Optional[Union[Iterable[Position], Position]] = None,
+):
     ml = MessageLogger.get()
     ml.log_node(log_type, node, text, context=context, positions=positions)
 
 
-def warn(text, positions=None, prefix=None, marker_pos=None, marker_line=None):
+def warn(
+    text: str,
+    positions: Optional[Union[Iterable[Position], Position]] = None,
+    prefix: str = None,
+    marker_pos: Optional[int] = None,
+    marker_line: Optional[str] = None,
+):
     ml = MessageLogger.get()
-    ml.log(WARNING, text, positions, prefix, marker_pos, marker_line)
+    ml.log(LogType.WARNING, text, positions, prefix, marker_pos, marker_line)
 
 
-def warn_node(node, text, context=None, positions=None):
-    log_node(WARNING, node, text, context=context, positions=positions)
+def warn_node(
+    node,
+    text: str,
+    context=None,
+    positions: Optional[Union[Iterable[Position], Position]] = None,
+) -> None:
+    log_node(LogType.WARNING, node, text, context=context, positions=positions)
 
 
-def error_node(node, text, context=None, positions=None):
-    log_node(ERROR, node, text, context=context, positions=positions)
+def error_node(
+    node,
+    text: str,
+    context=None,
+    positions: Optional[Union[Iterable[Position], Position]] = None,
+) -> None:
+    log_node(LogType.ERROR, node, text, context=context, positions=positions)
 
 
-def warn_symbol(symbol, text):
+def warn_symbol(symbol: "SourceSymbol", text: str) -> None:
     ml = MessageLogger.get()
-    ml.log_symbol(WARNING, symbol, text)
+    ml.log_symbol(LogType.WARNING, symbol, text)
 
 
-def error(text, positions=None, prefix=None, marker_pos=None, marker_line=None):
+def error(
+    text: str,
+    positions: Optional[Union[Iterable[Position], Position]] = None,
+    prefix: str = None,
+    marker_pos: Optional[int] = None,
+    marker_line: Optional[str] = None,
+) -> None:
     ml = MessageLogger.get()
-    ml.log(ERROR, text, positions, prefix, marker_pos, marker_line)
+    ml.log(LogType.ERROR, text, positions, prefix, marker_pos, marker_line)
 
 
-def fatal(text, positions=None, prefix=None, marker_pos=None, marker_line=None):
+def fatal(
+    text: str,
+    positions: Optional[Union[Iterable[Position], Position]] = None,
+    prefix: str = None,
+    marker_pos: Optional[int] = None,
+    marker_line: Optional[str] = None,
+) -> None:
     ml = MessageLogger.get()
-    ml.log(FATAL, text, positions, prefix, marker_pos, marker_line)
+    ml.log(LogType.FATAL, text, positions, prefix, marker_pos, marker_line)
