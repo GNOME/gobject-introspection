@@ -472,6 +472,10 @@ def write_output(data, options):
     """Write encoded XML 'data' to the filename specified in 'options'."""
     if options.output == "-":
         output = sys.stdout
+        try:
+            output.write(data)
+        except IOError as e:
+            _error("while writing output: %s" % (e.strerror, ))
     elif options.reparse_validate_gir:
         main_f, main_f_name = tempfile.mkstemp(suffix='.gir')
 
@@ -500,14 +504,10 @@ def write_output(data, options):
         return 0
     else:
         try:
-            output = open(options.output, 'wb')
+            with open(options.output, 'wb') as output:
+                output.write(data)
         except IOError as e:
-            _error("opening output for writing: %s" % (e.strerror, ))
-
-    try:
-        output.write(data)
-    except IOError as e:
-        _error("while writing output: %s" % (e.strerror, ))
+            _error("opening/writing output: %s" % (e.strerror, ))
 
 
 def get_source_root_dirs(options, filenames):

@@ -169,12 +169,14 @@ class CacheStore(object):
                 return None
             else:
                 raise
-        if not self._cache_is_valid(store_filename, filename):
-            return None
-        try:
-            data = pickle.load(fd)
-        except Exception:
-            # Broken cache entry, remove it
-            self._remove_filename(store_filename)
-            data = None
-        return data
+
+        with fd:
+            if not self._cache_is_valid(store_filename, filename):
+                return None
+            try:
+                data = pickle.load(fd)
+            except Exception:
+                # Broken cache entry, remove it
+                self._remove_filename(store_filename)
+                data = None
+            return data
