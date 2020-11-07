@@ -13,7 +13,6 @@ giscanner_files = [
   'girparser.py',
   'girwriter.py',
   'gdumpparser.py',
-  'libtoolimporter.py',
   'maintransformer.py',
   'mdextensions.py',
   'message.py',
