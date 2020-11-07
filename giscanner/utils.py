@@ -25,13 +25,14 @@ import platform
 import shutil
 import sys
 import time
-import giscanner.pkgconfig
+from typing import List, Optional
 
+import giscanner.pkgconfig
 
 _debugflags = None
 
 
-def have_debug_flag(flag):
+def have_debug_flag(flag: str) -> bool:
     """Check for whether a specific debugging feature is enabled.
 Well-known flags:
  * start: Drop into debugger just after processing arguments
@@ -47,7 +48,7 @@ Well-known flags:
     return flag in _debugflags
 
 
-def break_on_debug_flag(flag):
+def break_on_debug_flag(flag: str) -> None:
     if have_debug_flag(flag):
         import pdb
         pdb.set_trace()
@@ -59,7 +60,7 @@ _upperstr_pat2 = re.compile(r'([A-Z][A-Z])([A-Z][0-9a-z])')
 _upperstr_pat3 = re.compile(r'^([A-Z])([A-Z])')
 
 
-def to_underscores(name):
+def to_underscores(name: str) -> str:
     """Converts a typename to the equivalent underscores name.
     This is used to form the type conversion macros and enum/flag
     name variables.
@@ -72,7 +73,7 @@ def to_underscores(name):
     return name
 
 
-def to_underscores_noprefix(name):
+def to_underscores_noprefix(name: str) -> str:
     """Like to_underscores, but designed for "unprefixed" names.
     to_underscores("DBusFoo") => dbus_foo, not d_bus_foo."""
     name = _upperstr_pat1.sub(r'\1_\2', name)
@@ -83,7 +84,7 @@ def to_underscores_noprefix(name):
 _libtool_pat = re.compile("dlname='([A-z0-9\\.\\-\\+]+)'\n")
 
 
-def _extract_dlname_field(la_file):
+def _extract_dlname_field(la_file: str) -> Optional[str]:
     with open(la_file, encoding='utf-8') as f:
         data = f.read()
     m = _libtool_pat.search(data)
@@ -96,7 +97,7 @@ def _extract_dlname_field(la_file):
 _libtool_libdir_pat = re.compile("libdir='([^']+)'")
 
 
-def _extract_libdir_field(la_file):
+def _extract_libdir_field(la_file: str) -> Optional[str]:
     with open(la_file, encoding='utf-8') as f:
         data = f.read()
     m = _libtool_libdir_pat.search(data)
@@ -108,7 +109,7 @@ def _extract_libdir_field(la_file):
 
 # Returns the name that we would pass to dlopen() the library
 # corresponding to this .la file
-def extract_libtool_shlib(la_file):
+def extract_libtool_shlib(la_file: str) -> Optional[str]:
     dlname = _extract_dlname_field(la_file)
     if dlname is None:
         return None
@@ -126,7 +127,7 @@ def extract_libtool_shlib(la_file):
 
 
 # Returns arguments for invoking libtool, if applicable, otherwise None
-def get_libtool_command(options):
+def get_libtool_command(options) -> Optional[List[str]]:
     libtool_infection = not options.nolibtool
     if not libtool_infection:
         return None
@@ -153,7 +154,7 @@ def get_libtool_command(options):
     return [libtool_cmd]
 
 
-def files_are_identical(path1, path2):
+def files_are_identical(path1: str, path2: str) -> bool:
     with open(path1, 'rb') as f1, open(path2, 'rb') as f2:
         buf1 = f1.read(8192)
         buf2 = f2.read(8192)
@@ -163,22 +164,22 @@ def files_are_identical(path1, path2):
         return buf1 == buf2
 
 
-def cflag_real_include_path(cflag):
+def cflag_real_include_path(cflag: str) -> str:
     if not cflag.startswith("-I"):
         return cflag
 
     return "-I" + os.path.realpath(cflag[2:])
 
 
-def host_os():
+def host_os() -> str:
     return os.environ.get("GI_HOST_OS", os.name)
 
 
-def which(program):
-    def is_exe(fpath):
+def which(program: str) -> Optional[str]:
+    def is_exe(fpath: str) -> bool:
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
-    def is_nt_exe(fpath):
+    def is_nt_exe(fpath: str) -> bool:
         return not fpath.lower().endswith('.exe') and \
             os.path.isfile(fpath + '.exe') and \
             os.access(fpath + '.exe', os.X_OK)
@@ -201,7 +202,7 @@ def which(program):
     return None
 
 
-def get_user_cache_dir(dir=None):
+def get_user_cache_dir(dir: Optional[str] = None) -> Optional[str]:
     '''
     This is a Python reimplemention of `g_get_user_cache_dir()` because we don't want to
     rely on the python-xdg package and we can't depend on GLib via introspection.
@@ -235,7 +236,7 @@ def get_user_cache_dir(dir=None):
     return None
 
 
-def get_system_data_dirs():
+def get_system_data_dirs() -> List[str]:
     '''
     This is a Python reimplemention of `g_get_system_data_dirs()` because we don't want to
     rely on the python-xdg package and we can't depend on GLib via introspection.
@@ -249,7 +250,7 @@ def get_system_data_dirs():
     return xdg_data_dirs
 
 
-def rmtree(*args, **kwargs):
+def rmtree(*args, **kwargs) -> None:
     '''
     A variant of shutil.rmtree() which waits and tries again in case one of
     the files in the directory tree can't be deleted.
@@ -286,10 +287,10 @@ class dll_dirs():
             self._cached_dll_dirs = []
             self._cached_added_dll_dirs = []
 
-    def add_dll_dirs(self, pkgs):
-        if os.name == 'nt' and hasattr(os, 'add_dll_directory'):
+    def add_dll_dirs(self, pkgs: List[str]) -> None:
+        if os.name == 'nt' and hasattr(os, 'add_dll_directory') and self._cached_dll_dirs is not None:
             if 'GI_EXTRA_BASE_DLL_DIRS' in os.environ:
-                for path in os.environ.get('GI_EXTRA_BASE_DLL_DIRS').split(os.pathsep):
+                for path in os.environ.get('GI_EXTRA_BASE_DLL_DIRS', '').split(os.pathsep):
                     if path not in self._cached_dll_dirs:
                         self._cached_dll_dirs.append(path)
                         self._cached_added_dll_dirs.append(os.add_dll_directory(path))
@@ -299,7 +300,7 @@ class dll_dirs():
                     self._cached_dll_dirs.append(path)
                     self._cached_added_dll_dirs.append(os.add_dll_directory(path))
 
-    def cleanup_dll_dirs(self):
+    def cleanup_dll_dirs(self) -> None:
         if self._cached_added_dll_dirs is not None:
             for added_dll_dir in self._cached_added_dll_dirs:
                 added_dll_dir.close()
@@ -310,7 +311,7 @@ class dll_dirs():
 # monkey patch distutils.cygwinccompiler
 # somehow distutils returns runtime library only up to
 # VS2010 / MSVC 10.0 (msc_ver 1600)
-def get_msvcr_overwrite():
+def get_msvcr_overwrite() -> Optional[List[str]]:
     try:
         return orig_get_msvcr()
     except ValueError:
@@ -329,6 +330,8 @@ def get_msvcr_overwrite():
         elif msc_ver >= '1900':
             # VS2015
             return ['vcruntime140']
+
+    return None
 
 
 import distutils.cygwinccompiler
