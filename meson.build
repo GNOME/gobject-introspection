@@ -283,7 +283,7 @@ pkg.generate(
 # FIXME: meson.override_dependency() and declare_dependency()'s variable arguments
 # are new in Meson 0.54.0, older versions of Meson won't be able to use g-i as
 # subproject anyway
-if meson.version().version_compare('>=0.54.0')
+if meson.version().version_compare('>=0.54.0') and get_option('build_introspection_data') == true
   girepo_dep = declare_dependency(
     sources: typelibs,
     dependencies: girepo_dep,
