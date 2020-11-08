@@ -56,8 +56,9 @@ fedora-x86_64-meson:
     - cd ..
     - mkdir -p public
     - mv _build/docs/reference/html/ public/girepository/
-    - python3 -m pip install --user flake8
+    - python3 -m pip install --user flake8 mypy
     - python3 -m flake8 --count
+    - python3 -m mypy .
   except:
     - tags
   artifacts:
