@@ -27,10 +27,6 @@
 
 #include <glib-object.h>
 
-#ifndef Py_TYPE
-    #define Py_TYPE(ob) (((PyObject*)(ob))->ob_type)
-#endif
-
 #if PY_MAJOR_VERSION >= 3
     #define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
     #define MOD_ERROR_RETURN NULL
@@ -52,8 +48,12 @@ PyTypeObject Py##cname##_Type = {             \
     0                                         \
 }
 
+#if PY_VERSION_HEX < 0x030900A4
+#  define Py_SET_TYPE(obj, type) ((Py_TYPE(obj) = (type)), (void)0)
+#endif
+
 #define REGISTER_TYPE(d, name, type)	      \
-    Py_TYPE(&type) = &PyType_Type;             \
+    Py_SET_TYPE(&type, &PyType_Type);         \
     type.tp_alloc = PyType_GenericAlloc;      \
     type.tp_new = PyType_GenericNew;          \
     type.tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE; \
