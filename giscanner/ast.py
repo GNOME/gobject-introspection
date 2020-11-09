@@ -23,12 +23,22 @@ import copy
 import operator
 from itertools import chain
 from collections import OrderedDict
+import typing as T
 
 from . import message
 
-from .sourcescanner import CTYPE_TYPEDEF, CSYMBOL_TYPE_TYPEDEF
+from .sourcescanner import CTYPE_TYPEDEF, CSYMBOL_TYPE_TYPEDEF, SourceSymbol
 from .message import Position
 from .utils import to_underscores
+
+
+class Typed:
+    """Marks a Node as being comparable with Type"""
+
+    target_fundamental = None  # type: T.Optional[str]
+    target_giname = None  # type: T.Optional[str]
+    target_foreign = None  # type: T.Optional[str]
+    ctype = None  # type: T.Optional[str]
 
 
 class Type(object):
@@ -42,16 +52,18 @@ class Type(object):
     from a C type string, or a gtype_name (from g_type_name()).
     """
 
-    def __init__(self,
-                 ctype=None,
-                 gtype_name=None,
-                 target_fundamental=None,
-                 target_giname=None,
-                 target_foreign=None,
-                 _target_unknown=False,
-                 is_const=False,
-                 origin_symbol=None,
-                 complete_ctype=None):
+    def __init__(
+        self,
+        ctype: T.Optional[str] = None,
+        gtype_name: T.Optional[str] = None,
+        target_fundamental: T.Optional[str] = None,
+        target_giname: T.Optional[str] = None,
+        target_foreign: T.Optional[str] = None,
+        _target_unknown: T.Union["Type", bool] = False,
+        is_const: bool = False,
+        origin_symbol: T.Optional[str] = None,
+        complete_ctype: T.Optional[str] = None
+    ):
         self.ctype = ctype
         self.gtype_name = gtype_name
         self.origin_symbol = origin_symbol
@@ -77,13 +89,13 @@ class Type(object):
         self.complete_ctype = complete_ctype
 
     @property
-    def resolved(self):
+    def resolved(self) -> T.Optional[str]:
         return (self.target_fundamental or
                 self.target_giname or
                 self.target_foreign)
 
     @property
-    def unresolved_string(self):
+    def unresolved_string(self) -> str:
         if self.ctype:
             return self.ctype
         elif self.gtype_name:
@@ -94,7 +106,7 @@ class Type(object):
             assert False
 
     @classmethod
-    def create_from_gtype_name(cls, gtype_name):
+    def create_from_gtype_name(cls, gtype_name: str) -> "Type":
         """Parse a GType name (as from g_type_name()), and return a
 Type instance.  Note that this function performs namespace lookup,
 in contrast to the other create_type() functions."""
@@ -118,11 +130,15 @@ in contrast to the other create_type() functions."""
 
         return cls(gtype_name=gtype_name)
 
-    def get_giname(self):
+    def get_giname(self) -> str:
         assert self.target_giname is not None
         return self.target_giname.split('.')[1]
 
-    def _compare(self, other, op):
+    def _compare(
+        self,
+        other: T.Union["Type", "Typed"],
+        op: T.Callable[[T.Optional[str], T.Optional[str]], bool]
+    ):
         if self.target_fundamental:
             return op(self.target_fundamental, other.target_fundamental)
         elif self.target_giname:
@@ -132,29 +148,45 @@ in contrast to the other create_type() functions."""
         else:
             return op(self.ctype, other.ctype)
 
-    def __lt__(self, other):
+    def __lt__(
+        self,
+        other: T.Union["Type", "Typed"]
+    ) -> bool:
         return self._compare(other, operator.lt)
 
-    def __gt__(self, other):
+    def __gt__(
+        self,
+        other: T.Union["Type", "Typed"]
+    ) -> bool:
         return self._compare(other, operator.gt)
 
-    def __ge__(self, other):
+    def __ge__(
+        self,
+        other: T.Union["Type", "Typed"]
+    ) -> bool:
         return self._compare(other, operator.ge)
 
-    def __le__(self, other):
+    def __le__(
+        self,
+        other: T.Union["Type", "Typed"]
+    ) -> bool:
         return self._compare(other, operator.le)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, (Type, Typed)):
+            return False
         return self._compare(other, operator.eq)
 
-    def __ne__(self, other):
+    def __ne__(self, other: object) -> bool:
+        if not isinstance(other, (Type, Typed)):
+            return True
         return self._compare(other, operator.ne)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.target_fundamental, self.target_giname,
                      self.target_foreign, self.ctype))
 
-    def is_equiv(self, typeval):
+    def is_equiv(self, typeval: T.Union["Type", T.Sequence["Type"]]) -> bool:
         """Return True if the specified types are compatible at
         an introspection level, disregarding their C types.
         A sequence may be given for typeval, in which case
@@ -167,22 +199,23 @@ in contrast to the other create_type() functions."""
             return False
         return self == typeval
 
-    def clone(self):
+    def clone(self) -> "Type":
         return Type(target_fundamental=self.target_fundamental,
                     target_giname=self.target_giname,
                     target_foreign=self.target_foreign,
                     ctype=self.ctype,
                     is_const=self.is_const)
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.target_fundamental:
             return self.target_fundamental
         elif self.target_giname:
             return self.target_giname
         elif self.target_foreign:
             return self.target_foreign
+        return ''
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if self.target_fundamental:
             data = 'target_fundamental=%s, ' % (self.target_fundamental, )
         elif self.target_giname:
@@ -266,11 +299,13 @@ for v in [TYPE_NONE, TYPE_ANY,
           TYPE_LONG_DOUBLE, TYPE_VALIST]:
     INTROSPECTABLE_BASIC.remove(v)
 
-type_names = {}
+type_names = {} # type: T.Dict[str, Type]
 for typeval in GIR_TYPES:
+    assert typeval.target_fundamental is not None
     type_names[typeval.target_fundamental] = typeval
-basic_type_names = {}
+basic_type_names = {} # type: T.Dict[str, Type]
 for typeval in BASIC_GIR_TYPES:
+    assert typeval.target_fundamental is not None
     basic_type_names[typeval.target_fundamental] = typeval
 
 # C builtin
@@ -375,7 +410,13 @@ SIGNAL_MUST_COLLECT = 'must-collect'
 
 
 class Namespace(object):
-    def __init__(self, name, version, identifier_prefixes=None, symbol_prefixes=None):
+    def __init__(
+        self,
+        name: str,
+        version: str,
+        identifier_prefixes: T.List[str] = None,
+        symbol_prefixes: T.List[str] = None
+    ):
         self.name = name
         self.version = version
         if identifier_prefixes is not None:
@@ -389,18 +430,18 @@ class Namespace(object):
             self.symbol_prefixes = [to_underscores(p).lower() for p in ps]
         # cache upper-cased versions
         self._ucase_symbol_prefixes = [p.upper() for p in self.symbol_prefixes]
-        self.names = OrderedDict()   # Maps from GIName -> node
-        self.aliases = {}            # Maps from GIName -> GIName
-        self.type_names = {}         # Maps from GTName -> node
-        self.ctypes = {}             # Maps from CType -> node
-        self.symbols = {}            # Maps from function symbols -> Function
+        self.names = OrderedDict()  # type: T.MutableMapping[str, Node]
+        self.aliases = {}  # type: T.Dict[str, Node]
+        self.type_names = {}  # type: T.Dict[str, Node]
+        self.ctypes = {}  # type: T.Dict[str, Node]
+        self.symbols = {}  # type: T.Dict[str, T.Union[Function, Member]]
         # Immediate includes only, not their transitive closure:
-        self.includes = set()        # Include
-        self.shared_libraries = []   # str
-        self.c_includes = []         # str
-        self.exported_packages = []  # str
+        self.includes = set()  # type: T.Set[Include]
+        self.shared_libraries = []  # type: T.List[str]
+        self.c_includes = []  # type: T.List[str]
+        self.exported_packages = []  # type: T.List[str]
 
-    def type_from_name(self, name, ctype=None):
+    def type_from_name(self, name: str, ctype: T.Optional[str] = None) -> Type:
         """Backwards compatibility method for older .gir files, which
 only use the 'name' attribute.  If name refers to a fundamental type,
 create a Type object referncing it.  If name is already a
@@ -415,7 +456,7 @@ returned."""
             target = '%s.%s' % (self.name, name)
         return Type(target_giname=target, ctype=ctype)
 
-    def track(self, node):
+    def track(self, node: "Node") -> None:
         """Doesn't directly append the function to our own namespace,
 but adds it to things like ctypes, symbols, and type_names.
 """
@@ -424,7 +465,7 @@ but adds it to things like ctypes, symbols, and type_names.
             return
         assert node.namespace is None
         node.namespace = self
-        if isinstance(node, Alias):
+        if isinstance(node, Alias) and node.name:
             self.aliases[node.name] = node
         elif isinstance(node, Registered) and node.gtype_name is not None:
             self.type_names[node.gtype_name] = node
@@ -452,9 +493,9 @@ but adds it to things like ctypes, symbols, and type_names.
                 member.namespace = self
                 self.symbols[member.symbol] = member
         if hasattr(node, 'ctype'):
-            self.ctypes[node.ctype] = node
+            self.ctypes[T.cast(T.Any, node).ctype] = node
 
-    def append(self, node, replace=False):
+    def append(self, node: "Node", replace: bool = False) -> None:
         previous = self.names.get(node.name)
         if previous is not None:
             if not replace:
@@ -464,86 +505,93 @@ but adds it to things like ctypes, symbols, and type_names.
         self.track(node)
         self.names[node.name] = node
 
-    def remove(self, node):
+    def remove(self, node: "Node") -> None:
         if isinstance(node, Alias):
             del self.aliases[node.name]
         elif isinstance(node, Registered) and node.gtype_name is not None:
             del self.type_names[node.gtype_name]
         if hasattr(node, 'ctype'):
-            del self.ctypes[node.ctype]
+            del self.ctypes[T.cast(T.Any, node).ctype]
         if isinstance(node, Function):
             del self.symbols[node.symbol]
         node.namespace = None
         self.names.pop(node.name, None)
 
-    def float(self, node):
+    def float(self, node: "Function") -> None:
         """Like remove(), but doesn't unset the node's namespace
 back-reference, and it's still possible to look up
 functions via get_by_symbol()."""
-        if isinstance(node, Function):
-            symbol = node.symbol
+        symbol = node.symbol
         self.remove(node)
         self.symbols[symbol] = node
         node.namespace = self
 
-    def __iter__(self):
+    def __iter__(self) -> T.Iterable[str]:
         return iter(self.names)
 
-    def items(self):
+    def items(self) -> T.AbstractSet[T.Tuple[str, "Node"]]:
         return self.names.items()
 
-    def values(self):
+    def values(self) -> T.ValuesView["Node"]:
         return self.names.values()
 
-    def get(self, name):
+    def get(self, name: str) -> T.Optional["Node"]:
         return self.names.get(name)
 
-    def get_by_ctype(self, ctype):
+    def get_by_ctype(self, ctype: str) -> T.Optional["Node"]:
         return self.ctypes.get(ctype)
 
-    def get_by_symbol(self, symbol):
+    def get_by_symbol(self, symbol: str) -> T.Optional[T.Union["Function", "Member"]]:
         return self.symbols.get(symbol)
 
-    def walk(self, callback):
+    def walk(self, callback: T.Callable[["Node", T.List], bool]) -> None:
         for node in self.values():
             node.walk(callback, [])
 
 
 class Include(object):
 
-    def __init__(self, name, version):
+    def __init__(self, name: str, version: str):
         self.name = name
         self.version = version
 
     @classmethod
-    def from_string(cls, string):
+    def from_string(cls, string: str) -> "Include":
         return cls(*string.split('-', 1))
 
-    def _compare(self, other, op):
+    def _compare(
+        self,
+        other: "Include",
+        op: T.Callable[[T.Tuple[str, str], T.Tuple[str, str]], bool]
+    ) -> bool:
         return op((self.name, self.version), (other.name, other.version))
 
-    def __lt__(self, other):
+    def __lt__(self, other: "Include") -> bool:
         return self._compare(other, operator.lt)
 
-    def __gt__(self, other):
+    def __gt__(self, other: "Include") -> bool:
         return self._compare(other, operator.gt)
 
-    def __ge__(self, other):
+    def __ge__(self, other: "Include") -> bool:
         return self._compare(other, operator.ge)
 
-    def __le__(self, other):
+    def __le__(self, other: "Include") -> bool:
         return self._compare(other, operator.le)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Include):
+            return False
         return self._compare(other, operator.eq)
 
-    def __ne__(self, other):
+    def __ne__(self, other: object) -> bool:
+        if not isinstance(other, Include):
+            return True
         return self._compare(other, operator.ne)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(str(self))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return '%s-%s' % (self.name, self.version)
 
 
@@ -573,63 +621,73 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
                       self.name)
     gi_name = property(lambda self: '%s.%s' % (self.namespace.name, self.name))
 
-    def __init__(self, name=None):
+    def __init__(self, name: str):
         Annotated.__init__(self)
-        self.namespace = None   # Should be set later by Namespace.append()
+        # Should be set later by Namespace.append()
+        self.namespace = None  # type: T.Optional[Namespace]
         self.name = name
         self.foreign = False
-        self.file_positions = set()
-        self._parent = None
+        self.file_positions = set()  # type: T.Set[Position]
+        self._parent = None  # type: T.Optional[Node]
 
-    def _get_parent(self):
+    def _get_parent(self) -> T.Optional[T.Union["Node", Namespace]]:
         if self._parent is not None:
             return self._parent
         else:
             return self.namespace
 
-    def _set_parent(self, value):
+    def _set_parent(self, value: "Node") -> None:
         self._parent = value
+
     parent = property(_get_parent, _set_parent)
 
-    def create_type(self):
+    def create_type(self) -> Type:
         """Create a Type object referencing this node."""
         assert self.namespace is not None
         return Type(target_giname=('%s.%s' % (self.namespace.name, self.name)))
 
-    def _compare(self, other, op):
+    def _compare(
+        self,
+        other: "Node",
+        op: T.Callable[[T.Tuple[T.Optional[Namespace], str], T.Tuple[T.Optional[Namespace], str]], bool]
+    ) -> bool:
         return op((self.namespace, self.name), (other.namespace, other.name))
 
-    def __lt__(self, other):
+    def __lt__(self, other: "Node") -> bool:
         return self._compare(other, operator.lt)
 
-    def __gt__(self, other):
+    def __gt__(self, other: "Node") -> bool:
         return self._compare(other, operator.gt)
 
-    def __ge__(self, other):
+    def __ge__(self, other: "Node") -> bool:
         return self._compare(other, operator.ge)
 
-    def __le__(self, other):
+    def __le__(self, other: "Node") -> bool:
         return self._compare(other, operator.le)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Node):
+            return False
         return self._compare(other, operator.eq)
 
-    def __ne__(self, other):
+    def __ne__(self, other: object) -> bool:
+        if not isinstance(other, Node):
+            return True
         return self._compare(other, operator.ne)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.namespace, self.name))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s('%s')" % (self.__class__.__name__, self.name)
 
-    def inherit_file_positions(self, node):
+    def inherit_file_positions(self, node: "Node") -> None:
         self.file_positions.update(node.file_positions)
 
-    def add_file_position(self, position):
+    def add_file_position(self, position: Position) -> None:
         self.file_positions.add(position)
 
-    def get_main_position(self):
+    def get_main_position(self) -> T.Optional[Position]:
         if not self.file_positions:
             return None
 
@@ -642,12 +700,16 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
 
         return res
 
-    def add_symbol_reference(self, symbol):
+    def add_symbol_reference(self, symbol: SourceSymbol) -> None:
         if symbol.source_filename:
             self.add_file_position(Position(symbol.source_filename, symbol.line,
                 is_typedef=symbol.type in (CTYPE_TYPEDEF, CSYMBOL_TYPE_TYPEDEF)))
 
-    def walk(self, callback, chain):
+    def walk(
+        self,
+        callback: T.Callable[["Node", T.List], bool],
+        chain: T.List
+    ) -> T.Optional[bool]:
         res = callback(self, chain)
         assert res in (True, False), "Walk function must return boolean, not %r" % (res, )
         if not res:
@@ -655,19 +717,28 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
         chain.append(self)
         self._walk(callback, chain)
         chain.pop()
+        return None
 
-    def _walk(self, callback, chain):
+    def _walk(
+        self,
+        callback: T.Callable[["Node", T.List], bool],
+        chain: T.List
+    ) -> None:
         pass
 
 
 class DocSection(Node):
-    def __init__(self, name=None):
+    def __init__(self, name: str):
         Node.__init__(self, name)
 
 
 class Registered:
     """A node that (possibly) has gtype_name and get_type."""
-    def __init__(self, gtype_name, get_type):
+    def __init__(
+        self,
+        gtype_name: T.Optional[str],
+        get_type: T.Optional[str]
+    ):
         assert (gtype_name is None and get_type is None) or \
                (gtype_name is not None and get_type is not None)
         self.gtype_name = gtype_name
@@ -676,7 +747,13 @@ class Registered:
 
 class Callable(Node):
 
-    def __init__(self, name, retval, parameters, throws):
+    def __init__(
+        self,
+        name: str,
+        retval: "Return",
+        parameters: T.List["Parameter"],
+        throws: bool
+    ):
         Node.__init__(self, name)
         self.retval = retval
         self.parameters = parameters
@@ -684,49 +761,52 @@ class Callable(Node):
         self.instance_parameter = None  # Parameter
         self.parent = None  # A Class or Interface
 
-    def _get_retval(self):
+    def _get_retval(self) -> T.Optional["Return"]:
         return self._retval
 
-    def _set_retval(self, value):
+    def _set_retval(self, value: T.Optional["Return"]) -> None:
         self._retval = value
         if self._retval is not None:
             self._retval.parent = self
+
     retval = property(_get_retval, _set_retval)
 
-    def _get_instance_parameter(self):
+    def _get_instance_parameter(self) -> T.Optional["Parameter"]:
         return self._instance_parameter
 
-    def _set_instance_parameter(self, value):
+    def _set_instance_parameter(self, value: T.Optional["Parameter"]) -> None:
         self._instance_parameter = value
         if value is not None:
             value.parent = self
+
     instance_parameter = property(_get_instance_parameter,
                                   _set_instance_parameter)
 
-    def _get_parameters(self):
+    def _get_parameters(self) -> T.List["Parameter"]:
         return self._parameters
 
-    def _set_parameters(self, value):
+    def _set_parameters(self, value: T.List["Parameter"]) -> None:
         self._parameters = value
         for param in self._parameters:
             param.parent = self
+
     parameters = property(_get_parameters, _set_parameters)
 
     # Returns all parameters, including the instance parameter
     @property
-    def all_parameters(self):
+    def all_parameters(self) -> T.List["Parameter"]:
         if self.instance_parameter is not None:
             return [self.instance_parameter] + self.parameters
         else:
             return self.parameters
 
-    def get_parameter_index(self, name):
+    def get_parameter_index(self, name: str) -> int:
         for i, parameter in enumerate(self.parameters):
             if parameter.argname == name:
                 return i
         raise ValueError("Unknown argument %s" % (name, ))
 
-    def get_parameter(self, name):
+    def get_parameter(self, name: str) -> "Parameter":
         for parameter in self.all_parameters:
             if parameter.argname == name:
                 return parameter
@@ -734,7 +814,7 @@ class Callable(Node):
 
 
 class FunctionMacro(Node):
-    def __init__(self, name, parameters, symbol):
+    def __init__(self, name: str, parameters: T.List["Parameter"], symbol: str):
         Node.__init__(self, name)
         self.symbol = symbol
         self.parameters = parameters
@@ -743,7 +823,14 @@ class FunctionMacro(Node):
 
 class Function(Callable):
 
-    def __init__(self, name, retval, parameters, throws, symbol):
+    def __init__(
+        self,
+        name: str,
+        retval: "Return",
+        parameters: T.List["Parameter"],
+        throws: bool,
+        symbol: str
+    ):
         Callable.__init__(self, name, retval, parameters, throws)
         self.symbol = symbol
         self.is_method = False
@@ -753,7 +840,7 @@ class Function(Callable):
         self.moved_to = None            # namespaced function name string
         self.internal_skipped = False   # if True, this func will not be written to GIR
 
-    def clone(self):
+    def clone(self) -> "Function":
         clone = copy.copy(self)
         # copy the parameters array so a change to self.parameters does not
         # influence clone.parameters.
@@ -762,7 +849,7 @@ class Function(Callable):
             param.parent = clone
         return clone
 
-    def is_type_meta_function(self):
+    def is_type_meta_function(self) -> bool:
         # Named correctly
         if not (self.name.endswith('_get_type') or self.name.endswith('_get_gtype')):
             return False
@@ -782,19 +869,33 @@ class Function(Callable):
 
 class ErrorQuarkFunction(Function):
 
-    def __init__(self, name, retval, parameters, throws, symbol, error_domain):
+    def __init__(
+        self,
+        name: str,
+        retval: "Return",
+        parameters: T.List["Parameter"],
+        throws: bool,
+        symbol: str,
+        error_domain: str
+    ):
         Function.__init__(self, name, retval, parameters, throws, symbol)
         self.error_domain = error_domain
 
 
 class VFunction(Callable):
 
-    def __init__(self, name, retval, parameters, throws):
+    def __init__(
+        self,
+        name: str,
+        retval: "Return",
+        parameters: T.List["Parameter"],
+        throws: bool
+    ):
         Callable.__init__(self, name, retval, parameters, throws)
         self.invoker = None
 
     @classmethod
-    def from_callback(cls, name, cb):
+    def from_callback(cls, name: str, cb: "Callback") -> "VFunction":
         obj = cls(name, cb.retval, cb.parameters[1:],
                   cb.throws)
         return obj
@@ -812,9 +913,13 @@ class Array(Type):
     GLIB_BYTEARRAY = 'GLib.ByteArray'
     GLIB_PTRARRAY = 'GLib.PtrArray'
 
-    def __init__(self, array_type, element_type, **kwargs):
-        Type.__init__(self, target_fundamental='<array>',
-                      **kwargs)
+    def __init__(
+        self,
+        array_type: T.Optional[str],
+        element_type: Type,
+        **kwargs
+    ):
+        Type.__init__(self, target_fundamental='<array>', **kwargs)
         if (array_type is None or array_type == self.C):
             self.array_type = self.C
         else:
@@ -828,7 +933,7 @@ class Array(Type):
         self.length_param_name = None
         self.size = None
 
-    def clone(self):
+    def clone(self) -> "Array":
         arr = Array(self.array_type, self.element_type)
         arr.zeroterminated = self.zeroterminated
         arr.length_param_name = self.length_param_name
@@ -838,34 +943,34 @@ class Array(Type):
 
 class List(Type):
 
-    def __init__(self, name, element_type, **kwargs):
-        Type.__init__(self, target_fundamental='<list>',
-                      **kwargs)
+    def __init__(self, name: str, element_type: Type, **kwargs):
+        Type.__init__(self, target_fundamental='<list>', **kwargs)
         self.name = name
         assert isinstance(element_type, Type)
         self.element_type = element_type
 
-    def clone(self):
+    def clone(self) -> "List":
         return List(self.name, self.element_type)
 
 
 class Map(Type):
 
-    def __init__(self, key_type, value_type, **kwargs):
+    def __init__(self, key_type: Type, value_type: Type, **kwargs):
         Type.__init__(self, target_fundamental='<map>', **kwargs)
         assert isinstance(key_type, Type)
         self.key_type = key_type
         assert isinstance(value_type, Type)
         self.value_type = value_type
 
-    def clone(self):
+    def clone(self) -> "Map":
         return Map(self.key_type, self.value_type)
 
 
-class Alias(Node):
+class Alias(Node, Typed):
 
-    def __init__(self, name, target, ctype=None):
+    def __init__(self, name: str, target: Node, ctype: str = None):
         Node.__init__(self, name)
+        Typed.__init__(self)
         self.target = target
         self.ctype = ctype
 
@@ -873,7 +978,16 @@ class Alias(Node):
 class TypeContainer(Annotated):
     """A fundamental base class for Return and Parameter."""
 
-    def __init__(self, typenode, nullable, not_nullable, transfer, direction):
+    transfer = None # type: T.Optional[str]
+
+    def __init__(
+        self,
+        typenode,
+        nullable: bool,
+        not_nullable: bool,
+        transfer: T.Optional[str],
+        direction: T.Optional[str]
+    ):
         Annotated.__init__(self)
         self.type = typenode
         self.nullable = nullable
@@ -883,22 +997,29 @@ class TypeContainer(Annotated):
             self.transfer = transfer
         elif typenode and typenode.is_const:
             self.transfer = PARAM_TRANSFER_NONE
-        else:
-            self.transfer = None
 
 
 class Parameter(TypeContainer):
     """An argument to a function."""
 
-    def __init__(self, argname, typenode, direction=None,
-                 transfer=None, nullable=False, optional=False,
-                 allow_none=False, scope=None,
-                 caller_allocates=False, not_nullable=False):
+    def __init__(
+        self,
+        argname: str,
+        typenode: Type,
+        direction: T.Optional[str] = None,
+        transfer: T.Optional[str] = None,
+        nullable: bool = False,
+        optional: bool = False,
+        allow_none: bool = False,
+        scope: T.Optional[str] = None,
+        caller_allocates: bool = False,
+        not_nullable: bool = False
+    ):
         TypeContainer.__init__(self, typenode, nullable, not_nullable,
                                transfer, direction)
         self.argname = argname
         self.optional = optional
-        self.parent = None  # A Callable
+        self.parent = None  # type: T.Optional[Callable]
 
         if allow_none:
             if self.direction == PARAM_DIRECTION_OUT:
@@ -919,22 +1040,32 @@ class Parameter(TypeContainer):
 class Return(TypeContainer):
     """A return value from a function."""
 
-    def __init__(self, rtype, nullable=False, not_nullable=False,
-                 transfer=None):
+    def __init__(
+        self,
+        rtype: Type,
+        nullable: bool = False,
+        not_nullable: bool = False,
+        transfer: T.Optional[str] = None
+    ):
         TypeContainer.__init__(self, rtype, nullable, not_nullable, transfer,
                                direction=PARAM_DIRECTION_OUT)
-        self.parent = None  # A Callable
+        self.parent = None  # type: T.Optional[Callable]
 
 
-class Enum(Node, Registered):
+class Enum(Node, Registered, Typed):
 
-    def __init__(self, name, ctype,
-                 gtype_name=None,
-                 get_type=None,
-                 c_symbol_prefix=None,
-                 members=None):
+    def __init__(
+        self,
+        name: str,
+        ctype: str,
+        gtype_name: T.Optional[str] = None,
+        get_type: T.Optional[str] = None,
+        c_symbol_prefix: T.Optional[str] = None,
+        members: T.List["Member"] = []
+    ):
         Node.__init__(self, name)
         Registered.__init__(self, gtype_name, get_type)
+        Typed.__init__(self)
         self.c_symbol_prefix = c_symbol_prefix
         self.ctype = ctype
         self.members = members
@@ -942,99 +1073,125 @@ class Enum(Node, Registered):
             member.parent = self
         # Associated error domain name
         self.error_domain = None
-        self.static_methods = []
+        self.static_methods = [] #  type: T.List[Function]
 
-    def _walk(self, callback, chain):
+    def _walk(
+        self,
+        callback: T.Callable[["Node", T.List], bool],
+        chain: T.List
+    ) -> None:
         for meth in self.static_methods:
             meth.walk(callback, chain)
 
 
-class Bitfield(Node, Registered):
+class Bitfield(Node, Registered, Typed):
 
-    def __init__(self, name, ctype,
-                 gtype_name=None,
-                 c_symbol_prefix=None,
-                 get_type=None,
-                 members=None):
+    def __init__(
+        self,
+        name: str,
+        ctype: str,
+        gtype_name: T.Optional[str] = None,
+        c_symbol_prefix: T.Optional[str] = None,
+        get_type: T.Optional[str] = None,
+        members: T.List["Member"] = []
+    ):
         Node.__init__(self, name)
         Registered.__init__(self, gtype_name, get_type)
+        Typed.__init__(self)
         self.ctype = ctype
         self.c_symbol_prefix = c_symbol_prefix
         self.members = members
         for member in members:
             member.parent = self
-        self.static_methods = []
+        self.static_methods = []  # type: T.List[Function]
 
-    def _walk(self, callback, chain):
+    def _walk(
+        self,
+        callback: T.Callable[["Node", T.List], bool],
+        chain: T.List
+    ) -> None:
         for meth in self.static_methods:
             meth.walk(callback, chain)
 
 
 class Member(Annotated):
 
-    def __init__(self, name, value, symbol, nick):
+    def __init__(self, name: str, value: Node, symbol: str, nick: str):
         Annotated.__init__(self)
         self.name = name
         self.value = value
         self.symbol = symbol
         self.nick = nick
-        self.parent = None
+        self.parent = None  # type: T.Optional[Node]
+        self.namespace = None  # type: T.Optional[Namespace]
 
-    def _compare(self, other, op):
+    def _compare(self, other: "Member", op: T.Callable[[str, str], bool]):
         return op(self.name, other.name)
 
-    def __lt__(self, other):
+    def __lt__(self, other: "Member") -> bool:
         return self._compare(other, operator.lt)
 
-    def __gt__(self, other):
+    def __gt__(self, other: "Member") -> bool:
         return self._compare(other, operator.gt)
 
-    def __ge__(self, other):
+    def __ge__(self, other: "Member") -> bool:
         return self._compare(other, operator.ge)
 
-    def __le__(self, other):
+    def __le__(self, other: "Member") -> bool:
         return self._compare(other, operator.le)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
+        if not isinstance(other, Member):
+            return False
         return self._compare(other, operator.eq)
 
-    def __ne__(self, other):
+    def __ne__(self, other: object):
+        if not isinstance(other, Member):
+            return True
         return self._compare(other, operator.ne)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.name)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s('%s')" % (self.__class__.__name__, self.name)
 
 
-class Compound(Node, Registered):
-    def __init__(self, name,
-                 ctype=None,
-                 gtype_name=None,
-                 get_type=None,
-                 c_symbol_prefix=None,
-                 disguised=False,
-                 tag_name=None):
+class Compound(Node, Registered, Typed):
+    def __init__(
+        self,
+        name,
+        ctype: T.Optional[str] = None,
+        gtype_name: T.Optional[str] = None,
+        get_type: T.Optional[str] = None,
+        c_symbol_prefix: T.Optional[str] = None,
+        disguised: bool = False,
+        tag_name: T.Optional[str] = None
+    ):
         Node.__init__(self, name)
         Registered.__init__(self, gtype_name, get_type)
         self.ctype = ctype
-        self.methods = []
-        self.static_methods = []
-        self.fields = []
-        self.constructors = []
+        self.methods = []  # type: T.List[Function]
+        self.static_methods = []  # type: T.List[Function]
+        self.fields = []  # type: T.List[Field]
+        self.constructors = []  # type: T.List[Function]
         self.disguised = disguised
         self.gtype_name = gtype_name
         self.get_type = get_type
         self.c_symbol_prefix = c_symbol_prefix
         self.tag_name = tag_name
 
-    def add_gtype(self, gtype_name, get_type):
+    def add_gtype(self, gtype_name: str, get_type: str) -> None:
         self.gtype_name = gtype_name
         self.get_type = get_type
+        assert self.namespace is not None
         self.namespace.type_names[gtype_name] = self
 
-    def _walk(self, callback, chain):
+    def _walk(
+        self,
+        callback: T.Callable[["Node", T.List], bool],
+        chain: T.List
+    ) -> None:
         for ctor in self.constructors:
             ctor.walk(callback, chain)
         for func in self.methods:
@@ -1045,13 +1202,13 @@ class Compound(Node, Registered):
             if field.anonymous_node is not None:
                 field.anonymous_node.walk(callback, chain)
 
-    def get_field(self, name):
+    def get_field(self, name: str) -> "Field":
         for field in self.fields:
             if field.name == name:
                 return field
         raise ValueError("Unknown field %s" % (name, ))
 
-    def get_field_index(self, name):
+    def get_field_index(self, name: str) -> int:
         for i, field in enumerate(self.fields):
             if field.name == name:
                 return i
@@ -1060,8 +1217,15 @@ class Compound(Node, Registered):
 
 class Field(Annotated):
 
-    def __init__(self, name, typenode, readable, writable, bits=None,
-                 anonymous_node=None):
+    def __init__(
+        self,
+        name: str,
+        typenode: Type,
+        readable: bool,
+        writable: bool,
+        bits: T.Optional[str] = None,
+        anonymous_node: T.Optional[Node] = None
+    ):
         Annotated.__init__(self)
         assert (typenode or anonymous_node)
         self.name = name
@@ -1072,45 +1236,56 @@ class Field(Annotated):
         self.anonymous_node = anonymous_node
         self.private = False
         self.namespace = None
-        self.parent = None  # a compound
+        self.parent = None  # type: T.Optional[Compound]
 
-    def _compare(self, other, op):
+    def _compare(
+        self,
+        other: "Field",
+        op: T.Callable[[str, str], bool]
+    ) -> bool:
         return op(self.name, other.name)
 
-    def __lt__(self, other):
+    def __lt__(self, other: "Field") -> bool:
         return self._compare(other, operator.lt)
 
-    def __gt__(self, other):
+    def __gt__(self, other: "Field") -> bool:
         return self._compare(other, operator.gt)
 
-    def __ge__(self, other):
+    def __ge__(self, other: "Field") -> bool:
         return self._compare(other, operator.ge)
 
-    def __le__(self, other):
+    def __le__(self, other: "Field") -> bool:
         return self._compare(other, operator.le)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Field):
+            return False
         return self._compare(other, operator.eq)
 
-    def __ne__(self, other):
+    def __ne__(self, other: object) -> bool:
+        if not isinstance(other, Field):
+            return True
         return self._compare(other, operator.ne)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.name)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "%s('%s')" % (self.__class__.__name__, self.name)
 
 
 class Record(Compound):
 
-    def __init__(self, name,
-                 ctype=None,
-                 gtype_name=None,
-                 get_type=None,
-                 c_symbol_prefix=None,
-                 disguised=False,
-                 tag_name=None):
+    def __init__(
+        self,
+        name: str,
+        ctype: T.Optional[str] = None,
+        gtype_name: T.Optional[str] = None,
+        get_type: T.Optional[str] = None,
+        c_symbol_prefix: T.Optional[str] = None,
+        disguised: bool = False,
+        tag_name: T.Optional[str] = None
+    ):
         Compound.__init__(self, name,
                           ctype=ctype,
                           gtype_name=gtype_name,
@@ -1125,13 +1300,16 @@ class Record(Compound):
 
 class Union(Compound):
 
-    def __init__(self, name,
-                 ctype=None,
-                 gtype_name=None,
-                 get_type=None,
-                 c_symbol_prefix=None,
-                 disguised=False,
-                 tag_name=None):
+    def __init__(
+        self,
+        name: str,
+        ctype: T.Optional[str] = None,
+        gtype_name: T.Optional[str] = None,
+        get_type: T.Optional[str] = None,
+        c_symbol_prefix: T.Optional[str] = None,
+        disguised: bool = False,
+        tag_name: T.Optional[str] = None
+    ):
         Compound.__init__(self, name,
                           ctype=ctype,
                           gtype_name=gtype_name,
@@ -1158,7 +1336,11 @@ class Boxed(Node, Registered):
         self.methods = []
         self.static_methods = []
 
-    def _walk(self, callback, chain):
+    def _walk(
+        self,
+        callback: T.Callable[["Node", T.List], bool],
+        chain: T.List
+    ) -> None:
         for ctor in self.constructors:
             ctor.walk(callback, chain)
         for meth in self.methods:
@@ -1213,7 +1395,11 @@ class Class(Node, Registered):
         self.fields = []
         self.signals = []
 
-    def _walk(self, callback, chain):
+    def _walk(
+        self,
+        callback: T.Callable[["Node", T.List], bool],
+        chain: T.List
+    ) -> None:
         for meth in self.methods:
             meth.walk(callback, chain)
         for meth in self.virtual_methods:
@@ -1233,36 +1419,44 @@ class Class(Node, Registered):
 
 class Interface(Node, Registered):
 
-    def __init__(self, name, parent_type,
-                 ctype=None,
-                 gtype_name=None,
-                 get_type=None,
-                 c_symbol_prefix=None):
+    def __init__(
+        self,
+        name: str,
+        parent_type: Type,
+        ctype: T.Optional[str] = None,
+        gtype_name: T.Optional[str] = None,
+        get_type: T.Optional[str] = None,
+        c_symbol_prefix: T.Optional[str] = None
+    ):
         Node.__init__(self, name)
         Registered.__init__(self, gtype_name, get_type)
         self.ctype = ctype
         self.c_symbol_prefix = c_symbol_prefix
         self.parent_type = parent_type
-        self.parent_chain = []
-        self.methods = []
-        self.signals = []
-        self.static_methods = []
-        self.virtual_methods = []
+        self.parent_chain = []  # type: T.List[Type]
+        self.methods = []  # type: T.List[Function]
+        self.signals = []  # type: T.List[Signal]
+        self.static_methods = []  # type: T.List[Function]
+        self.virtual_methods = []  # type: T.List[VFunction]
         self.glib_type_struct = None
-        self.properties = []
-        self.fields = []
-        self.prerequisites = []
+        self.properties = []  # type: T.List[Property]
+        self.fields = []  # type: T.List[Field]
+        self.prerequisites = []  # type: T.List[str]
         # Not used yet, exists just to avoid an exception in
         # Namespace.append()
-        self.constructors = []
+        self.constructors = []  # type: T.List[Function]
 
-    def _walk(self, callback, chain):
+    def _walk(
+        self,
+        callback: T.Callable[["Node", T.List], bool],
+        chain: T.List
+    ) -> None:
         for meth in self.methods:
             meth.walk(callback, chain)
         for meth in self.static_methods:
             meth.walk(callback, chain)
-        for meth in self.virtual_methods:
-            meth.walk(callback, chain)
+        for vmeth in self.virtual_methods:
+            vmeth.walk(callback, chain)
         for field in self.fields:
             if field.anonymous_node:
                 field.anonymous_node.walk(callback, chain)
@@ -1270,10 +1464,11 @@ class Interface(Node, Registered):
             sig.walk(callback, chain)
 
 
-class Constant(Node):
+class Constant(Node, Typed):
 
-    def __init__(self, name, value_type, value, ctype):
+    def __init__(self, name: str, value_type: Type, value: Node, ctype: str):
         Node.__init__(self, name)
+        Typed.__init__(self)
         self.value_type = value_type
         self.value = value
         self.ctype = ctype
@@ -1281,8 +1476,16 @@ class Constant(Node):
 
 class Property(Node):
 
-    def __init__(self, name, typeobj, readable, writable,
-                 construct, construct_only, transfer=None):
+    def __init__(
+        self,
+        name: str,
+        typeobj: Type,
+        readable: bool,
+        writable: bool,
+        construct: bool,
+        construct_only: bool,
+        transfer: T.Optional[str] = None
+    ):
         Node.__init__(self, name)
         self.type = typeobj
         self.readable = readable
@@ -1298,6 +1501,13 @@ class Property(Node):
 
 class Callback(Callable):
 
-    def __init__(self, name, retval, parameters, throws, ctype=None):
+    def __init__(
+        self,
+        name: str,
+        retval: Return,
+        parameters: T.List[Parameter],
+        throws: bool,
+        ctype: T.Optional[str] = None
+    ):
         Callable.__init__(self, name, retval, parameters, throws)
         self.ctype = ctype
