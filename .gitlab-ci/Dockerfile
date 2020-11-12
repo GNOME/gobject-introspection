@@ -65,4 +65,4 @@ ENV PYENV_ROOT /home/user/.pyenv
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 ENV PYTHON_CONFIGURE_OPTS="--enable-shared"
 RUN curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-RUN pyenv install 3.5.6
+RUN pyenv install 3.6.12
