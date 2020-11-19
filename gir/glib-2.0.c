@@ -6218,11 +6218,12 @@
  *
  * Note that there is no `g_uri_equal ()` function, because comparing
  * URIs usefully requires scheme-specific knowledge that #GUri does
- * not have. For example, `http://example.com/` and
- * `http://EXAMPLE.COM:80` have exactly the same meaning according
- * to the HTTP specification, and `data:,foo` and
- * `data:;base64,Zm9v` resolve to the same thing according to the
- * `data:` URI specification.
+ * not have. #GUri can help with normalization if you use the various
+ * encoded #GUriFlags as well as %G_URI_FLAGS_SCHEME_NORMALIZE however
+ * it is not comprehensive.
+ * For example, `data:,foo` and `data:;base64,Zm9v` resolve to the same
+ * thing according to the `data:` URI specification which GLib does not
+ * handle.
  *
  * Since: 2.66
  */
@@ -6243,7 +6244,7 @@
  * its type nor its content can be modified further.
  *
  * GVariant is useful whenever data needs to be serialized, for example when
- * sending method parameters in DBus, or when saving settings using GSettings.
+ * sending method parameters in D-Bus, or when saving settings using GSettings.
  *
  * When creating a new #GVariant, you pass the data you want to store in it
  * along with a string representing the type of data you wish to pass to it.
@@ -6512,7 +6513,7 @@
  *
  * Just as in D-Bus, GVariant types are described with strings ("type
  * strings").  Subject to the differences mentioned above, these strings
- * are of the same form as those found in DBus.  Note, however: D-Bus
+ * are of the same form as those found in D-Bus.  Note, however: D-Bus
  * always works in terms of messages and therefore individual type
  * strings appear nowhere in its interface.  Instead, "signatures"
  * are a concatenation of the strings of the type of each argument in a
@@ -10152,6 +10153,31 @@
  * ]|
  *
  * Since: 2.16
+ */
+
+
+/**
+ * g_assert_cmpstrv:
+ * @strv1: (nullable): a string array (may be %NULL)
+ * @strv2: (nullable): another string array (may be %NULL)
+ *
+ * Debugging macro to check if two %NULL-terminated string arrays (i.e. 2
+ * #GStrv) are equal. If they are not equal, an error message is logged and the
+ * application is either terminated or the testcase marked as failed.
+ * If both arrays are %NULL, the check passes. If one array is %NULL but the
+ * other is not, an error message is logged.
+ *
+ * The effect of `g_assert_cmpstrv (strv1, strv2)` is the same as
+ * `g_assert_true (g_strv_equal (strv1, strv2))` (if both arrays are not
+ * %NULL). The advantage of this macro is that it can produce a message that
+ * includes how @strv1 and @strv2 are different.
+ *
+ * |[<!-- language="C" -->
+ *   const char *expected[] = { "one", "two", "three", NULL };
+ *   g_assert_cmpstrv (mystrv, expected);
+ * ]|
+ *
+ * Since: 2.68
  */
 
 
@@ -21993,7 +22019,10 @@
  *       the last call to g_main_context_query()
  * @n_fds: return value of g_main_context_query()
  *
- * Passes the results of polling back to the main loop.
+ * Passes the results of polling back to the main loop. You should be
+ * careful to pass @fds and its length @n_fds as received from
+ * g_main_context_query(), as this functions relies on assumptions
+ * on how @fds is filled.
  *
  * You must have successfully acquired the context with
  * g_main_context_acquire() before you may call this function.
@@ -22298,7 +22327,10 @@
  *       store #GPollFD records that need to be polled.
  * @n_fds: (in): length of @fds.
  *
- * Determines information necessary to poll this main loop.
+ * Determines information necessary to poll this main loop. You should
+ * be careful to pass the resulting @fds array and its length @n_fds
+ * as is when calling g_main_context_check(), as this function relies
+ * on assumptions made when the array is filled.
  *
  * You must have successfully acquired the context with
  * g_main_context_acquire() before you may call this function.
@@ -28411,9 +28443,9 @@
  * g_sequence_get_length:
  * @seq: a #GSequence
  *
- * Returns the length of @seq. Note that this method is O(h) where `h' is the
- * height of the tree. It is thus more efficient to use g_sequence_is_empty()
- * when comparing the length to zero.
+ * Returns the positive length (>= 0) of @seq. Note that this method is
+ * O(h) where `h' is the height of the tree. It is thus more efficient
+ * to use g_sequence_is_empty() when comparing the length to zero.
  *
  * Returns: the length of @seq
  * Since: 2.14
@@ -32297,7 +32329,8 @@
 /**
  * g_strrstr_len:
  * @haystack: a nul-terminated string
- * @haystack_len: the maximum length of @haystack
+ * @haystack_len: the maximum length of @haystack in bytes. A length of -1
+ *     can be used to mean "search the entire string", like g_strrstr().
  * @needle: the nul-terminated string to search for
  *
  * Searches the string @haystack for the last occurrence
@@ -32391,10 +32424,9 @@
 
 /**
  * g_strstr_len:
- * @haystack: a string
- * @haystack_len: the maximum length of @haystack. Note that -1 is
- *     a valid length, if @haystack is nul-terminated, meaning it will
- *     search through the whole string.
+ * @haystack: a nul-terminated string
+ * @haystack_len: the maximum length of @haystack in bytes. A length of -1
+ *     can be used to mean "search the entire string", like `strstr()`.
  * @needle: the string to search for
  *
  * Searches the string @haystack for the first occurrence
@@ -40866,7 +40898,7 @@
  * @n: the maximum number of bytes to produce (including the
  *     terminating nul character).
  * @format: a standard printf() format string, but notice
- *          string precision pitfalls][string-precision]
+ *          [string precision pitfalls][string-precision]
  * @args: the list of arguments to insert in the output.
  *
  * A safer form of the standard vsprintf() function. The output is guaranteed

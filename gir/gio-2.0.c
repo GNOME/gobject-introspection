@@ -6037,7 +6037,7 @@
  * To just export an object on a well-known name on a message bus, such as the
  * session or system bus, you should instead use g_bus_own_name().
  *
- * An example of peer-to-peer communication with G-DBus can be found
+ * An example of peer-to-peer communication with GDBus can be found
  * in [gdbus-example-peer.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-peer.c).
  *
  * Note that a minimal #GDBusServer will accept connections from any
@@ -10375,7 +10375,7 @@
  * The return value (if non-%NULL) should be freed with
  * g_variant_unref() when it is no longer required.
  *
- * Returns: (transfer full): the current state of the action
+ * Returns: (nullable) (transfer full): the current state of the action
  * Since: 2.28
  */
 
@@ -10782,7 +10782,7 @@
  *
  * If no such action exists, returns %NULL.
  *
- * Returns: (transfer none): a #GAction, or %NULL
+ * Returns: (nullable) (transfer none): a #GAction, or %NULL
  * Since: 2.32
  */
 
@@ -10962,7 +10962,7 @@
  *
  * Checks if two #GAppInfos are equal.
  *
- * Note that the check <emphasis>may not</emphasis> compare each individual
+ * Note that the check *may not* compare each individual
  * field, and only does an identity check. In case detecting changes in the
  * contents is needed, program code must additionally compare relevant fields.
  *
@@ -11007,7 +11007,7 @@
  * Gets the commandline with which the application will be
  * started.
  *
- * Returns: (type filename): a string containing the @appinfo's commandline,
+ * Returns: (nullable) (type filename): a string containing the @appinfo's commandline,
  *     or %NULL if this information is not available
  * Since: 2.20
  */
@@ -11046,7 +11046,7 @@
  *
  * Gets a human-readable description of an installed application.
  *
- * Returns: a string containing a description of the
+ * Returns: (nullable): a string containing a description of the
  * application @appinfo, or %NULL if none.
  */
 
@@ -11095,7 +11095,7 @@
  *
  * Gets the icon for the application.
  *
- * Returns: (transfer none): the default #GIcon for @appinfo or %NULL
+ * Returns: (nullable) (transfer none): the default #GIcon for @appinfo or %NULL
  * if there is no default icon.
  */
 
@@ -11112,7 +11112,7 @@
  * Note that the returned ID may be %NULL, depending on how
  * the @appinfo has been constructed.
  *
- * Returns: a string containing the application's ID.
+ * Returns: (nullable): a string containing the application's ID.
  */
 
 
@@ -11433,7 +11433,7 @@
  * applications are started on the same display as the launching
  * application, by setting the `DISPLAY` environment variable.
  *
- * Returns: a display string for the display.
+ * Returns: (nullable): a display string for the display.
  */
 
 
@@ -11464,7 +11464,7 @@
  * Startup notification IDs are defined in the
  * [FreeDesktop.Org Startup Notifications standard](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt).
  *
- * Returns: a startup notification ID for the application, or %NULL if
+ * Returns: (nullable): a startup notification ID for the application, or %NULL if
  *     not supported.
  */
 
@@ -11828,13 +11828,13 @@
  * The #GInputStream can be used to read data passed to the standard
  * input of the invoking process.
  * This doesn't work on all platforms.  Presently, it is only available
- * on UNIX when using a DBus daemon capable of passing file descriptors.
+ * on UNIX when using a D-Bus daemon capable of passing file descriptors.
  * If stdin is not available then %NULL will be returned.  In the
  * future, support may be expanded to other platforms.
  *
  * You must only call this function once per commandline invocation.
  *
- * Returns: (transfer full): a #GInputStream for stdin
+ * Returns: (nullable) (transfer full): a #GInputStream for stdin
  * Since: 2.34
  */
 
@@ -11856,7 +11856,7 @@
  * The return value should not be modified or freed and is valid for as
  * long as @cmdline exists.
  *
- * Returns: the value of the variable, or %NULL if unset or unsent
+ * Returns: (nullable): the value of the variable, or %NULL if unset or unsent
  * Since: 2.28
  */
 
@@ -11932,7 +11932,7 @@
  *
  * Gets the unique identifier for @application.
  *
- * Returns: the identifier for @application, owned by @application
+ * Returns: (nullable): the identifier for @application, owned by @application
  * Since: 2.28
  */
 
@@ -11955,7 +11955,7 @@
  * This function must not be called before the application has been
  * registered.  See g_application_get_is_registered().
  *
- * Returns: (transfer none): a #GDBusConnection, or %NULL
+ * Returns: (nullable) (transfer none): a #GDBusConnection, or %NULL
  * Since: 2.34
  */
 
@@ -11979,7 +11979,7 @@
  * This function must not be called before the application has been
  * registered.  See g_application_get_is_registered().
  *
- * Returns: the object path, or %NULL
+ * Returns: (nullable): the object path, or %NULL
  * Since: 2.34
  */
 
@@ -11995,7 +11995,7 @@
  *
  * If there is no default application then %NULL is returned.
  *
- * Returns: (transfer none): the default application for this process, or %NULL
+ * Returns: (nullable) (transfer none): the default application for this process, or %NULL
  * Since: 2.32
  */
 
@@ -13428,7 +13428,7 @@
  *
  * Gets the #GBytes associated with the given @icon.
  *
- * Returns: (transfer none): a #GBytes, or %NULL.
+ * Returns: (transfer none): a #GBytes.
  * Since: 2.38
  */
 
@@ -15217,7 +15217,7 @@
  *
  * The cost of this function is O(n) in number of annotations.
  *
- * Returns: The value or %NULL if not found. Do not free, it is owned by @annotations.
+ * Returns: (nullable): The value or %NULL if not found. Do not free, it is owned by @annotations.
  * Since: 2.26
  */
 
@@ -15515,6 +15515,18 @@
  *
  * Like g_dbus_connection_call() but also takes a #GUnixFDList object.
  *
+ * The file descriptors normally correspond to %G_VARIANT_TYPE_HANDLE
+ * values in the body of the message. For example, if a message contains
+ * two file descriptors, @fd_list would have length 2, and
+ * `g_variant_new_handle (0)` and `g_variant_new_handle (1)` would appear
+ * somewhere in the body of the message (not necessarily in that order!)
+ * to represent the file descriptors at indexes 0 and 1 respectively.
+ *
+ * When designing D-Bus APIs that are intended to be interoperable,
+ * please note that non-GDBus implementations of D-Bus can usually only
+ * access file descriptors if they are referenced in this way by a
+ * value of type %G_VARIANT_TYPE_HANDLE in the body of the message.
+ *
  * This method is only available on UNIX.
  *
  * Since: 2.30
@@ -15530,6 +15542,17 @@
  * @error: return location for error or %NULL
  *
  * Finishes an operation started with g_dbus_connection_call_with_unix_fd_list().
+ *
+ * The file descriptors normally correspond to %G_VARIANT_TYPE_HANDLE
+ * values in the body of the message. For example,
+ * if g_variant_get_handle() returns 5, that is intended to be a reference
+ * to the file descriptor that can be accessed by
+ * `g_unix_fd_list_get (*out_fd_list, 5, ...)`.
+ *
+ * When designing D-Bus APIs that are intended to be interoperable,
+ * please note that non-GDBus implementations of D-Bus can usually only
+ * access file descriptors if they are referenced in this way by a
+ * value of type %G_VARIANT_TYPE_HANDLE in the body of the message.
  *
  * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
  *     return values. Free with g_variant_unref().
@@ -15557,6 +15580,8 @@
  * @error: return location for error or %NULL
  *
  * Like g_dbus_connection_call_sync() but also takes and returns #GUnixFDList objects.
+ * See g_dbus_connection_call_with_unix_fd_list() and
+ * g_dbus_connection_call_with_unix_fd_list_finish() for more details.
  *
  * This method is only available on UNIX.
  *
@@ -16767,9 +16792,9 @@
  * See the g_dbus_gvariant_to_gvalue() function for how to convert a
  * #GVariant to a #GValue.
  *
- * Returns: A #GVariant (never floating) of #GVariantType @type holding
- *     the data from @gvalue or %NULL in case of failure. Free with
- *     g_variant_unref().
+ * Returns: (transfer full): A #GVariant (never floating) of
+ *     #GVariantType @type holding the data from @gvalue or an empty #GVariant
+ *     in case of failure. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -16801,7 +16826,7 @@
  *
  * Gets the #GDBusObject that @interface_ belongs to, if any.
  *
- * Returns: (transfer full): A #GDBusObject or %NULL. The returned
+ * Returns: (nullable) (transfer full): A #GDBusObject or %NULL. The returned
  * reference should be freed with g_object_unref().
  * Since: 2.32
  */
@@ -16829,7 +16854,7 @@
  * the returned object is being used from other threads. See
  * g_dbus_interface_dup_object() for a thread-safe alternative.
  *
- * Returns: (transfer none): A #GDBusObject or %NULL. The returned
+ * Returns: (nullable) (transfer none): A #GDBusObject or %NULL. The returned
  *     reference belongs to @interface_ and should not be freed.
  * Since: 2.30
  */
@@ -16893,7 +16918,7 @@
  * The cost of this function is O(n) in number of methods unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
- * Returns: (transfer none): A #GDBusMethodInfo or %NULL if not found. Do not free, it is owned by @info.
+ * Returns: (nullable) (transfer none): A #GDBusMethodInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
  */
 
@@ -16908,7 +16933,7 @@
  * The cost of this function is O(n) in number of properties unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
- * Returns: (transfer none): A #GDBusPropertyInfo or %NULL if not found. Do not free, it is owned by @info.
+ * Returns: (nullable) (transfer none): A #GDBusPropertyInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
  */
 
@@ -16923,7 +16948,7 @@
  * The cost of this function is O(n) in number of signals unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
- * Returns: (transfer none): A #GDBusSignalInfo or %NULL if not found. Do not free, it is owned by @info.
+ * Returns: (nullable) (transfer none): A #GDBusSignalInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
  */
 
@@ -17009,7 +17034,7 @@
  *
  * Gets the first connection that @interface_ is exported on, if any.
  *
- * Returns: (transfer none): A #GDBusConnection or %NULL if @interface_ is
+ * Returns: (nullable) (transfer none): A #GDBusConnection or %NULL if @interface_ is
  * not exported anywhere. Do not free, the object belongs to @interface_.
  * Since: 2.30
  */
@@ -17059,7 +17084,7 @@
  *
  * Gets the object path that @interface_ is exported on, if any.
  *
- * Returns: A string owned by @interface_ or %NULL if @interface_ is not exported
+ * Returns: (nullable): A string owned by @interface_ or %NULL if @interface_ is not exported
  * anywhere. Do not free, the string belongs to @interface_.
  * Since: 2.30
  */
@@ -17293,7 +17318,7 @@
  *
  * Convenience to get the first item in the body of @message.
  *
- * Returns: The string item or %NULL if the first item in the body of
+ * Returns: (nullable): The string item or %NULL if the first item in the body of
  * @message is not a string.
  * Since: 2.26
  */
@@ -17305,7 +17330,7 @@
  *
  * Gets the body of a message.
  *
- * Returns: (transfer none): A #GVariant or %NULL if the body is
+ * Returns: (nullable) (transfer none): A #GVariant or %NULL if the body is
  * empty. Do not free, it is owned by @message.
  * Since: 2.26
  */
@@ -17327,7 +17352,7 @@
  *
  * Convenience getter for the %G_DBUS_MESSAGE_HEADER_FIELD_DESTINATION header field.
  *
- * Returns: The value.
+ * Returns: (nullable): The value.
  * Since: 2.26
  */
 
@@ -17338,7 +17363,7 @@
  *
  * Convenience getter for the %G_DBUS_MESSAGE_HEADER_FIELD_ERROR_NAME header field.
  *
- * Returns: The value.
+ * Returns: (nullable): The value.
  * Since: 2.26
  */
 
@@ -17389,7 +17414,7 @@
  *
  * Convenience getter for the %G_DBUS_MESSAGE_HEADER_FIELD_INTERFACE header field.
  *
- * Returns: The value.
+ * Returns: (nullable): The value.
  * Since: 2.26
  */
 
@@ -17413,7 +17438,7 @@
  *
  * Convenience getter for the %G_DBUS_MESSAGE_HEADER_FIELD_MEMBER header field.
  *
- * Returns: The value.
+ * Returns: (nullable): The value.
  * Since: 2.26
  */
 
@@ -17446,7 +17471,7 @@
  *
  * Convenience getter for the %G_DBUS_MESSAGE_HEADER_FIELD_PATH header field.
  *
- * Returns: The value.
+ * Returns: (nullable): The value.
  * Since: 2.26
  */
 
@@ -17468,7 +17493,7 @@
  *
  * Convenience getter for the %G_DBUS_MESSAGE_HEADER_FIELD_SENDER header field.
  *
- * Returns: The value.
+ * Returns: (nullable): The value.
  * Since: 2.26
  */
 
@@ -17503,7 +17528,13 @@
  *
  * This method is only available on UNIX.
  *
- * Returns: (transfer none): A #GUnixFDList or %NULL if no file descriptors are
+ * The file descriptors normally correspond to %G_VARIANT_TYPE_HANDLE
+ * values in the body of the message. For example,
+ * if g_variant_get_handle() returns 5, that is intended to be a reference
+ * to the file descriptor that can be accessed by
+ * `g_unix_fd_list_get (list, 5, ...)`.
+ *
+ * Returns: (nullable) (transfer none): A #GUnixFDList or %NULL if no file descriptors are
  * associated. Do not free, this object is owned by @message.
  * Since: 2.26
  */
@@ -17702,7 +17733,7 @@
 /**
  * g_dbus_message_set_destination:
  * @message: A #GDBusMessage.
- * @value: The value to set.
+ * @value: (nullable): The value to set.
  *
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_DESTINATION header field.
  *
@@ -17712,7 +17743,7 @@
 
 /**
  * g_dbus_message_set_error_name:
- * @message: A #GDBusMessage.
+ * @message: (nullable): A #GDBusMessage.
  * @value: The value to set.
  *
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_ERROR_NAME header field.
@@ -17750,7 +17781,7 @@
 /**
  * g_dbus_message_set_interface:
  * @message: A #GDBusMessage.
- * @value: The value to set.
+ * @value: (nullable): The value to set.
  *
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_INTERFACE header field.
  *
@@ -17761,7 +17792,7 @@
 /**
  * g_dbus_message_set_member:
  * @message: A #GDBusMessage.
- * @value: The value to set.
+ * @value: (nullable): The value to set.
  *
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_MEMBER header field.
  *
@@ -17794,7 +17825,7 @@
 /**
  * g_dbus_message_set_path:
  * @message: A #GDBusMessage.
- * @value: The value to set.
+ * @value: (nullable): The value to set.
  *
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_PATH header field.
  *
@@ -17816,7 +17847,7 @@
 /**
  * g_dbus_message_set_sender:
  * @message: A #GDBusMessage.
- * @value: The value to set.
+ * @value: (nullable): The value to set.
  *
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_SENDER header field.
  *
@@ -17838,7 +17869,7 @@
 /**
  * g_dbus_message_set_signature:
  * @message: A #GDBusMessage.
- * @value: The value to set.
+ * @value: (nullable): The value to set.
  *
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_SIGNATURE header field.
  *
@@ -17857,6 +17888,11 @@
  * @fd_list is %NULL).
  *
  * This method is only available on UNIX.
+ *
+ * When designing D-Bus APIs that are intended to be interoperable,
+ * please note that non-GDBus implementations of D-Bus can usually only
+ * access file descriptors if they are referenced by a value of type
+ * %G_VARIANT_TYPE_HANDLE in the body of the message.
  *
  * Since: 2.26
  */
@@ -17977,7 +18013,7 @@
  * returned.  See g_dbus_method_invocation_get_property_info() and
  * #GDBusInterfaceVTable for more information.
  *
- * Returns: A #GDBusMethodInfo or %NULL. Do not free, it is owned by @invocation.
+ * Returns: (nullable): A #GDBusMethodInfo or %NULL. Do not free, it is owned by @invocation.
  * Since: 2.26
  */
 
@@ -18032,7 +18068,7 @@
  *
  * If the call was GetAll, %NULL will be returned.
  *
- * Returns: (transfer none): a #GDBusPropertyInfo or %NULL
+ * Returns: (nullable) (transfer none): a #GDBusPropertyInfo or %NULL
  * Since: 2.38
  */
 
@@ -18260,7 +18296,7 @@
  *
  * The cost of this function is O(n) in number of interfaces.
  *
- * Returns: (transfer none): A #GDBusInterfaceInfo or %NULL if not found. Do not free, it is owned by @info.
+ * Returns: (nullable) (transfer none): A #GDBusInterfaceInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
  */
 
@@ -18317,7 +18353,7 @@
  * Gets the D-Bus interface with name @interface_name associated with
  * @object, if any.
  *
- * Returns: (transfer full): %NULL if not found, otherwise a
+ * Returns: (nullable) (transfer full): %NULL if not found, otherwise a
  *   #GDBusInterface that must be freed with g_object_unref().
  * Since: 2.30
  */
@@ -19521,7 +19557,7 @@
  *
  * Gets the categories from the desktop file.
  *
- * Returns: The unparsed Categories key from the desktop file;
+ * Returns: (nullable): The unparsed Categories key from the desktop file;
  *     i.e. no attempt is made to split it by ';' or validate it.
  */
 
@@ -19534,7 +19570,7 @@
  * situations such as the #GDesktopAppInfo returned from
  * g_desktop_app_info_new_from_keyfile(), this function will return %NULL.
  *
- * Returns: (type filename): The full path to the file for @info,
+ * Returns: (nullable) (type filename): The full path to the file for @info,
  *     or %NULL if not known.
  * Since: 2.24
  */
@@ -19544,9 +19580,9 @@
  * g_desktop_app_info_get_generic_name:
  * @info: a #GDesktopAppInfo
  *
- * Gets the generic name from the destkop file.
+ * Gets the generic name from the desktop file.
  *
- * Returns: The value of the GenericName key
+ * Returns: (nullable): The value of the GenericName key
  */
 
 
@@ -19648,7 +19684,7 @@
  * WM_CLASS property of the main window of the application, if launched
  * through @info.
  *
- * Returns: (transfer none): the startup WM class, or %NULL if none is set
+ * Returns: (nullable) (transfer none): the startup WM class, or %NULL if none is set
  * in the desktop file.
  * Since: 2.34
  */
@@ -19663,7 +19699,7 @@
  *
  * The @key is looked up in the "Desktop Entry" group.
  *
- * Returns: a newly allocated string, or %NULL if the key
+ * Returns: (nullable): a newly allocated string, or %NULL if the key
  *     is not found
  * Since: 2.36
  */
@@ -21177,8 +21213,8 @@
 
 /**
  * g_file_attribute_matcher_subtract:
- * @matcher: Matcher to subtract from
- * @subtract: The matcher to subtract
+ * @matcher: (nullable): Matcher to subtract from
+ * @subtract: (nullable): The matcher to subtract
  *
  * Subtracts all attributes of @subtract from @matcher and returns
  * a matcher that supports those attributes.
@@ -21189,7 +21225,7 @@
  * is a limitation of the current implementation, but may be fixed
  * in the future.
  *
- * Returns: A file attribute matcher matching all attributes of
+ * Returns: (nullable): A file attribute matcher matching all attributes of
  *     @matcher that are not matched by @subtract
  */
 
@@ -22342,7 +22378,7 @@
  *
  * Gets the #GFile associated with the given @icon.
  *
- * Returns: (transfer none): a #GFile, or %NULL.
+ * Returns: (transfer none): a #GFile.
  */
 
 
@@ -22608,7 +22644,7 @@
  * Gets the [entity tag][gfile-etag] for a given
  * #GFileInfo. See %G_FILE_ATTRIBUTE_ETAG_VALUE.
  *
- * Returns: a string containing the value of the "etag:value" attribute.
+ * Returns: (nullable): a string containing the value of the "etag:value" attribute.
  */
 
 
@@ -22629,7 +22665,7 @@
  *
  * Gets the icon for a file.
  *
- * Returns: (transfer none): #GIcon for the given @info.
+ * Returns: (nullable) (transfer none): #GIcon for the given @info.
  */
 
 
@@ -22729,7 +22765,7 @@
  *
  * Gets the symbolic icon for a file.
  *
- * Returns: (transfer none): #GIcon for the given @info.
+ * Returns: (nullable) (transfer none): #GIcon for the given @info.
  * Since: 2.34
  */
 
@@ -22740,7 +22776,7 @@
  *
  * Gets the symlink target for a given #GFileInfo.
  *
- * Returns: a string containing the symlink target.
+ * Returns: (nullable): a string containing the symlink target.
  */
 
 
@@ -23163,7 +23199,7 @@
  * This must be called after the stream has been written
  * and closed, as the etag can change while writing.
  *
- * Returns: the entity tag for the stream.
+ * Returns: (nullable) (transfer full): the entity tag for the stream.
  * Since: 2.22
  */
 
@@ -24066,7 +24102,7 @@
  * This must be called after the stream has been written
  * and closed, as the etag can change while writing.
  *
- * Returns: the entity tag for the stream.
+ * Returns: (nullable) (transfer full): the entity tag for the stream.
  */
 
 
@@ -25391,9 +25427,9 @@
  *
  * Obtains a completion for @initial_text from @completer.
  *
- * Returns: a completed string, or %NULL if no completion exists.
- *     This string is not owned by GIO, so remember to g_free() it
- *     when finished.
+ * Returns: (nullable) (transfer full): a completed string, or %NULL if no
+ *     completion exists. This string is not owned by GIO, so remember to g_free()
+ *     it when finished.
  */
 
 
@@ -25494,7 +25530,7 @@
  *
  * Deserializes a #GIcon previously serialized using g_icon_serialize().
  *
- * Returns: (transfer full): a #GIcon, or %NULL when deserialization fails.
+ * Returns: (nullable) (transfer full): a #GIcon, or %NULL when deserialization fails.
  * Since: 2.38
  */
 
@@ -25549,7 +25585,7 @@
  * makes sense to transfer the #GVariant between processes on the same machine,
  * (as opposed to over the network), and within the same file system namespace.
  *
- * Returns: (transfer full): a #GVariant, or %NULL when serialization fails. The #GVariant will not be floating.
+ * Returns: (nullable) (transfer full): a #GVariant, or %NULL when serialization fails. The #GVariant will not be floating.
  * Since: 2.38
  */
 
@@ -27548,7 +27584,7 @@
  *
  * Gets a reference to the default #GMemoryMonitor for the system.
  *
- * Returns: (transfer full): a new reference to the default #GMemoryMonitor
+ * Returns: (not nullable) (transfer full): a new reference to the default #GMemoryMonitor
  * Since: 2.64
  */
 
@@ -27965,7 +28001,7 @@
  * type, %NULL is returned.  %NULL is also returned if the attribute
  * simply does not exist.
  *
- * Returns: (transfer full): the attribute value, or %NULL
+ * Returns: (nullable) (transfer full): the attribute value, or %NULL
  * Since: 2.34
  */
 
@@ -27977,7 +28013,7 @@
  *
  * Queries the named @link on @menu_item.
  *
- * Returns: (transfer full): the link, or %NULL
+ * Returns: (nullable) (transfer full): the link, or %NULL
  * Since: 2.34
  */
 
@@ -28473,7 +28509,7 @@
  * If the attribute does not exist, or does not match the expected type
  * then %NULL is returned.
  *
- * Returns: (transfer full): the value of the attribute
+ * Returns: (nullable) (transfer full): the value of the attribute
  * Since: 2.32
  */
 
@@ -28490,7 +28526,7 @@
  * If the link exists, the linked #GMenuModel is returned.  If the link
  * does not exist, %NULL is returned.
  *
- * Returns: (transfer full): the linked #GMenuModel, or %NULL
+ * Returns: (nullable) (transfer full): the linked #GMenuModel, or %NULL
  * Since: 2.32
  */
 
@@ -29008,7 +29044,7 @@
  *
  * Gets the domain of the mount operation.
  *
- * Returns: a string set to the domain.
+ * Returns: (nullable): a string set to the domain.
  */
 
 
@@ -29042,7 +29078,7 @@
  *
  * Gets a password from the mount operation.
  *
- * Returns: a string containing the password within @op.
+ * Returns: (nullable): a string containing the password within @op.
  */
 
 
@@ -29073,7 +29109,7 @@
  *
  * Get the user name from the mount operation.
  *
- * Returns: a string containing the user name.
+ * Returns: (nullable): a string containing the user name.
  */
 
 
@@ -29116,7 +29152,7 @@
 /**
  * g_mount_operation_set_domain:
  * @op: a #GMountOperation.
- * @domain: the domain to set.
+ * @domain: (nullable): the domain to set.
  *
  * Sets the mount operation's domain.
  */
@@ -29147,7 +29183,7 @@
 /**
  * g_mount_operation_set_password:
  * @op: a #GMountOperation.
- * @password: password to set.
+ * @password: (nullable): password to set.
  *
  * Sets the mount operation's password to @password.
  */
@@ -29176,7 +29212,7 @@
 /**
  * g_mount_operation_set_username:
  * @op: a #GMountOperation.
- * @username: input username.
+ * @username: (nullable): input username.
  *
  * Sets the user name within @op to @username.
  */
@@ -29349,7 +29385,7 @@
  *
  * Gets @addr's scheme
  *
- * Returns: @addr's scheme (%NULL if not built from URI)
+ * Returns: (nullable): @addr's scheme (%NULL if not built from URI)
  * Since: 2.26
  */
 
@@ -29579,7 +29615,8 @@
  *
  * Gets the default #GNetworkMonitor for the system.
  *
- * Returns: (transfer none): a #GNetworkMonitor
+ * Returns: (not nullable) (transfer none): a #GNetworkMonitor, which will be
+ *     a dummy object if no network monitor is available
  * Since: 2.32
  */
 
@@ -31190,7 +31227,7 @@
  *
  * Gets @proxy's password.
  *
- * Returns: the @proxy's password
+ * Returns: (nullable): the @proxy's password
  * Since: 2.26
  */
 
@@ -31212,7 +31249,7 @@
  *
  * Gets the proxy URI that @proxy was constructed from.
  *
- * Returns: the @proxy's URI, or %NULL if unknown
+ * Returns: (nullable): the @proxy's URI, or %NULL if unknown
  * Since: 2.34
  */
 
@@ -31223,7 +31260,7 @@
  *
  * Gets @proxy's username.
  *
- * Returns: the @proxy's username
+ * Returns: (nullable): the @proxy's username
  * Since: 2.26
  */
 
@@ -31307,7 +31344,7 @@
  * Find the `gio-proxy` extension point for a proxy implementation that supports
  * the specified protocol.
  *
- * Returns: (transfer full): return a #GProxy or NULL if protocol
+ * Returns: (nullable) (transfer full): return a #GProxy or NULL if protocol
  *               is not supported.
  * Since: 2.26
  */
@@ -31318,7 +31355,8 @@
  *
  * Gets the default #GProxyResolver for the system.
  *
- * Returns: (transfer none): the default #GProxyResolver.
+ * Returns: (not nullable) (transfer none): the default #GProxyResolver, which
+ *     will be a dummy object if no proxy resolver is available
  * Since: 2.26
  */
 
@@ -32307,7 +32345,9 @@
  *
  * The user gets a reference to the backend.
  *
- * Returns: (transfer full): the default #GSettingsBackend
+ * Returns: (not nullable) (transfer full): the default #GSettingsBackend,
+ *     which will be a dummy (memory) settings backend if no other settings
+ *     backend is available.
  * Since: 2.28
  */
 
@@ -33175,7 +33215,7 @@
  * therefore describe multiple sets of keys at different locations.  For
  * relocatable schemas, this function will return %NULL.
  *
- * Returns: (transfer none): the path of the schema, or %NULL
+ * Returns: (nullable) (transfer none): the path of the schema, or %NULL
  * Since: 2.32
  */
 
@@ -33225,7 +33265,7 @@
  * function has to parse all of the source XML files in the schema
  * directory.
  *
- * Returns: the description for @key, or %NULL
+ * Returns: (nullable): the description for @key, or %NULL
  * Since: 2.34
  */
 
@@ -33305,7 +33345,7 @@
  * function has to parse all of the source XML files in the schema
  * directory.
  *
- * Returns: the summary for @key, or %NULL
+ * Returns: (nullable): the summary for @key, or %NULL
  * Since: 2.34
  */
 
@@ -34976,7 +35016,7 @@
  *
  * See g_socket_client_set_local_address() for details.
  *
- * Returns: (transfer none): a #GSocketAddress or %NULL. Do not free.
+ * Returns: (nullable) (transfer none): a #GSocketAddress or %NULL. Do not free.
  * Since: 2.22
  */
 
@@ -37509,10 +37549,10 @@
  * Gets the #GInputStream from which to read the stderr output of
  * @subprocess.
  *
- * The process must have been created with
- * %G_SUBPROCESS_FLAGS_STDERR_PIPE.
+ * The process must have been created with %G_SUBPROCESS_FLAGS_STDERR_PIPE,
+ * otherwise %NULL will be returned.
  *
- * Returns: (transfer none): the stderr pipe
+ * Returns: (nullable) (transfer none): the stderr pipe
  * Since: 2.40
  */
 
@@ -37524,10 +37564,10 @@
  * Gets the #GOutputStream that you can write to in order to give data
  * to the stdin of @subprocess.
  *
- * The process must have been created with
- * %G_SUBPROCESS_FLAGS_STDIN_PIPE.
+ * The process must have been created with %G_SUBPROCESS_FLAGS_STDIN_PIPE and
+ * not %G_SUBPROCESS_FLAGS_STDIN_INHERIT, otherwise %NULL will be returned.
  *
- * Returns: (transfer none): the stdout pipe
+ * Returns: (nullable) (transfer none): the stdout pipe
  * Since: 2.40
  */
 
@@ -37539,10 +37579,10 @@
  * Gets the #GInputStream from which to read the stdout output of
  * @subprocess.
  *
- * The process must have been created with
- * %G_SUBPROCESS_FLAGS_STDOUT_PIPE.
+ * The process must have been created with %G_SUBPROCESS_FLAGS_STDOUT_PIPE,
+ * otherwise %NULL will be returned.
  *
- * Returns: (transfer none): the stdout pipe
+ * Returns: (nullable) (transfer none): the stdout pipe
  * Since: 2.40
  */
 
@@ -37610,7 +37650,7 @@
  * On UNIX, the returned string can be an arbitrary byte string.
  * On Windows, it will be UTF-8.
  *
- * Returns: (type filename): the value of the environment variable,
+ * Returns: (nullable) (type filename): the value of the environment variable,
  *     %NULL if unset
  * Since: 2.40
  */
@@ -39028,7 +39068,8 @@
  *
  * Gets the default #GTlsBackend for the system.
  *
- * Returns: (transfer none): a #GTlsBackend
+ * Returns: (not nullable) (transfer none): a #GTlsBackend, which will be a
+ *     dummy object if no TLS backend is available
  * Since: 2.28
  */
 
@@ -39140,7 +39181,7 @@
  *
  * Gets the #GTlsCertificate representing @cert's issuer, if known
  *
- * Returns: (transfer none): The certificate of @cert's issuer,
+ * Returns: (nullable) (transfer none): The certificate of @cert's issuer,
  * or %NULL if @cert is self-signed or signed with an unknown
  * certificate.
  * Since: 2.28
@@ -39398,7 +39439,7 @@
  *
  * Gets @conn's expected server identity
  *
- * Returns: (transfer none): a #GSocketConnectable describing the
+ * Returns: (nullable) (transfer none): a #GSocketConnectable describing the
  * expected server identity, or %NULL if the expected identity is not
  * known.
  * Since: 2.28
@@ -41467,7 +41508,7 @@
  *
  * Gets the options for the mount point.
  *
- * Returns: a string containing the options.
+ * Returns: (nullable): a string containing the options.
  * Since: 2.32
  */
 
@@ -41791,7 +41832,8 @@
  *
  * Gets the default #GVfs for the system.
  *
- * Returns: (transfer none): a #GVfs.
+ * Returns: (not nullable) (transfer none): a #GVfs, which will be the local
+ *     file system #GVfs if no other implementation is available.
  */
 
 
@@ -42232,7 +42274,7 @@
  *
  * Finds a #GMount object by its UUID (see g_mount_get_uuid())
  *
- * Returns: (transfer full): a #GMount or %NULL if no such mount is available.
+ * Returns: (nullable) (transfer full): a #GMount or %NULL if no such mount is available.
  *     Free the returned object with g_object_unref().
  */
 
@@ -42257,7 +42299,7 @@
  *
  * Finds a #GVolume object by its UUID (see g_volume_get_uuid())
  *
- * Returns: (transfer full): a #GVolume or %NULL if no such volume is available.
+ * Returns: (nullable) (transfer full): a #GVolume or %NULL if no such volume is available.
  *     Free the returned object with g_object_unref().
  */
 
@@ -43080,7 +43122,7 @@
  *
  * Returns the #GZlibCompressor:file-info property.
  *
- * Returns: (transfer none): a #GFileInfo, or %NULL
+ * Returns: (nullable) (transfer none): a #GFileInfo, or %NULL
  * Since: 2.26
  */
 
@@ -43125,7 +43167,7 @@
  * or the header data was not fully processed yet, or it not present in the
  * data stream at all.
  *
- * Returns: (transfer none): a #GFileInfo, or %NULL
+ * Returns: (nullable) (transfer none): a #GFileInfo, or %NULL
  * Since: 2.26
  */
 
