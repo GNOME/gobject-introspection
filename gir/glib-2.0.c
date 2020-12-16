@@ -10692,7 +10692,7 @@
  * To easily calculate @end_time, a combination of g_get_real_time()
  * and g_time_val_add() can be used.
  *
- * Returns: data from the queue or %NULL, when no data is
+ * Returns: (nullable): data from the queue or %NULL, when no data is
  *     received before @end_time.
  * Deprecated: use g_async_queue_timeout_pop().
  */
@@ -10713,7 +10713,7 @@
  *
  * This function must be called while holding the @queue's lock.
  *
- * Returns: data from the queue or %NULL, when no data is
+ * Returns: (nullable): data from the queue or %NULL, when no data is
  *     received before @end_time.
  * Deprecated: use g_async_queue_timeout_pop_unlocked().
  */
@@ -10729,7 +10729,7 @@
  *
  * If no data is received before the timeout, %NULL is returned.
  *
- * Returns: data from the queue or %NULL, when no data is
+ * Returns: (nullable): data from the queue or %NULL, when no data is
  *     received before the timeout.
  */
 
@@ -10746,7 +10746,7 @@
  *
  * This function must be called while holding the @queue's lock.
  *
- * Returns: data from the queue or %NULL, when no data is
+ * Returns: (nullable): data from the queue or %NULL, when no data is
  *     received before the timeout.
  */
 
@@ -10758,7 +10758,7 @@
  * Tries to pop data from the @queue. If no data is available,
  * %NULL is returned.
  *
- * Returns: data from the queue or %NULL, when no data is
+ * Returns: (nullable): data from the queue or %NULL, when no data is
  *     available immediately.
  */
 
@@ -10772,7 +10772,7 @@
  *
  * This function must be called while holding the @queue's lock.
  *
- * Returns: data from the queue or %NULL, when no data is
+ * Returns: (nullable): data from the queue or %NULL, when no data is
  *     available immediately.
  */
 
@@ -10871,6 +10871,9 @@
  * Before version 2.30, this function did not return a value
  * (but g_atomic_int_exchange_and_add() did, and had the same meaning).
  *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
+ *
  * Returns: the value of @atomic before the add, signed
  * Since: 2.4
  */
@@ -10888,6 +10891,9 @@
  *
  * Think of this operation as an atomic version of
  * `{ tmp = *atomic; *atomic &= val; return tmp; }`.
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
@@ -10910,6 +10916,9 @@
  *
  * This call acts as a full compiler and hardware memory barrier.
  *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
+ *
  * Returns: %TRUE if the exchange took place
  * Since: 2.4
  */
@@ -10925,6 +10934,9 @@
  * `{ *atomic -= 1; return (*atomic == 0); }`.
  *
  * This call acts as a full compiler and hardware memory barrier.
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Returns: %TRUE if the resultant value is zero
  * Since: 2.4
@@ -10955,6 +10967,9 @@
  * This call acts as a full compiler and hardware
  * memory barrier (before the get).
  *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
+ *
  * Returns: the value of the integer
  * Since: 2.4
  */
@@ -10969,6 +10984,9 @@
  * Think of this operation as an atomic version of `{ *atomic += 1; }`.
  *
  * This call acts as a full compiler and hardware memory barrier.
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Since: 2.4
  */
@@ -10987,6 +11005,9 @@
  *
  * This call acts as a full compiler and hardware memory barrier.
  *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
+ *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
  */
@@ -11001,6 +11022,9 @@
  *
  * This call acts as a full compiler and hardware
  * memory barrier (after the set).
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Since: 2.4
  */
@@ -11019,6 +11043,9 @@
  *
  * This call acts as a full compiler and hardware memory barrier.
  *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
+ *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
  */
@@ -11035,6 +11062,9 @@
  * `{ tmp = *atomic; *atomic += val; return tmp; }`.
  *
  * This call acts as a full compiler and hardware memory barrier.
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Returns: the value of @atomic before the add, signed
  * Since: 2.30
@@ -11053,6 +11083,9 @@
  * `{ tmp = *atomic; *atomic &= val; return tmp; }`.
  *
  * This call acts as a full compiler and hardware memory barrier.
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
@@ -11075,6 +11108,9 @@
  *
  * This call acts as a full compiler and hardware memory barrier.
  *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
+ *
  * Returns: %TRUE if the exchange took place
  * Since: 2.4
  */
@@ -11088,6 +11124,9 @@
  *
  * This call acts as a full compiler and hardware
  * memory barrier (before the get).
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Returns: the value of the pointer
  * Since: 2.4
@@ -11107,6 +11146,9 @@
  *
  * This call acts as a full compiler and hardware memory barrier.
  *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
+ *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
  */
@@ -11121,6 +11163,9 @@
  *
  * This call acts as a full compiler and hardware
  * memory barrier (after the set).
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Since: 2.4
  */
@@ -11138,6 +11183,9 @@
  * `{ tmp = *atomic; *atomic ^= val; return tmp; }`.
  *
  * This call acts as a full compiler and hardware memory barrier.
+ *
+ * While @atomic has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Returns: the value of @atomic before the operation, unsigned
  * Since: 2.30
@@ -11997,7 +12045,7 @@
  * In the event the URI cannot be found, %NULL is returned and
  * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
- * Returns: a newly allocated string or %NULL if the specified
+ * Returns: (transfer full): a newly allocated string or %NULL if the specified
  *   URI cannot be found.
  * Since: 2.12
  */
@@ -12074,7 +12122,7 @@
  * event that the MIME type cannot be found, %NULL is returned and
  * @error is set to #G_BOOKMARK_FILE_ERROR_INVALID_VALUE.
  *
- * Returns: a newly allocated string or %NULL if the specified
+ * Returns: (transfer full): a newly allocated string or %NULL if the specified
  *   URI cannot be found.
  * Since: 2.12
  */
@@ -12138,7 +12186,7 @@
  * In the event the URI cannot be found, %NULL is returned and
  * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
- * Returns: a newly allocated string or %NULL if the specified
+ * Returns: (transfer full): a newly allocated string or %NULL if the specified
  *   URI cannot be found.
  * Since: 2.12
  */
@@ -12687,7 +12735,7 @@
  *
  * This function outputs @bookmark as a string.
  *
- * Returns: (array length=length) (element-type guint8):
+ * Returns: (transfer full) (array length=length) (element-type guint8):
  *   a newly allocated string holding the contents of the #GBookmarkFile
  * Since: 2.12
  */
@@ -13325,8 +13373,8 @@
  * g_checksum_get_string() or g_checksum_get_digest(), the copied
  * checksum will be closed as well.
  *
- * Returns: the copy of the passed #GChecksum. Use g_checksum_free()
- *   when finished using it.
+ * Returns: (transfer full): the copy of the passed #GChecksum. Use
+ *   g_checksum_free() when finished using it.
  * Since: 2.16
  */
 
@@ -13394,7 +13442,7 @@
  * will be closed and it won't be possible to call g_checksum_update()
  * on it anymore.
  *
- * Returns: (transfer full): the newly created #GChecksum, or %NULL.
+ * Returns: (transfer full) (nullable): the newly created #GChecksum, or %NULL.
  *   Use g_checksum_free() to free the memory allocated by it.
  * Since: 2.16
  */
@@ -13684,8 +13732,10 @@
  *
  * The hexadecimal string returned will be in lower case.
  *
- * Returns: the digest of the binary data as a string in hexadecimal.
- *   The returned string should be freed with g_free() when done using it.
+ * Returns: (transfer full) (nullable): the digest of the binary data as a
+ *   string in hexadecimal, or %NULL if g_checksum_new() fails for
+ *   @checksum_type. The returned string should be freed with g_free() when
+ *   done using it.
  * Since: 2.34
  */
 
@@ -13702,8 +13752,10 @@
  *
  * The hexadecimal string returned will be in lower case.
  *
- * Returns: the digest of the binary data as a string in hexadecimal.
- *   The returned string should be freed with g_free() when done using it.
+ * Returns: (transfer full) (nullable): the digest of the binary data as a
+ *   string in hexadecimal, or %NULL if g_checksum_new() fails for
+ *   @checksum_type. The returned string should be freed with g_free() when
+ *   done using it.
  * Since: 2.16
  */
 
@@ -13718,7 +13770,8 @@
  *
  * The hexadecimal string returned will be in lower case.
  *
- * Returns: the checksum as a hexadecimal string. The returned string
+ * Returns: (transfer full) (nullable): the checksum as a hexadecimal string,
+ *   or %NULL if g_checksum_new() fails for @checksum_type. The returned string
  *   should be freed with g_free() when done using it.
  * Since: 2.16
  */
@@ -15212,8 +15265,8 @@
 
 /**
  * g_date_time_compare:
- * @dt1: (not nullable): first #GDateTime to compare
- * @dt2: (not nullable): second #GDateTime to compare
+ * @dt1: (type GDateTime) (not nullable): first #GDateTime to compare
+ * @dt2: (type GDateTime) (not nullable): second #GDateTime to compare
  *
  * A comparison function for #GDateTimes that is suitable
  * as a #GCompareFunc. Both #GDateTimes must be non-%NULL.
@@ -15241,8 +15294,8 @@
 
 /**
  * g_date_time_equal:
- * @dt1: (not nullable): a #GDateTime
- * @dt2: (not nullable): a #GDateTime
+ * @dt1: (type GDateTime) (not nullable): a #GDateTime
+ * @dt2: (type GDateTime) (not nullable): a #GDateTime
  *
  * Checks to see if @dt1 and @dt2 are equal.
  *
@@ -15629,7 +15682,7 @@
 
 /**
  * g_date_time_hash:
- * @datetime: (not nullable): a #GDateTime
+ * @datetime: (type GDateTime) (not nullable): a #GDateTime
  *
  * Hashes @datetime into a #guint, suitable for use within #GHashTable.
  *
@@ -16708,7 +16761,7 @@
  * @error: return location for a #GError, or %NULL
  *
  * Writes all of @contents to a file named @filename. This is a convenience
- * wrapper around calling g_file_set_contents() with `flags` set to
+ * wrapper around calling g_file_set_contents_full() with `flags` set to
  * `G_FILE_SET_CONTENTS_CONSISTENT | G_FILE_SET_CONTENTS_ONLY_EXISTING` and
  * `mode` set to `0666`.
  *
@@ -18852,8 +18905,8 @@
  * string containing no uppercase letters and not ending with a
  * trailing dot.
  *
- * Returns: an ASCII hostname, which must be freed, or %NULL if
- * @hostname is in some way invalid.
+ * Returns: (nullable) (transfer full): an ASCII hostname, which must be freed,
+ *    or %NULL if @hostname is in some way invalid.
  * Since: 2.22
  */
 
@@ -18870,8 +18923,8 @@
  * Of course if @hostname is not an internationalized hostname, then
  * the canonical presentation form will be entirely ASCII.
  *
- * Returns: a UTF-8 hostname, which must be freed, or %NULL if
- * @hostname is in some way invalid.
+ * Returns: (nullable) (transfer full): a UTF-8 hostname, which must be freed,
+ *    or %NULL if @hostname is in some way invalid.
  * Since: 2.22
  */
 
@@ -22448,7 +22501,7 @@
  *
  * |[<!-- language="C" -->
  *   #define NUM_TASKS 10
- *   static volatile gint tasks_remaining = NUM_TASKS;
+ *   static gint tasks_remaining = NUM_TASKS;  // (atomic)
  *   ...
  *  
  *   while (g_atomic_int_get (&tasks_remaining) != 0)
@@ -24375,6 +24428,9 @@
  *   // use initialization_value here
  * ]|
  *
+ * While @location has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
+ *
  * Returns: %TRUE if the initialization section should be entered,
  *     %FALSE and blocks otherwise
  * Since: 2.14
@@ -24392,6 +24448,9 @@
  * other than 0. Sets the variable to the initialization value, and
  * releases concurrent threads blocking in g_once_init_enter() on this
  * initialization variable.
+ *
+ * While @location has a `volatile` qualifier, this is a historical artifact and
+ * the pointer passed to it should not be `volatile`.
  *
  * Since: 2.14
  */
@@ -25519,8 +25578,8 @@
  * threads, use only the atomic g_ptr_array_ref() and g_ptr_array_unref()
  * functions.
  *
- * Returns: the pointer array if @free_seg is %FALSE, otherwise %NULL.
- *     The pointer array should be freed using g_free().
+ * Returns: (transfer full) (nullable): the pointer array if @free_seg is
+ *     %FALSE, otherwise %NULL. The pointer array should be freed using g_free().
  */
 
 
@@ -34365,7 +34424,26 @@
  * g_time_zone_new:
  * @identifier: (nullable): a timezone identifier
  *
- * Creates a #GTimeZone corresponding to @identifier.
+ * A version of g_time_zone_new_identifier() which returns the UTC time zone
+ * if @identifier could not be parsed or loaded.
+ *
+ * If you need to check whether @identifier was loaded successfully, use
+ * g_time_zone_new_identifier().
+ *
+ * Returns: (transfer full) (not nullable): the requested timezone
+ * Deprecated: 2.68: Use g_time_zone_new_identifier() instead, as it provides
+ *     error reporting. Change your code to handle a potentially %NULL return
+ *     value.
+ * Since: 2.26
+ */
+
+
+/**
+ * g_time_zone_new_identifier:
+ * @identifier: (nullable): a timezone identifier
+ *
+ * Creates a #GTimeZone corresponding to @identifier. If @identifier cannot be
+ * parsed or loaded, %NULL is returned.
  *
  * @identifier can either be an RFC3339/ISO 8601 time offset or
  * something that would pass as a valid value for the `TZ` environment
@@ -34430,8 +34508,9 @@
  * You should release the return value by calling g_time_zone_unref()
  * when you are done with it.
  *
- * Returns: the requested timezone
- * Since: 2.26
+ * Returns: (transfer full) (nullable): the requested timezone, or %NULL on
+ *     failure
+ * Since: 2.68
  */
 
 

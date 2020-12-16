@@ -811,6 +811,38 @@
 
 
 /**
+ * g_binding_dup_source:
+ * @binding: a #GBinding
+ *
+ * Retrieves the #GObject instance used as the source of the binding.
+ *
+ * A #GBinding can outlive the source #GObject as the binding does not hold a
+ * strong reference to the source. If the source is destroyed before the
+ * binding then this function will return %NULL.
+ *
+ * Returns: (transfer full) (nullable): the source #GObject, or %NULL if the
+ *     source does not exist any more.
+ * Since: 2.68
+ */
+
+
+/**
+ * g_binding_dup_target:
+ * @binding: a #GBinding
+ *
+ * Retrieves the #GObject instance used as the target of the binding.
+ *
+ * A #GBinding can outlive the target #GObject as the binding does not hold a
+ * strong reference to the target. If the target is destroyed before the
+ * binding then this function will return %NULL.
+ *
+ * Returns: (transfer full) (nullable): the target #GObject, or %NULL if the
+ *     target does not exist any more.
+ * Since: 2.68
+ */
+
+
+/**
  * g_binding_get_flags:
  * @binding: a #GBinding
  *
@@ -831,8 +863,14 @@
  * strong reference to the source. If the source is destroyed before the
  * binding then this function will return %NULL.
  *
+ * Use g_binding_dup_source() if the source or binding are used from different
+ * threads as otherwise the pointer returned from this function might become
+ * invalid if the source is finalized from another thread in the meantime.
+ *
  * Returns: (transfer none) (nullable): the source #GObject, or %NULL if the
  *     source does not exist any more.
+ * Deprecated: 2.68: Use g_binding_dup_source() for a safer version of this
+ * function.
  * Since: 2.26
  */
 
@@ -859,8 +897,14 @@
  * strong reference to the target. If the target is destroyed before the
  * binding then this function will return %NULL.
  *
+ * Use g_binding_dup_target() if the target or binding are used from different
+ * threads as otherwise the pointer returned from this function might become
+ * invalid if the target is finalized from another thread in the meantime.
+ *
  * Returns: (transfer none) (nullable): the target #GObject, or %NULL if the
  *     target does not exist any more.
+ * Deprecated: 2.68: Use g_binding_dup_target() for a safer version of this
+ * function.
  * Since: 2.26
  */
 
@@ -885,9 +929,13 @@
  * property expressed by @binding.
  *
  * This function will release the reference that is being held on
- * the @binding instance; if you want to hold on to the #GBinding instance
- * after calling g_binding_unbind(), you will need to hold a reference
- * to it.
+ * the @binding instance if the binding is still bound; if you want to hold on
+ * to the #GBinding instance after calling g_binding_unbind(), you will need
+ * to hold a reference to it.
+ *
+ * Note however that this function does not take ownership of @binding, it
+ * only unrefs the reference that was initially created by
+ * g_object_bind_property() and is owned by the binding.
  *
  * Since: 2.38
  */
@@ -2168,7 +2216,7 @@
  *
  * Returns the #GEnumValue for a value.
  *
- * Returns: (transfer none): the #GEnumValue for @value, or %NULL
+ * Returns: (transfer none) (nullable): the #GEnumValue for @value, or %NULL
  *          if @value is not a member of the enumeration
  */
 
@@ -2180,7 +2228,7 @@
  *
  * Looks up a #GEnumValue by name.
  *
- * Returns: (transfer none): the #GEnumValue with name @name,
+ * Returns: (transfer none) (nullable): the #GEnumValue with name @name,
  *          or %NULL if the enumeration doesn't have a member
  *          with that name
  */
@@ -2193,7 +2241,7 @@
  *
  * Looks up a #GEnumValue by nickname.
  *
- * Returns: (transfer none): the #GEnumValue with nickname @nick,
+ * Returns: (transfer none) (nullable): the #GEnumValue with nickname @nick,
  *          or %NULL if the enumeration doesn't have a member
  *          with that nickname
  */
@@ -2253,7 +2301,7 @@
  *
  * Returns the first #GFlagsValue which is set in @value.
  *
- * Returns: (transfer none): the first #GFlagsValue which is set in
+ * Returns: (transfer none) (nullable): the first #GFlagsValue which is set in
  *          @value, or %NULL if none is set
  */
 
@@ -2265,7 +2313,7 @@
  *
  * Looks up a #GFlagsValue by name.
  *
- * Returns: (transfer none): the #GFlagsValue with name @name,
+ * Returns: (transfer none) (nullable): the #GFlagsValue with name @name,
  *          or %NULL if there is no flag with that name
  */
 
@@ -2277,7 +2325,7 @@
  *
  * Looks up a #GFlagsValue by nickname.
  *
- * Returns: (transfer none): the #GFlagsValue with nickname @nick,
+ * Returns: (transfer none) (nullable): the #GFlagsValue with nickname @nick,
  *          or %NULL if there is no flag with that nickname
  */
 
@@ -2402,6 +2450,13 @@
  * @target instances are finalized. To remove the binding without affecting the
  * @source and the @target you can just call g_object_unref() on the returned
  * #GBinding instance.
+ *
+ * Removing the binding by calling g_object_unref() on it must only be done if
+ * the binding, @source and @target are only used from a single thread and it
+ * is clear that both @source and @target outlive the binding. Especially it
+ * is not safe to rely on this if the binding, @source or @target can be
+ * finalized from different threads. Keep another reference to the binding and
+ * use g_binding_unbind() instead to be on the safe side.
  *
  * A #GObject can have multiple bindings.
  *
@@ -3494,7 +3549,7 @@
  * @data: extra data to pass to notify
  *
  * Adds a weak reference callback to an object. Weak references are
- * used for notification when an object is finalized. They are called
+ * used for notification when an object is disposed. They are called
  * "weak references" because they allow you to safely hold a pointer
  * to an object without calling g_object_ref() (g_object_ref() adds a
  * strong reference, that is, forces the object to stay alive).
@@ -3648,7 +3703,7 @@
  *
  * Get the short description of a #GParamSpec.
  *
- * Returns: the short description of @pspec.
+ * Returns: (nullable): the short description of @pspec.
  */
 
 
@@ -3706,7 +3761,7 @@
  *
  * Gets back user data pointers stored via g_param_spec_set_qdata().
  *
- * Returns: (transfer none): the user data pointer set, or %NULL
+ * Returns: (transfer none) (nullable): the user data pointer set, or %NULL
  */
 
 
@@ -3723,7 +3778,7 @@
  * for an example of the use of this capability.
  *
  * Since: 2.4
- * Returns: (transfer none): paramspec to which requests on this
+ * Returns: (transfer none) (nullable): paramspec to which requests on this
  *          paramspec should be redirected, or %NULL if none.
  */
 
@@ -3803,7 +3858,7 @@
  * @blurb, which should be a somewhat longer description, suitable for
  * e.g. a tooltip. The @nick and @blurb should ideally be localized.
  *
- * Returns: (type GObject.ParamSpec): a newly allocated #GParamSpec instance
+ * Returns: (type GObject.ParamSpec): (transfer full): a newly allocated #GParamSpec instance
  */
 
 
@@ -3909,7 +3964,7 @@
 /**
  * g_param_spec_pool_insert:
  * @pool: a #GParamSpecPool.
- * @pspec: the #GParamSpec to insert
+ * @pspec: (transfer none) (not nullable): the #GParamSpec to insert
  * @owner_type: a #GType identifying the owner of @pspec
  *
  * Inserts a #GParamSpec in the pool.
@@ -3955,7 +4010,7 @@
  *
  * Looks up a #GParamSpec in the pool.
  *
- * Returns: (transfer none): The found #GParamSpec, or %NULL if no
+ * Returns: (transfer none) (nullable): The found #GParamSpec, or %NULL if no
  * matching #GParamSpec was found.
  */
 
@@ -3971,14 +4026,14 @@
  * property name, like "GtkContainer:border-width". This feature is
  * deprecated, so you should always set @type_prefixing to %FALSE.
  *
- * Returns: (transfer none): a newly allocated #GParamSpecPool.
+ * Returns: (transfer full): a newly allocated #GParamSpecPool.
  */
 
 
 /**
  * g_param_spec_pool_remove:
  * @pool: a #GParamSpecPool
- * @pspec: the #GParamSpec to remove
+ * @pspec: (transfer none) (not nullable): the #GParamSpec to remove
  *
  * Removes a #GParamSpec from the pool.
  */
@@ -3986,11 +4041,11 @@
 
 /**
  * g_param_spec_ref: (skip)
- * @pspec: a valid #GParamSpec
+ * @pspec: (transfer none) (not nullable): a valid #GParamSpec
  *
  * Increments the reference count of @pspec.
  *
- * Returns: the #GParamSpec that was passed into this function
+ * Returns: (transfer full) (not nullable): the #GParamSpec that was passed into this function
  */
 
 
@@ -4001,7 +4056,7 @@
  * Convenience function to ref and sink a #GParamSpec.
  *
  * Since: 2.10
- * Returns: the #GParamSpec that was passed into this function
+ * Returns: (transfer full) (not nullable): the #GParamSpec that was passed into this function
  */
 
 
@@ -4009,7 +4064,7 @@
  * g_param_spec_set_qdata:
  * @pspec: the #GParamSpec to set store a user data pointer
  * @quark: a #GQuark, naming the user data pointer
- * @data: an opaque user data pointer
+ * @data: (nullable): an opaque user data pointer
  *
  * Sets an opaque, named pointer on a #GParamSpec. The name is
  * specified through a #GQuark (retrieved e.g. via
@@ -4024,8 +4079,8 @@
  * g_param_spec_set_qdata_full: (skip)
  * @pspec: the #GParamSpec to set store a user data pointer
  * @quark: a #GQuark, naming the user data pointer
- * @data: an opaque user data pointer
- * @destroy: function to invoke with @data as argument, when @data needs to
+ * @data: (nullable): an opaque user data pointer
+ * @destroy: (nullable): function to invoke with @data as argument, when @data needs to
  *  be freed
  *
  * This function works like g_param_spec_set_qdata(), but in addition,
@@ -4060,7 +4115,7 @@
  * function (if any was set).  Usually, calling this function is only
  * required to update user data pointers with a destroy notifier.
  *
- * Returns: (transfer none): the user data pointer set, or %NULL
+ * Returns: (transfer none) (nullable): the user data pointer set, or %NULL
  */
 
 
@@ -4364,9 +4419,9 @@
  * g_signal_add_emission_hook:
  * @signal_id: the signal identifier, as returned by g_signal_lookup().
  * @detail: the detail on which to call the hook.
- * @hook_func: a #GSignalEmissionHook function.
- * @hook_data: user data for @hook_func.
- * @data_destroy: a #GDestroyNotify for @hook_data.
+ * @hook_func: (not nullable): a #GSignalEmissionHook function.
+ * @hook_data: (nullable): user data for @hook_func.
+ * @data_destroy: (nullable): a #GDestroyNotify for @hook_data.
  *
  * Adds an emission hook for a signal, which will get called for any emission
  * of that signal, independent of the instance. This is possible only
@@ -4411,7 +4466,7 @@
  * g_signal_connect_closure:
  * @instance: (type GObject.Object): the instance to connect to.
  * @detailed_signal: a string of the form "signal-name::detail".
- * @closure: the closure to connect.
+ * @closure: (not nullable): the closure to connect.
  * @after: whether the handler should be called before or after the
  *  default handler of the signal.
  *
@@ -4426,7 +4481,7 @@
  * @instance: (type GObject.Object): the instance to connect to.
  * @signal_id: the id of the signal.
  * @detail: the detail.
- * @closure: the closure to connect.
+ * @closure: (not nullable): the closure to connect.
  * @after: whether the handler should be called before or after the
  *  default handler of the signal.
  *
@@ -4440,9 +4495,9 @@
  * g_signal_connect_data:
  * @instance: (type GObject.Object): the instance to connect to.
  * @detailed_signal: a string of the form "signal-name::detail".
- * @c_handler: the #GCallback to connect.
- * @data: data to pass to @c_handler calls.
- * @destroy_data: a #GClosureNotify for @data.
+ * @c_handler: (not nullable): the #GCallback to connect.
+ * @data: (nullable): data to pass to @c_handler calls.
+ * @destroy_data: (nullable): a #GClosureNotify for @data.
  * @connect_flags: a combination of #GConnectFlags.
  *
  * Connects a #GCallback function to a signal for a particular object. Similar
@@ -4549,7 +4604,8 @@
  *
  * Returns the invocation hint of the innermost signal emission of instance.
  *
- * Returns: (transfer none): the invocation hint of the innermost signal  emission.
+ * Returns: (transfer none) (nullable): the invocation hint of the innermost
+ *     signal emission, or %NULL if not found.
  */
 
 
@@ -4592,7 +4648,7 @@
  * @detail: Signal detail the handler has to be connected to.
  * @closure: (nullable): The closure the handler will invoke.
  * @func: The C closure callback of the handler (useless for non-C closures).
- * @data: The closure data of the handler's closure.
+ * @data: (nullable): The closure data of the handler's closure.
  *
  * Finds the first signal handler that matches certain selection criteria.
  * The criteria mask is passed as an OR-ed combination of #GSignalMatchType
@@ -4645,7 +4701,7 @@
  * @detail: Signal detail the handlers have to be connected to.
  * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: The closure data of the handlers' closures.
+ * @data: (nullable): The closure data of the handlers' closures.
  *
  * Blocks all handlers on an instance that match a certain selection criteria.
  * The criteria mask is passed as an OR-ed combination of #GSignalMatchType
@@ -4678,7 +4734,7 @@
  * @detail: Signal detail the handlers have to be connected to.
  * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: The closure data of the handlers' closures.
+ * @data: (nullable): The closure data of the handlers' closures.
  *
  * Disconnects all handlers on an instance that match a certain
  * selection criteria. The criteria mask is passed as an OR-ed
@@ -4702,7 +4758,7 @@
  * @detail: Signal detail the handlers have to be connected to.
  * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: The closure data of the handlers' closures.
+ * @data: (nullable): The closure data of the handlers' closures.
  *
  * Unblocks all handlers on an instance that match a certain selection
  * criteria. The criteria mask is passed as an OR-ed combination of
@@ -4804,7 +4860,7 @@
  *
  * Two different signals may have the same name, if they have differing types.
  *
- * Returns: the signal name, or %NULL if the signal number was invalid.
+ * Returns: (nullable): the signal name, or %NULL if the signal number was invalid.
  */
 
 
@@ -4819,8 +4875,8 @@
  * @class_offset: The offset of the function pointer in the class structure
  *  for this type. Used to invoke a class method generically. Pass 0 to
  *  not associate a class method slot with this signal.
- * @accumulator: the accumulator for this signal; may be %NULL.
- * @accu_data: user data for the @accumulator.
+ * @accumulator: (nullable): the accumulator for this signal; may be %NULL.
+ * @accu_data: (nullable): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
@@ -4865,11 +4921,11 @@
  * @signal_flags: a combination of #GSignalFlags specifying detail of when
  *  the default handler is to be invoked. You should at least specify
  *  %G_SIGNAL_RUN_FIRST or %G_SIGNAL_RUN_LAST.
- * @class_handler: a #GCallback which acts as class implementation of
+ * @class_handler: (nullable): a #GCallback which acts as class implementation of
  *  this signal. Used to invoke a class method generically. Pass %NULL to
  *  not associate a class method with this signal.
- * @accumulator: the accumulator for this signal; may be %NULL.
- * @accu_data: user data for the @accumulator.
+ * @accumulator: (nullable): the accumulator for this signal; may be %NULL.
+ * @accu_data: (nullable): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
@@ -4907,9 +4963,9 @@
  * @signal_flags: a combination of #GSignalFlags specifying detail of when
  *  the default handler is to be invoked. You should at least specify
  *  %G_SIGNAL_RUN_FIRST or %G_SIGNAL_RUN_LAST.
- * @class_closure: The closure to invoke on signal emission; may be %NULL.
- * @accumulator: the accumulator for this signal; may be %NULL.
- * @accu_data: user data for the @accumulator.
+ * @class_closure: (nullable): The closure to invoke on signal emission; may be %NULL.
+ * @accumulator: (nullable): the accumulator for this signal; may be %NULL.
+ * @accu_data: (nullable): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
@@ -4939,15 +4995,15 @@
  * @class_closure: (nullable): The closure to invoke on signal emission;
  *     may be %NULL
  * @accumulator: (nullable): the accumulator for this signal; may be %NULL
- * @accu_data: user data for the @accumulator
+ * @accu_data: (nullable): user data for the @accumulator
  * @c_marshaller: (nullable): the function to translate arrays of
  *     parameter values to signal emissions into C language callback
  *     invocations or %NULL
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
  *     without a return value
  * @n_params: the length of @param_types
- * @param_types: (array length=n_params): an array of types, one for
- *     each parameter
+ * @param_types: (array length=n_params) (nullable): an array of types, one for
+ *     each parameter (may be %NULL if @n_params is zero)
  *
  * Creates a new signal. (This is usually done in the class initializer.)
  *
@@ -5015,7 +5071,7 @@
 /**
  * g_signal_query:
  * @signal_id: The signal id of the signal to query information for.
- * @query: (out caller-allocates): A user provided structure that is
+ * @query: (out caller-allocates) (not optional): A user provided structure that is
  *  filled in with constant values upon success.
  *
  * Queries the signal system for in-depth information about a
@@ -5765,8 +5821,8 @@
 
 /**
  * g_type_is_a:
- * @type: type to check anchestry for
- * @is_a_type: possible anchestor of @type or interface that @type
+ * @type: type to check ancestry for
+ * @is_a_type: possible ancestor of @type or interface that @type
  *     could conform to
  *
  * If @is_a_type is a derivable type, check whether @type is a
@@ -5935,7 +5991,7 @@
  * be used to determine the types and order in which the leaf type is
  * descended from the root type.
  *
- * Returns: immediate child of @root_type and anchestor of @leaf_type
+ * Returns: immediate child of @root_type and ancestor of @leaf_type
  */
 
 
@@ -6319,8 +6375,8 @@
  * Get the contents of a %G_TYPE_PARAM #GValue, increasing its
  * reference count.
  *
- * Returns: #GParamSpec content of @value, should be unreferenced when
- *          no longer needed.
+ * Returns: (transfer full): #GParamSpec content of @value, should be
+ *     unreferenced when no longer needed.
  */
 
 

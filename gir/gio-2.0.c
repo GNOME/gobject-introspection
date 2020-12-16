@@ -737,7 +737,7 @@
  *
  * If you are constructing a #GDBusConnection and pass
  * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_SERVER in the
- * #GDBusConnection:flags property then you MUST also set this
+ * #GDBusConnection:flags property then you **must** also set this
  * property to a valid guid.
  *
  * If you are constructing a #GDBusConnection and pass
@@ -5688,12 +5688,12 @@
  * GQuark
  * foo_bar_error_quark (void)
  * {
- *   static volatile gsize quark_volatile = 0;
+ *   static gsize quark = 0;
  *   g_dbus_error_register_error_domain ("foo-bar-error-quark",
- *                                       &quark_volatile,
+ *                                       &quark,
  *                                       foo_bar_error_entries,
  *                                       G_N_ELEMENTS (foo_bar_error_entries));
- *   return (GQuark) quark_volatile;
+ *   return (GQuark) quark;
  * }
  * ]|
  * With this setup, a D-Bus peer can transparently pass e.g. %FOO_BAR_ERROR_ANOTHER_ERROR and
@@ -14157,10 +14157,10 @@
  * logged) to use this method if there is no #GCredentials support for
  * the OS or if @native_type isn't supported by the OS.
  *
- * Returns: The pointer to native credentials or %NULL if the
- * operation there is no #GCredentials support for the OS or if
- * @native_type isn't supported by the OS. Do not free the returned
- * data, it is owned by @credentials.
+ * Returns: (transfer none) (nullable): The pointer to native credentials or
+ *     %NULL if there is no #GCredentials support for the OS or if @native_type
+ *     isn't supported by the OS. Do not free the returned data, it is owned
+ *     by @credentials.
  * Since: 2.26
  */
 
@@ -14178,7 +14178,7 @@
  * about the UNIX process ID (for example this is the case for
  * %G_CREDENTIALS_TYPE_APPLE_XUCRED).
  *
- * Returns: The UNIX process ID, or -1 if @error is set.
+ * Returns: The UNIX process ID, or `-1` if @error is set.
  * Since: 2.36
  */
 
@@ -14195,7 +14195,7 @@
  * OS or if the native credentials type does not contain information
  * about the UNIX user.
  *
- * Returns: The UNIX user identifier or -1 if @error is set.
+ * Returns: The UNIX user identifier or `-1` if @error is set.
  * Since: 2.26
  */
 
@@ -14223,7 +14223,7 @@
  * Creates a new #GCredentials object with credentials matching the
  * the current process.
  *
- * Returns: A #GCredentials. Free with g_object_unref().
+ * Returns: (transfer full): A #GCredentials. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -14272,7 +14272,7 @@
  * that can be used in logging and debug messages. The format of the
  * returned string may change in future GLib release.
  *
- * Returns: A string that should be freed with g_free().
+ * Returns: (transfer full): A string that should be freed with g_free().
  * Since: 2.26
  */
 
@@ -15178,10 +15178,13 @@
 /**
  * g_dbus_address_get_stream_finish:
  * @res: A #GAsyncResult obtained from the GAsyncReadyCallback passed to g_dbus_address_get_stream().
- * @out_guid: (optional) (out): %NULL or return location to store the GUID extracted from @address, if any.
+ * @out_guid: (optional) (out) (nullable): %NULL or return location to store the GUID extracted from @address, if any.
  * @error: Return location for error or %NULL.
  *
  * Finishes an operation started with g_dbus_address_get_stream().
+ *
+ * A server is not required to set a GUID, so @out_guid may be set to %NULL
+ * even on success.
  *
  * Returns: (transfer full): A #GIOStream or %NULL if @error is set.
  * Since: 2.26
@@ -15191,7 +15194,7 @@
 /**
  * g_dbus_address_get_stream_sync:
  * @address: A valid D-Bus address.
- * @out_guid: (optional) (out): %NULL or return location to store the GUID extracted from @address, if any.
+ * @out_guid: (optional) (out) (nullable): %NULL or return location to store the GUID extracted from @address, if any.
  * @cancellable: (nullable): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
@@ -15199,6 +15202,9 @@
  * sets up the connection so it is in a state to run the client-side
  * of the D-Bus authentication conversation. @address must be in the
  * [D-Bus address format](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses).
+ *
+ * A server is not required to set a GUID, so @out_guid may be set to %NULL
+ * even on success.
  *
  * This is a synchronous failable function. See
  * g_dbus_address_get_stream() for the asynchronous version.
@@ -15426,8 +15432,8 @@
  *
  * Finishes an operation started with g_dbus_connection_call().
  *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
- *     return values. Free with g_variant_unref().
+ * Returns: (transfer full): %NULL if @error is set. Otherwise a non-floating
+ *     #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.26
  */
 
@@ -15486,8 +15492,8 @@
  * g_dbus_connection_call() for the asynchronous version of
  * this method.
  *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
- *     return values. Free with g_variant_unref().
+ * Returns: (transfer full): %NULL if @error is set. Otherwise a non-floating
+ *     #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.26
  */
 
@@ -15554,8 +15560,8 @@
  * access file descriptors if they are referenced in this way by a
  * value of type %G_VARIANT_TYPE_HANDLE in the body of the message.
  *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
- *     return values. Free with g_variant_unref().
+ * Returns: (transfer full): %NULL if @error is set. Otherwise a non-floating
+ *     #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -15585,8 +15591,8 @@
  *
  * This method is only available on UNIX.
  *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
- *     return values. Free with g_variant_unref().
+ * Returns: (transfer full): %NULL if @error is set. Otherwise a non-floating
+ *     #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -15842,7 +15848,7 @@
  * The GUID of the peer performing the role of server when
  * authenticating. See #GDBusConnection:guid for more details.
  *
- * Returns: The GUID. Do not free this string, it is owned by
+ * Returns: (not nullable): The GUID. Do not free this string, it is owned by
  *     @connection.
  * Since: 2.26
  */
@@ -15894,7 +15900,7 @@
  * stream from a worker thread, so it is not safe to interact with
  * the stream directly.
  *
- * Returns: (transfer none): the stream used for IO
+ * Returns: (transfer none) (not nullable): the stream used for IO
  * Since: 2.26
  */
 
@@ -15968,7 +15974,7 @@
  *
  * Finishes an operation started with g_dbus_connection_new().
  *
- * Returns: a #GDBusConnection or %NULL if @error is set. Free
+ * Returns: (transfer full): a #GDBusConnection or %NULL if @error is set. Free
  *     with g_object_unref().
  * Since: 2.26
  */
@@ -16017,8 +16023,8 @@
  *
  * Finishes an operation started with g_dbus_connection_new_for_address().
  *
- * Returns: a #GDBusConnection or %NULL if @error is set. Free with
- *     g_object_unref().
+ * Returns: (transfer full): a #GDBusConnection or %NULL if @error is set.
+ *     Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -16048,8 +16054,8 @@
  * If @observer is not %NULL it may be used to control the
  * authentication process.
  *
- * Returns: a #GDBusConnection or %NULL if @error is set. Free with
- *     g_object_unref().
+ * Returns: (transfer full): a #GDBusConnection or %NULL if @error is set.
+ *     Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -16079,7 +16085,8 @@
  * This is a synchronous failable constructor. See
  * g_dbus_connection_new() for the asynchronous version.
  *
- * Returns: a #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: (transfer full): a #GDBusConnection or %NULL if @error is set.
+ *     Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -16152,7 +16159,7 @@
  * Version of g_dbus_connection_register_object() using closures instead of a
  * #GDBusInterfaceVTable for easier binding in other languages.
  *
- * Returns: 0 if @error is set, otherwise a registration id (never 0)
+ * Returns: 0 if @error is set, otherwise a registration ID (never 0)
  * that can be used with g_dbus_connection_unregister_object() .
  * Since: 2.46
  */
@@ -16204,8 +16211,8 @@
  * See this [server][gdbus-subtree-server] for an example of how to use
  * this method.
  *
- * Returns: 0 if @error is set, otherwise a subtree registration id (never 0)
- * that can be used with g_dbus_connection_unregister_subtree() .
+ * Returns: 0 if @error is set, otherwise a subtree registration ID (never 0)
+ * that can be used with g_dbus_connection_unregister_subtree()
  * Since: 2.26
  */
 
@@ -16244,7 +16251,9 @@
  * will be assigned by @connection and set on @message via
  * g_dbus_message_set_serial(). If @out_serial is not %NULL, then the
  * serial number used will be written to this location prior to
- * submitting the message to the underlying transport.
+ * submitting the message to the underlying transport. While it has a `volatile`
+ * qualifier, this is a historical artifact and the argument passed to it should
+ * not be `volatile`.
  *
  * If @connection is closed then the operation will fail with
  * %G_IO_ERROR_CLOSED. If @message is not well-formed,
@@ -16284,7 +16293,9 @@
  * will be assigned by @connection and set on @message via
  * g_dbus_message_set_serial(). If @out_serial is not %NULL, then the
  * serial number used will be written to this location prior to
- * submitting the message to the underlying transport.
+ * submitting the message to the underlying transport. While it has a `volatile`
+ * qualifier, this is a historical artifact and the argument passed to it should
+ * not be `volatile`.
  *
  * If @connection is closed then the operation will fail with
  * %G_IO_ERROR_CLOSED. If @cancellable is canceled, the operation will
@@ -16354,7 +16365,9 @@
  * will be assigned by @connection and set on @message via
  * g_dbus_message_set_serial(). If @out_serial is not %NULL, then the
  * serial number used will be written to this location prior to
- * submitting the message to the underlying transport.
+ * submitting the message to the underlying transport. While it has a `volatile`
+ * qualifier, this is a historical artifact and the argument passed to it should
+ * not be `volatile`.
  *
  * If @connection is closed then the operation will fail with
  * %G_IO_ERROR_CLOSED. If @cancellable is canceled, the operation will
@@ -16582,7 +16595,8 @@
  * This function is typically only used in object mappings to put a
  * #GError on the wire. Regular applications should not use it.
  *
- * Returns: A D-Bus error name (never %NULL). Free with g_free().
+ * Returns: (transfer full) (not nullable): A D-Bus error name (never %NULL).
+ *     Free with g_free().
  * Since: 2.26
  */
 
@@ -16598,8 +16612,8 @@
  * (e.g. g_dbus_connection_call_finish()) unless
  * g_dbus_error_strip_remote_error() has been used on @error.
  *
- * Returns: an allocated string or %NULL if the D-Bus error name
- *     could not be found. Free with g_free().
+ * Returns: (nullable) (transfer full): an allocated string or %NULL if the
+ *     D-Bus error name could not be found. Free with g_free().
  * Since: 2.26
  */
 
@@ -16649,7 +16663,7 @@
  * #GError instances for applications. Regular applications should not use
  * it.
  *
- * Returns: An allocated #GError. Free with g_error_free().
+ * Returns: (transfer full): An allocated #GError. Free with g_error_free().
  * Since: 2.26
  */
 
@@ -16680,6 +16694,9 @@
  * @num_entries: Number of items to register.
  *
  * Helper function for associating a #GError error domain with D-Bus error names.
+ *
+ * While @quark_volatile has a `volatile` qualifier, this is a historical
+ * artifact and the argument passed to it should not be `volatile`.
  *
  * Since: 2.26
  */
