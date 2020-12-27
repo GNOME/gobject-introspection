@@ -23,7 +23,7 @@
 % if formatter.get_in_parameters(node):
 @accepts(${', '.join((formatter.format_type(arg.type) for arg in formatter.get_in_parameters(node)))})
 % endif
-@returns(${formatter.format_type(node.retval.type) | x})
+@returns(${', '.join((formatter.format_type(arg.type) for arg in formatter.get_out_parameters(node)))})
 def ${node.name}(${', '.join((formatter.format_parameter_name(node, arg) for arg in formatter.get_in_parameters(node)))}):
     # Python wrapper for ${node.symbol}()
   </code></synopsis></%block>
@@ -36,12 +36,12 @@ def ${node.name}(${', '.join((formatter.format_parameter_name(node, arg) for arg
 ${formatter.format(node, arg.doc)}
 </item>
 % endfor
-% if node.retval and node.retval.type.ctype != 'void':
+% for arg in formatter.get_out_parameters(node):
 <item>
-<title><code>Returns</code></title>
-{formatter.format(node, node.retval.doc)}
+<title><code>${(arg.argname + ' (out)')}</code></title>
+${formatter.format(node, arg.doc)}
 </item>
-% endif
+% endfor
 </terms>
 % endif
 </%block>

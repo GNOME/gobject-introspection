@@ -810,7 +810,49 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
             return func.name
 
     def get_in_parameters(self, node):
-        return node.all_parameters
+        skip = set()
+        for param in node.all_parameters:
+            if param.direction == ast.PARAM_DIRECTION_OUT:
+                skip.add(param)
+            if isinstance(param.type, ast.Array) and param.type.length_param_name is not None:
+                skip.add(node.get_parameter(param.type.length_param_name))
+
+        params = []
+        for param in node.parameters:
+            if param not in skip:
+                params.append(param)
+        return params
+
+    def get_out_parameters(self, node):
+        # First make a list of parameters we should skip anyhow
+        skip = set()
+        for param in node.parameters:
+            if param.direction == ast.PARAM_DIRECTION_IN:
+                skip.add(param)
+            if isinstance(param.type, ast.Array) and param.type.length_param_name is not None:
+                skip.add(node.get_parameter(param.type.length_param_name))
+
+        # Now build the actual list of out parameters
+        params = []
+        # First the return value
+        if node.retval.type.target_fundamental != 'none':
+            name = 'return_value'
+            if node.retval.type.target_fundamental == 'gboolean':
+                name = 'ok'
+
+            ret_param = ast.Parameter(name, node.retval.type,
+                                      ast.PARAM_DIRECTION_OUT)
+            ret_param.doc = node.retval.doc
+            params.append(ret_param)
+        # Next, each parameter marked as (out)
+        for param in node.parameters:
+            if param not in skip:
+                params.append(param)
+
+        if len(params) == 1:
+            params[0].argname = 'Returns'
+
+        return params
 
 
 class DocFormatterGjs(DocFormatterIntrospectableBase):
