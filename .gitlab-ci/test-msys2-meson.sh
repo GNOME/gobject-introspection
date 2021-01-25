@@ -31,7 +31,7 @@ pacman --noconfirm -S --needed \
 export CCACHE_BASEDIR="${CI_PROJECT_DIR}"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
-pip3 install --upgrade --user meson==0.50.1 flake8 mypy
+pip3 install --upgrade --user meson==0.50.1 flake8 mypy==0.790
 export PATH="$HOME/.local/bin:$PATH"
 
 export CFLAGS="-Werror"
