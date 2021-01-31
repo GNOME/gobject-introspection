@@ -5884,14 +5884,14 @@
  * - Do not report programming errors via #GError.
  *
  * - The last argument of a function that returns an error should
- *   be a location where a #GError can be placed (i.e. "#GError** error").
- *   If #GError is used with varargs, the #GError** should be the last
- *   argument before the "...".
+ *   be a location where a #GError can be placed (i.e. `GError **error`).
+ *   If #GError is used with varargs, the `GError**` should be the last
+ *   argument before the `...`.
  *
- * - The caller may pass %NULL for the #GError** if they are not interested
+ * - The caller may pass %NULL for the `GError**` if they are not interested
  *   in details of the exact error that occurred.
  *
- * - If %NULL is passed for the #GError** argument, then errors should
+ * - If %NULL is passed for the `GError**` argument, then errors should
  *   not be returned to the caller, but your function should still
  *   abort and return if an error occurs. That is, control flow should
  *   not be affected by whether the caller wants to get a #GError.
@@ -5905,11 +5905,13 @@
  * - If a #GError is reported, out parameters are not guaranteed to
  *   be set to any defined value.
  *
- * - A #GError* must be initialized to %NULL before passing its address
+ * - A `GError*` must be initialized to %NULL before passing its address
  *   to a function that can report errors.
  *
+ * - #GError structs must not be stack-allocated.
+ *
  * - "Piling up" errors is always a bug. That is, if you assign a
- *   new #GError to a #GError* that is non-%NULL, thus overwriting
+ *   new #GError to a `GError*` that is non-%NULL, thus overwriting
  *   the previous error, it indicates that you should have aborted
  *   the operation instead of continuing. If you were able to continue,
  *   you should have cleared the previous error with g_clear_error().
@@ -5917,12 +5919,12 @@
  *
  * - By convention, if you return a boolean value indicating success
  *   then %TRUE means success and %FALSE means failure. Avoid creating
- *   functions which have a boolean return value and a GError parameter,
+ *   functions which have a boolean return value and a #GError parameter,
  *   but where the boolean does something other than signal whether the
- *   GError is set.  Among other problems, it requires C callers to allocate
- *   a temporary error.  Instead, provide a "gboolean *" out parameter.
+ *   #GError is set.  Among other problems, it requires C callers to allocate
+ *   a temporary error.  Instead, provide a `gboolean *` out parameter.
  *   There are functions in GLib itself such as g_key_file_has_key() that
- *   are deprecated because of this. If %FALSE is returned, the error must
+ *   are hard to use because of this. If %FALSE is returned, the error must
  *   be set to a non-%NULL value.  One exception to this is that in situations
  *   that are already considered to be undefined behaviour (such as when a
  *   g_return_val_if_fail() check fails), the error need not be set.
@@ -5940,6 +5942,121 @@
  *   to add a check at the top of your function that the error return
  *   location is either %NULL or contains a %NULL error (e.g.
  *   `g_return_if_fail (error == NULL || *error == NULL);`).
+ *
+ * ## Extended #GError Domains # {#gerror-extended-domains}
+ *
+ * Since GLib 2.68 it is possible to extend the #GError type. This is
+ * done with the G_DEFINE_EXTENDED_ERROR() macro. To create an
+ * extended #GError type do something like this in the header file:
+ * |[<!-- language="C" -->
+ * typedef enum
+ * {
+ *   MY_ERROR_BAD_REQUEST,
+ * } MyError;
+ * #define MY_ERROR (my_error_quark ())
+ * GQuark my_error_quark (void);
+ * int
+ * my_error_get_parse_error_id (GError *error);
+ * const char *
+ * my_error_get_bad_request_details (GError *error);
+ * ]|
+ * and in implementation:
+ * |[<!-- language="C" -->
+ * typedef struct
+ * {
+ *   int parse_error_id;
+ *   char *bad_request_details;
+ * } MyErrorPrivate;
+ *
+ * static void
+ * my_error_private_init (MyErrorPrivate *priv)
+ * {
+ *   priv->parse_error_id = -1;
+ *   // No need to set priv->bad_request_details to NULL,
+ *   // the struct is initialized with zeros.
+ * }
+ *
+ * static void
+ * my_error_private_copy (const MyErrorPrivate *src_priv, MyErrorPrivate *dest_priv)
+ * {
+ *   dest_priv->parse_error_id = src_priv->parse_error_id;
+ *   dest_priv->bad_request_details = g_strdup (src_priv->bad_request_details);
+ * }
+ *
+ * static void
+ * my_error_private_clear (MyErrorPrivate *priv)
+ * {
+ *   g_free (priv->bad_request_details);
+ * }
+ *
+ * // This defines the my_error_get_private and my_error_quark functions.
+ * G_DEFINE_EXTENDED_ERROR (MyError, my_error)
+ *
+ * int
+ * my_error_get_parse_error_id (GError *error)
+ * {
+ *   MyErrorPrivate *priv = my_error_get_private (error);
+ *   g_return_val_if_fail (priv != NULL, -1);
+ *   return priv->parse_error_id;
+ * }
+ *
+ * const char *
+ * my_error_get_bad_request_details (GError *error)
+ * {
+ *   MyErrorPrivate *priv = my_error_get_private (error);
+ *   g_return_val_if_fail (priv != NULL, NULL);
+ *   g_return_val_if_fail (error->code != MY_ERROR_BAD_REQUEST, NULL);
+ *   return priv->bad_request_details;
+ * }
+ *
+ * static void
+ * my_error_set_bad_request (GError     **error,
+ *                           const char  *reason,
+ *                           int          error_id,
+ *                           const char  *details)
+ * {
+ *   MyErrorPrivate *priv;
+ *   g_set_error (error, MY_ERROR, MY_ERROR_BAD_REQUEST, "Invalid request: %s", reason);
+ *   if (error != NULL && *error != NULL)
+ *     {
+ *       priv = my_error_get_private (error);
+ *       g_return_val_if_fail (priv != NULL, NULL);
+ *       priv->parse_error_id = error_id;
+ *       priv->bad_request_details = g_strdup (details);
+ *     }
+ * }
+ * ]|
+ * An example of use of the error could be:
+ * |[<!-- language="C" -->
+ * gboolean
+ * send_request (GBytes *request, GError **error)
+ * {
+ *   ParseFailedStatus *failure = validate_request (request);
+ *   if (failure != NULL)
+ *     {
+ *       my_error_set_bad_request (error, failure->reason, failure->error_id, failure->details);
+ *       parse_failed_status_free (failure);
+ *       return FALSE;
+ *     }
+ *
+ *   return send_one (request, error);
+ * }
+ * ]|
+ *
+ * Please note that if you are a library author and your library
+ * exposes an existing error domain, then you can't make this error
+ * domain an extended one without breaking ABI. This is because
+ * earlier it was possible to create an error with this error domain
+ * on the stack and then copy it with g_error_copy(). If the new
+ * version of your library makes the error domain an extended one,
+ * then g_error_copy() called by code that allocated the error on the
+ * stack will try to copy more data than it used to, which will lead
+ * to undefined behavior. You must not stack-allocate errors with an
+ * extended error domain, and it is bad practice to stack-allocate any
+ * other #GErrors.
+ *
+ * Extended error domains in unloadable plugins/modules are not
+ * supported.
  */
 
 
@@ -16593,6 +16710,54 @@
 
 
 /**
+ * g_error_domain_register:
+ * @error_type_name: string to create a #GQuark from
+ * @error_type_private_size: size of the private error data in bytes
+ * @error_type_init: function initializing fields of the private error data
+ * @error_type_copy: function copying fields of the private error data
+ * @error_type_clear: function freeing fields of the private error data
+ *
+ * This function registers an extended #GError domain.
+ * @error_type_name will be duplicated. Otherwise does the same as
+ * g_error_domain_register_static().
+ *
+ * Returns: #GQuark representing the error domain
+ * Since: 2.68
+ */
+
+
+/**
+ * g_error_domain_register_static:
+ * @error_type_name: static string to create a #GQuark from
+ * @error_type_private_size: size of the private error data in bytes
+ * @error_type_init: function initializing fields of the private error data
+ * @error_type_copy: function copying fields of the private error data
+ * @error_type_clear: function freeing fields of the private error data
+ *
+ * This function registers an extended #GError domain.
+ *
+ * @error_type_name should not be freed. @error_type_private_size must
+ * be greater than 0.
+ *
+ * @error_type_init receives an initialized #GError and should then initialize
+ * the private data.
+ *
+ * @error_type_copy is a function that receives both original and a copy
+ * #GError and should copy the fields of the private error data. The standard
+ * #GError fields are already handled.
+ *
+ * @error_type_clear receives the pointer to the error, and it should free the
+ * fields of the private error data. It should not free the struct itself though.
+ *
+ * Normally, it is better to use G_DEFINE_EXTENDED_ERROR(), as it
+ * already takes care of passing valid information to this function.
+ *
+ * Returns: #GQuark representing the error domain
+ * Since: 2.68
+ */
+
+
+/**
  * g_error_free:
  * @error: a #GError
  *
@@ -17648,6 +17813,9 @@
  * CSIDL_COMMON_APPDATA folder. This information will not roam and is available
  * to anyone using the computer.
  *
+ * The return value is cached and modifying it at runtime is not supported, as
+ * it’s not thread-safe to modify environment variables at runtime.
+ *
  * Returns: (array zero-terminated=1) (element-type filename) (transfer none):
  *     a %NULL-terminated array of strings owned by GLib that must not be
  *     modified or freed.
@@ -17689,6 +17857,9 @@
  *
  * Note that on Windows the returned list can vary depending on where
  * this function is called.
+ *
+ * The return value is cached and modifying it at runtime is not supported, as
+ * it’s not thread-safe to modify environment variables at runtime.
  *
  * Returns: (array zero-terminated=1) (element-type filename) (transfer none):
  *     a %NULL-terminated array of strings owned by GLib that must not be
@@ -17736,6 +17907,9 @@
  * `C:\Documents and Settings\username\Local Settings\Temporary Internet Files`.
  * See the [documentation for `CSIDL_INTERNET_CACHE`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb762494%28v=vs.85%29.aspx#csidl_internet_cache).
  *
+ * The return value is cached and modifying it at runtime is not supported, as
+ * it’s not thread-safe to modify environment variables at runtime.
+ *
  * Returns: (type filename) (transfer none): a string owned by GLib that
  *   must not be modified or freed.
  * Since: 2.6
@@ -17760,6 +17934,9 @@
  * Note that in this case on Windows it will be  the same
  * as what g_get_user_data_dir() returns.
  *
+ * The return value is cached and modifying it at runtime is not supported, as
+ * it’s not thread-safe to modify environment variables at runtime.
+ *
  * Returns: (type filename) (transfer none): a string owned by GLib that
  *   must not be modified or freed.
  * Since: 2.6
@@ -17783,6 +17960,9 @@
  * [documentation for `CSIDL_LOCAL_APPDATA`](https://msdn.microsoft.com/en-us/library/windows/desktop/bb762494%28v=vs.85%29.aspx#csidl_local_appdata).
  * Note that in this case on Windows it will be the same
  * as what g_get_user_config_dir() returns.
+ *
+ * The return value is cached and modifying it at runtime is not supported, as
+ * it’s not thread-safe to modify environment variables at runtime.
  *
  * Returns: (type filename) (transfer none): a string owned by GLib that must
  *   not be modified or freed.
@@ -17815,6 +17995,9 @@
  * specified in the `XDG_RUNTIME_DIR` environment variable.
  * In the case that this variable is not set, we return the value of
  * g_get_user_cache_dir(), after verifying that it exists.
+ *
+ * The return value is cached and modifying it at runtime is not supported, as
+ * it’s not thread-safe to modify environment variables at runtime.
  *
  * Returns: (type filename): a string owned by GLib that must not be
  *     modified or freed.
@@ -30188,10 +30371,10 @@
  * {
  *   SomeWidget *self = data;
  *    
- *   GDK_THREADS_ENTER ();
+ *   g_mutex_lock (&self->idle_id_mutex);
  *   // do stuff with self
  *   self->idle_id = 0;
- *   GDK_THREADS_LEAVE ();
+ *   g_mutex_unlock (&self->idle_id_mutex);
  *    
  *   return G_SOURCE_REMOVE;
  * }
@@ -30199,9 +30382,19 @@
  * static void
  * some_widget_do_stuff_later (SomeWidget *self)
  * {
+ *   g_mutex_lock (&self->idle_id_mutex);
  *   self->idle_id = g_idle_add (idle_callback, self);
+ *   g_mutex_unlock (&self->idle_id_mutex);
  * }
  *  
+ * static void
+ * some_widget_init (SomeWidget *self)
+ * {
+ *   g_mutex_init (&self->idle_id_mutex);
+ *
+ *   // ...
+ * }
+ *
  * static void
  * some_widget_finalize (GObject *object)
  * {
@@ -30210,6 +30403,8 @@
  *   if (self->idle_id)
  *     g_source_remove (self->idle_id);
  *    
+ *   g_mutex_clear (&self->idle_id_mutex);
+ *
  *   G_OBJECT_CLASS (parent_class)->finalize (object);
  * }
  * ]|
@@ -30226,12 +30421,12 @@
  * {
  *   SomeWidget *self = data;
  *   
- *   GDK_THREADS_ENTER ();
+ *   g_mutex_lock (&self->idle_id_mutex);
  *   if (!g_source_is_destroyed (g_main_current_source ()))
  *     {
  *       // do stuff with self
  *     }
- *   GDK_THREADS_LEAVE ();
+ *   g_mutex_unlock (&self->idle_id_mutex);
  *   
  *   return FALSE;
  * }
@@ -32959,6 +33154,21 @@
  *
  * Returns: the path, automatically freed at the end of the testcase
  * Since: 2.38
+ */
+
+
+/**
+ * g_test_get_path:
+ *
+ * Gets the test path for the test currently being run.
+ *
+ * In essence, it will be the same string passed as the first argument to
+ * e.g. g_test_add() when the test was added.
+ *
+ * This function returns a valid string only within a test function.
+ *
+ * Returns: the test path for the test currently being run
+ * Since: 2.68
  */
 
 

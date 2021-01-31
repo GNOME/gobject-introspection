@@ -1830,7 +1830,7 @@
  * associated with a #GObject, and want the callback to no longer run
  * after the object is is freed.
  *
- * Returns: a new #GCClosure
+ * Returns: (transfer floating): a new #GCClosure
  */
 
 
@@ -1845,7 +1845,7 @@
  * associated with a #GObject, and want the callback to no longer run
  * after the object is is freed.
  *
- * Returns: a new #GCClosure
+ * Returns: (transfer floating): a new #GCClosure
  */
 
 
@@ -1994,7 +1994,7 @@
  * @object and the created closure. This function is mainly useful
  * when implementing new types of closures.
  *
- * Returns: (transfer full): a newly allocated #GClosure
+ * Returns: (transfer floating): a newly allocated #GClosure
  */
 
 
@@ -3858,7 +3858,8 @@
  * @blurb, which should be a somewhat longer description, suitable for
  * e.g. a tooltip. The @nick and @blurb should ideally be localized.
  *
- * Returns: (type GObject.ParamSpec): (transfer full): a newly allocated #GParamSpec instance
+ * Returns: (type GObject.ParamSpec): (transfer floating): a newly allocated
+ *     #GParamSpec instance, which is initially floating
  */
 
 
@@ -4420,8 +4421,8 @@
  * @signal_id: the signal identifier, as returned by g_signal_lookup().
  * @detail: the detail on which to call the hook.
  * @hook_func: (not nullable): a #GSignalEmissionHook function.
- * @hook_data: (nullable): user data for @hook_func.
- * @data_destroy: (nullable): a #GDestroyNotify for @hook_data.
+ * @hook_data: (nullable) (closure hook_func): user data for @hook_func.
+ * @data_destroy: (nullable) (destroy hook_data): a #GDestroyNotify for @hook_data.
  *
  * Adds an emission hook for a signal, which will get called for any emission
  * of that signal, independent of the instance. This is possible only
@@ -4496,8 +4497,8 @@
  * @instance: (type GObject.Object): the instance to connect to.
  * @detailed_signal: a string of the form "signal-name::detail".
  * @c_handler: (not nullable): the #GCallback to connect.
- * @data: (nullable): data to pass to @c_handler calls.
- * @destroy_data: (nullable): a #GClosureNotify for @data.
+ * @data: (nullable) (closure c_handler): data to pass to @c_handler calls.
+ * @destroy_data: (nullable) (destroy data): a #GClosureNotify for @data.
  * @connect_flags: a combination of #GConnectFlags.
  *
  * Connects a #GCallback function to a signal for a particular object. Similar
@@ -4648,7 +4649,7 @@
  * @detail: Signal detail the handler has to be connected to.
  * @closure: (nullable): The closure the handler will invoke.
  * @func: The C closure callback of the handler (useless for non-C closures).
- * @data: (nullable): The closure data of the handler's closure.
+ * @data: (nullable) (closure closure): The closure data of the handler's closure.
  *
  * Finds the first signal handler that matches certain selection criteria.
  * The criteria mask is passed as an OR-ed combination of #GSignalMatchType
@@ -4701,7 +4702,7 @@
  * @detail: Signal detail the handlers have to be connected to.
  * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: (nullable): The closure data of the handlers' closures.
+ * @data: (nullable) (closure closure): The closure data of the handlers' closures.
  *
  * Blocks all handlers on an instance that match a certain selection criteria.
  * The criteria mask is passed as an OR-ed combination of #GSignalMatchType
@@ -4734,7 +4735,7 @@
  * @detail: Signal detail the handlers have to be connected to.
  * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: (nullable): The closure data of the handlers' closures.
+ * @data: (nullable) (closure closure): The closure data of the handlers' closures.
  *
  * Disconnects all handlers on an instance that match a certain
  * selection criteria. The criteria mask is passed as an OR-ed
@@ -4758,7 +4759,7 @@
  * @detail: Signal detail the handlers have to be connected to.
  * @closure: (nullable): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: (nullable): The closure data of the handlers' closures.
+ * @data: (nullable) (closure closure): The closure data of the handlers' closures.
  *
  * Unblocks all handlers on an instance that match a certain selection
  * criteria. The criteria mask is passed as an OR-ed combination of
@@ -4876,7 +4877,7 @@
  *  for this type. Used to invoke a class method generically. Pass 0 to
  *  not associate a class method slot with this signal.
  * @accumulator: (nullable): the accumulator for this signal; may be %NULL.
- * @accu_data: (nullable): user data for the @accumulator.
+ * @accu_data: (nullable) (closure accumulator): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
@@ -4925,7 +4926,7 @@
  *  this signal. Used to invoke a class method generically. Pass %NULL to
  *  not associate a class method with this signal.
  * @accumulator: (nullable): the accumulator for this signal; may be %NULL.
- * @accu_data: (nullable): user data for the @accumulator.
+ * @accu_data: (nullable) (closure accumulator): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
@@ -4965,7 +4966,7 @@
  *  %G_SIGNAL_RUN_FIRST or %G_SIGNAL_RUN_LAST.
  * @class_closure: (nullable): The closure to invoke on signal emission; may be %NULL.
  * @accumulator: (nullable): the accumulator for this signal; may be %NULL.
- * @accu_data: (nullable): user data for the @accumulator.
+ * @accu_data: (nullable) (closure accumulator): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal
@@ -4995,7 +4996,7 @@
  * @class_closure: (nullable): The closure to invoke on signal emission;
  *     may be %NULL
  * @accumulator: (nullable): the accumulator for this signal; may be %NULL
- * @accu_data: (nullable): user data for the @accumulator
+ * @accu_data: (nullable) (closure accumulator): user data for the @accumulator
  * @c_marshaller: (nullable): the function to translate arrays of
  *     parameter values to signal emissions into C language callback
  *     invocations or %NULL

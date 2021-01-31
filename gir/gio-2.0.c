@@ -7608,12 +7608,16 @@
  * the xmllint executable, or xmllint must be in the `PATH`; otherwise
  * the preprocessing step is skipped.
  *
- * `to-pixdata` which will use the gdk-pixbuf-pixdata command to convert
- * images to the GdkPixdata format, which allows you to create pixbufs directly using the data inside
- * the resource file, rather than an (uncompressed) copy of it. For this, the gdk-pixbuf-pixdata
- * program must be in the PATH, or the `GDK_PIXBUF_PIXDATA` environment variable must be
- * set to the full path to the gdk-pixbuf-pixdata executable; otherwise the resource compiler will
- * abort.
+ * `to-pixdata` (deprecated since gdk-pixbuf 2.32) which will use the
+ * `gdk-pixbuf-pixdata` command to convert images to the #GdkPixdata format,
+ * which allows you to create pixbufs directly using the data inside the
+ * resource file, rather than an (uncompressed) copy of it. For this, the
+ * `gdk-pixbuf-pixdata` program must be in the `PATH`, or the
+ * `GDK_PIXBUF_PIXDATA` environment variable must be set to the full path to the
+ * `gdk-pixbuf-pixdata` executable; otherwise the resource compiler will abort.
+ * `to-pixdata` has been deprecated since gdk-pixbuf 2.32, as #GResource
+ * supports embedding modern image formats just as well. Instead of using it,
+ * embed a PNG or SVG file in your #GResource.
  *
  * `json-stripblanks` which will use the `json-glib-format` command to strip
  * ignorable whitespace from the JSON file. For this to work, the
@@ -7691,7 +7695,7 @@
  * replace resources in the program or library, without recompiling, for debugging or quick hacking and testing
  * purposes. Since GLib 2.50, it is possible to use the `G_RESOURCE_OVERLAYS` environment variable to selectively overlay
  * resources with replacements from the filesystem.  It is a %G_SEARCHPATH_SEPARATOR-separated list of substitutions to perform
- * during resource lookups.
+ * during resource lookups. It is ignored when running in a setuid process.
  *
  * A substitution has the form
  *
@@ -10235,10 +10239,11 @@
  * be called on each candidate implementation after construction, to
  * check if it is actually usable or not.
  *
- * The result is cached after it is generated the first time, and
+ * The result is cached after it is generated the first time (but the cache does
+ * not keep a strong reference to the object), and
  * the function is thread-safe.
  *
- * Returns: (transfer none): an object implementing
+ * Returns: (transfer full) (nullable): an object implementing
  *     @extension_point, or %NULL if there are no usable
  *     implementations.
  */
@@ -10496,6 +10501,33 @@
  * parameter must be given as @parameter.  If the action is expecting no
  * parameters then @parameter must be %NULL.  See
  * g_action_group_get_action_parameter_type().
+ *
+ * If the #GActionGroup implementation supports asynchronous remote
+ * activation over D-Bus, this call may return before the relevant
+ * D-Bus traffic has been sent, or any replies have been received. In
+ * order to block on such asynchronous activation calls,
+ * g_dbus_connection_flush() should be called prior to the code, which
+ * depends on the result of the action activation. Without flushing
+ * the D-Bus connection, there is no guarantee that the action would
+ * have been activated.
+ *
+ * The following code which runs in a remote app instance, shows an
+ * example of a "quit" action being activated on the primary app
+ * instance over D-Bus. Here g_dbus_connection_flush() is called
+ * before `exit()`. Without g_dbus_connection_flush(), the "quit" action
+ * may fail to be activated on the primary instance.
+ *
+ * |[<!-- language="C" -->
+ * // call "quit" action on primary instance
+ * g_action_group_activate_action (G_ACTION_GROUP (app), "quit", NULL);
+ *
+ * // make sure the action is activated now
+ * g_dbus_connection_flush (...);
+ *
+ * g_debug ("application has been terminated. exiting.");
+ *
+ * exit (0);
+ * ]|
  *
  * Since: 2.28
  */
@@ -11001,7 +11033,7 @@
 
 
 /**
- * g_app_info_get_commandline:
+ * g_app_info_get_commandline: (virtual get_commandline)
  * @appinfo: a #GAppInfo
  *
  * Gets the commandline with which the application will be
@@ -11065,7 +11097,7 @@
 
 
 /**
- * g_app_info_get_executable:
+ * g_app_info_get_executable: (virtual get_executable)
  * @appinfo: a #GAppInfo
  *
  * Gets the executable's name for the installed application.
@@ -16762,6 +16794,43 @@
 
 
 /**
+ * g_dbus_escape_object_path:
+ * @s: the string to escape
+ *
+ * This is a language binding friendly version of g_dbus_escape_object_path_bytestring().
+ *
+ * Returns: an escaped version of @s. Free with g_free().
+ * Since: 2.68
+ */
+
+
+/**
+ * g_dbus_escape_object_path_bytestring:
+ * @bytes: (array zero-terminated=1) (element-type guint8): the string of bytes to escape
+ *
+ * Escapes @bytes for use in a D-Bus object path component.
+ * @bytes is an array of zero or more nonzero bytes in an
+ * unspecified encoding, followed by a single zero byte.
+ *
+ * The escaping method consists of replacing all non-alphanumeric
+ * characters (see g_ascii_isalnum()) with their hexadecimal value
+ * preceded by an underscore (`_`). For example:
+ * `foo.bar.baz` will become `foo_2ebar_2ebaz`.
+ *
+ * This method is appropriate to use when the input is nearly
+ * a valid object path component but is not when your input
+ * is far from being a valid object path component.
+ * Other escaping algorithms are also valid to use with
+ * D-Bus object paths.
+ *
+ * This can be reversed with g_dbus_unescape_object_path().
+ *
+ * Returns: an escaped version of @bytes. Free with g_free().
+ * Since: 2.68
+ */
+
+
+/**
  * g_dbus_generate_guid:
  *
  * Generate a D-Bus GUID that can be used with
@@ -19537,6 +19606,26 @@
 
 
 /**
+ * g_dbus_unescape_object_path:
+ * @s: the string to unescape
+ *
+ * Unescapes an string that was previously escaped with
+ * g_dbus_escape_object_path(). If the string is in a format that could
+ * not have been returned by g_dbus_escape_object_path(), this function
+ * returns %NULL.
+ *
+ * Encoding alphanumeric characters which do not need to be
+ * encoded is not allowed (e.g `_63` is not valid, the string
+ * should contain `c` instead).
+ *
+ * Returns: (array zero-terminated=1) (element-type guint8) (nullable): an
+ *   unescaped version of @s, or %NULL if @s is not a string returned
+ *   from g_dbus_escape_object_path(). Free with g_free().
+ * Since: 2.68
+ */
+
+
+/**
  * g_desktop_app_info_get_action_name:
  * @info: a #GDesktopAppInfo
  * @action_name: the name of the action as from
@@ -22150,7 +22239,7 @@
 
 
 /**
- * g_file_get_basename:
+ * g_file_get_basename: (virtual get_basename)
  * @file: input #GFile
  *
  * Gets the base name (the last component of the path) for a given #GFile.
@@ -22254,7 +22343,7 @@
 
 
 /**
- * g_file_get_path:
+ * g_file_get_path: (virtual get_path)
  * @file: input #GFile
  *
  * Gets the local pathname for #GFile, if one exists. If non-%NULL, this is
@@ -22269,7 +22358,7 @@
 
 
 /**
- * g_file_get_relative_path:
+ * g_file_get_relative_path: (virtual get_relative_path)
  * @parent: input #GFile
  * @descendant: input #GFile
  *
@@ -22292,7 +22381,8 @@
  *
  * This call does no blocking I/O.
  *
- * Returns: a string containing the #GFile's URI.
+ * Returns: a string containing the #GFile's URI. If the #GFile was constructed
+ *     with an invalid URI, an invalid URI is returned.
  *     The returned string should be freed with g_free()
  *     when no longer needed.
  */
@@ -22309,11 +22399,14 @@
  * ]|
  * Common schemes include "file", "http", "ftp", etc.
  *
+ * The scheme can be different from the one used to construct the #GFile,
+ * in that it might be replaced with one that is logically equivalent to the #GFile.
+ *
  * This call does no blocking I/O.
  *
- * Returns: a string containing the URI scheme for the given
- *     #GFile. The returned string should be freed with g_free()
- *     when no longer needed.
+ * Returns: (nullable): a string containing the URI scheme for the given
+ *     #GFile or %NULL if the #GFile was constructed with an invalid URI. The
+ *     returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -36772,6 +36865,11 @@
  * notified of a %G_IO_OUT condition. (On Windows in particular, this is
  * very common due to the way the underlying APIs work.)
  *
+ * The sum of the sizes of each #GOutputVector in vectors must not be
+ * greater than %G_MAXSSIZE. If the message can be larger than this,
+ * then it is mandatory to use the g_socket_send_message_with_timeout()
+ * function.
+ *
  * On error -1 is returned and @error is set accordingly.
  *
  * Returns: Number of bytes written (which may be less than @size), or -1
@@ -42374,6 +42472,34 @@
  * Returns whether the volume should be automatically mounted.
  *
  * Returns: %TRUE if the volume should be automatically mounted
+ */
+
+
+/**
+ * g_win32_file_sync_stream_new:
+ * @handle: a Win32 HANDLE for a file.
+ * @owns_handle: %TRUE if newly-created stream owns the handle
+ *               (and closes it when destroyed)
+ * @stgm_mode: a combination of [STGM constants](https://docs.microsoft.com/en-us/windows/win32/stg/stgm-constants)
+ *             that specify the mode with which the stream
+ *             is opened.
+ * @output_hresult: (out) (optional): a HRESULT from the internal COM calls.
+ *                                    Will be `S_OK` on success.
+ *
+ * Creates an IStream object backed by a HANDLE.
+ *
+ * @stgm_mode should match the mode of the @handle, otherwise the stream might
+ * attempt to perform operations that the @handle does not allow. The implementation
+ * itself ignores these flags completely, they are only used to report
+ * the mode of the stream to third parties.
+ *
+ * The stream only does synchronous access and will never return `E_PENDING` on I/O.
+ *
+ * The returned stream object should be treated just like any other
+ * COM object, and released via `IUnknown_Release()`.
+ * its elements have been unreffed with g_object_unref().
+ *
+ * Returns: (nullable) (transfer full): a new IStream object on success, %NULL on failure.
  */
 
 
