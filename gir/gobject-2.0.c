@@ -1887,6 +1887,7 @@
  * g_clear_signal_handler:
  * @handler_id_ptr: A pointer to a handler ID (of type #gulong) of the handler to be disconnected.
  * @instance: (type GObject.Object): The instance to remove the signal handler from.
+ *   This pointer may be %NULL or invalid, if the handler ID is zero.
  *
  * Disconnects a handler from @instance so it will not be called during
  * any future or currently ongoing emissions of the signal it has been
@@ -1894,8 +1895,8 @@
  *
  * If the handler ID is 0 then this function does nothing.
  *
- * A macro is also included that allows this function to be used without
- * pointer casts.
+ * There is also a macro version of this function so that the code
+ * will be inlined.
  *
  * Since: 2.62
  */

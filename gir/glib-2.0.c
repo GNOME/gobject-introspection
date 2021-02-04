@@ -20117,7 +20117,7 @@
  * g_key_file_get_comment:
  * @key_file: a #GKeyFile
  * @group_name: (nullable): a group name, or %NULL
- * @key: a key
+ * @key: (nullable): a key
  * @error: return location for a #GError
  *
  * Retrieves a comment above @key from @group_name.
@@ -23860,6 +23860,23 @@
  *
  * Returns: a pointer to the newly-allocated copy of the memory, or %NULL if @mem
  *  is %NULL.
+ */
+
+
+/**
+ * g_memdup2:
+ * @mem: (nullable): the memory to copy.
+ * @byte_size: the number of bytes to copy.
+ *
+ * Allocates @byte_size bytes of memory, and copies @byte_size bytes into it
+ * from @mem. If @mem is %NULL it returns %NULL.
+ *
+ * This replaces g_memdup(), which was prone to integer overflows when
+ * converting the argument from a #gsize to a #guint.
+ *
+ * Returns: (nullable): a pointer to the newly-allocated copy of the memory,
+ *    or %NULL if @mem is %NULL.
+ * Since: 2.68
  */
 
 
@@ -33960,8 +33977,12 @@
  * behaviour, to verify that appropriate warnings are given. It might, in some
  * cases, be useful to turn this off with if running tests under valgrind;
  * in tests that use g_test_init(), the option `-m no-undefined` disables
- * those tests, while `-m undefined` explicitly enables them (the default
- * behaviour).
+ * those tests, while `-m undefined` explicitly enables them (normally
+ * the default behaviour).
+ *
+ * Since GLib 2.68, if GLib was compiled with gcc or clang and
+ * [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer)
+ * is enabled, the default changes to not exercising undefined behaviour.
  *
  * Returns: %TRUE if tests may provoke programming errors
  */
@@ -36736,7 +36757,7 @@
  * be a scope ID attached to the address. Eg, `fe80::1234%``em1` (or
  * `fe80::1234%``25em1` if the string is still encoded).
  *
- * Returns: (not nullable): @uri's host.
+ * Returns: (nullable): @uri's host.
  * Since: 2.66
  */
 
