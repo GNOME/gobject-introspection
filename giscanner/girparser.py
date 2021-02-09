@@ -259,6 +259,9 @@ class GIRParser(object):
             is_abstract = node.attrib.get('abstract')
             is_abstract = is_abstract and is_abstract != '0'
             ctor_kwargs['is_abstract'] = is_abstract
+            is_final = node.attrib.get('final')
+            is_final = is_final and is_final != '0'
+            ctor_kwargs['is_final'] = is_final
         else:
             raise AssertionError(node)
 

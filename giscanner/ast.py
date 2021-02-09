@@ -1188,7 +1188,8 @@ class Class(Node, Registered):
                  gtype_name=None,
                  get_type=None,
                  c_symbol_prefix=None,
-                 is_abstract=False):
+                 is_abstract=False,
+                 is_final=False):
         Node.__init__(self, name)
         Registered.__init__(self, gtype_name, get_type)
         self.ctype = ctype
@@ -1205,6 +1206,7 @@ class Class(Node, Registered):
         self.parent_chain = []
         self.glib_type_struct = None
         self.is_abstract = is_abstract
+        self.is_final = is_final
         self.methods = []
         self.virtual_methods = []
         self.static_methods = []

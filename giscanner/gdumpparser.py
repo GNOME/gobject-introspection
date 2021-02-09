@@ -320,6 +320,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
     def _introspect_object(self, xmlnode):
         type_name = xmlnode.attrib['name']
         is_abstract = bool(xmlnode.attrib.get('abstract', False))
+        is_final = bool(xmlnode.attrib.get('final', False))
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
             object_name = self._transformer.strip_identifier(type_name)
@@ -329,7 +330,8 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
                          gtype_name=type_name,
                          get_type=get_type,
                          c_symbol_prefix=c_symbol_prefix,
-                         is_abstract=is_abstract)
+                         is_abstract=is_abstract,
+                         is_final=is_final)
         self._parse_parents(xmlnode, node)
         self._introspect_properties(node, xmlnode)
         self._introspect_signals(node, xmlnode)
@@ -458,6 +460,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         type_name = xmlnode.attrib['name']
 
         is_abstract = bool(xmlnode.attrib.get('abstract', False))
+        is_final = bool(xmlnode.attrib.get('final', False))
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
             fundamental_name = self._transformer.strip_identifier(type_name)
@@ -469,7 +472,8 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
                          gtype_name=type_name,
                          get_type=get_type,
                          c_symbol_prefix=c_symbol_prefix,
-                         is_abstract=is_abstract)
+                         is_abstract=is_abstract,
+                         is_final=is_final)
         self._parse_parents(xmlnode, node)
         node.fundamental = True
         self._introspect_implemented_interfaces(node, xmlnode)

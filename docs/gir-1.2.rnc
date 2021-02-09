@@ -170,6 +170,8 @@ grammar {
       attribute abstract { "0" | "1" }?,
       ## Binary attribute to declare the class fundamental or not (top-level class which do not derives from any other type)
       attribute glib:fundamental { "0" | "1" }?,
+      ## Binary attribute to declare the class final or not (non-derivable class in a derivable hierarchy)
+      attribute glib:final { "0" | "1" }?,
 
       # Other elements a class can contain
       (Info.elements

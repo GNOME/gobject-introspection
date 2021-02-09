@@ -475,6 +475,8 @@ class GIRWriter(XMLWriter):
                               self._type_to_name(node.parent_type)))
             if node.is_abstract:
                 attrs.append(('abstract', '1'))
+            if node.is_final:
+                attrs.append(('final', '1'))
         else:
             assert isinstance(node, ast.Interface)
             tag_name = 'interface'
