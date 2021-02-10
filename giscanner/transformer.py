@@ -185,6 +185,9 @@ None."""
         from_env = os.getenv('GI_GIR_PATH', '')
         if from_env:
             searchdirs.extend(from_env.split(os.pathsep))
+        user_data = utils.get_user_data_dir()
+        if user_data is not None:
+            searchdirs.append(os.path.join(user_data, 'gir-1.0'))
         for path in utils.get_system_data_dirs():
             searchdirs.append(os.path.join(path, 'gir-1.0'))
         searchdirs.append(GIR_DIR)

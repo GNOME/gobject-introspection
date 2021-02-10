@@ -236,6 +236,36 @@ def get_user_cache_dir(dir=None):
     return None
 
 
+def get_user_data_dir():
+    '''
+    This is a Python reimplemention of `g_get_user_data_dir()` because we don't want to
+    rely on the python-xdg package and we can't depend on GLib via introspection.
+    If any changes are made to that function they'll need to be copied here.
+    '''
+
+    xdg_data_home = os.environ.get('XDG_DATA_HOME')
+    if xdg_data_home is not None:
+        try:
+            os.makedirs(xdg_data_home, mode=0o700, exist_ok=True)
+        except EnvironmentError:
+            # Let's fall back to ~/.local/share below
+            pass
+        else:
+            return xdg_data_home
+
+    homedir = os.path.expanduser('~')
+    if homedir is not None:
+        datadir = os.path.join(homedir, '.local', 'share')
+        try:
+            os.makedirs(datadir, mode=0o700, exist_ok=True)
+        except EnvironmentError:
+            return None
+        else:
+            return datadir
+
+    return None
+
+
 def get_system_data_dirs():
     '''
     This is a Python reimplemention of `g_get_system_data_dirs()` because we don't want to
