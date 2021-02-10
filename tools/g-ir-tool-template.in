@@ -52,11 +52,7 @@ if not os.path.isdir(os.path.join(datadir, 'gir-1.0')):
     datadir = "@datarootdir@"
 
 builtins.__dict__['DATADIR'] = datadir
-
-# Respect gir_dir_prefix
-girdir = ''
-girdir = os.path.abspath(os.path.join(filedir, '..', '@gir_dir_prefix@'))
-builtins.__dict__['GIRDIR'] = [girdir]
+builtins.__dict__['GIRDIR'] = []
 
 # Again, relative paths first so that the installation prefix is relocatable
 pylibdir = os.path.abspath(os.path.join(filedir, '..', 'lib', 'gobject-introspection'))
