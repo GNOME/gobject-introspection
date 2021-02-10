@@ -52,7 +52,6 @@ if not os.path.isdir(os.path.join(datadir, 'gir-1.0')):
     datadir = "@datarootdir@"
 
 builtins.__dict__['DATADIR'] = datadir
-builtins.__dict__['GIRDIR'] = []
 
 # Again, relative paths first so that the installation prefix is relocatable
 pylibdir = os.path.abspath(os.path.join(filedir, '..', 'lib', 'gobject-introspection'))
@@ -76,7 +75,10 @@ if not os.path.isfile(os.path.join(pylibdir, 'giscanner', '_giscanner' + py_mod_
         # We're running uninstalled inside meson
         builddir = os.path.abspath(os.path.join(filedir, '..'))
         pylibdir = builddir
-        builtins.__dict__['GIRDIR'].append(os.path.join(filedir, os.pardir, 'gir'))
+
+        if 'GI_GIR_PATH' not in os.environ:
+            os.environ['GI_GIR_PATH'] = os.path.join(filedir, os.pardir, 'gir')
+
         gdump_path = os.path.join(builddir, 'giscanner', 'gdump.c')
         if os.path.isfile(gdump_path):
             builtins.__dict__['GDUMP_PATH'] = gdump_path
