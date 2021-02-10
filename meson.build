@@ -90,14 +90,13 @@ config.set('GI_MICRO_VERSION', gi_versions[2])
 
 config.set_quoted('GIR_SUFFIX', 'gir-1.0')
 gir_dir_prefix = get_option('gir_dir_prefix')
-if gir_dir_prefix == ''
-    gir_dir_prefix = join_paths(get_option('prefix'), get_option('datadir'))
+if gir_dir_prefix == '' or gir_dir_prefix == get_option('datadir')
+    gir_dir_prefix = get_option('datadir')
     gir_dir_pc_prefix = '${datadir}'
 else
-    gir_dir_prefix = join_paths(get_option('prefix'), gir_dir_prefix)
     gir_dir_pc_prefix = join_paths('${prefix}', gir_dir_prefix)
 endif
-girdir = join_paths(gir_dir_prefix, 'gir-1.0')
+girdir = join_paths(get_option('prefix'), gir_dir_prefix, 'gir-1.0')
 config.set_quoted('GIR_DIR', girdir)
 config.set_quoted('GOBJECT_INTROSPECTION_LIBDIR', join_paths(get_option('prefix'), get_option('libdir')))
 
