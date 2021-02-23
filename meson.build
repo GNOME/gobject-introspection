@@ -218,14 +218,19 @@ subdir('giscanner')
 # scenarios where running target binaries through software emulation
 # is not possible (due to the SW emulation missing support for target HW).
 if get_option('build_introspection_data') == true
-    subdir('gir')
+  subdir('gir')
+else
+  # for tests
+  typelibs = disabler()
+  gobject_gir = disabler()
+  gio_gir = disabler()
 endif
 subdir('docs')
 
 # The tests will also run, which is not possible if they
 # were built for a different architecture.
 if not meson.is_cross_build()
-    subdir('tests')
+  subdir('tests')
 endif
 
 install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
