@@ -42,4 +42,4 @@ meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
 cd ..
 
 python3 -m flake8 --count
-python3 -m mypy .
+python3 -m mypy _build
