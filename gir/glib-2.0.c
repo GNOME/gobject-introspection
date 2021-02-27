@@ -13045,6 +13045,10 @@
  * Create byte array containing the data. The data will be owned by the array
  * and will be freed with g_free(), i.e. it could be allocated using g_strdup().
  *
+ * Do not use it if @len is greater than %G_MAXUINT. #GByteArray
+ * stores the length of its data in #guint, which may be shorter than
+ * #gsize.
+ *
  * Since: 2.32
  * Returns: (transfer full): a new #GByteArray
  */
@@ -13415,6 +13419,10 @@
  * if this was the last reference to bytes and bytes was created with
  * g_bytes_new(), g_bytes_new_take() or g_byte_array_free_to_bytes(). In all
  * other cases the data is copied.
+ *
+ * Do not use it if @bytes contains more than %G_MAXUINT
+ * bytes. #GByteArray stores the length of its data in #guint, which
+ * may be shorter than #gsize, that @bytes is using.
  *
  * Returns: (transfer full): a new mutable #GByteArray containing the same byte data
  * Since: 2.32
@@ -23860,6 +23868,9 @@
  *
  * Returns: a pointer to the newly-allocated copy of the memory, or %NULL if @mem
  *  is %NULL.
+ * Deprecated: 2.68: Use g_memdup2() instead, as it accepts a #gsize argument
+ *     for @byte_size, avoiding the possibility of overflow in a #gsize → #guint
+ *     conversion
  */
 
 
@@ -30899,29 +30910,13 @@
  * @child_setup: (scope async) (nullable): function to run in the child just before exec()
  * @user_data: (closure): user data for @child_setup
  * @child_pid: (out) (optional): return location for child process ID, or %NULL
- * @stdin_fd: file descriptor to use for child's stdin, or -1
- * @stdout_fd: file descriptor to use for child's stdout, or -1
- * @stderr_fd: file descriptor to use for child's stderr, or -1
+ * @stdin_fd: file descriptor to use for child's stdin, or `-1`
+ * @stdout_fd: file descriptor to use for child's stdout, or `-1`
+ * @stderr_fd: file descriptor to use for child's stderr, or `-1`
  * @error: return location for error
  *
- * Identical to g_spawn_async_with_pipes() but instead of
- * creating pipes for the stdin/stdout/stderr, you can pass existing
- * file descriptors into this function through the @stdin_fd,
- * @stdout_fd and @stderr_fd parameters. The following @flags
- * also have their behaviour slightly tweaked as a result:
- *
- * %G_SPAWN_STDOUT_TO_DEV_NULL means that the child's standard output
- * will be discarded, instead of going to the same location as the parent's
- * standard output. If you use this flag, @standard_output must be -1.
- * %G_SPAWN_STDERR_TO_DEV_NULL means that the child's standard error
- * will be discarded, instead of going to the same location as the parent's
- * standard error. If you use this flag, @standard_error must be -1.
- * %G_SPAWN_CHILD_INHERITS_STDIN means that the child will inherit the parent's
- * standard input (by default, the child's standard input is attached to
- * /dev/null). If you use this flag, @standard_input must be -1.
- *
- * It is valid to pass the same fd in multiple parameters (e.g. you can pass
- * a single fd for both stdout and stderr).
+ * Identical to g_spawn_async_with_pipes_and_fds() but with `n_fds` set to zero,
+ * so no FD assignments are used.
  *
  * Returns: %TRUE on success, %FALSE if an error was set
  * Since: 2.58
@@ -30944,6 +30939,39 @@
  * @standard_input: (out) (optional): return location for file descriptor to write to child's stdin, or %NULL
  * @standard_output: (out) (optional): return location for file descriptor to read child's stdout, or %NULL
  * @standard_error: (out) (optional): return location for file descriptor to read child's stderr, or %NULL
+ * @error: return location for error
+ *
+ * Identical to g_spawn_async_with_pipes_and_fds() but with `n_fds` set to zero,
+ * so no FD assignments are used.
+ *
+ * Returns: %TRUE on success, %FALSE if an error was set
+ */
+
+
+/**
+ * g_spawn_async_with_pipes_and_fds:
+ * @working_directory: (type filename) (nullable): child's current working
+ *     directory, or %NULL to inherit parent's, in the GLib file name encoding
+ * @argv: (array zero-terminated=1) (element-type filename): child's argument
+ *     vector, in the GLib file name encoding
+ * @envp: (array zero-terminated=1) (element-type filename) (nullable):
+ *     child's environment, or %NULL to inherit parent's, in the GLib file
+ *     name encoding
+ * @flags: flags from #GSpawnFlags
+ * @child_setup: (scope async) (nullable): function to run in the child just before `exec()`
+ * @user_data: (closure): user data for @child_setup
+ * @stdin_fd: file descriptor to use for child's stdin, or `-1`
+ * @stdout_fd: file descriptor to use for child's stdout, or `-1`
+ * @stderr_fd: file descriptor to use for child's stderr, or `-1`
+ * @source_fds: (array length=n_fds) (nullable): array of FDs from the parent
+ *    process to make available in the child process
+ * @target_fds: (array length=n_fds) (nullable): array of FDs to remap
+ *    @source_fds to in the child process
+ * @n_fds: number of FDs in @source_fds and @target_fds
+ * @child_pid_out: (out) (optional): return location for child process ID, or %NULL
+ * @stdin_pipe_out: (out) (optional): return location for file descriptor to write to child's stdin, or %NULL
+ * @stdout_pipe_out: (out) (optional): return location for file descriptor to read child's stdout, or %NULL
+ * @stderr_pipe_out: (out) (optional): return location for file descriptor to read child's stderr, or %NULL
  * @error: return location for error
  *
  * Executes a child program asynchronously (your program will not
@@ -31010,7 +31038,7 @@
  * Eventually you must call g_spawn_close_pid() on the @child_pid, in order to
  * free resources which may be associated with the child process. (On Unix,
  * using a child watch is equivalent to calling waitpid() or handling
- * the %SIGCHLD signal manually. On Windows, calling g_spawn_close_pid()
+ * the `SIGCHLD` signal manually. On Windows, calling g_spawn_close_pid()
  * is equivalent to calling CloseHandle() on the process handle returned
  * in @child_pid). See g_child_watch_add().
  *
@@ -31024,15 +31052,32 @@
  * absolute path, it will be looked for in the `PATH` variable from
  * @envp. If both %G_SPAWN_SEARCH_PATH and %G_SPAWN_SEARCH_PATH_FROM_ENVP
  * are used, the value from @envp takes precedence over the environment.
+ *
  * %G_SPAWN_STDOUT_TO_DEV_NULL means that the child's standard output
  * will be discarded, instead of going to the same location as the parent's
- * standard output. If you use this flag, @standard_output must be %NULL.
+ * standard output. If you use this flag, @stdout_pipe_out must be %NULL.
+ *
  * %G_SPAWN_STDERR_TO_DEV_NULL means that the child's standard error
  * will be discarded, instead of going to the same location as the parent's
- * standard error. If you use this flag, @standard_error must be %NULL.
+ * standard error. If you use this flag, @stderr_pipe_out must be %NULL.
+ *
  * %G_SPAWN_CHILD_INHERITS_STDIN means that the child will inherit the parent's
  * standard input (by default, the child's standard input is attached to
- * `/dev/null`). If you use this flag, @standard_input must be %NULL.
+ * `/dev/null`). If you use this flag, @stdin_pipe_out must be %NULL.
+ *
+ * It is valid to pass the same FD in multiple parameters (e.g. you can pass
+ * a single FD for both @stdout_fd and @stderr_fd, and include it in
+ * @source_fds too).
+ *
+ * @source_fds and @target_fds allow zero or more FDs from this process to be
+ * remapped to different FDs in the spawned process. If @n_fds is greater than
+ * zero, @source_fds and @target_fds must both be non-%NULL and the same length.
+ * Each FD in @source_fds is remapped to the FD number at the same index in
+ * @target_fds. The source and target FD may be equal to simply propagate an FD
+ * to the spawned process. FD remappings are processed after standard FDs, so
+ * any target FDs which equal @stdin_fd, @stdout_fd or @stderr_fd will overwrite
+ * them in the spawned process.
+ *
  * %G_SPAWN_FILE_AND_ARGV_ZERO means that the first element of @argv is
  * the file to execute, while the remaining elements are the actual
  * argument vector to pass to the file. Normally g_spawn_async_with_pipes()
@@ -31062,21 +31107,21 @@
  * GetExitCodeProcess(). You should close the handle with CloseHandle()
  * or g_spawn_close_pid() when you no longer need it.
  *
- * If non-%NULL, the @standard_input, @standard_output, @standard_error
+ * If non-%NULL, the @stdin_pipe_out, @stdout_pipe_out, @stderr_pipe_out
  * locations will be filled with file descriptors for writing to the child's
  * standard input or reading from its standard output or standard error.
  * The caller of g_spawn_async_with_pipes() must close these file descriptors
  * when they are no longer in use. If these parameters are %NULL, the
  * corresponding pipe won't be created.
  *
- * If @standard_input is %NULL, the child's standard input is attached to
+ * If @stdin_pipe_out is %NULL, the child's standard input is attached to
  * `/dev/null` unless %G_SPAWN_CHILD_INHERITS_STDIN is set.
  *
- * If @standard_error is NULL, the child's standard error goes to the same
+ * If @stderr_pipe_out is NULL, the child's standard error goes to the same
  * location as the parent's standard error unless %G_SPAWN_STDERR_TO_DEV_NULL
  * is set.
  *
- * If @standard_output is NULL, the child's standard output goes to the same
+ * If @stdout_pipe_out is NULL, the child's standard output goes to the same
  * location as the parent's standard output unless %G_SPAWN_STDOUT_TO_DEV_NULL
  * is set.
  *
@@ -31087,8 +31132,8 @@
  * errors should be displayed to users. Possible errors are those from
  * the #G_SPAWN_ERROR domain.
  *
- * If an error occurs, @child_pid, @standard_input, @standard_output,
- * and @standard_error will not be filled with valid values.
+ * If an error occurs, @child_pid, @stdin_pipe_out, @stdout_pipe_out,
+ * and @stderr_pipe_out will not be filled with valid values.
  *
  * If @child_pid is not %NULL and an error does not occur then the returned
  * process reference must be closed using g_spawn_close_pid().
@@ -31111,9 +31156,10 @@
  * If you are writing a GTK+ application, and the program you are spawning is a
  * graphical application too, then to ensure that the spawned program opens its
  * windows on the right screen, you may want to use #GdkAppLaunchContext,
- * #GAppLaunchContext, or set the %DISPLAY environment variable.
+ * #GAppLaunchContext, or set the `DISPLAY` environment variable.
  *
  * Returns: %TRUE on success, %FALSE if an error was set
+ * Since: 2.68
  */
 
 
@@ -32308,6 +32354,24 @@
  * except that the #GString buffer automatically expands
  * to contain the results. The previous contents of the
  * #GString are destroyed.
+ */
+
+
+/**
+ * g_string_replace:
+ * @string: a #GString
+ * @find: the string to find in @string
+ * @replace: the string to insert in place of @find
+ * @limit: the maximum instances of @find to replace with @replace, or `0` for
+ * no limit
+ *
+ * Replaces the string @find with the string @replace in a #GString up to
+ * @limit times. If the number of instances of @find in the #GString is
+ * less than @limit, all instances are replaced. If the number of
+ * instances is `0`, all instances of @find are replaced.
+ *
+ * Returns: the number of find and replace operations performed.
+ * Since: 2.68
  */
 
 

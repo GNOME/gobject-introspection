@@ -5551,7 +5551,9 @@
  * connections from any successfully authenticated user (but not from
  * anonymous connections using the `ANONYMOUS` mechanism). If you only
  * want to allow D-Bus connections from processes owned by the same uid
- * as the server, you would use a signal handler like the following:
+ * as the server, since GLib 2.68, you should use the
+ * %G_DBUS_SERVER_FLAGS_AUTHENTICATION_REQUIRE_SAME_USER flag. It’s equivalent
+ * to the following signal handler:
  *
  * |[<!-- language="C" -->
  * static gboolean
@@ -6043,7 +6045,9 @@
  * Note that a minimal #GDBusServer will accept connections from any
  * peer. In many use-cases it will be necessary to add a #GDBusAuthObserver
  * that only accepts connections that have successfully authenticated
- * as the same user that is running the #GDBusServer.
+ * as the same user that is running the #GDBusServer. Since GLib 2.68 this can
+ * be achieved more simply by passing the
+ * %G_DBUS_SERVER_FLAGS_AUTHENTICATION_REQUIRE_SAME_USER flag to the server.
  */
 
 
@@ -16029,8 +16033,9 @@
  * This constructor can only be used to initiate client-side
  * connections - use g_dbus_connection_new() if you need to act as the
  * server. In particular, @flags cannot contain the
- * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_SERVER or
- * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_ALLOW_ANONYMOUS flags.
+ * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_SERVER,
+ * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_ALLOW_ANONYMOUS or
+ * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_REQUIRE_SAME_USER flags.
  *
  * When the operation is finished, @callback will be invoked. You can
  * then call g_dbus_connection_new_for_address_finish() to get the result of
@@ -16077,8 +16082,9 @@
  * This constructor can only be used to initiate client-side
  * connections - use g_dbus_connection_new_sync() if you need to act
  * as the server. In particular, @flags cannot contain the
- * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_SERVER or
- * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_ALLOW_ANONYMOUS flags.
+ * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_SERVER,
+ * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_ALLOW_ANONYMOUS or
+ * %G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_REQUIRE_SAME_USER flags.
  *
  * This is a synchronous failable constructor. See
  * g_dbus_connection_new_for_address() for the asynchronous version.
@@ -22852,9 +22858,11 @@
  * g_file_info_get_size:
  * @info: a #GFileInfo.
  *
- * Gets the file's size.
+ * Gets the file's size (in bytes). The size is retrieved through the value of
+ * the %G_FILE_ATTRIBUTE_STANDARD_SIZE attribute and is converted
+ * from #guint64 to #goffset before returning the result.
  *
- * Returns: a #goffset containing the file's size.
+ * Returns: a #goffset containing the file's size (in bytes).
  */
 
 
@@ -23476,7 +23484,7 @@
  * @contents: (out) (transfer full) (element-type guint8) (array length=length): a location to place the contents of the file
  * @length: (out) (optional): a location to place the length of the contents of the file,
  *    or %NULL if the length is not needed
- * @etag_out: (out) (optional): a location to place the current entity tag for the file,
+ * @etag_out: (out) (optional) (nullable): a location to place the current entity tag for the file,
  *    or %NULL if the entity tag is not needed
  * @error: a #GError, or %NULL
  *
@@ -23524,7 +23532,7 @@
  * @contents: (out) (transfer full) (element-type guint8) (array length=length): a location to place the contents of the file
  * @length: (out) (optional): a location to place the length of the contents of the file,
  *     or %NULL if the length is not needed
- * @etag_out: (out) (optional): a location to place the current entity tag for the file,
+ * @etag_out: (out) (optional) (nullable): a location to place the current entity tag for the file,
  *     or %NULL if the entity tag is not needed
  * @error: a #GError, or %NULL
  *
@@ -23571,7 +23579,7 @@
  * @contents: (out) (transfer full) (element-type guint8) (array length=length): a location to place the contents of the file
  * @length: (out) (optional): a location to place the length of the contents of the file,
  *     or %NULL if the length is not needed
- * @etag_out: (out) (optional): a location to place the current entity tag for the file,
+ * @etag_out: (out) (optional) (nullable): a location to place the current entity tag for the file,
  *     or %NULL if the entity tag is not needed
  * @error: a #GError, or %NULL
  *
@@ -24806,7 +24814,7 @@
  *     or %NULL
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
- * @new_etag: (out) (optional): a location to a new [entity tag][gfile-etag]
+ * @new_etag: (out) (optional) (nullable): a location to a new [entity tag][gfile-etag]
  *      for the document. This should be freed with g_free() when no longer
  *      needed, or %NULL
  * @cancellable: optional #GCancellable object, %NULL to ignore
@@ -24896,7 +24904,7 @@
  * g_file_replace_contents_finish:
  * @file: input #GFile
  * @res: a #GAsyncResult
- * @new_etag: (out) (optional): a location of a new [entity tag][gfile-etag]
+ * @new_etag: (out) (optional) (nullable): a location of a new [entity tag][gfile-etag]
  *     for the document. This should be freed with g_free() when it is no
  *     longer needed, or %NULL
  * @error: a #GError, or %NULL
@@ -37995,16 +38003,16 @@
  * @target_fd: Target descriptor for child process
  *
  * Transfer an arbitrary file descriptor from parent process to the
- * child.  This function takes "ownership" of the fd; it will be closed
+ * child.  This function takes ownership of the @source_fd; it will be closed
  * in the parent when @self is freed.
  *
  * By default, all file descriptors from the parent will be closed.
- * This function allows you to create (for example) a custom pipe() or
- * socketpair() before launching the process, and choose the target
+ * This function allows you to create (for example) a custom `pipe()` or
+ * `socketpair()` before launching the process, and choose the target
  * descriptor in the child.
  *
  * An example use case is GNUPG, which has a command line argument
- * --passphrase-fd providing a file descriptor number where it expects
+ * `--passphrase-fd` providing a file descriptor number where it expects
  * the passphrase to be written.
  */
 
