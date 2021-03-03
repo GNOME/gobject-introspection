@@ -2049,4 +2049,38 @@ GType gi_marshalling_tests_properties_object_get_type (void) G_GNUC_CONST;
 _GI_TEST_EXTERN
 GIMarshallingTestsPropertiesObject *gi_marshalling_tests_properties_object_new (void);
 
+/* Signals object */
+
+#define GI_MARSHALLING_TESTS_TYPE_SIGNALS_OBJECT (gi_marshalling_tests_signals_object_get_type ())
+#define GI_MARSHALLING_TESTS_SIGNALS_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GI_MARSHALLING_TESTS_TYPE_SIGNALS_OBJECT, GIMarshallingTestsSignalsObject))
+#define GI_MARSHALLING_TESTS_SIGNALS_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GI_MARSHALLING_TESTS_TYPE_SIGNALS_OBJECT, GIMarshallingTestsSignalsObjectClass))
+#define GI_MARSHALLING_TESTS_IS_SIGNALS_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GI_MARSHALLING_TESTS_TYPE_SIGNALS_OBJECT))
+#define GI_MARSHALLING_TESTS_IS_SIGNALS_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GI_MARSHALLING_TESTS_TYPE_SIGNALS_OBJECT))
+#define GI_MARSHALLING_TESTS_SIGNALS_OBJECT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GI_MARSHALLING_TESTS_TYPE_SIGNALS_OBJECT, GIMarshallingTestsSignalsObjectClass))
+
+typedef struct _GIMarshallingTestsSignalsObject GIMarshallingTestsSignalsObject;
+typedef struct _GIMarshallingTestsSignalsObjectClass GIMarshallingTestsSignalsObjectClass;
+
+struct _GIMarshallingTestsSignalsObject {
+    GObject parent_instance;
+};
+
+struct _GIMarshallingTestsSignalsObjectClass {
+    GObjectClass parent_class;
+};
+
+
+_GI_TEST_EXTERN
+GType gi_marshalling_tests_signals_object_get_type (void) G_GNUC_CONST;
+
+
+_GI_TEST_EXTERN
+GIMarshallingTestsSignalsObject *gi_marshalling_tests_signals_object_new (void);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_signals_object_emit_boxed_gptrarray_utf8 (GIMarshallingTestsSignalsObject *object);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_signals_object_emit_boxed_gptrarray_boxed_struct (GIMarshallingTestsSignalsObject *object);
+
 #endif /* _GI_MARSHALLING_TESTS_H_ */
