@@ -5895,3 +5895,76 @@ gi_marshalling_tests_properties_object_new (void)
 {
   return g_object_new (GI_MARSHALLING_TESTS_TYPE_PROPERTIES_OBJECT, NULL);
 }
+
+G_DEFINE_TYPE (GIMarshallingTestsSignalsObject, gi_marshalling_tests_signals_object, G_TYPE_OBJECT);
+
+static void
+gi_marshalling_tests_signals_object_init (GIMarshallingTestsSignalsObject *object G_GNUC_UNUSED)
+{
+}
+
+static void
+gi_marshalling_tests_signals_object_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (gi_marshalling_tests_signals_object_parent_class)->finalize (object);
+}
+
+static void
+gi_marshalling_tests_signals_object_class_init (GIMarshallingTestsSignalsObjectClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gi_marshalling_tests_signals_object_finalize;
+
+  /**
+   * GIMarshallingTestsSignalsObject::some-boxed-gptrarray-utf8:
+   * @self:
+   * @arg: (element-type utf8):
+   */
+  g_signal_new ("some-boxed-gptrarray-utf8",
+                G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE, 1,
+                G_TYPE_PTR_ARRAY);
+
+  /**
+   * GIMarshallingTestsSignalsObject::some-boxed-gptrarray-boxed-struct:
+   * @self:
+   * @arg: (element-type GIMarshallingTestsBoxedStruct):
+   */
+  g_signal_new ("some-boxed-gptrarray-boxed-struct",
+                G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE, 1,
+                G_TYPE_PTR_ARRAY);
+}
+
+GIMarshallingTestsSignalsObject *
+gi_marshalling_tests_signals_object_new (void)
+{
+  return g_object_new (GI_MARSHALLING_TESTS_TYPE_SIGNALS_OBJECT, NULL);
+}
+
+void
+gi_marshalling_tests_signals_object_emit_boxed_gptrarray_utf8 (GIMarshallingTestsSignalsObject *object)
+{
+  GPtrArray *ptrarray;
+
+  ptrarray = gi_marshalling_tests_gptrarray_utf8_full_return ();
+  g_signal_emit_by_name (object, "some-boxed-gptrarray-utf8",
+                         ptrarray);
+  g_ptr_array_unref (ptrarray);
+}
+
+void
+gi_marshalling_tests_signals_object_emit_boxed_gptrarray_boxed_struct (GIMarshallingTestsSignalsObject *object)
+{
+  GPtrArray *ptrarray;
+
+  ptrarray = gi_marshalling_tests_gptrarray_boxed_struct_full_return ();
+  g_signal_emit_by_name (object, "some-boxed-gptrarray-boxed-struct",
+                         ptrarray);
+  g_ptr_array_unref (ptrarray);
+}
