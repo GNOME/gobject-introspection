@@ -1934,7 +1934,7 @@ uses a C sugar return type.</doc>
               c:identifier="regress_foo_object_append_new_stack_layer">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="786">This shouldn't be scanned as a constructor.</doc>
+             line="806">This shouldn't be scanned as a constructor.</doc>
         <source-position filename="foo.h" line="581"/>
         <return-value transfer-ownership="none">
           <type name="FooOtherObject" c:type="RegressFooOtherObject*"/>
@@ -2263,13 +2263,13 @@ uses a C sugar return type.</doc>
                               transfer-ownership="full">
             <doc xml:space="preserve"
                  filename="foo.c"
-                 line="566">add to this rect</doc>
+                 line="582">add to this rect</doc>
             <type name="FooRectangle" c:type="RegressFooRectangle*"/>
           </instance-parameter>
           <parameter name="r2" transfer-ownership="none">
             <doc xml:space="preserve"
                  filename="foo.c"
-                 line="567">source rectangle</doc>
+                 line="583">source rectangle</doc>
             <type name="FooRectangle" c:type="const RegressFooRectangle*"/>
           </parameter>
         </parameters>
@@ -2279,7 +2279,7 @@ uses a C sugar return type.</doc>
                 introspectable="0">
         <doc xml:space="preserve"
              filename="foo.c"
-             line="547">This is a C convenience constructor; we have to (skip)
+             line="563">This is a C convenience constructor; we have to (skip)
 it because it's not a boxed type.</doc>
         <source-position filename="foo.h" line="357"/>
         <return-value>
@@ -6071,7 +6071,7 @@ detection, and fixing it via annotations.</doc>
               c:identifier="regress_foo_not_a_constructor_new">
       <doc xml:space="preserve"
            filename="foo.c"
-           line="799">This should be scanned as a top-level function, and shouldn't cause
+           line="819">This should be scanned as a top-level function, and shouldn't cause
 a "Can't find matching type for constructor" warning.</doc>
       <source-position filename="foo.h" line="221"/>
       <return-value transfer-ownership="none">
@@ -6084,7 +6084,7 @@ a "Can't find matching type for constructor" warning.</doc>
               introspectable="0">
       <doc xml:space="preserve"
            filename="foo.c"
-           line="547">This is a C convenience constructor; we have to (skip)
+           line="563">This is a C convenience constructor; we have to (skip)
 it because it's not a boxed type.</doc>
       <source-position filename="foo.h" line="357"/>
       <return-value>
@@ -6110,7 +6110,7 @@ it because it's not a boxed type.</doc>
               introspectable="0">
       <doc xml:space="preserve"
            filename="foo.c"
-           line="726">Does something that's only interesting from C and should not be
+           line="746">Does something that's only interesting from C and should not be
 exposed to language bindings.</doc>
       <source-position filename="foo.h" line="556"/>
       <return-value transfer-ownership="none">
@@ -6120,7 +6120,7 @@ exposed to language bindings.</doc>
         <parameter name="fs" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="foo.c"
-               line="728">a #RegressFooSkippable</doc>
+               line="748">a #RegressFooSkippable</doc>
           <type name="FooSkippable" c:type="RegressFooSkippable"/>
         </parameter>
       </parameters>
