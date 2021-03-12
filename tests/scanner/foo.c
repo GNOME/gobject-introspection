@@ -410,7 +410,11 @@ struct _RegressFooBoxed
 RegressFooBoxed *
 regress_foo_boxed_copy (const RegressFooBoxed *boxed)
 {
+#if GLIB_CHECK_VERSION (2, 67, 5)
+  return (RegressFooBoxed *)g_memdup2 (boxed, sizeof (RegressFooBoxed));
+#else
   return (RegressFooBoxed *)g_memdup (boxed, sizeof (RegressFooBoxed));
+#endif
 }
 
 void
@@ -453,7 +457,11 @@ struct _RegressFooDBusData
 RegressFooDBusData *
 regress_foo_dbus_data_copy (const RegressFooDBusData *boxed)
 {
+#if GLIB_CHECK_VERSION (2, 67, 5)
+  return (RegressFooDBusData *)g_memdup2 (boxed, sizeof (RegressFooDBusData));
+#else
   return (RegressFooDBusData *)g_memdup (boxed, sizeof (RegressFooDBusData));
+#endif
 }
 
 void
@@ -478,7 +486,11 @@ regress_foo_dbus_data_get_type (void)
 static RegressFooBRect *
 regress_foo_brect_copy (const RegressFooBRect *boxed)
 {
+#if GLIB_CHECK_VERSION (2, 67, 5)
+  return (RegressFooBRect *)g_memdup2 (boxed, sizeof (RegressFooBRect));
+#else
   return (RegressFooBRect *)g_memdup (boxed, sizeof (RegressFooBRect));
+#endif
 }
 
 GType
@@ -496,7 +508,11 @@ regress_foo_brect_get_type (void)
 static RegressFooBUnion *
 regress_foo_bunion_copy (const RegressFooBUnion *boxed)
 {
+#if GLIB_CHECK_VERSION (2, 67, 5)
+  return (RegressFooBUnion *)g_memdup2 (boxed, sizeof (RegressFooBUnion));
+#else
   return (RegressFooBUnion *)g_memdup (boxed, sizeof (RegressFooBUnion));
+#endif
 }
 
 GType
@@ -582,7 +598,11 @@ struct _RegressFooHidden
 RegressFooHidden *
 regress_foo_hidden_copy (const RegressFooHidden *boxed)
 {
+#if GLIB_CHECK_VERSION (2, 67, 5)
+  return (RegressFooHidden *)g_memdup2 (boxed, sizeof (RegressFooHidden));
+#else
   return (RegressFooHidden *)g_memdup (boxed, sizeof (RegressFooHidden));
+#endif
 }
 
 void
