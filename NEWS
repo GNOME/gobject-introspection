@@ -1,8 +1,11 @@
-1.67.1 - ????-??-??
+1.67.1 - 2021-03-12
 -------------------
 
 * Requires Python 3.6+
-
+* Update GLib annotations
+* Fix compatibility with Python 3.10 :issue:`358`
+* Fix build with GIR data disabled :mr:`248`
+* Add test object for signal marshallers :mr:`259`
 
 1.66.1 - 2020-10-03
 -------------------
