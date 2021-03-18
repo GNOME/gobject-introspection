@@ -16,7 +16,6 @@
   <homepage rdf:resource="https://gi.readthedocs.io/" />
   <license rdf:resource="http://usefulinc.com/doap/licenses/lgpl" />
   <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gobject-introspection/issues/" />
-  <mailing-list rdf:resource="mailto:gtk-devel-list@gnome.org" />
 
   <programming-language>C</programming-language>
   <programming-language>Python</programming-language>

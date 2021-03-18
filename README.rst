@@ -63,5 +63,5 @@ Bugs should be reported in https://gitlab.gnome.org/GNOME/gobject-introspection/
 
 Contact
 -------
-:Mail: gtk-devel-list@gnome.org
+:Discourse: https://discourse.gnome.org/tag/introspection
 :IRC: #introspection@irc.gnome.org

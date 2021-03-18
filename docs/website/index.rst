@@ -69,5 +69,5 @@ Contact
 
 For questions or additional information, please use:
 
-* Mailing list: gtk-devel-list@gnome.org
+* Discourse: https://discourse.gnome.org/tag/introspection
 * IRC: #introspection on irc.gnome.org
