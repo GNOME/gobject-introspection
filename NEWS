@@ -1,3 +1,10 @@
+1.68.0 - 2021-03-19
+-------------------
+
+* Update GLib annotations :mr:`262`
+* docs: cleanup :mr:`261`
+* Fix syntax errors in gir-1.2.rnc :mr:`256`
+
 1.67.1 - 2021-03-12
 -------------------
 
