@@ -4391,7 +4391,7 @@ gi_marshalling_tests_object_method_int8_out (GIMarshallingTestsObject *self, gin
 
 /**
  * gi_marshalling_tests_object_method_int8_arg_and_out_caller:
- * @out: (out caller-allocates):
+ * @out: (out):
  */
 void
   gi_marshalling_tests_object_method_int8_arg_and_out_caller (GIMarshallingTestsObject *self, gint8 arg, gint8 *out)
@@ -4411,7 +4411,7 @@ void
 
 /**
  * gi_marshalling_tests_object_method_str_arg_out_ret:
- * @out: (out caller-allocates):
+ * @out: (out):
  *
  * Returns: (transfer none)
  */

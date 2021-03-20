@@ -1363,7 +1363,7 @@ struct _GIMarshallingTestsObjectClass
 
     /**
      * GIMarshallingTestsObjectClass::method_int8_arg_and_out_caller:
-     * @out: (out caller-allocates):
+     * @out: (out):
      */
     void (* method_int8_arg_and_out_caller) (GIMarshallingTestsObject *self, gint8 arg, gint8 *out);
 
@@ -1375,7 +1375,7 @@ struct _GIMarshallingTestsObjectClass
 
     /**
      * GIMarshallingTestsObjectClass::method_str_arg_out_ret:
-     * @out: (out caller-allocates):
+     * @out: (out):
      *
      * Returns: (transfer none)
      */
