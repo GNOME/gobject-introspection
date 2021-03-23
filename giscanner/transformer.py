@@ -432,9 +432,7 @@ raise ValueError."""
                 name = self._strip_symbol(child)
             members.append(ast.Member(name.lower(),
                                       child.const_int,
-                                      child.ident,
-                                      None))
-
+                                      child.ident))
         enum_name = self.strip_identifier(symbol.ident)
         if symbol.base_type.is_bitfield:
             klass = ast.Bitfield

@@ -972,12 +972,13 @@ class Bitfield(Node, Registered):
 
 class Member(Annotated):
 
-    def __init__(self, name, value, symbol, nick):
+    def __init__(self, name, value, symbol, nick=None, dump_name=None):
         Annotated.__init__(self)
         self.name = name
         self.value = value
         self.symbol = symbol
         self.nick = nick
+        self.dump_name = dump_name
         self.parent = None
 
     def _compare(self, other, op):

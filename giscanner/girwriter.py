@@ -442,6 +442,8 @@ class GIRWriter(XMLWriter):
         self._append_version(member, attrs)
         if member.nick is not None:
             attrs.append(('glib:nick', member.nick))
+        if member.dump_name is not None:
+            attrs.append(('glib:name', member.dump_name))
         with self.tagcontext('member', attrs):
             self._write_generic(member)
 

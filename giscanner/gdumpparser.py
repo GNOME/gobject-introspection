@@ -285,7 +285,8 @@ blob containing data gleaned from GObject's primitive introspection."""
             members.append(ast.Member(name,
                                       value,
                                       symbol,
-                                      member.attrib['nick']))
+                                      member.attrib['nick'],
+                                      member.attrib['name']))
 
         if xmlnode.tag == 'flags':
             klass = ast.Bitfield

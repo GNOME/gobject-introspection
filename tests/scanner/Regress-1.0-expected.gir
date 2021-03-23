@@ -1623,17 +1623,20 @@ it says it's pointer but it's actually a string.</doc>
       <member name="alpha"
               value="0"
               c:identifier="REGRESS_FOO_ENUM_ALPHA"
-              glib:nick="alpha">
+              glib:nick="alpha"
+              glib:name="REGRESS_FOO_ENUM_ALPHA">
       </member>
       <member name="beta"
               value="1"
               c:identifier="REGRESS_FOO_ENUM_BETA"
-              glib:nick="beta">
+              glib:nick="beta"
+              glib:name="REGRESS_FOO_ENUM_BETA">
       </member>
       <member name="delta"
               value="2"
               c:identifier="REGRESS_FOO_ENUM_DELTA"
-              glib:nick="delta">
+              glib:nick="delta"
+              glib:name="REGRESS_FOO_ENUM_DELTA">
       </member>
       <function name="method" c:identifier="regress_foo_enum_type_method">
         <source-position filename="foo.h" line="236"/>
@@ -1666,17 +1669,20 @@ it says it's pointer but it's actually a string.</doc>
       <member name="good"
               value="0"
               c:identifier="REGRESS_FOO_ERROR_GOOD"
-              glib:nick="good">
+              glib:nick="good"
+              glib:name="REGRESS_FOO_ERROR_GOOD">
       </member>
       <member name="bad"
               value="1"
               c:identifier="REGRESS_FOO_ERROR_BAD"
-              glib:nick="bad">
+              glib:nick="bad"
+              glib:name="REGRESS_FOO_ERROR_BAD">
       </member>
       <member name="ugly"
               value="2"
               c:identifier="REGRESS_FOO_ERROR_UGLY"
-              glib:nick="ugly">
+              glib:nick="ugly"
+              glib:name="REGRESS_FOO_ERROR_UGLY">
       </member>
       <function name="quark" c:identifier="regress_foo_error_quark">
         <return-value transfer-ownership="none">
@@ -1727,17 +1733,20 @@ it says it's pointer but it's actually a string.</doc>
       <member name="first"
               value="1"
               c:identifier="REGRESS_FOO_FLAGS_FIRST"
-              glib:nick="first">
+              glib:nick="first"
+              glib:name="REGRESS_FOO_FLAGS_FIRST">
       </member>
       <member name="second"
               value="2"
               c:identifier="REGRESS_FOO_FLAGS_SECOND"
-              glib:nick="second">
+              glib:nick="second"
+              glib:name="REGRESS_FOO_FLAGS_SECOND">
       </member>
       <member name="third"
               value="4"
               c:identifier="REGRESS_FOO_FLAGS_THIRD"
-              glib:nick="third">
+              glib:nick="third"
+              glib:name="REGRESS_FOO_FLAGS_THIRD">
       </member>
     </bitfield>
     <record name="FooForeignStruct"
@@ -2934,17 +2943,20 @@ use it should be.</doc>
       <member name="code1"
               value="1"
               c:identifier="REGRESS_TEST_ABC_ERROR_CODE1"
-              glib:nick="code1">
+              glib:nick="code1"
+              glib:name="REGRESS_TEST_ABC_ERROR_CODE1">
       </member>
       <member name="code2"
               value="2"
               c:identifier="REGRESS_TEST_ABC_ERROR_CODE2"
-              glib:nick="code2">
+              glib:nick="code2"
+              glib:name="REGRESS_TEST_ABC_ERROR_CODE2">
       </member>
       <member name="code3"
               value="3"
               c:identifier="REGRESS_TEST_ABC_ERROR_CODE3"
-              glib:nick="code3">
+              glib:nick="code3"
+              glib:name="REGRESS_TEST_ABC_ERROR_CODE3">
       </member>
       <function name="quark" c:identifier="regress_test_abc_error_quark">
         <return-value transfer-ownership="none">
@@ -3339,29 +3351,34 @@ use it should be.</doc>
       <member name="value1"
               value="0"
               c:identifier="REGRESS_TEST_VALUE1"
-              glib:nick="value1">
+              glib:nick="value1"
+              glib:name="REGRESS_TEST_VALUE1">
         <doc xml:space="preserve" filename="regress.h" line="370">value 1</doc>
       </member>
       <member name="value2"
               value="1"
               c:identifier="REGRESS_TEST_VALUE2"
-              glib:nick="value2">
+              glib:nick="value2"
+              glib:name="REGRESS_TEST_VALUE2">
         <doc xml:space="preserve" filename="regress.h" line="371">value 2</doc>
       </member>
       <member name="value3"
               value="-1"
               c:identifier="REGRESS_TEST_VALUE3"
-              glib:nick="value3">
+              glib:nick="value3"
+              glib:name="REGRESS_TEST_VALUE3">
       </member>
       <member name="value4"
               value="48"
               c:identifier="REGRESS_TEST_VALUE4"
-              glib:nick="value4">
+              glib:nick="value4"
+              glib:name="REGRESS_TEST_VALUE4">
       </member>
       <member name="value5"
               value="49"
               c:identifier="REGRESS_TEST_VALUE5"
-              glib:nick="value5">
+              glib:nick="value5"
+              glib:name="REGRESS_TEST_VALUE5">
       </member>
       <function name="param" c:identifier="regress_test_enum_param">
         <source-position filename="regress.h" line="435"/>
@@ -3391,12 +3408,14 @@ use it should be.</doc>
       <member name="value1"
               value="1"
               c:identifier="REGRESS_TEST_UNSIGNED_VALUE1"
-              glib:nick="value1">
+              glib:nick="value1"
+              glib:name="REGRESS_TEST_UNSIGNED_VALUE1">
       </member>
       <member name="value2"
               value="2147483648"
               c:identifier="REGRESS_TEST_UNSIGNED_VALUE2"
-              glib:nick="value2">
+              glib:nick="value2"
+              glib:name="REGRESS_TEST_UNSIGNED_VALUE2">
       </member>
     </enumeration>
     <enumeration name="TestError"
@@ -3407,17 +3426,20 @@ use it should be.</doc>
       <member name="code1"
               value="1"
               c:identifier="REGRESS_TEST_ERROR_CODE1"
-              glib:nick="code1">
+              glib:nick="code1"
+              glib:name="REGRESS_TEST_ERROR_CODE1">
       </member>
       <member name="code2"
               value="2"
               c:identifier="REGRESS_TEST_ERROR_CODE2"
-              glib:nick="code2">
+              glib:nick="code2"
+              glib:name="REGRESS_TEST_ERROR_CODE2">
       </member>
       <member name="code3"
               value="3"
               c:identifier="REGRESS_TEST_ERROR_CODE3"
-              glib:nick="code3">
+              glib:nick="code3"
+              glib:name="REGRESS_TEST_ERROR_CODE3">
       </member>
       <function name="quark" c:identifier="regress_test_error_quark">
         <return-value transfer-ownership="none">
@@ -3447,17 +3469,20 @@ use it should be.</doc>
       <member name="flag1"
               value="1"
               c:identifier="REGRESS_TEST_FLAG1"
-              glib:nick="flag1">
+              glib:nick="flag1"
+              glib:name="TEST_FLAG1">
       </member>
       <member name="flag2"
               value="2"
               c:identifier="REGRESS_TEST_FLAG2"
-              glib:nick="flag2">
+              glib:nick="flag2"
+              glib:name="TEST_FLAG2">
       </member>
       <member name="flag3"
               value="4"
               c:identifier="REGRESS_TEST_FLAG3"
-              glib:nick="flag3">
+              glib:nick="flag3"
+              glib:name="TEST_FLAG3">
       </member>
     </bitfield>
     <class name="TestFloating"
@@ -5131,17 +5156,20 @@ the introspection client langage.</doc>
       <member name="code1"
               value="1"
               c:identifier="REGRESS_TEST_OTHER_ERROR_CODE1"
-              glib:nick="code1">
+              glib:nick="code1"
+              glib:name="REGRESS_TEST_OTHER_ERROR_CODE1">
       </member>
       <member name="code2"
               value="2"
               c:identifier="REGRESS_TEST_OTHER_ERROR_CODE2"
-              glib:nick="code2">
+              glib:nick="code2"
+              glib:name="REGRESS_TEST_OTHER_ERROR_CODE2">
       </member>
       <member name="code3"
               value="3"
               c:identifier="REGRESS_TEST_OTHER_ERROR_CODE3"
-              glib:nick="code3">
+              glib:nick="code3"
+              glib:name="REGRESS_TEST_OTHER_ERROR_CODE3">
       </member>
       <function name="quark"
                 c:identifier="regress_test_unconventional_error_quark">

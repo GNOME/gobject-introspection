@@ -679,8 +679,10 @@ grammar {
       attribute value { xsd:string },
       ## corresponding C type of the member
       attribute c:identifier { xsd:string },
-      ## short nickname of the member
+      ## short nickname of the member (from GEnumValue/GFlagsValue)
       attribute glib:nick { xsd:string }?,
+      ## name of the member (from GEnumValue/GFlagsValue)
+      attribute glib:name { xsd:string }?,
 
       Info.elements
     }

@@ -609,7 +609,8 @@ class GIRParser(object):
         member = ast.Member(node.attrib['name'],
                             node.attrib['value'],
                             node.attrib.get(_cns('identifier')),
-                            node.attrib.get(_glibns('nick')))
+                            node.attrib.get(_glibns('nick')),
+                            node.attrib.get(_glibns('name')))
         self._parse_generic_attribs(node, member)
         return member
 
