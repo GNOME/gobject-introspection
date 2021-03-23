@@ -262,10 +262,12 @@ blob containing data gleaned from GObject's primitive introspection."""
         # values as a 32-bit signed integer, even if they were unsigned
         # in the source code.
         previous_values = {}
+        previous_symbols = {}
         previous = self._namespace.get(enum_name)
         if isinstance(previous, (ast.Enum, ast.Bitfield)):
             for member in previous.members:
                 previous_values[member.name] = member.value
+                previous_symbols[member.name] = member.symbol
 
         members = []
         for member in xmlnode.findall('member'):
@@ -275,12 +277,14 @@ blob containing data gleaned from GObject's primitive introspection."""
 
             if name in previous_values:
                 value = previous_values[name]
+                symbol = previous_symbols[name]
             else:
                 value = member.attrib['value']
+                symbol = member.attrib['name']
 
             members.append(ast.Member(name,
                                       value,
-                                      member.attrib['name'],
+                                      symbol,
                                       member.attrib['nick']))
 
         if xmlnode.tag == 'flags':

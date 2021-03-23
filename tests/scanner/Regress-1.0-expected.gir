@@ -3446,17 +3446,17 @@ use it should be.</doc>
               c:type="RegressTestFlags">
       <member name="flag1"
               value="1"
-              c:identifier="TEST_FLAG1"
+              c:identifier="REGRESS_TEST_FLAG1"
               glib:nick="flag1">
       </member>
       <member name="flag2"
               value="2"
-              c:identifier="TEST_FLAG2"
+              c:identifier="REGRESS_TEST_FLAG2"
               glib:nick="flag2">
       </member>
       <member name="flag3"
               value="4"
-              c:identifier="TEST_FLAG3"
+              c:identifier="REGRESS_TEST_FLAG3"
               glib:nick="flag3">
       </member>
     </bitfield>
