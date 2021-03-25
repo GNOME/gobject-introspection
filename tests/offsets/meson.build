@@ -24,8 +24,8 @@ if glib_dep.type_name() == 'pkgconfig'
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
-      '--add-include-path', join_paths(meson.source_root(), 'gir'),
-      '--add-include-path', join_paths(meson.build_root(), 'gir'),
+      '--add-include-path', join_paths(source_root, 'gir'),
+      '--add-include-path', join_paths(build_root, 'gir'),
       '--warn-all',
       '--warn-error',
       '--namespace=Offsets',
@@ -34,7 +34,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '--library=offsets-1.0',
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
-      '-I', join_paths(meson.source_root(), 'tests'),
+      '-I', join_paths(source_root, 'tests'),
       extra_giscanner_args,
       '@INPUT@',
     ]
@@ -46,7 +46,7 @@ if glib_dep.type_name() == 'pkgconfig'
     output: '@BASENAME@.typelib',
     depends: [gobject_gir, ],
     command: [gircompiler, '-o', '@OUTPUT@', '@INPUT@',
-              '--includedir', join_paths(meson.build_root(), 'gir'),
+              '--includedir', join_paths(build_root, 'gir'),
               '--includedir', meson.current_build_dir()
     ],
   )
@@ -58,10 +58,10 @@ if glib_dep.type_name() == 'pkgconfig'
   )
 
   test_offsets_env = environment()
-  test_offsets_env.set('top_builddir', join_paths(meson.build_root(), 'gir'))
+  test_offsets_env.set('top_builddir', join_paths(build_root, 'gir'))
   test_offsets_env.set('builddir', meson.current_build_dir())
   if host_system == 'windows'
-    test_offsets_env.prepend('PATH', join_paths(meson.build_root(), 'girepository'))
+    test_offsets_env.prepend('PATH', join_paths(build_root, 'girepository'))
   endif
 
   test('test_offsets.py',
