@@ -318,6 +318,13 @@ regress_test_fundamental_object_ref
 regress_test_fundamental_object_unref
 
 <SECTION>
+<FILE>regress-test-fundamental-object-no-get-set-func</FILE>
+<TITLE>RegressTestFundamentalObjectNoGetSetFunc</TITLE>
+RegressTestFundamentalObjectNoGetSetFunc
+RegressTestFundamentalObjectNoGetSetFuncClass
+regress_test_fundamental_object_no_get_set_func_get_data
+
+<SECTION>
 <FILE>regress-test-fundamental-sub-object</FILE>
 <TITLE>RegressTestFundamentalSubObject</TITLE>
 RegressTestFundamentalSubObject

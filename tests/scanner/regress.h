@@ -1079,6 +1079,25 @@ struct _RegressTestFundamentalSubObjectClass {
 _GI_TEST_EXTERN
 GType regress_test_fundamental_sub_object_get_type(void);
 
+struct _RegressTestFundamentalObjectNoGetSetFunc {
+  /* This is not really an RegressTestFundamentalObject but we "inherit"
+   * the structure from it */
+  /* < private > */
+  RegressTestFundamentalObject fundamental_object;
+
+  /* < public > */
+  char *data;
+};
+
+struct _RegressTestFundamentalObjectNoGetSetFuncClass {
+  RegressTestFundamentalObjectClass fundamental_object_class;
+};
+
+typedef struct _RegressTestFundamentalObjectNoGetSetFunc RegressTestFundamentalObjectNoGetSetFunc;
+typedef struct _RegressTestFundamentalObjectNoGetSetFuncClass RegressTestFundamentalObjectNoGetSetFuncClass;
+
+_GI_TEST_EXTERN
+GType regress_test_fundamental_object_no_get_set_func_get_type (void);
 
 _GI_TEST_EXTERN
 RegressTestFundamentalSubObject *
@@ -1087,6 +1106,14 @@ regress_test_fundamental_sub_object_new (const char *data);
 _GI_TEST_EXTERN
 RegressTestFundamentalObject *
 regress_test_create_fundamental_hidden_class_instance (void);
+
+_GI_TEST_EXTERN
+RegressTestFundamentalObjectNoGetSetFunc *
+regress_test_fundamental_object_no_get_set_func_new (const char *data);
+
+_GI_TEST_EXTERN
+const char *
+regress_test_fundamental_object_no_get_set_func_get_data (RegressTestFundamentalObjectNoGetSetFunc *fundamental);
 
 /* callback */
 typedef void (*RegressTestSimpleCallback) (void);
