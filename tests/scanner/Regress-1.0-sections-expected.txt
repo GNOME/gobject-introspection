@@ -331,6 +331,12 @@ RegressTestFundamentalSubObject
 RegressTestFundamentalSubObjectClass
 
 <SECTION>
+<FILE>regress-test-fundamental-sub-object-no-get-set-func</FILE>
+<TITLE>RegressTestFundamentalSubObjectNoGetSetFunc</TITLE>
+RegressTestFundamentalSubObjectNoGetSetFunc
+RegressTestFundamentalSubObjectNoGetSetFuncClass
+
+<SECTION>
 <FILE>regress-test-inherit-drawable</FILE>
 <TITLE>RegressTestInheritDrawable</TITLE>
 RegressTestInheritDrawable

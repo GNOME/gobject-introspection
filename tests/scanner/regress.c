@@ -3860,6 +3860,36 @@ regress_test_fundamental_object_no_get_set_func_get_data (RegressTestFundamental
   return fundamental->data;
 }
 
+G_DEFINE_TYPE (RegressTestFundamentalSubObjectNoGetSetFunc, regress_test_fundamental_sub_object_no_get_set_func, regress_test_fundamental_object_no_get_set_func_get_type ());
+
+static void
+regress_test_fundamental_sub_object_no_get_set_func_class_init (RegressTestFundamentalSubObjectNoGetSetFuncClass *klass G_GNUC_UNUSED)
+{
+}
+
+static void
+regress_test_fundamental_sub_object_no_get_set_func_init (RegressTestFundamentalSubObjectNoGetSetFunc *self G_GNUC_UNUSED)
+{
+}
+
+/**
+ * regress_test_fundamental_sub_object_no_get_set_func_new:
+ *
+ * Return value: (transfer full):
+ */
+RegressTestFundamentalSubObjectNoGetSetFunc *
+regress_test_fundamental_sub_object_no_get_set_func_new (const char *data)
+{
+  RegressTestFundamentalSubObjectNoGetSetFunc *object;
+  RegressTestFundamentalObjectNoGetSetFunc *parent_object;
+
+  object = (RegressTestFundamentalSubObjectNoGetSetFunc *) g_type_create_instance (regress_test_fundamental_sub_object_no_get_set_func_get_type ());
+  parent_object = (RegressTestFundamentalObjectNoGetSetFunc *) object;
+  parent_object->data = g_strdup (data);
+
+  return object;
+}
+
 /**
  * regress_test_callback:
  * @callback: (scope call) (allow-none):
