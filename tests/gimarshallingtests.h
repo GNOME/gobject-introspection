@@ -2026,6 +2026,7 @@ struct _GIMarshallingTestsPropertiesObject {
     guint64 some_uint64;
     gfloat some_float;
     gdouble some_double;
+    gchar *some_string;
     gchar **some_strv;
     GIMarshallingTestsBoxedStruct* some_boxed_struct;
     GList* some_boxed_glist;
