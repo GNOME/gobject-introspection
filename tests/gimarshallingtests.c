@@ -3562,6 +3562,35 @@ gi_marshalling_tests_return_gvalue_flat_array (void)
 }
 
 /**
+ * gi_marshalling_tests_gvalue_round_trip:
+ * @value: The first GValue
+ *
+ * Returns: (transfer none):
+ */
+GValue *
+gi_marshalling_tests_gvalue_round_trip (GValue *value)
+{
+  return value;
+}
+
+/**
+ * gi_marshalling_tests_gvalue_copy:
+ * @value: The first GValue
+ *
+ * Returns: (transfer none):
+ */
+GValue *
+gi_marshalling_tests_gvalue_copy (GValue *value)
+{
+  GValue *return_value = g_new0 (GValue, 1);
+
+  g_value_init (return_value, G_VALUE_TYPE (value));
+  g_value_copy (value, return_value);
+
+  return return_value;
+}
+
+/**
  * gi_marshalling_tests_gvalue_flat_array_round_trip:
  * @one: The first GValue
  * @two: The second GValue
