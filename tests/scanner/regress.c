@@ -3890,6 +3890,31 @@ regress_test_fundamental_sub_object_no_get_set_func_new (const char *data)
   return object;
 }
 
+static void
+fundamental_object_no_get_set_func_transform_to_compatible_with_fundamental_sub_object (const GValue *src_value,
+                                                                                        GValue       *dest_value)
+{
+  RegressTestFundamentalObjectNoGetSetFunc *src_object;
+  RegressTestFundamentalSubObject *dest_object;
+
+  g_return_if_fail (G_VALUE_TYPE (src_value) == regress_test_fundamental_object_no_get_set_func_get_type ());
+  g_return_if_fail (G_VALUE_TYPE (dest_value) == regress_test_fundamental_sub_object_get_type ());
+
+  src_object = g_value_peek_pointer (src_value);
+  dest_object = regress_test_fundamental_sub_object_new (src_object->data);
+
+  g_value_set_instance (dest_value, dest_object);
+}
+
+void
+regress_test_fundamental_object_no_get_set_func_make_compatible_with_fundamental_sub_object (void)
+{
+  g_value_register_transform_func (
+    regress_test_fundamental_object_no_get_set_func_get_type (),
+    regress_test_fundamental_sub_object_get_type (),
+    fundamental_object_no_get_set_func_transform_to_compatible_with_fundamental_sub_object);
+}
+
 /**
  * regress_test_callback:
  * @callback: (scope call) (allow-none):

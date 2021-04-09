@@ -1134,6 +1134,10 @@ _GI_TEST_EXTERN
 RegressTestFundamentalSubObjectNoGetSetFunc *
 regress_test_fundamental_sub_object_no_get_set_func_new (const char *data);
 
+_GI_TEST_EXTERN
+void
+regress_test_fundamental_object_no_get_set_func_make_compatible_with_fundamental_sub_object (void);
+
 /* callback */
 typedef void (*RegressTestSimpleCallback) (void);
 typedef void RegressTestNoPtrCallback (void);
