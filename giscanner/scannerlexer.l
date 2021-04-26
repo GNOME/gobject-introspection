@@ -224,6 +224,8 @@ stringtext				([^\\\"])|(\\.)
 "_Float32x"                             { return BASIC_TYPE; }
 "_Float64x"                             { return BASIC_TYPE; }
 "_Float128x"                            { return BASIC_TYPE; }
+"__float80"                             { return BASIC_TYPE; }
+"__float128"                            { return BASIC_TYPE; }
 "for"					{ return FOR; }
 "goto"					{ return GOTO; }
 "if"					{ return IF; }
