@@ -2,7 +2,6 @@
 
 set -e
 
-export PATH="/c/msys64/$MSYSTEM/bin:$PATH"
 if [[ "$MSYSTEM" == "MINGW32" ]]; then
     export MSYS2_ARCH="i686"
 else

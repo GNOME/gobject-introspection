@@ -109,12 +109,12 @@ fedora-x86_64-python3.6:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - public
 
-msys2-mingw32-meson:
+msys2-mingw64-meson:
   stage: build
   tags:
     - win32-ps
   variables:
-    MSYSTEM: "MINGW32"
+    MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
   script:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu --ask 20
