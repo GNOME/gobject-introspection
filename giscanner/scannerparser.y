@@ -1677,10 +1677,35 @@ gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
 {
   GError *error = NULL;
   char *tmp_name = NULL;
-  FILE *fmacros =
-    fdopen (g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error),
-            "w+");
+  gint tmp_fd;
+  FILE *fmacros;
   GList *l;
+
+  tmp_fd = g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error);
+
+  if (tmp_fd == -1)
+    {
+      gchar *filename = g_file_get_path (scanner->current_file);
+      gchar *error_msg = g_strdup_printf ("%s: failed to create temporary file '%s' while parsing macros: %s", filename, tmp_name, error->message);
+      g_ptr_array_add (scanner->errors, error_msg);
+      g_free (filename);
+      g_error_free (error);
+      return;
+    }
+
+  fmacros = fdopen (tmp_fd, "w+");
+
+  if (!fmacros)
+    {
+      gchar *filename = g_file_get_path (scanner->current_file);
+      gchar *error_msg = g_strdup_printf ("%s: failed to open temporary file '%s' while parsing macros", filename, tmp_name);
+      g_ptr_array_add (scanner->errors, error_msg);
+      g_free (filename);
+      close (tmp_fd);
+      g_unlink (tmp_name);
+      g_free (tmp_name);
+      return;
+    }
 
   for (l = filenames; l != NULL; l = l->next)
     {
@@ -1821,6 +1846,7 @@ gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
   parse_file (scanner, fmacros);
   fclose (fmacros);
   g_unlink (tmp_name);
+  g_free (tmp_name);
 }
 
 gboolean
