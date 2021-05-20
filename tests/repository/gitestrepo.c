@@ -32,6 +32,7 @@ test_constructor_return_type(GIBaseInfo* object_info)
 
   return_name = g_registered_type_info_get_type_name ((GIRegisteredTypeInfo*) return_info);
   g_assert (strcmp (class_name, return_name) == 0);
+  g_base_info_unref ((GIBaseInfo*)return_info);
 }
 
 static void
