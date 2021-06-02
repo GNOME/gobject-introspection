@@ -8,31 +8,38 @@ cache:
   paths:
     - _ccache/
 
+variables:
+  COMMON_MESON_FLAGS: "--prefix /usr --libdir lib64 --buildtype=debug -Dglib:werror=false -Dcairo=enabled -Dpython=python3"
+
 example-meson:
   stage: build
+  variables:
+    EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true"
   script:
     - python3 -m pip install --user mako markdown
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Ddoctool=enabled -Dgtk_doc=true -Dcairo=enabled -Dpython=python3 _build .
-    - ninja -C _build
-    - sudo ninja -C _build install
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - meson compile -C _build
+    - sudo meson install -C _build
     - g-ir-scanner --version
     - cd examples/library
-    - meson --prefix /usr --default-library both _build
-    - ninja -C _build
-    - sudo ninja -C _build install
+    - meson setup --prefix /usr --default-library=both _build .
+    - meson compile -C _build
+    - sudo meson install -C _build
     - g-ir-inspect --print-typelibs --print-shlibs GISample
     # also build a small program using libgirepository
     - cd ../girepository
-    - meson _build
-    - ninja -C _build
+    - meson setup _build
+    - meson compile -C _build
 
 example-autotools:
   stage: build
+  variables:
+    EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true"
   script:
     - python3 -m pip install --user mako markdown
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Ddoctool=enabled -Dgtk_doc=true -Dcairo=enabled -Dpython=python3 _build .
-    - ninja -C _build
-    - sudo ninja -C _build install
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - meson compile -C _build
+    - sudo meson install -C _build
     - g-ir-scanner --version
     - cd examples/library
     - ./autogen.sh --prefix /usr
@@ -45,15 +52,13 @@ fedora-x86_64-meson:
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
-    CFLAGS: "-Werror"
+    EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true -Dwerror=true"
   script:
     - python3 -m pip install --user mako markdown
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Ddoctool=enabled -Dgtk_doc=true -Dcairo=enabled -Dpython=python3 _build .
-    - cd _build
-    - ninja
-    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
-    - ninja gi-doc
-    - cd ..
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - meson compile -C _build
+    - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
+    - ninja -C _build gi-doc
     - mkdir -p public
     - mv _build/docs/reference/html/ public/girepository/
     - python3 -m pip install --user flake8 mypy==0.790
@@ -75,10 +80,9 @@ fedora-x86_64-subprojects:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
   script:
-    - meson _build .
-    - cd _build
-    - ninja
-    - meson test --print-errorlogs --suite=gobject-introspection
+    - meson setup _build .
+    - meson compile -C _build
+    - meson test -C _build --print-errorlogs --suite=gobject-introspection
   except:
     - tags
   artifacts:
@@ -93,13 +97,12 @@ fedora-x86_64-no-introspection-data:
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
-    CFLAGS: "-Werror"
+    EXTRA_MESON_FLAGS: "-Dwerror=true"
   script:
     - python3 -m pip install --user mako markdown
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Dbuild_introspection_data=false -Dpython=python3 _build .
-    - cd _build
-    - ninja
-    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - meson compile -C _build
+    - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
   except:
     - tags
   artifacts:
@@ -117,10 +120,9 @@ fedora-x86_64-python3.6:
     PYENV_VERSION: "3.6.12"
   script:
     - python3 -m pip install --user mako markdown
-    - meson --prefix /usr --libdir /usr/lib64 --buildtype debug -Ddoctool=enabled -Dgtk_doc=true -Dcairo=enabled -Dpython=python3 _build .
-    - cd _build
-    - ninja
-    - meson test --print-errorlogs --suite=gobject-introspection --no-suite=glib
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - meson compile -C _build
+    - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
   except:
     - tags
   artifacts:
