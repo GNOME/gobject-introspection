@@ -9,10 +9,10 @@ py -3 -c "import urllib.request, sys; urllib.request.urlretrieve(*sys.argv[1:])"
 
 SET PATH=%CD%;%CD%\win_flex_bison;%PATH%
 
-pip3 install --upgrade --user meson==0.50.1 || goto :error
-meson _build || goto :error
-ninja -C _build || goto :error
+pip3 install --upgrade --user meson==0.55.3 || goto :error
 
+meson setup _build || goto :error
+meson compile -C _build || goto :error
 meson test -C _build --suite=gobject-introspection || goto :error
 
 goto :EOF
