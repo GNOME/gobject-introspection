@@ -2,7 +2,7 @@ project('gobject-introspection', 'c',
   version: '1.69.0',
   meson_version: '>= 0.55.3',
   default_options: [
-    'warning_level=1',
+    'warning_level=2',
     'buildtype=debugoptimized',
   ],
 )
@@ -28,12 +28,10 @@ cc = meson.get_compiler('c')
 project_c_args = []
 if cc.get_id() != 'msvc'
     project_c_args += [
-      '-Wall',
       '-Warray-bounds',
       '-Wcast-align',
       '-Wdeclaration-after-statement',
       '-Wduplicated-branches',
-      '-Wextra',
       '-Wformat=2',
       '-Wformat-nonliteral',
       '-Wformat-security',
