@@ -1,4 +1,4 @@
-FROM fedora:29
+FROM fedora:34
 
 RUN dnf -y install \
     autoconf \
