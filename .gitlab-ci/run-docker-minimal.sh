@@ -16,7 +16,7 @@ fi
 set -e
 
 REGISTRY="registry.gitlab.gnome.org/gnome/gobject-introspection"
-TAG="${REGISTRY}:min-v1"
+TAG="${REGISTRY}:min-v2"
 
 ${CMD} build \
         ${format} \
