@@ -2,3 +2,4 @@
 directory=proxy-libintl
 url=https://github.com/centricular/proxy-libintl.git
 revision=master
+depth=1
