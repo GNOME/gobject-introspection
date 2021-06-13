@@ -40,6 +40,7 @@ class IntrospectablePass(object):
         self._namespace.walk(self._introspectable_property_analysis)
         self._namespace.walk(self._introspectable_pass3)
         self._namespace.walk(self._remove_non_reachable_backcompat_copies)
+        self._namespace.walk(self._introspectable_symbol_collisions)
 
     def _parameter_warning(self, parent, param, text, position=None):
         # Suppress VFunctions and Callbacks warnings for now
@@ -259,4 +260,44 @@ class IntrospectablePass(object):
             # remove functions that are not introspectable
             if not obj.introspectable:
                 obj.internal_skipped = True
+        return True
+
+    def _property_warning(self, parent, prop, text, position=None):
+        context = "property %s:%s: " % (parent.name, prop.name, )
+        message.warn_node(parent, context + text, positions=position)
+
+    def _property_signal_collision(self, obj, prop):
+        for s in obj.signals:
+            if s.skip or not s.introspectable:
+                continue
+            if s.name.replace('-', '_') == prop.name.replace('-', '_'):
+                self._property_warning(obj, prop, "Properties cannot have the same name as signals")
+        return False
+
+    def _property_method_collision(self, obj, prop):
+        for m in obj.methods:
+            if m.skip or not m.introspectable:
+                continue
+            if m.name == prop.name.replace('-', '_'):
+                self._property_warning(obj, prop, "Properties cannot have the same name as methods")
+        return False
+
+    def _property_vfunc_collision(self, obj, prop):
+        for vfunc in obj.virtual_methods:
+            if vfunc.skip or not vfunc.introspectable:
+                continue
+            if vfunc.name == prop.name.replace('-', '_'):
+                self._property_warning(obj, prop, "Properties cannot have the same name as virtual methods")
+        return False
+
+    def _introspectable_symbol_collisions(self, obj, stack):
+        if obj.skip:
+            return False
+        if isinstance(obj, (ast.Class, ast.Interface)):
+            for prop in obj.properties:
+                if prop.skip or not prop.introspectable:
+                    continue
+                self._property_signal_collision(obj, prop)
+                self._property_method_collision(obj, prop)
+                self._property_vfunc_collision(obj, prop)
         return True
