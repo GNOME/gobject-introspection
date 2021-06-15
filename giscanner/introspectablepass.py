@@ -257,6 +257,8 @@ class IntrospectablePass(object):
             if m.skip or not m.introspectable:
                 continue
             if m.name == prop.name.replace('-', '_'):
+                if prop.attributes and prop.attributes['org.gtk.Property.get'] == m.symbol:
+                    continue
                 self._property_warning(obj, prop, "Properties cannot have the same name as methods")
         return False
 
