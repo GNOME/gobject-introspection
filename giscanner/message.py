@@ -102,6 +102,7 @@ class MessageLogger(object):
         self._output = output
         self._namespace = namespace
         self._enable_warnings = False
+        self._enable_strict = False
         self._warning_count = 0
 
     @classmethod
@@ -112,6 +113,17 @@ class MessageLogger(object):
 
     def enable_warnings(self, value):
         self._enable_warnings = bool(value)
+
+    @property
+    def warnings_enabled(self):
+        return self._enable_warnings
+
+    def enable_strict(self, value):
+        self._enable_strict = bool(value)
+
+    @property
+    def strict_enabled(self):
+        return self._enable_strict
 
     def get_warning_count(self):
         return self._warning_count
@@ -216,6 +228,12 @@ def warn_node(node, text, context=None, positions=None):
 
 def error_node(node, text, context=None, positions=None):
     log_node(ERROR, node, text, context=context, positions=positions)
+
+
+def strict_node(node, text, context=None, positions=None):
+    ml = MessageLogger.get()
+    if ml.strict_enabled:
+        ml.log(WARNING, node, text, context=context, positions=positions)
 
 
 def warn_symbol(symbol, text):

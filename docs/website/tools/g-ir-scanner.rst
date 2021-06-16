@@ -42,6 +42,10 @@ OPTIONS
 --warn-error
     Make warnings be fatal errors.
 
+--strict
+    Display warnings for introspectable API that may present issues when
+    consumed by known language bindings.
+
 --format=FORMAT
     This parameters decides which the resulting format will be used. The
     default value is gir.

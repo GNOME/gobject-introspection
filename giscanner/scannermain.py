@@ -205,6 +205,9 @@ match the namespace prefix.""")
     parser.add_option('', "--warn-error",
                       action="store_true", dest="warn_fatal",
                       help="Turn warnings into fatal errors")
+    parser.add_option('', "--strict",
+                      action="store_true", dest="warn_strict", default=False,
+                      help="If true, enable strict warnings for introspection")
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
                       help="be verbose")
@@ -576,6 +579,8 @@ def scanner_main(args):
     logger = message.MessageLogger.get(namespace=namespace)
     if options.warn_all:
         logger.enable_warnings(True)
+    if options.warn_strict:
+        logger.enable_strict(True)
 
     transformer = create_transformer(namespace, options)
 
@@ -610,11 +615,12 @@ def scanner_main(args):
     final = IntrospectablePass(transformer, blocks)
     final.validate()
 
+    show_suppression = options.warn_all is False and options.warn_strict is False and options.quiet is False
     warning_count = logger.get_warning_count()
     if options.warn_fatal and warning_count > 0:
         message.fatal("warnings configured as fatal")
         return 1
-    elif warning_count > 0 and options.warn_all is False and options.quiet is False:
+    elif warning_count > 0 and show_suppression:
         print("g-ir-scanner: %s: warning: %d warnings suppressed "
               "(use --warn-all to see them)" %
               (transformer.namespace.name, warning_count, ))
