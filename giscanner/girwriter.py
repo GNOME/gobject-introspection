@@ -224,6 +224,10 @@ class GIRWriter(XMLWriter):
             attrs.append(('shadows', func.shadows))
         if func.moved_to is not None:
             attrs.append(('moved-to', func.moved_to))
+        if func.set_property is not None:
+            attrs.append(('glib:set-property', func.set_property))
+        if func.get_property is not None:
+            attrs.append(('glib:get-property', func.get_property))
         self._write_callable(func, tag_name, attrs)
 
     def _write_function_macro(self, macro):

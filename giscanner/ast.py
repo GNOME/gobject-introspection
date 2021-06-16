@@ -752,6 +752,8 @@ class Function(Callable):
         self.shadows = None             # C symbol string
         self.moved_to = None            # namespaced function name string
         self.internal_skipped = False   # if True, this func will not be written to GIR
+        self.set_property = None        # Property name
+        self.get_property = None        # Property name
 
     def clone(self):
         clone = copy.copy(self)

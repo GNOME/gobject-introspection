@@ -382,6 +382,8 @@ class GIRParser(object):
         else:
             assert False
 
+        func.set_property = node.attrib.get(_glibns('set-property'), None)
+        func.get_property = node.attrib.get(_glibns('get-property'), None)
         func.shadows = node.attrib.get('shadows', None)
         func.shadowed_by = node.attrib.get('shadowed-by', None)
         func.moved_to = node.attrib.get('moved-to', None)

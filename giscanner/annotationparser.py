@@ -196,6 +196,7 @@ ANN_CONSTRUCTOR = 'constructor'
 ANN_DESTROY = 'destroy'
 ANN_ELEMENT_TYPE = 'element-type'
 ANN_FOREIGN = 'foreign'
+ANN_GET_PROPERTY = 'get-property'
 ANN_GET_VALUE_FUNC = 'get-value-func'
 ANN_IN = 'in'
 ANN_INOUT = 'inout'
@@ -207,6 +208,7 @@ ANN_OUT = 'out'
 ANN_REF_FUNC = 'ref-func'
 ANN_RENAME_TO = 'rename-to'
 ANN_SCOPE = 'scope'
+ANN_SET_PROPERTY = 'set-property'
 ANN_SET_VALUE_FUNC = 'set-value-func'
 ANN_SKIP = 'skip'
 ANN_TRANSFER = 'transfer'
@@ -226,6 +228,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_DESTROY,
            ANN_ELEMENT_TYPE,
            ANN_FOREIGN,
+           ANN_GET_PROPERTY,
            ANN_GET_VALUE_FUNC,
            ANN_IN,
            ANN_INOUT,
@@ -234,6 +237,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_REF_FUNC,
            ANN_RENAME_TO,
            ANN_SCOPE,
+           ANN_SET_PROPERTY,
            ANN_SET_VALUE_FUNC,
            ANN_SKIP,
            ANN_TRANSFER,
@@ -812,6 +816,18 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
+    def _do_validate_get_property(self, position, ann_name, options):
+        '''
+        Validate the ``(get-property)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
+
     def _do_validate_get_value_func(self, position, ann_name, options):
         '''
         Validate the ``(value-func)`` annotation.
@@ -946,6 +962,18 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=1,
                                   choices=SCOPE_OPTIONS)
+
+    def _do_validate_set_property(self, position, ann_name, options):
+        '''
+        Validate the ``(set-property)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
     def _do_validate_set_value_func(self, position, ann_name, options):
         '''
@@ -1092,9 +1120,10 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
                  'name', 'params', 'description', 'tags')
 
     #: Valid annotation names for the GTK-Doc comment block identifier part.
-    valid_annotations = (ANN_ATTRIBUTES, ANN_CONSTRUCTOR, ANN_FOREIGN, ANN_GET_VALUE_FUNC,
-                         ANN_METHOD, ANN_REF_FUNC, ANN_RENAME_TO, ANN_SET_VALUE_FUNC,
-                         ANN_SKIP, ANN_TRANSFER, ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE, ANN_VFUNC)
+    valid_annotations = (ANN_ATTRIBUTES, ANN_CONSTRUCTOR, ANN_FOREIGN, ANN_GET_PROPERTY,
+                         ANN_GET_VALUE_FUNC, ANN_METHOD, ANN_REF_FUNC, ANN_RENAME_TO,
+                         ANN_SET_PROPERTY, ANN_SET_VALUE_FUNC, ANN_SKIP, ANN_TRANSFER,
+                         ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE, ANN_VFUNC)
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)
