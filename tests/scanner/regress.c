@@ -2846,6 +2846,34 @@ regress_test_obj_set_bare (RegressTestObj *obj, GObject *bare)
     g_object_ref (obj->bare);
 }
 
+/**
+ * regress_test_obj_set_string: (set-property string)
+ * @obj:
+ * @str:
+ */
+void
+regress_test_obj_set_string (RegressTestObj *obj, const char *str)
+{
+  if (g_strcmp0 (str, obj->string) == 0)
+    return;
+
+  g_free (obj->string);
+  obj->string = g_strdup (str);
+  g_object_notify (G_OBJECT (obj), "string");
+}
+
+/**
+ * regress_test_obj_get_string: (get-property string)
+ * @obj:
+ *
+ * Returns: (transfer none):
+ */
+const char *
+regress_test_obj_get_string (RegressTestObj *obj)
+{
+  return obj->string;
+}
+
 void
 regress_test_obj_emit_sig_with_obj (RegressTestObj *obj)
 {

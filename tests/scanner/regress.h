@@ -828,6 +828,12 @@ _GI_TEST_EXTERN
 void       regress_test_obj_set_bare (RegressTestObj *obj, GObject *bare);
 
 _GI_TEST_EXTERN
+void       regress_test_obj_set_string (RegressTestObj *obj, const char *str);
+
+_GI_TEST_EXTERN
+const char *regress_test_obj_get_string (RegressTestObj *obj);
+
+_GI_TEST_EXTERN
 void       regress_test_obj_emit_sig_with_obj (RegressTestObj *obj);
 
 _GI_TEST_EXTERN
