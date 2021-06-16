@@ -593,6 +593,11 @@ grammar {
     element method {
       Callable.attrs,
 
+      ## The GObject property that is set by this method
+      attribute glib:set-property { xsd:string }?,
+      ## The GObject property that is retrieved by this method
+      attribute glib:get-property { xsd:string }?,
+
       (Info.elements
        & Callable.params?
        & Callable.return?)

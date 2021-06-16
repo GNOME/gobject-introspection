@@ -97,6 +97,14 @@ Support for GObject objects
     - This function is the invoker for a virtual method.
     - :commit:`v0.6.3 <fdbe3cc3>`
       :bzbug:`557383`
+  * - ``(set-property NAME)``
+    - identifier
+    - This function is a setter method for the given GObject property.
+    - :issue:`13`
+  * - ``(get-property NAME)``
+    - identifier
+    - This function is a getter method for the given GObject property.
+    - :issue:`13`
 
 
 Support for GObject closures
