@@ -264,7 +264,7 @@ class IntrospectablePass(object):
 
     def _property_warning(self, parent, prop, text, position=None):
         context = "property %s:%s: " % (parent.name, prop.name, )
-        message.warn_node(parent, context + text, positions=position)
+        message.strict_node(parent, context + text, positions=position)
 
     def _property_signal_collision(self, obj, prop):
         for s in obj.signals:
