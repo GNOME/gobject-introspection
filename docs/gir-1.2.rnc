@@ -347,6 +347,10 @@ grammar {
       attribute construct { "0" | "1" }?,
       ## Binary attribute, true if the property can only be set upon construction
       attribute construct-only { "0" | "1" }?,
+      ## The setter function for this property
+      attribute setter { xsd:string }?,
+      ## The getter function for this property
+      attribute getter { xsd:string }?,
       # Define the transfer of ownership of the property element
       TransferOwnership?,
 

@@ -105,6 +105,14 @@ Support for GObject objects
     - identifier
     - This function is a getter method for the given GObject property.
     - :issue:`13`
+  * - ``(setter SYMBOL)``
+    - identifier
+    - This GObject property is accessed by the given setter function
+    - :issue:`13`
+  * - ``(getter SYMBOL)``
+    - identifier
+    - This GObject property is accessed by the given getter function
+    - :issue:`13`
 
 
 Support for GObject closures
