@@ -198,6 +198,7 @@ ANN_ELEMENT_TYPE = 'element-type'
 ANN_FOREIGN = 'foreign'
 ANN_GET_PROPERTY = 'get-property'
 ANN_GET_VALUE_FUNC = 'get-value-func'
+ANN_GETTER = 'getter'
 ANN_IN = 'in'
 ANN_INOUT = 'inout'
 ANN_METHOD = 'method'
@@ -210,6 +211,7 @@ ANN_RENAME_TO = 'rename-to'
 ANN_SCOPE = 'scope'
 ANN_SET_PROPERTY = 'set-property'
 ANN_SET_VALUE_FUNC = 'set-value-func'
+ANN_SETTER = 'setter'
 ANN_SKIP = 'skip'
 ANN_TRANSFER = 'transfer'
 ANN_TYPE = 'type'
@@ -230,6 +232,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_FOREIGN,
            ANN_GET_PROPERTY,
            ANN_GET_VALUE_FUNC,
+           ANN_GETTER,
            ANN_IN,
            ANN_INOUT,
            ANN_METHOD,
@@ -239,6 +242,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_SCOPE,
            ANN_SET_PROPERTY,
            ANN_SET_VALUE_FUNC,
+           ANN_SETTER,
            ANN_SKIP,
            ANN_TRANSFER,
            ANN_TYPE,
@@ -840,6 +844,18 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
+    def _do_validate_getter(self, position, ann_name, options):
+        '''
+        Validate the ``(getter)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
+
     def _do_validate_in(self, position, ann_name, options):
         '''
         Validate the ``(in)`` annotation.
@@ -987,6 +1003,18 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
+    def _do_validate_setter(self, position, ann_name, options):
+        '''
+        Validate the ``(setter)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
+
     def _do_validate_skip(self, position, ann_name, options):
         '''
         Validate the ``(skip)`` annotation.
@@ -1120,10 +1148,26 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
                  'name', 'params', 'description', 'tags')
 
     #: Valid annotation names for the GTK-Doc comment block identifier part.
-    valid_annotations = (ANN_ATTRIBUTES, ANN_CONSTRUCTOR, ANN_FOREIGN, ANN_GET_PROPERTY,
-                         ANN_GET_VALUE_FUNC, ANN_METHOD, ANN_REF_FUNC, ANN_RENAME_TO,
-                         ANN_SET_PROPERTY, ANN_SET_VALUE_FUNC, ANN_SKIP, ANN_TRANSFER,
-                         ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE, ANN_VFUNC)
+    valid_annotations = (
+        ANN_ATTRIBUTES,
+        ANN_CONSTRUCTOR,
+        ANN_FOREIGN,
+        ANN_GET_PROPERTY,
+        ANN_GET_VALUE_FUNC,
+        ANN_GETTER,
+        ANN_METHOD,
+        ANN_REF_FUNC,
+        ANN_RENAME_TO,
+        ANN_SET_PROPERTY,
+        ANN_SET_VALUE_FUNC,
+        ANN_SETTER,
+        ANN_SKIP,
+        ANN_TRANSFER,
+        ANN_TYPE,
+        ANN_UNREF_FUNC,
+        ANN_VALUE,
+        ANN_VFUNC,
+    )
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)

@@ -556,6 +556,10 @@ class GIRWriter(XMLWriter):
             attrs.append(('construct-only', '1'))
         if prop.transfer:
             attrs.append(('transfer-ownership', prop.transfer))
+        if prop.setter:
+            attrs.append(('setter', prop.setter))
+        if prop.getter:
+            attrs.append(('getter', prop.getter))
         with self.tagcontext('property', attrs):
             self._write_generic(prop)
             self._write_type(prop.type)

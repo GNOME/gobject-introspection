@@ -1298,6 +1298,8 @@ class Property(Node):
             self.transfer = PARAM_TRANSFER_NONE
         else:
             self.transfer = transfer
+        self.setter = None
+        self.getter = None
         self.parent = None  # A Class or Interface
 
 

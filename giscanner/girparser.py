@@ -606,8 +606,10 @@ class GIRParser(object):
                             node.attrib.get('construct') == '1',
                             node.attrib.get('construct-only') == '1',
                             node.attrib.get('transfer-ownership'))
-        self._parse_generic_attribs(node, prop)
+        prop.setter = node.attrib.get('setter')
+        prop.getter = node.attrib.get('getter')
         prop.parent = parent
+        self._parse_generic_attribs(node, prop)
         return prop
 
     def _parse_member(self, node):
