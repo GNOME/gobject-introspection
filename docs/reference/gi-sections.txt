@@ -301,6 +301,8 @@ GIPropertyInfo
 g_property_info_get_flags
 g_property_info_get_ownership_transfer
 g_property_info_get_type
+g_property_info_get_getter
+g_property_info_get_setter
 </SECTION>
 
 <SECTION>
