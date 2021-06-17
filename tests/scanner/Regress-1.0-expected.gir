@@ -4791,7 +4791,11 @@ raise an error.</doc>
           <type name="utf8"/>
         </array>
       </property>
-      <property name="string" writable="1" transfer-ownership="none">
+      <property name="string"
+                writable="1"
+                transfer-ownership="none"
+                setter="set_string"
+                getter="get_string">
         <type name="utf8" c:type="gchar*"/>
       </property>
       <property name="write-only"

@@ -2690,7 +2690,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 
 
   /**
-   * TestObj:int:
+   * RegressTestObj:int:
    */
   pspec = g_param_spec_int ("int",
                             "int property",
@@ -2704,7 +2704,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * TestObj:float:
+   * RegressTestObj:float:
    */
   pspec = g_param_spec_float ("float",
                               "float property",
@@ -2718,7 +2718,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * TestObj:double:
+   * RegressTestObj:double:
    */
   pspec = g_param_spec_double ("double",
                                "double property",
@@ -2732,7 +2732,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * TestObj:string:
+   * RegressTestObj:string: (setter set_string) (getter get_string)
    */
   pspec = g_param_spec_string ("string",
                                "string property",
