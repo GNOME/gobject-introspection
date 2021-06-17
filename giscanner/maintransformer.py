@@ -1472,7 +1472,12 @@ method or constructor of some type."""
             else:
                 setter = None
             if prop.readable:
-                getter = 'get_' + normalized_name
+                # Heuristic: read-only properties can have getters that are
+                # just the property name, like: gtk_widget_has_focus()
+                if not prop.writable and prop.type.is_equiv(ast.TYPE_BOOLEAN):
+                    getter = normalized_name
+                else:
+                    getter = 'get_' + normalized_name
             else:
                 getter = None
             for method in node.methods:
