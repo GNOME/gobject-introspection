@@ -4730,7 +4730,10 @@ raise an error.</doc>
           </parameter>
         </parameters>
       </method>
-      <property name="bare" writable="1" transfer-ownership="none">
+      <property name="bare"
+                writable="1"
+                transfer-ownership="none"
+                setter="set_bare">
         <type name="GObject.Object"/>
       </property>
       <property name="boxed" writable="1" transfer-ownership="none">
@@ -5679,7 +5682,11 @@ the introspection client langage.</doc>
           </parameter>
         </parameters>
       </method>
-      <property name="testbool" writable="1" transfer-ownership="none">
+      <property name="testbool"
+                writable="1"
+                transfer-ownership="none"
+                setter="set_testbool"
+                getter="get_testbool">
         <type name="gboolean" c:type="gboolean"/>
       </property>
       <field name="parent_instance">

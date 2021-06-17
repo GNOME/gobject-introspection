@@ -92,6 +92,7 @@ class MainTransformer(object):
                 self._pair_function(node)
             if isinstance(node, (ast.Class, ast.Interface)):
                 self._pair_class_virtuals(node)
+                self._pair_property_accessors(node)
 
         # Some annotations need to be post function pairing
         self._namespace.walk(self._pass_read_annotations2)
@@ -1461,6 +1462,26 @@ method or constructor of some type."""
                 block = self._blocks.get(method.symbol)
                 self._apply_annotations_callable(vfunc, [], block)
                 break
+
+    def _pair_property_accessors(self, node):
+        """Look for accessor methods for class properties"""
+        for prop in node.properties:
+            normalized_name = prop.name.replace('-', '_')
+            if prop.writable and not prop.construct_only:
+                setter = 'set_' + normalized_name
+            else:
+                setter = None
+            if prop.readable:
+                getter = 'get_' + normalized_name
+            else:
+                getter = None
+            for method in node.methods:
+                if setter is not None and method.name == setter:
+                    prop.setter = method.name
+                    continue
+                if getter is not None and method.name == getter:
+                    prop.getter = method.name
+                    continue
 
     def _pass3(self, node, chain):
         """Pass 3 is after we've loaded GType data and performed type
