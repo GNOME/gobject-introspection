@@ -99,19 +99,31 @@ Support for GObject objects
       :bzbug:`557383`
   * - ``(set-property NAME)``
     - identifier
-    - This function is a setter method for the given GObject property.
+    - This function is the setter method for the given GObject property.
+      A setter function is defined as being the public function that is
+      called by the ``GObjectClass.set_property`` implementation in a
+      class.
     - :issue:`13`
   * - ``(get-property NAME)``
     - identifier
-    - This function is a getter method for the given GObject property.
+    - This function is the getter method for the given GObject property.
+      A getter function is defined as being the public function that is
+      called by the ``GObjectClass.get_property`` implementation in a
+      class.
     - :issue:`13`
   * - ``(setter SYMBOL)``
     - identifier
-    - This GObject property is accessed by the given setter function
+    - This GObject property is accessed by the given setter function.
+      A setter function is defined as being the public function that is
+      called by the ``GObjectClass.set_property`` implementation in a
+      class.
     - :issue:`13`
   * - ``(getter SYMBOL)``
     - identifier
-    - This GObject property is accessed by the given getter function
+    - This GObject property is accessed by the given getter function.
+      A getter function is defined as being the public function that is
+      called by the ``GObjectClass.get_property`` implementation in a
+      class.
     - :issue:`13`
 
 
