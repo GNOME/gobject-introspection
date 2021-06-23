@@ -39,6 +39,8 @@ RUN dnf -y install \
     pcre-devel \
     python3 \
     python3-devel \
+    python3-mako \
+    python3-markdown \
     python3-pip \
     python3-wheel \
     readline-devel \

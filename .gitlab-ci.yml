@@ -16,7 +16,6 @@ example-meson:
   variables:
     EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true"
   script:
-    - python3 -m pip install --user mako markdown
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
     - meson compile -C _build
     - sudo meson install -C _build
@@ -36,7 +35,6 @@ example-autotools:
   variables:
     EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true"
   script:
-    - python3 -m pip install --user mako markdown
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
     - meson compile -C _build
     - sudo meson install -C _build
@@ -54,7 +52,6 @@ fedora-x86_64-meson:
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
     EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true -Dwerror=true"
   script:
-    - python3 -m pip install --user mako markdown
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
     - meson compile -C _build
     - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
@@ -99,7 +96,6 @@ fedora-x86_64-no-introspection-data:
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
     EXTRA_MESON_FLAGS: "-Dwerror=true"
   script:
-    - python3 -m pip install --user mako markdown
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
     - meson compile -C _build
     - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
@@ -119,7 +115,6 @@ fedora-x86_64-python3.6:
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
     PYENV_VERSION: "3.6.12"
   script:
-    - python3 -m pip install --user mako markdown
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
     - meson compile -C _build
     - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
