@@ -124,9 +124,10 @@ class CCompiler(object):
                compiler_name != 'mingw32':
                 raise SystemExit('Specified Compiler \'%s\' is unsupported.' % compiler_name)
         else:
-            # XXX: Is it common practice to use a non-Unix compiler
-            #      class instance on non-Windows on platforms g-i supports?
-            compiler_name = distutils.ccompiler.get_default_compiler()
+            if compiler_name is None:
+                # XXX: Is it common practice to use a non-Unix compiler
+                #      class instance on non-Windows on platforms g-i supports?
+                compiler_name = distutils.ccompiler.get_default_compiler()
 
         # Now, create the distutils ccompiler instance based on the info we have.
         if compiler_name == 'msvc':
@@ -135,7 +136,6 @@ class CCompiler(object):
             # implementation
             from . import msvccompiler
             self.compiler = msvccompiler.get_msvc_compiler()
-
         else:
             self.compiler = distutils.ccompiler.new_compiler(compiler=compiler_name)
         customize_compiler(self.compiler)

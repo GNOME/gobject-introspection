@@ -217,6 +217,9 @@ match the namespace prefix.""")
     parser.add_option("", "--filelist",
                       action="store", dest="filelist", default=[],
                       help="file containing headers and sources to be scanned")
+    parser.add_option("", "--compiler",
+                      action="store", dest="compiler", default=None,
+                      help="the C compiler to use internally")
 
     group = get_preprocessor_option_group(parser)
     parser.add_option_group(group)
@@ -458,6 +461,7 @@ def create_source_scanner(options, args):
     # Run the preprocessor, tokenize and construct simple
     # objects representing the raw C symbols
     ss = SourceScanner()
+    ss.set_compiler(options.compiler)
     ss.set_cpp_options(options.cpp_includes,
                        options.cpp_defines,
                        options.cpp_undefines,

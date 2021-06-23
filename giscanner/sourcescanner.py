@@ -231,6 +231,7 @@ class SourceScanner(object):
         self._scanner = CSourceScanner()
         self._filenames = []
         self._cpp_options = []
+        self._compiler = None
 
     # Public API
 
@@ -243,6 +244,9 @@ class SourceScanner(object):
                 opt = prefix + arg
                 if opt not in self._cpp_options:
                     self._cpp_options.append(opt)
+
+    def set_compiler(self, compiler):
+        self._compiler = compiler
 
     def parse_files(self, filenames):
         for filename in filenames:
@@ -290,7 +294,7 @@ class SourceScanner(object):
         defines = ['__GI_SCANNER__']
         undefs = []
 
-        cc = CCompiler()
+        cc = CCompiler(compiler_name=self._compiler)
 
         tmp_fd_cpp, tmp_name_cpp = tempfile.mkstemp(prefix='g-ir-cpp-',
                                                     suffix='.c',
