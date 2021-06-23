@@ -379,6 +379,7 @@ class GIRParser(object):
                          detailed=node.attrib.get('detailed', '0') == '1',
                          action=node.attrib.get('action', '0') == '1',
                          no_hooks=node.attrib.get('no-hooks', '0') == '1')
+            func.emitter = node.attrib.get('emitter')
         else:
             assert False
 

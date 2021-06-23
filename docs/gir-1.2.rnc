@@ -374,6 +374,8 @@ grammar {
       attribute no-hooks { "0" | "1" }?,
       ## Binary attribute, true if signals emitted for an object while currently being in emission for this very object will not be emitted recursively, but instead cause the first emission to be restarted (https://docs.gtk.org/gobject/flags.SignalFlags.html)
       attribute no-recurse { "0" | "1" }?,
+      ## The emitter method for the signal
+      attribute emitter { xsd:string }?,
 
       # Other elements a signal can contain
       (Info.elements

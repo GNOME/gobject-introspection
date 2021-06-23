@@ -674,6 +674,8 @@ class GIRWriter(XMLWriter):
             attrs.append(('action', '1'))
         if signal.no_hooks:
             attrs.append(('no-hooks', '1'))
+        if signal.emitter:
+            attrs.append(('emitter', signal.emitter))
 
         self._append_version(signal, attrs)
         self._append_node_generic(signal, attrs)

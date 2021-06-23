@@ -195,6 +195,7 @@ ANN_CLOSURE = 'closure'
 ANN_CONSTRUCTOR = 'constructor'
 ANN_DESTROY = 'destroy'
 ANN_ELEMENT_TYPE = 'element-type'
+ANN_EMITTER = 'emitter'
 ANN_FOREIGN = 'foreign'
 ANN_GET_PROPERTY = 'get-property'
 ANN_GET_VALUE_FUNC = 'get-value-func'
@@ -229,6 +230,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_CONSTRUCTOR,
            ANN_DESTROY,
            ANN_ELEMENT_TYPE,
+           ANN_EMITTER,
            ANN_FOREIGN,
            ANN_GET_PROPERTY,
            ANN_GET_VALUE_FUNC,
@@ -810,6 +812,18 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, min_n_options=1, max_n_options=2)
 
+    def _do_validate_emitter(self, position, ann_name, options):
+        '''
+        Validate the ``(emitter)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
+
     def _do_validate_foreign(self, position, ann_name, options):
         '''
         Validate the ``(foreign)`` annotation.
@@ -1153,6 +1167,7 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
     valid_annotations = (
         ANN_ATTRIBUTES,
         ANN_CONSTRUCTOR,
+        ANN_EMITTER,
         ANN_FOREIGN,
         ANN_GET_PROPERTY,
         ANN_GET_VALUE_FUNC,

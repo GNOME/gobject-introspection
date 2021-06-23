@@ -22,16 +22,49 @@ import re
 from . import ast
 from . import message
 from .annotationparser import (TAG_DEPRECATED, TAG_SINCE, TAG_STABILITY, TAG_RETURNS)
-from .annotationparser import (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CLOSURE,
-                               ANN_CONSTRUCTOR, ANN_DESTROY, ANN_ELEMENT_TYPE, ANN_FOREIGN,
-                               ANN_GET_PROPERTY, ANN_GET_VALUE_FUNC, ANN_GETTER, ANN_IN, ANN_INOUT,
-                               ANN_METHOD, ANN_OUT, ANN_REF_FUNC, ANN_RENAME_TO, ANN_SCOPE,
-                               ANN_SET_PROPERTY, ANN_SET_VALUE_FUNC, ANN_SETTER, ANN_SKIP, ANN_TRANSFER,
-                               ANN_TYPE, ANN_UNREF_FUNC, ANN_VALUE, ANN_VFUNC, ANN_NULLABLE,
-                               ANN_OPTIONAL, ANN_NOT)
-from .annotationparser import (OPT_ARRAY_FIXED_SIZE, OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
-                               OPT_OUT_CALLEE_ALLOCATES, OPT_OUT_CALLER_ALLOCATES,
-                               OPT_TRANSFER_CONTAINER, OPT_TRANSFER_FLOATING, OPT_TRANSFER_NONE)
+from .annotationparser import (
+    ANN_ALLOW_NONE,
+    ANN_ARRAY,
+    ANN_ATTRIBUTES,
+    ANN_CLOSURE,
+    ANN_CONSTRUCTOR,
+    ANN_DESTROY,
+    ANN_ELEMENT_TYPE,
+    ANN_EMITTER,
+    ANN_FOREIGN,
+    ANN_GET_PROPERTY,
+    ANN_GET_VALUE_FUNC,
+    ANN_GETTER,
+    ANN_IN,
+    ANN_INOUT,
+    ANN_METHOD,
+    ANN_OUT,
+    ANN_REF_FUNC,
+    ANN_RENAME_TO,
+    ANN_SCOPE,
+    ANN_SET_PROPERTY,
+    ANN_SET_VALUE_FUNC,
+    ANN_SETTER,
+    ANN_SKIP,
+    ANN_TRANSFER,
+    ANN_TYPE,
+    ANN_UNREF_FUNC,
+    ANN_VALUE,
+    ANN_VFUNC,
+    ANN_NULLABLE,
+    ANN_OPTIONAL,
+    ANN_NOT,
+)
+from .annotationparser import (
+    OPT_ARRAY_FIXED_SIZE,
+    OPT_ARRAY_LENGTH,
+    OPT_ARRAY_ZERO_TERMINATED,
+    OPT_OUT_CALLEE_ALLOCATES,
+    OPT_OUT_CALLER_ALLOCATES,
+    OPT_TRANSFER_CONTAINER,
+    OPT_TRANSFER_FLOATING,
+    OPT_TRANSFER_NONE,
+)
 
 from .utils import to_underscores_noprefix
 
@@ -938,6 +971,11 @@ class MainTransformer(object):
 
         if block:
             self._apply_annotations_annotated(signal, block)
+
+            emitter = block.annotations.get(ANN_EMITTER)
+            if emitter:
+                signal.emitter = emitter[0]
+
             # We're only attempting to name the signal parameters if
             # the number of parameters (@foo) is the same or greater
             # than the number of signal parameters

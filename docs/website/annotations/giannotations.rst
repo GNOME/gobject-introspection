@@ -125,6 +125,10 @@ Support for GObject objects
       called by the ``GObjectClass.get_property`` implementation in a
       class.
     - :issue:`13`
+  * - ``(emitter METHOD)``
+    - identifier (only applies to methods)
+    - This signal is emitted by the given method
+    -
 
 
 Support for GObject closures
