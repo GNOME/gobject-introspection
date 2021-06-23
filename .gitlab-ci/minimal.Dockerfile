@@ -6,13 +6,14 @@ RUN dnf -y install \
     gcc \
     gcc-c++ \
     git \
+    libmount-devel \
     ninja-build \
+    pcre-devel \
     pkgconf \
     python3 \
     python3-devel \
     python3-pip \
     python3-wheel \
-    libmount-devel \
  && dnf clean all
 
 RUN pip3 install meson==0.55.3
