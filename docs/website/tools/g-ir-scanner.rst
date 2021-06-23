@@ -137,6 +137,12 @@ OPTIONS
     option can be specified multiple times if the gir provides more packages.
     If not specified, the packages specified with ``--pkg=`` will be used.
 
+--compiler=COMPILER
+    The C compiler to be used internally by g-ir-scanner when introspecting
+    the run time type information, like properties, signals, ancestors, and
+    implemented interfaces. It has the same semantics as the ``CC`` environment
+    variable.
+
 --verbose
     Be verbose, include some debugging information.
 

@@ -151,6 +151,12 @@ List of pkg\-config packages that are provided by the generated gir. This
 option can be specified multiple times if the gir provides more packages.
 If not specified, the packages specified with \fB\-\-pkg=\fP will be used.
 .TP
+.BI \-\-compiler\fB= COMPILER
+The C compiler to be used internally by g\-ir\-scanner when introspecting
+the run time type information, like properties, signals, ancestors, and
+implemented interfaces. It has the same semantics as the \fBCC\fP environment
+variable.
+.TP
 .B \-\-verbose
 Be verbose, include some debugging information.
 .UNINDENT
