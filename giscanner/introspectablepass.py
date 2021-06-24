@@ -209,6 +209,41 @@ class IntrospectablePass(object):
             if not self._type_is_introspectable(obj.retval.type):
                 obj.introspectable = False
                 return True
+        if isinstance(obj, ast.Signal):
+            if obj.emitter is None:
+                return False
+            parent = stack[0]
+            for method in parent.methods:
+                if method.name != obj.emitter:
+                    continue
+                if not obj.retval.type.is_equiv(method.retval.type):
+                    self._parameter_warning(
+                        parent,
+                        obj,
+                        "Emitter method %s for signal %s::%s does not have the "
+                        "same return value type" % (method.symbol, parent.name, obj.name))
+                    obj.emitter = None
+                    return False
+                n_emitter_params = len(method.parameters)
+                n_signal_params = len(obj.parameters)
+                if n_emitter_params != n_signal_params:
+                    self._parameter_warning(
+                        parent,
+                        obj,
+                        "Emitter method %s for signal %s::%s does not have the "
+                        "same number of arguments (expected: %d)" % (method.symbol, parent.name, obj.name, n_signal_params))
+                    obj.emitter = None
+                    return False
+                for idx, signal_param in enumerate(obj.parameters):
+                    method_param = method.parameters[idx + 1]
+                    if signal_param.type.is_equiv(method_param.type):
+                        self._parameter_warning(
+                            parent,
+                            obj,
+                            "Emitter method %s for signal %s::%s does not have the "
+                            "same type of arguments" % (method.symbol, parent.name, obj.name))
+                        obj.emitter = None
+                        return False
         return True
 
     def _introspectable_property_analysis(self, obj, stack):
