@@ -248,6 +248,7 @@ GI_IS_OBJECT_INFO
 GIObjectInfo
 g_object_info_get_abstract
 g_object_info_get_fundamental
+g_object_info_get_final
 g_object_info_get_parent
 g_object_info_get_type_name
 g_object_info_get_type_init
