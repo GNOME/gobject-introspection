@@ -1466,25 +1466,41 @@ method or constructor of some type."""
     def _pair_property_accessors(self, node):
         """Look for accessor methods for class properties"""
         for prop in node.properties:
-            normalized_name = prop.name.replace('-', '_')
-            if prop.writable and not prop.construct_only:
-                setter = 'set_' + normalized_name
-            else:
-                setter = None
-            if prop.readable:
-                # Heuristic: read-only properties can have getters that are
-                # just the property name, like: gtk_widget_has_focus()
-                if not prop.writable and prop.type.is_equiv(ast.TYPE_BOOLEAN):
-                    getter = normalized_name
-                else:
-                    getter = 'get_' + normalized_name
-            else:
-                getter = None
+            setter = prop.setter
+            if setter is None:
+                normalized_name = prop.name.replace('-', '_')
+                if prop.writable and not prop.construct_only:
+                    setter = 'set_' + normalized_name
+            getter = prop.getter
+            if getter is None:
+                if prop.readable:
+                    # Heuristic: read-only properties can have getters that are
+                    # just the property name, like: gtk_widget_has_focus()
+                    if not prop.writable and prop.type.is_equiv(ast.TYPE_BOOLEAN):
+                        getter = normalized_name
+                    else:
+                        getter = 'get_' + normalized_name
             for method in node.methods:
                 if setter is not None and method.name == setter:
+                    if method.set_property is None:
+                        method.set_property = prop.name
+                    elif method.set_property != prop.name:
+                        message.warn_node(method,
+                                          "Setter method '%s' for property '%s' has a "
+                                          "mismatched '(set-property %s)' annotation" %
+                                          (method.symbol, prop.name, method.set_property))
+                        method.set_property = prop.name
                     prop.setter = method.name
                     continue
                 if getter is not None and method.name == getter:
+                    if method.get_property is None:
+                        method.get_property = prop.name
+                    elif method.get_property != prop.name:
+                        message.warn_node(method,
+                                          "Getter method '%s' for property '%s' has a "
+                                          "mismatched '(get-property %s)' annotation" %
+                                          (method.symbol, prop.name, method.get_property))
+                        method.get_property = prop.name
                     prop.getter = method.name
                     continue
 

@@ -4286,7 +4286,9 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="set_bare" c:identifier="regress_test_obj_set_bare">
+      <method name="set_bare"
+              c:identifier="regress_test_obj_set_bare"
+              glib:set-property="bare">
         <source-position filename="regress.h" line="828"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -5656,7 +5658,8 @@ the introspection client langage.</doc>
         </parameters>
       </function>
       <method name="get_testbool"
-              c:identifier="regress_test_wi_802_1x_get_testbool">
+              c:identifier="regress_test_wi_802_1x_get_testbool"
+              glib:get-property="testbool">
         <source-position filename="regress.h" line="1256"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
@@ -5668,7 +5671,8 @@ the introspection client langage.</doc>
         </parameters>
       </method>
       <method name="set_testbool"
-              c:identifier="regress_test_wi_802_1x_set_testbool">
+              c:identifier="regress_test_wi_802_1x_set_testbool"
+              glib:set-property="testbool">
         <source-position filename="regress.h" line="1259"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
