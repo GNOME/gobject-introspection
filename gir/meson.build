@@ -58,8 +58,12 @@ if dep_type == 'internal'
   # paths, library paths, and more that we now have to handle manually when
   # building with subprojects.
   subprojdir = 'subprojects'
-  scanner_command += ['--extra-library=gio-2.0', '--extra-library=gmodule-2.0',
-                      '--extra-library=glib-2.0', '--extra-library=gobject-2.0']
+  scanner_command += [
+    '--extra-library=glib-2.0',
+    '--extra-library=gmodule-2.0',
+    '--extra-library=gobject-2.0',
+    '--extra-library=gio-2.0',
+  ]
 endif
 
 if get_option('gi_cross_binary_wrapper') != ''
@@ -118,36 +122,65 @@ if dep_type == 'pkgconfig'
     glib_files += ret.stdout().strip().split('\n')
   endif
   glib_includes = ['-I' + glib_incdir, '-I' + glib_libincdir]
+  glib_gir_dep = []
 elif dep_type == 'internal'
-  glib_command += ['--pkg-export=glib-2.0']
-  # XXX: Assumes that the builddir layout is 'mirror'
-  glib_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'glib')
-  # XXX: Assumes the location of the glib subproject dir
-  # We should add API to meson to get a specific file from a specific subproject
-  glibproj_incdir = join_paths(meson.source_root(), subprojdir, 'glib')
-  glib_incdir = join_paths(glibproj_incdir, 'glib')
-  glib_libincdir = glib_libdir
-  glib_files += join_paths(glibproj_incdir, 'gobject', 'glib-types.h')
-  glib_files += join_paths(glib_libincdir, 'glibconfig.h')
-  if giounix_dep.found()
-    glib_files += join_paths(glib_incdir, 'glib-unix.h')
-  endif
+  # XXX: This is a pile of hacks to allow gobject-introspection to parse the
+  #      GLib source files when GLib is used as a subproject
+  #      Assumes that the builddir layout is 'mirror'
+  #      Assumes the location of the glib subproject dir
+  #      We should add API to meson to get a specific file from a specific
+  #      subproject
   # We know exactly what headers will be installed, so just fetch that
   glib_subproject = subproject('glib')
+
+  glibproj_sourcedir = join_paths(meson.source_root(), subprojdir, 'glib')
+  glibproj_builddir = join_paths(meson.build_root(), subprojdir, 'glib')
+
+  glib_files += join_paths(glibproj_sourcedir, 'gobject', 'glib-types.h')
+
+  # Generated files, relative to the build directory
+  glib_files += [
+    join_paths(glibproj_builddir, 'glib', 'glibconfig.h'),
+    glib_subproject.get_variable('glib_enumtypes_h'),
+  ]
+
+  if giounix_dep.found()
+    glib_files += [
+      join_paths(glibproj_sourcedir, 'glib', 'glib-unix.h'),
+    ]
+  endif
+
   glib_headers = glib_subproject.get_variable('glib_sub_headers')
   glib_files += glib_subproject.get_variable('glib_sources')
+
   # XXX: Assumes that the builddir layout is 'mirror'
-  gobject_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'gobject')
-  gmodule_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'gmodule')
-  gio_libdir = join_paths(meson.build_root(), subprojdir, 'glib', 'gio')
-  glib_libpaths = ['-L' + glib_libdir, '-L' + gobject_libdir,
-                   '-L' + gmodule_libdir, '-L' + gio_libdir]
+  glib_libdir = join_paths(glibproj_builddir, 'glib')
+  gobject_libdir = join_paths(glibproj_builddir, 'gobject')
+  gmodule_libdir = join_paths(glibproj_builddir, 'gmodule')
+  gio_libdir = join_paths(glibproj_builddir, 'gio')
+
+  glib_libpaths = [
+    '-L' + glib_libdir,
+    '-L' + gobject_libdir,
+    '-L' + gmodule_libdir,
+    '-L' + gio_libdir,
+  ]
   # Includes that will be used to compile the scanner executable
-  glib_buildinc = join_paths(meson.build_root(), subprojdir, 'glib')
-  gmodule_incdir = join_paths(glibproj_incdir, 'gmodule')
-  gio_incdir = join_paths(glibproj_incdir, 'gio')
-  glib_includes = ['-I' + glibproj_incdir, '-I' + glib_incdir, '-I' + glib_libincdir,
-                   '-I' + glib_buildinc, '-I' + gmodule_incdir, '-I' + gio_incdir]
+  glib_incdir = join_paths(glibproj_sourcedir, 'glib')
+  gobject_incdir = join_paths(glibproj_sourcedir, 'gobject')
+  gmodule_incdir = join_paths(glibproj_sourcedir, 'gmodule')
+  gio_incdir = join_paths(glibproj_sourcedir, 'gio')
+
+  glib_includes = [
+    '-I' + glibproj_sourcedir,
+    '-I' + glibproj_builddir,
+    '-I' + glib_libdir,
+    '-I' + glib_incdir,
+    '-I' + gobject_incdir,
+    '-I' + gmodule_incdir,
+    '-I' + gio_incdir,
+  ]
+
   # XXX: We need include paths to all glib dependencies too. We assume that the
   # dependencies are only libffi and proxy-libintl, and that they are used as
   # subprojects. In the worst case we add paths to non-existent directories.
@@ -158,10 +191,15 @@ elif dep_type == 'internal'
 
   ffi_libdir = join_paths(meson.build_root(), subprojdir, 'libffi', 'src')
   intl_libdir = join_paths(meson.build_root(), subprojdir, 'proxy-libintl')
-  glib_libpaths = ['-L' + ffi_libdir, '-L' + intl_libdir] + glib_libpaths
+  glib_libpaths = [
+    '-L' + ffi_libdir,
+    '-L' + intl_libdir,
+  ] + glib_libpaths
 
+  glib_command += ['--pkg-export=glib-2.0']
   glib_command += glib_libpaths
 
+  glib_gir_dep = glib_subproject.get_variable('libglib')
 else
   error('Unknown glib dependency type: ' + dep_type)
 endif
@@ -190,7 +228,7 @@ endif
 glib_gir = custom_target('gir-glib',
   input: glib_files,
   output: 'GLib-2.0.gir',
-  depends: gir_giscanner_pymod,
+  depends: [gir_giscanner_pymod, glib_gir_dep],
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
@@ -231,11 +269,15 @@ if dep_type == 'pkgconfig'
     endif
     gobject_files += ret.stdout().strip().split('\n')
   endif
+  gobject_gir_dep = []
 else
   gobject_command += ['--pkg-export=gobject-2.0']
   gobject_headers = glib_subproject.get_variable('gobject_install_headers')
-  gobject_files += glib_subproject.get_variable('gobject_sources')
+  gobject_files += [
+    glib_subproject.get_variable('gobject_sources'),
+  ]
   gobject_command += glib_libpaths
+  gobject_gir_dep = glib_subproject.get_variable('libgobject')
 endif
 
 foreach h : gobject_headers
@@ -253,7 +295,7 @@ gobject_files += files('gobject-2.0.c')
 gobject_gir = custom_target('gir-gobject',
   input: gobject_files,
   output: 'GObject-2.0.gir',
-  depends: [glib_gir, gir_giscanner_pymod],
+  depends: [glib_gir, gir_giscanner_pymod, gobject_gir_dep],
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
@@ -285,11 +327,16 @@ if dep_type == 'pkgconfig'
   if glib_srcdir != ''
     gmodule_files += join_paths(glib_srcdir, 'gmodule', 'gmodule.c')
   endif
+  gmodule_gir_dep = []
 else
   gmodule_command += ['--pkg-export=gmodule-2.0']
   gmodule_command += glib_libpaths
-  gmodule_files += [join_paths(glibproj_incdir, 'gmodule', 'gmodule.h'),
-                    join_paths(glibproj_incdir, 'gmodule', 'gmodule.c')]
+  gmodule_files += [
+    join_paths(glibproj_sourcedir, 'gmodule', 'gmodule.h'),
+    join_paths(glibproj_sourcedir, 'gmodule', 'gmodule.c'),
+    glib_subproject.get_variable('gmoduleconf_h'),
+  ]
+  gmodule_gir_dep = glib_subproject.get_variable('libgmodule')
 endif
 
 # NOTE: Always add this last so that we prefer the annotations in the sources
@@ -300,7 +347,7 @@ gmodule_files += files('gmodule-2.0.c')
 gir_files += custom_target('gir-gmodule',
   input: gmodule_files,
   output: 'GModule-2.0.gir',
-  depends: [glib_gir, gir_giscanner_pymod],
+  depends: [glib_gir, gir_giscanner_pymod, gmodule_gir_dep],
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
@@ -341,11 +388,17 @@ if dep_type == 'pkgconfig'
     endif
     gio_files += ret.stdout().strip().split('\n')
   endif
+  gio_gir_dep = []
 else
   gio_command += ['--pkg-export=gio-2.0']
   gio_headers = glib_subproject.get_variable('gio_headers')
-  gio_files += glib_subproject.get_variable('gio_sources')
+  gio_files += [
+    glib_subproject.get_variable('gio_sources'),
+    glib_subproject.get_variable('gioenumtypes_h'),
+    glib_subproject.get_variable('gnetworking_h'),
+  ]
   gio_command += glib_libpaths
+  gio_gir_dep = glib_subproject.get_variable('libgio')
 endif
 
 foreach h : gio_headers
@@ -389,7 +442,7 @@ gio_files += files('gio-2.0.c')
 gio_gir = custom_target('gir-gio',
   input: gio_files,
   output: 'Gio-2.0.gir',
-  depends: [gobject_gir, gir_giscanner_pymod],
+  depends: [gobject_gir, gir_giscanner_pymod, gio_gir_dep],
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
