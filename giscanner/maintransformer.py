@@ -1466,20 +1466,25 @@ method or constructor of some type."""
     def _pair_property_accessors(self, node):
         """Look for accessor methods for class properties"""
         for prop in node.properties:
-            setter = prop.setter
-            if setter is None:
+            if prop.setter is None:
                 normalized_name = prop.name.replace('-', '_')
                 if prop.writable and not prop.construct_only:
                     setter = 'set_' + normalized_name
-            getter = prop.getter
-            if getter is None:
+                else:
+                    setter = None
+            else:
+                setter = prop.setter
+            if prop.getter is None:
                 if prop.readable:
+                    getter = ['get_' + normalized_name]
                     # Heuristic: read-only properties can have getters that are
                     # just the property name, like: gtk_widget_has_focus()
                     if not prop.writable and prop.type.is_equiv(ast.TYPE_BOOLEAN):
-                        getter = normalized_name
-                    else:
-                        getter = 'get_' + normalized_name
+                        getter.append(normalized_name)
+                else:
+                    getter = []
+            else:
+                getter = [prop.getter]
             for method in node.methods:
                 if setter is not None and method.name == setter:
                     if method.set_property is None:
@@ -1492,7 +1497,7 @@ method or constructor of some type."""
                         method.set_property = prop.name
                     prop.setter = method.name
                     continue
-                if getter is not None and method.name == getter:
+                if getter is not [] and method.name in getter:
                     if method.get_property is None:
                         method.get_property = prop.name
                     elif method.get_property != prop.name:
