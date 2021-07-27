@@ -37,6 +37,7 @@ class IntrospectablePass(object):
         self._namespace.walk(self._analyze_node)
         self._namespace.walk(self._introspectable_callable_analysis)
         self._namespace.walk(self._introspectable_callable_analysis)
+        self._namespace.walk(self._introspectable_property_analysis)
         self._namespace.walk(self._introspectable_pass3)
         self._namespace.walk(self._remove_non_reachable_backcompat_copies)
 
@@ -209,6 +210,30 @@ class IntrospectablePass(object):
                 return True
         return True
 
+    def _introspectable_property_analysis(self, obj, stack):
+        if obj.skip:
+            return False
+        if isinstance(obj, (ast.Class, ast.Interface)):
+            for prop in obj.properties:
+                if not self._type_is_introspectable(prop.type):
+                    prop.introspectable = False
+                    prop.setter = None
+                    prop.getter = None
+            for method in obj.methods:
+                set_property = method.set_property
+                if set_property is not None:
+                    for prop in obj.properties:
+                        if prop.name == set_property and not prop.introspectable:
+                            method.set_property = None
+                            break
+                get_property = method.get_property
+                if get_property is not None:
+                    for prop in obj.properties:
+                        if prop.name == get_property and not prop.introspectable:
+                            method.get_property = None
+                            break
+        return True
+
     def _introspectable_pass3(self, obj, stack):
         if obj.skip:
             return False
@@ -223,9 +248,6 @@ class IntrospectablePass(object):
                         field.introspectable = False
         # Propagate introspectability for properties
         if isinstance(obj, (ast.Class, ast.Interface)):
-            for prop in obj.properties:
-                if not self._type_is_introspectable(prop.type):
-                    prop.introspectable = False
             for sig in obj.signals:
                 self._introspectable_callable_analysis(sig, [obj])
         return True

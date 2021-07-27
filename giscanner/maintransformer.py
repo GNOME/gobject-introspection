@@ -1466,6 +1466,8 @@ method or constructor of some type."""
     def _pair_property_accessors(self, node):
         """Look for accessor methods for class properties"""
         for prop in node.properties:
+            if not prop.introspectable:
+                continue
             if prop.setter is None:
                 normalized_name = prop.name.replace('-', '_')
                 if prop.writable and not prop.construct_only:
@@ -1486,6 +1488,8 @@ method or constructor of some type."""
             else:
                 getter = [prop.getter]
             for method in node.methods:
+                if not method.introspectable:
+                    continue
                 if setter is not None and method.name == setter:
                     if method.set_property is None:
                         method.set_property = prop.name
