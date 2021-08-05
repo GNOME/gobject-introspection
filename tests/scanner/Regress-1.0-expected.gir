@@ -4885,6 +4885,7 @@ raise an error.</doc>
         </type>
       </property>
       <property name="name-conflict"
+                introspectable="0"
                 writable="1"
                 construct="1"
                 transfer-ownership="none">

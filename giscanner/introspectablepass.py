@@ -272,6 +272,7 @@ class IntrospectablePass(object):
                 continue
             if s.name.replace('-', '_') == prop.name.replace('-', '_'):
                 self._property_warning(obj, prop, "Properties cannot have the same name as signals")
+                prop.introspectable = False
         return False
 
     def _property_method_collision(self, obj, prop):
@@ -280,6 +281,7 @@ class IntrospectablePass(object):
                 continue
             if m.name == prop.name.replace('-', '_'):
                 self._property_warning(obj, prop, "Properties cannot have the same name as methods")
+                prop.introspectable = False
         return False
 
     def _property_vfunc_collision(self, obj, prop):
@@ -288,6 +290,7 @@ class IntrospectablePass(object):
                 continue
             if vfunc.name == prop.name.replace('-', '_'):
                 self._property_warning(obj, prop, "Properties cannot have the same name as virtual methods")
+                prop.introspectable = False
         return False
 
     def _introspectable_symbol_collisions(self, obj, stack):
