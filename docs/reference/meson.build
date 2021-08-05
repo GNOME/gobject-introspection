@@ -1,37 +1,43 @@
-gnome = import('gnome')
-
-version_conf = configuration_data()
-version_conf.set('GI_VERSION', meson.project_version())
-
-version_xml = configure_file(
-  input: 'version.xml.in',
-  output: 'version.xml',
-  configuration: version_conf,
+gidocgen_dep = dependency('gi-docgen',
+  version: '>= 2021.7',
+  fallback: ['gi-docgen', 'dummy_dep'],
+  required: get_option('gtk_doc'),
 )
 
-ignore_headers = [
-  'cmph',
-  'girnode.h',
-  'girparser.h',
-  'girwriter.h',
-  'girmodule.h',
-  'girepository-private.h',
-]
+gi_docgen = find_program('gi-docgen', required: get_option('gtk_doc'))
 
-gnome.gtkdoc('gi',
-  main_xml: 'gi-docs.xml',
-  dependencies: girepo_dep,
-  src_dir: 'girepository',
-  content_files: [
-    'gi-struct-hierarchy.xml',
-  ],
-  scan_args: [
-    '--rebuild-types',
-    '--ignore-headers=' + ' '.join(ignore_headers),
-  ],
-  mkdb_args: [
-    '--name-space=g',
-    '--ignore-files=cmph',
-  ],
+docs_dir = get_option('prefix') / get_option('datadir') / 'doc'
+
+toml_conf = configuration_data()
+toml_conf.set('version', meson.project_version())
+
+expand_content_files = []
+
+girepository_toml = configure_file(
+  input: 'girepository.toml.in',
+  output: 'girepository.toml',
+  configuration: toml_conf,
   install: true,
+  install_dir: docs_dir / 'girepository',
+)
+
+custom_target('girepsitory-doc',
+  input: [girepository_toml, girepository_gir],
+  output: 'girepository',
+  command: [
+    gi_docgen,
+    'generate',
+    '--quiet',
+    '--fatal-warnings',
+    '--add-include-path=@0@'.format(meson.current_build_dir() / '../../gir'),
+    '--config=@INPUT0@',
+    '--output-dir=@OUTPUT@',
+    '--no-namespace-dir',
+    '--content-dir=@0@'.format(meson.current_source_dir()),
+    '@INPUT1@',
+  ],
+  depend_files: expand_content_files,
+  build_by_default: true,
+  install: true,
+  install_dir: docs_dir,
 )

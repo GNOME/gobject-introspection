@@ -476,7 +476,7 @@ if dep_type != 'pkgconfig'
   girepository_command += glib_libpaths
 endif
 
-gir_files += custom_target('gir-girepository',
+girepository_gir = custom_target('gir-girepository',
   input: girepo_gir_sources,
   output: 'GIRepository-2.0.gir',
   depends: [gobject_gir, gir_giscanner_pymod, girepo_lib],
@@ -493,6 +493,8 @@ gir_files += custom_target('gir-girepository',
     '@INPUT@',
   ]
 )
+
+gir_files += girepository_gir
 
 typelibs = []
 if get_option('gi_cross_binary_wrapper') != ''
