@@ -746,6 +746,15 @@
  * of the other peer here after the connection has been successfully
  * initialized.
  *
+ * Note that the
+ * [D-Bus specification](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses)
+ * uses the term ‘UUID’ to refer to this, whereas GLib consistently uses the
+ * term ‘GUID’ for historical reasons.
+ *
+ * Despite its name, the format of #GDBusConnection:guid does not follow
+ * [RFC 4122](https://datatracker.ietf.org/doc/html/rfc4122) or the Microsoft
+ * GUID format.
+ *
  * Since: 2.26
  */
 
@@ -1426,7 +1435,9 @@
 /**
  * GDBusServer:guid:
  *
- * The guid of the server.
+ * The GUID of the server.
+ *
+ * See #GDBusConnection:guid for more details.
  *
  * Since: 2.26
  */
@@ -1443,27 +1454,27 @@
 
 
 /**
- * GDataOutputStream:byte-order:
+ * GDataInputStream:byte-order:
  *
- * Determines the byte ordering that is used when writing
- * multi-byte entities (such as integers) to the stream.
- */
-
-
-/**
- * GDataStream:byte-order:
- *
- * The ::byte-order property determines the byte ordering that
+ * The :byte-order property determines the byte ordering that
  * is used when reading multi-byte entities (such as integers)
  * from the stream.
  */
 
 
 /**
- * GDataStream:newline-type:
+ * GDataInputStream:newline-type:
  *
  * The :newline-type property determines what is considered
  * as a line ending when reading complete lines from the stream.
+ */
+
+
+/**
+ * GDataOutputStream:byte-order:
+ *
+ * Determines the byte ordering that is used when writing
+ * multi-byte entities (such as integers) to the stream.
  */
 
 
@@ -1680,6 +1691,15 @@
 
 
 /**
+ * GDtlsConnection:ciphersuite-name: (nullable)
+ *
+ * The name of the DTLS ciphersuite in use. See g_dtls_connection_get_ciphersuite_name().
+ *
+ * Since: 2.70
+ */
+
+
+/**
  * GDtlsConnection:database: (nullable)
  *
  * The certificate database to use when verifying this TLS connection.
@@ -1736,6 +1756,15 @@
  * behavior.
  *
  * Since: 2.48
+ */
+
+
+/**
+ * GDtlsConnection:protocol-version:
+ *
+ * The DTLS protocol version in use. See g_dtls_connection_get_protocol_version().
+ *
+ * Since: 2.70
  */
 
 
@@ -2650,6 +2679,35 @@
  *
  * %TRUE if it is generally possible to release the permission by calling
  * g_permission_release().
+ */
+
+
+/**
+ * GPowerProfileMonitor:
+ *
+ * #GPowerProfileMonitor monitors system power profile and notifies on
+ * changes.
+ *
+ * Since: 2.70
+ */
+
+
+/**
+ * GPowerProfileMonitor:power-saver-enabled:
+ *
+ * Whether “Power Saver” mode is enabled on the system.
+ *
+ * Since: 2.70
+ */
+
+
+/**
+ * GPowerProfileMonitorInterface:
+ * @g_iface: The parent interface.
+ *
+ * The virtual function table for #GPowerProfileMonitor.
+ *
+ * Since: 2.70
  */
 
 
@@ -3615,6 +3673,26 @@
 
 
 /**
+ * GTlsCertificate:dns-names: (nullable) (element-type GBytes) (transfer container)
+ *
+ * The DNS names from the certificate's Subject Alternative Names (SANs),
+ * %NULL if unavailable.
+ *
+ * Since: 2.70
+ */
+
+
+/**
+ * GTlsCertificate:ip-addresses: (nullable) (element-type GInetAddress) (transfer container)
+ *
+ * The IP addresses from the certificate's Subject Alternative Names (SANs),
+ * %NULL if unavailable.
+ *
+ * Since: 2.70
+ */
+
+
+/**
  * GTlsCertificate:issuer:
  *
  * A #GTlsCertificate representing the entity that issued this
@@ -3622,17 +3700,59 @@
  * self-signed, or else the certificate of the issuer is not
  * available.
  *
+ * Beware the issuer certificate may not be the same as the
+ * certificate that would actually be used to construct a valid
+ * certification path during certificate verification.
+ * [RFC 4158](https://datatracker.ietf.org/doc/html/rfc4158) explains
+ * why an issuer certificate cannot be naively assumed to be part of the
+ * the certification path (though GLib's TLS backends may not follow the
+ * path building strategies outlined in this RFC). Due to the complexity
+ * of certification path building, GLib does not provide any way to know
+ * which certification path will actually be used. Accordingly, this
+ * property cannot be used to make security-related decisions. Only
+ * GLib itself should make security decisions about TLS certificates.
+ *
  * Since: 2.28
+ */
+
+
+/**
+ * GTlsCertificate:issuer-name: (nullable)
+ *
+ * The issuer from the certificate,
+ * %NULL if unavailable.
+ *
+ * Since: 2.70
+ */
+
+
+/**
+ * GTlsCertificate:not-valid-after: (nullable)
+ *
+ * The time at which this cert is no longer valid,
+ * %NULL if unavailable.
+ *
+ * Since: 2.70
+ */
+
+
+/**
+ * GTlsCertificate:not-valid-before: (nullable)
+ *
+ * The time at which this cert is considered to be valid,
+ * %NULL if unavailable.
+ *
+ * Since: 2.70
  */
 
 
 /**
  * GTlsCertificate:pkcs11-uri: (nullable)
  *
- * A URI referencing the PKCS \#11 objects containing an X.509 certificate
- * and optionally a private key.
+ * A URI referencing the [PKCS \#11](https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/os/pkcs11-base-v3.0-os.html)
+ * objects containing an X.509 certificate and optionally a private key.
  *
- * If %NULL the certificate is either not backed by PKCS \#11 or the
+ * If %NULL, the certificate is either not backed by PKCS \#11 or the
  * #GTlsBackend does not support PKCS \#11.
  *
  * Since: 2.68
@@ -3640,35 +3760,51 @@
 
 
 /**
- * GTlsCertificate:private-key:
+ * GTlsCertificate:private-key: (nullable)
  *
  * The DER (binary) encoded representation of the certificate's
- * private key, in either PKCS#1 format or unencrypted PKCS#8
- * format. This property (or the #GTlsCertificate:private-key-pem
- * property) can be set when constructing a key (eg, from a file),
- * but cannot be read.
+ * private key, in either [PKCS \#1 format](https://datatracker.ietf.org/doc/html/rfc8017)
+ * or unencrypted [PKCS \#8 format.](https://datatracker.ietf.org/doc/html/rfc5208)
+ * PKCS \#8 format is supported since 2.32; earlier releases only
+ * support PKCS \#1. You can use the `openssl rsa` tool to convert
+ * PKCS \#8 keys to PKCS \#1.
  *
- * PKCS#8 format is supported since 2.32; earlier releases only
- * support PKCS#1. You can use the `openssl rsa`
- * tool to convert PKCS#8 keys to PKCS#1.
+ * This property (or the #GTlsCertificate:private-key-pem property)
+ * can be set when constructing a key (for example, from a file).
+ * Since GLib 2.70, it is now also readable; however, be aware that if
+ * the private key is backed by a PKCS \#11 URI – for example, if it
+ * is stored on a smartcard – then this property will be %NULL. If so,
+ * the private key must be referenced via its PKCS \#11 URI,
+ * #GTlsCertificate:private-key-pkcs11-uri. You must check both
+ * properties to see if the certificate really has a private key.
+ * When this property is read, the output format will be unencrypted
+ * PKCS \#8.
  *
  * Since: 2.28
  */
 
 
 /**
- * GTlsCertificate:private-key-pem:
+ * GTlsCertificate:private-key-pem: (nullable)
  *
  * The PEM (ASCII) encoded representation of the certificate's
- * private key in either PKCS#1 format ("`BEGIN RSA PRIVATE
- * KEY`") or unencrypted PKCS#8 format ("`BEGIN
- * PRIVATE KEY`"). This property (or the
- * #GTlsCertificate:private-key property) can be set when
- * constructing a key (eg, from a file), but cannot be read.
+ * private key in either [PKCS \#1 format](https://datatracker.ietf.org/doc/html/rfc8017)
+ * ("`BEGIN RSA PRIVATE KEY`") or unencrypted
+ * [PKCS \#8 format](https://datatracker.ietf.org/doc/html/rfc5208)
+ * ("`BEGIN PRIVATE KEY`"). PKCS \#8 format is supported since 2.32;
+ * earlier releases only support PKCS \#1. You can use the `openssl rsa`
+ * tool to convert PKCS \#8 keys to PKCS \#1.
  *
- * PKCS#8 format is supported since 2.32; earlier releases only
- * support PKCS#1. You can use the `openssl rsa`
- * tool to convert PKCS#8 keys to PKCS#1.
+ * This property (or the #GTlsCertificate:private-key property)
+ * can be set when constructing a key (for example, from a file).
+ * Since GLib 2.70, it is now also readable; however, be aware that if
+ * the private key is backed by a PKCS \#11 URI - for example, if it
+ * is stored on a smartcard - then this property will be %NULL. If so,
+ * the private key must be referenced via its PKCS \#11 URI,
+ * #GTlsCertificate:private-key-pkcs11-uri. You must check both
+ * properties to see if the certificate really has a private key.
+ * When this property is read, the output format will be unencrypted
+ * PKCS \#8.
  *
  * Since: 2.28
  */
@@ -3677,9 +3813,20 @@
 /**
  * GTlsCertificate:private-key-pkcs11-uri: (nullable)
  *
- * A URI referencing a PKCS \#11 object containing a private key.
+ * A URI referencing a [PKCS \#11](https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/os/pkcs11-base-v3.0-os.html)
+ * object containing a private key.
  *
  * Since: 2.68
+ */
+
+
+/**
+ * GTlsCertificate:subject-name: (nullable)
+ *
+ * The subject from the cert,
+ * %NULL if unavailable.
+ *
+ * Since: 2.70
  */
 
 
@@ -3846,6 +3993,15 @@
 
 
 /**
+ * GTlsConnection:ciphersuite-name: (nullable)
+ *
+ * The name of the TLS ciphersuite in use. See g_tls_connection_get_ciphersuite_name().
+ *
+ * Since: 2.70
+ */
+
+
+/**
  * GTlsConnection:database: (nullable)
  *
  * The certificate database to use when verifying this TLS connection.
@@ -3902,6 +4058,15 @@
  * behavior.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * GTlsConnection:protocol-version:
+ *
+ * The TLS protocol version in use. See g_tls_connection_get_protocol_version().
+ *
+ * Since: 2.70
  */
 
 
@@ -4841,13 +5006,13 @@
  * respectively.
  *
  * For an example of opening files with a GApplication, see
- * [gapplication-example-open.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-open.c).
+ * [gapplication-example-open.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-open.c).
  *
  * For an example of using actions with GApplication, see
- * [gapplication-example-actions.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-actions.c).
+ * [gapplication-example-actions.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-actions.c).
  *
  * For an example of using extra D-Bus hooks with GApplication, see
- * [gapplication-example-dbushooks.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-dbushooks.c).
+ * [gapplication-example-dbushooks.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-dbushooks.c).
  */
 
 
@@ -4918,7 +5083,7 @@
  * }
  * ]|
  * The complete example can be found here:
- * [gapplication-example-cmdline.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-cmdline.c)
+ * [gapplication-example-cmdline.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-cmdline.c)
  *
  * In more complicated cases, the handling of the comandline can be
  * split between the launcher and the primary instance.
@@ -4969,7 +5134,7 @@
  * instance.
  *
  * The complete example can be found here:
- * [gapplication-example-cmdline2.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-cmdline2.c)
+ * [gapplication-example-cmdline2.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-cmdline2.c)
  *
  * If handling the commandline requires a lot of work, it may
  * be better to defer it.
@@ -5011,7 +5176,7 @@
  * hold the application until you are done with the commandline.
  *
  * The complete example can be found here:
- * [gapplication-example-cmdline3.c](https://git.gnome.org/browse/glib/tree/gio/tests/gapplication-example-cmdline3.c)
+ * [gapplication-example-cmdline3.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-cmdline3.c)
  */
 
 
@@ -5618,22 +5783,22 @@
  * ## An example D-Bus server # {#gdbus-server}
  *
  * Here is an example for a D-Bus server:
- * [gdbus-example-server.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-server.c)
+ * [gdbus-example-server.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-example-server.c)
  *
  * ## An example for exporting a subtree # {#gdbus-subtree-server}
  *
  * Here is an example for exporting a subtree:
- * [gdbus-example-subtree.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-subtree.c)
+ * [gdbus-example-subtree.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-example-subtree.c)
  *
  * ## An example for file descriptor passing # {#gdbus-unix-fd-client}
  *
  * Here is an example for passing UNIX file descriptors:
- * [gdbus-unix-fd-client.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-unix-fd-client.c)
+ * [gdbus-unix-fd-client.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-example-unix-fd-client.c)
  *
  * ## An example for exporting a GObject # {#gdbus-export}
  *
  * Here is an example for exporting a #GObject:
- * [gdbus-example-export.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-export.c)
+ * [gdbus-example-export.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-example-export.c)
  */
 
 
@@ -5796,7 +5961,7 @@
  * Convenience API for owning bus names.
  *
  * A simple example for owning a name can be found in
- * [gdbus-example-own-name.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-own-name.c)
+ * [gdbus-example-own-name.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-example-own-name.c)
  */
 
 
@@ -5809,7 +5974,7 @@
  * Convenience API for watching bus names.
  *
  * A simple example for watching a name can be found in
- * [gdbus-example-watch-name.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-watch-name.c)
+ * [gdbus-example-watch-name.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-example-watch-name.c)
  */
 
 
@@ -6007,6 +6172,13 @@
  * the message bus launching an owner (unless
  * %G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START is set).
  *
+ * If the proxy is for a stateless D-Bus service, where the name owner may
+ * be started and stopped between calls, the #GDBusProxy:g-name-owner tracking
+ * of #GDBusProxy will cause the proxy to drop signal and property changes from
+ * the service after it has restarted for the first time. When interacting
+ * with a stateless D-Bus service, do not use #GDBusProxy — use direct D-Bus
+ * method calls and signal connections.
+ *
  * The generic #GDBusProxy::g-properties-changed and
  * #GDBusProxy::g-signal signals are not very convenient to work with.
  * Therefore, the recommended way of working with proxies is to subclass
@@ -6021,7 +6193,7 @@
  * of the thread where the instance was constructed.
  *
  * An example using a proxy for a well-known name can be found in
- * [gdbus-example-watch-proxy.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-watch-proxy.c)
+ * [gdbus-example-watch-proxy.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-example-watch-proxy.c)
  */
 
 
@@ -6040,7 +6212,7 @@
  * session or system bus, you should instead use g_bus_own_name().
  *
  * An example of peer-to-peer communication with GDBus can be found
- * in [gdbus-example-peer.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-example-peer.c).
+ * in [gdbus-example-peer.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-example-peer.c).
  *
  * Note that a minimal #GDBusServer will accept connections from any
  * peer. In many use-cases it will be necessary to add a #GDBusAuthObserver
@@ -6480,6 +6652,11 @@
  * You may call g_file_query_settable_attributes() and
  * g_file_query_writable_namespaces() to discover the settable attributes
  * of a particular file at runtime.
+ *
+ * The direct accessors, such as g_file_info_get_name(), are slightly more
+ * optimized than the generic attribute accessors, such as
+ * g_file_info_get_attribute_byte_string().This optimization will matter
+ * only if calling the API in a tight loop.
  *
  * #GFileAttributeMatcher allows for searching through a #GFileInfo for
  * attributes.
@@ -6943,13 +7120,14 @@
  * There is also an implementation for use inside Flatpak sandboxes.
  *
  * Possible actions to take when the signal is received are:
- * - Free caches
- * - Save files that haven't been looked at in a while to disk, ready to be reopened when needed
- * - Run a garbage collection cycle
- * - Try and compress fragmented allocations
- * - Exit on idle if the process has no reason to stay around
- * - Call [`malloc_trim(3)`](man:malloc_trim) to return cached heap pages to
- *   the kernel (if supported by your libc)
+ *
+ *  - Free caches
+ *  - Save files that haven't been looked at in a while to disk, ready to be reopened when needed
+ *  - Run a garbage collection cycle
+ *  - Try and compress fragmented allocations
+ *  - Exit on idle if the process has no reason to stay around
+ *  - Call [`malloc_trim(3)`](man:malloc_trim) to return cached heap pages to
+ *    the kernel (if supported by your libc)
  *
  * Note that some actions may not always improve system performance, and so
  * should be profiled for your application. `malloc_trim()`, for example, may
@@ -7315,6 +7493,29 @@
  * not running, applications using #GNotification should be able to be
  * started as a D-Bus service, using #GApplication.
  *
+ * In order for #GNotification to work, the application must have installed
+ * a `.desktop` file. For example:
+ * |[
+ *  [Desktop Entry]
+ *   Name=Test Application
+ *   Comment=Description of what Test Application does
+ *   Exec=gnome-test-application
+ *   Icon=org.gnome.TestApplication
+ *   Terminal=false
+ *   Type=Application
+ *   Categories=GNOME;GTK;TestApplication Category;
+ *   StartupNotify=true
+ *   DBusActivatable=true
+ *   X-GNOME-UsesNotifications=true
+ * ]|
+ *
+ * The `X-GNOME-UsesNotifications` key indicates to GNOME Control Center
+ * that this application uses notifications, so it can be listed in the
+ * Control Center’s ‘Notifications’ panel.
+ *
+ * The `.desktop` file must be named as `org.gnome.TestApplication.desktop`,
+ * where `org.gnome.TestApplication` is the ID passed to g_application_new().
+ *
  * User interaction with a notification (either the default action, or
  * buttons) must be associated with actions on the application (ie:
  * "app." actions).  It is not possible to route user interaction
@@ -7409,6 +7610,39 @@
  *
  * Utility functions for #GPollableInputStream and
  * #GPollableOutputStream implementations.
+ */
+
+
+/**
+ * SECTION:gpowerprofilemonitor
+ * @title: GPowerProfileMonitor
+ * @short_description: Power profile monitor
+ * @include: gio/gio.h
+ *
+ * #GPowerProfileMonitor makes it possible for applications as well as OS components
+ * to monitor system power profiles and act upon them. It currently only exports
+ * whether the system is in “Power Saver” mode (known as “Low Power” mode on
+ * some systems).
+ *
+ * When in “Low Power” mode, it is recommended that applications:
+ * - disabling automatic downloads
+ * - reduce the rate of refresh from online sources such as calendar or
+ *   email synchronisation
+ * - if the application has expensive visual effects, reduce them
+ *
+ * It is also likely that OS components providing services to applications will
+ * lower their own background activity, for the sake of the system.
+ *
+ * There are a variety of tools that exist for power consumption analysis, but those
+ * usually depend on the OS and hardware used. On Linux, one could use `upower` to
+ * monitor the battery discharge rate, `powertop` to check on the background activity
+ * or activity at all), `sysprof` to inspect CPU usage, and `intel_gpu_time` to
+ * profile GPU usage.
+ *
+ * Don't forget to disconnect the #GPowerProfileMonitor::notify::power-saver-enabled
+ * signal, and unref the #GPowerProfileMonitor itself when exiting.
+ *
+ * Since: 2.70
  */
 
 
@@ -7835,7 +8069,7 @@
  * utility. The input is a schema description in an XML format.
  *
  * A DTD for the gschema XML format can be found here:
- * [gschema.dtd](https://git.gnome.org/browse/glib/tree/gio/gschema.dtd)
+ * [gschema.dtd](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/gschema.dtd)
  *
  * The [glib-compile-schemas][glib-compile-schemas] tool expects schema
  * files to have the extension `.gschema.xml`.
@@ -9430,7 +9664,7 @@
  *
  * An example of a test fixture for D-Bus services can be found
  * here:
- * [gdbus-test-fixture.c](https://git.gnome.org/browse/glib/tree/gio/tests/gdbus-test-fixture.c)
+ * [gdbus-test-fixture.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gdbus-test-fixture.c)
  *
  * Note that these examples only deal with isolating the D-Bus aspect of your
  * service. To successfully run isolated unit tests on your service you may need
@@ -9982,7 +10216,7 @@
 
 
 /**
- * SECTION:gzcompressor
+ * SECTION:gzlibcompressor
  * @short_description: Zlib compressor
  * @include: gio/gio.h
  *
@@ -9992,7 +10226,7 @@
 
 
 /**
- * SECTION:gzdecompressor
+ * SECTION:gzlibdecompressor
  * @short_description: Zlib decompressor
  * @include: gio/gio.h
  *
@@ -12205,6 +12439,8 @@
  *
  * To cancel the busy indication, use g_application_unmark_busy().
  *
+ * The application must be registered before calling this function.
+ *
  * Since: 2.38
  */
 
@@ -12374,7 +12610,7 @@
  * and override local_command_line(). In this case, you most likely want
  * to return %TRUE from your local_command_line() implementation to
  * suppress the default handling. See
- * [gapplication-example-cmdline2.c][gapplication-example-cmdline2]
+ * [gapplication-example-cmdline2.c][https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-cmdline2.c]
  * for an example.
  *
  * If, after the above is done, the use count of the application is zero
@@ -15274,7 +15510,7 @@
  * If @info is statically allocated does nothing. Otherwise increases
  * the reference count.
  *
- * Returns: The same @info.
+ * Returns: (not nullable): The same @info.
  * Since: 2.26
  */
 
@@ -15298,7 +15534,7 @@
  * If @info is statically allocated does nothing. Otherwise increases
  * the reference count.
  *
- * Returns: The same @info.
+ * Returns: (not nullable): The same @info.
  * Since: 2.26
  */
 
@@ -16544,6 +16780,9 @@
  * g_dbus_connection_signal_subscribe() is called, in order to avoid memory
  * leaks through callbacks queued on the #GMainContext after it’s stopped being
  * iterated.
+ * Alternatively, any idle source with a priority lower than %G_PRIORITY_DEFAULT
+ * that was scheduled after unsubscription, also indicates that all resources
+ * of this subscription are released.
  *
  * Since: 2.26
  */
@@ -16845,8 +17084,14 @@
  * Generate a D-Bus GUID that can be used with
  * e.g. g_dbus_connection_new().
  *
- * See the D-Bus specification regarding what strings are valid D-Bus
- * GUID (for example, D-Bus GUIDs are not RFC-4122 compliant).
+ * See the
+ * [D-Bus specification](https://dbus.freedesktop.org/doc/dbus-specification.html#uuids)
+ * regarding what strings are valid D-Bus GUIDs. The specification refers to
+ * these as ‘UUIDs’ whereas GLib (for historical reasons) refers to them as
+ * ‘GUIDs’. The terms are interchangeable.
+ *
+ * Note that D-Bus GUIDs do not follow
+ * [RFC 4122](https://datatracker.ietf.org/doc/html/rfc4122).
  *
  * Returns: A valid D-Bus GUID. Free with g_free().
  * Since: 2.26
@@ -17055,7 +17300,7 @@
  * If @info is statically allocated does nothing. Otherwise increases
  * the reference count.
  *
- * Returns: The same @info.
+ * Returns: (not nullable): The same @info.
  * Since: 2.26
  */
 
@@ -17278,15 +17523,30 @@
 
 
 /**
+ * g_dbus_is_error_name:
+ * @string: The string to check.
+ *
+ * Check whether @string is a valid D-Bus error name.
+ *
+ * This function returns the same result as g_dbus_is_interface_name(),
+ * because D-Bus error names are defined to have exactly the
+ * same syntax as interface names.
+ *
+ * Returns: %TRUE if valid, %FALSE otherwise.
+ * Since: 2.70
+ */
+
+
+/**
  * g_dbus_is_guid:
  * @string: The string to check.
  *
  * Checks if @string is a D-Bus GUID.
  *
- * See the D-Bus specification regarding what strings are valid D-Bus
- * GUID (for example, D-Bus GUIDs are not RFC-4122 compliant).
+ * See the documentation for g_dbus_generate_guid() for more information about
+ * the format of a GUID.
  *
- * Returns: %TRUE if @string is a guid, %FALSE otherwise.
+ * Returns: %TRUE if @string is a GUID, %FALSE otherwise.
  * Since: 2.26
  */
 
@@ -17610,7 +17870,9 @@
  *
  * Convenience getter for the %G_DBUS_MESSAGE_HEADER_FIELD_SIGNATURE header field.
  *
- * Returns: The value.
+ * This will always be non-%NULL, but may be an empty string.
+ *
+ * Returns: (not nullable): The value.
  * Since: 2.26
  */
 
@@ -17796,7 +18058,7 @@
  *   fd 12: dev=0:10,mode=020620,ino=5,uid=500,gid=5,rdev=136:2,size=0,atime=1273085037,mtime=1273085851,ctime=1272982635
  * ]|
  *
- * Returns: A string that should be freed with g_free().
+ * Returns: (not nullable): A string that should be freed with g_free().
  * Since: 2.26
  */
 
@@ -18035,7 +18297,7 @@
  * If @info is statically allocated does nothing. Otherwise increases
  * the reference count.
  *
- * Returns: The same @info.
+ * Returns: (not nullable): The same @info.
  * Since: 2.26
  */
 
@@ -18423,7 +18685,7 @@
  * If @info is statically allocated does nothing. Otherwise increases
  * the reference count.
  *
- * Returns: The same @info.
+ * Returns: (not nullable): The same @info.
  * Since: 2.26
  */
 
@@ -18671,7 +18933,7 @@
  * Gets the interface proxy for @interface_name at @object_path, if
  * any.
  *
- * Returns: (transfer full): A #GDBusInterface instance or %NULL. Free
+ * Returns: (transfer full) (nullable): A #GDBusInterface instance or %NULL. Free
  *   with g_object_unref().
  * Since: 2.30
  */
@@ -18684,7 +18946,7 @@
  *
  * Gets the #GDBusObjectProxy at @object_path, if any.
  *
- * Returns: (transfer full): A #GDBusObject or %NULL. Free with
+ * Returns: (transfer full) (nullable): A #GDBusObject or %NULL. Free with
  *   g_object_unref().
  * Since: 2.30
  */
@@ -18755,7 +19017,7 @@
  *
  * Gets the #GDBusConnection used by @manager.
  *
- * Returns: (transfer full): A #GDBusConnection object or %NULL if
+ * Returns: (transfer full) (nullable): A #GDBusConnection object or %NULL if
  *   @manager isn't exported on a connection. The returned object should
  *   be freed with g_object_unref().
  * Since: 2.30
@@ -18925,7 +19187,7 @@
  * If @info is statically allocated does nothing. Otherwise increases
  * the reference count.
  *
- * Returns: The same @info.
+ * Returns: (not nullable): The same @info.
  * Since: 2.26
  */
 
@@ -19169,7 +19431,7 @@
  *
  * Gets the connection @proxy is for.
  *
- * Returns: (transfer none): A #GDBusConnection owned by @proxy. Do not free.
+ * Returns: (transfer none) (not nullable): A #GDBusConnection owned by @proxy. Do not free.
  * Since: 2.26
  */
 
@@ -19220,7 +19482,7 @@
  *
  * Gets the D-Bus interface name @proxy is for.
  *
- * Returns: A string owned by @proxy. Do not free.
+ * Returns: (not nullable): A string owned by @proxy. Do not free.
  * Since: 2.26
  */
 
@@ -19231,7 +19493,11 @@
  *
  * Gets the name that @proxy was constructed for.
  *
- * Returns: A string owned by @proxy. Do not free.
+ * When connected to a message bus, this will usually be non-%NULL.
+ * However, it may be %NULL for a proxy that communicates using a peer-to-peer
+ * pattern.
+ *
+ * Returns: (nullable): A string owned by @proxy. Do not free.
  * Since: 2.26
  */
 
@@ -19257,7 +19523,7 @@
  *
  * Gets the object path @proxy is for.
  *
- * Returns: A string owned by @proxy. Do not free.
+ * Returns: (not nullable): A string owned by @proxy. Do not free.
  * Since: 2.26
  */
 
@@ -19495,7 +19761,9 @@
  * [D-Bus address](https://dbus.freedesktop.org/doc/dbus-specification.html#addresses)
  * string that can be used by clients to connect to @server.
  *
- * Returns: A D-Bus address string. Do not free, the string is owned
+ * This is valid and non-empty if initializing the #GDBusServer succeeded.
+ *
+ * Returns: (not nullable): A D-Bus address string. Do not free, the string is owned
  * by @server.
  * Since: 2.26
  */
@@ -19516,9 +19784,9 @@
  * g_dbus_server_get_guid:
  * @server: A #GDBusServer.
  *
- * Gets the GUID for @server.
+ * Gets the GUID for @server, as provided to g_dbus_server_new_sync().
  *
- * Returns: A D-Bus GUID. Do not free this string, it is owned by @server.
+ * Returns: (not nullable): A D-Bus GUID. Do not free this string, it is owned by @server.
  * Since: 2.26
  */
 
@@ -19597,7 +19865,7 @@
  * If @info is statically allocated does nothing. Otherwise increases
  * the reference count.
  *
- * Returns: The same @info.
+ * Returns: (not nullable): The same @info.
  * Since: 2.26
  */
 
@@ -20629,6 +20897,24 @@
 
 
 /**
+ * g_dtls_connection_get_ciphersuite_name:
+ * @conn: a #GDTlsConnection
+ *
+ * Returns the name of the current DTLS ciphersuite, or %NULL if the
+ * connection has not handshaked or has been closed. Beware that the TLS
+ * backend may use any of multiple different naming conventions, because
+ * OpenSSL and GnuTLS have their own ciphersuite naming conventions that
+ * are different from each other and different from the standard, IANA-
+ * registered ciphersuite names. The ciphersuite name is intended to be
+ * displayed to the user for informative purposes only, and parsing it
+ * is not recommended.
+ *
+ * Returns: (nullable): The name of the current DTLS ciphersuite, or %NULL
+ * Since: 2.70
+ */
+
+
+/**
  * g_dtls_connection_get_database:
  * @conn: a #GDtlsConnection
  *
@@ -20693,6 +20979,20 @@
  *
  * Returns: @conn's peer's certificate errors
  * Since: 2.48
+ */
+
+
+/**
+ * g_dtls_connection_get_protocol_version:
+ * @conn: a #GDTlsConnection
+ *
+ * Returns the current DTLS protocol version, which may be
+ * %G_TLS_PROTOCOL_VERSION_UNKNOWN if the connection has not handshaked, or
+ * has been closed, or if the TLS backend has implemented a protocol version
+ * that is not a recognized #GTlsProtocolVersion.
+ *
+ * Returns: The current DTLS protocol version
+ * Since: 2.70
  */
 
 
@@ -22541,6 +22841,22 @@
 
 
 /**
+ * g_file_info_get_access_date_time:
+ * @info: a #GFileInfo.
+ *
+ * Gets the access time of the current @info and returns it as a
+ * #GDateTime.
+ *
+ * This requires the %G_FILE_ATTRIBUTE_TIME_ACCESS attribute. If
+ * %G_FILE_ATTRIBUTE_TIME_ACCESS_USEC is provided, the resulting #GDateTime
+ * will have microsecond precision.
+ *
+ * Returns: (transfer full) (nullable): access time, or %NULL if unknown
+ * Since: 2.70
+ */
+
+
+/**
  * g_file_info_get_attribute_as_string:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
@@ -22720,6 +23036,22 @@
  *
  * Returns: (nullable): a string containing the file's content type,
  * or %NULL if unknown.
+ */
+
+
+/**
+ * g_file_info_get_creation_date_time:
+ * @info: a #GFileInfo.
+ *
+ * Gets the creation time of the current @info and returns it as a
+ * #GDateTime.
+ *
+ * This requires the %G_FILE_ATTRIBUTE_TIME_CREATED attribute. If
+ * %G_FILE_ATTRIBUTE_TIME_CREATED_USEC is provided, the resulting #GDateTime
+ * will have microsecond precision.
+ *
+ * Returns: (transfer full) (nullable): creation time, or %NULL if unknown
+ * Since: 2.70
  */
 
 
@@ -22960,6 +23292,19 @@
 
 
 /**
+ * g_file_info_set_access_date_time:
+ * @info: a #GFileInfo.
+ * @atime: (not nullable): a #GDateTime.
+ *
+ * Sets the %G_FILE_ATTRIBUTE_TIME_ACCESS and
+ * %G_FILE_ATTRIBUTE_TIME_ACCESS_USEC attributes in the file info to the
+ * given date/time value.
+ *
+ * Since: 2.70
+ */
+
+
+/**
  * g_file_info_set_attribute:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
@@ -23107,6 +23452,19 @@
  *
  * Sets the content type attribute for a given #GFileInfo.
  * See %G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE.
+ */
+
+
+/**
+ * g_file_info_set_creation_date_time:
+ * @info: a #GFileInfo.
+ * @creation_time: (not nullable): a #GDateTime.
+ *
+ * Sets the %G_FILE_ATTRIBUTE_TIME_CREATED and
+ * %G_FILE_ATTRIBUTE_TIME_CREATED_USEC attributes in the file info to the
+ * given date/time value.
+ *
+ * Since: 2.70
  */
 
 
@@ -26357,7 +26715,7 @@
  * @stream: a #GInputStream.
  * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
  *     a buffer to read data into (which should be at least count bytes long).
- * @count: the number of bytes that will be read from the stream
+ * @count: (in): the number of bytes that will be read from the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occurring, or %NULL to ignore
  *
@@ -26392,7 +26750,7 @@
  * @stream: a #GInputStream.
  * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
  *     a buffer to read data into (which should be at least count bytes long).
- * @count: the number of bytes that will be read from the stream
+ * @count: (in): the number of bytes that will be read from the stream
  * @bytes_read: (out): location to store the number of bytes that was read from the stream
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -26426,7 +26784,7 @@
  * @stream: A #GInputStream
  * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
  *     a buffer to read data into (which should be at least count bytes long)
- * @count: the number of bytes that will be read from the stream
+ * @count: (in): the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore
  * @callback: (scope async): callback to call when the request is satisfied
@@ -26474,7 +26832,7 @@
  * @stream: A #GInputStream.
  * @buffer: (array length=count) (element-type guint8) (out caller-allocates):
  *     a buffer to read data into (which should be at least count bytes long).
- * @count: the number of bytes that will be read from the stream
+ * @count: (in): the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority]
  * of the request.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
@@ -29937,6 +30295,22 @@
 
 
 /**
+ * g_notification_set_category:
+ * @notification: a #GNotification
+ * @category: (nullable): the category for @notification, or %NULL for no category
+ *
+ * Sets the type of @notification to @category. Categories have a main
+ * type like `email`, `im` or `device` and can have a detail separated
+ * by a `.`, e.g. `im.received` or `email.arrived`. Setting the category
+ * helps the notification server to select proper feedback to the user.
+ *
+ * Standard categories are [listed in the specification](https://specifications.freedesktop.org/notification-spec/latest/ar01s06.html).
+ *
+ * Since: 2.70
+ */
+
+
+/**
  * g_notification_set_default_action:
  * @notification: a #GNotification
  * @detailed_action: a detailed action name
@@ -31019,9 +31393,9 @@
 /**
  * g_pollable_input_stream_read_nonblocking: (virtual read_nonblocking)
  * @stream: a #GPollableInputStream
- * @buffer: (array length=count) (element-type guint8): a buffer to
- *     read data into (which should be at least @count bytes long).
- * @count: the number of bytes you want to read
+ * @buffer: (array length=count) (element-type guint8) (out caller-allocates): a
+ *     buffer to read data into (which should be at least @count bytes long).
+ * @count: (in): the number of bytes you want to read
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -31280,6 +31654,31 @@
  *
  * Returns: %TRUE on success, %FALSE if there was an error
  * Since: 2.34
+ */
+
+
+/**
+ * g_power_profile_monitor_dup_default:
+ *
+ * Gets a reference to the default #GPowerProfileMonitor for the system.
+ *
+ * Returns: (not nullable) (transfer full): a new reference to the default #GPowerProfileMonitor
+ * Since: 2.70
+ */
+
+
+/**
+ * g_power_profile_monitor_get_power_saver_enabled:
+ * @monitor: a #GPowerProfileMonitor
+ *
+ * Gets whether the system is in “Power Saver” mode.
+ *
+ * You are expected to listen to the
+ * #GPowerProfileMonitor::notify::power-saver-enabled signal to know when the profile has
+ * changed.
+ *
+ * Returns: Whether the system is in “Power Saver” mode.
+ * Since: 2.70
  */
 
 
@@ -32350,7 +32749,8 @@
  *
  * Tells the current position within the stream.
  *
- * Returns: the offset from the beginning of the buffer.
+ * Returns: the (positive or zero) offset from the beginning of the
+ * buffer, zero if the target is not seekable.
  */
 
 
@@ -36277,7 +36677,7 @@
  * This is the asynchronous version of g_socket_listener_accept().
  *
  * When the operation is finished @callback will be
- * called. You can then call g_socket_listener_accept_socket()
+ * called. You can then call g_socket_listener_accept_finish()
  * to get the result of the operation.
  *
  * Since: 2.22
@@ -37655,7 +38055,7 @@
  *
  * This value has no particular meaning, but it can be used with the
  * macros defined by the system headers such as WIFEXITED.  It can also
- * be used with g_spawn_check_exit_status().
+ * be used with g_spawn_check_wait_status().
  *
  * It is more likely that you want to use g_subprocess_get_if_exited()
  * followed by g_subprocess_get_exit_status().
@@ -38215,7 +38615,7 @@
  * @cancellable: a #GCancellable
  * @error: a #GError
  *
- * Combines g_subprocess_wait() with g_spawn_check_exit_status().
+ * Combines g_subprocess_wait() with g_spawn_check_wait_status().
  *
  * Returns: %TRUE on success, %FALSE if process exited abnormally, or
  * @cancellable was cancelled
@@ -38230,7 +38630,7 @@
  * @callback: a #GAsyncReadyCallback to call when the operation is complete
  * @user_data: user_data for @callback
  *
- * Combines g_subprocess_wait_async() with g_spawn_check_exit_status().
+ * Combines g_subprocess_wait_async() with g_spawn_check_wait_status().
  *
  * This is the asynchronous version of g_subprocess_wait_check().
  *
@@ -38730,9 +39130,9 @@
  *
  * Although GLib currently rate-limits the tasks queued via
  * g_task_run_in_thread(), you should not assume that it will always
- * do this. If you have a very large number of tasks to run, but don't
- * want them to all run at once, you should only queue a limited
- * number of them at a time.
+ * do this. If you have a very large number of tasks to run (several tens of
+ * tasks), but don't want them to all run at once, you should only queue a
+ * limited number of them (around ten) at a time.
  *
  * Since: 2.36
  */
@@ -39302,6 +39702,30 @@
 
 
 /**
+ * g_tls_certificate_get_dns_names:
+ * @cert: a #GTlsCertificate
+ *
+ * Gets the value of #GTlsCertificate:dns-names.
+ *
+ * Returns: (nullable) (element-type GBytes) (transfer container): A #GPtrArray of
+ * #GBytes elements, or %NULL if it's not available.
+ * Since: 2.70
+ */
+
+
+/**
+ * g_tls_certificate_get_ip_addresses:
+ * @cert: a #GTlsCertificate
+ *
+ * Gets the value of #GTlsCertificate:ip-addresses.
+ *
+ * Returns: (nullable) (element-type GInetAddress) (transfer container): A #GPtrArray
+ * of #GInetAddress elements, or %NULL if it's not available.
+ * Since: 2.70
+ */
+
+
+/**
  * g_tls_certificate_get_issuer:
  * @cert: a #GTlsCertificate
  *
@@ -39311,6 +39735,50 @@
  * or %NULL if @cert is self-signed or signed with an unknown
  * certificate.
  * Since: 2.28
+ */
+
+
+/**
+ * g_tls_certificate_get_issuer_name:
+ * @cert: a #GTlsCertificate
+ *
+ * Returns the issuer name from the certificate.
+ *
+ * Returns: (nullable) (transfer full): The issuer name, or %NULL if it's not available.
+ * Since: 2.70
+ */
+
+
+/**
+ * g_tls_certificate_get_not_valid_after:
+ * @cert: a #GTlsCertificate
+ *
+ * Returns the time at which the certificate became or will become invalid.
+ *
+ * Returns: (nullable) (transfer full): The not-valid-after date, or %NULL if it's not available.
+ * Since: 2.70
+ */
+
+
+/**
+ * g_tls_certificate_get_not_valid_before:
+ * @cert: a #GTlsCertificate
+ *
+ * Returns the time at which the certificate became or will become valid.
+ *
+ * Returns: (nullable) (transfer full): The not-valid-before date, or %NULL if it's not available.
+ * Since: 2.70
+ */
+
+
+/**
+ * g_tls_certificate_get_subject_name:
+ * @cert: a #GTlsCertificate
+ *
+ * Returns the subject name from the certificate.
+ *
+ * Returns: (nullable) (transfer full): The subject name, or %NULL if it's not available.
+ * Since: 2.70
  */
 
 
@@ -39432,13 +39900,14 @@
  * @private_key_pkcs11_uri: (nullable): A PKCS \#11 URI
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Creates a #GTlsCertificate from a PKCS \#11 URI.
+ * Creates a #GTlsCertificate from a
+ * [PKCS \#11](https://docs.oasis-open.org/pkcs11/pkcs11-base/v3.0/os/pkcs11-base-v3.0-os.html) URI.
  *
  * An example @pkcs11_uri would be `pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01`
  *
  * Where the token’s layout is:
  *
- * ```
+ * |[
  * Object 0:
  *   URL: pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01;object=private%20key;type=private
  *   Type: Private key (RSA-2048)
@@ -39448,7 +39917,7 @@
  *   URL: pkcs11:model=Model;manufacturer=Manufacture;serial=1;token=My%20Client%20Certificate;id=%01;object=Certificate%20for%20Authentication;type=cert
  *   Type: X.509 Certificate (RSA-2048)
  *   ID: 01
- * ```
+ * ]|
  *
  * In this case the certificate and private key would both be detected and used as expected.
  * @pkcs_uri may also just reference an X.509 certificate object and then optionally
@@ -39486,6 +39955,13 @@
  *
  * (All other #GTlsCertificateFlags values will always be set or unset
  * as appropriate.)
+ *
+ * Because TLS session context is not used, #GTlsCertificate may not
+ * perform as many checks on the certificates as #GTlsConnection would.
+ * For example, certificate constraints cannot be honored, and some
+ * revocation checks cannot be performed. The best way to verify TLS
+ * certificates used by a TLS connection is to let #GTlsConnection
+ * handle the verification.
  *
  * Returns: the appropriate #GTlsCertificateFlags
  * Since: 2.28
@@ -39719,6 +40195,24 @@
 
 
 /**
+ * g_tls_connection_get_ciphersuite_name:
+ * @conn: a #GTlsConnection
+ *
+ * Returns the name of the current TLS ciphersuite, or %NULL if the
+ * connection has not handshaked or has been closed. Beware that the TLS
+ * backend may use any of multiple different naming conventions, because
+ * OpenSSL and GnuTLS have their own ciphersuite naming conventions that
+ * are different from each other and different from the standard, IANA-
+ * registered ciphersuite names. The ciphersuite name is intended to be
+ * displayed to the user for informative purposes only, and parsing it
+ * is not recommended.
+ *
+ * Returns: (nullable): The name of the current TLS ciphersuite, or %NULL
+ * Since: 2.70
+ */
+
+
+/**
  * g_tls_connection_get_database:
  * @conn: a #GTlsConnection
  *
@@ -39783,6 +40277,20 @@
  *
  * Returns: @conn's peer's certificate errors
  * Since: 2.28
+ */
+
+
+/**
+ * g_tls_connection_get_protocol_version:
+ * @conn: a #GTlsConnection
+ *
+ * Returns the current TLS protocol version, which may be
+ * %G_TLS_PROTOCOL_VERSION_UNKNOWN if the connection has not handshaked, or
+ * has been closed, or if the TLS backend has implemented a protocol version
+ * that is not a recognized #GTlsProtocolVersion.
+ *
+ * Returns: The current TLS protocol version
+ * Since: 2.70
  */
 
 
@@ -40146,14 +40654,26 @@
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: (nullable): a #GError, or %NULL
  *
- * Look up the issuer of @certificate in the database.
+ * Look up the issuer of @certificate in the database. The
+ * #GTlsCertificate:issuer property of @certificate is not modified, and
+ * the two certificates are not hooked into a chain.
  *
- * The #GTlsCertificate:issuer property
- * of @certificate is not modified, and the two certificates are not hooked
- * into a chain.
+ * This function can block. Use g_tls_database_lookup_certificate_issuer_async()
+ * to perform the lookup operation asynchronously.
  *
- * This function can block, use g_tls_database_lookup_certificate_issuer_async() to perform
- * the lookup operation asynchronously.
+ * Beware this function cannot be used to build certification paths. The
+ * issuer certificate returned by this function may not be the same as
+ * the certificate that would actually be used to construct a valid
+ * certification path during certificate verification.
+ * [RFC 4158](https://datatracker.ietf.org/doc/html/rfc4158) explains
+ * why an issuer certificate cannot be naively assumed to be part of the
+ * the certification path (though GLib's TLS backends may not follow the
+ * path building strategies outlined in this RFC). Due to the complexity
+ * of certification path building, GLib does not provide any way to know
+ * which certification path will actually be used when verifying a TLS
+ * certificate. Accordingly, this function cannot be used to make
+ * security-related decisions. Only GLib itself should make security
+ * decisions about TLS certificates.
  *
  * Returns: (transfer full): a newly allocated issuer #GTlsCertificate,
  * or %NULL. Use g_object_unref() to release the certificate.
@@ -40260,15 +40780,11 @@
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @error: (nullable): a #GError, or %NULL
  *
- * Determines the validity of a certificate chain after looking up and
- * adding any missing certificates to the chain.
+ * Determines the validity of a certificate chain, outside the context
+ * of a TLS session.
  *
  * @chain is a chain of #GTlsCertificate objects each pointing to the next
- * certificate in the chain by its #GTlsCertificate:issuer property. The chain may initially
- * consist of one or more certificates. After the verification process is
- * complete, @chain may be modified by adding missing certificates, or removing
- * extra certificates. If a certificate anchor was found, then it is added to
- * the @chain.
+ * certificate in the chain by its #GTlsCertificate:issuer property.
  *
  * @purpose describes the purpose (or usage) for which the certificate
  * is being used. Typically @purpose will be set to #G_TLS_DATABASE_PURPOSE_AUTHENTICATE_SERVER
@@ -40295,8 +40811,27 @@
  * accordingly. @error is not set when @chain is successfully analyzed
  * but found to be invalid.
  *
- * This function can block, use g_tls_database_verify_chain_async() to perform
- * the verification operation asynchronously.
+ * Prior to GLib 2.48, GLib's default TLS backend modified @chain to
+ * represent the certification path built by #GTlsDatabase during
+ * certificate verification by adjusting the #GTlsCertificate:issuer
+ * property of each certificate in @chain. Since GLib 2.48, this no
+ * longer occurs, so you cannot rely on #GTlsCertificate:issuer to
+ * represent the actual certification path used during certificate
+ * verification.
+ *
+ * Because TLS session context is not used, #GTlsDatabase may not
+ * perform as many checks on the certificates as #GTlsConnection would.
+ * For example, certificate constraints cannot be honored, and some
+ * revocation checks cannot be performed. The best way to verify TLS
+ * certificates used by a TLS connection is to let #GTlsConnection
+ * handle the verification.
+ *
+ * The TLS backend may attempt to look up and add missing certificates
+ * to the chain. Since GLib 2.70, this may involve HTTP requests to
+ * download missing certificates.
+ *
+ * This function can block. Use g_tls_database_verify_chain_async() to
+ * perform the verification operation asynchronously.
  *
  * Returns: the appropriate #GTlsCertificateFlags which represents the
  * result of verification.
@@ -40612,9 +41147,9 @@
 
 
 /**
- * g_tls_password_get_value:
+ * g_tls_password_get_value: (virtual get_value)
  * @password: a #GTlsPassword object
- * @length: (nullable): location to place the length of the password.
+ * @length: (optional): location to place the length of the password.
  *
  * Get the password value. If @length is not %NULL then it will be
  * filled in with the length of the password value. (Note that the
@@ -40622,7 +41157,7 @@
  * for @length in contexts where you know the password will have a
  * certain fixed length.)
  *
- * Returns: The password value (owned by the password object).
+ * Returns: (array length=length): The password value (owned by the password object).
  * Since: 2.30
  */
 
@@ -41296,7 +41831,9 @@
  * If more mounts have the same mount path, the last matching mount
  * is returned.
  *
- * Returns: (transfer full): a #GUnixMountEntry.
+ * This will return %NULL if there is no mount point at @mount_path.
+ *
+ * Returns: (transfer full) (nullable): a #GUnixMountEntry.
  */
 
 
@@ -41335,7 +41872,10 @@
  * If more mounts have the same mount path, the last matching mount
  * is returned.
  *
- * Returns: (transfer full): a #GUnixMountEntry.
+ * This will return %NULL if looking up the mount entry fails, if
+ * @file_path doesn’t exist or there is an I/O error.
+ *
+ * Returns: (transfer full) (nullable): a #GUnixMountEntry.
  * Since: 2.52
  */
 

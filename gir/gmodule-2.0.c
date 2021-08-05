@@ -37,6 +37,15 @@
 
 
 /**
+ * G_MODULE_ERROR:
+ *
+ * The error domain of the #GModule API.
+ *
+ * Since: 2.70
+ */
+
+
+/**
  * G_MODULE_EXPORT:
  *
  * Used to declare functions exported by libraries or modules.
@@ -218,22 +227,37 @@
  * @file_name: (nullable): the name of the file containing the module, or %NULL
  *     to obtain a #GModule representing the main program itself
  * @flags: the flags used for opening the module. This can be the
+ *     logical OR of any of the #GModuleFlags.
+ *
+ * A thin wrapper function around g_module_open_full()
+ *
+ * Returns: a #GModule on success, or %NULL on failure
+ */
+
+
+/**
+ * g_module_open_full:
+ * @file_name: (nullable): the name of the file containing the module, or %NULL
+ *     to obtain a #GModule representing the main program itself
+ * @flags: the flags used for opening the module. This can be the
  *     logical OR of any of the #GModuleFlags
+ * @error: #GError.
  *
  * Opens a module. If the module has already been opened,
  * its reference count is incremented.
  *
- * First of all g_module_open() tries to open @file_name as a module.
+ * First of all g_module_open_full() tries to open @file_name as a module.
  * If that fails and @file_name has the ".la"-suffix (and is a libtool
  * archive) it tries to open the corresponding module. If that fails
  * and it doesn't have the proper module suffix for the platform
  * (#G_MODULE_SUFFIX), this suffix will be appended and the corresponding
  * module will be opened. If that fails and @file_name doesn't have the
- * ".la"-suffix, this suffix is appended and g_module_open() tries to open
+ * ".la"-suffix, this suffix is appended and g_module_open_full() tries to open
  * the corresponding module. If eventually that fails as well, %NULL is
  * returned.
  *
  * Returns: a #GModule on success, or %NULL on failure
+ * Since: 2.70
  */
 
 

@@ -75,11 +75,13 @@
  * This signal is typically used to obtain change notification for a
  * single property, by specifying the property name as a detail in the
  * g_signal_connect() call, like this:
+ *
  * |[<!-- language="C" -->
  * g_signal_connect (text_view->buffer, "notify::paste-target-list",
  *                   G_CALLBACK (gtk_text_view_target_list_notify),
  *                   text_view)
  * ]|
+ *
  * It is important to note that you must use
  * [canonical parameter names][canonical-parameter-names] as
  * detail strings for the notify signal.
@@ -90,20 +92,22 @@
  * GParamSpecPool:
  *
  * A #GParamSpecPool maintains a collection of #GParamSpecs which can be
- * quickly accessed by owner and name. The implementation of the #GObject property
- * system uses such a pool to store the #GParamSpecs of the properties all object
- * types.
+ * quickly accessed by owner and name.
+ *
+ * The implementation of the #GObject property system uses such a pool to
+ * store the #GParamSpecs of the properties all object types.
  */
 
 
 /**
  * GWeakRef:
  *
- * A structure containing a weak reference to a #GObject.  It can either
- * be empty (i.e. point to %NULL), or point to an object for as long as
- * at least one "strong" reference to that object exists. Before the
- * object's #GObjectClass.dispose method is called, every #GWeakRef
- * associated with becomes empty (i.e. points to %NULL).
+ * A structure containing a weak reference to a #GObject.
+ *
+ * A `GWeakRef` can either be empty (i.e. point to %NULL), or point to an
+ * object for as long as at least one "strong" reference to that object
+ * exists. Before the object's #GObjectClass.dispose method is called,
+ * every #GWeakRef associated with becomes empty (i.e. points to %NULL).
  *
  * Like #GValue, #GWeakRef can be statically allocated, stack- or
  * heap-allocated, or embedded in larger structures.
@@ -166,9 +170,10 @@
  *
  * #GBinding is the representation of a binding between a property on a
  * #GObject instance (or source) and another property on another #GObject
- * instance (or target). Whenever the source property changes, the same
- * value is applied to the target property; for instance, the following
- * binding:
+ * instance (or target).
+ *
+ * Whenever the source property changes, the same value is applied to the
+ * target property; for instance, the following binding:
  *
  * |[<!-- language="C" -->
  *   g_object_bind_property (object1, "property-a",
@@ -251,10 +256,11 @@
  * @see_also: #GParamSpecBoxed, g_param_spec_boxed()
  * @title: Boxed Types
  *
- * #GBoxed is a generic wrapper mechanism for arbitrary C structures. The only
- * thing the type system needs to know about the structures is how to copy them
- * (a #GBoxedCopyFunc) and how to free them (a #GBoxedFreeFunc) — beyond that
- * they are treated as opaque chunks of memory.
+ * #GBoxed is a generic wrapper mechanism for arbitrary C structures.
+ *
+ * The only thing the type system needs to know about the structures is how to
+ * copy them (a #GBoxedCopyFunc) and how to free them (a #GBoxedFreeFunc);
+ * beyond that, they are treated as opaque chunks of memory.
  *
  * Boxed types are useful for simple value-holder structures like rectangles or
  * points. They can also be used for wrapping structures defined in non-#GObject
@@ -277,8 +283,9 @@
  * @short_description: Functions as first-class objects
  * @title: Closures
  *
- * A #GClosure represents a callback supplied by the programmer. It
- * will generally comprise a function of some kind and a marshaller
+ * A #GClosure represents a callback supplied by the programmer.
+ *
+ * It will generally comprise a function of some kind and a marshaller
  * used to call it. It is the responsibility of the marshaller to
  * convert the arguments for the invocation from #GValues into
  * a suitable form, perform the callback on the converted arguments,
@@ -336,11 +343,16 @@
  *
  * The #GValue structure is basically a variable container that consists
  * of a type identifier and a specific value of that type.
+ *
  * The type identifier within a #GValue structure always determines the
  * type of the associated value.
+ *
  * To create an undefined #GValue structure, simply create a zero-filled
  * #GValue structure. To initialize the #GValue, use the g_value_init()
- * function. A #GValue cannot be used until it is initialized.
+ * function. A #GValue cannot be used until it is initialized. Before
+ * destruction you must always use g_value_unset() to make sure allocated
+ * memory is freed.
+ *
  * The basic type operations (such as freeing and copying) are determined
  * by the #GTypeValueTable associated with the type ID stored in the #GValue.
  * Other #GValue operations (such as converting values between types) are
@@ -403,6 +415,34 @@
  *   return 0;
  * }
  * ]|
+ *
+ * See also [gobject-Standard-Parameter-and-Value-Types] for more information on
+ * validation of #GValue.
+ *
+ * For letting a #GValue own (and memory manage) arbitrary types or pointers,
+ * they need to become a [boxed type][gboxed]. The example below shows how
+ * the pointer `mystruct` of type `MyStruct` is used as a [boxed type][gboxed].
+ *
+ * |[<!-- language="C" -->
+ * typedef struct { ... } MyStruct;
+ * G_DEFINE_BOXED_TYPE (MyStruct, my_struct, my_struct_copy, my_struct_free)
+ *
+ * // These two lines normally go in a public header. By GObject convention,
+ * // the naming scheme is NAMESPACE_TYPE_NAME:
+ * #define MY_TYPE_STRUCT (my_struct_get_type ())
+ * GType my_struct_get_type (void);
+ *
+ * void
+ * foo ()
+ * {
+ *   GValue *value = g_new0 (GValue, 1);
+ *   g_value_init (value, MY_TYPE_STRUCT);
+ *   g_value_set_boxed (value, mystruct);
+ *   // [... your code ....]
+ *   g_value_unset (value);
+ *   g_value_free (value);
+ * }
+ * ]|
  */
 
 
@@ -436,7 +476,7 @@
  *     management system
  * @title: Type Information
  *
- * The GType API is the foundation of the GObject system.  It provides the
+ * The GType API is the foundation of the GObject system. It provides the
  * facilities for registering and managing all fundamental data types,
  * user-defined object and interface types.
  *
@@ -483,16 +523,20 @@
  * @title: GTypeModule
  *
  * #GTypeModule provides a simple implementation of the #GTypePlugin
- * interface. The model of #GTypeModule is a dynamically loaded module
- * which implements some number of types and interface implementations.
+ * interface.
+ *
+ * The model of #GTypeModule is a dynamically loaded module which
+ * implements some number of types and interface implementations.
+ *
  * When the module is loaded, it registers its types and interfaces
  * using g_type_module_register_type() and g_type_module_add_interface().
  * As long as any instances of these types and interface implementations
  * are in use, the module is kept loaded. When the types and interfaces
  * are gone, the module may be unloaded. If the types and interfaces
  * become used again, the module will be reloaded. Note that the last
- * unref cannot happen in module code, since that would lead to the
- * caller's code being unloaded before g_object_unref() returns to it.
+ * reference cannot be released from within the module code, since that
+ * would lead to the caller's code being unloaded before g_object_unref()
+ * returns to it.
  *
  * Keeping track of whether the module should be loaded or not is done by
  * using a use count - it starts at zero, and whenever it is greater than
@@ -517,9 +561,10 @@
  * @see_also: #GTypeModule and g_type_register_dynamic().
  * @title: GTypePlugin
  *
+ * An interface that handles the lifecycle of dynamically loaded types.
+ *
  * The GObject type system supports dynamic loading of types.
- * The #GTypePlugin interface is used to handle the lifecycle
- * of dynamically loaded types. It goes as follows:
+ * It goes as follows:
  *
  * 1. The type is initially introduced (usually upon loading the module
  *    the first time, or by your main application that knows what modules
@@ -600,15 +645,18 @@
  * claimed to be "owned" by any code portion. The main motivation for
  * providing floating references is C convenience. In particular, it
  * allows code to be written as:
+ *
  * |[<!-- language="C" -->
  * container = create_container ();
  * container_add_child (container, create_child());
  * ]|
+ *
  * If container_add_child() calls g_object_ref_sink() on the passed-in child,
  * no reference of the newly created child is leaked. Without floating
  * references, container_add_child() can only g_object_ref() the new child,
  * so to implement this code without reference leaks, it would have to be
  * written as:
+ *
  * |[<!-- language="C" -->
  * Child *child;
  * container = create_container ();
@@ -616,6 +664,7 @@
  * container_add_child (container, child);
  * g_object_unref (child);
  * ]|
+ *
  * The floating reference can be converted into an ordinary reference by
  * calling g_object_ref_sink(). For already sunken objects (objects that
  * don't have a floating reference anymore), g_object_ref_sink() is equivalent
@@ -680,6 +729,8 @@
  * Parameter names need to start with a letter (a-z or A-Z). Subsequent
  * characters can be letters, numbers or a '-'.
  * All other characters are replaced by a '-' during construction.
+ *
+ * See also #GValue for more information.
  */
 
 
@@ -969,8 +1020,14 @@
  * @boxed_free: Boxed structure free function.
  *
  * This function creates a new %G_TYPE_BOXED derived type id for a new
- * boxed type with name @name. Boxed type handling functions have to be
- * provided to copy and free opaque boxed structures of this type.
+ * boxed type with name @name.
+ *
+ * Boxed type handling functions have to be provided to copy and free
+ * opaque boxed structures of this type.
+ *
+ * For the general case, it is recommended to use #G_DEFINE_BOXED_TYPE
+ * instead of calling g_boxed_type_register_static() directly. The macro
+ * will create the appropriate `*_get_type()` function for the boxed type.
  *
  * Returns: New %G_TYPE_BOXED derived type id for @name.
  */
@@ -1909,11 +1966,12 @@
  * @notify_func: the callback function to register
  *
  * Registers a finalization notifier which will be called when the
- * reference count of @closure goes down to 0. Multiple finalization
- * notifiers on a single closure are invoked in unspecified order. If
- * a single call to g_closure_unref() results in the closure being
- * both invalidated and finalized, then the invalidate notifiers will
- * be run before the finalize notifiers.
+ * reference count of @closure goes down to 0.
+ *
+ * Multiple finalization notifiers on a single closure are invoked in
+ * unspecified order. If a single call to g_closure_unref() results in
+ * the closure being both invalidated and finalized, then the invalidate
+ * notifiers will be run before the finalize notifiers.
  */
 
 
@@ -1924,9 +1982,10 @@
  * @notify_func: the callback function to register
  *
  * Registers an invalidation notifier which will be called when the
- * @closure is invalidated with g_closure_invalidate(). Invalidation
- * notifiers are invoked before finalization notifiers, in an
- * unspecified order.
+ * @closure is invalidated with g_closure_invalidate().
+ *
+ * Invalidation notifiers are invoked before finalization notifiers,
+ * in an unspecified order.
  */
 
 
@@ -1941,9 +2000,11 @@
  * @post_marshal_notify: a function to call after the closure callback
  *
  * Adds a pair of notifiers which get invoked before and after the
- * closure callback, respectively. This is typically used to protect
- * the extra arguments for the duration of the callback. See
- * g_object_watch_closure() for an example of marshal guards.
+ * closure callback, respectively.
+ *
+ * This is typically used to protect the extra arguments for the
+ * duration of the callback. See g_object_watch_closure() for an
+ * example of marshal guards.
  */
 
 
@@ -1954,7 +2015,9 @@
  * Sets a flag on the closure to indicate that its calling
  * environment has become invalid, and thus causes any future
  * invocations of g_closure_invoke() on this @closure to be
- * ignored. Also, invalidation notifiers installed on the closure will
+ * ignored.
+ *
+ * Also, invalidation notifiers installed on the closure will
  * be called at this point. Note that unless you are holding a
  * reference to the closure yourself, the invalidation notifiers may
  * unref the closure and cause it to be destroyed, so if you need to
@@ -1970,7 +2033,7 @@
 /**
  * g_closure_invoke:
  * @closure: a #GClosure
- * @return_value: (optional) (out): a #GValue to store the return
+ * @return_value: (optional) (inout): a #GValue to store the return
  *                value. May be %NULL if the callback of @closure
  *                doesn't return a value.
  * @n_param_values: the length of the @param_values array
@@ -2006,8 +2069,9 @@
  * @data: data to store in the @data field of the newly allocated #GClosure
  *
  * Allocates a struct of the given size and initializes the initial
- * part as a #GClosure. This function is mainly useful when
- * implementing new types of closures.
+ * part as a #GClosure.
+ *
+ * This function is mainly useful when implementing new types of closures:
  *
  * |[<!-- language="C" -->
  * typedef struct _MyClosure MyClosure;
@@ -2088,12 +2152,16 @@
  * @closure: a #GClosure
  * @marshal: a #GClosureMarshal function
  *
- * Sets the marshaller of @closure. The `marshal_data`
- * of @marshal provides a way for a meta marshaller to provide additional
- * information to the marshaller. (See g_closure_set_meta_marshal().) For
- * GObject's C predefined marshallers (the g_cclosure_marshal_*()
+ * Sets the marshaller of @closure.
+ *
+ * The `marshal_data` of @marshal provides a way for a meta marshaller to
+ * provide additional information to the marshaller.
+ *
+ * For GObject's C predefined marshallers (the `g_cclosure_marshal_*()`
  * functions), what it provides is a callback function to use instead of
  * @closure->callback.
+ *
+ * See also: g_closure_set_meta_marshal()
  */
 
 
@@ -2104,12 +2172,15 @@
  *  to @meta_marshal
  * @meta_marshal: a #GClosureMarshal function
  *
- * Sets the meta marshaller of @closure.  A meta marshaller wraps
- * @closure->marshal and modifies the way it is called in some
- * fashion. The most common use of this facility is for C callbacks.
+ * Sets the meta marshaller of @closure.
+ *
+ * A meta marshaller wraps the @closure's marshal and modifies the way
+ * it is called in some fashion. The most common use of this facility
+ * is for C callbacks.
+ *
  * The same marshallers (generated by [glib-genmarshal][glib-genmarshal]),
  * are used everywhere, but the way that we get the callback function
- * differs. In most cases we want to use @closure->callback, but in
+ * differs. In most cases we want to use the @closure's callback, but in
  * other cases we want to use some different technique to retrieve the
  * callback function.
  *
@@ -2126,27 +2197,34 @@
  * @closure: #GClosure to decrement the initial reference count on, if it's
  *           still being held
  *
- * Takes over the initial ownership of a closure.  Each closure is
- * initially created in a "floating" state, which means that the initial
- * reference count is not owned by any caller. g_closure_sink() checks
- * to see if the object is still floating, and if so, unsets the
- * floating state and decreases the reference count. If the closure
- * is not floating, g_closure_sink() does nothing. The reason for the
- * existence of the floating state is to prevent cumbersome code
- * sequences like:
+ * Takes over the initial ownership of a closure.
+ *
+ * Each closure is initially created in a "floating" state, which means
+ * that the initial reference count is not owned by any caller.
+ *
+ * This function checks to see if the object is still floating, and if so,
+ * unsets the floating state and decreases the reference count. If the
+ * closure is not floating, g_closure_sink() does nothing.
+ *
+ * The reason for the existence of the floating state is to prevent
+ * cumbersome code sequences like:
+ *
  * |[<!-- language="C" -->
  * closure = g_cclosure_new (cb_func, cb_data);
  * g_source_set_closure (source, closure);
  * g_closure_unref (closure); // GObject doesn't really need this
  * ]|
+ *
  * Because g_source_set_closure() (and similar functions) take ownership of the
  * initial reference count, if it is unowned, we instead can write:
+ *
  * |[<!-- language="C" -->
  * g_source_set_closure (source, g_cclosure_new (cb_func, cb_data));
  * ]|
  *
  * Generally, this function is used together with g_closure_ref(). An example
  * of storing a closure for later notification looks like:
+ *
  * |[<!-- language="C" -->
  * static GClosure *notify_closure = NULL;
  * void
@@ -2174,8 +2252,10 @@
  * @closure: #GClosure to decrement the reference count on
  *
  * Decrements the reference count of a closure after it was previously
- * incremented by the same caller. If no other callers are using the
- * closure, then the closure will be destroyed and freed.
+ * incremented by the same caller.
+ *
+ * If no other callers are using the closure, then the closure will be
+ * destroyed and freed.
  */
 
 
@@ -2432,10 +2512,12 @@
  * @flags: flags to pass to #GBinding
  *
  * Creates a binding between @source_property on @source and @target_property
- * on @target. Whenever the @source_property is changed the @target_property is
+ * on @target.
+ *
+ * Whenever the @source_property is changed the @target_property is
  * updated using the same value. For instance:
  *
- * |[
+ * |[<!-- language="C" -->
  *   g_object_bind_property (action, "active", widget, "sensitive", 0);
  * ]|
  *
@@ -3221,7 +3303,8 @@
  * @notify: a function to call when this reference is the
  *  last reference to the object, or is no longer
  *  the last reference.
- * @data: data to pass to @notify
+ * @data: (nullable): data to pass to @notify, or %NULL to
+ *  match any toggle refs with the @notify argument.
  *
  * Removes a reference added with g_object_add_toggle_ref(). The
  * reference count of the object is decreased by one.
@@ -3493,6 +3576,51 @@
  * g_object_set_qdata_full().
  *
  * Returns: (transfer full) (nullable): The user data pointer set, or %NULL
+ */
+
+
+/**
+ * g_object_take_ref: (skip)
+ * @object: (type GObject.Object): a #GObject
+ *
+ * If @object is floating, sink it.  Otherwise, do nothing.
+ *
+ * In other words, this function will convert a floating reference (if
+ * present) into a full reference.
+ *
+ * Typically you want to use g_object_ref_sink() in order to
+ * automatically do the correct thing with respect to floating or
+ * non-floating references, but there is one specific scenario where
+ * this function is helpful.
+ *
+ * The situation where this function is helpful is when creating an API
+ * that allows the user to provide a callback function that returns a
+ * GObject. We certainly want to allow the user the flexibility to
+ * return a non-floating reference from this callback (for the case
+ * where the object that is being returned already exists).
+ *
+ * At the same time, the API style of some popular GObject-based
+ * libraries (such as Gtk) make it likely that for newly-created GObject
+ * instances, the user can be saved some typing if they are allowed to
+ * return a floating reference.
+ *
+ * Using this function on the return value of the user's callback allows
+ * the user to do whichever is more convenient for them. The caller will
+ * alway receives exactly one full reference to the value: either the
+ * one that was returned in the first place, or a floating reference
+ * that has been converted to a full reference.
+ *
+ * This function has an odd interaction when combined with
+ * g_object_ref_sink() running at the same time in another thread on
+ * the same #GObject instance. If g_object_ref_sink() runs first then
+ * the result will be that the floating reference is converted to a hard
+ * reference. If g_object_take_ref() runs first then the result will be
+ * that the floating reference is converted to a hard reference and an
+ * additional reference on top of that one is added. It is best to avoid
+ * this situation.
+ *
+ * Since: 2.70
+ * Returns: (type GObject.Object) (transfer full): @object
  */
 
 
@@ -4282,10 +4410,12 @@
  * @name: 0-terminated string used as the name of the new #GParamSpec type.
  * @pspec_info: The #GParamSpecTypeInfo for this #GParamSpec type.
  *
- * Registers @name as the name of a new static type derived from
- * #G_TYPE_PARAM. The type system uses the information contained in
- * the #GParamSpecTypeInfo structure pointed to by @info to manage the
- * #GParamSpec type and its instances.
+ * Registers @name as the name of a new static type derived
+ * from #G_TYPE_PARAM.
+ *
+ * The type system uses the information contained in the #GParamSpecTypeInfo
+ * structure pointed to by @info to manage the #GParamSpec type and its
+ * instances.
  *
  * Returns: The new type identifier.
  */
@@ -6910,6 +7040,7 @@
  * @v_boxed: (nullable): static boxed value to be set
  *
  * Set the contents of a %G_TYPE_BOXED derived #GValue to @v_boxed.
+ *
  * The boxed value is assumed to be static, and is thus not duplicated
  * when setting the #GValue.
  */
@@ -6934,7 +7065,7 @@
  * @value: a valid #GValue of type %G_TYPE_STRING
  * @v_string: (nullable): caller-owned string to be duplicated for the #GValue
  *
- * Set the contents of a %G_TYPE_STRING #GValue to @v_string.
+ * Set the contents of a %G_TYPE_STRING #GValue to a copy of @v_string.
  */
 
 
