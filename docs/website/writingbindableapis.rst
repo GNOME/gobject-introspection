@@ -10,12 +10,12 @@ Structures with custom memory management
 
 Avoid creating C structures with custom memory management unless they are
 registered as a `boxed type
-<https://developer.gnome.org/gobject/unstable/gobject-Boxed-Types.html>`__.
+<https://developer-old.gnome.org/gobject/stable/gobject-Boxed-Types.html>`__.
 If you don't register them as a boxed type bindings will fall back to
 simple memory copying, which might not be what you want.
 
 Also consider using a full `GObject
-<https://developer.gnome.org/gobject/unstable/gobject-The-Base-Object-Type.html>`__
+<https://developer-old.gnome.org/gobject/stable/gobject-The-Base-Object-Type.html>`__
 as that allows bindings to better integrate those objects with the binding
 language, like for example preserve user defined state across language
 boundaries.

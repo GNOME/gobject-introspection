@@ -103,7 +103,7 @@ Additionally, the following restrictions are in effect:
 Refer to the `GTK-Doc manual`_ for more detailed usage information.
 
 .. _GTK-Doc manual:
-        http://developer.gnome.org/gtk-doc-manual/1.18/documenting.html.en
+        http://developer-old.gnome.org/gtk-doc-manual/1.18/documenting.html.en
 '''
 
 import os

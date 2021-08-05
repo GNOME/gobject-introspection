@@ -11,7 +11,7 @@
     <releaseinfo>
       This document is for libgirepository version &version;.
       The latest version of this documentation can be found on-line at
-      <ulink type="http" url="https://developer.gnome.org/gi/unstable/">https://developer.gnome.org/gi/unstable/</ulink>.
+      <ulink type="http" url="https://developer-old.gnome.org/gi/unstable/">https://developer-old.gnome.org/gi/unstable/</ulink>.
       <para>
         For more information on how to build libgirepository, for how to build
         bindings with it and for information on GObject Introspection in

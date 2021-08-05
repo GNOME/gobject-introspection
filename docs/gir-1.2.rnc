@@ -354,20 +354,20 @@ grammar {
     }
 
   Signal =
-    ## A signal as defined in the GObject system (https://developer.gnome.org/gobject/stable/signal.html)
+    ## A signal as defined in the GObject system (https://developer-old.gnome.org/gobject/stable/signal.html)
     element glib:signal {
       Info.attrs,
       ## name of the signal
       attribute name { xsd:string },
-      ## Binary attribute, true if the signal has a detailed parameter (https://developer.gnome.org/gobject/stable/signal.html#signal-detail# and https://developer.gnome.org/gobject/unstable/gobject-Signals.html#GSignalFlags)
+      ## Binary attribute, true if the signal has a detailed parameter (https://developer-old.gnome.org/gobject/stable/signal.html#signal-detail and https://developer-old.gnome.org/gobject/stable/gobject-Signals.html#GSignalFlags)
       attribute detailed { "0" | "1" }?,
-      ## When to run the signal during the 5 steps of signal emission (https://developer.gnome.org/gobject/stable/signal.html#signal-emission and https://developer.gnome.org/gobject/unstable/gobject-Signals.html#GSignalFlags)
+      ## When to run the signal during the 5 steps of signal emission (https://developer-old.gnome.org/gobject/stable/signal.html#signal-emission and https://developer-old.gnome.org/gobject/stable/gobject-Signals.html#GSignalFlags)
       attribute when { "first" | "last" | "cleanup" }?,
-      ## Binary attribute, true if the signal can be freely emitted on alive objects from user code (https://developer.gnome.org/gobject/unstable/gobject-Signals.html#GSignalFlags)
+      ## Binary attribute, true if the signal can be freely emitted on alive objects from user code (https://developer-old.gnome.org/gobject/stable/gobject-Signals.html#GSignalFlags)
       attribute action { "0" | "1" }?,
-      ## Binary attribute, true if no emission hooks are supported for this signal (https://developer.gnome.org/gobject/unstable/gobject-Signals.html#GSignalFlags) 
+      ## Binary attribute, true if no emission hooks are supported for this signal (https://developer-old.gnome.org/gobject/stable/gobject-Signals.html#GSignalFlags) 
       attribute no-hooks { "0" | "1" }?,
-      ## Binary attribute, true if signals emitted for an object while currently being in emission for this very object will not be emitted recursively, but instead cause the first emission to be restarted (https://developer.gnome.org/gobject/unstable/gobject-Signals.html#GSignalFlags)
+      ## Binary attribute, true if signals emitted for an object while currently being in emission for this very object will not be emitted recursively, but instead cause the first emission to be restarted (https://developer-old.gnome.org/gobject/stable/gobject-Signals.html#GSignalFlags)
       attribute no-recurse { "0" | "1" }?,
 
       # Other elements a property can contain
