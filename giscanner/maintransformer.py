@@ -1304,10 +1304,21 @@ method or constructor of some type."""
         return origin_node
 
     def _get_constructor_name(self, func, subsymbol):
-        name = None
+        prefix_matches = False
+        uscored_prefix = None
+        target = self._transformer.lookup_typenode(func.retval.type)
+        if hasattr(target, 'c_symbol_prefix') and target.c_symbol_prefix is not None:
+            prefix_matches = subsymbol.startswith(target.c_symbol_prefix)
+            if prefix_matches:
+                uscored_prefix = target.c_symbol_prefix
+        if not prefix_matches:
+            uscored_prefix = self._uscored_identifier_for_type(func.retval.type)
         split = self._split_uscored_by_type(subsymbol)
         if split is None:
             if func.is_constructor:
+                if uscored_prefix in func.symbol:
+                    subsym_idx = func.symbol.find(subsymbol)
+                    func.name = func.symbol[(subsym_idx + len(uscored_prefix) + 1):]
                 name = func.name
         else:
             _, name = split
