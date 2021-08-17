@@ -4661,6 +4661,9 @@
  * In order to use this function, you must include string.h yourself,
  * because this macro may use memmove() and GLib does not include
  * string.h for you.
+ *
+ * Each invocation of `G_VA_COPY (ap1, ap2)` must be matched with a
+ * corresponding `va_end (ap1)` call in the same function.
  */
 
 
@@ -32526,18 +32529,18 @@
 
 
 /**
- * g_string_new:
+ * g_string_new: (constructor)
  * @init: (nullable): the initial text to copy into the string, or %NULL to
- * start with an empty string
+ *   start with an empty string
  *
  * Creates a new #GString, initialized with the given string.
  *
- * Returns: the new #GString
+ * Returns: (transfer full): the new #GString
  */
 
 
 /**
- * g_string_new_len:
+ * g_string_new_len: (constructor)
  * @init: initial contents of the string
  * @len: length of @init to use
  *
@@ -32549,7 +32552,7 @@
  * responsibility to ensure that @init has at least @len addressable
  * bytes.
  *
- * Returns: a new #GString
+ * Returns: (transfer full): a new #GString
  */
 
 
@@ -32690,16 +32693,15 @@
 
 
 /**
- * g_string_sized_new:
- * @dfl_size: the default size of the space allocated to
- *     hold the string
+ * g_string_sized_new: (constructor)
+ * @dfl_size: the default size of the space allocated to hold the string
  *
  * Creates a new #GString, with enough space for @dfl_size
  * bytes. This is useful if you are going to add a lot of
  * text to the string and don't want it to be reallocated
  * too often.
  *
- * Returns: the new #GString
+ * Returns: (transfer full): the new #GString
  */
 
 
