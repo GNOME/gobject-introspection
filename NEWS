@@ -1,3 +1,19 @@
+1.69.0 - 2021-08-24
+-------------------
+
+* Fix build when gobject-introspection is a subproject :mr:`266`
+* Add more float types :issue:`384`, :mr:`269`
+* Make test suite work with cross-related options :issue:`227`
+* Fix several leaks found by Coverity :mr:`272`
+* Fix enum member c:identifier :mr:`264`
+* Add g-ir-doc-tool man page :mr:`284`
+* Export warnlib sources as variables :mr:`287`
+* Update the GLib annotations :mr:`288`
+* Add "final" class attribute :mr:`257`, :mr:`291`
+* Add option to make .gir files installation paths configurable :mr:`63`
+* Handle constructors with mismatched GTypes :issue:`399`, :mr:`292`
+* Add property accessors annotations :issue:`13`, :mr:`279`
+
 1.68.0 - 2021-03-19
 -------------------
 
