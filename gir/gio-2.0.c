@@ -33887,10 +33887,10 @@
  * @key: a #GSettingsSchemaKey
  * @value: the value to check
  *
- * Checks if the given @value is of the correct type and within the
+ * Checks if the given @value is within the
  * permitted range for @key.
  *
- * It is a programmer error if @value is not of the correct type -- you
+ * It is a programmer error if @value is not of the correct type — you
  * must check for this first.
  *
  * Returns: %TRUE if @value is valid for @key

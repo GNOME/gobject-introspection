@@ -33513,7 +33513,25 @@
  *
  * If not called from inside a test, this function does nothing.
  *
+ * Note that unlike g_test_skip() and g_test_incomplete(), this
+ * function does not log a message alongside the test failure.
+ * If details of the test failure are available, either log them with
+ * g_test_message() before g_test_fail(), or use g_test_fail_printf()
+ * instead.
+ *
  * Since: 2.30
+ */
+
+
+/**
+ * g_test_fail_printf:
+ * @format: the format string
+ * @...: printf-like arguments to @format
+ *
+ * Equivalent to g_test_fail(), but also record a message like
+ * g_test_skip_printf().
+ *
+ * Since: 2.70
  */
 
 
@@ -33616,6 +33634,18 @@
  * If not called from inside a test, this function does nothing.
  *
  * Since: 2.38
+ */
+
+
+/**
+ * g_test_incomplete_printf:
+ * @format: the format string
+ * @...: printf-like arguments to @format
+ *
+ * Equivalent to g_test_incomplete(), but the explanation is formatted
+ * as if by g_strdup_printf().
+ *
+ * Since: 2.70
  */
 
 
@@ -34035,6 +34065,18 @@
  * If not called from inside a test, this function does nothing.
  *
  * Since: 2.38
+ */
+
+
+/**
+ * g_test_skip_printf:
+ * @format: the format string
+ * @...: printf-like arguments to @format
+ *
+ * Equivalent to g_test_skip(), but the explanation is formatted
+ * as if by g_strdup_printf().
+ *
+ * Since: 2.70
  */
 
 

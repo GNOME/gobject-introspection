@@ -2033,7 +2033,7 @@
 /**
  * g_closure_invoke:
  * @closure: a #GClosure
- * @return_value: (optional) (inout): a #GValue to store the return
+ * @return_value: (optional) (out): a #GValue to store the return
  *                value. May be %NULL if the callback of @closure
  *                doesn't return a value.
  * @n_param_values: the length of the @param_values array
@@ -4686,7 +4686,8 @@
  * @detailed_signal: a string of the form "signal-name::detail".
  * @...: parameters to be passed to the signal, followed by a
  *  location for the return value. If the return type of the signal
- *  is #G_TYPE_NONE, the return value location can be omitted.
+ *  is %G_TYPE_NONE, the return value location can be omitted. The
+ *  number of parameters to pass to this function is defined when creating the signal.
  *
  * Emits a signal.
  *
