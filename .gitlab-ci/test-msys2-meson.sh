@@ -33,6 +33,7 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 pip3 install --upgrade --user meson==0.55.3 flake8 mypy==0.790
 export PATH="$HOME/.local/bin:$PATH"
 
+meson subprojects download glib
 export CFLAGS="-Werror"
 meson -Dcairo=enabled -Ddoctool=enabled --buildtype debug _build
 cd _build

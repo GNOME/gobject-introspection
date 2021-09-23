@@ -52,12 +52,12 @@ scanner_command = [
 ]
 
 dep_type = glib_dep.type_name()
+# XXX: Instead of hard-coding the subproject directory, we should use
+# gnome.generate_gir() because that will take care of dependencies, include
+# paths, library paths, and more that we now have to handle manually when
+# building with subprojects.
+subprojdir = 'subprojects'
 if dep_type == 'internal'
-  # XXX: Instead of hard-coding the subproject directory, we should use
-  # gnome.generate_gir() because that will take care of dependencies, include
-  # paths, library paths, and more that we now have to handle manually when
-  # building with subprojects.
-  subprojdir = 'subprojects'
   scanner_command += [
     '--extra-library=glib-2.0',
     '--extra-library=gmodule-2.0',
@@ -96,6 +96,33 @@ glib_command = scanner_command + [
   '--library=gobject-2.0',
 ]
 
+glib_srcdir = get_option('glib_src_dir')
+if dep_type == 'internal'
+  # XXX: This is a pile of hacks to allow gobject-introspection to parse the
+  #      GLib source files when GLib is used as a subproject
+  #      Assumes the location of the glib subproject dir
+  #      We should add API to meson to get a specific file from a specific
+  #      subproject
+  glib_subproject = subproject('glib')
+
+  glibproj_sourcedir = join_paths(meson.source_root(), subprojdir, 'glib')
+  glibproj_builddir = join_paths(meson.build_root(), subprojdir, 'glib')
+endif
+
+if glib_srcdir == ''
+  if dep_type == 'pkgconfig'
+    # Cannot use subproject directly, or Meson will try to “configure” it.
+    glib_srcdir = join_paths(meson.source_root(), subprojdir, 'glib')
+    if not fs.is_dir(glib_srcdir)
+      error('Missing glib subproject required for generating glib GIR files. Either download it, or specify path to source code using glib_src_dir Meson option.')
+    endif
+  elif dep_type == 'internal'
+    glib_srcdir = glibproj_sourcedir
+  else
+    error('Unknown glib dependency type: ' + dep_type)
+  endif
+endif
+
 if dep_type == 'pkgconfig'
   glib_command += ['--external-library', '--pkg=glib-2.0']
   glib_libdir = get_option('gi_cross_pkgconfig_sysroot_path') + glib_dep.get_pkgconfig_variable('libdir')
@@ -113,14 +140,11 @@ if dep_type == 'pkgconfig'
   endif
   glib_headers = ret.stdout().strip().split('\n')
   # Get a list of all source files
-  glib_srcdir = get_option('glib_src_dir')
-  if glib_srcdir != ''
-    ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'glib', '*.c')))
-    if ret.returncode() != 0
-      error('Failed to get glib source list')
-    endif
-    glib_files += ret.stdout().strip().split('\n')
+  ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'glib', '*.c')))
+  if ret.returncode() != 0
+    error('Failed to get glib source list')
   endif
+  glib_files += ret.stdout().strip().split('\n')
   glib_includes = ['-I' + glib_incdir, '-I' + glib_libincdir]
   glib_gir_dep = []
 elif dep_type == 'internal'
@@ -131,11 +155,6 @@ elif dep_type == 'internal'
   #      We should add API to meson to get a specific file from a specific
   #      subproject
   # We know exactly what headers will be installed, so just fetch that
-  glib_subproject = subproject('glib')
-
-  glibproj_sourcedir = join_paths(meson.source_root(), subprojdir, 'glib')
-  glibproj_builddir = join_paths(meson.build_root(), subprojdir, 'glib')
-
   glib_files += join_paths(glibproj_sourcedir, 'gobject', 'glib-types.h')
 
   # Generated files, relative to the build directory
@@ -211,11 +230,6 @@ foreach h : glib_headers
   endif
 endforeach
 
-# NOTE: Always add this last so that we prefer the annotations in the sources
-# (if they are available) since it contains 'backup' annotations that can be
-# out of date.
-glib_files += files('glib-2.0.c')
-
 gir_giscanner_pymod = []
 gir_giscanner_built_files = []
 if not get_option('gi_cross_use_prebuilt_gi')
@@ -262,13 +276,11 @@ if dep_type == 'pkgconfig'
     error('Failed to get gobject header list')
   endif
   gobject_headers = ret.stdout().strip().split('\n')
-  if glib_srcdir != ''
-    ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'gobject', '*.c')))
-    if ret.returncode() != 0
-      error('Failed to get gobject source list')
-    endif
-    gobject_files += ret.stdout().strip().split('\n')
+  ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'gobject', '*.c')))
+  if ret.returncode() != 0
+    error('Failed to get gobject source list')
   endif
+  gobject_files += ret.stdout().strip().split('\n')
   gobject_gir_dep = []
 else
   gobject_command += ['--pkg-export=gobject-2.0']
@@ -286,11 +298,6 @@ foreach h : gobject_headers
     gobject_files += h
   endif
 endforeach
-
-# NOTE: Always add this last so that we prefer the annotations in the sources
-# (if they are available) since it contains 'backup' annotations that can be
-# out of date.
-gobject_files += files('gobject-2.0.c')
 
 gobject_gir = custom_target('gir-gobject',
   input: gobject_files,
@@ -324,9 +331,7 @@ gmodule_command = scanner_command + [
 if dep_type == 'pkgconfig'
   gmodule_command += ['--external-library', '--pkg=gmodule-2.0']
   gmodule_files += join_paths(glib_incdir, 'gmodule.h')
-  if glib_srcdir != ''
-    gmodule_files += join_paths(glib_srcdir, 'gmodule', 'gmodule.c')
-  endif
+  gmodule_files += join_paths(glib_srcdir, 'gmodule', 'gmodule.c')
   gmodule_gir_dep = []
 else
   gmodule_command += ['--pkg-export=gmodule-2.0']
@@ -338,11 +343,6 @@ else
   ]
   gmodule_gir_dep = glib_subproject.get_variable('libgmodule')
 endif
-
-# NOTE: Always add this last so that we prefer the annotations in the sources
-# (if they are available) since it contains 'backup' annotations that can be
-# out of date.
-gmodule_files += files('gmodule-2.0.c')
 
 gir_files += custom_target('gir-gmodule',
   input: gmodule_files,
@@ -381,13 +381,11 @@ if dep_type == 'pkgconfig'
   # Get all gio (and gio-unix) sources. This is not entirely correct, but it's
   # probably fine since it matches what Autotools does. We are more exact in
   # the subproject case.
-  if glib_srcdir != ''
-    ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'gio', '*.c')))
-    if ret.returncode() != 0
-      error('Failed to get gio source list')
-    endif
-    gio_files += ret.stdout().strip().split('\n')
+  ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'gio', '*.c')))
+  if ret.returncode() != 0
+    error('Failed to get gio source list')
   endif
+  gio_files += ret.stdout().strip().split('\n')
   gio_gir_dep = []
 else
   gio_command += ['--pkg-export=gio-2.0']
@@ -433,11 +431,6 @@ if giounix_dep.found()
     gio_command += '--c-include=gio/@0@'.format(hbase)
   endforeach
 endif
-
-# NOTE: Always add this last so that we prefer the annotations in the sources
-# (if they are available) since it contains 'backup' annotations that can be
-# out of date.
-gio_files += files('gio-2.0.c')
 
 gio_gir = custom_target('gir-gio',
   input: gio_files,

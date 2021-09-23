@@ -17,6 +17,8 @@ configinc = include_directories('.')
 pymod = import('python')
 python = pymod.find_installation(get_option('python'))
 
+fs = import('fs')
+
 python_version = python.language_version()
 python_version_req = '>=3.6'
 if not python_version.version_compare(python_version_req)
