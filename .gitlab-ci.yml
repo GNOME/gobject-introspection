@@ -71,6 +71,7 @@ fedora-x86_64-meson:
     name: "gi-_${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/gir/*.gir"
       - public
 
 fedora-x86_64-subprojects:
@@ -90,6 +91,7 @@ fedora-x86_64-subprojects:
     name: "gi-_${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/gir/*.gir"
       - public
 
 fedora-x86_64-no-introspection-data:
@@ -110,6 +112,7 @@ fedora-x86_64-no-introspection-data:
     name: "gi-_${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/gir/*.gir"
       - public
 
 fedora-x86_64-python3.6:
@@ -130,6 +133,7 @@ fedora-x86_64-python3.6:
     name: "gi-_${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/gir/*.gir"
       - public
 
 msys2-mingw64-meson:
@@ -147,6 +151,7 @@ msys2-mingw64-meson:
     name: "gi-_${env:CI_COMMIT_REF_NAME}"
     paths:
       - _build/meson-logs
+      - _build/gir/*.gir
 
 vs2017-x64-meson:
   stage: build
@@ -159,6 +164,7 @@ vs2017-x64-meson:
     name: "gi-_${env:CI_COMMIT_REF_NAME}"
     paths:
       - _build/meson-logs
+      - _build/gir/*.gir
 
 pages:
   stage: deploy
