@@ -36,6 +36,10 @@
 #include "sourcescanner.h"
 #include "scannerparser.h"
 
+#ifdef G_OS_WIN32
+#include <io.h>
+#endif
+
 extern FILE *yyin;
 extern int lineno;
 extern char linebuf[2000];
