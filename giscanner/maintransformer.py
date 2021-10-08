@@ -1147,6 +1147,21 @@ method or constructor of some type."""
         name = typeval.get_giname()
         return to_underscores_noprefix(name).lower()
 
+    def _is_instance_pointer(self, typeval):
+        pointer_types = (
+            ast.Boxed,
+            ast.Class,
+            ast.Interface,
+            ast.Record,
+            ast.Union,
+        )
+        if isinstance(typeval, pointer_types):
+            return True
+        # Aliases to gpointer are also pointers
+        if isinstance(typeval, ast.Alias) and typeval.target.is_equiv(ast.TYPE_ANY):
+            return True
+        return False
+
     def _is_method(self, func, subsymbol):
         if not func.parameters:
             if func.is_method:
@@ -1155,9 +1170,7 @@ method or constructor of some type."""
             return False
         first = func.parameters[0]
         target = self._transformer.lookup_typenode(first.type)
-        if not isinstance(target, (ast.Class, ast.Interface,
-                                   ast.Record, ast.Union,
-                                   ast.Boxed)):
+        if not self._is_instance_pointer(target):
             if func.is_method:
                 message.warn_node(func,
                     '%s: Methods must have a pointer as their first '
