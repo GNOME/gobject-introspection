@@ -344,6 +344,8 @@ type_names['FILE*'] = TYPE_ANY
 # integers it's easy enough to expand them.
 type_names['size_t'] = type_names['gsize']
 type_names['ssize_t'] = type_names['gssize']
+type_names['uintptr_t'] = type_names['guintptr']
+type_names['intptr_t'] = type_names['gintptr']
 type_names['time_t'] = TYPE_LONG
 type_names['off_t'] = type_names['gsize']
 type_names['pid_t'] = TYPE_INT
