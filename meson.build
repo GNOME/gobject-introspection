@@ -8,6 +8,7 @@ project('gobject-introspection', 'c',
 )
 
 host_system = host_machine.system()
+host_arch = host_machine.cpu_family()
 gi_versions = meson.project_version().split('.')
 build_root = meson.current_build_dir()
 source_root = meson.current_source_dir()
@@ -122,10 +123,6 @@ else
   gi_hidden_visibility_cflags += '-fvisibility=hidden'
 endif
 
-configure_file(
-  configuration: config,
-  output: 'config.h'
-)
 
 # FIXME: Always bumped to match our version
 #glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
@@ -154,6 +151,15 @@ else
 endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
+
+if host_system == 'darwin' and host_arch == 'aarch64' or host_system == 'linux' and libffi_dep.version().version_compare('< 3.4')
+  config.set('LEGACY_GIRFFI_FREE', 1)
+endif
+
+configure_file(
+  configuration: config,
+  output: 'config.h'
+)
 
 # python headers
 cc.check_header('Python.h', dependencies: [python.dependency()], required: true)
