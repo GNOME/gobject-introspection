@@ -152,7 +152,8 @@ endif
 libffi_dep = dependency('libffi',
   fallback : ['libffi', 'ffi_dep'])
 
-if host_system == 'darwin' and host_arch == 'aarch64' or host_system == 'linux' and libffi_dep.version().version_compare('< 3.4')
+if not (host_system == 'darwin' and host_arch == 'aarch64' or
+        host_system == 'linux' and libffi_dep.version().version_compare('>= 3.4'))
   config.set('LEGACY_GIRFFI_FREE', 1)
 endif
 
