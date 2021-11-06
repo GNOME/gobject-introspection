@@ -12,7 +12,7 @@ SET PATH=%CD%;%CD%\win_flex_bison;%PATH%
 pip3 install --upgrade --user meson==0.55.3 || goto :error
 
 meson subprojects download glib
-meson wrap promote subprojects\glib\subprojects\libpcre.wrap
+meson wrap promote subprojects\glib\subprojects\pcre.wrap
 
 meson setup _build || goto :error
 meson compile -C _build || goto :error
