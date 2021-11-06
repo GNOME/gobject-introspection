@@ -7,7 +7,7 @@ typelib data and for interacting with the corresponding GObject based
 libraries.
 
 For more information about libgirepository see the `API documentation
-<https://developer-old.gnome.org/gi/stable>`__.
+<https://gnome.pages.gitlab.gnome.org/gobject-introspection/girepository/>`__.
 
 The following example shows how to call the ``g_assertion_message()`` function
 from libglib-2.0:
