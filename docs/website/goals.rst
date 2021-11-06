@@ -23,7 +23,7 @@ application logic such as configuration, layout, dialogs, etc.
 
   To achieve this goal you need to write your code using GObject convention.
   For more information about that, see the `GObject tutorial
-  <https://developer-old.gnome.org/gobject/stable/pt02.html>`__
+  <https://docs.gtk.org/gobject/tutorial.html>`__
 
 Thus, one of the major goals of the GObject introspection project is to be a
 convenient bridge between these two worlds, and allow you to choose the right
