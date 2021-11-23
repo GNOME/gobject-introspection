@@ -945,7 +945,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             if giname == 'Gdk.Atom':
                 return 'String'
             if giname in ('GLib.ByteArray', 'GLib.Bytes'):
-                return 'ByteArray'
+                return 'Uint8Array'
             if giname == 'GObject.Value':
                 return 'Any'
             if giname == 'GObject.Closure':
