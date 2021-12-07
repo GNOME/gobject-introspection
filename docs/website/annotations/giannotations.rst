@@ -689,7 +689,7 @@ where the caller can pass NULL if they don’t want to receive the (out) value.
   g_file_get_contents ("/etc/motd", NULL, NULL, &error); // NOT VALID
 
 
-g_hash_table_iter_next() demonstrates the difference between (nullable) and
+mylib_hash_table_iter_next() demonstrates the difference between (nullable) and
 (optional) for (out) parameters. For an (out) parameter, (optional) indicates
 that NULL may be passed by the caller to indicate they don’t want to receive
 the (out) value. (nullable) indicates that NULL may be passed out by the
@@ -698,25 +698,25 @@ callee as the returned value.
 ::
 
   /**
-   * g_hash_table_iter_next:
-   * @iter: an initialized #GHashTableIter
+   * mylib_hash_table_iter_next:
+   * @iter: an initialized #MylibHashTableIter
    * @key: (out) (optional): a location to store the key
    * @value: (out) (optional) (nullable): a location to store the value
    *
    * [...]
    *
-   * Returns: %FALSE if the end of the #GHashTable has been reached.
+   * Returns: %FALSE if the end of the #MylibHashTable has been reached.
    */
   gboolean
-  g_hash_table_iter_next (GHashTableIter *iter,
-                          gpointer       *key,
-                          gpointer       *value);
+  mylib_hash_table_iter_next (MylibHashTableIter *iter,
+                              gpointer           *key,
+                              gpointer           *value);
 
   /* this is valid because value and key have (optional) */
-  g_hash_table_iter_next (iter, NULL, NULL);
+  mylib_hash_table_iter_next (iter, NULL, NULL);
 
   gpointer key, value;
-  g_hash_table_iter_next (iter, &key, &value);
+  mylib_hash_table_iter_next (iter, &key, &value);
 
   if (value == NULL)
     /* this is valid because value has (nullable) */
