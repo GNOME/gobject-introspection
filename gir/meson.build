@@ -98,8 +98,8 @@ glib_command = scanner_command + [
 
 if dep_type == 'pkgconfig'
   glib_command += ['--external-library', '--pkg=glib-2.0']
-  glib_libdir = get_option('gi_cross_pkgconfig_sysroot_path') + glib_dep.get_pkgconfig_variable('libdir')
-  glib_incdir = get_option('gi_cross_pkgconfig_sysroot_path') + join_paths(glib_dep.get_pkgconfig_variable('includedir'), 'glib-2.0')
+  glib_libdir = get_option('gi_cross_pkgconfig_sysroot_path') + glib_dep.get_variable(pkgconfig: 'libdir')
+  glib_incdir = get_option('gi_cross_pkgconfig_sysroot_path') + join_paths(glib_dep.get_variable(pkgconfig: 'includedir'), 'glib-2.0')
   glib_libincdir = join_paths(glib_libdir, 'glib-2.0', 'include')
   glib_files += join_paths(glib_incdir, 'gobject', 'glib-types.h')
   glib_files += join_paths(glib_libincdir, 'glibconfig.h')
@@ -133,8 +133,8 @@ elif dep_type == 'internal'
   # We know exactly what headers will be installed, so just fetch that
   glib_subproject = subproject('glib')
 
-  glibproj_sourcedir = join_paths(meson.source_root(), subprojdir, 'glib')
-  glibproj_builddir = join_paths(meson.build_root(), subprojdir, 'glib')
+  glibproj_sourcedir = join_paths(meson.project_source_root(), subprojdir, 'glib')
+  glibproj_builddir = join_paths(meson.project_build_root(), subprojdir, 'glib')
 
   glib_files += join_paths(glibproj_sourcedir, 'gobject', 'glib-types.h')
 
@@ -184,13 +184,13 @@ elif dep_type == 'internal'
   # XXX: We need include paths to all glib dependencies too. We assume that the
   # dependencies are only libffi and proxy-libintl, and that they are used as
   # subprojects. In the worst case we add paths to non-existent directories.
-  ffi_incdir = join_paths(meson.build_root(), subprojdir, 'libffi', 'include')
+  ffi_incdir = join_paths(meson.project_build_root(), subprojdir, 'libffi', 'include')
   glib_includes += ['-I' + ffi_incdir]
-  intl_incdir = join_paths(meson.source_root(), subprojdir, 'proxy-libintl')
+  intl_incdir = join_paths(meson.project_source_root(), subprojdir, 'proxy-libintl')
   glib_includes += ['-I' + intl_incdir]
 
-  ffi_libdir = join_paths(meson.build_root(), subprojdir, 'libffi', 'src')
-  intl_libdir = join_paths(meson.build_root(), subprojdir, 'proxy-libintl')
+  ffi_libdir = join_paths(meson.project_build_root(), subprojdir, 'libffi', 'src')
+  intl_libdir = join_paths(meson.project_build_root(), subprojdir, 'proxy-libintl')
   glib_libpaths = [
     '-L' + ffi_libdir,
     '-L' + intl_libdir,
@@ -412,7 +412,7 @@ if giounix_dep.found()
   dep_type = giounix_dep.type_name()
   if dep_type == 'pkgconfig'
     gio_command += ['--pkg=gio-unix-2.0']
-    giounix_includedir = get_option('gi_cross_pkgconfig_sysroot_path') + join_paths(giounix_dep.get_pkgconfig_variable('includedir'), 'gio-unix-2.0')
+    giounix_includedir = get_option('gi_cross_pkgconfig_sysroot_path') + join_paths(giounix_dep.get_variable(pkgconfig: 'includedir'), 'gio-unix-2.0')
     # Get the installed gio-unix header list
     ret = run_command(python, '-c', globber.format(join_paths(giounix_includedir, 'gio', '*.h')))
     if ret.returncode() != 0
