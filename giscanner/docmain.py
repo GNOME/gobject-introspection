@@ -51,6 +51,8 @@ def doc_main(args):
     parser.add_argument("-s", "--write-sections-file",
                         action="store_const", dest="format", const="sections",
                         help="Backwards-compatible equivalent to -f sections")
+    parser.add_argument("--templates-dir",
+                        action="store")
 
     args = parser.parse_args(args[1:])
     if not args.output:
@@ -74,7 +76,7 @@ def doc_main(args):
         with open(args.output, 'w', encoding='utf-8') as fp:
             write_sections_file(fp, sections_file)
     else:
-        writer = DocWriter(transformer, args.language, args.format)
+        writer = DocWriter(transformer, args.language, args.format, args.templates_dir)
         writer.write(args.output)
 
     return 0
