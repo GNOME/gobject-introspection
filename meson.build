@@ -1,6 +1,6 @@
 project('gobject-introspection', 'c',
   version: '1.71.0',
-  meson_version: '>= 0.55.3',
+  meson_version: '>= 0.58.2',
   default_options: [
     'warning_level=2',
     'buildtype=debugoptimized',
