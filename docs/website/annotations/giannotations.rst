@@ -312,6 +312,7 @@ Scope types:
   Can only be called once.
 * ``notified`` - valid until the GDestroyNotify argument is called.
   Can be called multiple times before the GDestroyNotify is called.
+* ``forever`` - valid until the process terminates.
 
 An example of a function using the ``call`` scope is ``g_slist_foreach()``.
 For ``async`` there is ``g_file_read_async()`` and for notified
