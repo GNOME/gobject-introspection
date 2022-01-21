@@ -471,7 +471,7 @@ def create_source_scanner(options, args):
 def write_output(data, options):
     """Write encoded XML 'data' to the filename specified in 'options'."""
     if options.output == "-":
-        output = sys.stdout
+        output = sys.stdout.buffer
         try:
             output.write(data)
         except IOError as e:
