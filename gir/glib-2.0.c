@@ -5437,7 +5437,7 @@
  *    "Unknown file name" in its title bar but still let the user save
  *    the file, as it would keep the raw file name internally. This
  *    can happen if the user has not set the `G_FILENAME_ENCODING`
- *    environment variable even though he has files whose names are
+ *    environment variable even though they have files whose names are
  *    not encoded in UTF-8.
  *
  * 3. If your user interface lets the user type a file name for saving
@@ -7331,6 +7331,15 @@
  * g_main_context_iteration() directly. These functions are
  * g_main_context_prepare(), g_main_context_query(),
  * g_main_context_check() and g_main_context_dispatch().
+ *
+ * If the event loop thread releases #GMainContext ownership until the results
+ * required by g_main_context_check() are ready you must create a context with
+ * the flag %G_MAIN_CONTEXT_FLAGS_OWNERLESS_POLLING or else you'll lose
+ * g_source_attach() notifications. This happens for instance when you integrate
+ * the GLib event loop into implementations that follow the proactor pattern
+ * (i.e. in these contexts the `poll()` implementation will reclaim the thread for
+ * other tasks until the results are ready). One example of the proactor pattern
+ * is the Boost.Asio library.
  *
  * ## State of a Main Context # {#mainloop-states}
  *
@@ -9680,13 +9689,16 @@
  * @buffer: A buffer to place the resulting string in
  * @buf_len: The length of the buffer.
  * @format: The printf()-style format to use for the
- *          code to use for converting.
+ *   code to use for converting
  * @d: The #gdouble to convert
  *
  * Converts a #gdouble to a string, using the '.' as
  * decimal point. To format the number you pass in
  * a printf()-style format string. Allowed conversion
  * specifiers are 'e', 'E', 'f', 'F', 'g' and 'G'.
+ *
+ * The @format must just be a single format specifier
+ * starting with `%`, expecting a #gdouble argument.
  *
  * The returned buffer is guaranteed to be nul-terminated.
  *
@@ -9998,7 +10010,9 @@
  * @n: number of characters to compare
  *
  * Compare @s1 and @s2, ignoring the case of ASCII characters and any
- * characters after the first @n in each string.
+ * characters after the first @n in each string. If either string is
+ * less than @n bytes long, comparison will stop at the first nul byte
+ * encountered.
  *
  * Unlike the BSD strcasecmp() function, this only recognizes standard
  * ASCII letters and ignores the locale, treating all non-ASCII
@@ -12943,8 +12957,8 @@
  * path. If the first element is a relative path, the result will
  * be a relative path.
  *
- * Returns: (type filename): a newly-allocated string that must be freed with
- *     g_free().
+ * Returns: (type filename) (transfer full): a newly-allocated string that
+ *     must be freed with g_free().
  */
 
 
@@ -12956,8 +12970,8 @@
  * Behaves exactly like g_build_filename(), but takes the path elements
  * as a va_list. This function is mainly meant for language bindings.
  *
- * Returns: (type filename): a newly-allocated string that must be freed
- *     with g_free().
+ * Returns: (type filename) (transfer full): a newly-allocated string that
+ *     must be freed with g_free().
  * Since: 2.56
  */
 
@@ -12971,8 +12985,8 @@
  * as a string array, instead of varargs. This function is mainly
  * meant for language bindings.
  *
- * Returns: (type filename): a newly-allocated string that must be freed
- *     with g_free().
+ * Returns: (type filename) (transfer full): a newly-allocated string that
+ *     must be freed with g_free().
  * Since: 2.8
  */
 
@@ -13010,8 +13024,8 @@
  * copies of the separator, elements consisting only of copies
  * of the separator are ignored.
  *
- * Returns: (type filename): a newly-allocated string that must be freed with
- *     g_free().
+ * Returns: (type filename) (transfer full): a newly-allocated string that
+ *     must be freed with g_free().
  */
 
 
@@ -13025,8 +13039,8 @@
  * as a string array, instead of varargs. This function is mainly
  * meant for language bindings.
  *
- * Returns: (type filename): a newly-allocated string that must be freed
- *     with g_free().
+ * Returns: (type filename) (transfer full): a newly-allocated string that
+ *     must be freed with g_free().
  * Since: 2.8
  */
 
@@ -14535,7 +14549,7 @@
  * If the previous value was replaced then ownership of the
  * old value (@oldval) is passed to the caller, including
  * the registered destroy notify for it (passed out in @old_destroy).
- * Its up to the caller to free this as he wishes, which may
+ * Its up to the caller to free this as they wish, which may
  * or may not include using @old_destroy as sometimes replacement
  * should not destroy the object in the normal way.
  *
@@ -15120,11 +15134,14 @@
  * @month: month of the year
  * @year: year
  *
- * Like g_date_new(), but also sets the value of the date. Assuming the
- * day-month-year triplet you pass in represents an existing day, the
- * returned date will be valid.
+ * Create a new #GDate representing the given day-month-year triplet.
  *
- * Returns: a newly-allocated #GDate initialized with @day, @month, and @year
+ * The triplet you pass in must represent a valid date. Use g_date_valid_dmy()
+ * if needed to validate it. The returned #GDate is guaranteed to be non-%NULL
+ * and valid.
+ *
+ * Returns: (transfer full) (not nullable): a newly-allocated #GDate
+ *   initialized with @day, @month, and @year
  */
 
 
@@ -15132,11 +15149,14 @@
  * g_date_new_julian:
  * @julian_day: days since January 1, Year 1
  *
- * Like g_date_new(), but also sets the value of the date. Assuming the
- * Julian day number you pass in is valid (greater than 0, less than an
- * unreasonably large number), the returned date will be valid.
+ * Create a new #GDate representing the given Julian date.
  *
- * Returns: a newly-allocated #GDate initialized with @julian_day
+ * The @julian_day you pass in must be valid. Use g_date_valid_julian() if
+ * needed to validate it. The returned #GDate is guaranteed to be non-%NULL and
+ * valid.
+ *
+ * Returns: (transfer full) (not nullable): a newly-allocated #GDate initialized
+ *   with @julian_day
  */
 
 
@@ -16500,7 +16520,7 @@
  * Note that in contrast to g_mkdtemp() (and mkdtemp()) @tmpl is not
  * modified, and might thus be a read-only literal string.
  *
- * Returns: (type filename): The actual name used. This string
+ * Returns: (type filename) (transfer full): The actual name used. This string
  *     should be freed with g_free() when not needed any longer and is
  *     is in the GLib file name encoding. In case of errors, %NULL is
  *     returned and @error will be set.
@@ -16602,7 +16622,7 @@
  * If the file name has no directory components "." is returned.
  * The returned string should be freed when no longer needed.
  *
- * Returns: (type filename): the directory components of the file
+ * Returns: (type filename) (transfer full): the directory components of the file
  * Deprecated: use g_path_get_dirname() instead
  */
 
@@ -16717,7 +16737,7 @@
  * Returns the value of the environment variable @variable in the
  * provided list @envp.
  *
- * Returns: (type filename): the value of the environment variable, or %NULL if
+ * Returns: (type filename) (nullable): the value of the environment variable, or %NULL if
  *     the environment variable is not set in @envp. The returned
  *     string is owned by @envp, and will be freed if @variable is
  *     set or unset again.
@@ -17003,8 +17023,8 @@
  * readlink() function.  The returned string is in the encoding used
  * for filenames. Use g_filename_to_utf8() to convert it to UTF-8.
  *
- * Returns: (type filename): A newly-allocated string with the contents of
- *     the symbolic link, or %NULL if an error occurred.
+ * Returns: (type filename) (transfer full): A newly-allocated string with
+ *     the contents of the symbolic link, or %NULL if an error occurred.
  * Since: 2.4
  */
 
@@ -17591,7 +17611,7 @@
  * the current directory.  This can make a difference in the case that
  * the current directory is the target of a symbolic link.
  *
- * Returns: (type filename): the current directory
+ * Returns: (type filename) (transfer full): the current directory
  */
 
 
@@ -18112,10 +18132,37 @@
  * of the special directory without requiring the session to restart; GLib
  * will not reflect any change once the special directories are loaded.
  *
- * Returns: (type filename): the path to the specified special directory, or
- *   %NULL if the logical id was not found. The returned string is owned by
- *   GLib and should not be modified or freed.
+ * Returns: (type filename) (nullable): the path to the specified special
+ *   directory, or %NULL if the logical id was not found. The returned string is
+ *   owned by GLib and should not be modified or freed.
  * Since: 2.14
+ */
+
+
+/**
+ * g_get_user_state_dir:
+ *
+ * Returns a base directory in which to store state files specific to
+ * particular user.
+ *
+ * On UNIX platforms this is determined using the mechanisms described
+ * in the
+ * [XDG Base Directory Specification](http://www.freedesktop.org/Standards/basedir-spec).
+ * In this case the directory retrieved will be `XDG_STATE_HOME`.
+ *
+ * On Windows it follows XDG Base Directory Specification if `XDG_STATE_HOME` is defined.
+ * If `XDG_STATE_HOME` is undefined, the folder to use for local (as opposed
+ * to roaming) application data is used instead. See the
+ * [documentation for `FOLDERID_LocalAppData`](https://docs.microsoft.com/en-us/windows/win32/shell/knownfolderid).
+ * Note that in this case on Windows it will be the same
+ * as what g_get_user_data_dir() returns.
+ *
+ * The return value is cached and modifying it at runtime is not supported, as
+ * it’s not thread-safe to modify environment variables at runtime.
+ *
+ * Returns: (type filename) (transfer none): a string owned by GLib that
+ *   must not be modified or freed.
+ * Since: 2.72
  */
 
 
@@ -18131,7 +18178,7 @@
  * On Windows, in case the environment variable's value contains
  * references to other environment variables, they are expanded.
  *
- * Returns: (type filename): the value of the environment variable, or %NULL if
+ * Returns: (type filename) (nullable): the value of the environment variable, or %NULL if
  *     the environment variable is not found. The returned string
  *     may be overwritten by the next call to g_getenv(), g_setenv()
  *     or g_unsetenv().
@@ -18568,6 +18615,24 @@
  * g_hash_table_unref().
  *
  * Returns: a new #GHashTable
+ */
+
+
+/**
+ * g_hash_table_new_similar:
+ * @other_hash_table: (not nullable) (transfer none): Another #GHashTable
+ *
+ * Creates a new #GHashTable like g_hash_table_new_full() with a reference
+ * count of 1.
+ *
+ * It inherits the hash function, the key equal function, the key destroy function,
+ * as well as the value destroy function, from @other_hash_table.
+ *
+ * The returned hash table will be empty; it will not contain the keys
+ * or values from @other_hash_table.
+ *
+ * Returns: (transfer full) (not nullable): a new #GHashTable
+ * Since: 2.72
  */
 
 
@@ -22572,6 +22637,18 @@
 
 
 /**
+ * g_main_context_new_with_flags:
+ * @flags: a bitwise-OR combination of #GMainContextFlags flags that can only be
+ *         set at creation time.
+ *
+ * Creates a new #GMainContext structure.
+ *
+ * Returns: (transfer full): the new #GMainContext
+ * Since: 2.72
+ */
+
+
+/**
  * g_main_context_pending:
  * @context: (nullable): a #GMainContext (if %NULL, the default context will be used)
  *
@@ -25341,8 +25418,8 @@
  * separators (and on Windows, possibly a drive letter), a single
  * separator is returned. If @file_name is empty, it gets ".".
  *
- * Returns: (type filename): a newly allocated string containing the last
- *    component of the filename
+ * Returns: (type filename) (transfer full): a newly allocated string
+ *    containing the last component of the filename
  */
 
 
@@ -25357,7 +25434,7 @@
  * If the file name has no directory components "." is returned.
  * The returned string should be freed when no longer needed.
  *
- * Returns: (type filename): the directory components of the file
+ * Returns: (type filename) (transfer full): the directory components of the file
  */
 
 
@@ -29464,7 +29541,9 @@
  * #GtkApplication::startup handler. The program name is found by
  * taking the last component of @argv[0].
  *
- * Note that for thread-safety reasons this function can only be called once.
+ * Since GLib 2.72, this function can be called multiple times
+ * and is fully thread safe. Prior to GLib 2.72, this function
+ * could only be called once per process.
  */
 
 
@@ -30775,7 +30854,7 @@
  * been reissued, leading to the operation being performed against the
  * wrong source.
  *
- * Returns: For historical reasons, this function always returns %TRUE
+ * Returns: %TRUE if the source was found and removed.
  */
 
 
@@ -33578,9 +33657,9 @@
  * Gets the pathname to a data file that is required for a test.
  *
  * This is the same as g_test_build_filename() with two differences.
- * The first difference is that must only use this function from within
+ * The first difference is that you must only use this function from within
  * a testcase function.  The second difference is that you need not free
- * the return value -- it will be automatically freed when the testcase
+ * the return value — it will be automatically freed when the testcase
  * finishes running.
  *
  * It is safe to use this function from a thread inside of a testcase
@@ -37944,9 +38023,10 @@
  *     words read, or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will
  *     be returned in case @str contains a trailing partial character. If
  *     an error occurs then the index of the invalid input is stored here.
+ *     It’s guaranteed to be non-negative.
  * @items_written: (out) (optional): location to store number
  *     of bytes written, or %NULL. The value stored here does not include the
- *     trailing 0 byte.
+ *     trailing 0 byte. It’s guaranteed to be non-negative.
  * @error: location to store the error occurring, or %NULL to ignore
  *     errors. Any of the errors in #GConvertError other than
  *     %G_CONVERT_ERROR_NO_CONVERSION may occur.
@@ -38368,10 +38448,14 @@
  * g_utf8_substring:
  * @str: a UTF-8 encoded string
  * @start_pos: a character offset within @str
- * @end_pos: another character offset within @str
+ * @end_pos: another character offset within @str,
+ *   or `-1` to indicate the end of the string
  *
  * Copies a substring out of a UTF-8 encoded string.
  * The substring will contain @end_pos - @start_pos characters.
+ *
+ * Since GLib 2.72, `-1` can be passed to @end_pos to indicate the
+ * end of the string.
  *
  * Returns: (transfer full): a newly allocated copy of the requested
  *     substring. Free with g_free() when no longer needed.
