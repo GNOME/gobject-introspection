@@ -8,6 +8,8 @@ py -3 -m zipfile -e win_flex_bison.zip win_flex_bison
 py -3 -c "import urllib.request, sys; urllib.request.urlretrieve(*sys.argv[1:])" "https://nirbheek.in/files/binaries/pkg-config/win32/pkg-config.exe" pkg-config.exe
 
 SET PATH=%CD%;%CD%\win_flex_bison;%PATH%
+SET PKG_CONFIG=%CD%\pkg-config.exe
+SET PKG_CONFIG_PATH=%CD%\_build\meson-uninstalled
 
 pip3 install --upgrade --user meson==0.58.2 || goto :error
 
