@@ -50,6 +50,16 @@ def cflags(packages, msvc_syntax=False, ignore_errors=True, command=None):
     return shlex.split(out)
 
 
+def libs_only_L(packages, static=False, msvc_syntax=False, ignore_errors=True, command=None):
+    flags = ['--msvc-syntax'] if msvc_syntax else []
+    if static:
+        flags.append('--static')
+    flags.append('--libs-only-L')
+    flags.extend(packages)
+    out = check_output(flags, ignore_errors, command)
+    return shlex.split(out)
+
+
 def libs(packages, msvc_syntax=False, ignore_errors=True, command=None):
     flags = ['--msvc-syntax'] if msvc_syntax else []
     flags.append('--libs')
