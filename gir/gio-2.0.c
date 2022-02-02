@@ -1512,6 +1512,57 @@
 
 
 /**
+ * GDebugController:debug-enabled:
+ *
+ * %TRUE if debug output should be exposed (for example by forwarding it to
+ * the journal), %FALSE otherwise.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * GDebugControllerDBus::authorize:
+ * @controller: The #GDebugControllerDBus emitting the signal.
+ * @invocation: A #GDBusMethodInvocation.
+ *
+ * Emitted when a D-Bus peer is trying to change the debug settings and used
+ * to determine if that is authorized.
+ *
+ * This signal is emitted in a dedicated worker thread, so handlers are
+ * allowed to perform blocking I/O. This means that, for example, it is
+ * appropriate to call `polkit_authority_check_authorization_sync()` to check
+ * authorization using polkit.
+ *
+ * If %FALSE is returned then no further handlers are run and the request to
+ * change the debug settings is rejected.
+ *
+ * Otherwise, if %TRUE is returned, signal emission continues. If no handlers
+ * return %FALSE, then the debug settings are allowed to be changed.
+ *
+ * Signal handlers must not modify @invocation, or cause it to return a value.
+ *
+ * The default class handler just returns %TRUE.
+ *
+ * Returns: %TRUE if the call is authorized, %FALSE otherwise.
+ * Since: 2.72
+ */
+
+
+/**
+ * GDebugControllerDBus:connection:
+ *
+ * The D-Bus connection to expose the debugging interface on.
+ *
+ * Typically this will be the same connection (to the system or session bus)
+ * which the rest of the application or service’s D-Bus objects are registered
+ * on.
+ *
+ * Since: 2.72
+ */
+
+
+/**
  * GDesktopAppInfo:
  *
  * Information about an installed application from a desktop file.
@@ -5713,6 +5764,9 @@
  * On Solaris (including OpenSolaris and its derivatives), the native
  * credential type is a `ucred_t`. This corresponds to
  * %G_CREDENTIALS_TYPE_SOLARIS_UCRED.
+ *
+ * Since GLib 2.72, on Windows, the native credentials may contain the PID of a
+ * process. This corresponds to %G_CREDENTIALS_TYPE_WIN32_PID.
  */
 
 
@@ -5822,6 +5876,9 @@
  *
  * TCP D-Bus connections are supported, but accessing them via a proxy is
  * currently not supported.
+ *
+ * Since GLib 2.72, `unix:` addresses are supported on Windows with `AF_UNIX`
+ * support (Windows 10).
  */
 
 
@@ -6380,6 +6437,46 @@
  * @include: gio/gio.h
  *
  * Various utility routines related to D-Bus.
+ */
+
+
+/**
+ * SECTION:gdebugcontroller
+ * @title: GDebugController
+ * @short_description: Debugging controller
+ * @include: gio/gio.h
+ *
+ * #GDebugController is an interface to expose control of debugging features and
+ * debug output.
+ *
+ * It is implemented on Linux using #GDebugControllerDBus, which exposes a D-Bus
+ * interface to allow authenticated peers to control debug features in this
+ * process.
+ *
+ * Whether debug output is enabled is exposed as
+ * #GDebugController:debug-enabled. This controls g_log_set_debug_enabled() by
+ * default. Application code may connect to the #GObject::notify signal for it
+ * to control other parts of its debug infrastructure as necessary.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * SECTION:gdebugcontrollerdbus
+ * @title: GDebugControllerDBus
+ * @short_description: Debugging controller D-Bus implementation
+ * @include: gio/gio.h
+ *
+ * #GDebugControllerDBus is an implementation of #GDebugController which exposes
+ * debug settings as a D-Bus object.
+ *
+ * It is a #GInitable object, and will register an object at
+ * `/org/gtk/Debugging` on the bus given as
+ * #GDebugControllerDBus:connection once it’s initialized. The object will be
+ * unregistered when the last reference to the #GDebugControllerDBus is dropped.
+ *
+ * Since: 2.72
  */
 
 
@@ -10080,9 +10177,12 @@
  * It contains functions to do some of the UNIX socket specific
  * functionality like passing file descriptors.
  *
- * Note that `<gio/gunixconnection.h>` belongs to the UNIX-specific
- * GIO interfaces, thus you have to use the `gio-unix-2.0.pc`
- * pkg-config file when using it.
+ * Since GLib 2.72, #GUnixConnection is available on all platforms. It requires
+ * underlying system support (such as Windows 10 with `AF_UNIX`) at run time.
+ *
+ * Before GLib 2.72, `<gio/gunixconnection.h>` belonged to the UNIX-specific GIO
+ * interfaces, thus you had to use the `gio-unix-2.0.pc` pkg-config file when
+ * using it. This is no longer necessary since GLib 2.72.
  *
  * Since: 2.22
  */
@@ -10106,6 +10206,14 @@
  * g_unix_connection_receive_credentials(). To receive credentials of
  * a foreign process connected to a socket, use
  * g_socket_get_credentials().
+ *
+ * Since GLib 2.72, #GUnixCredentialMessage is available on all platforms. It
+ * requires underlying system support (such as Windows 10 with `AF_UNIX`) at run
+ * time.
+ *
+ * Before GLib 2.72, `<gio/gunixcredentialsmessage.h>` belonged to the UNIX-specific
+ * GIO interfaces, thus you had to use the `gio-unix-2.0.pc` pkg-config file
+ * when using it. This is no longer necessary since GLib 2.72.
  */
 
 
@@ -10217,9 +10325,13 @@
  * errors. You can use g_unix_socket_address_abstract_names_supported()
  * to see if abstract names are supported.
  *
- * Note that `<gio/gunixsocketaddress.h>` belongs to the UNIX-specific GIO
- * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config file
- * when using it.
+ * Since GLib 2.72, #GUnixSocketAddress is available on all platforms. It
+ * requires underlying system support (such as Windows 10 with `AF_UNIX`) at
+ * run time.
+ *
+ * Before GLib 2.72, `<gio/gunixsocketaddress.h>` belonged to the UNIX-specific
+ * GIO interfaces, thus you had to use the `gio-unix-2.0.pc` pkg-config file
+ * when using it. This is no longer necessary since GLib 2.72.
  */
 
 
@@ -13610,7 +13722,9 @@
  * callers of g_bus_get() and g_bus_get_sync() for @bus_type. In the
  * event that you need a private message bus connection, use
  * g_dbus_address_get_for_bus_sync() and
- * g_dbus_connection_new_for_address().
+ * g_dbus_connection_new_for_address() with
+ * G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT and
+ * G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION flags.
  *
  * Note that the returned #GDBusConnection object will (usually) have
  * the #GDBusConnection:exit-on-close property set to %TRUE.
@@ -13639,7 +13753,9 @@
  * callers of g_bus_get() and g_bus_get_sync() for @bus_type. In the
  * event that you need a private message bus connection, use
  * g_dbus_address_get_for_bus_sync() and
- * g_dbus_connection_new_for_address().
+ * g_dbus_connection_new_for_address() with
+ * G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT and
+ * G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION flags.
  *
  * Note that the returned #GDBusConnection object will (usually) have
  * the #GDBusConnection:exit-on-close property set to %TRUE.
@@ -20121,6 +20237,58 @@
 
 
 /**
+ * g_debug_controller_dbus_new:
+ * @connection: a #GDBusConnection to register the debug object on
+ * @cancellable: (nullable): a #GCancellable, or %NULL
+ * @error: return location for a #GError, or %NULL
+ *
+ * Create a new #GDebugControllerDBus and synchronously initialize it.
+ *
+ * Initializing the object will export the debug object on @connection. The
+ * object will remain registered until the last reference to the
+ * #GDebugControllerDBus is dropped.
+ *
+ * Initialization may fail if registering the object on @connection fails.
+ *
+ * Returns: (nullable) (transfer full): a new #GDebugControllerDBus, or %NULL
+ *   on failure
+ * Since: 2.72
+ */
+
+
+/**
+ * g_debug_controller_dup_default:
+ *
+ * Gets a reference to the default #GDebugController for the system.
+ *
+ * Returns: (not nullable) (transfer full): a new reference to the default #GDebugController
+ * Since: 2.72
+ */
+
+
+/**
+ * g_debug_controller_get_debug_enabled:
+ * @self: a #GDebugController
+ *
+ * Get the value of #GDebugController:debug-enabled.
+ *
+ * Returns: %TRUE if debug output should be exposed, %FALSE otherwise
+ * Since: 2.72
+ */
+
+
+/**
+ * g_debug_controller_set_debug_enabled:
+ * @self: a #GDebugController
+ * @debug_enabled: %TRUE if debug output should be exposed, %FALSE otherwise
+ *
+ * Set the value of #GDebugController:debug-enabled.
+ *
+ * Since: 2.72
+ */
+
+
+/**
  * g_desktop_app_info_get_action_name:
  * @info: a #GDesktopAppInfo
  * @action_name: the name of the action as from
@@ -25602,9 +25770,7 @@
  * If the @relative_path is an absolute path name, the resolution
  * is done absolutely (without taking @file path as base).
  *
- * Returns: (transfer full) (nullable): #GFile to the resolved path.
- *   %NULL if @relative_path is %NULL or if @file is invalid.
- *   Free the returned object with g_object_unref().
+ * Returns: (transfer full): a #GFile for the resolved path.
  */
 
 

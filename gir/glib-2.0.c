@@ -21810,6 +21810,23 @@
 
 
 /**
+ * g_log_get_debug_enabled:
+ *
+ * Return whether debug output from the GLib logging system is enabled.
+ *
+ * Note that this should not be used to conditionalise calls to g_debug() or
+ * other logging functions; it should only be used from %GLogWriterFunc
+ * implementations.
+ *
+ * Note also that the value of this does not depend on `G_MESSAGES_DEBUG`, as
+ * it is domain-dependent.
+ *
+ * Returns: %TRUE if debug output is enabled, %FALSE otherwise
+ * Since: 2.72
+ */
+
+
+/**
  * g_log_remove_handler:
  * @log_domain: the log domain
  * @handler_id: the id of the handler, which was returned
@@ -21845,6 +21862,21 @@
  * are fatal. See [Using Structured Logging][using-structured-logging].
  *
  * Returns: the old fatal mask
+ */
+
+
+/**
+ * g_log_set_debug_enabled:
+ * @enabled: %TRUE to enable debug output, %FALSE otherwise
+ *
+ * Enable or disable debug output from the GLib logging system is enabled. This
+ * value interacts disjunctively with `G_MESSAGES_DEBUG` — if either of them
+ * would allow a debug message to be outputted, it will be.
+ *
+ * Note that this should not be used from within library code to enable debug
+ * output — it is intended for external use.
+ *
+ * Since: 2.72
  */
 
 
@@ -41989,6 +42021,50 @@
  * deallocated with g_free().
  *
  * Returns: newly-allocated error message
+ */
+
+
+/**
+ * g_win32_find_helper_executable_path:
+ * @executable_name: (transfer none): name of the helper executable to find
+ * (something like gspawn-win64-helper.exe or gdbus.exe for example).
+ * @dll_handle: handle of the DLL to use as searching base path. Pass NULL
+ * to take current process executable as searching base path.
+ *
+ * Find an external executable path and name starting in the same folder
+ * as a specified DLL or current process executable path. Helper executables
+ * (like gspawn-win64-helper.exe, gspawn-win64-helper-console.exe or
+ * gdbus.exe for example) are generally installed in the same folder as the
+ * corresponding DLL file.
+ *
+ * So, if package has been correctly installed, with a dynamic build of GLib,
+ * the helper executable should be in the same directory as the corresponding
+ * DLL file and searching should be straightforward.
+ *
+ * But if built statically, DLL handle is not available and we have to start
+ * searching from the directory holding current executable. It may be very
+ * different from the directory containing the helper program. In order to
+ * find the right helper program automatically in all common situations, we
+ * use this pattern:
+ *
+ * current directory
+ *             |-- ???
+ *             |-- bin
+ *             |    |-- ???
+ *             |-- lib
+ *             |    |-- ???
+ *             |-- glib
+ *             |    |-- ???
+ *             |-- gio
+ *                  |-- ???
+ *
+ * starting at base searching path (DLL or current executable directory) and
+ * getting up until the root path. If we cannot still find the helper program,
+ * we'll rely on PATH as the last resort.
+ *
+ * Returns: (transfer full) (type filename) (nullable): the helper executable
+ * path and name in the GLib filename encoding or NULL in case of error. It
+ * should be deallocated with g_free().
  */
 
 

@@ -56,6 +56,15 @@
 
 
 /**
+ * GBindingGroup:source: (nullable)
+ *
+ * The source object used for binding properties.
+ *
+ * Since: 2.72
+ */
+
+
+/**
  * GObject::notify:
  * @gobject: the object which received the signal.
  * @pspec: the #GParamSpec of the property which changed.
@@ -96,6 +105,52 @@
  *
  * The implementation of the #GObject property system uses such a pool to
  * store the #GParamSpecs of the properties all object types.
+ */
+
+
+/**
+ * GSignalGroup::bind:
+ * @self: the #GSignalGroup
+ * @instance: a #GObject containing the new value for #GSignalGroup:target
+ *
+ * This signal is emitted when #GSignalGroup:target is set to a new value
+ * other than %NULL. It is similar to #GObject::notify on `target` except it
+ * will not emit when #GSignalGroup:target is %NULL and also allows for
+ * receiving the #GObject without a data-race.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * GSignalGroup::unbind:
+ * @self: a #GSignalGroup
+ *
+ * This signal is emitted when the target instance of @self is set to a
+ * new #GObject.
+ *
+ * This signal will only be emitted if the previous target of @self is
+ * non-%NULL.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * GSignalGroup:target:
+ *
+ * The target instance used when connecting signals.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * GSignalGroup:target-type:
+ *
+ * The #GType of the target property.
+ *
+ * Since: 2.72
  */
 
 
@@ -249,6 +304,24 @@
  * binding, source, and target instances to drop.
  *
  * #GBinding is available since GObject 2.26
+ */
+
+
+/**
+ * SECTION:gbindinggroup
+ * @Title: GBindingGroup
+ * @Short_description: Binding multiple properties as a group
+ * @include: glib-object.h
+ *
+ * The #GBindingGroup can be used to bind multiple properties
+ * from an object collectively.
+ *
+ * Use the various methods to bind properties from a single source
+ * object to multiple destination objects. Properties can be bound
+ * bidirectionally and are connected when the source object is set
+ * with g_binding_group_set_source().
+ *
+ * Since: 2.72
  */
 
 
@@ -470,6 +543,34 @@
  * When creating and looking up a #GParamSpec, either separator can be
  * used, but they cannot be mixed. Using `-` is considerably more
  * efficient, and is the ‘canonical form’. Using `_` is discouraged.
+ */
+
+
+/**
+ * SECTION:gsignalgroup
+ * @Title: GSignalGroup
+ * @Short_description: Manage a collection of signals on a GObject
+ *
+ * #GSignalGroup manages to simplify the process of connecting
+ * many signals to a #GObject as a group. As such there is no API
+ * to disconnect a signal from the group.
+ *
+ * In particular, this allows you to:
+ *
+ *  - Change the target instance, which automatically causes disconnection
+ *    of the signals from the old instance and connecting to the new instance.
+ *  - Block and unblock signals as a group
+ *  - Ensuring that blocked state transfers across target instances.
+ *
+ * One place you might want to use such a structure is with #GtkTextView and
+ * #GtkTextBuffer. Often times, you'll need to connect to many signals on
+ * #GtkTextBuffer from a #GtkTextView subclass. This allows you to create a
+ * signal group during instance construction, simply bind the
+ * #GtkTextView:buffer property to #GSignalGroup:target and connect
+ * all the signals you need. When the #GtkTextView:buffer property changes
+ * all of the signals will be transitioned correctly.
+ *
+ * Since: 2.72
  */
 
 
@@ -972,6 +1073,118 @@
  *
  * Returns: the name of the target property
  * Since: 2.26
+ */
+
+
+/**
+ * g_binding_group_bind:
+ * @self: the #GBindingGroup
+ * @source_property: the property on the source to bind
+ * @target: (type GObject) (transfer none) (not nullable): the target #GObject
+ * @target_property: the property on @target to bind
+ * @flags: the flags used to create the #GBinding
+ *
+ * Creates a binding between @source_property on the source object
+ * and @target_property on @target. Whenever the @source_property
+ * is changed the @target_property is updated using the same value.
+ * The binding flag %G_BINDING_SYNC_CREATE is automatically specified.
+ *
+ * See g_object_bind_property() for more information.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_binding_group_bind_full:
+ * @self: the #GBindingGroup
+ * @source_property: the property on the source to bind
+ * @target: (type GObject) (transfer none) (not nullable): the target #GObject
+ * @target_property: the property on @target to bind
+ * @flags: the flags used to create the #GBinding
+ * @transform_to: (scope notified) (nullable): the transformation function
+ *     from the source object to the @target, or %NULL to use the default
+ * @transform_from: (scope notified) (nullable): the transformation function
+ *     from the @target to the source object, or %NULL to use the default
+ * @user_data: custom data to be passed to the transformation
+ *             functions, or %NULL
+ * @user_data_destroy: function to be called when disposing the binding,
+ *     to free the resources used by the transformation functions
+ *
+ * Creates a binding between @source_property on the source object and
+ * @target_property on @target, allowing you to set the transformation
+ * functions to be used by the binding. The binding flag
+ * %G_BINDING_SYNC_CREATE is automatically specified.
+ *
+ * See g_object_bind_property_full() for more information.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_binding_group_bind_with_closures: (rename-to g_binding_group_bind_full)
+ * @self: the #GBindingGroup
+ * @source_property: the property on the source to bind
+ * @target: (type GObject) (transfer none) (not nullable): the target #GObject
+ * @target_property: the property on @target to bind
+ * @flags: the flags used to create the #GBinding
+ * @transform_to: (nullable) (transfer none): a #GClosure wrapping the
+ *     transformation function from the source object to the @target,
+ *     or %NULL to use the default
+ * @transform_from: (nullable) (transfer none): a #GClosure wrapping the
+ *     transformation function from the @target to the source object,
+ *     or %NULL to use the default
+ *
+ * Creates a binding between @source_property on the source object and
+ * @target_property on @target, allowing you to set the transformation
+ * functions to be used by the binding. The binding flag
+ * %G_BINDING_SYNC_CREATE is automatically specified.
+ *
+ * This function is the language bindings friendly version of
+ * g_binding_group_bind_property_full(), using #GClosures
+ * instead of function pointers.
+ *
+ * See g_object_bind_property_with_closures() for more information.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_binding_group_dup_source:
+ * @self: the #GBindingGroup
+ *
+ * Gets the source object used for binding properties.
+ *
+ * Returns: (transfer none) (nullable) (type GObject): a #GObject or %NULL.
+ * Since: 2.72
+ */
+
+
+/**
+ * g_binding_group_new:
+ *
+ * Creates a new #GBindingGroup.
+ *
+ * Returns: (transfer full): a new #GBindingGroup
+ * Since: 2.72
+ */
+
+
+/**
+ * g_binding_group_set_source:
+ * @self: the #GBindingGroup
+ * @source: (type GObject) (nullable) (transfer none): the source #GObject,
+ *   or %NULL to clear it
+ *
+ * Sets @source as the source object used for creating property
+ * bindings. If there is already a source object all bindings from it
+ * will be removed.
+ *
+ * Note that all properties that have been bound must exist on @source.
+ *
+ * Since: 2.72
  */
 
 
@@ -4752,6 +4965,163 @@
  *
  * Returns: (transfer none) (nullable): the invocation hint of the innermost
  *     signal emission, or %NULL if not found.
+ */
+
+
+/**
+ * g_signal_group_block:
+ * @self: the #GSignalGroup
+ *
+ * Blocks all signal handlers managed by @self so they will not
+ * be called during any signal emissions. Must be unblocked exactly
+ * the same number of times it has been blocked to become active again.
+ *
+ * This blocked state will be kept across changes of the target instance.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_connect: (skip)
+ * @self: a #GSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @c_handler: (scope notified): the #GCallback to connect
+ * @data: the data to pass to @c_handler calls
+ *
+ * Connects @c_handler to the signal @detailed_signal
+ * on the target instance of @self.
+ *
+ * You cannot connect a signal handler after #GSignalGroup:target has been set.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_connect_after: (skip)
+ * @self: a #GSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @c_handler: (scope notified): the #GCallback to connect
+ * @data: the data to pass to @c_handler calls
+ *
+ * Connects @c_handler to the signal @detailed_signal
+ * on the target instance of @self.
+ *
+ * The @c_handler will be called after the default handler of the signal.
+ *
+ * You cannot connect a signal handler after #GSignalGroup:target has been set.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_connect_data:
+ * @self: a #GSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @c_handler: (scope notified) (closure data) (destroy notify): the #GCallback to connect
+ * @data: the data to pass to @c_handler calls
+ * @notify: function to be called when disposing of @self
+ * @flags: the flags used to create the signal connection
+ *
+ * Connects @c_handler to the signal @detailed_signal
+ * on the target instance of @self.
+ *
+ * You cannot connect a signal handler after #GSignalGroup:target has been set.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_connect_object: (skip)
+ * @self: a #GSignalGroup
+ * @detailed_signal: a string of the form `signal-name` with optional `::signal-detail`
+ * @c_handler: (scope notified): the #GCallback to connect
+ * @object: (not nullable) (transfer none): the #GObject to pass as data to @c_handler calls
+ * @flags: #GConnectFlags for the signal connection
+ *
+ * Connects @c_handler to the signal @detailed_signal on #GSignalGroup:target.
+ *
+ * Ensures that the @object stays alive during the call to @c_handler
+ * by temporarily adding a reference count. When the @object is destroyed
+ * the signal handler will automatically be removed.
+ *
+ * You cannot connect a signal handler after #GSignalGroup:target has been set.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_connect_swapped:
+ * @self: a #GSignalGroup
+ * @detailed_signal: a string of the form "signal-name::detail"
+ * @c_handler: (scope async): the #GCallback to connect
+ * @data: the data to pass to @c_handler calls
+ *
+ * Connects @c_handler to the signal @detailed_signal
+ * on the target instance of @self.
+ *
+ * The instance on which the signal is emitted and @data
+ * will be swapped when calling @c_handler.
+ *
+ * You cannot connect a signal handler after #GSignalGroup:target has been set.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_dup_target:
+ * @self: the #GSignalGroup
+ *
+ * Gets the target instance used when connecting signals.
+ *
+ * Returns: (nullable) (transfer full) (type GObject): The target instance
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_new:
+ * @target_type: the #GType of the target instance.
+ *
+ * Creates a new #GSignalGroup for target instances of @target_type.
+ *
+ * Returns: (transfer full): a new #GSignalGroup
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_set_target:
+ * @self: the #GSignalGroup.
+ * @target: (nullable) (type GObject) (transfer none): The target instance used
+ *     when connecting signals.
+ *
+ * Sets the target instance used when connecting signals. Any signal
+ * that has been registered with g_signal_group_connect_object() or
+ * similar functions will be connected to this object.
+ *
+ * If the target instance was previously set, signals will be
+ * disconnected from that object prior to connecting to @target.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_signal_group_unblock:
+ * @self: the #GSignalGroup
+ *
+ * Unblocks all signal handlers managed by @self so they will be
+ * called again during any signal emissions unless it is blocked
+ * again. Must be unblocked exactly the same number of times it
+ * has been blocked to become active again.
+ *
+ * Since: 2.72
  */
 
 
