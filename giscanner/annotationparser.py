@@ -1243,12 +1243,16 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
 
 
 #: Result object returned by :class:`GtkDocCommentBlockParser`._parse_annotations()
-_ParseAnnotationsResult = namedtuple('Result', ['success', 'annotations', 'annotations_changed',
-                                                'start_pos', 'end_pos'])
+_ParseAnnotationsResult = namedtuple(
+    '_ParseAnnotationsResult',
+    ['success', 'annotations', 'annotations_changed',
+     'start_pos', 'end_pos'])
 
 #: Result object returned by :class:`GtkDocCommentBlockParser`._parse_fields()
-_ParseFieldsResult = namedtuple('Result', ['success', 'annotations', 'annotations_changed',
-                                           'description'])
+_ParseFieldsResult = namedtuple(
+    '_ParseFieldsResult',
+    ['success', 'annotations', 'annotations_changed',
+     'description'])
 
 
 class GtkDocCommentBlockParser(object):

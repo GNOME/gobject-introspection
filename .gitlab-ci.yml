@@ -58,7 +58,7 @@ fedora-x86_64-meson:
     - ninja -C _build gi-doc
     - mkdir -p public
     - mv _build/docs/reference/html/ public/girepository/
-    - python3 -m pip install --user flake8 mypy==0.790
+    - python3 -m pip install --user flake8 mypy==0.931 types-Markdown
     - python3 -m flake8 --count
     - python3 -m mypy _build
   except:
