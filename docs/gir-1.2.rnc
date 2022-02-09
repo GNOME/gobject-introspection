@@ -328,7 +328,7 @@ grammar {
         ## corresponding C identifier in the source code
         attribute c:identifier { xsd:string }?,
 
-        # Other elements a record can contain
+        # Other elements a constant can contain
         (Info.elements
          & AnyType?)
     }
@@ -376,7 +376,7 @@ grammar {
       ## Binary attribute, true if signals emitted for an object while currently being in emission for this very object will not be emitted recursively, but instead cause the first emission to be restarted (https://docs.gtk.org/gobject/flags.SignalFlags.html)
       attribute no-recurse { "0" | "1" }?,
 
-      # Other elements a property can contain
+      # Other elements a signal can contain
       (Info.elements
        & Callable.params?
        & Callable.return?)
@@ -397,7 +397,7 @@ grammar {
       ## number of bits of the field
       attribute bits { xsd:integer }?,
 
-      # Other elements a property can contain
+      # Other elements a field can contain
       (Info.elements
        & (Callback | AnyType))
     }
@@ -413,7 +413,7 @@ grammar {
       ## Binary attribute, true if the callback can throw an error
       attribute throws { "0" | "1" }?,
 
-      # Other elements a property can contain
+      # Other elements a callback can contain
       (Info.elements
        & Callable.params?
        & Callable.return?)
