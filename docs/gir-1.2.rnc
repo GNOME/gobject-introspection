@@ -236,8 +236,7 @@ grammar {
        & Function*
        & Union*
        & Method*
-       & Constructor*
-       & Property*)
+       & Constructor*)
     }
 
   # Some base information for most elements like version, deprecation, stability, if they are introspectable or not, etc...
