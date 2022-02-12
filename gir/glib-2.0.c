@@ -9208,6 +9208,51 @@
 
 
 /**
+ * g_aligned_alloc:
+ * @n_blocks: the number of blocks to allocate
+ * @n_block_bytes: the size of each block in bytes
+ * @alignment: the alignment to be enforced, which must be a positive power of 2
+ *   and a multiple of `sizeof(void*)`
+ *
+ * This function is similar to g_malloc(), allocating (@n_blocks * @n_block_bytes)
+ * bytes, but care is taken to align the allocated memory to with the given
+ * alignment value. Additionally, it will detect possible overflow during
+ * multiplication.
+ *
+ * Aligned memory allocations returned by this function can only be
+ * freed using g_aligned_free().
+ *
+ * Returns: (transfer full): the allocated memory
+ * Since: 2.72
+ */
+
+
+/**
+ * g_aligned_alloc0:
+ * @n_blocks: the number of blocks to allocate
+ * @n_block_bytes: the size of each block in bytes
+ * @alignment: the alignment to be enforced, which must be a positive power of 2
+ *   and a multiple of `sizeof(void*)`
+ *
+ * This function is similar to g_aligned_alloc(), but it will
+ * also clear the allocated memory before returning it.
+ *
+ * Returns: (transfer full): the allocated, cleared memory
+ * Since: 2.72
+ */
+
+
+/**
+ * g_aligned_free:
+ * @mem: (nullable): the memory to deallocate
+ *
+ * Frees the memory allocated by g_aligned_alloc().
+ *
+ * Since: 2.72
+ */
+
+
+/**
  * g_array_append_val:
  * @a: a #GArray
  * @v: the value to append to the #GArray
@@ -31420,6 +31465,8 @@
  * any target FDs which equal @stdin_fd, @stdout_fd or @stderr_fd will overwrite
  * them in the spawned process.
  *
+ * @source_fds is supported on Windows since 2.72.
+ *
  * %G_SPAWN_FILE_AND_ARGV_ZERO means that the first element of @argv is
  * the file to execute, while the remaining elements are the actual
  * argument vector to pass to the file. Normally g_spawn_async_with_pipes()
@@ -34296,9 +34343,10 @@
 /**
  * g_test_timer_elapsed:
  *
- * Get the time since the last start of the timer with g_test_timer_start().
+ * Get the number of seconds since the last start of the timer with
+ * g_test_timer_start().
  *
- * Returns: the time since the last start of the timer, as a double
+ * Returns: the time since the last start of the timer in seconds, as a double
  * Since: 2.16
  */
 

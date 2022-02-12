@@ -12209,6 +12209,10 @@
  * consumed, they will no longer be visible to the default handling
  * (which treats them as filenames to be opened).
  *
+ * The dict includes options that have been explicitly specified on the parsed
+ * commandline, as well as zero values for numeric options that were not
+ * necessarily specified.
+ *
  * It is important to use the proper GVariant format when retrieving
  * the options with g_variant_dict_lookup():
  * - for %G_OPTION_ARG_NONE, use `b`
@@ -24783,6 +24787,50 @@
  * move operation isn't available).
  *
  * Returns: %TRUE on successful move, %FALSE otherwise.
+ */
+
+
+/**
+ * g_file_move_async:
+ * @source: #GFile pointing to the source location
+ * @destination: #GFile pointing to the destination location
+ * @flags: set of #GFileCopyFlags
+ * @io_priority: the [I/O priority][io-priority] of the request
+ * @cancellable: (nullable): optional #GCancellable object,
+ *   %NULL to ignore
+ * @progress_callback: (nullable) (scope call): #GFileProgressCallback
+ *   function for updates
+ * @progress_callback_data: (closure): gpointer to user data for
+ *   the callback function
+ * @callback: a #GAsyncReadyCallback to call
+ *   when the request is satisfied
+ * @user_data: the data to pass to callback function
+ *
+ * Asynchronously moves a file @source to the location of @destination. For details of the behaviour, see g_file_move().
+ *
+ * If @progress_callback is not %NULL, then that function that will be called
+ * just like in g_file_move(). The callback will run in the default main context
+ * of the thread calling g_file_move_async() — the same context as @callback is
+ * run in.
+ *
+ * When the operation is finished, @callback will be called. You can then call
+ * g_file_move_finish() to get the result of the operation.
+ *
+ * Since: 2.72
+ */
+
+
+/**
+ * g_file_move_finish:
+ * @file: input source #GFile
+ * @result: a #GAsyncResult
+ * @error: a #GError, or %NULL
+ *
+ * Finishes an asynchronous file movement, started with
+ * g_file_move_async().
+ *
+ * Returns: %TRUE on successful file move, %FALSE otherwise.
+ * Since: 2.72
  */
 
 
