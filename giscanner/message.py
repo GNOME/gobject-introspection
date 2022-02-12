@@ -233,7 +233,7 @@ def error_node(node, text, context=None, positions=None):
 def strict_node(node, text, context=None, positions=None):
     ml = MessageLogger.get()
     if ml.strict_enabled:
-        ml.log(WARNING, node, text, context=context, positions=positions)
+        ml.log_node(WARNING, node, text, context=context, positions=positions)
 
 
 def warn_symbol(symbol, text):
