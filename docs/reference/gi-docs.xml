@@ -103,5 +103,21 @@
     <title>Index of new symbols in 1.60</title>
     <xi:include href="xml/api-index-1.60.xml"><xi:fallback /></xi:include>
   </index>
+  <index id="api-index-1-62" role="1.62">
+    <title>Index of new symbols in 1.62</title>
+    <xi:include href="xml/api-index-1.62.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-66" role="1.66">
+    <title>Index of new symbols in 1.66</title>
+    <xi:include href="xml/api-index-1.66.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-70" role="1.70">
+    <title>Index of new symbols in 1.70</title>
+    <xi:include href="xml/api-index-1.70.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-1-72" role="1.72">
+    <title>Index of new symbols in 1.72</title>
+    <xi:include href="xml/api-index-1.72.xml"><xi:fallback /></xi:include>
+  </index>
   <xi:include href="xml/annotation-glossary.xml" />
 </book>
