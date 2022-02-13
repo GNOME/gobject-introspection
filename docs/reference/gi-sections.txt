@@ -58,6 +58,9 @@ GI_AVAILABLE_IN_1_42
 GI_AVAILABLE_IN_1_44
 GI_AVAILABLE_IN_1_46
 GI_AVAILABLE_IN_1_60
+GI_AVAILABLE_IN_1_66
+GI_AVAILABLE_IN_1_70
+GI_AVAILABLE_IN_1_72
 GI_AVAILABLE_IN_ALL
 GI_DEPRECATED_IN_1_32
 GI_DEPRECATED_IN_1_32_FOR
@@ -75,6 +78,12 @@ GI_DEPRECATED_IN_1_44
 GI_DEPRECATED_IN_1_44_FOR
 GI_DEPRECATED_IN_1_46
 GI_DEPRECATED_IN_1_46_FOR
+GI_DEPRECATED_IN_1_72
+GI_DEPRECATED_IN_1_72_FOR
+GI_DEPRECATED
+GI_DEPRECATED_FOR
+GI_UNAVAILABLE
+ACCESSOR_SENTINEL
 </SECTION>
 
 <SECTION>
@@ -152,6 +161,9 @@ g_callable_info_load_arg
 g_callable_info_load_return_type
 g_callable_info_may_return_null
 g_callable_info_skip_return
+g_callable_info_create_closure
+g_callable_info_destroy_closure
+g_callable_info_get_closure_native_address
 </SECTION>
 
 <SECTION>
@@ -160,6 +172,9 @@ GIArgument
 GITypeTag
 GIArrayType
 GI_TYPE_TAG_N_TYPES
+GI_TYPE_TAG_IS_BASIC
+GI_TYPE_TAG_IS_CONTAINER
+GI_TYPE_TAG_IS_NUMERIC
 G_TYPE_TAG_IS_BASIC
 g_type_tag_to_string
 </SECTION>
@@ -320,8 +335,12 @@ GIFFIClosureCallback
 GIFunctionInvoker
 GIFFIReturnValue
 gi_type_tag_get_ffi_type
+gi_type_tag_extract_ffi_return_value
 g_type_info_get_ffi_type
 gi_type_info_extract_ffi_return_value
+g_type_info_argument_from_hash_pointer
+g_type_info_get_storage_type
+g_type_info_hash_pointer_from_argument
 g_function_info_prep_invoker
 g_function_invoker_new_for_address
 g_function_invoker_destroy
