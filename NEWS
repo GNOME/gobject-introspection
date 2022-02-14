@@ -1,3 +1,22 @@
+1.71.0 - 2022-02-14
+-------------------
+
+* Create new API for libffi closures [Sergei Trofimovich, Cimbali]
+* Treat @-prefixed shlib paths as absolute on macOS [Rok Mandeljc]
+* Add new `forever` scope [#49]
+* Build fixes with newer Meson [#414]
+* Improve regression test suite [Marco Trevisan (Treviño)]
+* Avoid a segfault when using an invalid GType [Lukas Oberhuber]
+* Build fixes on Windows when using g-i as a subproject [Andoni Morales Alastruey]
+* Warn about property name collisions [#386]
+* Add "strict" warnings to g-ir-scanner
+* Add the "emitter" annotation for signal emitters
+* Add a command line option to g-ir-scanner to specify the compiler
+* Add new convenience API to libgirepository [Philip Chimento]
+* Build fixes on Windows when using MSVC [Chun-wei Fan]
+* Documentation fixes [#211, #327]
+* Update the GIR data for GLib, GObject, and GIO
+
 1.70.0 - 2021-09-17
 -------------------
 
