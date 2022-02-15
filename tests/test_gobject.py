@@ -775,6 +775,17 @@ class TestGValue(unittest.TestCase):
         value = GObject.Value(GObject.TYPE_OBJECT, obj)
         self.assertEqual(value.get_value(), obj)
 
+    def test_dispose_object(self):
+        class TestObject(GObject.Object):
+            def __init__(self):
+                self.child = "Some Child"
+            def do_dispose(self):
+                self.child = None
+        obj = TestObject()
+        obj.run_dispose()
+        self.assertEqual(obj.child, None)
+
+
     def test_value_array(self):
         value = GObject.Value(GObject.ValueArray)
         self.assertEqual(value.g_type, GObject.type_from_name('GValueArray'))
