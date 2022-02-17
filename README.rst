@@ -51,7 +51,21 @@ roundtrip tests (GIR -> typelib -> GIR).
 
 Helping out
 -----------
-The introspection framework needs a lot more work, see TODO.
+The introspection framework needs a lot more work, see the ``TODO`` file.
+
+Default branch renamed to ``main``
+----------------------------------
+
+The default development branch of GObject Introspection has been renamed
+to ``main``. To update your local checkout, use::
+
+    git checkout master
+    git branch -m master main
+    git fetch
+    git branch --unset-upstream
+    git branch -u origin/main
+    git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+
 
 Homepage
 --------

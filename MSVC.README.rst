@@ -25,14 +25,14 @@ You will need the following, in addition to your Visual Studio installation:
 
 - A recent enough version of GLib, preferably built with the same compiler that
   is now being used to build G-I.  If none is found, the Meson build will fetch
-  GLib from GIT master and build it first before continuing to build G-I.  Note
-  that it will require a libintl implementation (must be installed beforehand, the
-  headers and lib and DLL must be found in the paths specified by %INCLUDE, %LIB%
-  and %PATH% respectively), along with ZLib and libffi (GLib's own Meson build will
-  build  them if they are not found).  If a pre-existing copy of GLib is available,
-  be sure to set PKG_CONFIG_PATH to where its .pc files can be found, and ensure
-  that its DLLs/ executables can be first found in the paths specified in %PATH%.
-  Note that libffi is needed both by GLib and G-I.
+  GLib from the tip of the main branch and build it first before continuing to
+  build G-I.  Note that it will require a libintl implementation (must be installed
+  beforehand, the headers and lib and DLL must be found in the paths specified by
+  %INCLUDE%, %LIB% and %PATH% respectively), along with ZLib and libffi (GLib's
+  own Meson build will build  them if they are not found).  If a pre-existing copy
+  of GLib is available, be sure to set PKG_CONFIG_PATH to where its .pc files can
+  be found, and ensure that its DLLs/ executables can be first found in the paths
+  specified in %PATH%. Note that libffi is needed both by GLib and G-I.
 
 - A DLL build of Cairo with Cairo-GObject built, also preferably with the same
   compiler that is now used to build G-I.

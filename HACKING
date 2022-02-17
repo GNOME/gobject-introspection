@@ -52,7 +52,7 @@ giscanner
   even 'make distcheck'
 
 * While hacking on annotationparser.py it is a good idea to:
-    1) Update your GLib build to git master.
+    1) Update your GLib build to the tip of the `main` branch.
     2) Run the following command from your gobject-introspection source directory before making
        changes to annotationparser.py (adapt GLib source and/or build directory as required):
        (cd misc && ./update-glib-annotations.py /path/to/gnome.org/checkout/glib/)
@@ -61,8 +61,9 @@ giscanner
          - gir/gio-2.0.c
          - gir/glib-2.0.c
          - gir/gobject-2.0.c
-       When satisfied, commit these files adding "Update GLib annotations to master" as the
-       commit message.
+       When satisfied, commit these files adding "Update GLib annotations to ${commit}" as the
+       commit message. Fill out the `${commit}` with the GLib commit at the tip of the `main`
+       development branch
     4) Only now start editing annotationparser.py.
     5) run make check.
     6) Run update-glib-annotations.py again and carefully study the changes (if any) to:
