@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<page id="Regress.TestReferenceEnum"
+<page id="Regress.TestEventType"
       type="topic"
       style="enum"
       xmlns="http://projectmallard.org/1.0/"
@@ -8,32 +8,28 @@
   <info>
     <link xref="index" group="enum" type="guide"/>
   </info>
-  <title>Regress.TestReferenceEnum</title>
+  <title>Regress.TestEventType</title>
 
 
 <terms>
 <item>
-<title><code>TestReferenceEnum._0</code></title>
+<title><code>TestEventType.BUTTON_PRESS</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum._1</code></title>
+<title><code>TestEventType._2BUTTON_PRESS</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum._2</code></title>
+<title><code>TestEventType.DOUBLE_BUTTON_PRESS</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum._3</code></title>
+<title><code>TestEventType._3BUTTON_PRESS</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum._4</code></title>
-
-</item>
-<item>
-<title><code>TestReferenceEnum._5</code></title>
+<title><code>TestEventType.TRIPLE_BUTTON_PRESS</code></title>
 
 </item>
 </terms>

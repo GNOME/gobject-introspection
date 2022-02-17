@@ -406,7 +406,7 @@ _GI_TEST_EXTERN
 GType regress_test_flags_get_type (void) G_GNUC_CONST;
 #define REGRESS_TEST_TYPE_FLAGS (regress_test_flags_get_type ())
 
-typedef enum
+typedef enum /*< prefix=REGRESS_TEST >*/
 {
   REGRESS_TEST_REFERENCE_0 = 2 + 2,
   REGRESS_TEST_REFERENCE_1 = 1 + 1,
@@ -1611,5 +1611,13 @@ void regress_test_array_struct_in_full (RegressTestStructA *arr, gsize len);
 
 _GI_TEST_EXTERN
 void regress_test_array_struct_in_none (RegressTestStructA *arr, gsize len);
+
+typedef enum { /*< prefix=REGRESS_TEST >*/
+  REGRESS_TEST_BUTTON_PRESS,
+  REGRESS_TEST_2BUTTON_PRESS,
+  REGRESS_TEST_DOUBLE_BUTTON_PRESS,
+  REGRESS_TEST_3BUTTON_PRESS,
+  REGRESS_TEST_TRIPLE_BUTTON_PRESS
+} RegressTestEventType;
 
 #endif /* __GITESTTYPES_H__ */

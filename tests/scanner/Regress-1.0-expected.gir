@@ -3471,6 +3471,29 @@ use it should be.</doc>
         </return-value>
       </function>
     </enumeration>
+    <enumeration name="TestEventType" c:type="RegressTestEventType">
+      <source-position filename="regress.h" line="1599"/>
+      <member name="button_press"
+              value="0"
+              c:identifier="REGRESS_TEST_BUTTON_PRESS">
+      </member>
+      <member name="_2button_press"
+              value="1"
+              c:identifier="REGRESS_TEST_2BUTTON_PRESS">
+      </member>
+      <member name="double_button_press"
+              value="2"
+              c:identifier="REGRESS_TEST_DOUBLE_BUTTON_PRESS">
+      </member>
+      <member name="_3button_press"
+              value="3"
+              c:identifier="REGRESS_TEST_3BUTTON_PRESS">
+      </member>
+      <member name="triple_button_press"
+              value="4"
+              c:identifier="REGRESS_TEST_TRIPLE_BUTTON_PRESS">
+      </member>
+    </enumeration>
     <callback name="TestExternallyDefinedCallback"
               c:type="RegressTestExternallyDefinedCallback">
       <source-position filename="regress.h" line="807"/>
@@ -5451,17 +5474,17 @@ the introspection client langage.</doc>
     </record>
     <enumeration name="TestReferenceEnum" c:type="RegressTestReferenceEnum">
       <source-position filename="regress.h" line="417"/>
-      <member name="0" value="4" c:identifier="REGRESS_TEST_REFERENCE_0">
+      <member name="_0" value="4" c:identifier="REGRESS_TEST_REFERENCE_0">
       </member>
-      <member name="1" value="2" c:identifier="REGRESS_TEST_REFERENCE_1">
+      <member name="_1" value="2" c:identifier="REGRESS_TEST_REFERENCE_1">
       </member>
-      <member name="2" value="54" c:identifier="REGRESS_TEST_REFERENCE_2">
+      <member name="_2" value="54" c:identifier="REGRESS_TEST_REFERENCE_2">
       </member>
-      <member name="3" value="4" c:identifier="REGRESS_TEST_REFERENCE_3">
+      <member name="_3" value="4" c:identifier="REGRESS_TEST_REFERENCE_3">
       </member>
-      <member name="4" value="216" c:identifier="REGRESS_TEST_REFERENCE_4">
+      <member name="_4" value="216" c:identifier="REGRESS_TEST_REFERENCE_4">
       </member>
-      <member name="5" value="-217" c:identifier="REGRESS_TEST_REFERENCE_5">
+      <member name="_5" value="-217" c:identifier="REGRESS_TEST_REFERENCE_5">
       </member>
     </enumeration>
     <record name="TestSimpleBoxedA"
