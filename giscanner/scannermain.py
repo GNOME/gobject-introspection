@@ -582,6 +582,7 @@ def scanner_main(args):
     if options.warn_all:
         logger.enable_warnings(True)
     if options.warn_strict:
+        logger.enable_warnings(True)
         logger.enable_strict(True)
 
     transformer = create_transformer(namespace, options)
