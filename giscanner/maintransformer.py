@@ -129,6 +129,8 @@ class MainTransformer(object):
             if isinstance(node, (ast.Class, ast.Interface)):
                 self._pair_class_virtuals(node)
                 self._pair_property_accessors(node)
+            if isinstance(node, (ast.Enum, ast.Bitfield)):
+                self._pass_member_numeric_name(node)
 
         # Some annotations need to be post function pairing
         self._namespace.walk(self._pass_read_annotations2)
@@ -1575,6 +1577,16 @@ method or constructor of some type."""
                         method.get_property = prop.name
                     prop.getter = method.name
                     continue
+
+    def _pass_member_numeric_name(self, node):
+        """Validate the name of the members of enumeration types."""
+        for member in node.members:
+            if re.match(r"^[0-9]", member.name):
+                message.strict_node(member,
+                                    f"Member {member.name} for enumeration {node.name} starts "
+                                     "with a number",
+                                     context=node)
+                member.name = f"_{member.name}"
 
     def _pass3(self, node, chain):
         """Pass 3 is after we've loaded GType data and performed type
