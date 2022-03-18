@@ -1,3 +1,10 @@
+1.72.0 - 2022-03-18
+-------------------
+
+* Add new utility API to libgirepository for bindings implementing an argument
+  cache [Philip Chimento]
+* Update the GIR data for GLib, GObject, GModule, and GIO
+
 1.71.0 - 2022-02-14
 -------------------
 
