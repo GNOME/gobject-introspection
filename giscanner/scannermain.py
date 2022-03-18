@@ -461,7 +461,8 @@ def create_source_scanner(options, args):
     # Run the preprocessor, tokenize and construct simple
     # objects representing the raw C symbols
     ss = SourceScanner()
-    ss.set_compiler(options.compiler)
+    if hasattr(options, 'compiler') and options.compiler:
+        ss.set_compiler(options.compiler)
     ss.set_cpp_options(options.cpp_includes,
                        options.cpp_defines,
                        options.cpp_undefines,
