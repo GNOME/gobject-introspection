@@ -1952,7 +1952,7 @@
  * that the %G_FILE_MONITOR_WATCH_MOVES flag is not in use.
  *
  * If using the deprecated flag %G_FILE_MONITOR_SEND_MOVED flag and @event_type is
- * #G_FILE_MONITOR_EVENT_MOVED, @file will be set to a #GFile containing the
+ * %G_FILE_MONITOR_EVENT_MOVED, @file will be set to a #GFile containing the
  * old path, and @other_file will be set to a #GFile containing the new path.
  *
  * In all the other cases, @other_file will be set to #NULL.
@@ -5286,7 +5286,7 @@
  * The complete example can be found here:
  * [gapplication-example-cmdline.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/gio/tests/gapplication-example-cmdline.c)
  *
- * In more complicated cases, the handling of the comandline can be
+ * In more complicated cases, the handling of the commandline can be
  * split between the launcher and the primary instance.
  * |[<!-- language="C" -->
  * static gboolean
@@ -5298,6 +5298,12 @@
  *   gchar **argv;
  *
  *   argv = *arguments;
+ *
+ *   if (argv[0] == NULL)
+ *     {
+ *       *exit_status = 0;
+ *       return FALSE;
+ *     }
  *
  *   i = 1;
  *   while (argv[i])
@@ -8546,7 +8552,7 @@
  * looks for a boolean property with the name "sensitivity" and
  * automatically binds it to the writability of the bound setting.
  * If this 'magic' gets in the way, it can be suppressed with the
- * #G_SETTINGS_BIND_NO_SENSITIVITY flag.
+ * %G_SETTINGS_BIND_NO_SENSITIVITY flag.
  *
  * ## Relocatable schemas # {#gsettings-relocatable}
  *
@@ -8638,7 +8644,7 @@
  * non-strictly-typed data that is stored in a hierarchy. To implement
  * an alternative storage backend for #GSettings, you need to implement
  * the #GSettingsBackend interface and then make it implement the
- * extension point #G_SETTINGS_BACKEND_EXTENSION_POINT_NAME.
+ * extension point %G_SETTINGS_BACKEND_EXTENSION_POINT_NAME.
  *
  * The interface defines methods for reading and writing values, a
  * method for determining if writing of certain values will fail
@@ -10484,13 +10490,13 @@
  * different kinds of identifiers, such as Hal UDIs, filesystem labels,
  * traditional Unix devices (e.g. `/dev/sda2`), UUIDs. GIO uses predefined
  * strings as names for the different kinds of identifiers:
- * #G_VOLUME_IDENTIFIER_KIND_UUID, #G_VOLUME_IDENTIFIER_KIND_LABEL, etc.
+ * %G_VOLUME_IDENTIFIER_KIND_UUID, %G_VOLUME_IDENTIFIER_KIND_LABEL, etc.
  * Use g_volume_get_identifier() to obtain an identifier for a volume.
  *
  *
- * Note that #G_VOLUME_IDENTIFIER_KIND_HAL_UDI will only be available
+ * Note that %G_VOLUME_IDENTIFIER_KIND_HAL_UDI will only be available
  * when the gvfs hal volume monitor is in use. Other volume monitors
- * will generally be able to provide the #G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE
+ * will generally be able to provide the %G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE
  * identifier, which can be used to obtain a hal device by means of
  * libhal_manager_find_device_string_match().
  */
@@ -12311,10 +12317,6 @@
  * need to handle these arguments for yourself because once they are
  * consumed, they will no longer be visible to the default handling
  * (which treats them as filenames to be opened).
- *
- * The dict includes options that have been explicitly specified on the parsed
- * commandline, as well as zero values for numeric options that were not
- * necessarily specified.
  *
  * It is important to use the proper GVariant format when retrieving
  * the options with g_variant_dict_lookup():
@@ -16843,7 +16845,7 @@
  * #GVariant of incorrect type.
  *
  * If an existing callback is already registered at @object_path and
- * @interface_name, then @error is set to #G_IO_ERROR_EXISTS.
+ * @interface_name, then @error is set to %G_IO_ERROR_EXISTS.
  *
  * GDBus automatically implements the standard D-Bus interfaces
  * org.freedesktop.DBus.Properties, org.freedesktop.DBus.Introspectable
@@ -16902,7 +16904,7 @@
  *
  * When handling remote calls into any node in the subtree, first the
  * @enumerate function is used to check if the node exists. If the node exists
- * or the #G_DBUS_SUBTREE_FLAGS_DISPATCH_TO_UNENUMERATED_NODES flag is set
+ * or the %G_DBUS_SUBTREE_FLAGS_DISPATCH_TO_UNENUMERATED_NODES flag is set
  * the @introspection function is used to check if the node supports the
  * requested method. If so, the @dispatch function is used to determine
  * where to dispatch the call. The collected #GDBusInterfaceVTable and
@@ -16914,7 +16916,7 @@
  * of the thread you are calling this method from.
  *
  * If an existing subtree is already registered at @object_path or
- * then @error is set to #G_IO_ERROR_EXISTS.
+ * then @error is set to %G_IO_ERROR_EXISTS.
  *
  * Note that it is valid to register regular objects (using
  * g_dbus_connection_register_object()) in a subtree registered with
@@ -17372,7 +17374,7 @@
  * such that it can be recovered with g_dbus_error_get_remote_error().
  *
  * Otherwise, a #GError with the error code %G_IO_ERROR_DBUS_ERROR
- * in the #G_IO_ERROR error domain is returned. Also, @dbus_error_name is
+ * in the %G_IO_ERROR error domain is returned. Also, @dbus_error_name is
  * added to the error message such that it can be recovered with
  * g_dbus_error_get_remote_error().
  *
@@ -17560,12 +17562,12 @@
  * - `G_TYPE_DOUBLE`: 'd'
  * - `G_TYPE_VARIANT`: Any #GVariantType
  *
- * This can fail if e.g. @gvalue is of type #G_TYPE_STRING and @type
- * is 'i', i.e. #G_VARIANT_TYPE_INT32. It will also fail for any #GType
- * (including e.g. #G_TYPE_OBJECT and #G_TYPE_BOXED derived-types) not
+ * This can fail if e.g. @gvalue is of type %G_TYPE_STRING and @type
+ * is 'i', i.e. %G_VARIANT_TYPE_INT32. It will also fail for any #GType
+ * (including e.g. %G_TYPE_OBJECT and %G_TYPE_BOXED derived-types) not
  * in the table above.
  *
- * Note that if @gvalue is of type #G_TYPE_VARIANT and its value is
+ * Note that if @gvalue is of type %G_TYPE_VARIANT and its value is
  * %NULL, the empty #GVariant instance (never %NULL) for @type is
  * returned (e.g. 0 for scalar types, the empty string for string types,
  * '/' for object path types, the empty array for any array type and so on).
@@ -20536,7 +20538,7 @@
  *
  * Gets the value of the NoDisplay key, which helps determine if the
  * application info should be shown in menus. See
- * #G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY and g_app_info_should_show().
+ * %G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY and g_app_info_should_show().
  *
  * Returns: The value of the NoDisplay key
  * Since: 2.30
@@ -20987,7 +20989,7 @@
  *
  * Gets the identifier of the given kind for @drive. The only
  * identifier currently available is
- * #G_DRIVE_IDENTIFIER_KIND_UNIX_DEVICE.
+ * %G_DRIVE_IDENTIFIER_KIND_UNIX_DEVICE.
  *
  * Returns: (nullable) (transfer full): a newly allocated string containing the
  *     requested identifier, or %NULL if the #GDrive
@@ -21928,7 +21930,7 @@
  * If the file doesn't already exist it is created.
  *
  * By default files created are generally readable by everyone,
- * but if you pass #G_FILE_CREATE_PRIVATE in @flags the file
+ * but if you pass %G_FILE_CREATE_PRIVATE in @flags the file
  * will be made readable only to the current user, to the level that
  * is supported on the target filesystem.
  *
@@ -22238,14 +22240,14 @@
  * Copies the file @source to the location specified by @destination.
  * Can not handle recursive copies of directories.
  *
- * If the flag #G_FILE_COPY_OVERWRITE is specified an already
+ * If the flag %G_FILE_COPY_OVERWRITE is specified an already
  * existing @destination file is overwritten.
  *
- * If the flag #G_FILE_COPY_NOFOLLOW_SYMLINKS is specified then symlinks
+ * If the flag %G_FILE_COPY_NOFOLLOW_SYMLINKS is specified then symlinks
  * will be copied as symlinks, otherwise the target of the
  * @source symlink will be copied.
  *
- * If the flag #G_FILE_COPY_ALL_METADATA is specified then all the metadata
+ * If the flag %G_FILE_COPY_ALL_METADATA is specified then all the metadata
  * that is possible to copy is copied, not just the default subset (which,
  * for instance, does not include the owner, see #GFileInfo).
  *
@@ -22262,7 +22264,7 @@
  * If the @source file does not exist, then the %G_IO_ERROR_NOT_FOUND error
  * is returned, independent on the status of the @destination.
  *
- * If #G_FILE_COPY_OVERWRITE is not specified and the target exists, then
+ * If %G_FILE_COPY_OVERWRITE is not specified and the target exists, then
  * the error %G_IO_ERROR_EXISTS is returned.
  *
  * If trying to overwrite a file over a directory, the %G_IO_ERROR_IS_DIRECTORY
@@ -22270,7 +22272,7 @@
  * %G_IO_ERROR_WOULD_MERGE error is returned.
  *
  * If the source is a directory and the target does not exist, or
- * #G_FILE_COPY_OVERWRITE is specified and the target is a file, then the
+ * %G_FILE_COPY_OVERWRITE is specified and the target is a file, then the
  * %G_IO_ERROR_WOULD_RECURSE error is returned.
  *
  * If you are interested in copying the #GFile object itself (not the on-disk
@@ -22321,7 +22323,7 @@
  * Normally only a subset of the file attributes are copied,
  * those that are copies in a normal file copy operation
  * (which for instance does not include e.g. owner). However
- * if #G_FILE_COPY_ALL_METADATA is specified in @flags, then
+ * if %G_FILE_COPY_ALL_METADATA is specified in @flags, then
  * all the metadata that is possible to copy is copied. This
  * is useful when implementing move by copy + delete source.
  *
@@ -22354,7 +22356,7 @@
  * The file must not already exist.
  *
  * By default files created are generally readable by everyone,
- * but if you pass #G_FILE_CREATE_PRIVATE in @flags the file
+ * but if you pass %G_FILE_CREATE_PRIVATE in @flags the file
  * will be made readable only to the current user, to the level
  * that is supported on the target filesystem.
  *
@@ -22425,7 +22427,7 @@
  * writing to it. The file must not already exist.
  *
  * By default files created are generally readable by everyone,
- * but if you pass #G_FILE_CREATE_PRIVATE in @flags the file
+ * but if you pass %G_FILE_CREATE_PRIVATE in @flags the file
  * will be made readable only to the current user, to the level
  * that is supported on the target filesystem.
  *
@@ -22688,7 +22690,7 @@
  * "standard::*" means all attributes in the standard namespace.
  * An example attribute query be "standard::*,owner::user".
  * The standard attributes are available as defines, like
- * #G_FILE_ATTRIBUTE_STANDARD_NAME. #G_FILE_ATTRIBUTE_STANDARD_NAME should
+ * %G_FILE_ATTRIBUTE_STANDARD_NAME. %G_FILE_ATTRIBUTE_STANDARD_NAME should
  * always be specified if you plan to call g_file_enumerator_get_child() or
  * g_file_enumerator_iterate() on the returned enumerator.
  *
@@ -22812,7 +22814,7 @@
  * directory of @enumerator.  This function is primarily intended to be used
  * inside loops with g_file_enumerator_next_file().
  *
- * To use this, #G_FILE_ATTRIBUTE_STANDARD_NAME must have been listed in the
+ * To use this, %G_FILE_ATTRIBUTE_STANDARD_NAME must have been listed in the
  * attributes list used when creating the #GFileEnumerator.
  *
  * This is a convenience method that's equivalent to:
@@ -24876,7 +24878,7 @@
  * implementation may support moving directories (for instance on moves
  * inside the same filesystem), but the fallback code does not.
  *
- * If the flag #G_FILE_COPY_OVERWRITE is specified an already
+ * If the flag %G_FILE_COPY_OVERWRITE is specified an already
  * existing @destination file is overwritten.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
@@ -24892,7 +24894,7 @@
  * If the @source file does not exist, then the %G_IO_ERROR_NOT_FOUND
  * error is returned, independent on the status of the @destination.
  *
- * If #G_FILE_COPY_OVERWRITE is not specified and the target exists,
+ * If %G_FILE_COPY_OVERWRITE is not specified and the target exists,
  * then the error %G_IO_ERROR_EXISTS is returned.
  *
  * If trying to overwrite a file over a directory, the %G_IO_ERROR_IS_DIRECTORY
@@ -24900,7 +24902,7 @@
  * %G_IO_ERROR_WOULD_MERGE error is returned.
  *
  * If the source is a directory and the target does not exist, or
- * #G_FILE_COPY_OVERWRITE is specified and the target is a file, then
+ * %G_FILE_COPY_OVERWRITE is specified and the target is a file, then
  * the %G_IO_ERROR_WOULD_RECURSE error may be returned (if the native
  * move operation isn't available).
  *
@@ -25244,7 +25246,7 @@
  *   when the request is satisfied, or %NULL
  * @user_data: the data to pass to callback function
  *
- * Polls a file of type #G_FILE_TYPE_MOUNTABLE.
+ * Polls a file of type %G_FILE_TYPE_MOUNTABLE.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -25370,7 +25372,7 @@
  * The primary use case of this method is to check if a file is
  * a regular file, directory, or symlink.
  *
- * Returns: The #GFileType of the file and #G_FILE_TYPE_UNKNOWN
+ * Returns: The #GFileType of the file and %G_FILE_TYPE_UNKNOWN
  *   if the file does not exist
  * Since: 2.18
  */
@@ -25397,9 +25399,9 @@
  * attributes, and a wildcard like "filesystem::*" means all attributes
  * in the filesystem namespace. The standard namespace for filesystem
  * attributes is "filesystem". Common attributes of interest are
- * #G_FILE_ATTRIBUTE_FILESYSTEM_SIZE (the total size of the filesystem
- * in bytes), #G_FILE_ATTRIBUTE_FILESYSTEM_FREE (number of bytes available),
- * and #G_FILE_ATTRIBUTE_FILESYSTEM_TYPE (type of the filesystem).
+ * %G_FILE_ATTRIBUTE_FILESYSTEM_SIZE (the total size of the filesystem
+ * in bytes), %G_FILE_ATTRIBUTE_FILESYSTEM_FREE (number of bytes available),
+ * and %G_FILE_ATTRIBUTE_FILESYSTEM_TYPE (type of the filesystem).
  *
  * If @cancellable is not %NULL, then the operation can be cancelled
  * by triggering the cancellable object from another thread. If the
@@ -25477,7 +25479,7 @@
  * "standard::*" means all attributes in the standard namespace.
  * An example attribute query be "standard::*,owner::user".
  * The standard attributes are available as defines, like
- * #G_FILE_ATTRIBUTE_STANDARD_NAME.
+ * %G_FILE_ATTRIBUTE_STANDARD_NAME.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled
  * by triggering the cancellable object from another thread. If the
@@ -25486,7 +25488,7 @@
  *
  * For symlinks, normally the information about the target of the
  * symlink is returned, rather than information about the symlink
- * itself. However if you pass #G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS
+ * itself. However if you pass %G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS
  * in @flags the information about the symlink itself will be returned.
  * Also, for symlinks that point to non-existing files the information
  * about the symlink itself will be returned.
@@ -25664,7 +25666,7 @@
  * the destination when the stream is closed.
  *
  * By default files created are generally readable by everyone,
- * but if you pass #G_FILE_CREATE_PRIVATE in @flags the file
+ * but if you pass %G_FILE_CREATE_PRIVATE in @flags the file
  * will be made readable only to the current user, to the level that
  * is supported on the target filesystem.
  *
@@ -26171,7 +26173,7 @@
  * for the target filesystem if possible and the @file is renamed to this.
  *
  * If you want to implement a rename operation in the user interface the
- * edit name (#G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME) should be used as the
+ * edit name (%G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME) should be used as the
  * initial value in the rename widget, and then the result after editing
  * should be passed to g_file_set_display_name().
  *
@@ -26232,7 +26234,7 @@
  * @callback: (nullable): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL
  * @user_data: the data to pass to callback function
  *
- * Starts a file of type #G_FILE_TYPE_MOUNTABLE.
+ * Starts a file of type %G_FILE_TYPE_MOUNTABLE.
  * Using @start_operation, you can request callbacks when, for instance,
  * passwords are needed during authentication.
  *
@@ -26277,7 +26279,7 @@
  *   when the request is satisfied, or %NULL
  * @user_data: the data to pass to callback function
  *
- * Stops a file of type #G_FILE_TYPE_MOUNTABLE.
+ * Stops a file of type %G_FILE_TYPE_MOUNTABLE.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -26428,7 +26430,7 @@
  *   when the request is satisfied, or %NULL
  * @user_data: (closure): the data to pass to callback function
  *
- * Unmounts a file of type #G_FILE_TYPE_MOUNTABLE.
+ * Unmounts a file of type %G_FILE_TYPE_MOUNTABLE.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -27721,7 +27723,7 @@
  * Gets the required type for @extension_point.
  *
  * Returns: the #GType that all implementations must have,
- *     or #G_TYPE_INVALID if the extension point has no required type
+ *   or %G_TYPE_INVALID if the extension point has no required type
  */
 
 
@@ -32781,7 +32783,7 @@
  *
  * This differs from g_resolver_lookup_by_name() in that you can modify
  * the lookup behavior with @flags. For example this can be used to limit
- * results with #G_RESOLVER_NAME_LOOKUP_FLAGS_IPV4_ONLY.
+ * results with %G_RESOLVER_NAME_LOOKUP_FLAGS_IPV4_ONLY.
  *
  * Returns: (element-type GInetAddress) (transfer full): a non-empty #GList
  * of #GInetAddress, or %NULL on error. You
@@ -35116,7 +35118,7 @@
  * @object: (nullable): a #GObject, or %NULL.
  * @callback: a #GAsyncReadyCallback.
  * @user_data: user data passed to @callback.
- * @domain: a #GQuark containing the error domain (usually #G_IO_ERROR).
+ * @domain: a #GQuark containing the error domain (usually %G_IO_ERROR).
  * @code: a specific error code.
  * @format: a formatted error reporting string.
  * @...: a list of variables to fill in @format.
@@ -35396,7 +35398,7 @@
 /**
  * g_simple_async_result_set_error: (skip)
  * @simple: a #GSimpleAsyncResult.
- * @domain: a #GQuark (usually #G_IO_ERROR).
+ * @domain: a #GQuark (usually %G_IO_ERROR).
  * @code: an error code.
  * @format: a formatted error reporting string.
  * @...: a list of variables to fill in @format.
@@ -35410,7 +35412,7 @@
 /**
  * g_simple_async_result_set_error_va: (skip)
  * @simple: a #GSimpleAsyncResult.
- * @domain: a #GQuark (usually #G_IO_ERROR).
+ * @domain: a #GQuark (usually %G_IO_ERROR).
  * @code: an error code.
  * @format: a formatted error reporting string.
  * @args: va_list of arguments.
@@ -39692,7 +39694,7 @@
  *
  * Sets @task's result to @result (by copying it) and completes the task.
  *
- * If @result is %NULL then a #GValue of type #G_TYPE_POINTER
+ * If @result is %NULL then a #GValue of type %G_TYPE_POINTER
  * with a value of %NULL will be used for the result.
  *
  * This is a very generic low-level method intended primarily for use
@@ -39789,7 +39791,8 @@
  * name of the #GSource used for idle completion of the task.
  *
  * This function may only be called before the @task is first used in a thread
- * other than the one it was constructed in.
+ * other than the one it was constructed in. It is called automatically by
+ * g_task_set_source_tag() if not called already.
  *
  * Since: 2.60
  */
@@ -39859,12 +39862,18 @@
  * @task: the #GTask
  * @source_tag: an opaque pointer indicating the source of this task
  *
- * Sets @task's source tag. You can use this to tag a task return
+ * Sets @task's source tag.
+ *
+ * You can use this to tag a task return
  * value with a particular pointer (usually a pointer to the function
  * doing the tagging) and then later check it using
  * g_task_get_source_tag() (or g_async_result_is_tagged()) in the
  * task's "finish" function, to figure out if the response came from a
  * particular place.
+ *
+ * A macro wrapper around this function will automatically set the
+ * task’s name to the string form of @source_tag if it’s not already
+ * set, for convenience.
  *
  * Since: 2.36
  */
@@ -41440,7 +41449,7 @@
  * certificate in the chain by its #GTlsCertificate:issuer property.
  *
  * @purpose describes the purpose (or usage) for which the certificate
- * is being used. Typically @purpose will be set to #G_TLS_DATABASE_PURPOSE_AUTHENTICATE_SERVER
+ * is being used. Typically @purpose will be set to %G_TLS_DATABASE_PURPOSE_AUTHENTICATE_SERVER
  * which means that the certificate is being used to authenticate a server
  * (and we are acting as the client).
  *

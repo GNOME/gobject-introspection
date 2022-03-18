@@ -327,8 +327,8 @@
  * @G_DATE_SATURDAY: Saturday
  * @G_DATE_SUNDAY: Sunday
  *
- * Enumeration representing a day of the week; #G_DATE_MONDAY,
- * #G_DATE_TUESDAY, etc. #G_DATE_BAD_WEEKDAY is an invalid weekday.
+ * Enumeration representing a day of the week; %G_DATE_MONDAY,
+ * %G_DATE_TUESDAY, etc. %G_DATE_BAD_WEEKDAY is an invalid weekday.
  */
 
 
@@ -1748,11 +1748,11 @@
  *     by the scanner (the default is the whitespace characters: space,
  *     tab, carriage-return and line-feed).
  * @cset_identifier_first: specifies the characters which can start
- *     identifiers (the default is #G_CSET_a_2_z, "_", and #G_CSET_A_2_Z).
+ *     identifiers (the default is %G_CSET_a_2_z, "_", and %G_CSET_A_2_Z).
  * @cset_identifier_nth: specifies the characters which can be used
  *     in identifiers, after the first character (the default is
- *     #G_CSET_a_2_z, "_0123456789", #G_CSET_A_2_Z, #G_CSET_LATINS,
- *     #G_CSET_LATINC).
+ *     %G_CSET_a_2_z, "_0123456789", %G_CSET_A_2_Z, %G_CSET_LATINS,
+ *     %G_CSET_LATINC).
  * @cpair_comment_single: specifies the characters at the start and
  *     end of single-line comments. The default is "#\n" which means
  *     that single-line comments start with a '#' and continue until
@@ -1788,7 +1788,7 @@
  * @scan_string_dq: specifies if strings can be enclosed in double
  *     quotes (the default is %TRUE).
  * @numbers_2_int: specifies if binary, octal and hexadecimal numbers
- *     are reported as #G_TOKEN_INT (the default is %TRUE).
+ *     are reported as %G_TOKEN_INT (the default is %TRUE).
  * @int_2_float: specifies if all numbers are reported as %G_TOKEN_FLOAT
  *     (the default is %FALSE).
  * @identifier_2_string: specifies if identifiers are reported as strings
@@ -2862,7 +2862,7 @@
 /**
  * G_BEGIN_DECLS:
  *
- * Used (along with #G_END_DECLS) to bracket header files. If the
+ * Used (along with %G_END_DECLS) to bracket header files. If the
  * compiler in use is a C++ compiler, adds extern "C"
  * around the header.
  */
@@ -2872,7 +2872,7 @@
  * G_BIG_ENDIAN:
  *
  * Specifies one of the possible types of byte order.
- * See #G_BYTE_ORDER.
+ * See %G_BYTE_ORDER.
  */
 
 
@@ -2880,8 +2880,8 @@
  * G_BYTE_ORDER:
  *
  * The host byte order.
- * This can be either #G_LITTLE_ENDIAN or #G_BIG_ENDIAN (support for
- * #G_PDP_ENDIAN may be added in future.)
+ * This can be either %G_LITTLE_ENDIAN or %G_BIG_ENDIAN (support for
+ * %G_PDP_ENDIAN may be added in future.)
  */
 
 
@@ -3111,7 +3111,7 @@
 /**
  * G_END_DECLS:
  *
- * Used (along with #G_BEGIN_DECLS) to bracket header files. If the
+ * Used (along with %G_BEGIN_DECLS) to bracket header files. If the
  * compiler in use is a C++ compiler, adds extern "C"
  * around the header.
  */
@@ -3167,7 +3167,7 @@
  * G_GINT32_FORMAT:
  *
  * This is the platform dependent conversion specifier for scanning
- * and printing values of type #gint32. See also #G_GINT16_FORMAT.
+ * and printing values of type #gint32. See also %G_GINT16_FORMAT.
  */
 
 
@@ -3176,7 +3176,7 @@
  *
  * The platform dependent length modifier for conversion specifiers
  * for scanning and printing values of type #gint32 or #guint32. It
- * is a string literal. See also #G_GINT16_MODIFIER.
+ * is a string literal. See also %G_GINT16_MODIFIER.
  *
  * Since: 2.4
  */
@@ -3195,7 +3195,7 @@
  * G_GINT64_FORMAT:
  *
  * This is the platform dependent conversion specifier for scanning
- * and printing values of type #gint64. See also #G_GINT16_FORMAT.
+ * and printing values of type #gint64. See also %G_GINT16_FORMAT.
  *
  * Some platforms do not support scanning and printing 64-bit integers,
  * even though the types are supported. On such platforms %G_GINT64_FORMAT
@@ -3386,7 +3386,7 @@
  * This macro is used to insert #goffset 64-bit integer literals
  * into the source code.
  *
- * See also #G_GINT64_CONSTANT.
+ * See also G_GINT64_CONSTANT().
  *
  * Since: 2.20
  */
@@ -3396,7 +3396,7 @@
  * G_GOFFSET_FORMAT:
  *
  * This is the platform dependent conversion specifier for scanning
- * and printing values of type #goffset. See also #G_GINT64_FORMAT.
+ * and printing values of type #goffset. See also %G_GINT64_FORMAT.
  *
  * Since: 2.20
  */
@@ -3407,7 +3407,7 @@
  *
  * The platform dependent length modifier for conversion specifiers
  * for scanning and printing values of type #goffset. It is a string
- * literal. See also #G_GINT64_MODIFIER.
+ * literal. See also %G_GINT64_MODIFIER.
  *
  * Since: 2.20
  */
@@ -3417,7 +3417,7 @@
  * G_GSIZE_FORMAT:
  *
  * This is the platform dependent conversion specifier for scanning
- * and printing values of type #gsize. See also #G_GINT16_FORMAT.
+ * and printing values of type #gsize. See also %G_GINT16_FORMAT.
  *
  * Since: 2.6
  */
@@ -3438,7 +3438,7 @@
  * G_GSSIZE_FORMAT:
  *
  * This is the platform dependent conversion specifier for scanning
- * and printing values of type #gssize. See also #G_GINT16_FORMAT.
+ * and printing values of type #gssize. See also %G_GINT16_FORMAT.
  *
  * Since: 2.6
  */
@@ -3459,7 +3459,7 @@
  * G_GUINT16_FORMAT:
  *
  * This is the platform dependent conversion specifier for scanning
- * and printing values of type #guint16. See also #G_GINT16_FORMAT
+ * and printing values of type #guint16. See also %G_GINT16_FORMAT
  */
 
 
@@ -3467,7 +3467,7 @@
  * G_GUINT32_FORMAT:
  *
  * This is the platform dependent conversion specifier for scanning
- * and printing values of type #guint32. See also #G_GINT16_FORMAT.
+ * and printing values of type #guint32. See also %G_GINT16_FORMAT.
  */
 
 
@@ -3486,7 +3486,7 @@
  * G_GUINT64_FORMAT:
  *
  * This is the platform dependent conversion specifier for scanning
- * and printing values of type #guint64. See also #G_GINT16_FORMAT.
+ * and printing values of type #guint64. See also %G_GINT16_FORMAT.
  *
  * Some platforms do not support scanning and printing 64-bit integers,
  * even though the types are supported. On such platforms %G_GUINT64_FORMAT
@@ -3919,7 +3919,7 @@
  * G_LITTLE_ENDIAN:
  *
  * Specifies one of the possible types of byte order.
- * See #G_BYTE_ORDER.
+ * See %G_BYTE_ORDER.
  */
 
 
@@ -4328,7 +4328,7 @@
  * G_PDP_ENDIAN:
  *
  * Specifies one of the possible types of byte order
- * (currently unused). See #G_BYTE_ORDER.
+ * (currently unused). See %G_BYTE_ORDER.
  */
 
 
@@ -6150,7 +6150,7 @@
  * Perl regular expression.
  *
  * Some functions accept a @start_position argument, setting it differs
- * from just passing over a shortened string and setting #G_REGEX_MATCH_NOTBOL
+ * from just passing over a shortened string and setting %G_REGEX_MATCH_NOTBOL
  * in the case of a pattern that begins with any kind of lookbehind assertion.
  * For example, consider the pattern "\Biss\B" which finds occurrences of "iss"
  * in the middle of words. ("\B" matches only if the current position in the
@@ -6162,11 +6162,11 @@
  * it is able to look behind the starting point to discover that it is
  * preceded by a letter.
  *
- * Note that, unless you set the #G_REGEX_RAW flag, all the strings passed
+ * Note that, unless you set the %G_REGEX_RAW flag, all the strings passed
  * to these functions must be encoded in UTF-8. The lengths and the positions
  * inside the strings are in bytes and not in characters, so, for instance,
  * "\xc3\xa0" (i.e. "à") is two bytes long but it is treated as a
- * single character. If you set #G_REGEX_RAW the strings can be non-valid
+ * single character. If you set %G_REGEX_RAW the strings can be non-valid
  * UTF-8 strings and a byte is treated as a character, so "\xc3\xa0" is two
  * bytes and two characters long.
  *
@@ -6181,11 +6181,11 @@
  * The behaviour of the dot, circumflex, and dollar metacharacters are
  * affected by newline characters, the default is to recognize any newline
  * character (the same characters recognized by "\R"). This can be changed
- * with #G_REGEX_NEWLINE_CR, #G_REGEX_NEWLINE_LF and #G_REGEX_NEWLINE_CRLF
- * compile options, and with #G_REGEX_MATCH_NEWLINE_ANY,
- * #G_REGEX_MATCH_NEWLINE_CR, #G_REGEX_MATCH_NEWLINE_LF and
- * #G_REGEX_MATCH_NEWLINE_CRLF match options. These settings are also
- * relevant when compiling a pattern if #G_REGEX_EXTENDED is set, and an
+ * with %G_REGEX_NEWLINE_CR, %G_REGEX_NEWLINE_LF and %G_REGEX_NEWLINE_CRLF
+ * compile options, and with %G_REGEX_MATCH_NEWLINE_ANY,
+ * %G_REGEX_MATCH_NEWLINE_CR, %G_REGEX_MATCH_NEWLINE_LF and
+ * %G_REGEX_MATCH_NEWLINE_CRLF match options. These settings are also
+ * relevant when compiling a pattern if %G_REGEX_EXTENDED is set, and an
  * unescaped "#" outside a character class is encountered. This indicates
  * a comment that lasts until after the next newline.
  *
@@ -6243,7 +6243,7 @@
  * Most of GLib is intended to be portable; in contrast, this set of
  * functions is designed for programs which explicitly target UNIX,
  * or are using it to build higher level abstractions which would be
- * conditionally compiled if the platform matches G_OS_UNIX.
+ * conditionally compiled if the platform matches %G_OS_UNIX.
  *
  * To use these functions, you must explicitly include the
  * "glib-unix.h" header.
@@ -7279,10 +7279,14 @@
  * Each event source is assigned a priority. The default priority,
  * %G_PRIORITY_DEFAULT, is 0. Values less than 0 denote higher priorities.
  * Values greater than 0 denote lower priorities. Events from high priority
- * sources are always processed before events from lower priority sources.
+ * sources are always processed before events from lower priority sources: if
+ * several sources are ready to dispatch, the ones with equal-highest priority
+ * will be dispatched on the current #GMainContext iteration, and the rest wait
+ * until a subsequent #GMainContext iteration when they have the highest
+ * priority of the sources which are ready for dispatch.
  *
  * Idle functions can also be added, and assigned a priority. These will
- * be run whenever no events with a higher priority are ready to be processed.
+ * be run whenever no events with a higher priority are ready to be dispatched.
  *
  * The #GMainLoop data type represents a main event loop. A GMainLoop is
  * created with g_main_loop_new(). After adding the initial event sources,
@@ -7699,7 +7703,7 @@
  * @title: Numerical Definitions
  * @short_description: mathematical constants, and floating point decomposition
  *
- * GLib offers mathematical constants such as #G_PI for the value of pi;
+ * GLib offers mathematical constants such as %G_PI for the value of pi;
  * many platforms have these in the C library, but some don't, the GLib
  * versions always exist.
  *
@@ -7946,7 +7950,7 @@
  *
  * To create a new GQueue, use g_queue_new().
  *
- * To initialize a statically-allocated GQueue, use #G_QUEUE_INIT or
+ * To initialize a statically-allocated GQueue, use %G_QUEUE_INIT or
  * g_queue_init().
  *
  * To add elements, use g_queue_push_head(), g_queue_push_head_link(),
@@ -9722,7 +9726,7 @@
  * the string back using g_ascii_strtod() gives the same machine-number
  * (on machines with IEEE compatible 64bit doubles). It is
  * guaranteed that the size of the resulting string will never
- * be larger than @G_ASCII_DTOSTR_BUF_SIZE bytes, including the terminating
+ * be larger than %G_ASCII_DTOSTR_BUF_SIZE bytes, including the terminating
  * nul character, which is always added.
  *
  * Returns: The pointer to the buffer with the converted string.
@@ -12156,7 +12160,7 @@
  * Gets the time the bookmark for @uri was added to @bookmark
  *
  * In the event the URI cannot be found, -1 is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: a timestamp
  * Since: 2.12
@@ -12174,7 +12178,7 @@
  * Gets the time the bookmark for @uri was added to @bookmark
  *
  * In the event the URI cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: (transfer none): a #GDateTime
  * Since: 2.66
@@ -12198,11 +12202,11 @@
  * The string returned in @app_exec must be freed.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
  * event that no application with name @app_name has registered a bookmark
  * for @uri,  %FALSE is returned and error is set to
- * #G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED. In the event that unquoting
- * the command line fails, an error of the #G_SHELL_ERROR domain is
+ * %G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED. In the event that unquoting
+ * the command line fails, an error of the %G_SHELL_ERROR domain is
  * set and %FALSE is returned.
  *
  * Returns: %TRUE on success.
@@ -12229,11 +12233,11 @@
  * The string returned in @app_exec must be freed.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
  * event that no application with name @app_name has registered a bookmark
  * for @uri,  %FALSE is returned and error is set to
- * #G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED. In the event that unquoting
- * the command line fails, an error of the #G_SHELL_ERROR domain is
+ * %G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED. In the event that unquoting
+ * the command line fails, an error of the %G_SHELL_ERROR domain is
  * set and %FALSE is returned.
  *
  * Returns: %TRUE on success.
@@ -12252,7 +12256,7 @@
  * bookmark for @uri.
  *
  * In the event the URI cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: (array length=length) (transfer full): a newly allocated %NULL-terminated array of strings.
  *   Use g_strfreev() to free it.
@@ -12269,7 +12273,7 @@
  * Retrieves the description of the bookmark for @uri.
  *
  * In the event the URI cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: (transfer full): a newly allocated string or %NULL if the specified
  *   URI cannot be found.
@@ -12287,7 +12291,7 @@
  * Retrieves the list of group names of the bookmark for @uri.
  *
  * In the event the URI cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * The returned array is %NULL terminated, so @length may optionally
  * be %NULL.
@@ -12309,7 +12313,7 @@
  * Gets the icon of the bookmark for @uri.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: %TRUE if the icon for the bookmark for the URI was found.
  *   You should free the returned strings.
@@ -12326,9 +12330,9 @@
  * Gets whether the private flag of the bookmark for @uri is set.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
  * event that the private flag cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_INVALID_VALUE.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: %TRUE if the private flag is set, %FALSE otherwise.
  * Since: 2.12
@@ -12344,9 +12348,9 @@
  * Retrieves the MIME type of the resource pointed by @uri.
  *
  * In the event the URI cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.  In the
  * event that the MIME type cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_INVALID_VALUE.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: (transfer full): a newly allocated string or %NULL if the specified
  *   URI cannot be found.
@@ -12363,7 +12367,7 @@
  * Gets the time when the bookmark for @uri was last modified.
  *
  * In the event the URI cannot be found, -1 is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: a timestamp
  * Since: 2.12
@@ -12381,7 +12385,7 @@
  * Gets the time when the bookmark for @uri was last modified.
  *
  * In the event the URI cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: (transfer none): a #GDateTime
  * Since: 2.66
@@ -12410,7 +12414,7 @@
  * If @uri is %NULL, the title of @bookmark is returned.
  *
  * In the event the URI cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: (transfer full): a newly allocated string or %NULL if the specified
  *   URI cannot be found.
@@ -12442,7 +12446,7 @@
  * Gets the time the bookmark for @uri was last visited.
  *
  * In the event the URI cannot be found, -1 is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: a timestamp.
  * Since: 2.12
@@ -12460,7 +12464,7 @@
  * Gets the time the bookmark for @uri was last visited.
  *
  * In the event the URI cannot be found, %NULL is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: (transfer none): a #GDateTime
  * Since: 2.66
@@ -12478,7 +12482,7 @@
  * registered by application @name.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: %TRUE if the application @name was found
  * Since: 2.12
@@ -12496,7 +12500,7 @@
  * the bookmark for @uri belongs to.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: %TRUE if @group was found.
  * Since: 2.12
@@ -12579,7 +12583,7 @@
  * %NULL, then the bookmark is removed.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
  * Returns: %TRUE if the URI was successfully changed
  * Since: 2.12
@@ -12611,10 +12615,10 @@
  * that have registered a bookmark for @uri inside @bookmark.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  * In the event that no application with name @app_name has registered
  * a bookmark for @uri,  %FALSE is returned and error is set to
- * #G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED.
+ * %G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED.
  *
  * Returns: %TRUE if the application was successfully removed.
  * Since: 2.12
@@ -12632,9 +12636,9 @@
  * for @uri belongs to.
  *
  * In the event the URI cannot be found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  * In the event no group was defined, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_INVALID_VALUE.
+ * @error is set to %G_BOOKMARK_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: %TRUE if @group was successfully removed.
  * Since: 2.12
@@ -12717,10 +12721,10 @@
  *
  * If you try to remove an application by setting its registration count to
  * zero, and no bookmark for @uri is found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND; similarly,
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND; similarly,
  * in the event that no application @name has registered a bookmark
  * for @uri,  %FALSE is returned and error is set to
- * #G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED.  Otherwise, if no bookmark
+ * %G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED.  Otherwise, if no bookmark
  * for @uri is found, one is created.
  *
  * Returns: %TRUE if the application's meta-data was successfully
@@ -12764,10 +12768,10 @@
  *
  * If you try to remove an application by setting its registration count to
  * zero, and no bookmark for @uri is found, %FALSE is returned and
- * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND; similarly,
+ * @error is set to %G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND; similarly,
  * in the event that no application @name has registered a bookmark
  * for @uri,  %FALSE is returned and error is set to
- * #G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED.  Otherwise, if no bookmark
+ * %G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED.  Otherwise, if no bookmark
  * for @uri is found, one is created.
  *
  * Returns: %TRUE if the application's meta-data was successfully
@@ -14256,7 +14260,7 @@
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
- *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
+ *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will be the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in
@@ -14350,7 +14354,7 @@
  *                 Even if the conversion was successful, this may be
  *                 less than @len if there were partial characters
  *                 at the end of the input. If the error
- *                 #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
+ *                 %G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value
  *                 stored will be the byte offset after the last valid
  *                 input sequence.
  * @bytes_written: (out) (optional): the number of bytes stored in
@@ -17019,7 +17023,7 @@
  * contents and @length to the length of the file contents in bytes. The string
  * stored in @contents will be nul-terminated, so for text files you can pass
  * %NULL for the @length argument. If the call was not successful, it returns
- * %FALSE and sets @error. The error domain is #G_FILE_ERROR. Possible error
+ * %FALSE and sets @error. The error domain is %G_FILE_ERROR. Possible error
  * codes are those in the #GFileError enumeration. In the error case,
  * @contents is set to %NULL and @length is set to zero.
  *
@@ -17147,7 +17151,7 @@
  *   @filename already exists and is open.
  *
  * If the call was successful, it returns %TRUE. If the call was not successful,
- * it returns %FALSE and sets @error. The error domain is #G_FILE_ERROR.
+ * it returns %FALSE and sets @error. The error domain is %G_FILE_ERROR.
  * Possible error codes are those in the #GFileError enumeration.
  *
  * Note that the name for the temporary file is constructed by appending up
@@ -19659,8 +19663,8 @@
  * Flushes the write buffer for the GIOChannel.
  *
  * Returns: the status of the operation: One of
- *   #G_IO_STATUS_NORMAL, #G_IO_STATUS_AGAIN, or
- *   #G_IO_STATUS_ERROR.
+ *   %G_IO_STATUS_NORMAL, %G_IO_STATUS_AGAIN, or
+ *   %G_IO_STATUS_ERROR.
  */
 
 
@@ -20242,7 +20246,7 @@
  * @condition: conditions to watch for
  *
  * Creates a #GSource that's dispatched when @condition is met for the
- * given @channel. For example, if condition is #G_IO_IN, the source will
+ * given @channel. For example, if condition is %G_IO_IN, the source will
  * be dispatched when there's data available for reading.
  *
  * The callback function invoked by the #GSource should be added with
@@ -20283,9 +20287,9 @@
  * boolean.
  *
  * If @key cannot be found then %FALSE is returned and @error is set
- * to #G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the value
+ * to %G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the value
  * associated with @key cannot be interpreted as a boolean then %FALSE
- * is returned and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
+ * is returned and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: the value associated with the key as a boolean,
  *    or %FALSE if the key was not found or could not be parsed.
@@ -20305,9 +20309,9 @@
  * booleans.
  *
  * If @key cannot be found then %NULL is returned and @error is set to
- * #G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
+ * %G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
  * with @key cannot be interpreted as booleans then %NULL is returned
- * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
+ * and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: (array length=length) (element-type gboolean) (transfer container):
  *    the values associated with the key as a list of booleans, or %NULL if the
@@ -20349,9 +20353,9 @@
  * double. If @group_name is %NULL, the start_group is used.
  *
  * If @key cannot be found then 0.0 is returned and @error is set to
- * #G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the value associated
+ * %G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the value associated
  * with @key cannot be interpreted as a double then 0.0 is returned
- * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
+ * and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: the value associated with the key as a double, or
  *     0.0 if the key was not found or could not be parsed.
@@ -20371,9 +20375,9 @@
  * doubles.
  *
  * If @key cannot be found then %NULL is returned and @error is set to
- * #G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
+ * %G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
  * with @key cannot be interpreted as doubles then %NULL is returned
- * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
+ * and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: (array length=length) (element-type gdouble) (transfer container):
  *     the values associated with the key as a list of doubles, or %NULL if the
@@ -20426,10 +20430,10 @@
  * integer.
  *
  * If @key cannot be found then 0 is returned and @error is set to
- * #G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the value associated
+ * %G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the value associated
  * with @key cannot be interpreted as an integer, or is out of range
  * for a #gint, then 0 is returned
- * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
+ * and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: the value associated with the key as an integer, or
  *     0 if the key was not found or could not be parsed.
@@ -20449,10 +20453,10 @@
  * integers.
  *
  * If @key cannot be found then %NULL is returned and @error is set to
- * #G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
+ * %G_KEY_FILE_ERROR_KEY_NOT_FOUND. Likewise, if the values associated
  * with @key cannot be interpreted as integers, or are out of range for
  * #gint, then %NULL is returned
- * and @error is set to #G_KEY_FILE_ERROR_INVALID_VALUE.
+ * and @error is set to %G_KEY_FILE_ERROR_INVALID_VALUE.
  *
  * Returns: (array length=length) (element-type gint) (transfer container):
  *     the values associated with the key as a list of integers, or %NULL if
@@ -20473,7 +20477,7 @@
  * returned keys will be %NULL-terminated, so @length may
  * optionally be %NULL. In the event that the @group_name cannot
  * be found, %NULL is returned and @error is set to
- * #G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
+ * %G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
  *
  * Returns: (array zero-terminated=1) (transfer full): a newly-allocated %NULL-terminated array of strings.
  *     Use g_strfreev() to free it.
@@ -20521,7 +20525,7 @@
  * %G_KEY_FILE_KEEP_TRANSLATIONS in order to load strings for all locales.
  *
  * If @key cannot be found then %NULL is returned and @error is set
- * to #G_KEY_FILE_ERROR_KEY_NOT_FOUND. If the value associated
+ * to %G_KEY_FILE_ERROR_KEY_NOT_FOUND. If the value associated
  * with @key cannot be interpreted or no suitable translation can
  * be found then the untranslated value is returned.
  *
@@ -20549,7 +20553,7 @@
  * %G_KEY_FILE_KEEP_TRANSLATIONS in order to load strings for all locales.
  *
  * If @key cannot be found then %NULL is returned and @error is set
- * to #G_KEY_FILE_ERROR_KEY_NOT_FOUND. If the values associated
+ * to %G_KEY_FILE_ERROR_KEY_NOT_FOUND. If the values associated
  * with @key cannot be interpreted or no suitable translations
  * can be found then the untranslated values are returned. The
  * returned array is %NULL-terminated, so @length may optionally
@@ -20585,9 +20589,9 @@
  * like \s.
  *
  * In the event the key cannot be found, %NULL is returned and
- * @error is set to #G_KEY_FILE_ERROR_KEY_NOT_FOUND.  In the
+ * @error is set to %G_KEY_FILE_ERROR_KEY_NOT_FOUND.  In the
  * event that the @group_name cannot be found, %NULL is returned
- * and @error is set to #G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
+ * and @error is set to %G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
  *
  * Returns: a newly allocated string or %NULL if the specified
  *   key cannot be found.
@@ -20606,9 +20610,9 @@
  * Returns the values associated with @key under @group_name.
  *
  * In the event the key cannot be found, %NULL is returned and
- * @error is set to #G_KEY_FILE_ERROR_KEY_NOT_FOUND.  In the
+ * @error is set to %G_KEY_FILE_ERROR_KEY_NOT_FOUND.  In the
  * event that the @group_name cannot be found, %NULL is returned
- * and @error is set to #G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
+ * and @error is set to %G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
  *
  * Returns: (array zero-terminated=1 length=length) (element-type utf8) (transfer full):
  *  a %NULL-terminated string array or %NULL if the specified
@@ -20645,9 +20649,9 @@
  * Use g_key_file_get_string() to retrieve an unescaped UTF-8 string.
  *
  * In the event the key cannot be found, %NULL is returned and
- * @error is set to #G_KEY_FILE_ERROR_KEY_NOT_FOUND.  In the
+ * @error is set to %G_KEY_FILE_ERROR_KEY_NOT_FOUND.  In the
  * event that the @group_name cannot be found, %NULL is returned
- * and @error is set to #G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
+ * and @error is set to %G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
  *
  * Returns: a newly allocated string or %NULL if the specified
  *  key cannot be found.
@@ -21863,8 +21867,8 @@
  * other logging functions; it should only be used from %GLogWriterFunc
  * implementations.
  *
- * Note also that the value of this does not depend on `G_MESSAGES_DEBUG`, as
- * it is domain-dependent.
+ * Note also that the value of this does not depend on `G_MESSAGES_DEBUG`; see
+ * the docs for g_log_set_debug_enabled().
  *
  * Returns: %TRUE if debug output is enabled, %FALSE otherwise
  * Since: 2.72
@@ -21914,9 +21918,9 @@
  * g_log_set_debug_enabled:
  * @enabled: %TRUE to enable debug output, %FALSE otherwise
  *
- * Enable or disable debug output from the GLib logging system is enabled. This
- * value interacts disjunctively with `G_MESSAGES_DEBUG` — if either of them
- * would allow a debug message to be outputted, it will be.
+ * Enable or disable debug output from the GLib logging system for all domains.
+ * This value interacts disjunctively with `G_MESSAGES_DEBUG` — if either of
+ * them would allow a debug message to be outputted, it will be.
  *
  * Note that this should not be used from within library code to enable debug
  * output — it is intended for external use.
@@ -22192,7 +22196,7 @@
  * contain the text shown to the user.
  *
  * The values in the @fields dictionary are likely to be of type String
- * (#G_VARIANT_TYPE_STRING). Array of bytes (#G_VARIANT_TYPE_BYTESTRING) is also
+ * (%G_VARIANT_TYPE_STRING). Array of bytes (%G_VARIANT_TYPE_BYTESTRING) is also
  * supported. In this case the message is handled as binary and will be forwarded
  * to the log writer as such. The size of the array should not be higher than
  * %G_MAXSSIZE. Otherwise it will be truncated to this size. For other types
@@ -23274,7 +23278,7 @@
  * If @filename is the name of an empty, regular file, the function
  * will successfully return an empty #GMappedFile. In other cases of
  * size 0 (e.g. device files such as /dev/null), @error will be set
- * to the #GFileError value #G_FILE_ERROR_INVAL.
+ * to the #GFileError value %G_FILE_ERROR_INVAL.
  *
  * Returns: a newly allocated #GMappedFile which must be unref'd
  *    with g_mapped_file_unref(), or %NULL if the mapping failed.
@@ -23763,7 +23767,7 @@
  * match done with @string against @regex and have the same syntax used by
  * g_regex_replace().
  *
- * The @string_to_expand must be UTF-8 encoded even if #G_REGEX_RAW was
+ * The @string_to_expand must be UTF-8 encoded even if %G_REGEX_RAW was
  * passed to g_regex_new().
  *
  * The backreferences are extracted from the string passed to the match
@@ -23982,19 +23986,19 @@
  * able to raise an error as soon as a mistake is made.
  *
  * GRegex supports the concept of partial matching by means of the
- * #G_REGEX_MATCH_PARTIAL_SOFT and #G_REGEX_MATCH_PARTIAL_HARD flags.
+ * %G_REGEX_MATCH_PARTIAL_SOFT and %G_REGEX_MATCH_PARTIAL_HARD flags.
  * When they are used, the return code for
  * g_regex_match() or g_regex_match_full() is, as usual, %TRUE
  * for a complete match, %FALSE otherwise. But, when these functions
  * return %FALSE, you can check if the match was partial calling
  * g_match_info_is_partial_match().
  *
- * The difference between #G_REGEX_MATCH_PARTIAL_SOFT and
- * #G_REGEX_MATCH_PARTIAL_HARD is that when a partial match is encountered
- * with #G_REGEX_MATCH_PARTIAL_SOFT, matching continues to search for a
- * possible complete match, while with #G_REGEX_MATCH_PARTIAL_HARD matching
+ * The difference between %G_REGEX_MATCH_PARTIAL_SOFT and
+ * %G_REGEX_MATCH_PARTIAL_HARD is that when a partial match is encountered
+ * with %G_REGEX_MATCH_PARTIAL_SOFT, matching continues to search for a
+ * possible complete match, while with %G_REGEX_MATCH_PARTIAL_HARD matching
  * stops at the partial match.
- * When both #G_REGEX_MATCH_PARTIAL_SOFT and #G_REGEX_MATCH_PARTIAL_HARD
+ * When both %G_REGEX_MATCH_PARTIAL_SOFT and %G_REGEX_MATCH_PARTIAL_HARD
  * are set, the latter takes precedence.
  *
  * There were formerly some restrictions on the pattern for partial matching.
@@ -25092,7 +25096,7 @@
  * The @parameter_string can serve multiple purposes. It can be used
  * to add descriptions for "rest" arguments, which are not parsed by
  * the #GOptionContext, typically something like "FILES" or
- * "FILE1 FILE2...". If you are using #G_OPTION_REMAINING for
+ * "FILE1 FILE2...". If you are using %G_OPTION_REMAINING for
  * collecting "rest" arguments, GLib handles this automatically by
  * using the @arg_description of the corresponding #GOptionEntry in
  * the usage summary.
@@ -26766,7 +26770,7 @@
  *
  * A statically-allocated #GQueue must be initialized with this function
  * before it can be used. Alternatively you can initialize it with
- * #G_QUEUE_INIT. It is not necessary to initialize queues created with
+ * %G_QUEUE_INIT. It is not necessary to initialize queues created with
  * g_queue_new().
  *
  * Since: 2.14
@@ -28012,7 +28016,7 @@
  * is not able to capture substrings, so backreferences do not work.
  *
  * Setting @start_position differs from just passing over a shortened
- * string and setting #G_REGEX_MATCH_NOTBOL in the case of a pattern
+ * string and setting %G_REGEX_MATCH_NOTBOL in the case of a pattern
  * that begins with any kind of lookbehind assertion, such as "\b".
  *
  * Unless %G_REGEX_RAW is specified in the options, @string must be valid UTF-8.
@@ -28049,7 +28053,7 @@
  * flexibility in reusing #GRegex structures.
  *
  * Setting @start_position differs from just passing over a shortened
- * string and setting #G_REGEX_MATCH_NOTBOL in the case of a pattern
+ * string and setting %G_REGEX_MATCH_NOTBOL in the case of a pattern
  * that begins with any kind of lookbehind assertion, such as "\b".
  *
  * Unless %G_REGEX_RAW is specified in the options, @string must be valid UTF-8.
@@ -28179,12 +28183,12 @@
  *
  * If you do not need to use backreferences use g_regex_replace_literal().
  *
- * The @replacement string must be UTF-8 encoded even if #G_REGEX_RAW was
+ * The @replacement string must be UTF-8 encoded even if %G_REGEX_RAW was
  * passed to g_regex_new(). If you want to use not UTF-8 encoded strings
  * you can use g_regex_replace_literal().
  *
  * Setting @start_position differs from just passing over a shortened
- * string and setting #G_REGEX_MATCH_NOTBOL in the case of a pattern that
+ * string and setting %G_REGEX_MATCH_NOTBOL in the case of a pattern that
  * begins with any kind of lookbehind assertion, such as "\b".
  *
  * Returns: a newly allocated string containing the replacements
@@ -28207,7 +28211,7 @@
  * @eval for that occurrence.
  *
  * Setting @start_position differs from just passing over a shortened
- * string and setting #G_REGEX_MATCH_NOTBOL in the case of a pattern
+ * string and setting %G_REGEX_MATCH_NOTBOL in the case of a pattern
  * that begins with any kind of lookbehind assertion, such as "\b".
  *
  * The following example uses g_regex_replace_eval() to replace multiple
@@ -28269,7 +28273,7 @@
  * include backreferences use g_regex_replace().
  *
  * Setting @start_position differs from just passing over a
- * shortened string and setting #G_REGEX_MATCH_NOTBOL in the
+ * shortened string and setting %G_REGEX_MATCH_NOTBOL in the
  * case of a pattern that begins with any kind of lookbehind
  * assertion, such as "\b".
  *
@@ -28338,7 +28342,7 @@
  * "a", "b" and "c".
  *
  * Setting @start_position differs from just passing over a shortened
- * string and setting #G_REGEX_MATCH_NOTBOL in the case of a pattern
+ * string and setting %G_REGEX_MATCH_NOTBOL in the case of a pattern
  * that begins with any kind of lookbehind assertion, such as "\b".
  *
  * Returns: (transfer full): a %NULL-terminated gchar ** array. Free
@@ -29707,6 +29711,11 @@
  * they are passed through literally.
  *
  * Possible errors are those from the %G_SHELL_ERROR domain.
+ *
+ * In particular, if @command_line is an empty string (or a string containing
+ * only whitespace), %G_SHELL_ERROR_EMPTY_STRING will be returned. It’s
+ * guaranteed that @argvp will be a non-empty array if this function returns
+ * successfully.
  *
  * Free the returned vector with g_strfreev().
  *
@@ -31288,7 +31297,8 @@
 /**
  * g_spawn_async_with_fds:
  * @working_directory: (type filename) (nullable): child's current working directory, or %NULL to inherit parent's, in the GLib file name encoding
- * @argv: (array zero-terminated=1): child's argument vector, in the GLib file name encoding
+ * @argv: (array zero-terminated=1): child's argument vector, in the GLib file name encoding;
+ *   it must be non-empty and %NULL-terminated
  * @envp: (array zero-terminated=1) (nullable): child's environment, or %NULL to inherit parent's, in the GLib file name encoding
  * @flags: flags from #GSpawnFlags
  * @child_setup: (scope async) (nullable): function to run in the child just before exec()
@@ -31314,7 +31324,7 @@
  * @working_directory: (type filename) (nullable): child's current working
  *     directory, or %NULL to inherit parent's, in the GLib file name encoding
  * @argv: (array zero-terminated=1) (element-type filename): child's argument
- *     vector, in the GLib file name encoding
+ *     vector, in the GLib file name encoding; it must be non-empty and %NULL-terminated
  * @envp: (array zero-terminated=1) (element-type filename) (nullable):
  *     child's environment, or %NULL to inherit parent's, in the GLib file
  *     name encoding
@@ -31339,7 +31349,7 @@
  * @working_directory: (type filename) (nullable): child's current working
  *     directory, or %NULL to inherit parent's, in the GLib file name encoding
  * @argv: (array zero-terminated=1) (element-type filename): child's argument
- *     vector, in the GLib file name encoding
+ *     vector, in the GLib file name encoding; it must be non-empty and %NULL-terminated
  * @envp: (array zero-terminated=1) (element-type filename) (nullable):
  *     child's environment, or %NULL to inherit parent's, in the GLib file
  *     name encoding
@@ -31519,7 +31529,7 @@
  * even if they occur in the child (for example if the executable in
  * `@argv[0]` is not found). Typically the `message` field of returned
  * errors should be displayed to users. Possible errors are those from
- * the #G_SPAWN_ERROR domain.
+ * the %G_SPAWN_ERROR domain.
  *
  * If an error occurs, @child_pid, @stdin_pipe_out, @stdout_pipe_out,
  * and @stderr_pipe_out will not be filled with valid values.
@@ -31704,7 +31714,7 @@
  * @working_directory: (type filename) (nullable): child's current working
  *     directory, or %NULL to inherit parent's
  * @argv: (array zero-terminated=1) (element-type filename):
- *     child's argument vector
+ *     child's argument vector, which must be non-empty and %NULL-terminated
  * @envp: (array zero-terminated=1) (element-type filename) (nullable):
  *     child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
@@ -32135,7 +32145,7 @@
  * g_strdelimit:
  * @string: the string to convert
  * @delimiters: (nullable): a string containing the current delimiters,
- *     or %NULL to use the standard delimiters defined in #G_STR_DELIMITERS
+ *     or %NULL to use the standard delimiters defined in %G_STR_DELIMITERS
  * @new_delimiter: the new delimiter character
  *
  * Converts any delimiter characters in @string to @new_delimiter.
@@ -37163,7 +37173,7 @@
 /**
  * g_unix_signal_add_full: (rename-to g_unix_signal_add)
  * @priority: the priority of the signal source. Typically this will be in
- *            the range between #G_PRIORITY_DEFAULT and #G_PRIORITY_HIGH.
+ *            the range between %G_PRIORITY_DEFAULT and %G_PRIORITY_HIGH.
  * @signum: Signal number
  * @handler: Callback
  * @user_data: Data for @handler
@@ -38063,7 +38073,7 @@
  * Pauses the current thread for the given number of microseconds.
  *
  * There are 1 million microseconds per second (represented by the
- * #G_USEC_PER_SEC macro). g_usleep() may have limited precision,
+ * %G_USEC_PER_SEC macro). g_usleep() may have limited precision,
  * depending on hardware and operating system; don't rely on the exact
  * length of the sleep.
  */
@@ -38164,6 +38174,10 @@
  * faster to obtain collation keys with g_utf8_collate_key() and
  * compare the keys with strcmp() when sorting instead of sorting
  * the original strings.
+ *
+ * If the two strings are not comparable due to being in different collation
+ * sequences, the result is undefined. This can happen if the strings are in
+ * different language scripts, for example.
  *
  * Returns: < 0 if @str1 compares before @str2,
  *   0 if they compare equal, > 0 if @str1 compares after @str2.
@@ -41802,7 +41816,8 @@
 
 /**
  * g_vasprintf:
- * @string: (not optional) (nullable): the return location for the newly-allocated string.
+ * @string: (not optional) (nullable): the return location for the newly-allocated string,
+ *   which will be %NULL if (and only if) this function fails
  * @format: (not nullable): a standard printf() format string, but notice
  *          [string precision pitfalls][string-precision]
  * @args: the list of arguments to insert in the output.
@@ -41819,7 +41834,7 @@
  *
  * `glib/gprintf.h` must be explicitly included in order to use this function.
  *
- * Returns: the number of bytes printed.
+ * Returns: the number of bytes printed, or `-1` on failure
  * Since: 2.4
  */
 
@@ -42437,7 +42452,7 @@
  * gdouble:
  *
  * Corresponds to the standard C double type.
- * Values of this type can range from -#G_MAXDOUBLE to #G_MAXDOUBLE.
+ * Values of this type can range from -%G_MAXDOUBLE to %G_MAXDOUBLE.
  */
 
 
@@ -42445,7 +42460,7 @@
  * gfloat:
  *
  * Corresponds to the standard C float type.
- * Values of this type can range from -#G_MAXFLOAT to #G_MAXFLOAT.
+ * Values of this type can range from -%G_MAXFLOAT to %G_MAXFLOAT.
  */
 
 
@@ -42453,7 +42468,7 @@
  * gint:
  *
  * Corresponds to the standard C int type.
- * Values of this type can range from #G_MININT to #G_MAXINT.
+ * Values of this type can range from %G_MININT to %G_MAXINT.
  */
 
 
@@ -42461,8 +42476,8 @@
  * gint16:
  *
  * A signed integer guaranteed to be 16 bits on all platforms.
- * Values of this type can range from #G_MININT16 (= -32,768) to
- * #G_MAXINT16 (= 32,767).
+ * Values of this type can range from %G_MININT16 (= -32,768) to
+ * %G_MAXINT16 (= 32,767).
  *
  * To print or scan values of this type, use
  * %G_GINT16_MODIFIER and/or %G_GINT16_FORMAT.
@@ -42473,8 +42488,8 @@
  * gint32:
  *
  * A signed integer guaranteed to be 32 bits on all platforms.
- * Values of this type can range from #G_MININT32 (= -2,147,483,648)
- * to #G_MAXINT32 (= 2,147,483,647).
+ * Values of this type can range from %G_MININT32 (= -2,147,483,648)
+ * to %G_MAXINT32 (= 2,147,483,647).
  *
  * To print or scan values of this type, use
  * %G_GINT32_MODIFIER and/or %G_GINT32_FORMAT.
@@ -42485,8 +42500,8 @@
  * gint64:
  *
  * A signed integer guaranteed to be 64 bits on all platforms.
- * Values of this type can range from #G_MININT64
- * (= -9,223,372,036,854,775,808) to #G_MAXINT64
+ * Values of this type can range from %G_MININT64
+ * (= -9,223,372,036,854,775,808) to %G_MAXINT64
  * (= 9,223,372,036,854,775,807).
  *
  * To print or scan values of this type, use
@@ -42498,8 +42513,8 @@
  * gint8:
  *
  * A signed integer guaranteed to be 8 bits on all platforms.
- * Values of this type can range from #G_MININT8 (= -128) to
- * #G_MAXINT8 (= 127).
+ * Values of this type can range from %G_MININT8 (= -128) to
+ * %G_MAXINT8 (= 127).
  */
 
 
@@ -42650,7 +42665,7 @@
  * glong:
  *
  * Corresponds to the standard C long type.
- * Values of this type can range from #G_MINLONG to #G_MAXLONG.
+ * Values of this type can range from %G_MINLONG to %G_MAXLONG.
  */
 
 
@@ -42661,8 +42676,8 @@
  * corresponding to the POSIX type `off_t` as if compiling with
  * `_FILE_OFFSET_BITS` set to 64. #goffset is always 64 bits wide, even on
  * 32-bit architectures.
- * Values of this type can range from #G_MINOFFSET to
- * #G_MAXOFFSET.
+ * Values of this type can range from %G_MINOFFSET to
+ * %G_MAXOFFSET.
  *
  * To print or scan values of this type, use
  * %G_GOFFSET_MODIFIER and/or %G_GOFFSET_FORMAT.
@@ -42702,7 +42717,7 @@
  * gshort:
  *
  * Corresponds to the standard C short type.
- * Values of this type can range from #G_MINSHORT to #G_MAXSHORT.
+ * Values of this type can range from %G_MINSHORT to %G_MAXSHORT.
  */
 
 
@@ -42714,7 +42729,7 @@
  * This type is wide enough to hold the numeric value of a pointer,
  * so it is usually 32 bit wide on a 32-bit platform and 64 bit wide
  * on a 64-bit platform. Values of this type can range from 0 to
- * #G_MAXSIZE.
+ * %G_MAXSIZE.
  *
  * To print or scan values of this type, use
  * %G_GSIZE_MODIFIER and/or %G_GSIZE_FORMAT.
@@ -42726,8 +42741,8 @@
  *
  * A signed variant of #gsize, corresponding to the
  * ssize_t defined on most platforms.
- * Values of this type can range from #G_MINSSIZE
- * to #G_MAXSSIZE.
+ * Values of this type can range from %G_MINSSIZE
+ * to %G_MAXSSIZE.
  *
  * To print or scan values of this type, use
  * %G_GSSIZE_MODIFIER and/or %G_GSSIZE_FORMAT.
@@ -42745,7 +42760,7 @@
  * guint:
  *
  * Corresponds to the standard C unsigned int type.
- * Values of this type can range from 0 to #G_MAXUINT.
+ * Values of this type can range from 0 to %G_MAXUINT.
  */
 
 
@@ -42753,7 +42768,7 @@
  * guint16:
  *
  * An unsigned integer guaranteed to be 16 bits on all platforms.
- * Values of this type can range from 0 to #G_MAXUINT16 (= 65,535).
+ * Values of this type can range from 0 to %G_MAXUINT16 (= 65,535).
  *
  * To print or scan values of this type, use
  * %G_GINT16_MODIFIER and/or %G_GUINT16_FORMAT.
@@ -42764,7 +42779,7 @@
  * guint32:
  *
  * An unsigned integer guaranteed to be 32 bits on all platforms.
- * Values of this type can range from 0 to #G_MAXUINT32 (= 4,294,967,295).
+ * Values of this type can range from 0 to %G_MAXUINT32 (= 4,294,967,295).
  *
  * To print or scan values of this type, use
  * %G_GINT32_MODIFIER and/or %G_GUINT32_FORMAT.
@@ -42775,7 +42790,7 @@
  * guint64:
  *
  * An unsigned integer guaranteed to be 64-bits on all platforms.
- * Values of this type can range from 0 to #G_MAXUINT64
+ * Values of this type can range from 0 to %G_MAXUINT64
  * (= 18,446,744,073,709,551,615).
  *
  * To print or scan values of this type, use
@@ -42787,7 +42802,7 @@
  * guint8:
  *
  * An unsigned integer guaranteed to be 8 bits on all platforms.
- * Values of this type can range from 0 to #G_MAXUINT8 (= 255).
+ * Values of this type can range from 0 to %G_MAXUINT8 (= 255).
  */
 
 
@@ -42808,7 +42823,7 @@
  * gulong:
  *
  * Corresponds to the standard C unsigned long type.
- * Values of this type can range from 0 to #G_MAXULONG.
+ * Values of this type can range from 0 to %G_MAXULONG.
  */
 
 
@@ -42816,7 +42831,7 @@
  * gushort:
  *
  * Corresponds to the standard C unsigned short type.
- * Values of this type can range from 0 to #G_MAXUSHORT.
+ * Values of this type can range from 0 to %G_MAXUSHORT.
  */
 
 

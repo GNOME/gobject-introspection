@@ -1241,7 +1241,7 @@
  * Boxed type handling functions have to be provided to copy and free
  * opaque boxed structures of this type.
  *
- * For the general case, it is recommended to use #G_DEFINE_BOXED_TYPE
+ * For the general case, it is recommended to use G_DEFINE_BOXED_TYPE()
  * instead of calling g_boxed_type_register_static() directly. The macro
  * will create the appropriate `*_get_type()` function for the boxed type.
  *
@@ -3333,7 +3333,7 @@
  *
  * Creates a new instance of a #GObject subtype and sets its properties.
  *
- * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
+ * Construction parameters (see %G_PARAM_CONSTRUCT, %G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values. Any
  * private data for the object is guaranteed to be initialized with zeros, as
  * per g_type_create_instance().
@@ -3372,7 +3372,7 @@
  *
  * Creates a new instance of a #GObject subtype and sets its properties.
  *
- * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
+ * Construction parameters (see %G_PARAM_CONSTRUCT, %G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
  *
  * Returns: a new instance of @object_type
@@ -3407,7 +3407,7 @@
  *
  * Creates a new instance of a #GObject subtype and sets its properties.
  *
- * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
+ * Construction parameters (see %G_PARAM_CONSTRUCT, %G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
  *
  * Returns: (type GObject.Object) (transfer full): a new instance of
@@ -4191,7 +4191,7 @@
 
 /**
  * g_param_spec_internal: (skip)
- * @param_type: the #GType for the property; must be derived from #G_TYPE_PARAM
+ * @param_type: the #GType for the property; must be derived from %G_TYPE_PARAM
  * @name: the canonical name of the property
  * @nick: the nickname of the property
  * @blurb: a short description of the property
@@ -4633,7 +4633,7 @@
  * @pspec_info: The #GParamSpecTypeInfo for this #GParamSpec type.
  *
  * Registers @name as the name of a new static type derived
- * from #G_TYPE_PARAM.
+ * from %G_TYPE_PARAM.
  *
  * The type system uses the information contained in the #GParamSpecTypeInfo
  * structure pointed to by @info to manage the #GParamSpec type and its
@@ -4779,7 +4779,7 @@
  *
  * Adds an emission hook for a signal, which will get called for any emission
  * of that signal, independent of the instance. This is possible only
- * for signals which don't have #G_SIGNAL_NO_HOOKS flag set.
+ * for signals which don't have %G_SIGNAL_NO_HOOKS flag set.
  *
  * Returns: the hook id, for later use with g_signal_remove_emission_hook().
  */
@@ -4805,7 +4805,7 @@
  *    emitted on.
  * @...: parameters to be passed to the parent class closure, followed by a
  *  location for the return value. If the return type of the signal
- *  is #G_TYPE_NONE, the return value location can be omitted.
+ *  is %G_TYPE_NONE, the return value location can be omitted.
  *
  * Calls the original class closure of a signal. This function should
  * only be called from an overridden class closure; see
@@ -4893,7 +4893,7 @@
  * @detail: the detail
  * @...: parameters to be passed to the signal, followed by a
  *  location for the return value. If the return type of the signal
- *  is #G_TYPE_NONE, the return value location can be omitted.
+ *  is %G_TYPE_NONE, the return value location can be omitted.
  *
  * Emits a signal. Signal emission is done synchronously.
  * The method will only return control after all handlers are called or signal emission was stopped.
@@ -4928,7 +4928,7 @@
  * @detail: the detail
  * @var_args: a list of parameters to be passed to the signal, followed by a
  *  location for the return value. If the return type of the signal
- *  is #G_TYPE_NONE, the return value location can be omitted.
+ *  is %G_TYPE_NONE, the return value location can be omitted.
  *
  * Emits a signal. Signal emission is done synchronously.
  * The method will only return control after all handlers are called or signal emission was stopped.
@@ -5395,7 +5395,7 @@
  * @accu_data: (nullable) (closure accumulator): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
- * @return_type: the type of return value, or #G_TYPE_NONE for a signal
+ * @return_type: the type of return value, or %G_TYPE_NONE for a signal
  *  without a return value.
  * @n_params: the number of parameter types to follow.
  * @...: a list of types, one for each parameter.
@@ -5444,7 +5444,7 @@
  * @accu_data: (nullable) (closure accumulator): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
- * @return_type: the type of return value, or #G_TYPE_NONE for a signal
+ * @return_type: the type of return value, or %G_TYPE_NONE for a signal
  *  without a return value.
  * @n_params: the number of parameter types to follow.
  * @...: a list of types, one for each parameter.
@@ -5484,7 +5484,7 @@
  * @accu_data: (nullable) (closure accumulator): user data for the @accumulator.
  * @c_marshaller: (nullable): the function to translate arrays of parameter
  *  values to signal emissions into C language callback invocations or %NULL.
- * @return_type: the type of return value, or #G_TYPE_NONE for a signal
+ * @return_type: the type of return value, or %G_TYPE_NONE for a signal
  *  without a return value.
  * @n_params: the number of parameter types in @args.
  * @args: va_list of #GType, one for each parameter.
@@ -5515,7 +5515,7 @@
  * @c_marshaller: (nullable): the function to translate arrays of
  *     parameter values to signal emissions into C language callback
  *     invocations or %NULL
- * @return_type: the type of return value, or #G_TYPE_NONE for a signal
+ * @return_type: the type of return value, or %G_TYPE_NONE for a signal
  *     without a return value
  * @n_params: the length of @param_types
  * @param_types: (array length=n_params) (nullable): an array of types, one for
@@ -6607,7 +6607,7 @@
  * instances (if not abstract).  The value of @flags determines the nature
  * (e.g. abstract or not) of the type.
  *
- * Returns: the new type identifier or #G_TYPE_INVALID if registration failed
+ * Returns: the new type identifier or %G_TYPE_INVALID if registration failed
  */
 
 
