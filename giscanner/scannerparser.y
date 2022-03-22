@@ -307,6 +307,7 @@ set_or_merge_base_type (GISourceType *type,
 %type <symbol> parameter_declaration
 %type <symbol> struct_declarator
 %type <list> enumerator_list
+%type <list> function_macro_argument_list
 %type <list> identifier_list
 %type <list> init_declarator_list
 %type <list> parameter_list
@@ -1513,8 +1514,28 @@ object_macro
 	  }
 	;
 
+function_macro_argument_list
+	: identifier
+	  {
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
+		sym->ident = $1;
+		$$ = g_list_append (NULL, sym);
+	  }
+	| ELLIPSIS
+	  {
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_ELLIPSIS, scanner->current_file, lineno);
+		$$ = g_list_append (NULL, sym);
+	  }
+	| identifier ',' function_macro_argument_list
+	  {
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
+		sym->ident = $1;
+		$$ = g_list_prepend ($3, sym);
+	  }
+	;
+
 function_macro_define
-	: function_macro '(' identifier_list ')'
+	: function_macro '(' function_macro_argument_list ')'
 	   {
 		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_FUNCTION_MACRO, scanner->current_file, lineno);
 		GISourceType *func = gi_source_function_new ();
