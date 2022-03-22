@@ -1524,6 +1524,16 @@ function_macro_define
 		gi_source_scanner_add_symbol (scanner, sym);
 		gi_source_symbol_unref (sym);
 	   }
+	| function_macro '(' ')'
+	   {
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_FUNCTION_MACRO, scanner->current_file, lineno);
+		GISourceType *func = gi_source_function_new ();
+		sym->ident = g_strdup ($1);
+		func->child_list = NULL;
+		gi_source_symbol_merge_type (sym, func);
+		gi_source_scanner_add_symbol (scanner, sym);
+		gi_source_symbol_unref (sym);
+	   }
 	;
 
 object_macro_define
