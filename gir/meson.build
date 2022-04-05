@@ -133,20 +133,20 @@ elif dep_type == 'internal'
   # We know exactly what headers will be installed, so just fetch that
   glib_subproject = subproject('glib')
 
-  glibproj_sourcedir = join_paths(meson.project_source_root(), subprojdir, 'glib')
-  glibproj_builddir = join_paths(meson.project_build_root(), subprojdir, 'glib')
+  glibproj_sourcedir = join_paths(meson.global_source_root(), subprojdir, 'glib')
+  glibproj_builddir = join_paths(meson.global_build_root(), subprojdir, 'glib')
 
-  glib_files += join_paths(glibproj_sourcedir, 'gobject', 'glib-types.h')
+  glib_files += glib_subproject.get_variable('glib_types_h')
 
   # Generated files, relative to the build directory
   glib_files += [
-    join_paths(glibproj_builddir, 'glib', 'glibconfig.h'),
+    glib_subproject.get_variable('glibconfig_h'),
     glib_subproject.get_variable('glib_enumtypes_h'),
   ]
 
   if giounix_dep.found()
     glib_files += [
-      join_paths(glibproj_sourcedir, 'glib', 'glib-unix.h'),
+      glib_subproject.get_variable('glib_unix_h')
     ]
   endif
 
@@ -184,13 +184,13 @@ elif dep_type == 'internal'
   # XXX: We need include paths to all glib dependencies too. We assume that the
   # dependencies are only libffi and proxy-libintl, and that they are used as
   # subprojects. In the worst case we add paths to non-existent directories.
-  ffi_incdir = join_paths(meson.project_build_root(), subprojdir, 'libffi', 'include')
+  ffi_incdir = join_paths(meson.global_build_root(), subprojdir, 'libffi', 'include')
   glib_includes += ['-I' + ffi_incdir]
-  intl_incdir = join_paths(meson.project_source_root(), subprojdir, 'proxy-libintl')
+  intl_incdir = join_paths(meson.global_source_root(), subprojdir, 'proxy-libintl')
   glib_includes += ['-I' + intl_incdir]
 
-  ffi_libdir = join_paths(meson.project_build_root(), subprojdir, 'libffi', 'src')
-  intl_libdir = join_paths(meson.project_build_root(), subprojdir, 'proxy-libintl')
+  ffi_libdir = join_paths(meson.global_build_root(), subprojdir, 'libffi', 'src')
+  intl_libdir = join_paths(meson.global_build_root(), subprojdir, 'proxy-libintl')
   glib_libpaths = [
     '-L' + ffi_libdir,
     '-L' + intl_libdir,
@@ -332,8 +332,8 @@ else
   gmodule_command += ['--pkg-export=gmodule-2.0']
   gmodule_command += glib_libpaths
   gmodule_files += [
-    join_paths(glibproj_sourcedir, 'gmodule', 'gmodule.h'),
-    join_paths(glibproj_sourcedir, 'gmodule', 'gmodule.c'),
+    glib_subproject.get_variable('gmodule_h'),
+    glib_subproject.get_variable('gmodule_c'),
     glib_subproject.get_variable('gmoduleconf_h'),
   ]
   gmodule_gir_dep = glib_subproject.get_variable('libgmodule')
