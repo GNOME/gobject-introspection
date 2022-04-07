@@ -34,6 +34,10 @@ from .ccompiler import CCompiler
 # we want to introspect, in order to call its get_type functions.
 
 _PROGRAM_TEMPLATE = """/* This file is generated, do not edit */
+
+#undef GLIB_VERSION_MIN_REQUIRED
+#undef GLIB_VERSION_MAX_ALLOWED
+
 #include <glib.h>
 #include <string.h>
 #include <stdlib.h>
