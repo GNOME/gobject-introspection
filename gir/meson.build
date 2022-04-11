@@ -1,3 +1,24 @@
+gir_files = [
+  'DBus-1.0.gir',
+  'DBusGLib-1.0.gir',
+  'fontconfig-2.0.gir',
+  'freetype2-2.0.gir',
+  'GL-1.0.gir',
+  'libxml2-2.0.gir',
+  'Vulkan-1.0.gir',
+  'xft-2.0.gir',
+  'xlib-2.0.gir',
+  'xfixes-4.0.gir',
+  'xrandr-1.3.gir',
+  'win32-1.0.gir',
+]
+# Copy gir files to build directory to have them all in a single place.
+# This is needed when gobject-introspection is a subproject because Meson
+# will add --includedir pointing to build directory automatically.
+foreach gir : gir_files
+  configure_file(input: gir, output: gir, copy: true)
+endforeach
+
 cairo_conf = configuration_data()
 if get_option('cairo_libname') != ''
   cairo_library_name = get_option('cairo_libname')
@@ -21,22 +42,7 @@ cairo_gir = configure_file(
   output: 'cairo-1.0.gir',
   configuration: cairo_conf,
 )
-
-gir_files = [
-  cairo_gir,
-  'DBus-1.0.gir',
-  'DBusGLib-1.0.gir',
-  'fontconfig-2.0.gir',
-  'freetype2-2.0.gir',
-  'GL-1.0.gir',
-  'libxml2-2.0.gir',
-  'Vulkan-1.0.gir',
-  'xft-2.0.gir',
-  'xlib-2.0.gir',
-  'xfixes-4.0.gir',
-  'xrandr-1.3.gir',
-  'win32-1.0.gir',
-]
+gir_files += [cairo_gir]
 
 typelibdir = join_paths(get_option('libdir'), 'girepository-1.0')
 install_data(gir_files, install_dir: girdir)
