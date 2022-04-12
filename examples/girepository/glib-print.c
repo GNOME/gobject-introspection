@@ -20,7 +20,7 @@ main (void)
   base_info = g_irepository_find_by_name (repository, "GLib", "assertion_message");
   if (!base_info)
     {
-      g_error ("ERROR: %s\n", "Could not find GLib.warn_message");
+      g_error ("ERROR: %s\n", "Could not find GLib.assertion_message");
       return 1;
     }
 
