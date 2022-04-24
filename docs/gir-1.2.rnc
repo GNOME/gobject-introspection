@@ -471,7 +471,7 @@ grammar {
     }
 
   TransferOwnership =
-    ## attributes used by many elements for the transfer of ownership, with for example, a returned value. "none" if the recipient does not own the value, "container" if the recipient owns the container but not the value (for arrays or lists for example) , "full" the recipient owns the entire value. For details, see https://wiki.gnome.org/Projects/GObjectIntrospection/Annotations#Memory_and_lifecycle_management
+    ## attributes used by many elements for the transfer of ownership, with for example, a returned value. "none" if the recipient does not own the value, "container" if the recipient owns the container but not the value (for arrays or lists for example) , "full" the recipient owns the entire value. For details, see https://gi.readthedocs.io/en/latest/annotations/giannotations.html#memory-and-lifecycle-management
     attribute transfer-ownership { "none" | "container" | "full" }
 
   Constructor =
@@ -507,7 +507,7 @@ grammar {
       empty
     }
 
-  # Refer to https://wiki.gnome.org/Projects/GObjectIntrospection/Annotations#Support_for_GObject_closures 
+  # Refer to https://gi.readthedocs.io/en/latest/annotations/giannotations.html#support-for-gobject-closures
   Callable.params =
     ## parameters element of a callable, that is in general parameters of a function or similar
     element parameters {
