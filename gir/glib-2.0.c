@@ -539,6 +539,12 @@
  *     Network and storage sizes should be reported in the normal SI units.
  * @G_FORMAT_SIZE_BITS: set the size as a quantity in bits, rather than
  *     bytes, and return units in bits. For example, ‘Mb’ rather than ‘MB’.
+ * @G_FORMAT_SIZE_ONLY_VALUE: return only value, without unit; this should
+ *     not be used together with @G_FORMAT_SIZE_LONG_FORMAT
+ *     nor @G_FORMAT_SIZE_ONLY_UNIT. Since: 2.74
+ * @G_FORMAT_SIZE_ONLY_UNIT: return only unit, without value; this should
+ *     not be used together with @G_FORMAT_SIZE_LONG_FORMAT
+ *     nor @G_FORMAT_SIZE_ONLY_VALUE. Since: 2.74
  *
  * Flags to modify the format of the string returned by g_format_size_full().
  */
@@ -19342,9 +19348,9 @@
  * g_iconv: (skip)
  * @converter: conversion descriptor from g_iconv_open()
  * @inbuf: bytes to convert
- * @inbytes_left: inout parameter, bytes remaining to convert in @inbuf
+ * @inbytes_left: (inout): inout parameter, bytes remaining to convert in @inbuf
  * @outbuf: converted output bytes
- * @outbytes_left: inout parameter, bytes available to fill in @outbuf
+ * @outbytes_left: (inout): inout parameter, bytes available to fill in @outbuf
  *
  * Same as the standard UNIX routine iconv(), but
  * may be implemented via libiconv on UNIX flavors that lack
@@ -35417,7 +35423,13 @@
  * This is equivalent to calling g_time_zone_new() with a string in the form
  * `[+|-]hh[:mm[:ss]]`.
  *
- * Returns: (transfer full): a timezone at the given offset from UTC
+ * It is possible for this function to fail if @seconds is too big (greater than
+ * 24 hours), in which case this function will return the UTC timezone for
+ * backwards compatibility. To detect failures like this, use
+ * g_time_zone_new_identifier() directly.
+ *
+ * Returns: (transfer full): a timezone at the given offset from UTC, or UTC on
+ *   failure
  * Since: 2.58
  */
 
@@ -38474,7 +38486,7 @@
  * must be valid UTF-8 encoded text. (Use g_utf8_validate() on all
  * text before trying to use UTF-8 utility functions with it.)
  *
- * Note you must ensure @dest is at least 4 * @n to fit the
+ * Note you must ensure @dest is at least 4 * @n + 1 to fit the
  * largest possible UTF-8 characters
  *
  * Returns: (transfer none): @dest

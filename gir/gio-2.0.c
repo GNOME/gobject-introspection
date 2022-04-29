@@ -7981,10 +7981,10 @@
  * some systems).
  *
  * When in “Low Power” mode, it is recommended that applications:
- * - disabling automatic downloads
+ * - disable automatic downloads;
  * - reduce the rate of refresh from online sources such as calendar or
- *   email synchronisation
- * - if the application has expensive visual effects, reduce them
+ *   email synchronisation;
+ * - reduce the use of expensive visual effects.
  *
  * It is also likely that OS components providing services to applications will
  * lower their own background activity, for the sake of the system.
@@ -28398,13 +28398,30 @@
  * @position: (out) (optional): the first position of @item, if it was found.
  *
  * Looks up the given @item in the list store by looping over the items and
- * comparing them with @compare_func until the first occurrence of @item which
+ * comparing them with @equal_func until the first occurrence of @item which
  * matches. If @item was not found, then @position will not be set, and this
  * method will return %FALSE.
  *
  * Returns: Whether @store contains @item. If it was found, @position will be
  * set to the position where @item occurred for the first time.
  * Since: 2.64
+ */
+
+
+/**
+ * g_list_store_find_with_equal_func_full:
+ * @store: a #GListStore
+ * @item: (type GObject): an item
+ * @equal_func: (scope call): A custom equality check function
+ * @user_data: (closure): user data for @equal_func
+ * @position: (out) (optional): the first position of @item, if it was found.
+ *
+ * Like g_list_store_find_with_equal_func() but with an additional @user_data
+ * that is passed to @equal_func.
+ *
+ * Returns: Whether @store contains @item. If it was found, @position will be
+ * set to the position where @item occurred for the first time.
+ * Since: 2.74
  */
 
 
@@ -41131,7 +41148,7 @@
  * #GTlsClientConnection:validation-flags).
  *
  * There are nonintuitive security implications when using a non-default
- * database. See #GDtlsConnection:database for details.
+ * database. See #GTlsConnection:database for details.
  *
  * Since: 2.30
  */

@@ -5017,6 +5017,22 @@
 
 
 /**
+ * g_signal_group_connect_closure:
+ * @self: a #GSignalGroup
+ * @detailed_signal: a string of the form `signal-name` with optional `::signal-detail`
+ * @closure: (not nullable): the closure to connect.
+ * @after: whether the handler should be called before or after the
+ *  default handler of the signal.
+ *
+ * Connects @closure to the signal @detailed_signal on #GSignalGroup:target.
+ *
+ * You cannot connect a signal handler after #GSignalGroup:target has been set.
+ *
+ * Since: 2.74
+ */
+
+
+/**
  * g_signal_group_connect_data:
  * @self: a #GSignalGroup
  * @detailed_signal: a string of the form "signal-name::detail"
