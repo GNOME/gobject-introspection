@@ -16,7 +16,7 @@ fi
 set -e
 
 REGISTRY="registry.gitlab.gnome.org/gnome/gobject-introspection"
-TAG="${REGISTRY}:v10"
+TAG="${REGISTRY}:v11"
 
 ${CMD} build \
         ${format} \
