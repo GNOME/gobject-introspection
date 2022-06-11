@@ -14,6 +14,7 @@ RUN dnf -y install \
     python3-devel \
     python3-pip \
     python3-wheel \
+    zlib-devel \
  && dnf clean all
 
 RUN pip3 install meson==0.60
