@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-image: registry.gitlab.gnome.org/gnome/gobject-introspection:v10
+image: registry.gitlab.gnome.org/gnome/gobject-introspection:v11
 
 cache:
   paths:
@@ -71,7 +71,7 @@ fedora-x86_64-meson:
       - public
 
 fedora-x86_64-subprojects:
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v3
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v4
   stage: build
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
