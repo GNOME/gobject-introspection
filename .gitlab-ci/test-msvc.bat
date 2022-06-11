@@ -18,7 +18,7 @@ meson wrap promote subprojects\glib\subprojects\pcre.wrap
 
 meson setup _build || goto :error
 meson compile -C _build || goto :error
-meson test -C _build --suite=gobject-introspection || goto :error
+::meson test -C _build --suite=gobject-introspection || goto :error
 
 goto :EOF
 :error
