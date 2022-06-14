@@ -22,7 +22,8 @@ binding for the GObject Introspection framework.
   generators as an optimization, its a lot faster to read metadata from the
   typelib than it is to extract the metadata from the GIR XML files.
 
-* Use the Everything library in your unittests, aim at testing all functions
+* Use the `Regress <https://gitlab.gnome.org/GNOME/gobject-introspection/-/blob/main/tests/scanner/regress.h>`_
+  library in your unittests, aim at testing all functions
   there. Do testing as early as possible in the development of the binding, as
   the code is likely to be more complex than you anticipate.
 
