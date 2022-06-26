@@ -4054,6 +4054,7 @@ gi_marshalling_tests_boxed_struct_copy (GIMarshallingTestsBoxedStruct *struct_)
 
   *new_struct = *struct_;
   new_struct->string_ = g_strdup (struct_->string_);
+  new_struct->g_strv = g_strdupv (struct_->g_strv);
 
   return new_struct;
 }
@@ -4064,6 +4065,7 @@ gi_marshalling_tests_boxed_struct_free (GIMarshallingTestsBoxedStruct *struct_)
   if (struct_ != NULL)
     {
       g_free (struct_->string_);
+      g_clear_pointer (&struct_->g_strv, g_strfreev);
       g_slice_free (GIMarshallingTestsBoxedStruct, struct_);
     }
 }
