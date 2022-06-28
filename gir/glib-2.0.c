@@ -682,7 +682,7 @@
 /**
  * GHookCheckMarshaller:
  * @hook: a #GHook
- * @marshal_data: user data
+ * @user_data: user data
  *
  * Defines the type of function used by g_hook_list_marshal_check().
  *
@@ -715,7 +715,7 @@
 /**
  * GHookFindFunc:
  * @hook: a #GHook
- * @data: user data passed to g_hook_find_func()
+ * @user_data: user data passed to g_hook_find_func()
  *
  * Defines the type of the function passed to g_hook_find().
  *
@@ -761,7 +761,7 @@
 /**
  * GHookMarshaller:
  * @hook: a #GHook
- * @marshal_data: user data
+ * @user_data: user data
  *
  * Defines the type of function used by g_hook_list_marshal().
  */
@@ -994,6 +994,7 @@
 
 /**
  * GIOFlags:
+ * @G_IO_FLAG_NONE: no special flags set. Since: 2.74
  * @G_IO_FLAG_APPEND: turns on append mode, corresponds to %O_APPEND
  *     (see the documentation of the UNIX open() syscall)
  * @G_IO_FLAG_NONBLOCK: turns on nonblocking mode, corresponds to
@@ -1025,7 +1026,7 @@
  * GIOFunc:
  * @source: the #GIOChannel event source
  * @condition: the condition which has been satisfied
- * @data: user data set in g_io_add_watch() or g_io_add_watch_full()
+ * @user_data: user data set in g_io_add_watch() or g_io_add_watch_full()
  *
  * Specifies the type of function passed to g_io_add_watch() or
  * g_io_add_watch_full(), which is called when the requested condition
@@ -1127,8 +1128,10 @@
  * @minor: the minor version to check for
  * @micro: the micro version to check for
  *
- * Checks the version of the GLib library that is being compiled
- * against. See glib_check_version() for a runtime check.
+ * Checks whether the version of the GLib library that is being compiled
+ * against is greater than or equal to the given one.
+ *
+ * See glib_check_version() for a runtime check.
  *
  * Returns: %TRUE if the version of the GLib header files
  * is the same as or newer than the passed-in version.
@@ -1384,7 +1387,7 @@
 /**
  * GNodeForeachFunc:
  * @node: a #GNode.
- * @data: user data passed to g_node_children_foreach().
+ * @user_data: user data passed to g_node_children_foreach().
  *
  * Specifies the type of function passed to g_node_children_foreach().
  * The function is called with each child node, together with the user
@@ -1395,7 +1398,7 @@
 /**
  * GNodeTraverseFunc:
  * @node: a #GNode.
- * @data: user data passed to g_node_traverse().
+ * @user_data: user data passed to g_node_traverse().
  *
  * Specifies the type of function passed to g_node_traverse(). The
  * function is called with each of the nodes visited, together with the
@@ -1855,7 +1858,7 @@
  * GSequenceIterCompareFunc:
  * @a: a #GSequenceIter
  * @b: a #GSequenceIter
- * @data: user data
+ * @user_data: user data
  *
  * A #GSequenceIterCompareFunc is a function used to compare iterators.
  * It must return zero if the iterators compare equal, a negative value
@@ -1991,6 +1994,7 @@
 
 /**
  * GTestSubprocessFlags:
+ * @G_TEST_SUBPROCESS_DEFAULT: Default behaviour. Since: 2.74
  * @G_TEST_SUBPROCESS_INHERIT_STDIN: If this flag is given, the child
  *     process will inherit the parent's stdin. Otherwise, the child's
  *     stdin is redirected to `/dev/null`.
@@ -2047,7 +2051,7 @@
 
 /**
  * GThreadFunc:
- * @data: data passed to the thread
+ * @user_data: data passed to the thread
  *
  * Specifies the type of the @func functions passed to g_thread_new()
  * or g_thread_try_new().
@@ -2220,7 +2224,7 @@
  * GTraverseFunc:
  * @key: a key of a #GTree node
  * @value: the value corresponding to the key
- * @data: user data passed to g_tree_traverse()
+ * @user_data: user data passed to g_tree_traverse()
  *
  * Specifies the type of function passed to g_tree_traverse(). It is
  * passed the key and value of each node, together with the @user_data
@@ -11154,6 +11158,31 @@
 
 
 /**
+ * g_atomic_int_compare_and_exchange_full:
+ * @atomic: a pointer to a #gint or #guint
+ * @oldval: the value to compare with
+ * @newval: the value to conditionally replace with
+ * @preval: (out): the contents of @atomic before this operation
+ *
+ * Compares @atomic to @oldval and, if equal, sets it to @newval.
+ * If @atomic was not equal to @oldval then no change occurs.
+ * In any case the value of @atomic before this operation is stored in @preval.
+ *
+ * This compare and exchange is done atomically.
+ *
+ * Think of this operation as an atomic version of
+ * `{ *preval = *atomic; if (*atomic == oldval) { *atomic = newval; return TRUE; } else return FALSE; }`.
+ *
+ * This call acts as a full compiler and hardware memory barrier.
+ *
+ * See also g_atomic_int_compare_and_exchange()
+ *
+ * Returns: %TRUE if the exchange took place
+ * Since: 2.74
+ */
+
+
+/**
  * g_atomic_int_dec_and_test:
  * @atomic: a pointer to a #gint or #guint
  *
@@ -11169,6 +11198,25 @@
  *
  * Returns: %TRUE if the resultant value is zero
  * Since: 2.4
+ */
+
+
+/**
+ * g_atomic_int_exchange:
+ * @atomic: a pointer to a #gint or #guint
+ * @newval: the value to replace with
+ *
+ * Sets the @atomic to @newval and returns the old value from @atomic.
+ *
+ * This exchange is done atomically.
+ *
+ * Think of this operation as an atomic version of
+ * `{ tmp = *atomic; *atomic = val; return tmp; }`.
+ *
+ * This call acts as a full compiler and hardware memory barrier.
+ *
+ * Returns: the value of @atomic before the exchange, signed
+ * Since: 2.74
  */
 
 
@@ -11342,6 +11390,50 @@
  *
  * Returns: %TRUE if the exchange took place
  * Since: 2.4
+ */
+
+
+/**
+ * g_atomic_pointer_compare_and_exchange_full:
+ * @atomic: (not nullable): a pointer to a #gpointer-sized value
+ * @oldval: the value to compare with
+ * @newval: the value to conditionally replace with
+ * @preval: (not nullable) (out): the contents of @atomic before this operation
+ *
+ * Compares @atomic to @oldval and, if equal, sets it to @newval.
+ * If @atomic was not equal to @oldval then no change occurs.
+ * In any case the value of @atomic before this operation is stored in @preval.
+ *
+ * This compare and exchange is done atomically.
+ *
+ * Think of this operation as an atomic version of
+ * `{ *preval = *atomic; if (*atomic == oldval) { *atomic = newval; return TRUE; } else return FALSE; }`.
+ *
+ * This call acts as a full compiler and hardware memory barrier.
+ *
+ * See also g_atomic_pointer_compare_and_exchange()
+ *
+ * Returns: %TRUE if the exchange took place
+ * Since: 2.74
+ */
+
+
+/**
+ * g_atomic_pointer_exchange:
+ * @atomic: a pointer to a #gpointer-sized value
+ * @newval: the value to replace with
+ *
+ * Sets the @atomic to @newval and returns the old value from @atomic.
+ *
+ * This exchange is done atomically.
+ *
+ * Think of this operation as an atomic version of
+ * `{ tmp = *atomic; *atomic = val; return tmp; }`.
+ *
+ * This call acts as a full compiler and hardware memory barrier.
+ *
+ * Returns: the value of @atomic before the exchange
+ * Since: 2.74
  */
 
 
@@ -14573,6 +14665,21 @@
 
 
 /**
+ * g_datalist_id_remove_multiple:
+ * @datalist: a datalist
+ * @keys: (array length=n_keys): keys to remove
+ * @n_keys: length of @keys, must be <= 16
+ *
+ * Removes multiple keys from a datalist.
+ *
+ * This is more efficient than calling g_datalist_id_remove_data()
+ * multiple times in a row.
+ *
+ * Since: 2.74
+ */
+
+
+/**
  * g_datalist_id_remove_no_notify: (skip)
  * @datalist: a datalist.
  * @key_id: the #GQuark identifying a data element.
@@ -15618,7 +15725,8 @@
  * - \%c: the preferred date and time representation for the current locale
  * - \%C: the century number (year/100) as a 2-digit integer (00-99)
  * - \%d: the day of the month as a decimal number (range 01 to 31)
- * - \%e: the day of the month as a decimal number (range  1 to 31)
+ * - \%e: the day of the month as a decimal number (range 1 to 31);
+ *   single digits are preceded by a figure space
  * - \%F: equivalent to `%Y-%m-%d` (the ISO 8601 date format)
  * - \%g: the last two digits of the ISO 8601 week-based year as a
  *   decimal number (00-99). This works well with \%V and \%u.
@@ -15629,9 +15737,9 @@
  * - \%I: the hour as a decimal number using a 12-hour clock (range 01 to 12)
  * - \%j: the day of the year as a decimal number (range 001 to 366)
  * - \%k: the hour (24-hour clock) as a decimal number (range 0 to 23);
- *   single digits are preceded by a blank
+ *   single digits are preceded by a figure space
  * - \%l: the hour (12-hour clock) as a decimal number (range 1 to 12);
- *   single digits are preceded by a blank
+ *   single digits are preceded by a figure space
  * - \%m: the month as a decimal number (range 01 to 12)
  * - \%M: the minute as a decimal number (range 00 to 59)
  * - \%f: the microsecond as a decimal number (range 000000 to 999999)
@@ -19452,6 +19560,25 @@
  * use a custom main context.
  *
  * Returns: the ID (greater than 0) of the event source.
+ */
+
+
+/**
+ * g_idle_add_once:
+ * @function: function to call
+ * @data: data to pass to @function
+ *
+ * Adds a function to be called whenever there are no higher priority
+ * events pending to the default main loop. The function is given the
+ * default idle priority, %G_PRIORITY_DEFAULT_IDLE.
+ *
+ * The function will only be called once and then the source will be
+ * automatically removed from the main context.
+ *
+ * This function otherwise behaves like g_idle_add().
+ *
+ * Returns: the ID (greater than 0) of the event source
+ * Since: 2.74
  */
 
 
@@ -24328,7 +24455,7 @@
  * Calling g_mutex_clear() on a locked mutex leads to undefined
  * behaviour.
  *
- * Sine: 2.32
+ * Since: 2.32
  */
 
 
@@ -25999,7 +26126,8 @@
  * pointing to) are copied to the new #GPtrArray.
  *
  * The copy of @array will have the same #GDestroyNotify for its elements as
- * @array.
+ * @array. The copy will also be %NULL terminated if (and only if) the source
+ * array is.
  *
  * Returns: (transfer full): a deep copy of the initial #GPtrArray.
  * Since: 2.62
@@ -26025,6 +26153,8 @@
  *
  * If @func is %NULL, then only the pointers (and not what they are
  * pointing to) are copied to the new #GPtrArray.
+ *
+ * Whether @array_to_extend is %NULL terminated stays unchanged by this function.
  *
  * Since: 2.62
  */
@@ -26122,6 +26252,10 @@
  * be freed separately if @free_seg is %TRUE and no #GDestroyNotify
  * function has been set for @array.
  *
+ * Note that if the array is %NULL terminated and @free_seg is %FALSE
+ * then this will always return an allocated %NULL terminated buffer.
+ * If pdata is previously %NULL, a new buffer will be allocated.
+ *
  * This function is not thread-safe. If using a #GPtrArray from multiple
  * threads, use only the atomic g_ptr_array_ref() and g_ptr_array_unref()
  * functions.
@@ -26159,6 +26293,22 @@
 
 
 /**
+ * g_ptr_array_is_null_terminated:
+ * @array: the #GPtrArray
+ *
+ * Gets whether the @array was constructed as %NULL-terminated.
+ *
+ * This will only return %TRUE for arrays constructed by passing %TRUE to the
+ * `null_terminated` argument of g_ptr_array_new_null_terminated(). It will not
+ * return %TRUE for normal arrays which have had a %NULL element appended to
+ * them.
+ *
+ * Returns: %TRUE if the array is made to be %NULL terminated.
+ * Since: 2.74
+ */
+
+
+/**
  * g_ptr_array_new:
  *
  * Creates a new #GPtrArray with a reference count of 1.
@@ -26181,8 +26331,39 @@
  * g_ptr_array_unref(), when g_ptr_array_free() is called with
  * @free_segment set to %TRUE or when removing elements.
  *
- * Returns: A new #GPtrArray
+ * Returns: (transfer full): A new #GPtrArray
  * Since: 2.30
+ */
+
+
+/**
+ * g_ptr_array_new_null_terminated:
+ * @reserved_size: number of pointers preallocated.
+ *     If @null_terminated is %TRUE, the actually allocated
+ *     buffer size is @reserved_size plus 1, unless @reserved_size
+ *     is zero, in which case no initial buffer gets allocated.
+ * @element_free_func: (nullable): A function to free elements with
+ *     destroy @array or %NULL
+ * @null_terminated: whether to make the array as %NULL terminated.
+ *
+ * Like g_ptr_array_new_full() but also allows to set the array to
+ * be %NULL terminated. A %NULL terminated pointer array has an
+ * additional %NULL pointer after the last element, beyond the
+ * current length.
+ *
+ * #GPtrArray created by other constructors are not automatically %NULL
+ * terminated.
+ *
+ * Note that if the @array's length is zero and currently no
+ * data array is allocated, then pdata will still be %NULL.
+ * %GPtrArray will only %NULL terminate pdata, if an actual
+ * array is allocated. It does not guarantee that an array
+ * is always allocated. In other words, if the length is zero,
+ * then pdata may either point to a %NULL terminated array of length
+ * zero or be %NULL.
+ *
+ * Returns: (transfer full): A new #GPtrArray
+ * Since: 2.74
  */
 
 
@@ -26196,7 +26377,7 @@
  * either via g_ptr_array_unref(), when g_ptr_array_free() is called with
  * @free_segment set to %TRUE or when removing elements.
  *
- * Returns: A new #GPtrArray
+ * Returns: (transfer full): A new #GPtrArray
  * Since: 2.22
  */
 
@@ -26451,6 +26632,10 @@
  * the underlying array is preserved for use elsewhere and returned
  * to the caller.
  *
+ * Note that if the array is %NULL terminated this may still return
+ * %NULL if the length of the array was zero and pdata was not yet
+ * allocated.
+ *
  * Even if set, the #GDestroyNotify function will never be called
  * on the current contents of the array and the caller is
  * responsible for freeing the array elements.
@@ -26488,8 +26673,9 @@
  * g_assert (chunk_buffer->len == 0);
  * ]|
  *
- * Returns: (transfer full): the element data, which should be
- *     freed using g_free().
+ * Returns: (transfer full) (nullable): the element data, which should be
+ *     freed using g_free(). This may be %NULL if the array doesn’t have any
+ *     elements (i.e. if `*len` is zero).
  * Since: 2.64
  */
 
@@ -27542,7 +27728,7 @@
  * Calling g_rec_mutex_clear() on a locked recursive mutex leads
  * to undefined behaviour.
  *
- * Sine: 2.32
+ * Since: 2.32
  */
 
 
@@ -27936,7 +28122,7 @@
  *   GRegex *regex;
  *   GMatchInfo *match_info;
  *  
- *   regex = g_regex_new ("[A-Z]+", 0, 0, NULL);
+ *   regex = g_regex_new ("[A-Z]+", G_REGEX_DEFAULT, G_REGEX_MATCH_DEFAULT, NULL);
  *   g_regex_match (regex, string, 0, &match_info);
  *   while (g_match_info_matches (match_info))
  *     {
@@ -28086,7 +28272,7 @@
  *   GMatchInfo *match_info;
  *   GError *error = NULL;
  *   
- *   regex = g_regex_new ("[A-Z]+", 0, 0, NULL);
+ *   regex = g_regex_new ("[A-Z]+", G_REGEX_DEFAULT, G_REGEX_MATCH_DEFAULT, NULL);
  *   g_regex_match_full (regex, string, -1, 0, 0, &match_info, &error);
  *   while (g_match_info_matches (match_info))
  *     {
@@ -28252,7 +28438,7 @@
  * g_hash_table_insert (h, "3", "THREE");
  * g_hash_table_insert (h, "4", "FOUR");
  *
- * reg = g_regex_new ("1|2|3|4", 0, 0, NULL);
+ * reg = g_regex_new ("1|2|3|4", G_REGEX_DEFAULT, G_REGEX_MATCH_DEFAULT, NULL);
  * res = g_regex_replace_eval (reg, text, -1, 0, 0, eval_cb, h, NULL);
  * g_hash_table_destroy (h);
  *
@@ -28511,7 +28697,7 @@
  * Calling g_rw_lock_clear() when any thread holds the lock
  * leads to undefined behaviour.
  *
- * Sine: 2.32
+ * Since: 2.32
  */
 
 
@@ -31456,17 +31642,23 @@
  * @envp. If both %G_SPAWN_SEARCH_PATH and %G_SPAWN_SEARCH_PATH_FROM_ENVP
  * are used, the value from @envp takes precedence over the environment.
  *
- * %G_SPAWN_STDOUT_TO_DEV_NULL means that the child's standard output
- * will be discarded, instead of going to the same location as the parent's
- * standard output. If you use this flag, @stdout_pipe_out must be %NULL.
- *
- * %G_SPAWN_STDERR_TO_DEV_NULL means that the child's standard error
- * will be discarded, instead of going to the same location as the parent's
- * standard error. If you use this flag, @stderr_pipe_out must be %NULL.
- *
  * %G_SPAWN_CHILD_INHERITS_STDIN means that the child will inherit the parent's
  * standard input (by default, the child's standard input is attached to
- * `/dev/null`). If you use this flag, @stdin_pipe_out must be %NULL.
+ * `/dev/null`). %G_SPAWN_STDIN_FROM_DEV_NULL explicitly imposes the default
+ * behavior. Both flags cannot be enabled at the same time and, in both cases,
+ * the @stdin_pipe_out argument is ignored.
+ *
+ * %G_SPAWN_STDOUT_TO_DEV_NULL means that the child's standard output
+ * will be discarded (by default, it goes to the same location as the parent's
+ * standard output). %G_SPAWN_CHILD_INHERITS_STDOUT explicitly imposes the
+ * default behavior. Both flags cannot be enabled at the same time and, in
+ * both cases, the @stdout_pipe_out argument is ignored.
+ *
+ * %G_SPAWN_STDERR_TO_DEV_NULL means that the child's standard error
+ * will be discarded (by default, it goes to the same location as the parent's
+ * standard error). %G_SPAWN_CHILD_INHERITS_STDERR explicitly imposes the
+ * default behavior. Both flags cannot be enabled at the same time and, in
+ * both cases, the @stderr_pipe_out argument is ignored.
  *
  * It is valid to pass the same FD in multiple parameters (e.g. you can pass
  * a single FD for both @stdout_fd and @stderr_fd, and include it in
@@ -34578,7 +34770,7 @@
  *       }
  *
  *     // Reruns this same test in a subprocess
- *     g_test_trap_subprocess (NULL, 0, 0);
+ *     g_test_trap_subprocess (NULL, 0, G_TEST_SUBPROCESS_DEFAULT);
  *     g_test_trap_assert_failed ();
  *     g_test_trap_assert_stderr ("*ERROR*too large*");
  *   }
@@ -35551,6 +35743,26 @@
  * See g_get_monotonic_time().
  *
  * Returns: the ID (greater than 0) of the event source.
+ */
+
+
+/**
+ * g_timeout_add_once:
+ * @interval: the time after which the function will be called, in
+ *   milliseconds (1/1000ths of a second)
+ * @function: function to call
+ * @data: data to pass to @function
+ *
+ * Sets a function to be called after @interval milliseconds have elapsed,
+ * with the default priority, %G_PRIORITY_DEFAULT.
+ *
+ * The given @function is called once and then the source will be automatically
+ * removed from the main context.
+ *
+ * This function otherwise behaves like g_timeout_add().
+ *
+ * Returns: the ID (greater than 0) of the event source
+ * Since: 2.74
  */
 
 
@@ -37134,7 +37346,7 @@
 
 /**
  * g_unix_open_pipe:
- * @fds: Array of two integers
+ * @fds: (array fixed-size=2): Array of two integers
  * @flags: Bitfield of file descriptor flags, as for fcntl()
  * @error: a #GError
  *
@@ -39266,7 +39478,7 @@
  * returned.  If @expected_type was specified then any non-%NULL return
  * value will have this type.
  *
- * Returns: (transfer full): the value of the dictionary key, or %NULL
+ * Returns: (transfer full) (nullable): the value of the dictionary key, or %NULL
  * Since: 2.40
  */
 

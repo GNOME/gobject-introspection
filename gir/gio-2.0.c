@@ -1681,7 +1681,20 @@
  * ways indicated here will be rejected unless the application
  * overrides the default via #GDtlsConnection::accept-certificate.
  *
+ * GLib guarantees that if certificate verification fails, at least one
+ * flag will be set, but it does not guarantee that all possible flags
+ * will be set. Accordingly, you may not safely decide to ignore any
+ * particular type of error. For example, it would be incorrect to mask
+ * %G_TLS_CERTIFICATE_EXPIRED if you want to allow expired certificates,
+ * because this could potentially be the only error flag set even if
+ * other problems exist with the certificate. Therefore, there is no
+ * safe way to use this property. This is not a horrible problem,
+ * though, because you should not be attempting to ignore validation
+ * errors anyway. If you really must ignore TLS certificate errors,
+ * connect to #GDtlsConnection::accept-certificate.
+ *
  * Since: 2.48
+ * Deprecated: 2.74: Do not attempt to ignore validation errors.
  */
 
 
@@ -2247,6 +2260,15 @@
  * subclasses of #GObject.
  *
  * Since: 2.44
+ */
+
+
+/**
+ * GListStore:n-items:
+ *
+ * The number of items contained in this list store.
+ *
+ * Since: 2.74
  */
 
 
@@ -6739,6 +6761,8 @@
  * - g_file_new_for_uri() if you have a URI.
  * - g_file_new_for_commandline_arg() for a command line argument.
  * - g_file_new_tmp() to create a temporary file from a template.
+ * - g_file_new_tmp_async() to asynchronously create a temporary file.
+ * - g_file_new_tmp_dir_async() to asynchronously create a temporary directory.
  * - g_file_parse_name() from a UTF-8 string gotten from g_file_get_parse_name().
  * - g_file_new_build_filename() to create a file from path elements.
  *
@@ -7420,6 +7444,21 @@
  * implementation, but typically it will be from the thread that owns
  * the [thread-default main context][g-main-context-push-thread-default]
  * in effect at the time that the model was created.
+ *
+ * Over time, it has established itself as good practice for listmodel
+ * implementations to provide properties `item-type` and `n-items` to
+ * ease working with them. While it is not required, it is recommended
+ * that implementations provide these two properties. They should return
+ * the values of g_list_model_get_item_type() and g_list_model_get_n_items()
+ * respectively and be defined as such:
+ * |[<!-- language="C" -->
+ * properties[PROP_ITEM_TYPE] =
+ *   g_param_spec_gtype ("item-type", "", "", G_TYPE_OBJECT,
+ *                       G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+ * properties[PROP_N_ITEMS] =
+ *   g_param_spec_uint ("n-items", "", "", 0, G_MAXUINT, 0,
+ *                      G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+ * ]|
  */
 
 
@@ -10340,9 +10379,11 @@
  * the %G_SOCKET_FAMILY_UNIX family by using g_socket_send_message()
  * and received using g_socket_receive_message().
  *
- * Note that `<gio/gunixfdlist.h>` belongs to the UNIX-specific GIO
- * interfaces, thus you have to use the `gio-unix-2.0.pc` pkg-config
- * file when using it.
+ * Before 2.74, `<gio/gunixfdlist.h>` belonged to the UNIX-specific GIO
+ * interfaces, thus you had to use the `gio-unix-2.0.pc` pkg-config file when
+ * using it.
+ *
+ * Since 2.74, the API is available for Windows.
  */
 
 
@@ -11737,6 +11778,37 @@
 
 
 /**
+ * g_app_info_get_default_for_type_async:
+ * @content_type: the content type to find a #GAppInfo for
+ * @must_support_uris: if %TRUE, the #GAppInfo is expected to
+ *     support URIs
+ * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @callback: (nullable): a #GAsyncReadyCallback to call when the request is done
+ * @user_data: (nullable): data to pass to @callback
+ *
+ * Asynchronously gets the default #GAppInfo for a given content type.
+ *
+ * Since: 2.74
+ */
+
+
+/**
+ * g_app_info_get_default_for_type_finish:
+ * @result: a #GAsyncResult
+ * @error: (nullable): a #GError
+ *
+ * Finishes a default #GAppInfo lookup started by
+ * g_app_info_get_default_for_type_async().
+ *
+ * If no #GAppInfo is found, then @error will be set to %G_IO_ERROR_NOT_FOUND.
+ *
+ * Returns: (transfer full): #GAppInfo for given @content_type or
+ *     %NULL on error.
+ * Since: 2.74
+ */
+
+
+/**
  * g_app_info_get_default_for_uri_scheme:
  * @uri_scheme: a string containing a URI scheme.
  *
@@ -11747,6 +11819,38 @@
  *
  * Returns: (transfer full) (nullable): #GAppInfo for given @uri_scheme or
  *     %NULL on error.
+ */
+
+
+/**
+ * g_app_info_get_default_for_uri_scheme_async:
+ * @uri_scheme: a string containing a URI scheme.
+ * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @callback: (nullable): a #GAsyncReadyCallback to call when the request is done
+ * @user_data: (nullable): data to pass to @callback
+ *
+ * Asynchronously gets the default application for handling URIs with
+ * the given URI scheme. A URI scheme is the initial part
+ * of the URI, up to but not including the ':', e.g. "http",
+ * "ftp" or "sip".
+ *
+ * Since: 2.74
+ */
+
+
+/**
+ * g_app_info_get_default_for_uri_scheme_finish:
+ * @result: a #GAsyncResult
+ * @error: (nullable): a #GError
+ *
+ * Finishes a default #GAppInfo lookup started by
+ * g_app_info_get_default_for_uri_scheme_async().
+ *
+ * If no #GAppInfo is found, then @error will be set to %G_IO_ERROR_NOT_FOUND.
+ *
+ * Returns: (transfer full): #GAppInfo for given @uri_scheme or
+ *     %NULL on error.
+ * Since: 2.74
  */
 
 
@@ -21244,8 +21348,13 @@
  *
  * Gets @conn's validation flags
  *
+ * This function does not work as originally designed and is impossible
+ * to use correctly. See #GDtlsClientConnection:validation-flags for more
+ * information.
+ *
  * Returns: the validation flags
  * Since: 2.48
+ * Deprecated: 2.74: Do not attempt to ignore validation errors.
  */
 
 
@@ -21287,7 +21396,12 @@
  * checks performed when validating a server certificate. By default,
  * %G_TLS_CERTIFICATE_VALIDATE_ALL is used.
  *
+ * This function does not work as originally designed and is impossible
+ * to use correctly. See #GDtlsClientConnection:validation-flags for more
+ * information.
+ *
  * Since: 2.48
+ * Deprecated: 2.74: Do not attempt to ignore validation errors.
  */
 
 
@@ -23369,6 +23483,9 @@
  * %G_FILE_ATTRIBUTE_TIME_ACCESS_USEC is provided, the resulting #GDateTime
  * will have microsecond precision.
  *
+ * If nanosecond precision is needed, %G_FILE_ATTRIBUTE_TIME_ACCESS_NSEC must
+ * be queried separately using g_file_info_get_attribute_uint32().
+ *
  * Returns: (transfer full) (nullable): access time, or %NULL if unknown
  * Since: 2.70
  */
@@ -23568,6 +23685,9 @@
  * %G_FILE_ATTRIBUTE_TIME_CREATED_USEC is provided, the resulting #GDateTime
  * will have microsecond precision.
  *
+ * If nanosecond precision is needed, %G_FILE_ATTRIBUTE_TIME_CREATED_NSEC must
+ * be queried separately using g_file_info_get_attribute_uint32().
+ *
  * Returns: (transfer full) (nullable): creation time, or %NULL if unknown
  * Since: 2.70
  */
@@ -23678,6 +23798,9 @@
  * This requires the %G_FILE_ATTRIBUTE_TIME_MODIFIED attribute. If
  * %G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC is provided, the resulting #GDateTime
  * will have microsecond precision.
+ *
+ * If nanosecond precision is needed, %G_FILE_ATTRIBUTE_TIME_MODIFIED_NSEC must
+ * be queried separately using g_file_info_get_attribute_uint32().
  *
  * Returns: (transfer full) (nullable): modification time, or %NULL if unknown
  * Since: 2.62
@@ -23817,6 +23940,8 @@
  * Sets the %G_FILE_ATTRIBUTE_TIME_ACCESS and
  * %G_FILE_ATTRIBUTE_TIME_ACCESS_USEC attributes in the file info to the
  * given date/time value.
+ *
+ * %G_FILE_ATTRIBUTE_TIME_ACCESS_NSEC will be cleared.
  *
  * Since: 2.70
  */
@@ -23982,6 +24107,8 @@
  * %G_FILE_ATTRIBUTE_TIME_CREATED_USEC attributes in the file info to the
  * given date/time value.
  *
+ * %G_FILE_ATTRIBUTE_TIME_CREATED_NSEC will be cleared.
+ *
  * Since: 2.70
  */
 
@@ -24055,6 +24182,8 @@
  * %G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC attributes in the file info to the
  * given date/time value.
  *
+ * %G_FILE_ATTRIBUTE_TIME_MODIFIED_NSEC will be cleared.
+ *
  * Since: 2.62
  */
 
@@ -24067,6 +24196,8 @@
  * Sets the %G_FILE_ATTRIBUTE_TIME_MODIFIED and
  * %G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC attributes in the file info to the
  * given time value.
+ *
+ * %G_FILE_ATTRIBUTE_TIME_MODIFIED_NSEC will be cleared.
  *
  * Deprecated: 2.62: Use g_file_info_set_modification_date_time() instead, as
  *    #GTimeVal is deprecated due to the year 2038 problem.
@@ -24577,6 +24708,39 @@
 
 
 /**
+ * g_file_make_symbolic_link_async: (virtual make_symbolic_link_async)
+ * @file: a #GFile with the name of the symlink to create
+ * @symlink_value: (type filename): a string with the path for the target
+ *   of the new symlink
+ * @io_priority: the [I/O priority][io-priority] of the request
+ * @cancellable: (nullable): optional #GCancellable object,
+ *   %NULL to ignore
+ * @callback: a #GAsyncReadyCallback to call
+ *   when the request is satisfied
+ * @user_data: the data to pass to callback function
+ *
+ * Asynchronously creates a symbolic link named @file which contains the
+ * string @symlink_value.
+ *
+ * Since: 2.74
+ */
+
+
+/**
+ * g_file_make_symbolic_link_finish: (virtual make_symbolic_link_finish)
+ * @file: input #GFile
+ * @result: a #GAsyncResult
+ * @error: a #GError, or %NULL
+ *
+ * Finishes an asynchronous symbolic link creation, started with
+ * g_file_make_symbolic_link_async().
+ *
+ * Returns: %TRUE on successful directory creation, %FALSE otherwise.
+ * Since: 2.74
+ */
+
+
+/**
  * g_file_measure_disk_usage:
  * @file: a #GFile
  * @flags: #GFileMeasureFlags
@@ -25065,6 +25229,74 @@
  * Returns: (transfer full): a new #GFile.
  *   Free the returned object with g_object_unref().
  * Since: 2.32
+ */
+
+
+/**
+ * g_file_new_tmp_async:
+ * @tmpl: (type filename) (nullable): Template for the file
+ *   name, as in g_file_open_tmp(), or %NULL for a default template
+ * @io_priority: the [I/O priority][io-priority] of the request
+ * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @callback: (nullable): a #GAsyncReadyCallback to call when the request is done
+ * @user_data: (nullable): data to pass to @callback
+ *
+ * Asynchronously opens a file in the preferred directory for temporary files
+ *  (as returned by g_get_tmp_dir()) as g_file_new_tmp().
+ *
+ * @tmpl should be a string in the GLib file name encoding
+ * containing a sequence of six 'X' characters, and containing no
+ * directory components. If it is %NULL, a default template is used.
+ *
+ * Since: 2.74
+ */
+
+
+/**
+ * g_file_new_tmp_dir_async:
+ * @tmpl: (type filename) (nullable): Template for the file
+ *   name, as in g_dir_make_tmp(), or %NULL for a default template
+ * @io_priority: the [I/O priority][io-priority] of the request
+ * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @callback: (nullable): a #GAsyncReadyCallback to call when the request is done
+ * @user_data: (nullable): data to pass to @callback
+ *
+ * Asynchronously creates a directory in the preferred directory for
+ * temporary files (as returned by g_get_tmp_dir()) as g_dir_make_tmp().
+ *
+ * @tmpl should be a string in the GLib file name encoding
+ * containing a sequence of six 'X' characters, and containing no
+ * directory components. If it is %NULL, a default template is used.
+ *
+ * Since: 2.74
+ */
+
+
+/**
+ * g_file_new_tmp_dir_finish:
+ * @result: a #GAsyncResult
+ * @error: a #GError, or %NULL
+ *
+ * Finishes a temporary directory creation started by
+ * g_file_new_tmp_dir_async().
+ *
+ * Returns: (transfer full): a new #GFile.
+ *   Free the returned object with g_object_unref().
+ * Since: 2.74
+ */
+
+
+/**
+ * g_file_new_tmp_finish:
+ * @result: a #GAsyncResult
+ * @iostream: (out) (not nullable) (transfer full): on return, a #GFileIOStream for the created file
+ * @error: a #GError, or %NULL
+ *
+ * Finishes a temporary file creation started by g_file_new_tmp_async().
+ *
+ * Returns: (transfer full): a new #GFile.
+ *   Free the returned object with g_object_unref().
+ * Since: 2.74
  */
 
 
@@ -27627,6 +27859,17 @@
  * calls, you should save its value as soon as the call which sets it
  *
  * Returns: #GIOErrorEnum value for the given errno.h error number.
+ */
+
+
+/**
+ * g_io_error_from_file_error:
+ * @file_error: a #GFileError.
+ *
+ * Converts #GFileError error codes into GIO error codes.
+ *
+ * Returns: #GIOErrorEnum value for the given #GFileError error value.
+ * Since: 2.74
  */
 
 
@@ -35651,7 +35894,7 @@
  * internal errors (other than @cancellable being triggered) will be
  * ignored.
  *
- * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on
+ * Returns: (transfer full) (nullable): a #GSocketAddress (owned by the caller), or %NULL on
  *     error (in which case *@error will be set) or if there are no
  *     more addresses.
  */
@@ -35684,7 +35927,7 @@
  * g_socket_address_enumerator_next() for more information about
  * error handling.
  *
- * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on
+ * Returns: (transfer full) (nullable): a #GSocketAddress (owned by the caller), or %NULL on
  *     error (in which case *@error will be set) or if there are no
  *     more addresses.
  */
@@ -40600,6 +40843,8 @@
  * certificate outside the context of making a connection, or to
  * check a certificate against a CA that is not part of the system
  * CA database.
+ *
+ * If @cert is valid, %G_TLS_CERTIFICATE_FLAGS_NONE is returned.
  *
  * If @identity is not %NULL, @cert's name(s) will be compared against
  * it, and %G_TLS_CERTIFICATE_BAD_IDENTITY will be set in the return
