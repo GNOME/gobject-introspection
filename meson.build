@@ -200,8 +200,8 @@ with_doctool = true
 if doctool_option.disabled()
   with_doctool = false
 else
-  has_mako = run_command(python, ['-c', 'import mako']).returncode() == 0
-  has_markdown = run_command(python, ['-c', 'import markdown']).returncode() == 0
+  has_mako = run_command(python, ['-c', 'import mako'], check: false).returncode() == 0
+  has_markdown = run_command(python, ['-c', 'import markdown'], check: false).returncode() == 0
   if not has_mako or not has_markdown
     if doctool_option.enabled()
       error('doctool requires markdown and mako')
