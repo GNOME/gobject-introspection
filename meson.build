@@ -288,10 +288,7 @@ pkg.generate(
 # be named girepo_dep for backward compatibility with projects that where already
 # using that name as fallback: dependency('gobject-introspection-1.0',
 # fallback : ['gobject-introspection', 'girepo_dep'])
-# FIXME: meson.override_dependency() and declare_dependency()'s variable arguments
-# are new in Meson 0.54.0, older versions of Meson won't be able to use g-i as
-# subproject anyway
-if meson.version().version_compare('>=0.54.0') and get_option('build_introspection_data') == true
+if get_option('build_introspection_data') == true
   girepo_dep = declare_dependency(
     sources: typelibs,
     dependencies: girepo_dep,
