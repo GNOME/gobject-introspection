@@ -102,7 +102,7 @@ regress_lib = shared_library('regress-1.0',
   dependencies: [gobject_dep, gio_dep] + regress_deps,
 )
 
-python_path = run_command(python, ['-c', 'import sys; sys.stdout.write(sys.executable)']).stdout()
+python_path = run_command(python, ['-c', 'import sys; sys.stdout.write(sys.executable)'], check: true).stdout()
 
 gircompiler_command = [
   test_gircompiler, '-o', '@OUTPUT@', '@INPUT@',
