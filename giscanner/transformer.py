@@ -613,7 +613,7 @@ raise ValueError."""
         elif (ctype == CTYPE_FUNCTION):
             node = self._create_typedef_callback(symbol)
         elif (ctype == CTYPE_POINTER and symbol.base_type.base_type.type == CTYPE_STRUCT):
-            node = self._create_typedef_compound(ast.Record, symbol, disguised=True)
+            node = self._create_typedef_compound(ast.Record, symbol, disguised=True, pointer=True)
         elif ctype == CTYPE_STRUCT:
             node = self._create_typedef_compound(ast.Record, symbol)
         elif ctype == CTYPE_UNION:
@@ -801,7 +801,7 @@ raise ValueError."""
         const.add_symbol_reference(symbol)
         return const
 
-    def _create_typedef_compound(self, compound_class, symbol, disguised=False):
+    def _create_typedef_compound(self, compound_class, symbol, disguised=False, pointer=False):
         name = self.strip_identifier(symbol.ident)
         assert symbol.base_type
         if symbol.base_type.name:
@@ -840,12 +840,14 @@ raise ValueError."""
             # Structs with a typedef name are promoted into the main namespace
             # by it being returned to the "parse" function and are also added to
             # the tag namespace if it has a tag_name set.
-            compound = compound_class(name, symbol.ident, disguised=disguised, tag_name=tag_name)
+            compound = compound_class(name, symbol.ident, disguised=disguised, pointer=pointer, tag_name=tag_name)
             if tag_name:
-                # Force the struct as disguised for now since we do not yet know
-                # if it has fields that will be parsed. Note that this is using
-                # an erroneous definition of disguised and we should eventually
-                # only look at the field count when needed.
+                # Force the struct as opaque for now since we do not yet know
+                # if it has fields that will be parsed.
+                compound.opaque = True
+                # Set disguised as well, for backward compatibility; the "disguised" field
+                # is used incorrectly, here, but it's too late for us to change this. See
+                # https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/101
                 compound.disguised = True
             else:
                 # Case where we have an anonymous struct which is typedef'd:
@@ -864,12 +866,17 @@ raise ValueError."""
         else:
             compound = compound_class(None, symbol.ident, tag_name=symbol.ident)
 
-        # Make sure disguised is False as we are now about to parse the
-        # fields of the real struct.
-        compound.disguised = False
         # Fields may need to be parsed in either of the above cases because the
         # Record can be created with a typedef prior to the struct definition.
         self._parse_fields(symbol, compound)
+
+        # A compound type with no fields is opaque
+        compound.opaque = len(compound.fields) == 0
+        # Unconditionally set disguised to false, for backward compatibility;
+        # the "disguised" field is used incorrectly, here, but it's too late for
+        # us to change this. See:
+        #   https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/101
+        compound.disguised = False
         compound.add_symbol_reference(symbol)
         return compound
 

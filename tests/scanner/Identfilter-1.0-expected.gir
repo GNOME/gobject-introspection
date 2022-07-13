@@ -11,10 +11,13 @@ and/or use gtk-doc annotations.  -->
              shared-library=""
              c:identifier-prefixes="Identfilter"
              c:symbol-prefixes="identfilter">
-    <record name="Context" c:type="identfilter_t" disguised="1">
+    <record name="Context" c:type="identfilter_t" disguised="1" opaque="1">
       <source-position filename="identfilter.h" line="4"/>
     </record>
-    <record name="Object" c:type="identfilter_object_t" disguised="1">
+    <record name="Object"
+            c:type="identfilter_object_t"
+            disguised="1"
+            opaque="1">
       <source-position filename="identfilter.h" line="5"/>
       <method name="foo_method" c:identifier="identfilter_object_foo_method">
         <source-position filename="identfilter.h" line="8"/>

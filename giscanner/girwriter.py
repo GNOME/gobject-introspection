@@ -587,6 +587,10 @@ class GIRWriter(XMLWriter):
             attrs.append(('c:type', record.ctype))
         if record.disguised:
             attrs.append(('disguised', '1'))
+        if record.opaque:
+            attrs.append(('opaque', '1'))
+        if record.pointer:
+            attrs.append(('pointer', '1'))
         if record.foreign:
             attrs.append(('foreign', '1'))
         if record.is_gtype_struct_for is not None:

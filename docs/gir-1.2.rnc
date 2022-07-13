@@ -215,9 +215,16 @@ grammar {
       attribute name { xsd:string },
       ## Corresponding C type of the record
       attribute c:type { xsd:string }?,
-      ## Binary attribute to tell if the record is disguised, i.e. whether the c:type is a typedef that doesn't look like a pointer, but is one internally
-	  ## Its second meaning is "private" and is set when any typedef struct is parsed which doesn't also include a full struct with fields (https://gitlab.gnome.org/GNOME/gobject-introspection/issues/101)
+      ## Deprecated. Binary attribute to tell if the record is disguised, i.e. whether the c:type
+      ## is a typedef that doesn't look like a pointer, but is one internally. Its second meaning
+      ## is "private" and is set when any typedef struct is parsed which doesn't also include a
+      ## full struct with fields (https://gitlab.gnome.org/GNOME/gobject-introspection/issues/101)
+      ## Replaced by "opaque" and "pointer".
       attribute disguised { "0" | "1" }?,
+      ## Binary attribute for a typedef struct that does not have a corresponding public structure definition
+      attribute opaque { "0" | "1" }?,
+      ## Binary attribute for a typedef struct pointer, e.g. typedef struct Foo* FooPtr
+      attribute pointer { "0" | "1" }?,
       ## GObject compatible C type of the record
       attribute glib:type-name { xsd:string }?,
       ## Function to get the GObject compatible type of the record

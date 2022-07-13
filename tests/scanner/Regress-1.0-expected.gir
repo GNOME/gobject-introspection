@@ -1511,6 +1511,7 @@ it says it's pointer but it's actually a string.</doc>
     </union>
     <record name="FooBoxed"
             c:type="RegressFooBoxed"
+            opaque="1"
             glib:type-name="RegressFooBoxed"
             glib:get-type="regress_foo_boxed_get_type"
             c:symbol-prefix="foo_boxed">
@@ -1557,6 +1558,7 @@ it says it's pointer but it's actually a string.</doc>
     <record name="FooBufferClass"
             c:type="RegressFooBufferClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="FooBuffer">
       <source-position filename="foo.h" line="52"/>
     </record>
@@ -1582,6 +1584,7 @@ it says it's pointer but it's actually a string.</doc>
     </callback>
     <record name="FooDBusData"
             c:type="RegressFooDBusData"
+            opaque="1"
             glib:type-name="RegressFooDBusData"
             glib:get-type="regress_foo_dbus_data_get_type"
             c:symbol-prefix="foo_dbus_data">
@@ -2252,6 +2255,7 @@ uses a C sugar return type.</doc>
     <record name="FooOtherObjectClass"
             c:type="RegressFooOtherObjectClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="FooOtherObject">
       <source-position filename="foo.h" line="54"/>
     </record>
@@ -2378,7 +2382,8 @@ exposed to language bindings.</doc>
     </record>
     <record name="FooStructPrivate"
             c:type="RegressFooStructPrivate"
-            disguised="1">
+            disguised="1"
+            opaque="1">
       <source-position filename="foo.h" line="325"/>
     </record>
     <interface name="FooSubInterface"
@@ -2648,7 +2653,7 @@ exposed to language bindings.</doc>
       <source-position filename="regress.h" line="520"/>
       <type name="gint" c:type="gint"/>
     </constant>
-    <record name="Intset" c:type="RegressIntset" disguised="1">
+    <record name="Intset" c:type="RegressIntset" disguised="1" opaque="1">
       <doc xml:space="preserve"
            filename="regress.h"
            line="1422">Like telepathy-glib's TpIntset.</doc>
@@ -3137,6 +3142,7 @@ use it should be.</doc>
     </record>
     <record name="TestBoxedD"
             c:type="RegressTestBoxedD"
+            opaque="1"
             copy-function="regress_test_boxed_d_copy"
             free-function="regress_test_boxed_d_free"
             glib:type-name="RegressTestBoxedD"
@@ -3193,7 +3199,8 @@ use it should be.</doc>
     </record>
     <record name="TestBoxedPrivate"
             c:type="RegressTestBoxedPrivate"
-            disguised="1">
+            disguised="1"
+            opaque="1">
       <source-position filename="regress.h" line="677"/>
     </record>
     <callback name="TestCallback" c:type="RegressTestCallback">

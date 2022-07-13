@@ -97,6 +97,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
 
@@ -111,6 +113,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
 
@@ -125,6 +129,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
 
@@ -138,6 +144,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
 
@@ -151,6 +159,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
 
@@ -167,6 +177,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
 
@@ -194,6 +206,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
         self.assertEqual(node.ctype, 'TestStruct')
@@ -201,6 +215,8 @@ class TestStructTypedefs(unittest.TestCase):
         shared = self.namespace.get('StructAlias')
         self.assertTrue(shared is not None)
         self.assertTrue(isinstance(shared, ast.Record))
+        self.assertFalse(shared.opaque)
+        self.assertFalse(shared.pointer)
         self.assertFalse(shared.disguised)
         self.assertEqual(len(shared.fields), 1)
         self.assertEqual(shared.ctype, 'TestStructAlias')
@@ -218,6 +234,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(len(node.fields), 1)
         self.assertEqual(node.ctype, 'TestStruct')
@@ -225,6 +243,8 @@ class TestStructTypedefs(unittest.TestCase):
         shared = self.namespace.get('StructAlias')
         self.assertTrue(shared is not None)
         self.assertTrue(isinstance(shared, ast.Record))
+        self.assertFalse(shared.opaque)
+        self.assertFalse(shared.pointer)
         self.assertFalse(shared.disguised)
         self.assertEqual(len(shared.fields), 1)
         self.assertEqual(shared.ctype, 'TestStructAlias')
@@ -262,6 +282,8 @@ class TestStructTypedefs(unittest.TestCase):
         node = self.namespace.get('Struct')
         self.assertTrue(node is not None)
         self.assertTrue(isinstance(node, ast.Record))
+        self.assertFalse(node.opaque)
+        self.assertFalse(node.pointer)
         self.assertFalse(node.disguised)
         self.assertEqual(node.ctype, 'TestStruct')
         self.assertEqual(len(node.fields), 1)
@@ -270,9 +292,26 @@ class TestStructTypedefs(unittest.TestCase):
         self.assertTrue(ptr is not None)
         # This currently gives a disguised Record instead of an Alias
         self.assertTrue(isinstance(ptr, ast.Record))
+        self.assertFalse(ptr.opaque)
+        self.assertTrue(ptr.pointer)
         self.assertTrue(ptr.disguised)
         self.assertEqual(len(ptr.fields), 0)
         self.assertEqual(ptr.ctype, 'TestStructPtr')
+
+    def test_opaque_struct(self):
+        load_namespace_from_source_string(self.namespace, """
+            typedef struct _TestStruct TestStruct;
+            """)
+        self.assertEqual(len(self.namespace.names), 1)
+
+        node = self.namespace.get('Struct')
+        self.assertIsNotNone(node)
+        self.assertIsInstance(node, ast.Record)
+        self.assertTrue(node.opaque)
+        self.assertFalse(node.pointer)
+        self.assertTrue(node.disguised)
+        self.assertEqual(node.ctype, 'TestStruct')
+        self.assertFalse(node.fields)
 
 
 class TestNestedStructs(unittest.TestCase):

@@ -1021,6 +1021,8 @@ class Compound(Node, Registered):
                  get_type=None,
                  c_symbol_prefix=None,
                  disguised=False,
+                 opaque=False,
+                 pointer=False,
                  tag_name=None):
         Node.__init__(self, name)
         Registered.__init__(self, gtype_name, get_type)
@@ -1030,6 +1032,8 @@ class Compound(Node, Registered):
         self.fields = []
         self.constructors = []
         self.disguised = disguised
+        self.opaque = opaque
+        self.pointer = pointer
         self.gtype_name = gtype_name
         self.get_type = get_type
         self.c_symbol_prefix = c_symbol_prefix
@@ -1116,6 +1120,8 @@ class Record(Compound):
                  get_type=None,
                  c_symbol_prefix=None,
                  disguised=False,
+                 opaque=False,
+                 pointer=False,
                  tag_name=None):
         Compound.__init__(self, name,
                           ctype=ctype,
@@ -1123,6 +1129,8 @@ class Record(Compound):
                           get_type=get_type,
                           c_symbol_prefix=c_symbol_prefix,
                           disguised=disguised,
+                          opaque=opaque,
+                          pointer=pointer,
                           tag_name=tag_name)
         # If non-None, this record defines the FooClass C structure
         # for some Foo GObject (or similar for GInterface)
@@ -1143,6 +1151,8 @@ class Union(Compound):
                  get_type=None,
                  c_symbol_prefix=None,
                  disguised=False,
+                 opaque=False,
+                 pointer=False,
                  tag_name=None):
         Compound.__init__(self, name,
                           ctype=ctype,
@@ -1150,6 +1160,8 @@ class Union(Compound):
                           get_type=get_type,
                           c_symbol_prefix=c_symbol_prefix,
                           disguised=disguised,
+                          opaque=opaque,
+                          pointer=pointer,
                           tag_name=tag_name)
         # If non-None, this union has a copy function for heap
         # allocated instances

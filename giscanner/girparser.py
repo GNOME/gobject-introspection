@@ -435,6 +435,8 @@ class GIRParser(object):
         compound = cls(node.attrib.get('name'),
                        ctype=node.attrib.get(_cns('type')),
                        disguised=node.attrib.get('disguised') == '1',
+                       opaque=node.attrib.get('opaque') == '1',
+                       pointer=node.attrib.get('pointer') == '1',
                        gtype_name=node.attrib.get(_glibns('type-name')),
                        get_type=node.attrib.get(_glibns('get-type')),
                        c_symbol_prefix=node.attrib.get(_cns('symbol-prefix')))
