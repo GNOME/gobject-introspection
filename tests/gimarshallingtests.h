@@ -1327,6 +1327,12 @@ typedef union {
     glong long_;
 } GIMarshallingTestsUnion;
 
+typedef union {
+    glong long_;
+    gsize size;
+    const gchar *str;
+} GIMarshallingTestsUnregisteredUnion;
+
 
 _GI_TEST_EXTERN
 GType gi_marshalling_tests_union_get_type (void) G_GNUC_CONST;
@@ -1342,6 +1348,79 @@ void gi_marshalling_tests_union_inv (GIMarshallingTestsUnion *union_);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_union_method (GIMarshallingTestsUnion *union_);
+
+typedef enum
+{
+  GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_NONE,
+  GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_SIMPLE_STRUCT,
+  GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_NESTED_STRUCT,
+  GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_POINTER_STRUCT,
+  GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_BOXED_STRUCT,
+  GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_BOXED_STRUCT_PTR,
+  GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_SINGLE_UNION,
+} GIMarshallingTestsStructuredUnionType;
+
+typedef struct {
+    GIMarshallingTestsStructuredUnionType type;
+    GIMarshallingTestsSimpleStruct parent;
+} GIMarshallingTestsStructuredUnionSimpleStruct;
+
+typedef struct {
+    GIMarshallingTestsStructuredUnionType type;
+    GIMarshallingTestsNestedStruct parent;
+} GIMarshallingTestsStructuredUnionNestedStruct;
+
+typedef struct {
+    GIMarshallingTestsStructuredUnionType type;
+    GIMarshallingTestsPointerStruct parent;
+} GIMarshallingTestsStructuredUnionPointerStruct;
+
+typedef struct {
+    GIMarshallingTestsStructuredUnionType type;
+    GIMarshallingTestsBoxedStruct parent;
+} GIMarshallingTestsStructuredUnionBoxedStruct;
+
+typedef struct {
+    GIMarshallingTestsStructuredUnionType type;
+    GIMarshallingTestsBoxedStruct *parent;
+} GIMarshallingTestsStructuredUnionBoxedStructPtr;
+
+typedef struct {
+    GIMarshallingTestsStructuredUnionType type;
+    GIMarshallingTestsUnion union_;
+} GIMarshallingTestsStructuredUnionUnionStruct;
+
+typedef union {
+    GIMarshallingTestsStructuredUnionUnionStruct parent;
+} GIMarshallingTestsStructuredUnionSingleUnion;
+
+typedef union {
+    /*< private >*/
+    GIMarshallingTestsStructuredUnionType type;
+
+    GIMarshallingTestsStructuredUnionSimpleStruct simple_struct;
+    GIMarshallingTestsStructuredUnionNestedStruct nested_struct;
+    GIMarshallingTestsStructuredUnionPointerStruct pointer_struct;
+    GIMarshallingTestsStructuredUnionBoxedStruct boxed_struct;
+    GIMarshallingTestsStructuredUnionBoxedStructPtr boxed_struct_ptr;
+    GIMarshallingTestsStructuredUnionSingleUnion single_union;
+} GIMarshallingTestsStructuredUnion;
+
+_GI_TEST_EXTERN
+GType gi_marshalling_tests_structured_union_get_type (void) G_GNUC_CONST;
+
+_GI_TEST_EXTERN
+GIMarshallingTestsStructuredUnion *gi_marshalling_tests_structured_union_new (GIMarshallingTestsStructuredUnionType type);
+
+/* we want this to clash with a field value name */
+_GI_TEST_EXTERN
+GIMarshallingTestsStructuredUnionType gi_marshalling_tests_structured_union_type (GIMarshallingTestsStructuredUnion *structured_union);
+
+typedef union {
+    GIMarshallingTestsStructuredUnionType type;
+    GIMarshallingTestsStructuredUnionSimpleStruct simple_struct1;
+    GIMarshallingTestsStructuredUnionSimpleStruct simple_struct2;
+} GIMarshallingTestsStructuredUnionSingleType;
 
  /* Object */
 

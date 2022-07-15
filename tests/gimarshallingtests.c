@@ -4243,6 +4243,156 @@ gi_marshalling_tests_union_method (GIMarshallingTestsUnion *union_)
   g_assert_cmpint (union_->long_, ==, 42);
 }
 
+/**
+ * gi_marshalling_tests_structured_union_new:
+ * @type: Type of #GIMarshallingTestsStructuredUnion to create
+ */
+GIMarshallingTestsStructuredUnion *
+gi_marshalling_tests_structured_union_new (GIMarshallingTestsStructuredUnionType type)
+{
+  GIMarshallingTestsStructuredUnion *new_union;
+
+  new_union = g_new0 (GIMarshallingTestsStructuredUnion, 1);
+  new_union->type = type;
+
+  switch (type)
+    {
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_NONE:
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_SIMPLE_STRUCT:
+      new_union->simple_struct.parent.long_ = 6;
+      new_union->simple_struct.parent.int8 = 7;
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_NESTED_STRUCT:
+      new_union->nested_struct.parent.simple_struct.long_ = 6;
+      new_union->nested_struct.parent.simple_struct.int8 = 7;
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_BOXED_STRUCT:
+      new_union->boxed_struct.parent.long_ = 42;
+      new_union->boxed_struct.parent.string_ = g_strdup ("hello");
+      new_union->boxed_struct.parent.g_strv = g_new0 (gchar *, 4);
+      new_union->boxed_struct.parent.g_strv[0] = g_strdup ("0");
+      new_union->boxed_struct.parent.g_strv[1] = g_strdup ("1");
+      new_union->boxed_struct.parent.g_strv[2] = g_strdup ("2");
+      new_union->boxed_struct.parent.g_strv[3] = NULL;
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_BOXED_STRUCT_PTR:
+      new_union->boxed_struct_ptr.parent = g_boxed_copy (
+        gi_marshalling_tests_boxed_struct_get_type(),
+        gi_marshalling_tests_boxed_struct_returnv ());
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_POINTER_STRUCT:
+      new_union->pointer_struct.parent.long_ = 42;
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_SINGLE_UNION:
+      new_union->single_union.parent.union_.long_ = 42;
+      break;
+
+    default:
+      g_free (new_union);
+      g_return_val_if_reached (NULL);
+    }
+
+  return new_union;
+}
+
+static GIMarshallingTestsStructuredUnion *
+gi_marshalling_tests_structured_union_copy (GIMarshallingTestsStructuredUnion *union_)
+{
+  GIMarshallingTestsStructuredUnion *new_union;
+
+  new_union = g_new (GIMarshallingTestsStructuredUnion, 1);
+  *new_union = *union_;
+
+  switch (union_->type)
+    {
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_BOXED_STRUCT:
+      new_union->boxed_struct.parent.string_ = g_strdup (union_->boxed_struct.parent.string_);
+      if (union_->boxed_struct.parent.g_strv)
+        {
+          guint length = g_strv_length (union_->boxed_struct.parent.g_strv);
+          guint i;
+
+          new_union->boxed_struct.parent.g_strv = g_new0 (gchar *, length + 1);
+          for (i = 0; i < length; i++)
+              new_union->boxed_struct.parent.g_strv[i] = g_strdup (union_->boxed_struct.parent.g_strv[i]);
+          new_union->boxed_struct.parent.g_strv[i] = NULL;
+        }
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_BOXED_STRUCT_PTR:
+      new_union->boxed_struct_ptr.parent = g_boxed_copy (
+        gi_marshalling_tests_boxed_struct_get_type(), union_->boxed_struct_ptr.parent);
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_NONE:
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_SINGLE_UNION:
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_POINTER_STRUCT:
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_SIMPLE_STRUCT:
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_NESTED_STRUCT:
+      break;
+
+    default:
+      g_return_val_if_reached (new_union);
+    }
+
+  return new_union;
+}
+
+static void
+gi_marshalling_tests_structured_union_free (GIMarshallingTestsStructuredUnion *union_)
+{
+  switch (union_->type)
+    {
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_BOXED_STRUCT:
+      g_free (union_->boxed_struct.parent.string_);
+      g_strfreev (union_->boxed_struct.parent.g_strv);
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_BOXED_STRUCT_PTR:
+      g_boxed_free (gi_marshalling_tests_boxed_struct_get_type(), union_->boxed_struct_ptr.parent);
+      break;
+
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_NONE:
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_SINGLE_UNION:
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_POINTER_STRUCT:
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_SIMPLE_STRUCT:
+    case GI_MARSHALLING_TESTS_STRUCTURED_UNION_TYPE_NESTED_STRUCT:
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  g_free (union_);
+}
+
+GType gi_marshalling_tests_structured_union_get_type (void)
+{
+    static GType type = 0;
+
+  if (type == 0)
+    {
+      type = g_boxed_type_register_static ("GIMarshallingTestsStructuredUnion",
+                                           (GBoxedCopyFunc)
+                                           gi_marshalling_tests_structured_union_copy,
+                                           (GBoxedFreeFunc) gi_marshalling_tests_structured_union_free);
+    }
+
+  return type;
+}
+
+GIMarshallingTestsStructuredUnionType
+gi_marshalling_tests_structured_union_type (GIMarshallingTestsStructuredUnion *structured_union)
+{
+    return structured_union->type;
+}
 
 
 enum
