@@ -2,30 +2,24 @@
 
 set -e
 
-if [[ "$MSYSTEM" == "MINGW32" ]]; then
-    export MSYS2_ARCH="i686"
-else
-    export MSYS2_ARCH="x86_64"
-fi
-
 pacman --noconfirm -Suy
 
 pacman --noconfirm -S --needed \
     git \
     base-devel \
-    mingw-w64-$MSYS2_ARCH-toolchain \
-    mingw-w64-$MSYS2_ARCH-ccache \
-    mingw-w64-$MSYS2_ARCH-meson \
-    mingw-w64-$MSYS2_ARCH-python3 \
-    mingw-w64-$MSYS2_ARCH-python3-pip \
-    mingw-w64-$MSYS2_ARCH-python3-mako \
-    mingw-w64-$MSYS2_ARCH-python3-markdown \
-    mingw-w64-$MSYS2_ARCH-libffi \
-    mingw-w64-$MSYS2_ARCH-pkg-config \
-    mingw-w64-$MSYS2_ARCH-cairo \
-    mingw-w64-$MSYS2_ARCH-pcre2 \
-    mingw-w64-$MSYS2_ARCH-zlib \
-    mingw-w64-$MSYS2_ARCH-gettext
+    ${MINGW_PACKAGE_PREFIX}-toolchain \
+    ${MINGW_PACKAGE_PREFIX}-ccache \
+    ${MINGW_PACKAGE_PREFIX}-meson \
+    ${MINGW_PACKAGE_PREFIX}-python3 \
+    ${MINGW_PACKAGE_PREFIX}-python3-pip \
+    ${MINGW_PACKAGE_PREFIX}-python3-mako \
+    ${MINGW_PACKAGE_PREFIX}-python3-markdown \
+    ${MINGW_PACKAGE_PREFIX}-libffi \
+    ${MINGW_PACKAGE_PREFIX}-pkg-config \
+    ${MINGW_PACKAGE_PREFIX}-cairo \
+    ${MINGW_PACKAGE_PREFIX}-pcre2 \
+    ${MINGW_PACKAGE_PREFIX}-zlib \
+    ${MINGW_PACKAGE_PREFIX}-gettext
 
 export CCACHE_BASEDIR="${CI_PROJECT_DIR}"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
