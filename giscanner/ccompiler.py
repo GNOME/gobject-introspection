@@ -208,7 +208,7 @@ class CCompiler(object):
                 args.append('-libpath:' + library_path)
             else:
                 args.append('-L' + library_path)
-                if os.path.isabs(library_path):
+                if os.name != 'nt' and os.path.isabs(library_path):
                     if libtool:
                         args.append('-rpath')
                         args.append(library_path)
