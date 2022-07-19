@@ -83,6 +83,7 @@ if cc.get_id() != 'msvc'
   custom_c_args = cc.get_supported_arguments([
     '-Wno-missing-field-initializers',
     '-Wno-unused-parameter',
+    '-Wno-misleading-indentation',
   ])
 endif
 
