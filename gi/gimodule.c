@@ -942,7 +942,14 @@ pyg_object_dispose (GObject *object)
 {
     PyObject *object_wrapper, *retval;
     PyGILState_STATE state;
-    GObjectClass *parent_class = g_type_class_peek (g_type_parent (G_TYPE_FROM_CLASS (object)));
+    GType parent = g_type_parent (G_TYPE_FROM_INSTANCE (object));
+    GObjectClass *parent_class = g_type_class_peek (parent);
+
+    printf ("dispose (%p) %20s %20s %p\n",
+            object,
+            G_OBJECT_TYPE_NAME (object),
+            g_type_name (parent),
+            parent_class);
 
     state = PyGILState_Ensure();
 
@@ -954,14 +961,14 @@ pyg_object_dispose (GObject *object)
       object_wrapper = pygobject_new(object);
 
     if (object_wrapper == NULL) {
-	PyGILState_Release(state);
-	return;
+        PyGILState_Release(state);
+        return;
     }
     retval = PyObject_CallMethod(object_wrapper, "do_dispose", NULL);
     if (retval) {
-	Py_DECREF(retval);
+        Py_DECREF(retval);
     } else {
-	PyErr_Print();
+        PyErr_Print();
     }
     // Chain up the dispose call
     if (parent_class->dispose) {
