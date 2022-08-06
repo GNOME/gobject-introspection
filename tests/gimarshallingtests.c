@@ -3577,7 +3577,7 @@ gi_marshalling_tests_gvalue_round_trip (GValue *value)
  * gi_marshalling_tests_gvalue_copy:
  * @value: The first GValue
  *
- * Returns: (transfer none):
+ * Returns: (transfer full):
  */
 GValue *
 gi_marshalling_tests_gvalue_copy (GValue *value)
