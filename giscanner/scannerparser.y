@@ -1406,8 +1406,23 @@ initializer
 	;
 
 initializer_list
-	: initializer
-	| initializer_list ',' initializer
+	: initializer_list_item
+	| initializer_list ',' initializer_list_item
+	;
+
+initializer_list_item
+	: designator_list '=' initializer
+	| initializer
+	;
+
+designator_list
+	: designator
+	| designator_list designator
+	;
+
+designator
+	: '[' constant_expression ']'
+	| '.' identifier
 	;
 
 /* A.2.3 Statements. */
