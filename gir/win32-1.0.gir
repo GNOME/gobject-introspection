@@ -11,9 +11,14 @@
     <alias name="HICON" c:type="HICON">
       <type name="gulong" c:type="gulong"/>
     </alias>
+    <alias name="HCURSOR" c:type="HCURSOR">
+      <type name="gulong" c:type="gulong"/>
+    </alias>
     <alias name="HGDIOBJ" c:type="HGDIOBJ">
       <type name="gulong" c:type="gulong"/>
     </alias>
+
+    <record name="MSG" c:type="MSG"/>
   </namespace>
 </repository>
 
