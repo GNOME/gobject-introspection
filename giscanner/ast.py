@@ -1304,6 +1304,7 @@ class Property(Node):
             self.transfer = transfer
         self.setter = None
         self.getter = None
+        self.default_value = None
         self.parent = None  # A Class or Interface
 
 

@@ -609,6 +609,7 @@ class GIRParser(object):
                             node.attrib.get('transfer-ownership'))
         prop.setter = node.attrib.get('setter')
         prop.getter = node.attrib.get('getter')
+        prop.default_value = node.attrib.get('default-value')
         prop.parent = parent
         self._parse_generic_attribs(node, prop)
         return prop

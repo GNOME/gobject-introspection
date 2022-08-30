@@ -560,6 +560,8 @@ class GIRWriter(XMLWriter):
             attrs.append(('setter', prop.setter))
         if prop.getter:
             attrs.append(('getter', prop.getter))
+        if prop.default_value:
+            attrs.append(('default-value', prop.default_value))
         with self.tagcontext('property', attrs):
             self._write_generic(prop)
             self._write_type(prop.type)

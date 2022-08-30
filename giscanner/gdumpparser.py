@@ -414,10 +414,13 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             writable = (flags & G_PARAM_WRITABLE) != 0
             construct = (flags & G_PARAM_CONSTRUCT) != 0
             construct_only = (flags & G_PARAM_CONSTRUCT_ONLY) != 0
-            node.properties.append(ast.Property(
+            default_value = pspec.attrib['default-value']
+            prop = ast.Property(
                 pspec.attrib['name'],
                 ast.Type.create_from_gtype_name(ctype),
-                readable, writable, construct, construct_only))
+                readable, writable, construct, construct_only)
+            prop.default_value = default_value
+            node.properties.append(prop)
         node.properties = node.properties
 
     def _introspect_signals(self, node, xmlnode):

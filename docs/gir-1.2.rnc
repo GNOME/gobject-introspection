@@ -350,6 +350,8 @@ grammar {
       attribute setter { xsd:string }?,
       ## The getter function for this property
       attribute getter { xsd:string }?,
+      ## The default value of the property, as a string; if missing, the default value is zero for integer types, and null for pointer types
+      attribute default-value { xsd:string }?,
       # Define the transfer of ownership of the property element
       TransferOwnership?,
 
