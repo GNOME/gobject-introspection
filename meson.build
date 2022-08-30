@@ -2,6 +2,7 @@ project('gobject-introspection', 'c',
   version: '1.73.1',
   meson_version: '>= 0.60.0',
   default_options: [
+    'c_std=gnu99',
     'warning_level=2',
     'buildtype=debugoptimized',
   ],
@@ -31,7 +32,6 @@ if cc.get_id() != 'msvc'
     project_c_args += [
       '-Warray-bounds',
       '-Wcast-align',
-      '-Wdeclaration-after-statement',
       '-Wduplicated-branches',
       '-Wformat=2',
       '-Wformat-nonliteral',
