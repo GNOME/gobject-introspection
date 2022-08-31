@@ -1274,6 +1274,12 @@ class DevDocsFormatterGjs(DocFormatterGjs):
     def format_in_parameters(self, node):
         return ', '.join(p.argname for p in self.get_in_parameters(node))
 
+    def format_signal_parameters(self, node):
+        emitter = self.to_lower_camel_case(node.parent.name)
+        in_params = self.format_in_parameters(node)
+
+        return '%s, %s' % (emitter, in_params) if in_params else emitter
+
 
 LANGUAGES = {
     "devdocs": {

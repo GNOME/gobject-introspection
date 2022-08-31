@@ -13,10 +13,17 @@
       in_params = formatter.get_in_parameters(m)
       out_params = formatter.get_out_parameters(m)
     %>
-    % if in_params:
+    % if in_params or isinstance(m, ast.Signal):
       <dt>Parameters:</dt>
       <dd>
         <ul>
+          % if isinstance(m, ast.Signal):
+            <li>
+              <strong>${formatter.to_lower_camel_case(m.parent.name)}</strong>
+              (<code>${m.parent.gi_name}</code>)
+              &mdash; the emitting object
+            </li>
+          %endif
           % for p in in_params:
             <li>
               <strong>${p.argname}</strong>
