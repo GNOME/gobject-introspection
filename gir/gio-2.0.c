@@ -243,6 +243,10 @@
  * fails. The startup notification id is provided, so that the launcher
  * can cancel the startup notification.
  *
+ * Because a launch operation may involve spawning multiple instances of the
+ * target application, you should expect this signal to be emitted multiple
+ * times, one for each spawned instance.
+ *
  * Since: 2.36
  */
 
@@ -268,6 +272,10 @@
  * It is guaranteed that this signal is followed by either a #GAppLaunchContext::launched or
  * #GAppLaunchContext::launch-failed signal.
  *
+ * Because a launch operation may involve spawning multiple instances of the
+ * target application, you should expect this signal to be emitted multiple
+ * times, one for each spawned instance.
+ *
  * Since: 2.72
  */
 
@@ -279,7 +287,13 @@
  * @platform_data: additional platform-specific data for this launch
  *
  * The #GAppLaunchContext::launched signal is emitted when a #GAppInfo is successfully
- * launched. The @platform_data is an GVariant dictionary mapping
+ * launched.
+ *
+ * Because a launch operation may involve spawning multiple instances of the
+ * target application, you should expect this signal to be emitted multiple
+ * times, one time for each spawned instance.
+ *
+ * The @platform_data is an GVariant dictionary mapping
  * strings to variants (ie `a{sv}`), which contains additional,
  * platform-specific data about this launch. On UNIX, at least the
  * `pid` and `startup-notification-id` keys will be present.
@@ -12082,7 +12096,9 @@
  * Launches the application. This passes the @uris to the launched application
  * as arguments, using the optional @context to get information
  * about the details of the launcher (like what screen it is on).
- * On error, @error will be set accordingly.
+ * On error, @error will be set accordingly. If the application only supports
+ * one URI per invocation as part of their command-line, multiple instances
+ * of the application will be spawned.
  *
  * To launch the application without arguments pass a %NULL @uris list.
  *
@@ -40849,7 +40865,7 @@
  * check a certificate against a CA that is not part of the system
  * CA database.
  *
- * If @cert is valid, %G_TLS_CERTIFICATE_FLAGS_NONE is returned.
+ * If @cert is valid, %G_TLS_CERTIFICATE_NO_FLAGS is returned.
  *
  * If @identity is not %NULL, @cert's name(s) will be compared against
  * it, and %G_TLS_CERTIFICATE_BAD_IDENTITY will be set in the return

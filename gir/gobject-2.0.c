@@ -3926,8 +3926,8 @@
 /**
  * g_param_spec_boolean:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @default_value: default value for the property specified
  * @flags: flags for the property specified
  *
@@ -3946,8 +3946,8 @@
 /**
  * g_param_spec_boxed:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @boxed_type: %G_TYPE_BOXED derived type of this property
  * @flags: flags for the property specified
  *
@@ -3963,8 +3963,8 @@
 /**
  * g_param_spec_char:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -3979,8 +3979,8 @@
 /**
  * g_param_spec_double:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -3998,8 +3998,8 @@
 /**
  * g_param_spec_enum:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @enum_type: a #GType derived from %G_TYPE_ENUM
  * @default_value: default value for the property specified
  * @flags: flags for the property specified
@@ -4016,8 +4016,8 @@
 /**
  * g_param_spec_flags:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @flags_type: a #GType derived from %G_TYPE_FLAGS
  * @default_value: default value for the property specified
  * @flags: flags for the property specified
@@ -4034,8 +4034,8 @@
 /**
  * g_param_spec_float:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -4138,8 +4138,8 @@
 /**
  * g_param_spec_gtype:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @is_a_type: a #GType whose subtypes are allowed as values
  *  of the property (use %G_TYPE_NONE for any type)
  * @flags: flags for the property specified
@@ -4157,8 +4157,8 @@
 /**
  * g_param_spec_int:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -4175,8 +4175,8 @@
 /**
  * g_param_spec_int64:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -4194,8 +4194,8 @@
  * g_param_spec_internal: (skip)
  * @param_type: the #GType for the property; must be derived from %G_TYPE_PARAM
  * @name: the canonical name of the property
- * @nick: the nickname of the property
- * @blurb: a short description of the property
+ * @nick: (nullable): the nickname of the property
+ * @blurb: (nullable): a short description of the property
  * @flags: a combination of #GParamFlags
  *
  * Creates a new #GParamSpec instance.
@@ -4204,11 +4204,12 @@
  * the rules for @name. Names which violate these rules lead to undefined
  * behaviour.
  *
- * Beyond the name, #GParamSpecs have two more descriptive
- * strings associated with them, the @nick, which should be suitable
- * for use as a label for the property in a property editor, and the
- * @blurb, which should be a somewhat longer description, suitable for
- * e.g. a tooltip. The @nick and @blurb should ideally be localized.
+ * Beyond the name, #GParamSpecs have two more descriptive strings, the
+ * @nick and @blurb, which may be used as a localized label and description.
+ * For GTK and related libraries these are considered deprecated and may be
+ * omitted, while for other libraries such as GStreamer and its plugins they
+ * are essential. When in doubt, follow the conventions used in the
+ * surrounding code and supporting libraries.
  *
  * Returns: (type GObject.ParamSpec): (transfer floating): a newly allocated
  *     #GParamSpec instance, which is initially floating
@@ -4234,8 +4235,8 @@
 /**
  * g_param_spec_long:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -4252,8 +4253,8 @@
 /**
  * g_param_spec_object:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @object_type: %G_TYPE_OBJECT derived type of this property
  * @flags: flags for the property specified
  *
@@ -4283,8 +4284,8 @@
 /**
  * g_param_spec_param:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @param_type: a #GType derived from %G_TYPE_PARAM
  * @flags: flags for the property specified
  *
@@ -4300,8 +4301,8 @@
 /**
  * g_param_spec_pointer:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecPointer instance specifying a pointer property.
@@ -4475,8 +4476,8 @@
 /**
  * g_param_spec_string:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @default_value: (nullable): default value for the property specified
  * @flags: flags for the property specified
  *
@@ -4491,8 +4492,8 @@
 /**
  * g_param_spec_uchar:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -4507,8 +4508,8 @@
 /**
  * g_param_spec_uint:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -4525,8 +4526,8 @@
 /**
  * g_param_spec_uint64:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -4544,8 +4545,8 @@
 /**
  * g_param_spec_ulong:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @minimum: minimum value for the property specified
  * @maximum: maximum value for the property specified
  * @default_value: default value for the property specified
@@ -4563,8 +4564,8 @@
 /**
  * g_param_spec_unichar:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @default_value: default value for the property specified
  * @flags: flags for the property specified
  *
@@ -4589,8 +4590,8 @@
 /**
  * g_param_spec_value_array: (skip)
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @element_spec: a #GParamSpec describing the elements contained in
  *  arrays of this property, may be %NULL
  * @flags: flags for the property specified
@@ -4609,8 +4610,8 @@
 /**
  * g_param_spec_variant:
  * @name: canonical name of the property specified
- * @nick: nick name for the property specified
- * @blurb: description of the property specified
+ * @nick: (nullable): nick name for the property specified
+ * @blurb: (nullable): description of the property specified
  * @type: a #GVariantType
  * @default_value: (nullable) (transfer full): a #GVariant of type @type to
  *                 use as the default value, or %NULL

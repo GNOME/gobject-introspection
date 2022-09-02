@@ -9233,6 +9233,9 @@
  * alignment value. Additionally, it will detect possible overflow during
  * multiplication.
  *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
+ *
  * Aligned memory allocations returned by this function can only be
  * freed using g_aligned_free().
  *
@@ -23295,6 +23298,9 @@
  * Allocates @n_bytes bytes of memory.
  * If @n_bytes is 0 it returns %NULL.
  *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
+ *
  * Returns: a pointer to the allocated memory
  */
 
@@ -23305,6 +23311,9 @@
  *
  * Allocates @n_bytes bytes of memory, initialized to 0's.
  * If @n_bytes is 0 it returns %NULL.
+ *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
  *
  * Returns: a pointer to the allocated memory
  */
@@ -23318,6 +23327,9 @@
  * This function is similar to g_malloc0(), allocating (@n_blocks * @n_block_bytes) bytes,
  * but care is taken to detect possible overflow during multiplication.
  *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
+ *
  * Since: 2.24
  * Returns: a pointer to the allocated memory
  */
@@ -23330,6 +23342,9 @@
  *
  * This function is similar to g_malloc(), allocating (@n_blocks * @n_block_bytes) bytes,
  * but care is taken to detect possible overflow during multiplication.
+ *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
  *
  * Since: 2.24
  * Returns: a pointer to the allocated memory
@@ -27697,6 +27712,9 @@
  * have zero-length. @n_bytes may be 0, in which case %NULL will be returned
  * and @mem will be freed unless it is %NULL.
  *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
+ *
  * Returns: the new address of the allocated memory
  */
 
@@ -27709,6 +27727,9 @@
  *
  * This function is similar to g_realloc(), allocating (@n_blocks * @n_block_bytes) bytes,
  * but care is taken to detect possible overflow during multiplication.
+ *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
  *
  * Since: 2.24
  * Returns: the new address of the allocated memory
