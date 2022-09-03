@@ -1,3 +1,15 @@
+1.73.1 - 2022-09-03
+-------------------
+
+* Update the GIR data for GLib, GObject, GModule, and GIO
+* Disable rpath on Windows [Christoph Reiter]
+* Add llvm/mingw support on Windows [Christoph Reiter]
+* Fix annotations in libgirepository [Philip Chimento]
+* Support C99 designated initializers when parsing C declarations [Jan Tojnar]
+* Add some more types to win32 GIR [Marc-André Lureau]
+* Let doctool prepend emitting objects in GJS signals [Andy Holmes]
+* Require a C99 toolchain like GLib
+
 1.73.0 - 2022-07-13
 -------------------
 
