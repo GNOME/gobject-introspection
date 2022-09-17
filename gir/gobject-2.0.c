@@ -5489,7 +5489,7 @@
  * an object definition, instead the function pointer is passed
  * directly and can be overridden by derived classes with
  * g_signal_override_class_closure() or
- * g_signal_override_class_handler()and chained to with
+ * g_signal_override_class_handler() and chained to with
  * g_signal_chain_from_overridden() or
  * g_signal_chain_from_overridden_handler().
  *
