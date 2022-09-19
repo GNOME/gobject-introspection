@@ -9,5 +9,5 @@ class RemoveOuterP(Treeprocessor):
 
 
 class InlineMarkdown(Extension):
-    def extendMarkdown(self, md, md_globals):
-        md.treeprocessors.add("remove_outer_p", RemoveOuterP(md), "_end")
+    def extendMarkdown(self, md):
+        md.treeprocessors.register(RemoveOuterP(md), "remove_outer_p", 0)
