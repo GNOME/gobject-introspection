@@ -3381,7 +3381,7 @@
 
 
 /**
- * GSimpleProxyResolver:default-proxy:
+ * GSimpleProxyResolver:default-proxy: (nullable)
  *
  * The default proxy URI that will be used for any URI that doesn't
  * match #GSimpleProxyResolver:ignore-hosts, and doesn't match any
@@ -11379,8 +11379,8 @@
  * @action_group: a #GActionGroup
  * @action_name: the name of an action in the group
  * @enabled: (out): if the action is presently enabled
- * @parameter_type: (out) (optional): the parameter type, or %NULL if none needed
- * @state_type: (out) (optional): the state type, or %NULL if stateless
+ * @parameter_type: (out) (transfer none) (optional): the parameter type, or %NULL if none needed
+ * @state_type: (out) (transfer none) (optional): the state type, or %NULL if stateless
  * @state_hint: (out) (optional): the state hint, or %NULL if none
  * @state: (out) (optional): the current state, or %NULL if stateless
  *
@@ -28398,30 +28398,13 @@
  * @position: (out) (optional): the first position of @item, if it was found.
  *
  * Looks up the given @item in the list store by looping over the items and
- * comparing them with @equal_func until the first occurrence of @item which
+ * comparing them with @compare_func until the first occurrence of @item which
  * matches. If @item was not found, then @position will not be set, and this
  * method will return %FALSE.
  *
  * Returns: Whether @store contains @item. If it was found, @position will be
  * set to the position where @item occurred for the first time.
  * Since: 2.64
- */
-
-
-/**
- * g_list_store_find_with_equal_func_full:
- * @store: a #GListStore
- * @item: (type GObject): an item
- * @equal_func: (scope call): A custom equality check function
- * @user_data: (closure): user data for @equal_func
- * @position: (out) (optional): the first position of @item, if it was found.
- *
- * Like g_list_store_find_with_equal_func() but with an additional @user_data
- * that is passed to @equal_func.
- *
- * Returns: Whether @store contains @item. If it was found, @position will be
- * set to the position where @item occurred for the first time.
- * Since: 2.74
  */
 
 
@@ -35560,7 +35543,7 @@
 /**
  * g_simple_proxy_resolver_set_default_proxy:
  * @resolver: a #GSimpleProxyResolver
- * @default_proxy: the default proxy to use
+ * @default_proxy: (nullable): the default proxy to use
  *
  * Sets the default proxy on @resolver, to be used for any URIs that
  * don't match #GSimpleProxyResolver:ignore-hosts or a proxy set
@@ -35651,7 +35634,7 @@
  * internal errors (other than @cancellable being triggered) will be
  * ignored.
  *
- * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on
+ * Returns: (transfer full) (nullable): a #GSocketAddress (owned by the caller), or %NULL on
  *     error (in which case *@error will be set) or if there are no
  *     more addresses.
  */
@@ -35684,7 +35667,7 @@
  * g_socket_address_enumerator_next() for more information about
  * error handling.
  *
- * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on
+ * Returns: (transfer full) (nullable): a #GSocketAddress (owned by the caller), or %NULL on
  *     error (in which case *@error will be set) or if there are no
  *     more addresses.
  */

@@ -539,12 +539,6 @@
  *     Network and storage sizes should be reported in the normal SI units.
  * @G_FORMAT_SIZE_BITS: set the size as a quantity in bits, rather than
  *     bytes, and return units in bits. For example, ‘Mb’ rather than ‘MB’.
- * @G_FORMAT_SIZE_ONLY_VALUE: return only value, without unit; this should
- *     not be used together with @G_FORMAT_SIZE_LONG_FORMAT
- *     nor @G_FORMAT_SIZE_ONLY_UNIT. Since: 2.74
- * @G_FORMAT_SIZE_ONLY_UNIT: return only unit, without value; this should
- *     not be used together with @G_FORMAT_SIZE_LONG_FORMAT
- *     nor @G_FORMAT_SIZE_ONLY_VALUE. Since: 2.74
  *
  * Flags to modify the format of the string returned by g_format_size_full().
  */
@@ -9228,6 +9222,9 @@
  * bytes, but care is taken to align the allocated memory to with the given
  * alignment value. Additionally, it will detect possible overflow during
  * multiplication.
+ *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
  *
  * Aligned memory allocations returned by this function can only be
  * freed using g_aligned_free().
@@ -19348,9 +19345,9 @@
  * g_iconv: (skip)
  * @converter: conversion descriptor from g_iconv_open()
  * @inbuf: bytes to convert
- * @inbytes_left: (inout): inout parameter, bytes remaining to convert in @inbuf
+ * @inbytes_left: inout parameter, bytes remaining to convert in @inbuf
  * @outbuf: converted output bytes
- * @outbytes_left: (inout): inout parameter, bytes available to fill in @outbuf
+ * @outbytes_left: inout parameter, bytes available to fill in @outbuf
  *
  * Same as the standard UNIX routine iconv(), but
  * may be implemented via libiconv on UNIX flavors that lack
@@ -23168,6 +23165,9 @@
  * Allocates @n_bytes bytes of memory.
  * If @n_bytes is 0 it returns %NULL.
  *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
+ *
  * Returns: a pointer to the allocated memory
  */
 
@@ -23178,6 +23178,9 @@
  *
  * Allocates @n_bytes bytes of memory, initialized to 0's.
  * If @n_bytes is 0 it returns %NULL.
+ *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
  *
  * Returns: a pointer to the allocated memory
  */
@@ -23191,6 +23194,9 @@
  * This function is similar to g_malloc0(), allocating (@n_blocks * @n_block_bytes) bytes,
  * but care is taken to detect possible overflow during multiplication.
  *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
+ *
  * Since: 2.24
  * Returns: a pointer to the allocated memory
  */
@@ -23203,6 +23209,9 @@
  *
  * This function is similar to g_malloc(), allocating (@n_blocks * @n_block_bytes) bytes,
  * but care is taken to detect possible overflow during multiplication.
+ *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
  *
  * Since: 2.24
  * Returns: a pointer to the allocated memory
@@ -24328,7 +24337,7 @@
  * Calling g_mutex_clear() on a locked mutex leads to undefined
  * behaviour.
  *
- * Sine: 2.32
+ * Since: 2.32
  */
 
 
@@ -26181,7 +26190,7 @@
  * g_ptr_array_unref(), when g_ptr_array_free() is called with
  * @free_segment set to %TRUE or when removing elements.
  *
- * Returns: A new #GPtrArray
+ * Returns: (transfer full): A new #GPtrArray
  * Since: 2.30
  */
 
@@ -26196,7 +26205,7 @@
  * either via g_ptr_array_unref(), when g_ptr_array_free() is called with
  * @free_segment set to %TRUE or when removing elements.
  *
- * Returns: A new #GPtrArray
+ * Returns: (transfer full): A new #GPtrArray
  * Since: 2.22
  */
 
@@ -26488,8 +26497,9 @@
  * g_assert (chunk_buffer->len == 0);
  * ]|
  *
- * Returns: (transfer full): the element data, which should be
- *     freed using g_free().
+ * Returns: (transfer full) (nullable): the element data, which should be
+ *     freed using g_free(). This may be %NULL if the array doesn’t have any
+ *     elements (i.e. if `*len` is zero).
  * Since: 2.64
  */
 
@@ -27511,6 +27521,9 @@
  * have zero-length. @n_bytes may be 0, in which case %NULL will be returned
  * and @mem will be freed unless it is %NULL.
  *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
+ *
  * Returns: the new address of the allocated memory
  */
 
@@ -27523,6 +27536,9 @@
  *
  * This function is similar to g_realloc(), allocating (@n_blocks * @n_block_bytes) bytes,
  * but care is taken to detect possible overflow during multiplication.
+ *
+ * If the allocation fails (because the system is out of memory),
+ * the program is terminated.
  *
  * Since: 2.24
  * Returns: the new address of the allocated memory
@@ -27542,7 +27558,7 @@
  * Calling g_rec_mutex_clear() on a locked recursive mutex leads
  * to undefined behaviour.
  *
- * Sine: 2.32
+ * Since: 2.32
  */
 
 
@@ -28511,7 +28527,7 @@
  * Calling g_rw_lock_clear() when any thread holds the lock
  * leads to undefined behaviour.
  *
- * Sine: 2.32
+ * Since: 2.32
  */
 
 
@@ -37134,7 +37150,7 @@
 
 /**
  * g_unix_open_pipe:
- * @fds: Array of two integers
+ * @fds: (array fixed-size=2): Array of two integers
  * @flags: Bitfield of file descriptor flags, as for fcntl()
  * @error: a #GError
  *
@@ -37215,11 +37231,11 @@
  *
  * For example, an effective use of this function is to handle `SIGTERM`
  * cleanly; flushing any outstanding files, and then calling
- * g_main_loop_quit ().  It is not safe to do any of this a regular
- * UNIX signal handler; your handler may be invoked while malloc() or
- * another library function is running, causing reentrancy if you
- * attempt to use it from the handler.  None of the GLib/GObject API
- * is safe against this kind of reentrancy.
+ * g_main_loop_quit().  It is not safe to do any of this from a regular
+ * UNIX signal handler; such a handler may be invoked while malloc() or
+ * another library function is running, causing reentrancy issues if the
+ * handler attempts to use those functions.  None of the GLib/GObject
+ * API is safe against this kind of reentrancy.
  *
  * The interaction of this source when combined with native UNIX
  * functions like sigprocmask() is not defined.
