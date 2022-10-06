@@ -343,7 +343,7 @@ regress_foo_subobject_init (RegressFooSubobject *object)
  * Return value: (type RegressFooSubobject) (transfer none): The global #RegressFooSubobject
  */
 RegressFooObject *
-regress_foo_object_get_default ()
+regress_foo_object_get_default (void)
 {
   return NULL;
 }
