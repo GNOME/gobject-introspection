@@ -673,6 +673,7 @@ VirtualMethod =
     Callable.attrs,
     ## name of the callable called when invoking this virtual method
     attribute invoker { xsd:string }?,
+    attribute glib:static { "0" | "1" }?,
 
     (Info.elements
      & Callable.params?

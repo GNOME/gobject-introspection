@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestObj::static_vfunc_out</title>
   <synopsis><code mime="text/x-gjs">
-function vfunc_static_vfunc_out(): void {
+function vfunc_static_vfunc_out(): <link xref="Regress.TestObj">Regress.TestObj</link> {
 }
   </code></synopsis>
 

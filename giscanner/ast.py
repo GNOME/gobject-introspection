@@ -848,10 +848,31 @@ class VFunction(Callable):
         self.invoker = None
 
     @classmethod
-    def from_callback(cls, name, cb):
-        obj = cls(name, cb.retval, cb.parameters[1:],
-                  cb.throws)
+    def from_callback(cls, name, cb, instance_type):
+        obj = cls(name, cb.retval, cb.parameters, cb.throws)
+        obj._all_parameters = cb.parameters
+        obj.update_instance_parameter(instance_type)
         return obj
+
+    def update_instance_parameter(self, instance_type):
+        def parameter_can_be_instance(parameter):
+            if parameter.type != instance_type:
+                return False
+            return (parameter.direction not in
+                        (PARAM_DIRECTION_OUT, PARAM_DIRECTION_INOUT))
+
+        if self.instance_parameter:
+            if not parameter_can_be_instance(self.instance_parameter):
+                self.instance_parameter = None
+                self.parameters = self._all_parameters
+        elif self.parameters:
+            if parameter_can_be_instance(self.parameters[0]):
+                self.instance_parameter = self.parameters[0]
+                self.parameters = self._all_parameters[1:]
+
+    def check_instance_parameter(self):
+        if self.instance_parameter:
+            self.update_instance_parameter(self.instance_parameter.type)
 
 
 class Varargs(Type):

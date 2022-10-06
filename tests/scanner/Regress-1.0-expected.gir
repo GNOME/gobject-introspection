@@ -4344,18 +4344,35 @@ case.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="static_vfunc_out">
+      <virtual-method name="static_vfunc" glib:static="1">
+        <source-position filename="regress.h" line="873"/>
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+      </virtual-method>
+      <virtual-method name="static_vfunc_out" glib:static="1">
         <source-position filename="regress.h" line="888"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <instance-parameter name="two"
-                              direction="out"
-                              caller-allocates="0"
-                              transfer-ownership="full">
+          <parameter name="two"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="TestObj" c:type="RegressTestObj**"/>
-          </instance-parameter>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="static_vfunc_params" glib:static="1">
+        <source-position filename="regress.h" line="882"/>
+        <return-value transfer-ownership="none">
+          <type name="TestObj" c:type="RegressTestObj*"/>
+        </return-value>
+        <parameters>
+          <parameter name="value" transfer-ownership="none">
+            <type name="gint" c:type="gint"/>
+          </parameter>
         </parameters>
       </virtual-method>
       <method name="do_matrix" c:identifier="regress_test_obj_do_matrix">
@@ -5682,10 +5699,10 @@ the introspection client langage.</doc>
           </return-value>
         </callback>
       </field>
-      <field name="static_vfunc_params" introspectable="0">
-        <callback name="static_vfunc_params" introspectable="0" throws="1">
+      <field name="static_vfunc_params">
+        <callback name="static_vfunc_params" throws="1">
           <source-position filename="regress.h" line="882"/>
-          <return-value>
+          <return-value transfer-ownership="none">
             <type name="TestObj" c:type="RegressTestObj*"/>
           </return-value>
           <parameters>

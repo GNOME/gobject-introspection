@@ -586,6 +586,8 @@ class GIRWriter(XMLWriter):
         attrs = []
         if vf.invoker:
             attrs.append(('invoker', vf.invoker))
+        if not vf.instance_parameter:
+            attrs.append(('glib:static', '1'))
         self._write_callable(vf, 'virtual-method', attrs)
 
     def _write_callback(self, callback):
