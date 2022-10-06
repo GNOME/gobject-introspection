@@ -179,6 +179,7 @@ in contrast to the other create_type() functions."""
             return self.target_giname
         elif self.target_foreign:
             return self.target_foreign
+        return '<undefined>'
 
     def __repr__(self):
         if self.target_fundamental:
