@@ -151,6 +151,16 @@ if not (host_system == 'darwin' and host_arch == 'aarch64' or
   config.set('LEGACY_GIRFFI_FREE', 1)
 endif
 
+# Replicate https://github.com/mesonbuild/meson/pull/10275 setting
+# the correct env in the custom_target
+pkg_config = find_program('pkg-config')
+g_ir_scanner_env = environment()
+dep_type = glib_dep.type_name()
+if dep_type == 'internal'
+  g_ir_scanner_env.append('PKG_CONFIG_PATH', meson.global_build_root() + '/meson-uninstalled')
+  g_ir_scanner_env.set('PKG_CONFIG', pkg_config.full_path())
+endif
+
 configure_file(
   configuration: config,
   output: 'config.h'

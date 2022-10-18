@@ -239,6 +239,7 @@ glib_gir = custom_target('gir-glib',
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
+  env: g_ir_scanner_env,
   command: glib_command + [
     '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
     '-DGLIB_COMPILATION',
@@ -307,6 +308,7 @@ gobject_gir = custom_target('gir-gobject',
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
+  env: g_ir_scanner_env,
   command: gobject_command + [
     '--include-uninstalled=' + glib_gir.full_path(),
     '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
@@ -360,6 +362,7 @@ gir_files += custom_target('gir-gmodule',
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
+  env: g_ir_scanner_env,
   command: gmodule_command + [
     '--include-uninstalled=' + glib_gir.full_path(),
     '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
@@ -456,6 +459,7 @@ gio_gir = custom_target('gir-gio',
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
+  env: g_ir_scanner_env,
   command: gio_command + [
     '--include-uninstalled=' + gobject_gir.full_path(),
     '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
@@ -493,6 +497,7 @@ gir_files += custom_target('gir-girepository',
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
+  env: g_ir_scanner_env,
   command: girepository_command + [
     '--include-uninstalled=' + gobject_gir.full_path(),
     '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [

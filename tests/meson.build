@@ -56,6 +56,7 @@ test_gircompiler = find_program('g-ir-compiler', native: false, required : false
 test_everything_files = custom_target('everything',
   output: ['everything.h', 'everything.c'],
   depends: typelibs,
+  env: g_ir_scanner_env,
   command: [
     test_girscanner,
     '--quiet',
