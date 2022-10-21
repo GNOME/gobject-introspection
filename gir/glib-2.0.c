@@ -3068,7 +3068,7 @@
  * meant to be portable across different compilers and must be placed
  * before the function declaration.
  *
- * |[<!-- language="C" --
+ * |[<!-- language="C" -->
  * G_DEPRECATED
  * int my_mistake (void);
  * ]|
@@ -3086,7 +3086,7 @@
  * is meant to be portable across different compilers and must be placed
  * before the function declaration.
  *
- * |[<!-- language="C" --
+ * |[<!-- language="C" -->
  * G_DEPRECATED_FOR(my_replacement)
  * int my_mistake (void);
  * ]|
@@ -3305,7 +3305,7 @@
  *   G_GNUC_END_IGNORE_DEPRECATIONS
  * ]|
  *
- * |[<!-- language="C" --
+ * |[<!-- language="C" -->
  * static void
  * test_deprecated_function (void)
  * {
@@ -4288,6 +4288,18 @@
  * ]|
  *
  * Since: 2.4
+ */
+
+
+/**
+ * G_OS_DARWIN:
+ *
+ * This macro is defined only on Apple operating systems (macOS or iOS).
+ * So you can bracket Apple-specific code in `\#ifdef G_OS_DARWIN`.
+ *
+ * Note that %G_OS_UNIX is also set.
+ *
+ * Since: 2.76
  */
 
 
@@ -6198,18 +6210,6 @@
  * relevant when compiling a pattern if %G_REGEX_EXTENDED is set, and an
  * unescaped "#" outside a character class is encountered. This indicates
  * a comment that lasts until after the next newline.
- *
- * When setting the %G_REGEX_JAVASCRIPT_COMPAT flag, pattern syntax and pattern
- * matching is changed to be compatible with the way that regular expressions
- * work in JavaScript. More precisely, a lonely ']' character in the pattern
- * is a syntax error; the '\x' escape only allows 0 to 2 hexadecimal digits, and
- * you must use the '\u' escape sequence with 4 hex digits to specify a unicode
- * codepoint instead of '\x' or 'x{....}'. If '\x' or '\u' are not followed by
- * the specified number of hex digits, they match 'x' and 'u' literally; also
- * '\U' always matches 'U' instead of being an error in the pattern. Finally,
- * pattern matching is modified so that back references to an unset subpattern
- * group produces a match with the empty string instead of an error. See
- * pcreapi(3) for more information.
  *
  * Creating and manipulating the same #GRegex structure from different
  * threads is not a problem as #GRegex does not modify its internal
@@ -10717,16 +10717,18 @@
 /**
  * g_async_queue_push:
  * @queue: a #GAsyncQueue
- * @data: @data to push into the @queue
+ * @data: (not nullable): data to push onto the @queue
  *
- * Pushes the @data into the @queue. @data must not be %NULL.
+ * Pushes the @data into the @queue.
+ *
+ * The @data parameter must not be %NULL.
  */
 
 
 /**
  * g_async_queue_push_front:
  * @queue: a #GAsyncQueue
- * @item: data to push into the @queue
+ * @item: (not nullable): data to push into the @queue
  *
  * Pushes the @item into the @queue. @item must not be %NULL.
  * In contrast to g_async_queue_push(), this function
@@ -10740,7 +10742,7 @@
 /**
  * g_async_queue_push_front_unlocked:
  * @queue: a #GAsyncQueue
- * @item: data to push into the @queue
+ * @item: (not nullable): data to push into the @queue
  *
  * Pushes the @item into the @queue. @item must not be %NULL.
  * In contrast to g_async_queue_push_unlocked(), this function
@@ -10756,7 +10758,7 @@
 /**
  * g_async_queue_push_sorted:
  * @queue: a #GAsyncQueue
- * @data: the @data to push into the @queue
+ * @data: (not nullable): the @data to push into the @queue
  * @func: the #GCompareDataFunc is used to sort @queue
  * @user_data: user data passed to @func.
  *
@@ -10778,7 +10780,7 @@
 /**
  * g_async_queue_push_sorted_unlocked:
  * @queue: a #GAsyncQueue
- * @data: the @data to push into the @queue
+ * @data: the data to push into the @queue
  * @func: the #GCompareDataFunc is used to sort @queue
  * @user_data: user data passed to @func.
  *
@@ -10805,9 +10807,11 @@
 /**
  * g_async_queue_push_unlocked:
  * @queue: a #GAsyncQueue
- * @data: @data to push into the @queue
+ * @data: (not nullable): data to push onto the @queue
  *
- * Pushes the @data into the @queue. @data must not be %NULL.
+ * Pushes the @data into the @queue.
+ *
+ * The @data parameter must not be %NULL.
  *
  * This function must be called while holding the @queue's lock.
  */
@@ -10839,7 +10843,7 @@
 /**
  * g_async_queue_remove:
  * @queue: a #GAsyncQueue
- * @item: the data to remove from the @queue
+ * @item: (not nullable): the data to remove from the @queue
  *
  * Remove an item from the queue.
  *
@@ -10929,7 +10933,7 @@
  * and g_time_val_add() can be used.
  *
  * Returns: (nullable): data from the queue or %NULL, when no data is
- *     received before @end_time.
+ *   received before @end_time.
  * Deprecated: use g_async_queue_timeout_pop().
  */
 
@@ -10950,7 +10954,7 @@
  * This function must be called while holding the @queue's lock.
  *
  * Returns: (nullable): data from the queue or %NULL, when no data is
- *     received before @end_time.
+ *   received before @end_time.
  * Deprecated: use g_async_queue_timeout_pop_unlocked().
  */
 
@@ -10966,7 +10970,7 @@
  * If no data is received before the timeout, %NULL is returned.
  *
  * Returns: (nullable): data from the queue or %NULL, when no data is
- *     received before the timeout.
+ *   received before the timeout.
  */
 
 
@@ -10983,7 +10987,7 @@
  * This function must be called while holding the @queue's lock.
  *
  * Returns: (nullable): data from the queue or %NULL, when no data is
- *     received before the timeout.
+ *   received before the timeout.
  */
 
 
@@ -10995,7 +10999,7 @@
  * %NULL is returned.
  *
  * Returns: (nullable): data from the queue or %NULL, when no data is
- *     available immediately.
+ *   available immediately.
  */
 
 
@@ -11009,7 +11013,7 @@
  * This function must be called while holding the @queue's lock.
  *
  * Returns: (nullable): data from the queue or %NULL, when no data is
- *     available immediately.
+ *   available immediately.
  */
 
 
@@ -12239,6 +12243,18 @@
  * If no bookmark for @uri is found then it is created.
  *
  * Since: 2.12
+ */
+
+
+/**
+ * g_bookmark_file_copy:
+ * @bookmark: A #GBookmarkFile
+ *
+ * Deeply copies a @bookmark #GBookmarkFile object to a new one.
+ *
+ * Returns: (transfer full): the copy of @bookmark. Use
+ *   g_bookmark_free() when finished using it.
+ * Since: 2.76
  */
 
 
@@ -14080,13 +14096,19 @@
  * @fd: A file descriptor
  * @error: a #GError
  *
- * This wraps the close() call; in case of error, %errno will be
+ * This wraps the close() call. In case of error, %errno will be
  * preserved, but the error will also be stored as a #GError in @error.
+ * In case of success, %errno is undefined.
  *
  * Besides using #GError, there is another major reason to prefer this
  * function over the call provided by the system; on Unix, it will
  * attempt to correctly handle %EINTR, which has platform-specific
  * semantics.
+ *
+ * It is a bug to call this function with an invalid file descriptor.
+ *
+ * Since 2.76, this function is guaranteed to be async-signal-safe if (and only
+ * if) @error is %NULL and @fd is a valid open file descriptor.
  *
  * Returns: %TRUE on success, %FALSE if there was an error.
  * Since: 2.36
@@ -18915,10 +18937,16 @@
  *
  * If found, the stolen key and value are removed from the hash table without
  * calling the key and value destroy functions, and ownership is transferred to
- * the caller of this method; as with g_hash_table_steal().
+ * the caller of this method, as with g_hash_table_steal(). That is the case
+ * regardless whether @stolen_key or @stolen_value output parameters are
+ * requested.
  *
  * You can pass %NULL for @lookup_key, provided the hash and equal functions
  * of @hash_table are %NULL-safe.
+ *
+ * The dictionary implementation optimizes for having all values identical to
+ * their keys, for example by using g_hash_table_add(). When stealing both the
+ * key and the value from such a dictionary, the value will be %NULL.
  *
  * Returns: %TRUE if the key was found in the #GHashTable
  * Since: 2.58
@@ -22227,6 +22255,12 @@
  * specification. It is suggested that custom keys are namespaced according to
  * the code which sets them. For example, custom keys from GLib all have a
  * `GLIB_` prefix.
+ *
+ * Note that keys that expect UTF-8 strings (specifically `"MESSAGE"` and
+ * `"GLIB_DOMAIN"`) must be passed as NUL-terminated UTF-8 strings until GLib
+ * version 2.74.1 because the default log handler did not consider the length of
+ * the `GLogField`. Starting with GLib 2.74.1 this is fixed and
+ * non-NUL-terminated UTF-8 strings can be passed with their correct length.
  *
  * The @log_domain will be converted into a `GLIB_DOMAIN` field. @log_level will
  * be converted into a

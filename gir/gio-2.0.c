@@ -26831,7 +26831,7 @@
 
 
 /**
- * g_icon_equal:
+ * g_icon_equal: (virtual equal)
  * @icon1: (nullable): pointer to the first #GIcon.
  * @icon2: (nullable): pointer to the second #GIcon.
  *
@@ -26843,7 +26843,7 @@
 
 /**
  * g_icon_hash: (virtual hash)
- * @icon: (not nullable): #gconstpointer to an icon object.
+ * @icon: (not nullable) (type Gio.Icon): #gconstpointer to an icon object.
  *
  * Gets a hash for an icon.
  *
@@ -26871,7 +26871,7 @@
 
 
 /**
- * g_icon_serialize:
+ * g_icon_serialize: (virtual serialize)
  * @icon: a #GIcon
  *
  * Serializes a #GIcon into a #GVariant. An equivalent #GIcon can be retrieved
@@ -26886,7 +26886,7 @@
 
 
 /**
- * g_icon_to_string: (virtual to_tokens)
+ * g_icon_to_string:
  * @icon: a #GIcon.
  *
  * Generates a textual representation of @icon that can be used for
@@ -39562,7 +39562,7 @@
  *
  * Gets @task's #GCancellable
  *
- * Returns: (transfer none): @task's #GCancellable
+ * Returns: (nullable) (transfer none): @task's #GCancellable
  * Since: 2.36
  */
 
