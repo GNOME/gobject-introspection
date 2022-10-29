@@ -168,6 +168,18 @@ test_fundamental_get_ref_function_pointer (GIRepository * repo)
 }
 
 static void
+test_record_get_copy_function (GIRepository *repo)
+{
+  GIStructInfo *info;
+
+  g_assert_true (g_irepository_require (repo, "Regress", NULL, 0, NULL));
+  info = g_irepository_find_by_name (repo, "Regress", "TestBoxedD");
+  g_assert_nonnull (info);
+  g_assert_cmpstr (g_struct_info_get_copy_function (info), ==, "regress_test_boxed_d_copy");
+  g_base_info_unref (info);
+}
+
+static void
 test_hash_with_cairo_typelib (GIRepository * repo)
 {
   GIBaseInfo *info;
@@ -318,6 +330,7 @@ main (int argc, char **argv)
   test_size_of_gvalue (repo);
   test_is_pointer_for_struct_arg (repo);
   test_fundamental_get_ref_function_pointer (repo);
+  test_record_get_copy_function (repo);
   test_hash_with_cairo_typelib (repo);
   test_char_types (repo);
   test_signal_array_len (repo);

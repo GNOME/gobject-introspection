@@ -14,7 +14,7 @@ from gi.repository import Regress
 
 test_simple_boxed_a = Regress.TestSimpleBoxedA()
   </code></synopsis>
-
+  <p>...</p>
 
   <links type="topic" ui:expanded="true"
          api:type="function" api:mime="text/python"

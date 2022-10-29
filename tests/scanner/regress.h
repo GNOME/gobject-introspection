@@ -625,6 +625,15 @@ struct _RegressTestStructF
 typedef struct _RegressTestSimpleBoxedA RegressTestSimpleBoxedA;
 typedef struct _RegressTestSimpleBoxedB RegressTestSimpleBoxedB;
 
+/**
+ * RegressTestSimpleBoxedA: (copy-func regress_test_simple_boxed_a_copy)
+ * @some_int:
+ * @some_int8:
+ * @some_double:
+ * @some_enum:
+ *
+ * ...
+ */
 struct _RegressTestSimpleBoxedA
 {
   gint some_int;
@@ -737,6 +746,11 @@ GType regress_test_boxed_c_get_type (void);
 _GI_TEST_EXTERN
 RegressTestBoxedC *regress_test_boxed_c_new (void);
 
+/**
+ * RegressTestBoxedD: (copy-func regress_test_boxed_d_copy)
+ *   (free-func regress_test_boxed_d_free)
+ *
+ */
 typedef struct _RegressTestBoxedD RegressTestBoxedD;
 
 
