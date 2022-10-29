@@ -199,6 +199,14 @@ Support for non-GObject fundamental objects
     - ``FUNC`` is the function used to convert from a struct to a GValue,
       must be a GTypeInstance
     -
+  * - ``(copy-func FUNC)``
+    - identifier
+    - ``FUNC`` is the function used to copy a struct or a union
+    - 1.76
+  * - ``(free-func FUNC)``
+    - identifier
+    - ``FUNC`` is the function used to free a struct or a union
+    - 1.76
 
 
 Type signature

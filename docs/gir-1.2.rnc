@@ -228,6 +228,10 @@ grammar {
       attribute foreign { "0" | "1" }?,
       ## Name of the GObject compatible gtype this record represents. If empty, this record will be hidden from generated public APIs.
       attribute glib:is-gtype-struct-for { xsd:string }?,
+      ## Name of the function used to copy the record
+      attribute copy-function { xsd:string }?,
+      ## Name of the function used to free the record
+      attribute free-function { xsd:string }?,
 
       # Other elements a record can contain
         # mandatory 
@@ -636,6 +640,10 @@ grammar {
       attribute glib:type-name { xsd:string }?,
       ## function to retrieve the GObject compatible type of the element
       attribute glib:get-type { xsd:string }?,
+      ## Name of the function used to copy the union
+      attribute copy-function { xsd:string }?,
+      ## Name of the function used to free the union
+      attribute free-function { xsd:string }?,
 
       (Info.elements
        & Field*
