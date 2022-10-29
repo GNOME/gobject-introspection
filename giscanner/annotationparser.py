@@ -193,11 +193,13 @@ ANN_ARRAY = 'array'
 ANN_ATTRIBUTES = 'attributes'
 ANN_CLOSURE = 'closure'
 ANN_CONSTRUCTOR = 'constructor'
+ANN_COPY_FUNC = 'copy-func'
 ANN_DEFAULT_VALUE = 'default-value'
 ANN_DESTROY = 'destroy'
 ANN_ELEMENT_TYPE = 'element-type'
 ANN_EMITTER = 'emitter'
 ANN_FOREIGN = 'foreign'
+ANN_FREE_FUNC = 'free-func'
 ANN_GET_PROPERTY = 'get-property'
 ANN_GET_VALUE_FUNC = 'get-value-func'
 ANN_GETTER = 'getter'
@@ -790,6 +792,18 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
+    def _do_validate_copy_func(self, position, ann_name, options):
+        '''
+        Validate the ``(copy-func)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
+
     def _do_validate_default_value(self, position, ann_name, options):
         '''
         Validate the ``(default-value)`` annotation.
@@ -850,6 +864,18 @@ class GtkDocAnnotatable(object):
         '''
 
         self._validate_annotation(position, ann_name, options, exact_n_options=0)
+
+    def _do_validate_free_func(self, position, ann_name, options):
+        '''
+        Validate the ``(free-func)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
 
     def _do_validate_get_property(self, position, ann_name, options):
         '''
@@ -1127,9 +1153,24 @@ class GtkDocParameter(GtkDocAnnotatable):
 
     __slots__ = ('name', 'description')
 
-    valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_CLOSURE, ANN_DESTROY,
-                         ANN_ELEMENT_TYPE, ANN_IN, ANN_INOUT, ANN_OUT, ANN_SCOPE, ANN_SKIP,
-                         ANN_TRANSFER, ANN_TYPE, ANN_OPTIONAL, ANN_NULLABLE, ANN_NOT)
+    valid_annotations = (
+        ANN_ALLOW_NONE,
+        ANN_ARRAY,
+        ANN_ATTRIBUTES,
+        ANN_CLOSURE,
+        ANN_DESTROY,
+        ANN_ELEMENT_TYPE,
+        ANN_IN,
+        ANN_INOUT,
+        ANN_OUT,
+        ANN_SCOPE,
+        ANN_SKIP,
+        ANN_TRANSFER,
+        ANN_TYPE,
+        ANN_OPTIONAL,
+        ANN_NULLABLE,
+        ANN_NOT,
+    )
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)
@@ -1151,8 +1192,18 @@ class GtkDocTag(GtkDocAnnotatable):
 
     __slots__ = ('name', 'value', 'description')
 
-    valid_annotations = (ANN_ALLOW_NONE, ANN_ARRAY, ANN_ATTRIBUTES, ANN_ELEMENT_TYPE, ANN_SKIP,
-                         ANN_TRANSFER, ANN_TYPE, ANN_NULLABLE, ANN_OPTIONAL, ANN_NOT)
+    valid_annotations = (
+        ANN_ALLOW_NONE,
+        ANN_ARRAY,
+        ANN_ATTRIBUTES,
+        ANN_ELEMENT_TYPE,
+        ANN_SKIP,
+        ANN_TRANSFER,
+        ANN_TYPE,
+        ANN_NULLABLE,
+        ANN_OPTIONAL,
+        ANN_NOT,
+    )
 
     def __init__(self, name, position=None):
         GtkDocAnnotatable.__init__(self, position)
@@ -1182,9 +1233,11 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
     valid_annotations = (
         ANN_ATTRIBUTES,
         ANN_CONSTRUCTOR,
+        ANN_COPY_FUNC,
         ANN_DEFAULT_VALUE,
         ANN_EMITTER,
         ANN_FOREIGN,
+        ANN_FREE_FUNC,
         ANN_GET_PROPERTY,
         ANN_GET_VALUE_FUNC,
         ANN_GETTER,

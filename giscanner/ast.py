@@ -1127,6 +1127,12 @@ class Record(Compound):
         # If non-None, this record defines the FooClass C structure
         # for some Foo GObject (or similar for GInterface)
         self.is_gtype_struct_for = None
+        # If non-None, this record has a copy function for heap
+        # allocated instances
+        self.copy_func = None
+        # If non-None, this record has a free function for heap
+        # allocated instances
+        self.free_func = None
 
 
 class Union(Compound):
@@ -1145,6 +1151,12 @@ class Union(Compound):
                           c_symbol_prefix=c_symbol_prefix,
                           disguised=disguised,
                           tag_name=tag_name)
+        # If non-None, this union has a copy function for heap
+        # allocated instances
+        self.copy_func = None
+        # If non-None, this union has a free function for heap
+        # allocated instances
+        self.free_func = None
 
 
 class Boxed(Node, Registered):

@@ -462,14 +462,20 @@ class GIRParser(object):
     def _parse_record(self, node, anonymous=False):
         struct = self._parse_compound(ast.Record, node)
         is_gtype_struct_for = node.attrib.get(_glibns('is-gtype-struct-for'))
+        copy_func = node.attrib.get('copy-function')
+        free_func = node.attrib.get('free-function')
         if is_gtype_struct_for is not None:
             struct.is_gtype_struct_for = self._namespace.type_from_name(is_gtype_struct_for)
+        struct.copy_func = copy_func
+        struct.free_func = free_func
         if not anonymous:
             self._namespace.append(struct)
         return struct
 
     def _parse_union(self, node, anonymous=False):
         union = self._parse_compound(ast.Union, node)
+        union.copy_func = node.attrib.get('copy-function')
+        union.free_func = node.attrib.get('free-function')
         if not anonymous:
             self._namespace.append(union)
         return union

@@ -593,6 +593,10 @@ class GIRWriter(XMLWriter):
             is_gtype_struct = True
             attrs.append(('glib:is-gtype-struct-for',
                           self._type_to_name(record.is_gtype_struct_for)))
+        if record.copy_func:
+            attrs.append(('copy-function', record.copy_func))
+        if record.free_func:
+            attrs.append(('free-function', record.free_func))
         self._append_version(record, attrs)
         self._append_node_generic(record, attrs)
         self._append_registered(record, attrs)
@@ -621,6 +625,10 @@ class GIRWriter(XMLWriter):
         self._append_registered(union, attrs)
         if union.c_symbol_prefix:
             attrs.append(('c:symbol-prefix', union.c_symbol_prefix))
+        if union.copy_func:
+            attrs.append(('copy-function', union.copy_func))
+        if union.free_func:
+            attrs.append(('free-function', union.free_func))
         with self.tagcontext('union', attrs):
             self._write_generic(union)
             if union.fields:
