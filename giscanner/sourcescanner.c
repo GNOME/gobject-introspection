@@ -74,6 +74,21 @@ gi_source_symbol_copy (GISourceSymbol * symbol)
 }
 
 GISourceSymbol *
+gi_source_symbol_const_binary (GISourceSymbol * s1, GISourceSymbol * s2, GFile *file, int line)
+{
+  GISourceSymbol *new_symbol;
+
+  if (s1->const_int_set && s2->const_int_set) {
+    new_symbol = gi_source_symbol_new (CSYMBOL_TYPE_CONST, file, line);
+    new_symbol->const_int_set = TRUE;
+  } else {
+    new_symbol = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, file, line);
+  }
+
+  return new_symbol;
+}
+
+GISourceSymbol *
 gi_source_symbol_ref (GISourceSymbol * symbol)
 {
   symbol->ref_count++;

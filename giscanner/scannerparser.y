@@ -582,24 +582,25 @@ multiplicative_expression
 	: cast_expression
 	| multiplicative_expression '*' cast_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int * $3->const_int;
 	  }
 	| multiplicative_expression '/' cast_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
 		if ($3->const_int != 0) {
+			$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 			$$->const_int = $1->const_int / $3->const_int;
+		} else {
+			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 		}
 	  }
 	| multiplicative_expression '%' cast_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
 		if ($3->const_int != 0) {
+			$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 			$$->const_int = $1->const_int % $3->const_int;
+		} else {
+			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 		}
 	  }
 	;
@@ -608,14 +609,12 @@ additive_expression
 	: multiplicative_expression
 	| additive_expression '+' multiplicative_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int + $3->const_int;
 	  }
 	| additive_expression '-' multiplicative_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int - $3->const_int;
 	  }
 	;
@@ -624,8 +623,7 @@ shift_expression
 	: additive_expression
 	| shift_expression SL additive_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int << $3->const_int;
 
 		/* assume this is a bitfield/flags declaration
@@ -636,8 +634,7 @@ shift_expression
 	  }
 	| shift_expression SR additive_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int >> $3->const_int;
 	  }
 	;
@@ -646,26 +643,22 @@ relational_expression
 	: shift_expression
 	| relational_expression '<' shift_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int < $3->const_int;
 	  }
 	| relational_expression '>' shift_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int > $3->const_int;
 	  }
 	| relational_expression LTEQ shift_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int <= $3->const_int;
 	  }
 	| relational_expression GTEQ shift_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int >= $3->const_int;
 	  }
 	;
@@ -674,14 +667,12 @@ equality_expression
 	: relational_expression
 	| equality_expression EQ relational_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int == $3->const_int;
 	  }
 	| equality_expression NOTEQ relational_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int != $3->const_int;
 	  }
 	;
@@ -690,8 +681,7 @@ and_expression
 	: equality_expression
 	| and_expression '&' equality_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int & $3->const_int;
 	  }
 	;
@@ -700,8 +690,7 @@ exclusive_or_expression
 	: and_expression
 	| exclusive_or_expression '^' and_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int ^ $3->const_int;
 	  }
 	;
@@ -710,8 +699,7 @@ inclusive_or_expression
 	: exclusive_or_expression
 	| inclusive_or_expression '|' exclusive_or_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int = $1->const_int | $3->const_int;
 	  }
 	;
@@ -720,8 +708,7 @@ logical_and_expression
 	: inclusive_or_expression
 	| logical_and_expression ANDAND inclusive_or_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int =
 		  gi_source_symbol_get_const_boolean ($1) &&
 		  gi_source_symbol_get_const_boolean ($3);
@@ -732,8 +719,7 @@ logical_or_expression
 	: logical_and_expression
 	| logical_or_expression OROR logical_and_expression
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_file, lineno);
-		$$->const_int_set = TRUE;
+		$$ = gi_source_symbol_const_binary ($1, $3, scanner->current_file, lineno);
 		$$->const_int =
 		  gi_source_symbol_get_const_boolean ($1) ||
 		  gi_source_symbol_get_const_boolean ($3);
