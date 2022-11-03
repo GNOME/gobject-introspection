@@ -75,9 +75,24 @@
 /**
  * G_MODULE_SUFFIX:
  *
- * Expands to the proper shared library suffix for the current platform
- * without the leading dot. For most Unices and Linux this is "so", and
- * for Windows this is "dll".
+ * Expands to a shared library suffix for the current platform without the
+ * leading dot. On Unixes this is "so", and on Windows this is "dll".
+ *
+ * Deprecated: 2.76: Use g_module_open() instead with @module_name as the
+ * basename of the file_name argument. You will get the wrong results using
+ * this macro most of the time:
+ *
+ * 1. The suffix on macOS is usually 'dylib', but it's 'so' when using
+ *    Autotools, so there's no way to get the suffix correct using
+ *    a pre-processor macro.
+ * 2. Prefixes also vary in a platform-specific way. You may or may not have
+ *    a 'lib' prefix for the name on Windows and on Cygwin the prefix is
+ *    'cyg'.
+ * 3. The library name itself can vary per platform. For instance, you may
+ *    want to load foo-1.dll on Windows and libfoo.1.dylib on macOS.
+ *
+ * g_module_open() takes care of all this by searching the filesystem for
+ * combinations of possible suffixes and prefixes.
  */
 
 
@@ -184,6 +199,8 @@
  *
  * Returns: the complete path of the module, including the standard library
  *     prefix and suffix. This should be freed when no longer needed
+ * Deprecated: 2.76: Use g_module_open() instead with @module_name as the
+ * basename of the file_name argument. See %G_MODULE_SUFFIX for why.
  */
 
 
@@ -229,8 +246,8 @@
 
 /**
  * g_module_open:
- * @file_name: (nullable): the name of the file containing the module, or %NULL
- *     to obtain a #GModule representing the main program itself
+ * @file_name: (nullable): the name or path to the file containing the module,
+ *     or %NULL to obtain a #GModule representing the main program itself
  * @flags: the flags used for opening the module. This can be the
  *     logical OR of any of the #GModuleFlags.
  *
@@ -242,24 +259,28 @@
 
 /**
  * g_module_open_full:
- * @file_name: (nullable): the name of the file containing the module, or %NULL
- *     to obtain a #GModule representing the main program itself
+ * @file_name: (nullable): the name or path to the file containing the module,
+ *     or %NULL to obtain a #GModule representing the main program itself
  * @flags: the flags used for opening the module. This can be the
  *     logical OR of any of the #GModuleFlags
  * @error: #GError.
  *
- * Opens a module. If the module has already been opened,
- * its reference count is incremented.
+ * Opens a module. If the module has already been opened, its reference count
+ * is incremented. If not, the module is searched in the following order:
  *
- * First of all g_module_open_full() tries to open @file_name as a module.
- * If that fails and @file_name has the ".la"-suffix (and is a libtool
- * archive) it tries to open the corresponding module. If that fails
- * and it doesn't have the proper module suffix for the platform
- * (%G_MODULE_SUFFIX), this suffix will be appended and the corresponding
- * module will be opened. If that fails and @file_name doesn't have the
- * ".la"-suffix, this suffix is appended and g_module_open_full() tries to open
- * the corresponding module. If eventually that fails as well, %NULL is
- * returned.
+ * 1. If @file_name exists as a regular file, it is used as-is; else
+ * 2. If @file_name doesn't have the correct suffix and/or prefix for the
+ *    platform, then possible suffixes and prefixes will be added to the
+ *    basename till a file is found and whatever is found will be used; else
+ * 3. If @file_name doesn't have the ".la"-suffix, ".la" is appended. Either
+ *    way, if a matching .la file exists (and is a libtool archive) the
+ *    libtool archive is parsed to find the actual file name, and that is
+ *    used.
+ *
+ * At the end of all this, we would have a file path that we can access on
+ * disk, and it is opened as a module. If not, @file_name is opened as
+ * a module verbatim in the hopes that the system implementation will somehow
+ * be able to access it.
  *
  * Returns: a #GModule on success, or %NULL on failure
  * Since: 2.70

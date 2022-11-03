@@ -39548,7 +39548,8 @@
  * callback to @callback, with @task as the callback's `user_data`.
  *
  * It will set the @source’s name to the task’s name (as set with
- * g_task_set_name()), if one has been set.
+ * g_task_set_name()), if one has been set on the task and the source doesn’t
+ * yet have a name.
  *
  * This takes a reference on @task until @source is destroyed.
  *
@@ -40157,6 +40158,19 @@
  * set, for convenience.
  *
  * Since: 2.36
+ */
+
+
+/**
+ * g_task_set_static_name:
+ * @task: a #GTask
+ * @name: (nullable): a human readable name for the task. Must be a string literal
+ *
+ * Sets @task’s name, used in debugging and profiling.
+ *
+ * This is a variant of g_task_set_name() that avoids copying @name.
+ *
+ * Since: 2.76
  */
 
 
