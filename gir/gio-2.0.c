@@ -9527,6 +9527,10 @@
  * #GTask was constructed to be running at least until the task has completed
  * and its data has been freed.
  *
+ * If a #GTask has been constructed and its callback set, it is an error to
+ * not call `g_task_return_*()` on it. GLib will warn at runtime if this happens
+ * (since 2.76).
+ *
  * Here is an example for using GTask as a GAsyncResult:
  * |[<!-- language="C" -->
  *     typedef struct {
