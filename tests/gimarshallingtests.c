@@ -1205,6 +1205,19 @@ gi_marshalling_tests_array_fixed_int_in (const gint *ints)
 }
 
 /**
+ * gi_marshalling_tests_array_fixed_caller_allocated_out:
+ * @ints: (out caller-allocates) (array fixed-size=4):
+ */
+void
+gi_marshalling_tests_array_fixed_caller_allocated_out (gint *ints)
+{
+  ints[0] = -1;
+  ints[1] = 0;
+  ints[2] = 1;
+  ints[3] = 2;
+}
+
+/**
  * gi_marshalling_tests_array_fixed_short_in:
  * @shorts: (array fixed-size=4):
  */
@@ -1249,6 +1262,23 @@ gi_marshalling_tests_array_fixed_out_struct (GIMarshallingTestsSimpleStruct **st
     }
 
   *structs = values;
+}
+
+/**
+ * gi_marshalling_tests_array_fixed_caller_allocated_struct_out:
+ * @structs: (out caller-allocates) (array fixed-size=4):
+ */
+void
+gi_marshalling_tests_array_fixed_caller_allocated_struct_out (GIMarshallingTestsSimpleStruct *structs)
+{
+    structs[0].long_ = -2;
+    structs[0].int8 = -1;
+    structs[1].long_ = 1;
+    structs[1].int8 = 2;
+    structs[2].long_ = 3;
+    structs[2].int8 = 4;
+    structs[3].long_ = 5;
+    structs[3].int8 = 6;
 }
 
 /**

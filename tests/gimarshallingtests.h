@@ -679,6 +679,9 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_array_fixed_int_in (const gint *ints);
 
 _GI_TEST_EXTERN
+void gi_marshalling_tests_array_fixed_caller_allocated_out (gint *ints);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_array_fixed_short_in (const gshort *shorts);
 
 
@@ -688,6 +691,9 @@ void gi_marshalling_tests_array_fixed_out (gint **ints);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_array_fixed_out_struct (GIMarshallingTestsSimpleStruct **structs);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_array_fixed_caller_allocated_struct_out (GIMarshallingTestsSimpleStruct *structs);
 
 
 _GI_TEST_EXTERN
