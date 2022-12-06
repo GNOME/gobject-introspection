@@ -11,12 +11,5 @@
     <alias name="Int32" c:type="FT_Int32">
       <type name="int32"/>
     </alias>
-    <function name="library_version" c:identifier="FT_Library_Version">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-      </parameters>
-    </function>
   </namespace>
 </repository>
