@@ -147,8 +147,9 @@ else
   giowin_dep = dependency('gio-windows-2.0', version : glib_version,
     fallback: ['glib', 'libgiowin32_dep'])
 endif
-libffi_dep = dependency('libffi',
-  fallback : ['libffi', 'ffi_dep'])
+
+# We either get libffi from the system, or from GLib's own subproject
+libffi_dep = dependency('libffi')
 
 if not (host_system == 'darwin' and host_arch == 'aarch64' or
         host_system == 'linux' and libffi_dep.version().version_compare('>= 3.4'))
