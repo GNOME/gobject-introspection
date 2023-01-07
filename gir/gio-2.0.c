@@ -11594,8 +11594,9 @@
 /**
  * g_action_parse_detailed_name:
  * @detailed_name: a detailed action name
- * @action_name: (out): the action name
- * @target_value: (out): the target value, or %NULL for no target
+ * @action_name: (out) (optional) (not nullable) (transfer full): the action name
+ * @target_value: (out) (optional) (nullable) (transfer full): the target value,
+ *   or %NULL for no target
  * @error: a pointer to a %NULL #GError, or %NULL
  *
  * Parses a detailed action name into its separate name and target
@@ -11605,23 +11606,29 @@
  *
  * The first format is used to represent an action name with no target
  * value and consists of just an action name containing no whitespace
- * nor the characters ':', '(' or ')'.  For example: "app.action".
+ * nor the characters `:`, `(` or `)`.  For example: `app.action`.
  *
  * The second format is used to represent an action with a target value
- * that is a non-empty string consisting only of alphanumerics, plus '-'
- * and '.'.  In that case, the action name and target value are
- * separated by a double colon ("::").  For example:
- * "app.action::target".
+ * that is a non-empty string consisting only of alphanumerics, plus `-`
+ * and `.`.  In that case, the action name and target value are
+ * separated by a double colon (`::`).  For example:
+ * `app.action::target`.
  *
  * The third format is used to represent an action with any type of
  * target value, including strings.  The target value follows the action
- * name, surrounded in parens.  For example: "app.action(42)".  The
+ * name, surrounded in parens.  For example: `app.action(42)`.  The
  * target value is parsed using g_variant_parse().  If a tuple-typed
  * value is desired, it must be specified in the same way, resulting in
- * two sets of parens, for example: "app.action((1,2,3))".  A string
- * target can be specified this way as well: "app.action('target')".
- * For strings, this third format must be used if * target value is
- * empty or contains characters other than alphanumerics, '-' and '.'.
+ * two sets of parens, for example: `app.action((1,2,3))`.  A string
+ * target can be specified this way as well: `app.action('target')`.
+ * For strings, this third format must be used if target value is
+ * empty or contains characters other than alphanumerics, `-` and `.`.
+ *
+ * If this function returns %TRUE, a non-%NULL value is guaranteed to be returned
+ * in @action_name (if a pointer is passed in). A %NULL value may still be
+ * returned in @target_value, as the @detailed_name may not contain a target.
+ *
+ * If returned, the #GVariant in @target_value is guaranteed to not be floating.
  *
  * Returns: %TRUE if successful, else %FALSE with @error set
  * Since: 2.38
@@ -12028,9 +12035,9 @@
  * environment variable with the path of the launched desktop file and
  * `GIO_LAUNCHED_DESKTOP_FILE_PID` to the process id of the launched
  * process. This can be used to ignore `GIO_LAUNCHED_DESKTOP_FILE`,
- * should it be inherited by further processes. The `DISPLAY` and
- * `DESKTOP_STARTUP_ID` environment variables are also set, based
- * on information provided in @context.
+ * should it be inherited by further processes. The `DISPLAY`,
+ * `XDG_ACTIVATION_TOKEN` and `DESKTOP_STARTUP_ID` environment
+ * variables are also set, based on information provided in @context.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
  */
@@ -12298,10 +12305,18 @@
  * @files: (element-type GFile): a #GList of of #GFile objects
  *
  * Initiates startup notification for the application and returns the
- * `DESKTOP_STARTUP_ID` for the launched operation, if supported.
+ * `XDG_ACTIVATION_TOKEN` or `DESKTOP_STARTUP_ID` for the launched operation,
+ * if supported.
  *
- * Startup notification IDs are defined in the
- * [FreeDesktop.Org Startup Notifications standard](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt).
+ * The returned token may be referred to equivalently as an ‘activation token’
+ * (using Wayland terminology) or a ‘startup sequence ID’ (using X11 terminology).
+ * The two [are interoperable](https://gitlab.freedesktop.org/wayland/wayland-protocols/-/blob/main/staging/xdg-activation/x11-interoperation.rst).
+ *
+ * Activation tokens are defined in the [XDG Activation Protocol](https://wayland.app/protocols/xdg-activation-v1),
+ * and startup notification IDs are defined in the
+ * [freedesktop.org Startup Notification Protocol](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt).
+ *
+ * Support for the XDG Activation Protocol was added in GLib 2.76.
  *
  * Returns: (nullable): a startup notification ID for the application, or %NULL if
  *     not supported.
@@ -12419,6 +12434,8 @@
  * inspected and modified.  If %G_APPLICATION_HANDLES_COMMAND_LINE is
  * set, then the resulting dictionary is sent to the primary instance,
  * where g_application_command_line_get_options_dict() will return it.
+ * As it has been passed outside the process at this point, the types of all
+ * values in the options dict must be checked before being used.
  * This "packing" is done according to the type of the argument --
  * booleans for normal flags, strings for strings, bytestrings for
  * filenames, etc.  The packing only occurs if the flag is given (ie: we
@@ -12625,7 +12642,7 @@
  * g_application_command_line_get_options_dict:
  * @cmdline: a #GApplicationCommandLine
  *
- * Gets the options there were passed to g_application_command_line().
+ * Gets the options that were passed to g_application_command_line().
  *
  * If you did not override local_command_line() then these are the same
  * options that were parsed according to the #GOptionEntrys added to the
@@ -12634,6 +12651,9 @@
  *
  * If no options were sent then an empty dictionary is returned so that
  * you don't need to check for %NULL.
+ *
+ * The data has been passed via an untrusted external process, so the types of
+ * all values must be checked before being used.
  *
  * Returns: (transfer none): a #GVariantDict with the options
  * Since: 2.40
@@ -12651,9 +12671,12 @@
  * information like the current working directory and the startup
  * notification ID.
  *
+ * It comes from an untrusted external process and hence the types of all
+ * values must be validated before being used.
+ *
  * For local invocation, it will be %NULL.
  *
- * Returns: (nullable): the platform data, or %NULL
+ * Returns: (nullable) (transfer full): the platform data, or %NULL
  * Since: 2.28
  */
 
@@ -16586,6 +16609,10 @@
  * constraint is violated, the export will fail and 0 will be
  * returned (with @error set accordingly).
  *
+ * Exporting menus with sections containing more than
+ * %G_MENU_EXPORTER_MAX_SECTION_SIZE items is not supported and results in
+ * undefined behavior.
+ *
  * You can unexport the menu model using
  * g_dbus_connection_unexport_menu_model() with the return value of
  * this function.
@@ -17282,7 +17309,7 @@
  * @user_data_free_func: (nullable): function to free @user_data with when
  *     subscription is removed or %NULL
  *
- * Subscribes to signals on @connection and invokes @callback with a whenever
+ * Subscribes to signals on @connection and invokes @callback whenever
  * the signal is received. Note that @callback will be invoked in the
  * [thread-default main context][g-main-context-push-thread-default]
  * of the thread you are calling this method from.
@@ -31226,7 +31253,7 @@
  * application-wide action (start with "app.").
  *
  * If @target is non-%NULL, @action will be activated with @target as
- * its parameter.
+ * its parameter. If @target is floating, it will be consumed.
  *
  * When no default action is set, the application that the notification
  * was sent on is activated.
@@ -32764,7 +32791,7 @@
  *
  * Looks into the system proxy configuration to determine what proxy,
  * if any, to use to connect to @uri. The returned proxy URIs are of
- * the form `<protocol>://[user[:password]@]host:port` or
+ * the form `<protocol>://[user[:password]@]host[:port]` or
  * `direct://`, where <protocol> could be http, rtsp, socks
  * or other proxying protocol.
  *
@@ -37019,7 +37046,7 @@
  * If there is no implementation for this kind of control message, %NULL
  * will be returned.
  *
- * Returns: (transfer full): the deserialized message or %NULL
+ * Returns: (nullable) (transfer full): the deserialized message or %NULL
  * Since: 2.22
  */
 

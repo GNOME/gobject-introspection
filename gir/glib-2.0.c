@@ -2943,6 +2943,89 @@
 
 
 /**
+ * G_CXX_STD_CHECK_VERSION:
+ * @version: The C++ version to be checked for compatibility
+ *
+ * Macro to check if the current compiler supports a specified @version
+ * of the C++ standard. Such value must be numeric and can be provided both
+ * in the short form for the well-known versions (e.g. `11`, `17`...) or in
+ * the complete form otherwise (e.g. `201103L`, `201703L`, `205503L`...).
+ *
+ * When a C compiler is used, the macro is defined and returns always %FALSE.
+ *
+ * This value is compared against %G_CXX_STD_VERSION.
+ *
+ * |[<!-- language="C" -->
+ * #if G_CXX_STD_CHECK_VERSION(20)
+ * #endif
+ * ]|
+ *
+ * See also: %G_C_STD_CHECK_VERSION
+ *
+ * Returns: %TRUE if @version is supported by the compiler, %FALSE otherwise
+ * Since: 2.76
+ */
+
+
+/**
+ * G_CXX_STD_VERSION:
+ *
+ * The C++ standard version the code is compiling against, it's defined
+ * with the same value of `__cplusplus` for C++ standard compatible
+ * compilers, while it uses `_MSVC_LANG` in MSVC, given that the
+ * standard definition depends on a compilation flag in such compiler.
+ *
+ * This is granted to be undefined when not compiling with a C++ compiler.
+ *
+ * See also: %G_CXX_STD_CHECK_VERSION and %G_C_STD_VERSION
+ *
+ * Since: 2.76
+ */
+
+
+/**
+ * G_C_STD_CHECK_VERSION:
+ * @version: The C version to be checked for compatibility
+ *
+ * Macro to check if the current compiler supports a specified @version
+ * of the C standard. Such value must be numeric and can be provided both
+ * in the short form for the well-known versions (e.g. `90`, `99`...) or in
+ * the complete form otherwise (e.g. `199000L`, `199901L`, `205503L`...).
+ *
+ * When a C++ compiler is used, the macro is defined and returns always %FALSE.
+ *
+ * This value is compared against %G_C_STD_VERSION.
+ *
+ * |[<!-- language="C" -->
+ * #if G_C_STD_CHECK_VERSION(17)
+ * #endif
+ * ]|
+ *
+ * See also: %G_CXX_STD_CHECK_VERSION
+ *
+ * Returns: %TRUE if @version is supported by the compiler, %FALSE otherwise
+ * Since: 2.76
+ */
+
+
+/**
+ * G_C_STD_VERSION:
+ *
+ * The C standard version the code is compiling against, it's normally
+ * defined with the same value of `__STDC_VERSION__` for C standard
+ * compatible compilers, while it uses the lowest standard version
+ * in pure MSVC, given that in such compiler the definition depends on
+ * a compilation flag.
+ *
+ * This is granted to be undefined when compiling with a C++ compiler.
+ *
+ * See also: %G_C_STD_CHECK_VERSION and %G_CXX_STD_VERSION
+ *
+ * Since: 2.76
+ */
+
+
+/**
  * G_DATE_BAD_DAY:
  *
  * Represents an invalid #GDateDay.
@@ -9635,6 +9718,65 @@
 
 
 /**
+ * g_array_new_take: (skip)
+ * @data: (array length=len) (transfer full) (nullable): an array of
+ *   elements of @element_size, or %NULL for an empty array
+ * @len: the number of elements in @data
+ * @clear: %TRUE if #GArray elements should be automatically cleared
+ *     to 0 when they are allocated
+ * @element_size: the size of each element in bytes
+ *
+ * Creates a new #GArray with @data as array data, @len as length and a
+ * reference count of 1.
+ *
+ * This avoids having to copy the data manually, when it can just be
+ * inherited. @data will eventually be freed using g_free(), so must
+ * have been allocated with a suitable allocator.
+ *
+ * In case the elements need to be cleared when the array is freed, use
+ * g_array_set_clear_func() to set a #GDestroyNotify function to perform
+ * such task.
+ *
+ * Do not use it if @len or @element_size are greater than %G_MAXUINT.
+ * #GArray stores the length of its data in #guint, which may be shorter
+ * than #gsize.
+ *
+ * Returns: (transfer full): A new #GArray
+ * Since: 2.76
+ */
+
+
+/**
+ * g_array_new_take_zero_terminated: (skip)
+ * @data: (array zero-terminated=1): an array of elements of @element_size
+ * @clear: %TRUE if #GArray elements should be automatically cleared
+ *     to 0 when they are allocated
+ * @element_size: the size of each element in bytes
+ *
+ * Creates a new #GArray with @data as array data, computing the length of it
+ * and setting the reference count to 1.
+ *
+ * This avoids having to copy the data manually, when it can just be
+ * inherited. @data will eventually be freed using g_free(), so must
+ * have been allocated with a suitable allocator.
+ *
+ * The length is calculated by iterating through @data until the first %NULL
+ * element is found.
+ *
+ * In case the elements need to be cleared when the array is freed, use
+ * g_array_set_clear_func() to set a #GDestroyNotify function to perform
+ * such task.
+ *
+ * Do not use it if @data length or @element_size are greater than %G_MAXUINT.
+ * #GArray stores the length of its data in #guint, which may be shorter
+ * than #gsize.
+ *
+ * Returns: (transfer full): A new #GArray
+ * Since: 2.76
+ */
+
+
+/**
  * g_array_prepend_val:
  * @a: a #GArray
  * @v: the value to prepend to the #GArray
@@ -14234,7 +14376,7 @@
 
 /**
  * g_clear_fd: (skip)
- * @fd_ptr: (not nullable): a pointer to a file descriptor
+ * @fd_ptr: (not optional) (inout) (transfer full): a pointer to a file descriptor
  * @error: Used to return an error on failure
  *
  * If @fd_ptr points to a file descriptor, close it and return
@@ -14325,8 +14467,8 @@
 
 /**
  * g_clear_pointer: (skip)
- * @pp: (not nullable): a pointer to a variable, struct member etc. holding a
- *    pointer
+ * @pp: (nullable) (not optional) (inout) (transfer full): a pointer to a
+ *   variable, struct member etc. holding a pointer
  * @destroy: a function to which a gpointer can be passed, to destroy *@pp
  *
  * Clears a reference to a variable.
@@ -17807,6 +17949,34 @@
 
 
 /**
+ * g_find_program_for_path:
+ * @program: (type filename): a program name in the GLib file name encoding
+ * @path: (type filename) (nullable): the current dir where to search program
+ * @working_dir: (type filename) (nullable): the working dir where to search
+ *   program
+ *
+ * Locates the first executable named @program in @path, in the
+ * same way that execvp() would locate it. Returns an allocated string
+ * with the absolute path name (taking in account the @working_dir), or
+ * %NULL if the program is not found in @path. If @program is already an
+ * absolute path, returns a copy of @program if @program exists and is
+ * executable, and %NULL otherwise.
+ *
+ * On Windows, if @path is %NULL, it looks for the file in the same way as
+ * CreateProcess()  would. This means first in the directory where the
+ * executing program was loaded from, then in the current directory, then in
+ * the Windows 32-bit system directory, then in the Windows directory, and
+ * finally in the directories in the `PATH` environment variable. If
+ * the program is found, the return value contains the full name
+ * including the type suffix.
+ *
+ * Returns: (type filename) (transfer full) (nullable): a newly-allocated
+ *   string with the absolute path, or %NULL
+ * Since: 2.76
+ */
+
+
+/**
  * g_find_program_in_path:
  * @program: (type filename): a program name in the GLib file name encoding
  *
@@ -18856,6 +19026,25 @@
 
 
 /**
+ * g_hash_table_get_keys_as_ptr_array: (skip)
+ * @hash_table: a #GHashTable
+ *
+ * Retrieves every key inside @hash_table, as a #GPtrArray.
+ * The returned data is valid until changes to the hash release those keys.
+ *
+ * This iterates over every entry in the hash table to build its return value.
+ * To iterate over the entries in a #GHashTable more efficiently, use a
+ * #GHashTableIter.
+ *
+ * You should always unref the returned array with g_ptr_array_unref().
+ *
+ * Returns: (transfer container): a #GPtrArray containing each key from
+ * the table. Unref with with g_ptr_array_unref() when done.
+ * Since: 2.76
+ */
+
+
+/**
  * g_hash_table_get_values:
  * @hash_table: a #GHashTable
  *
@@ -18871,6 +19060,25 @@
  *     hash table and should not be modified or freed. Use g_list_free()
  *     when done using the list.
  * Since: 2.14
+ */
+
+
+/**
+ * g_hash_table_get_values_as_ptr_array: (skip)
+ * @hash_table: a #GHashTable
+ *
+ * Retrieves every value inside @hash_table, as a #GPtrArray.
+ * The returned data is valid until changes to the hash release those values.
+ *
+ * This iterates over every entry in the hash table to build its return value.
+ * To iterate over the entries in a #GHashTable more efficiently, use a
+ * #GHashTableIter.
+ *
+ * You should always unref the returned array with g_ptr_array_unref().
+ *
+ * Returns: (transfer container): a #GPtrArray containing each value from
+ * the table. Unref with with g_ptr_array_unref() when done.
+ * Since: 2.76
  */
 
 
@@ -19208,6 +19416,36 @@
  * without calling the key and value destroy functions.
  *
  * Since: 2.12
+ */
+
+
+/**
+ * g_hash_table_steal_all_keys: (skip)
+ * @hash_table: a #GHashTable
+ *
+ * Removes all keys and their associated values from a #GHashTable
+ * without calling the key destroy functions, returning the keys
+ * as a #GPtrArray with the free func set to the @hash_table key
+ * destroy function.
+ *
+ * Returns: (transfer container): a #GPtrArray containing each key of
+ * the table. Unref with with g_ptr_array_unref() when done.
+ * Since: 2.76
+ */
+
+
+/**
+ * g_hash_table_steal_all_values: (skip)
+ * @hash_table: a #GHashTable
+ *
+ * Removes all keys and their associated values from a #GHashTable
+ * without calling the value destroy functions, returning the values
+ * as a #GPtrArray with the free func set to the @hash_table value
+ * destroy function.
+ *
+ * Returns: (transfer container): a #GPtrArray containing each value of
+ * the table. Unref with with g_ptr_array_unref() when done.
+ * Since: 2.76
  */
 
 
@@ -26656,6 +26894,67 @@
 
 
 /**
+ * g_ptr_array_new_from_array: (skip)
+ * @data: (array length=len) (transfer none) (nullable): an array of pointers,
+ * or %NULL for an empty array
+ * @len: the number of pointers in @data
+ * @copy_func: (nullable): a copy function used to copy every element in the
+ *   array or %NULL.
+ * @copy_func_user_data: user data passed to @copy_func, or %NULL
+ * @element_free_func: (nullable): a function to free elements on @array
+ *   destruction or %NULL
+ *
+ * Creates a new #GPtrArray, copying @len pointers from @data, and setting
+ * the array’s reference count to 1.
+ *
+ * This avoids having to manually add each element one by one.
+ *
+ * If @copy_func is provided, then it is used to copy each element before
+ * adding them to the new array. If it is %NULL then the pointers are copied
+ * directly.
+ *
+ * It also sets @element_free_func for freeing each element when the array is
+ * destroyed either via g_ptr_array_unref(), when g_ptr_array_free() is called
+ * with @free_segment set to %TRUE or when removing elements.
+ *
+ * Do not use it if @len is greater than %G_MAXUINT. #GPtrArray
+ * stores the length of its data in #guint, which may be shorter than
+ * #gsize.
+ *
+ * Returns: (transfer full): A new #GPtrArray
+ * Since: 2.76
+ */
+
+
+/**
+ * g_ptr_array_new_from_null_terminated_array: (skip)
+ * @data: (array zero-terminated=1) (transfer none) (nullable): an array of
+ *   pointers, %NULL terminated; or %NULL for an empty array
+ * @copy_func: (nullable): a copy function used to copy every element in the
+ *   array or %NULL.
+ * @copy_func_user_data: user data passed to @copy_func, or %NULL
+ * @element_free_func: (nullable): a function to free elements on @array
+ *   destruction or %NULL
+ *
+ * Creates a new #GPtrArray copying the pointers from @data after having
+ * computed the length of it and with a reference count of 1.
+ * This avoids having to manually add each element one by one.
+ * If @copy_func is provided, then it is used to copy the data in the new
+ * array.
+ * It also set @element_free_func for freeing each element when the array is
+ * destroyed either via g_ptr_array_unref(), when g_ptr_array_free() is called
+ * with @free_segment set to %TRUE or when removing elements.
+ *
+ * Do not use it if the @data has more than %G_MAXUINT elements. #GPtrArray
+ * stores the length of its data in #guint, which may be shorter than
+ * #gsize.
+ *
+ * Returns: (transfer full): A new #GPtrArray
+ * Since: 2.76
+ */
+
+
+/**
  * g_ptr_array_new_full:
  * @reserved_size: number of pointers preallocated
  * @element_free_func: (nullable): A function to free elements with
@@ -26702,6 +27001,62 @@
  *
  * Returns: (transfer full): A new #GPtrArray
  * Since: 2.74
+ */
+
+
+/**
+ * g_ptr_array_new_take: (skip)
+ * @data: (array length=len) (transfer full) (nullable): an array of pointers,
+ *    or %NULL for an empty array
+ * @len: the number of pointers in @data
+ * @element_free_func: (nullable): A function to free elements on @array
+ *   destruction or %NULL
+ *
+ * Creates a new #GPtrArray with @data as pointers, @len as length and a
+ * reference count of 1.
+ *
+ * This avoids having to copy such data manually. @data will eventually be
+ * freed using g_free(), so must have been allocated with a suitable allocator.
+ *
+ * It also sets @element_free_func for freeing each element when the array is
+ * destroyed either via g_ptr_array_unref(), when g_ptr_array_free() is called
+ * with @free_segment set to %TRUE or when removing elements.
+ *
+ * Do not use it if @len is greater than %G_MAXUINT. #GPtrArray
+ * stores the length of its data in #guint, which may be shorter than
+ * #gsize.
+ *
+ * Returns: (transfer full): A new #GPtrArray
+ * Since: 2.76
+ */
+
+
+/**
+ * g_ptr_array_new_take_null_terminated: (skip)
+ * @data: (array zero-terminated=1) (transfer full) (nullable): an array
+ *  of pointers, %NULL terminated, or %NULL for an empty array
+ * @element_free_func: (nullable): a function to free elements on @array
+ *   destruction or %NULL
+ *
+ * Creates a new #GPtrArray with @data as pointers, computing the length of it
+ * and setting the reference count to 1.
+ *
+ * This avoids having to copy such data manually. @data will eventually be
+ * freed using g_free(), so must have been allocated with a suitable allocator.
+ *
+ * The length is calculated by iterating through @data until the first %NULL
+ * element is found.
+ *
+ * It also sets @element_free_func for freeing each element when the array is
+ * destroyed either via g_ptr_array_unref(), when g_ptr_array_free() is called
+ * with @free_segment set to %TRUE or when removing elements.
+ *
+ * Do not use it if the @data length is greater than %G_MAXUINT. #GPtrArray
+ * stores the length of its data in #guint, which may be shorter than
+ * #gsize.
+ *
+ * Returns: (transfer full): A new #GPtrArray
+ * Since: 2.76
  */
 
 
@@ -26862,12 +27217,15 @@
  *
  * Sorts the array, using @compare_func which should be a qsort()-style
  * comparison function (returns less than zero for first arg is less
- * than second arg, zero for equal, greater than zero if irst arg is
+ * than second arg, zero for equal, greater than zero if first arg is
  * greater than second arg).
  *
  * Note that the comparison function for g_ptr_array_sort() doesn't
  * take the pointers from the array as arguments, it takes pointers to
- * the pointers in the array. Here is a full example of usage:
+ * the pointers in the array.
+ *
+ * Use g_ptr_array_sort_with_data() if you want to use normal
+ * #GCompareFuncs, otherwise here is a full example of use:
  *
  * |[<!-- language="C" -->
  * typedef struct
@@ -26899,6 +27257,37 @@
 
 
 /**
+ * g_ptr_array_sort_values:
+ * @array: a #GPtrArray
+ * @compare_func: a #GCompareFunc comparison function
+ *
+ * Sorts the array, using @compare_func which should be a qsort()-style
+ * comparison function (returns less than zero for first arg is less
+ * than second arg, zero for equal, greater than zero if first arg is
+ * greater than second arg).
+ *
+ * This is guaranteed to be a stable sort.
+ *
+ * Since: 2.76
+ */
+
+
+/**
+ * g_ptr_array_sort_values_with_data:
+ * @array: a #GPtrArray
+ * @compare_func: a #GCompareDataFunc comparison function
+ * @user_data: data to pass to @compare_func
+ *
+ * Like g_ptr_array_sort_values(), but the comparison function has an extra
+ * user data argument.
+ *
+ * This is guaranteed to be a stable sort.
+ *
+ * Since: 2.76
+ */
+
+
+/**
  * g_ptr_array_sort_with_data:
  * @array: a #GPtrArray
  * @compare_func: comparison function
@@ -26909,7 +27298,10 @@
  *
  * Note that the comparison function for g_ptr_array_sort_with_data()
  * doesn't take the pointers from the array as arguments, it takes
- * pointers to the pointers in the array. Here is a full example of use:
+ * pointers to the pointers in the array.
+ *
+ * Use g_ptr_array_sort_with_data() if you want to use normal
+ * #GCompareDataFuncs, otherwise here is a full example of use:
  *
  * |[<!-- language="C" -->
  * typedef enum { SORT_NAME, SORT_SIZE } SortMode;
@@ -32379,12 +32771,12 @@
  * @dest: destination buffer.
  * @src: source string.
  *
- * Copies a nul-terminated string into the dest buffer, include the
- * trailing nul, and return a pointer to the trailing nul byte.
- * This is useful for concatenating multiple strings together
- * without having to repeatedly scan for the end.
+ * Copies a nul-terminated string into the destination buffer, including
+ * the trailing nul byte, and returns a pointer to the trailing nul byte
+ * in `dest`.  The return value is useful for concatenating multiple
+ * strings without having to repeatedly scan for the end.
  *
- * Returns: a pointer to trailing nul byte.
+ * Returns: a pointer to the trailing nul byte in `dest`.
  */
 
 
@@ -34312,6 +34704,8 @@
  * e.g. g_test_add() when the test was added.
  *
  * This function returns a valid string only within a test function.
+ *
+ * Note that this is a test path, not a file system path.
  *
  * Returns: the test path for the test currently being run
  * Since: 2.68
@@ -39597,6 +39991,11 @@
  * contain multi-byte numeric data.  That include strings, booleans,
  * bytes and containers containing only these things (recursively).
  *
+ * While this function can safely handle untrusted, non-normal data, it is
+ * recommended to check whether the input is in normal form beforehand, using
+ * g_variant_is_normal_form(), and to reject non-normal inputs if your
+ * application can be strict about what inputs it rejects.
+ *
  * The returned value is always in normal form and is marked as trusted.
  * A full, not floating, reference is returned.
  *
@@ -40352,7 +40751,9 @@
  * marked as trusted and a new reference to it is returned.
  *
  * If @value is found not to be in normal form then a new trusted
- * #GVariant is created with the same value as @value.
+ * #GVariant is created with the same value as @value. The non-normal parts of
+ * @value will be replaced with default values which are guaranteed to be in
+ * normal form.
  *
  * It makes sense to call this function if you've received #GVariant
  * data from untrusted sources and you want to ensure your serialized
@@ -41003,6 +41404,31 @@
  *
  * Returns: (transfer full): the value of the dictionary key, or %NULL
  * Since: 2.28
+ */
+
+
+/**
+ * g_variant_maybe_get_child_value:
+ * @value: a container #GVariant
+ * @index_: the index of the child to fetch
+ *
+ * Reads a child item out of a container #GVariant instance, if it is in normal
+ * form. If it is not in normal form, return %NULL.
+ *
+ * This function behaves the same as g_variant_get_child_value(), except that it
+ * returns %NULL if the child is not in normal form. g_variant_get_child_value()
+ * would instead return a new default value of the correct type.
+ *
+ * This is intended to be used internally to avoid unnecessary #GVariant
+ * allocations.
+ *
+ * The returned value is never floating.  You should free it with
+ * g_variant_unref() when you're done with it.
+ *
+ * This function is O(1).
+ *
+ * Returns: (transfer full): the child at the specified index
+ * Since: 2.74
  */
 
 
