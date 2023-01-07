@@ -110,9 +110,9 @@ import os
 import re
 import operator
 
-from typing import Tuple
-from operator import ne, gt, lt
 from collections import namedtuple, Counter, OrderedDict
+from operator import ne, gt, lt
+from typing import Tuple  # noqa
 
 from .message import Position, warn, error
 
