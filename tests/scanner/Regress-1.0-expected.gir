@@ -1250,6 +1250,12 @@ it says it's pointer but it's actually a string.</doc>
         </field>
       </union>
     </record>
+    <constant name="BAD_EXPR_CONSTANT"
+              value="1"
+              c:type="REGRESS_BAD_EXPR_CONSTANT">
+      <source-position filename="regress.h" line="528"/>
+      <type name="gint" c:type="gint"/>
+    </constant>
     <constant name="BOOL_CONSTANT" value="true" c:type="REGRESS_BOOL_CONSTANT">
       <source-position filename="regress.h" line="524"/>
       <type name="gboolean" c:type="gboolean"/>
