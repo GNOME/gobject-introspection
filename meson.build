@@ -1,5 +1,5 @@
 project('gobject-introspection', 'c',
-  version: '1.75.0',
+  version: '1.75.1',
   meson_version: '>= 0.60.0',
   default_options: [
     'c_std=gnu99',
