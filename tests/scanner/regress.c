@@ -2643,7 +2643,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * RegressTestObj:list: (type GLib.List(utf8)) (transfer none)
+   * RegressTestObj:list: (type GLib.List(utf8)) (transfer none) (default-value NULL)
    */
   pspec = g_param_spec_pointer ("list",
                                 "GList property",
@@ -2745,7 +2745,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 
 
   /**
-   * TestObj:gtype:
+   * RegressTestObj:gtype: (default-value G_TYPE_INVALID)
    */
   pspec = g_param_spec_gtype ("gtype",
                               "GType property",
@@ -2757,7 +2757,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * TestObj:name-conflict:
+   * RegressTestObj:name-conflict:
    */
   pspec = g_param_spec_int ("name-conflict",
                             "name-conflict property",
@@ -2771,7 +2771,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * TestObj:byte-array:
+   * RegressTestObj:byte-array:
    */
   pspec = g_param_spec_boxed ("byte-array",
                               "GByteArray property",
@@ -2783,7 +2783,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
   /**
-   * TestObj:write-only:
+   * RegressTestObj:write-only:
    */
   pspec = g_param_spec_boolean ("write-only", "Write-only property",
                                 "A write-only bool property that resets the value of TestObj:int to 0 when true",

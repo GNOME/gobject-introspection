@@ -193,6 +193,7 @@ ANN_ARRAY = 'array'
 ANN_ATTRIBUTES = 'attributes'
 ANN_CLOSURE = 'closure'
 ANN_CONSTRUCTOR = 'constructor'
+ANN_DEFAULT_VALUE = 'default-value'
 ANN_DESTROY = 'destroy'
 ANN_ELEMENT_TYPE = 'element-type'
 ANN_EMITTER = 'emitter'
@@ -228,6 +229,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_ATTRIBUTES,
            ANN_CLOSURE,
            ANN_CONSTRUCTOR,
+           ANN_DEFAULT_VALUE,
            ANN_DESTROY,
            ANN_ELEMENT_TYPE,
            ANN_EMITTER,
@@ -788,6 +790,19 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
+    def _do_validate_default_value(self, position, ann_name, options):
+        '''
+        Validate the ``(default-value)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        # The 'default-value' annotation allows free form annotations.
+        pass
+
     def _do_validate_destroy(self, position, ann_name, options):
         '''
         Validate the ``(destroy)`` annotation.
@@ -1167,6 +1182,7 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
     valid_annotations = (
         ANN_ATTRIBUTES,
         ANN_CONSTRUCTOR,
+        ANN_DEFAULT_VALUE,
         ANN_EMITTER,
         ANN_FOREIGN,
         ANN_GET_PROPERTY,

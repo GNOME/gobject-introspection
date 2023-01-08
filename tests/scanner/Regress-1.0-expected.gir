@@ -4870,7 +4870,10 @@ raise an error.</doc>
                 default-value="1.000000">
         <type name="gfloat" c:type="gfloat"/>
       </property>
-      <property name="gtype" writable="1" transfer-ownership="none">
+      <property name="gtype"
+                writable="1"
+                transfer-ownership="none"
+                default-value="G_TYPE_INVALID">
         <type name="GType" c:type="GType"/>
       </property>
       <property name="hash-table" writable="1" transfer-ownership="container">
@@ -4893,7 +4896,10 @@ raise an error.</doc>
                 default-value="0">
         <type name="gint" c:type="gint"/>
       </property>
-      <property name="list" writable="1" transfer-ownership="none">
+      <property name="list"
+                writable="1"
+                transfer-ownership="none"
+                default-value="NULL">
         <type name="GLib.List" c:type="gpointer">
           <type name="utf8"/>
         </type>

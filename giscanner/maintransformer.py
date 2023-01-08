@@ -28,6 +28,7 @@ from .annotationparser import (
     ANN_ATTRIBUTES,
     ANN_CLOSURE,
     ANN_CONSTRUCTOR,
+    ANN_DEFAULT_VALUE,
     ANN_DESTROY,
     ANN_ELEMENT_TYPE,
     ANN_EMITTER,
@@ -963,6 +964,9 @@ class MainTransformer(object):
         getter = block.annotations.get(ANN_GETTER)
         if getter:
             prop.getter = getter[0]
+        default_value = block.annotations.get(ANN_DEFAULT_VALUE)
+        if default_value:
+            prop.default_value = default_value[0]
 
     def _apply_annotations_signal(self, parent, signal):
         names = []

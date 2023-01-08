@@ -129,6 +129,10 @@ Support for GObject objects
     - identifier (only applies to methods)
     - This signal is emitted by the given method
     -
+  * - ``(default-value VALUE)``
+    - identifier (only applies to properties)
+    - The default value of a GObject property, as a freeform string
+    - :issue:`4`
 
 
 Support for GObject closures
