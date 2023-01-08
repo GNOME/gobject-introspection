@@ -107,6 +107,7 @@ if dep_type == 'pkgconfig'
   glib_libdir = get_option('gi_cross_pkgconfig_sysroot_path') + glib_dep.get_variable(pkgconfig: 'libdir')
   glib_incdir = get_option('gi_cross_pkgconfig_sysroot_path') + join_paths(glib_dep.get_variable(pkgconfig: 'includedir'), 'glib-2.0')
   glib_libincdir = join_paths(glib_libdir, 'glib-2.0', 'include')
+  glib_files += join_paths(glib_incdir, 'gobject', 'gobject-visibility.h')
   glib_files += join_paths(glib_incdir, 'gobject', 'glib-types.h')
   glib_files += join_paths(glib_libincdir, 'glibconfig.h')
   if giounix_dep.found()
@@ -241,6 +242,7 @@ glib_gir = custom_target('gir-glib',
   command: glib_command + [
     '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
     '-DGLIB_COMPILATION',
+    '-DGOBJECT_COMPILATION',
     '-D__G_I18N_LIB_H__',
     '-DGETTEXT_PACKAGE=Dummy',
     '--cflags-end',
@@ -308,6 +310,7 @@ gobject_gir = custom_target('gir-gobject',
   command: gobject_command + [
     '--include-uninstalled=' + glib_gir.full_path(),
     '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
+    '-DGLIB_COMPILATION',
     '-DGOBJECT_COMPILATION',
     '--cflags-end',
     '@INPUT@',
