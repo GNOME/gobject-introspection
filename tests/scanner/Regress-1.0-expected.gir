@@ -1088,8 +1088,7 @@ regress_annotation_object_watch_full().</doc>
       <property name="function-property"
                 writable="1"
                 construct="1"
-                transfer-ownership="none"
-                default-value="NULL">
+                transfer-ownership="none">
         <type name="AnnotationCallback" c:type="gpointer"/>
       </property>
       <property name="string-property"
@@ -2147,8 +2146,7 @@ uses a C sugar return type.</doc>
                 introspectable="0"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none"
-                default-value="NULL">
+                transfer-ownership="none">
         <type/>
       </property>
       <property name="string"
@@ -4846,21 +4844,16 @@ raise an error.</doc>
       <property name="bare"
                 writable="1"
                 transfer-ownership="none"
-                setter="set_bare"
-                default-value="NULL">
+                setter="set_bare">
         <type name="GObject.Object"/>
       </property>
-      <property name="boxed"
-                writable="1"
-                transfer-ownership="none"
-                default-value="NULL">
+      <property name="boxed" writable="1" transfer-ownership="none">
         <type name="TestBoxed"/>
       </property>
       <property name="byte-array"
                 writable="1"
                 construct="1"
-                transfer-ownership="none"
-                default-value="NULL">
+                transfer-ownership="none">
         <array name="GLib.ByteArray">
           <type name="guint8" c:type="guint8"/>
         </array>
@@ -4877,16 +4870,10 @@ raise an error.</doc>
                 default-value="1.000000">
         <type name="gfloat" c:type="gfloat"/>
       </property>
-      <property name="gtype"
-                writable="1"
-                transfer-ownership="none"
-                default-value="NULL">
+      <property name="gtype" writable="1" transfer-ownership="none">
         <type name="GType" c:type="GType"/>
       </property>
-      <property name="hash-table"
-                writable="1"
-                transfer-ownership="container"
-                default-value="NULL">
+      <property name="hash-table" writable="1" transfer-ownership="container">
         <type name="GLib.HashTable">
           <type name="utf8"/>
           <type name="gint8"/>
@@ -4894,8 +4881,7 @@ raise an error.</doc>
       </property>
       <property name="hash-table-old"
                 writable="1"
-                transfer-ownership="container"
-                default-value="NULL">
+                transfer-ownership="container">
         <type name="GLib.HashTable">
           <type name="utf8"/>
           <type name="gint8"/>
@@ -4907,18 +4893,12 @@ raise an error.</doc>
                 default-value="0">
         <type name="gint" c:type="gint"/>
       </property>
-      <property name="list"
-                writable="1"
-                transfer-ownership="none"
-                default-value="NULL">
+      <property name="list" writable="1" transfer-ownership="none">
         <type name="GLib.List" c:type="gpointer">
           <type name="utf8"/>
         </type>
       </property>
-      <property name="list-old"
-                writable="1"
-                transfer-ownership="none"
-                default-value="NULL">
+      <property name="list-old" writable="1" transfer-ownership="none">
         <type name="GLib.List" c:type="gpointer">
           <type name="utf8"/>
         </type>
@@ -4930,10 +4910,7 @@ raise an error.</doc>
                 default-value="42">
         <type name="gint" c:type="gint"/>
       </property>
-      <property name="pptrarray"
-                writable="1"
-                transfer-ownership="none"
-                default-value="NULL">
+      <property name="pptrarray" writable="1" transfer-ownership="none">
         <array name="GLib.PtrArray" c:type="gpointer">
           <type name="utf8"/>
         </array>

@@ -414,7 +414,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             writable = (flags & G_PARAM_WRITABLE) != 0
             construct = (flags & G_PARAM_CONSTRUCT) != 0
             construct_only = (flags & G_PARAM_CONSTRUCT_ONLY) != 0
-            default_value = pspec.attrib['default-value']
+            default_value = pspec.attrib.get('default-value')
             prop = ast.Property(
                 pspec.attrib['name'],
                 ast.Type.create_from_gtype_name(ctype),
