@@ -360,6 +360,7 @@ gir_files += custom_target('gir-gmodule',
   command: gmodule_command + [
     '--include-uninstalled=' + glib_gir.full_path(),
     '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
+    '-DGMODULE_COMPILATION',
     '--cflags-end',
     '@INPUT@',
   ]
