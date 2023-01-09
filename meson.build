@@ -161,26 +161,10 @@ cc.check_header('Python.h', dependencies: [python.dependency()], required: true)
 
 # cairo
 cairo_option = get_option('cairo')
-if cc.get_id() == 'msvc'
-  if cairo_option.disabled()
-    req = cairo_option
-  else
-    req = false
-  endif
-
-  cairo_dep = dependency('cairo', required: req)
-  cairo_gobject_dep = dependency('cairo-gobject', required: req)
-
-  if not cairo_gobject_dep.found() or not cairo_dep.found()
-    if cc.has_header('cairo.h') and cc.has_header ('cairo-gobject.h')
-      cairo_dep = cc.find_library('cairo', required: cairo_option)
-      cairo_gobject_dep = cc.find_library('cairo-gobject', required: cairo_option)
-    endif
-  endif
-else
-  cairo_dep = dependency('cairo', required: cairo_option)
-  cairo_gobject_dep = dependency('cairo-gobject', required: cairo_option)
-endif
+cairo_dep = dependency('cairo',
+  required: get_option('cairo'),
+  default_options: ['zlib=enabled', 'tests=disabled'])
+cairo_gobject_dep = dependency('cairo-gobject', required: get_option('cairo'))
 cairo_deps_found = cairo_gobject_dep.found() and cairo_dep.found()
 
 if not cairo_deps_found
