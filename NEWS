@@ -1,3 +1,13 @@
+1.75.1 - 2023-01-09
+-------------------
+
+* Split 'disguised' attribute into two separate attributes [#101]
+* Add copy/free function annotations for plain-old data types [#14]
+* Include the default value of GObject properties in the GIR data [#4]
+* Drop wrap files for recursive dependencies
+* Add more marshalling tests [Marco Trevisan]
+* Update the GIR data for GLib, GObject, GModule, and GIO [Sebastian Dröge, Rico Tzschichholz]
+
 1.74.0 - 2022-09-17
 -------------------
 
