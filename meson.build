@@ -127,26 +127,20 @@ endif
 glib_micro_version = 0  # gi_version[2]
 glib_version = '>=2.@0@.@1@'.format(gi_versions[1], glib_micro_version)
 
-glib_dep = dependency('glib-2.0', version : glib_version,
-  fallback: ['glib', 'libglib_dep'])
-gobject_dep = dependency('gobject-2.0', version : glib_version,
-  fallback: ['glib', 'libgobject_dep'])
-gio_dep = dependency('gio-2.0', version : glib_version,
-  fallback: ['glib', 'libgio_dep'])
-gmodule_dep = dependency('gmodule-2.0', version : glib_version,
-  fallback: ['glib', 'libgmodule_dep'])
+glib_dep = dependency('glib-2.0', version: glib_version)
+gobject_dep = dependency('gobject-2.0', version: glib_version)
+gio_dep = dependency('gio-2.0', version: glib_version)
+gmodule_dep = dependency('gmodule-2.0', version: glib_version)
 if host_system != 'windows'
-  giounix_dep = dependency('gio-unix-2.0', version : glib_version,
-    fallback: ['glib', 'libgiounix_dep'])
-  giowin_dep = dependency('', required : false)
+  giounix_dep = dependency('gio-unix-2.0', version: glib_version)
+  giowin_dep = disabler()
 else
   # Don't even try to look for gio-unix-2.0 on Windows because Meson will
   # fruitlessly try to find it in the glib subproject even when we don't want
   # it to look in the subproject at all. Just use a not-found dependency.
-  giounix_dep = dependency('', required : false)
+  giounix_dep = disabler()
   # XXX: Autotools doesn't build girs for gio-win32-2.0, but maybe we should?
-  giowin_dep = dependency('gio-windows-2.0', version : glib_version,
-    fallback: ['glib', 'libgiowin32_dep'])
+  giowin_dep = dependency('gio-windows-2.0', version: glib_version)
 endif
 
 # We either get libffi from the system, or from GLib's own subproject
