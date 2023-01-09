@@ -1,4 +1,9 @@
-1.75.1 - 2023-01-09
+1.75.4 - 2023-01-09
+-------------------
+
+* Brown-paper bag release to fix the GLib dependency.
+
+1.75.2 - 2023-01-09
 -------------------
 
 * Split 'disguised' attribute into two separate attributes [#101]
