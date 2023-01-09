@@ -123,8 +123,9 @@ else
   gi_hidden_visibility_cflags += '-fvisibility=hidden'
 endif
 
-
-glib_version = '>=2.@0@.@1@'.format(gi_versions[1], gi_versions[2])
+# Reset to 0 if g-i micro version exceeds GLib's
+glib_micro_version = 0  # gi_version[2]
+glib_version = '>=2.@0@.@1@'.format(gi_versions[1], glib_micro_version)
 
 glib_dep = dependency('glib-2.0', version : glib_version,
   fallback: ['glib', 'libglib_dep'])
