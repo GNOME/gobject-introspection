@@ -640,9 +640,10 @@ class MainTransformer(object):
             transfer = OPT_TRANSFER_NONE
 
             if (not isinstance(target, (ast.Class, ast.Interface))
-                    and node_type.target_giname != 'GLib.Variant'):
+                    and node_type.target_giname != 'GLib.Variant'
+                    and node_type.target_giname != 'GObject.Closure'):
                 message.warn('invalid "transfer" annotation for {0}: '
-                             'only valid for object and GVariant types'.format(target),
+                             'only valid for object, GVariant and GClosure types'.format(target),
                              annotations.position)
                 return
 
