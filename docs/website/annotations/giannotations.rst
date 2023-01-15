@@ -148,24 +148,22 @@ Support for GObject closures
     - Since
   * - ``(destroy)``
     - parameters
-    - The parameter is a "``destroy_data``" for callbacks.
+    - The parameter is part of a callback type and containing the ``destroy_data``.
     - :commit:`v0.6.3 <cf7621f3>`
       :bzbug:`574284`
   * - ``(destroy DESTROY)``
     - parameters
-    - The parameter is a "``destroy_data``" for callbacks, the
-      ``DESTROY`` option points to a paramter name other than
-      ``destroy_data``.
+    - The parameter defines the ``destroy_data`` for a given callback. The
+      ``DESTROY`` option points to the parameter that is the actual callback.
     -
   * - ``(closure)``
     - parameters
-    - The parameter is a "``user_data``" for callbacks.
-      Many bindings can pass ``NULL`` here.
+    - The parameter is part of a callback type and containing the ``user_data``.
     -
   * - ``(closure CLOSURE)``
     - parameters
-    - The parameter is a "``user_data``" for callbacks, the ``CLOSURE`` option
-      points to a different parameter that is the actual callback.
+    - The parameter defines the ``user_data`` for a given callback. The ``CLOSURE`` option
+      points to the parameter that is the actual callback. Many bindings can pass ``NULL`` here.
     -
 
 
