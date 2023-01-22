@@ -682,7 +682,7 @@
 /**
  * GHookCheckMarshaller:
  * @hook: a #GHook
- * @user_data: user data
+ * @marshal_data: user data
  *
  * Defines the type of function used by g_hook_list_marshal_check().
  *
@@ -715,7 +715,7 @@
 /**
  * GHookFindFunc:
  * @hook: a #GHook
- * @user_data: user data passed to g_hook_find_func()
+ * @data: user data passed to g_hook_find_func()
  *
  * Defines the type of the function passed to g_hook_find().
  *
@@ -761,7 +761,7 @@
 /**
  * GHookMarshaller:
  * @hook: a #GHook
- * @user_data: user data
+ * @marshal_data: user data
  *
  * Defines the type of function used by g_hook_list_marshal().
  */
@@ -1026,7 +1026,7 @@
  * GIOFunc:
  * @source: the #GIOChannel event source
  * @condition: the condition which has been satisfied
- * @user_data: user data set in g_io_add_watch() or g_io_add_watch_full()
+ * @data: user data set in g_io_add_watch() or g_io_add_watch_full()
  *
  * Specifies the type of function passed to g_io_add_watch() or
  * g_io_add_watch_full(), which is called when the requested condition
@@ -1387,7 +1387,7 @@
 /**
  * GNodeForeachFunc:
  * @node: a #GNode.
- * @user_data: user data passed to g_node_children_foreach().
+ * @data: user data passed to g_node_children_foreach().
  *
  * Specifies the type of function passed to g_node_children_foreach().
  * The function is called with each child node, together with the user
@@ -1398,7 +1398,7 @@
 /**
  * GNodeTraverseFunc:
  * @node: a #GNode.
- * @user_data: user data passed to g_node_traverse().
+ * @data: user data passed to g_node_traverse().
  *
  * Specifies the type of function passed to g_node_traverse(). The
  * function is called with each of the nodes visited, together with the
@@ -1858,7 +1858,7 @@
  * GSequenceIterCompareFunc:
  * @a: a #GSequenceIter
  * @b: a #GSequenceIter
- * @user_data: user data
+ * @data: user data
  *
  * A #GSequenceIterCompareFunc is a function used to compare iterators.
  * It must return zero if the iterators compare equal, a negative value
@@ -2051,7 +2051,7 @@
 
 /**
  * GThreadFunc:
- * @user_data: data passed to the thread
+ * @data: data passed to the thread
  *
  * Specifies the type of the @func functions passed to g_thread_new()
  * or g_thread_try_new().
@@ -2224,7 +2224,7 @@
  * GTraverseFunc:
  * @key: a key of a #GTree node
  * @value: the value corresponding to the key
- * @user_data: user data passed to g_tree_traverse()
+ * @data: user data passed to g_tree_traverse()
  *
  * Specifies the type of function passed to g_tree_traverse(). It is
  * passed the key and value of each node, together with the @user_data
@@ -9558,7 +9558,7 @@
  *
  * This example defines a comparison function and search an element in a #GArray:
  * |[<!-- language="C" -->
- * static gint*
+ * static gint
  * cmpint (gconstpointer a, gconstpointer b)
  * {
  *   const gint *_a = a;
@@ -30558,9 +30558,11 @@
 
 /**
  * g_set_print_handler:
- * @func: the new print handler
+ * @func: (nullable): the new print handler or %NULL to
+ *   reset to the default
  *
- * Sets the print handler.
+ * Sets the print handler to @func, or resets it to the
+ * default GLib handler if %NULL.
  *
  * Any messages passed to g_print() will be output via
  * the new handler. The default handler simply outputs
@@ -30568,15 +30570,24 @@
  * you can redirect the output, to a GTK+ widget or a
  * log file for example.
  *
- * Returns: the old print handler
+ * Since 2.76 this functions always returns a valid
+ * #GPrintFunc, and never returns %NULL. If no custom
+ * print handler was set, it will return the GLib
+ * default print handler and that can be re-used to
+ * decorate its output and/or to write to stderr
+ * in all platforms. Before GLib 2.76, this was %NULL.
+ *
+ * Returns: (not nullable): the old print handler
  */
 
 
 /**
  * g_set_printerr_handler:
- * @func: the new error message handler
+ * @func: (nullable): he new error message handler or %NULL
+ *  to reset to the default
  *
- * Sets the handler for printing error messages.
+ * Sets the handler for printing error messages to @func,
+ * or resets it to the default GLib handler if %NULL.
  *
  * Any messages passed to g_printerr() will be output via
  * the new handler. The default handler simply outputs the
@@ -30584,7 +30595,14 @@
  * redirect the output, to a GTK+ widget or a log file for
  * example.
  *
- * Returns: the old error message handler
+ * Since 2.76 this functions always returns a valid
+ * #GPrintFunc, and never returns %NULL. If no custom error
+ * print handler was set, it will return the GLib default
+ * error print handler and that can be re-used to decorate
+ * its output and/or to write to stderr in all platforms.
+ * Before GLib 2.76, this was %NULL.
+ *
+ * Returns: (not nullable): the old error message handler
  */
 
 
@@ -33535,8 +33553,25 @@
  * it's %FALSE, the caller gains ownership of the buffer and must
  * free it after use with g_free().
  *
+ * Instead of passing %FALSE to this function, consider using
+ * g_string_free_and_steal().
+ *
  * Returns: (nullable): the character data of @string
  *          (i.e. %NULL if @free_segment is %TRUE)
+ */
+
+
+/**
+ * g_string_free_and_steal:
+ * @string: (transfer full): a #GString
+ *
+ * Frees the memory allocated for the #GString.
+ *
+ * The caller gains ownership of the buffer and
+ * must free it after use with g_free().
+ *
+ * Returns: (transfer full): the character data of @string
+ * Since: 2.76
  */
 
 
@@ -35768,6 +35803,11 @@
  * pools are not affected by g_thread_pool_set_max_idle_time()
  * since their threads are never considered idle and returned to the
  * global pool.
+ *
+ * Note that the threads used by exclusive threadpools will all inherit the
+ * scheduler settings of the current thread while the threads used by
+ * non-exclusive threadpools will inherit the scheduler settings from the
+ * first thread that created such a threadpool.
  *
  * @error can be %NULL to ignore errors, or non-%NULL to report
  * errors. An error can only occur when @exclusive is set to %TRUE

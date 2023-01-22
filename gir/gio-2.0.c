@@ -10005,6 +10005,24 @@
  *   having come from the `_async()` wrapper
  *   function (for "short-circuit" results, such as when passing
  *   0 to g_input_stream_read_async()).
+ *
+ * ## Thread-safety considerations
+ *
+ * Due to some infelicities in the API design, there is a
+ * thread-safety concern that users of GTask have to be aware of:
+ *
+ * If the `main` thread drops its last reference to the source object
+ * or the task data before the task is finalized, then the finalizers
+ * of these objects may be called on the worker thread.
+ *
+ * This is a problem if the finalizers use non-threadsafe API, and
+ * can lead to hard-to-debug crashes. Possible workarounds include:
+ *
+ * - Clear task data in a signal handler for `notify::completed`
+ *
+ * - Keep iterating a main context in the main thread and defer
+ *   dropping the reference to the source object to that main
+ *   context when the task is finalized
  */
 
 
@@ -20850,11 +20868,11 @@
  * @uris: (element-type utf8): List of URIs
  * @launch_context: (nullable): a #GAppLaunchContext
  * @spawn_flags: #GSpawnFlags, used for each process
- * @user_setup: (scope async) (nullable): a #GSpawnChildSetupFunc, used once
+ * @user_setup: (scope async) (nullable) (closure user_setup_data): a #GSpawnChildSetupFunc, used once
  *     for each process.
- * @user_setup_data: (closure user_setup) (nullable): User data for @user_setup
- * @pid_callback: (scope call) (nullable): Callback for child processes
- * @pid_callback_data: (closure pid_callback) (nullable): User data for @callback
+ * @user_setup_data: User data for @user_setup
+ * @pid_callback: (scope call) (nullable) (closure pid_callback_data): Callback for child processes
+ * @pid_callback_data: User data for @callback
  * @stdin_fd: file descriptor to use for child's stdin, or -1
  * @stdout_fd: file descriptor to use for child's stdout, or -1
  * @stderr_fd: file descriptor to use for child's stderr, or -1
@@ -22398,9 +22416,9 @@
  * @flags: set of #GFileCopyFlags
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @progress_callback: (nullable) (scope call): function to callback with
+ * @progress_callback: (nullable) (scope call) (closure progress_callback_data): function to callback with
  *   progress information, or %NULL if progress information is not needed
- * @progress_callback_data: (closure): user data to pass to @progress_callback
+ * @progress_callback_data: user data to pass to @progress_callback
  * @error: #GError to set on error, or %NULL
  *
  * Copies the file @source to the location specified by @destination.
@@ -25082,9 +25100,9 @@
  * @flags: set of #GFileCopyFlags
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @progress_callback: (nullable) (scope call): #GFileProgressCallback
+ * @progress_callback: (nullable) (scope call) (closure progress_callback_data): #GFileProgressCallback
  *   function for updates
- * @progress_callback_data: (closure): gpointer to user data for
+ * @progress_callback_data: gpointer to user data for
  *   the callback function
  * @error: #GError for returning error conditions, or %NULL
  *
@@ -39100,7 +39118,7 @@
 /**
  * g_subprocess_launcher_set_child_setup: (skip)
  * @self: a #GSubprocessLauncher
- * @child_setup: a #GSpawnChildSetupFunc to use as the child setup function
+ * @child_setup: (closure user_data): a #GSpawnChildSetupFunc to use as the child setup function
  * @user_data: user data for @child_setup
  * @destroy_notify: a #GDestroyNotify for @user_data
  *
