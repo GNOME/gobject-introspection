@@ -470,6 +470,10 @@ def create_source_scanner(options, args):
     finally:
         for error in ss.get_errors():
             print(error, file=sys.stderr)
+
+    if ss.get_errors() and options.warn_fatal:
+        _error("error caught during scanner parsing")
+
     return ss, filenames
 
 
