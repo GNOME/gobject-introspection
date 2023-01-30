@@ -7596,7 +7596,7 @@
 /**
  * g_value_take_string:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: (nullable): string to take ownership of
+ * @v_string: (nullable) (transfer full): string to take ownership of
  *
  * Sets the contents of a %G_TYPE_STRING #GValue to @v_string.
  *

@@ -7725,37 +7725,18 @@
  * @short_description: efficient way to allocate groups of equal-sized
  *     chunks of memory
  *
- * Memory slices provide a space-efficient and multi-processing scalable
- * way to allocate equal-sized pieces of memory, just like the original
- * #GMemChunks (from GLib 2.8), while avoiding their excessive
- * memory-waste, scalability and performance problems.
+ * GSlice was a space-efficient and multi-processing scalable way to allocate
+ * equal sized pieces of memory. Since GLib 2.76, its implementation has been
+ * removed and it calls g_malloc() and g_free(), because the performance of the
+ * system-default allocators has improved on all platforms since GSlice was
+ * written.
  *
- * To achieve these goals, the slice allocator uses a sophisticated,
- * layered design that has been inspired by Bonwick's slab allocator
- * ([Bonwick94](http://citeseer.ist.psu.edu/bonwick94slab.html)
- * Jeff Bonwick, The slab allocator: An object-caching kernel
- * memory allocator. USENIX 1994, and
- * [Bonwick01](http://citeseer.ist.psu.edu/bonwick01magazines.html)
- * Bonwick and Jonathan Adams, Magazines and vmem: Extending the
- * slab allocator to many cpu's and arbitrary resources. USENIX 2001)
+ * The GSlice APIs have not been deprecated, as they are widely in use and doing
+ * so would be very disruptive for little benefit.
  *
- * It uses posix_memalign() to optimize allocations of many equally-sized
- * chunks, and has per-thread free lists (the so-called magazine layer)
- * to quickly satisfy allocation requests of already known structure sizes.
- * This is accompanied by extra caching logic to keep freed memory around
- * for some time before returning it to the system. Memory that is unused
- * due to alignment constraints is used for cache colorization (random
- * distribution of chunk addresses) to improve CPU cache utilization. The
- * caching layer of the slice allocator adapts itself to high lock contention
- * to improve scalability.
- *
- * The slice allocator can allocate blocks as small as two pointers, and
- * unlike malloc(), it does not reserve extra space per block. For large block
- * sizes, g_slice_new() and g_slice_alloc() will automatically delegate to the
- * system malloc() implementation. For newly written code it is recommended
- * to use the new `g_slice` API instead of g_malloc() and
- * friends, as long as objects are not resized during their lifetime and the
- * object size used at allocation time is still available when freeing.
+ * New code should be written using g_new()/g_malloc() and g_free(). There is no
+ * particular benefit in porting existing code away from
+ * g_slice_new()/g_slice_free() unless it’s being rewritten anyway.
  *
  * Here is an example for using the slice allocator:
  * |[<!-- language="C" -->
@@ -9374,11 +9355,18 @@
  * }
  * ]|
  *
- * g_print(), g_printerr() and g_set_print_handler() are intended to be used for
+ * g_print() and g_printerr() are intended to be used for
  * output from command line applications, since they output to standard output
  * and standard error by default — whereas functions like g_message() and
  * g_log() may be redirected to special purpose message windows, files, or the
  * system journal.
+ *
+ * If the console encoding is not UTF-8 (as specified by g_get_console_charset())
+ * then these functions convert the message first. Any Unicode
+ * characters not defined by that charset are replaced by `'?'`. On Linux,
+ * setlocale() must be called early in main() to load the encoding. This behaviour
+ * can be changed by providing custom handlers to g_set_print_handler(),
+ * g_set_printerr_handler() and g_log_set_handler().
  */
 
 
@@ -18194,7 +18182,8 @@
  *
  * On Linux, the character set is found by consulting nl_langinfo() if
  * available. If not, the environment variables `LC_ALL`, `LC_CTYPE`, `LANG`
- * and `CHARSET` are queried in order.
+ * and `CHARSET` are queried in order. nl_langinfo() returns the C locale if
+ * no locale has been loaded by setlocale().
  *
  * The return value is %TRUE if the locale's encoding is UTF-8, in that
  * case you can perhaps avoid calling g_convert().
@@ -20438,7 +20427,7 @@
 /**
  * g_io_channel_get_line_term:
  * @channel: a #GIOChannel
- * @length: a location to return the length of the line terminator
+ * @length: (out) (optional): a location to return the length of the line terminator
  *
  * This returns the string that #GIOChannel uses to determine
  * where in the file a line break occurs. A value of %NULL
@@ -23159,7 +23148,8 @@
 
 /**
  * g_main_context_acquire:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  *
  * Tries to become the owner of the specified context.
  * If some other thread is the owner of the context,
@@ -23172,6 +23162,9 @@
  * can call g_main_context_prepare(), g_main_context_query(),
  * g_main_context_check(), g_main_context_dispatch().
  *
+ * Since 2.76 @context can be %NULL to use the global-default
+ * main context.
+ *
  * Returns: %TRUE if the operation succeeded, and
  *   this thread is now the owner of @context.
  */
@@ -23179,7 +23172,8 @@
 
 /**
  * g_main_context_add_poll:
- * @context: (nullable): a #GMainContext (or %NULL for the default context)
+ * @context: (nullable): a #GMainContext (or %NULL for the global-default
+ *   main context)
  * @fd: a #GPollFD structure holding information about a file
  *      descriptor to watch.
  * @priority: the priority for this file descriptor which should be
@@ -23194,7 +23188,8 @@
 
 /**
  * g_main_context_check:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @max_priority: the maximum numerical priority of sources to check
  * @fds: (array length=n_fds): array of #GPollFD's that was passed to
  *       the last call to g_main_context_query()
@@ -23208,6 +23203,9 @@
  * You must have successfully acquired the context with
  * g_main_context_acquire() before you may call this function.
  *
+ * Since 2.76 @context can be %NULL to use the global-default
+ * main context.
+ *
  * Returns: %TRUE if some sources are ready to be dispatched.
  */
 
@@ -23215,29 +23213,34 @@
 /**
  * g_main_context_default:
  *
- * Returns the global default main context. This is the main context
+ * Returns the global-default main context. This is the main context
  * used for main loop functions when a main loop is not explicitly
  * specified, and corresponds to the "main" main loop. See also
  * g_main_context_get_thread_default().
  *
- * Returns: (transfer none): the global default main context.
+ * Returns: (transfer none): the global-default main context.
  */
 
 
 /**
  * g_main_context_dispatch:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  *
  * Dispatches all pending sources.
  *
  * You must have successfully acquired the context with
  * g_main_context_acquire() before you may call this function.
+ *
+ * Since 2.76 @context can be %NULL to use the global-default
+ * main context.
  */
 
 
 /**
  * g_main_context_find_source_by_funcs_user_data:
- * @context: (nullable): a #GMainContext (if %NULL, the default context will be used).
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used).
  * @funcs: the @source_funcs passed to g_source_new().
  * @user_data: the user data from the callback.
  *
@@ -23251,7 +23254,8 @@
 
 /**
  * g_main_context_find_source_by_id:
- * @context: (nullable): a #GMainContext (if %NULL, the default context will be used)
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @source_id: the source ID, as returned by g_source_get_id().
  *
  * Finds a #GSource given a pair of context and ID.
@@ -23273,7 +23277,8 @@
 
 /**
  * g_main_context_find_source_by_user_data:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @user_data: the user_data for the callback.
  *
  * Finds a source with the given user data for the callback.  If
@@ -23286,7 +23291,8 @@
 
 /**
  * g_main_context_get_poll_func:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  *
  * Gets the poll function set by g_main_context_set_poll_func().
  *
@@ -23310,21 +23316,22 @@
  * g_main_context_ref_thread_default() instead.
  *
  * Returns: (transfer none) (nullable): the thread-default #GMainContext, or
- * %NULL if the thread-default context is the global default context.
+ * %NULL if the thread-default context is the global-default main context.
  * Since: 2.22
  */
 
 
 /**
  * g_main_context_invoke:
- * @context: (nullable): a #GMainContext, or %NULL
+ * @context: (nullable): a #GMainContext, or %NULL for the global-default
+ *   main context
  * @function: function to call
  * @data: data to pass to @function
  *
  * Invokes a function in such a way that @context is owned during the
  * invocation of @function.
  *
- * If @context is %NULL then the global default main context — as
+ * If @context is %NULL then the global-default main context — as
  * returned by g_main_context_default() — is used.
  *
  * If @context is owned by the current thread, @function is called
@@ -23349,7 +23356,8 @@
 
 /**
  * g_main_context_invoke_full:
- * @context: (nullable): a #GMainContext, or %NULL
+ * @context: (nullable): a #GMainContext, or %NULL for the global-default
+ *   main context
  * @priority: the priority at which to run @function
  * @function: function to call
  * @data: data to pass to @function
@@ -23371,7 +23379,8 @@
 
 /**
  * g_main_context_is_owner:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  *
  * Determines whether this thread holds the (recursive)
  * ownership of this #GMainContext. This is useful to
@@ -23385,7 +23394,8 @@
 
 /**
  * g_main_context_iteration:
- * @context: (nullable): a #GMainContext (if %NULL, the default context will be used)
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @may_block: whether the call may block.
  *
  * Runs a single iteration for the given main loop. This involves
@@ -23428,7 +23438,8 @@
 
 /**
  * g_main_context_pending:
- * @context: (nullable): a #GMainContext (if %NULL, the default context will be used)
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  *
  * Checks if any sources have pending events for the given context.
  *
@@ -23438,7 +23449,8 @@
 
 /**
  * g_main_context_pop_thread_default:
- * @context: (nullable): a #GMainContext object, or %NULL
+ * @context: (nullable): a #GMainContext, or %NULL for the global-default
+ *   main context
  *
  * Pops @context off the thread-default context stack (verifying that
  * it was on the top of the stack).
@@ -23449,7 +23461,8 @@
 
 /**
  * g_main_context_prepare:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @priority: (out) (optional): location to store priority of highest priority
  *            source already ready.
  *
@@ -23466,14 +23479,15 @@
 
 /**
  * g_main_context_push_thread_default:
- * @context: (nullable): a #GMainContext, or %NULL for the global default context
+ * @context: (nullable): a #GMainContext, or %NULL for the global-default
+ *   main context
  *
  * Acquires @context and sets it as the thread-default context for the
  * current thread. This will cause certain asynchronous operations
  * (such as most [gio][gio]-based I/O) which are
  * started in this thread to run under @context and deliver their
  * results to its main loop, rather than running under the global
- * default context in the main thread. Note that calling this function
+ * default main context in the main thread. Note that calling this function
  * changes the context returned by g_main_context_get_thread_default(),
  * not the one returned by g_main_context_default(), so it does not affect
  * the context used by functions like g_idle_add().
@@ -23513,7 +23527,8 @@
 
 /**
  * g_main_context_query:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @max_priority: maximum priority source to check
  * @timeout_: (out): location to store timeout to be used in polling
  * @fds: (out caller-allocates) (array length=n_fds): location to
@@ -23536,7 +23551,7 @@
 
 /**
  * g_main_context_ref:
- * @context: a #GMainContext
+ * @context: (not nullable): a #GMainContext
  *
  * Increases the reference count on a #GMainContext object by one.
  *
@@ -23551,7 +23566,7 @@
  * g_main_context_get_thread_default(), but also adds a reference to
  * it with g_main_context_ref(). In addition, unlike
  * g_main_context_get_thread_default(), if the thread-default context
- * is the global default context, this will return that #GMainContext
+ * is the global-default context, this will return that #GMainContext
  * (with a ref added to it) rather than returning %NULL.
  *
  * Returns: (transfer full): the thread-default #GMainContext. Unref
@@ -23562,7 +23577,8 @@
 
 /**
  * g_main_context_release:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  *
  * Releases ownership of a context previously acquired by this thread
  * with g_main_context_acquire(). If the context was acquired multiple
@@ -23573,7 +23589,8 @@
 
 /**
  * g_main_context_remove_poll:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @fd: a #GPollFD descriptor previously added with g_main_context_add_poll()
  *
  * Removes file descriptor from the set of file descriptors to be
@@ -23583,7 +23600,8 @@
 
 /**
  * g_main_context_set_poll_func:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @func: the function to call to poll all file descriptors
  *
  * Sets the function to use to handle polling of file descriptors. It
@@ -23598,7 +23616,7 @@
 
 /**
  * g_main_context_unref:
- * @context: a #GMainContext
+ * @context: (not nullable): a #GMainContext
  *
  * Decreases the reference count on a #GMainContext object by one. If
  * the result is zero, free the context and free all associated memory.
@@ -23607,7 +23625,8 @@
 
 /**
  * g_main_context_wait:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  * @cond: a condition variable
  * @mutex: a mutex, currently held
  *
@@ -23625,7 +23644,8 @@
 
 /**
  * g_main_context_wakeup:
- * @context: a #GMainContext
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  *
  * If @context is currently blocking in g_main_context_iteration()
  * waiting for a source to become ready, cause it to stop blocking
@@ -23799,7 +23819,8 @@
 
 /**
  * g_main_loop_new:
- * @context: (nullable): a #GMainContext  (if %NULL, the default context will be used).
+ * @context: (nullable): a #GMainContext  (if %NULL, the global-default
+ *   main context will be used).
  * @is_running: set to %TRUE to indicate that the loop is running. This
  * is not very important since calling g_main_loop_run() will set this to
  * %TRUE anyway.
@@ -26540,7 +26561,7 @@
  * @...: the parameters to insert into the format string
  *
  * Outputs a formatted message via the print handler.
- * The default print handler simply outputs the message to stdout, without
+ * The default print handler outputs the encoded message to stdout, without
  * appending a trailing new-line character. Typically, @format should end with
  * its own new-line character.
  *
@@ -26558,7 +26579,7 @@
  * @...: the parameters to insert into the format string
  *
  * Outputs a formatted message via the error message handler.
- * The default handler simply outputs the message to stderr, without appending
+ * The default handler outputs the encoded message to stderr, without appending
  * a trailing new-line character. Typically, @format should end with its own
  * new-line character.
  *
@@ -28712,7 +28733,7 @@
 
 /**
  * g_regex_escape_string:
- * @string: (array length=length): the string to escape
+ * @string: the string to escape
  * @length: the length of @string, in bytes, or -1 if @string is nul-terminated
  *
  * Escapes the special characters used for regular expressions
@@ -30565,8 +30586,8 @@
  * default GLib handler if %NULL.
  *
  * Any messages passed to g_print() will be output via
- * the new handler. The default handler simply outputs
- * the message to stdout. By providing your own handler
+ * the new handler. The default handler outputs
+ * the encoded message to stdout. By providing your own handler
  * you can redirect the output, to a GTK+ widget or a
  * log file for example.
  *
@@ -30590,7 +30611,7 @@
  * or resets it to the default GLib handler if %NULL.
  *
  * Any messages passed to g_printerr() will be output via
- * the new handler. The default handler simply outputs the
+ * the new handler. The default handler outputs the encoded
  * message to stderr. By providing your own handler you can
  * redirect the output, to a GTK+ widget or a log file for
  * example.
@@ -30765,17 +30786,13 @@
  * g_slice_alloc:
  * @block_size: the number of bytes to allocate
  *
- * Allocates a block of memory from the slice allocator.
+ * Allocates a block of memory from the libc allocator.
  *
  * The block address handed out can be expected to be aligned
- * to at least `1 * sizeof (void*)`, though in general slices
- * are `2 * sizeof (void*)` bytes aligned; if a `malloc()`
- * fallback implementation is used instead, the alignment may
- * be reduced in a libc dependent fashion.
+ * to at least `1 * sizeof (void*)`.
  *
- * Note that the underlying slice allocation mechanism can
- * be changed with the [`G_SLICE=always-malloc`][G_SLICE]
- * environment variable.
+ * Since GLib 2.76 this always uses the system malloc() implementation
+ * internally.
  *
  * Returns: a pointer to the allocated memory block, which will
  *   be %NULL if and only if @mem_size is 0
@@ -30788,9 +30805,10 @@
  * @block_size: the number of bytes to allocate
  *
  * Allocates a block of memory via g_slice_alloc() and initializes
- * the returned memory to 0. Note that the underlying slice allocation
- * mechanism can be changed with the [`G_SLICE=always-malloc`][G_SLICE]
- * environment variable.
+ * the returned memory to 0.
+ *
+ * Since GLib 2.76 this always uses the system malloc() implementation
+ * internally.
  *
  * Returns: a pointer to the allocated block, which will be %NULL if and only
  *    if @mem_size is 0
@@ -30807,6 +30825,9 @@
  * and copies @block_size bytes into it from @mem_block.
  *
  * @mem_block must be non-%NULL if @block_size is non-zero.
+ *
+ * Since GLib 2.76 this always uses the system malloc() implementation
+ * internally.
  *
  * Returns: a pointer to the allocated memory block, which will be %NULL if and
  *    only if @mem_size is 0
@@ -30825,11 +30846,11 @@
  * It calls g_slice_copy() with `sizeof (@type)`
  * and casts the returned pointer to a pointer of the given type,
  * avoiding a type cast in the source code.
- * Note that the underlying slice allocation mechanism can
- * be changed with the [`G_SLICE=always-malloc`][G_SLICE]
- * environment variable.
  *
  * This can never return %NULL.
+ *
+ * Since GLib 2.76 this always uses the system malloc() implementation
+ * internally.
  *
  * Returns: (not nullable): a pointer to the allocated block, cast to a pointer
  *    to @type
@@ -30848,10 +30869,11 @@
  * It calls g_slice_free1() using `sizeof (type)`
  * as the block size.
  * Note that the exact release behaviour can be changed with the
- * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable, also see
- * [`G_SLICE`][G_SLICE] for related debugging options.
+ * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable.
  *
  * If @mem is %NULL, this macro does nothing.
+ *
+ * Since GLib 2.76 this always uses the system free() implementation internally.
  *
  * Since: 2.10
  */
@@ -30868,9 +30890,11 @@
  * g_slice_alloc0() and the @block_size has to match the size
  * specified upon allocation. Note that the exact release behaviour
  * can be changed with the [`G_DEBUG=gc-friendly`][G_DEBUG] environment
- * variable, also see [`G_SLICE`][G_SLICE] for related debugging options.
+ * variable.
  *
  * If @mem_block is %NULL, this function does nothing.
+ *
+ * Since GLib 2.76 this always uses the system free() implementation internally.
  *
  * Since: 2.10
  */
@@ -30889,10 +30913,11 @@
  * a @next pointer (similar to #GSList). The name of the
  * @next field in @type is passed as third argument.
  * Note that the exact release behaviour can be changed with the
- * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable, also see
- * [`G_SLICE`][G_SLICE] for related debugging options.
+ * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable.
  *
  * If @mem_chain is %NULL, this function does nothing.
+ *
+ * Since GLib 2.76 this always uses the system free() implementation internally.
  *
  * Since: 2.10
  */
@@ -30911,10 +30936,11 @@
  * @next pointer (similar to #GSList). The offset of the @next
  * field in each block is passed as third argument.
  * Note that the exact release behaviour can be changed with the
- * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable, also see
- * [`G_SLICE`][G_SLICE] for related debugging options.
+ * [`G_DEBUG=gc-friendly`][G_DEBUG] environment variable.
  *
  * If @mem_chain is %NULL, this function does nothing.
+ *
+ * Since GLib 2.76 this always uses the system free() implementation internally.
  *
  * Since: 2.10
  */
@@ -30929,12 +30955,13 @@
  *
  * It calls g_slice_alloc() with `sizeof (@type)` and casts the
  * returned pointer to a pointer of the given type, avoiding a type
- * cast in the source code. Note that the underlying slice allocation
- * mechanism can be changed with the [`G_SLICE=always-malloc`][G_SLICE]
- * environment variable.
+ * cast in the source code.
  *
  * This can never return %NULL as the minimum allocation size from
  * `sizeof (@type)` is 1 byte.
+ *
+ * Since GLib 2.76 this always uses the system malloc() implementation
+ * internally.
  *
  * Returns: (not nullable): a pointer to the allocated block, cast to a pointer
  *    to @type
@@ -30952,12 +30979,12 @@
  * It calls g_slice_alloc0() with `sizeof (@type)`
  * and casts the returned pointer to a pointer of the given type,
  * avoiding a type cast in the source code.
- * Note that the underlying slice allocation mechanism can
- * be changed with the [`G_SLICE=always-malloc`][G_SLICE]
- * environment variable.
  *
  * This can never return %NULL as the minimum allocation size from
  * `sizeof (@type)` is 1 byte.
+ *
+ * Since GLib 2.76 this always uses the system malloc() implementation
+ * internally.
  *
  * Returns: (not nullable): a pointer to the allocated block, cast to a pointer
  *    to @type
@@ -31555,7 +31582,8 @@
 /**
  * g_source_attach:
  * @source: a #GSource
- * @context: (nullable): a #GMainContext (if %NULL, the default context will be used)
+ * @context: (nullable): a #GMainContext (if %NULL, the global-default
+ *   main context will be used)
  *
  * Adds a #GSource to a @context so that it will be executed within
  * that context. Remove it by calling g_source_destroy().
@@ -36151,7 +36179,7 @@
  * g_time_zone_adjust_time:
  * @tz: a #GTimeZone
  * @type: the #GTimeType of @time_
- * @time_: a pointer to a number of seconds since January 1, 1970
+ * @time_: (inout): a pointer to a number of seconds since January 1, 1970
  *
  * Finds an interval within @tz that corresponds to the given @time_,
  * possibly adjusting @time_ if required to fit into an interval.
@@ -37368,7 +37396,7 @@
 
 /**
  * g_ucs4_to_utf16:
- * @str: a UCS-4 encoded string
+ * @str: (array length=len) (element-type gunichar): a UCS-4 encoded string
  * @len: the maximum length (number of characters) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
  * @items_read: (out) (optional): location to store number of
@@ -37392,7 +37420,7 @@
 
 /**
  * g_ucs4_to_utf8:
- * @str: a UCS-4 encoded string
+ * @str: (array length=len) (element-type gunichar): a UCS-4 encoded string
  * @len: the maximum length (number of characters) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
  * @items_read: (out) (optional): location to store number of
@@ -37985,7 +38013,7 @@
 
 /**
  * g_unicode_canonical_ordering:
- * @string: a UCS-4 encoded string.
+ * @string: (array length=len) (element-type gunichar): a UCS-4 encoded string.
  * @len: the maximum length of @string to use.
  *
  * Computes the canonical ordering of a string in-place.
@@ -39083,7 +39111,7 @@
 
 /**
  * g_utf16_to_ucs4:
- * @str: a UTF-16 encoded string
+ * @str: (array length=len) (element-type guint16): a UTF-16 encoded string
  * @len: the maximum length (number of #gunichar2) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
  * @items_read: (out) (optional): location to store number of
@@ -39108,7 +39136,7 @@
 
 /**
  * g_utf16_to_utf8:
- * @str: a UTF-16 encoded string
+ * @str: (array length=len) (element-type guint16): a UTF-16 encoded string
  * @len: the maximum length (number of #gunichar2) of @str to use.
  *     If @len < 0, then the string is nul-terminated.
  * @items_read: (out) (optional): location to store number of
