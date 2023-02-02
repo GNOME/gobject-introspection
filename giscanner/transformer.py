@@ -180,21 +180,18 @@ None."""
 
     # Private
 
-    def _get_gi_data_dirs(self):
-        data_dirs = utils.get_system_data_dirs()
-        data_dirs.append(DATADIR)
-        if os.name != 'nt':
-            # For backwards compatibility, was always unconditionally added to the list.
-            data_dirs.append('/usr/share')
-        return data_dirs
-
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
         from_env = os.getenv('GI_GIR_PATH', '')
         if from_env:
             searchdirs.extend(from_env.split(os.pathsep))
-        for path in self._get_gi_data_dirs():
+        for path in utils.get_system_data_dirs():
             searchdirs.append(os.path.join(path, 'gir-1.0'))
+        searchdirs.append(GIR_DIR)
+        searchdirs.append(os.path.join(DATADIR, 'gir-1.0'))
+        if os.name != 'nt':
+            # For backwards compatibility, was always unconditionally added to the list.
+            searchdirs.append('/usr/share/gir-1.0')
 
         girname = '%s-%s.gir' % (include.name, include.version)
         for d in searchdirs:
