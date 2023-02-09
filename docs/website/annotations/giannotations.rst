@@ -223,7 +223,7 @@ Type signature
   * - ``(nullable)``
     - parameters, return value
     - Indicates that ``NULL`` may be a valid value for a parameter
-      (in, out, inout), or return value (though note that return values which
+      (in, out, inout), or return value (though note that return and out values which
       are only ``NULL`` when throwing an error should not be annotated as
       ``(nullable)``).
     - :commit:`1.42 <1459ff3e>`
@@ -681,6 +681,8 @@ parameter.
 
 An example which demonstrates an (optional) parameter: an (out) parameter
 where the caller can pass NULL if they don’t want to receive the (out) value.
+Note that if the GError is returned set, the value of contents and length might
+be unspecified and should therefore not be used or freed.
 
 ::
 
