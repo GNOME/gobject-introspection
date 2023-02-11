@@ -17,6 +17,7 @@ example-meson:
     EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true"
   script:
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - .gitlab-ci/show-git-commits.sh || true
     - meson compile -C _build
     - sudo meson install -C _build
     - g-ir-scanner --version
@@ -36,6 +37,7 @@ example-autotools:
     EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true"
   script:
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - .gitlab-ci/show-git-commits.sh || true
     - meson compile -C _build
     - sudo meson install -C _build
     - g-ir-scanner --version
@@ -53,6 +55,7 @@ fedora-x86_64-meson:
     EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true -Dwerror=true"
   script:
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - .gitlab-ci/show-git-commits.sh || true
     - meson compile -C _build
     - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
     - ninja -C _build gi-doc
@@ -78,6 +81,7 @@ fedora-x86_64-subprojects:
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
   script:
     - meson setup _build .
+    - .gitlab-ci/show-git-commits.sh || true
     - meson compile -C _build
     - meson test -C _build --print-errorlogs --suite=gobject-introspection
   except:
@@ -97,6 +101,7 @@ fedora-x86_64-no-introspection-data:
     EXTRA_MESON_FLAGS: "-Dwerror=true"
   script:
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - .gitlab-ci/show-git-commits.sh || true
     - meson compile -C _build
     - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
   except:
@@ -116,6 +121,7 @@ fedora-x86_64-python3.6:
     PYENV_VERSION: "3.6.12"
   script:
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - .gitlab-ci/show-git-commits.sh || true
     - meson compile -C _build
     - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
   except:

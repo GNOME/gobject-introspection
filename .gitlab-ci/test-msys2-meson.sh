@@ -35,6 +35,8 @@ meson setup \
         --buildtype debug \
         _build
 
+.gitlab-ci/show-git-commits.sh || true
+
 meson compile -C _build
 
 meson test \
