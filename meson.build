@@ -127,7 +127,8 @@ endif
 glib_micro_version = 0  # gi_version[2]
 glib_version = '>=2.@0@.@1@'.format(gi_versions[1], glib_micro_version)
 
-glib_dep = dependency('glib-2.0', version: glib_version)
+glib_dep = dependency('glib-2.0', version: glib_version,
+                      default_options: ['tests=false'])
 gobject_dep = dependency('gobject-2.0', version: glib_version)
 gio_dep = dependency('gio-2.0', version: glib_version)
 gmodule_dep = dependency('gmodule-2.0', version: glib_version)
