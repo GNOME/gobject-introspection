@@ -232,10 +232,31 @@ if not get_option('gi_cross_use_prebuilt_gi')
   gir_giscanner_built_files = giscanner_built_files
 endif
 
+print_argv = '''
+import sys
+for x in sys.argv[1:]:
+  print(x)
+'''
+
+# There are enough files in GLib and GObject to overflow the Windows cmd.exe
+# command-line length limit of 8191 characters, so write them into a
+# response file and pass that to g-ir-scanner instead
+glib_filelist = custom_target(
+  input: glib_files,
+  output: 'glib-files.txt',
+  capture: true,
+  command: [
+    python,
+    '-c',
+    print_argv,
+    '@INPUT@',
+  ],
+)
+
 glib_gir = custom_target('gir-glib',
   input: glib_files,
   output: 'GLib-2.0.gir',
-  depends: [gir_giscanner_pymod, glib_gir_dep],
+  depends: [gir_giscanner_pymod, glib_gir_dep, glib_filelist],
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,
@@ -247,8 +268,8 @@ glib_gir = custom_target('gir-glib',
     '-D__G_I18N_LIB_H__',
     '-DGETTEXT_PACKAGE=Dummy',
     '--cflags-end',
-    '@INPUT@',
-  ]
+    '--filelist'
+  ] + glib_filelist,
 )
 
 gir_files += glib_gir
