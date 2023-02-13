@@ -6403,6 +6403,46 @@
 
 
 /**
+ * SECTION:gpathbuf
+ * @Title: GPathBuf
+ * @Short_description: A mutable path builder
+ *
+ * `GPathBuf` is a helper type that allows you to easily build paths from
+ * individual elements, using the platform specific conventions for path
+ * separators.
+ *
+ * |[<!-- language="C" -->
+ * g_auto (GPathBuf) path;
+ *
+ * g_path_buf_init (&path);
+ *
+ * g_path_buf_push (&path, "usr");
+ * g_path_buf_push (&path, "bin");
+ * g_path_buf_push (&path, "echo");
+ *
+ * g_autofree char *echo = g_path_buf_to_path (&path);
+ * g_assert_cmpstr (echo, ==, "/usr/bin/echo");
+ * ]|
+ *
+ * You can also load a full path and then operate on its components:
+ *
+ * |[<!-- language="C" -->
+ * g_auto (GPathBuf) path;
+ *
+ * g_path_buf_init_from_path (&path, "/usr/bin/echo");
+ *
+ * g_path_buf_pop (&path);
+ * g_path_buf_push (&path, "sh");
+ *
+ * g_autofree char *sh = g_path_buf_to_path (&path);
+ * g_assert_cmpstr (sh, ==, "/usr/bin/sh");
+ * ]|
+ *
+ * `GPathBuf` is available since GLib 2.76.
+ */
+
+
+/**
  * SECTION:gregex
  * @title: Perl-compatible regular expressions
  * @short_description: matches strings against regular expressions
@@ -7727,15 +7767,15 @@
  *
  * GSlice was a space-efficient and multi-processing scalable way to allocate
  * equal sized pieces of memory. Since GLib 2.76, its implementation has been
- * removed and it calls g_malloc() and g_free(), because the performance of the
- * system-default allocators has improved on all platforms since GSlice was
- * written.
+ * removed and it calls g_malloc() and g_free_sized(), because the performance
+ * of the system-default allocators has improved on all platforms since GSlice
+ * was written.
  *
  * The GSlice APIs have not been deprecated, as they are widely in use and doing
  * so would be very disruptive for little benefit.
  *
- * New code should be written using g_new()/g_malloc() and g_free(). There is no
- * particular benefit in porting existing code away from
+ * New code should be written using g_new()/g_malloc() and g_free_sized() or
+ * g_free(). There is no particular benefit in porting existing code away from
  * g_slice_new()/g_slice_free() unless it’s being rewritten anyway.
  *
  * Here is an example for using the slice allocator:
@@ -9466,7 +9506,7 @@
  * the program is terminated.
  *
  * Aligned memory allocations returned by this function can only be
- * freed using g_aligned_free().
+ * freed using g_aligned_free_sized() or g_aligned_free().
  *
  * Returns: (transfer full): the allocated memory
  * Since: 2.72
@@ -9495,6 +9535,26 @@
  * Frees the memory allocated by g_aligned_alloc().
  *
  * Since: 2.72
+ */
+
+
+/**
+ * g_aligned_free_sized:
+ * @mem: (nullable): the memory to free
+ * @alignment: alignment of @mem
+ * @size: size of @mem, in bytes
+ *
+ * Frees the memory pointed to by @mem, assuming it is has the given @size and
+ * @alignment.
+ *
+ * If @mem is %NULL this is a no-op (and @size is ignored).
+ *
+ * It is an error if @size doesn’t match the size, or @alignment doesn’t match
+ * the alignment, passed when @mem was allocated. @size and @alignment are
+ * passed to this function to allow optimizations in the allocator. If you
+ * don’t know either of them, use g_aligned_free() instead.
+ *
+ * Since: 2.76
  */
 
 
@@ -12422,11 +12482,11 @@
  * string.
  *
  * Returns: (type filename): the name of the file without any leading
- *     directory components
+ *   directory components
  * Deprecated: 2.2: Use g_path_get_basename() instead, but notice
- *     that g_path_get_basename() allocates new memory for the
- *     returned string, unlike this function which returns a pointer
- *     into the argument.
+ *   that g_path_get_basename() allocates new memory for the
+ *   returned string, unlike this function which returns a pointer
+ *   into the argument.
  */
 
 
@@ -13450,7 +13510,7 @@
  * @...: remaining elements in path, terminated by %NULL
  *
  * Creates a filename from a series of elements using the correct
- * separator for filenames.
+ * separator for the current platform.
  *
  * On Unix, this function behaves identically to `g_build_path
  * (G_DIR_SEPARATOR_S, first_element, ....)`.
@@ -13465,8 +13525,10 @@
  * path. If the first element is a relative path, the result will
  * be a relative path.
  *
- * Returns: (type filename) (transfer full): a newly-allocated string that
- *     must be freed with g_free().
+ * If you are building a path programmatically you may want to use
+ * #GPathBuf instead.
+ *
+ * Returns: (type filename) (transfer full): the newly allocated path
  */
 
 
@@ -13475,11 +13537,16 @@
  * @first_element: (type filename): the first element in the path
  * @args: va_list of remaining elements in path
  *
- * Behaves exactly like g_build_filename(), but takes the path elements
- * as a va_list. This function is mainly meant for language bindings.
+ * Creates a filename from a list of elements using the correct
+ * separator for the current platform.
  *
- * Returns: (type filename) (transfer full): a newly-allocated string that
- *     must be freed with g_free().
+ * Behaves exactly like g_build_filename(), but takes the path elements
+ * as a va_list.
+ *
+ * This function is mainly meant for implementing other variadic arguments
+ * functions.
+ *
+ * Returns: (type filename) (transfer full): the newly allocated path
  * Since: 2.56
  */
 
@@ -13487,14 +13554,19 @@
 /**
  * g_build_filenamev:
  * @args: (array zero-terminated=1) (element-type filename): %NULL-terminated
- *     array of strings containing the path elements.
+ *   array of strings containing the path elements.
  *
- * Behaves exactly like g_build_filename(), but takes the path elements
- * as a string array, instead of varargs. This function is mainly
+ * Creates a filename from a vector of elements using the correct
+ * separator for the current platform.
+ *
+ * This function behaves exactly like g_build_filename(), but takes the path
+ * elements as a string array, instead of varargs. This function is mainly
  * meant for language bindings.
  *
- * Returns: (type filename) (transfer full): a newly-allocated string that
- *     must be freed with g_free().
+ * If you are building a path programmatically you may want to use
+ * #GPathBuf instead.
+ *
+ * Returns: (type filename) (transfer full): the newly allocated path
  * Since: 2.8
  */
 
@@ -13506,10 +13578,12 @@
  * @...: remaining elements in path, terminated by %NULL
  *
  * Creates a path from a series of elements using @separator as the
- * separator between elements. At the boundary between two elements,
- * any trailing occurrences of separator in the first element, or
- * leading occurrences of separator in the second element are removed
- * and exactly one copy of the separator is inserted.
+ * separator between elements.
+ *
+ * At the boundary between two elements, any trailing occurrences of
+ * separator in the first element, or leading occurrences of separator
+ * in the second element are removed and exactly one copy of the
+ * separator is inserted.
  *
  * Empty elements are ignored.
  *
@@ -13532,8 +13606,7 @@
  * copies of the separator, elements consisting only of copies
  * of the separator are ignored.
  *
- * Returns: (type filename) (transfer full): a newly-allocated string that
- *     must be freed with g_free().
+ * Returns: (type filename) (transfer full): the newly allocated path
  */
 
 
@@ -13541,11 +13614,12 @@
  * g_build_pathv:
  * @separator: a string used to separator the elements of the path.
  * @args: (array zero-terminated=1) (element-type filename): %NULL-terminated
- *     array of strings containing the path elements.
+ *   array of strings containing the path elements.
  *
  * Behaves exactly like g_build_path(), but takes the path elements
- * as a string array, instead of varargs. This function is mainly
- * meant for language bindings.
+ * as a string array, instead of variadic arguments.
+ *
+ * This function is mainly meant for language bindings.
  *
  * Returns: (type filename) (transfer full): a newly-allocated string that
  *     must be freed with g_free().
@@ -14075,7 +14149,7 @@
  * No file system I/O is done.
  *
  * Returns: (type filename) (transfer full): a newly allocated string with the
- * canonical file path
+ *   canonical file path
  * Since: 2.58
  */
 
@@ -17093,7 +17167,7 @@
 /**
  * g_dir_make_tmp:
  * @tmpl: (type filename) (nullable): Template for directory name,
- *     as in g_mkdtemp(), basename only, or %NULL for a default template
+ *   as in g_mkdtemp(), basename only, or %NULL for a default template
  * @error: return location for a #GError
  *
  * Creates a subdirectory in the preferred directory for temporary
@@ -17109,9 +17183,9 @@
  * modified, and might thus be a read-only literal string.
  *
  * Returns: (type filename) (transfer full): The actual name used. This string
- *     should be freed with g_free() when not needed any longer and is
- *     is in the GLib file name encoding. In case of errors, %NULL is
- *     returned and @error will be set.
+ *   should be freed with g_free() when not needed any longer and is
+ *   is in the GLib file name encoding. In case of errors, %NULL is
+ *   returned and @error will be set.
  * Since: 2.30
  */
 
@@ -17573,9 +17647,9 @@
 /**
  * g_file_open_tmp:
  * @tmpl: (type filename) (nullable): Template for file name, as in
- *     g_mkstemp(), basename only, or %NULL for a default template
+ *   g_mkstemp(), basename only, or %NULL for a default template
  * @name_used: (out) (type filename): location to store actual name used,
- *     or %NULL
+ *   or %NULL
  * @error: return location for a #GError
  *
  * Opens a file for writing in the preferred directory for temporary
@@ -17596,9 +17670,9 @@
  * name encoding.
  *
  * Returns: A file handle (as from open()) to the file opened for
- *     reading and writing. The file is opened in binary mode on platforms
- *     where there is a difference. The file handle should be closed with
- *     close(). In case of errors, -1 is returned and @error will be set.
+ *   reading and writing. The file is opened in binary mode on platforms
+ *   where there is a difference. The file handle should be closed with
+ *   close(). In case of errors, -1 is returned and @error will be set.
  */
 
 
@@ -17608,14 +17682,15 @@
  * @error: return location for a #GError
  *
  * Reads the contents of the symbolic link @filename like the POSIX
- * readlink() function.
+ * `readlink()` function.
  *
- * The returned string is in the encoding used
- * for filenames. Use g_filename_to_utf8() to convert it to UTF-8.
+ * The returned string is in the encoding used for filenames. Use
+ * g_filename_to_utf8() to convert it to UTF-8.
  *
- * The returned string may also be a relative path. Use g_build_filename() to
- * convert it to an absolute path:
- * |[
+ * The returned string may also be a relative path. Use g_build_filename()
+ * to convert it to an absolute path:
+ *
+ * |[<!-- language="C" -->
  * g_autoptr(GError) local_error = NULL;
  * g_autofree gchar *link_target = g_file_read_link ("/etc/localtime", &local_error);
  *
@@ -17631,7 +17706,7 @@
  * ]|
  *
  * Returns: (type filename) (transfer full): A newly-allocated string with
- *     the contents of the symbolic link, or %NULL if an error occurred.
+ *   the contents of the symbolic link, or %NULL if an error occurred.
  * Since: 2.4
  */
 
@@ -17746,15 +17821,33 @@
  *
  * You should never use g_file_test() to test whether it is safe
  * to perform an operation, because there is always the possibility
- * of the condition changing before you actually perform the operation.
+ * of the condition changing before you actually perform the operation,
+ * see [TOCTOU](https://en.wikipedia.org/wiki/Time-of-check_to_time-of-use).
+ *
  * For example, you might think you could use %G_FILE_TEST_IS_SYMLINK
  * to know whether it is safe to write to a file without being
  * tricked into writing into a different location. It doesn't work!
+ *
  * |[<!-- language="C" -->
  *  // DON'T DO THIS
  *  if (!g_file_test (filename, G_FILE_TEST_IS_SYMLINK))
  *    {
  *      fd = g_open (filename, O_WRONLY);
+ *      // write to fd
+ *    }
+ *
+ *  // DO THIS INSTEAD
+ *  fd = g_open (filename, O_WRONLY | O_NOFOLLOW);
+ *  if (fd == -1)
+ *    {
+ *      // check error
+ *      if (errno == ELOOP)
+ *        // file is a symlink and can be ignored
+ *      else
+ *        // handle errors as before
+ *    }
+ *  else
+ *    {
  *      // write to fd
  *    }
  * ]|
@@ -18105,8 +18198,28 @@
  *
  * Frees the memory pointed to by @mem.
  *
+ * If you know the allocated size of @mem, calling g_free_sized() may be faster,
+ * depending on the libc implementation in use.
+ *
  * If @mem is %NULL it simply returns, so there is no need to check @mem
  * against %NULL before calling this function.
+ */
+
+
+/**
+ * g_free_sized:
+ * @mem: (nullable): the memory to free
+ * @size: size of @mem, in bytes
+ *
+ * Frees the memory pointed to by @mem, assuming it is has the given @size.
+ *
+ * If @mem is %NULL this is a no-op (and @size is ignored).
+ *
+ * It is an error if @size doesn’t match the size passed when @mem was
+ * allocated. @size is passed to this function to allow optimizations in the
+ * allocator. If you don’t know the allocation size, use g_free() instead.
+ *
+ * Since: 2.76
  */
 
 
@@ -24956,8 +25069,8 @@
  * g_dir_make_tmp() instead.
  *
  * Returns: (nullable) (type filename): A pointer to @tmpl, which has been
- *     modified to hold the directory name.  In case of errors, %NULL is
- *     returned and %errno will be set.
+ *   modified to hold the directory name.  In case of errors, %NULL is
+ *   returned and %errno will be set.
  * Since: 2.30
  */
 
@@ -24984,8 +25097,8 @@
  * g_dir_make_tmp() instead.
  *
  * Returns: (nullable) (type filename): A pointer to @tmpl, which has been
- *     modified to hold the directory name. In case of errors, %NULL is
- *     returned, and %errno will be set.
+ *   modified to hold the directory name. In case of errors, %NULL is
+ *   returned, and %errno will be set.
  * Since: 2.30
  */
 
@@ -25006,10 +25119,10 @@
  * Most importantly, on Windows it should be in UTF-8.
  *
  * Returns: A file handle (as from open()) to the file
- *     opened for reading and writing. The file is opened in binary
- *     mode on platforms where there is a difference. The file handle
- *     should be closed with close(). In case of errors, -1 is
- *     returned and %errno will be set.
+ *   opened for reading and writing. The file is opened in binary
+ *   mode on platforms where there is a difference. The file handle
+ *   should be closed with close(). In case of errors, -1 is
+ *   returned and %errno will be set.
  */
 
 
@@ -25017,7 +25130,7 @@
  * g_mkstemp_full: (skip)
  * @tmpl: (type filename): template filename
  * @flags: flags to pass to an open() call in addition to O_EXCL
- *     and O_CREAT, which are passed automatically
+ *   and O_CREAT, which are passed automatically
  * @mode: permissions to create the temporary file with
  *
  * Opens a temporary file. See the mkstemp() documentation
@@ -25033,9 +25146,9 @@
  * on Windows it should be in UTF-8.
  *
  * Returns: A file handle (as from open()) to the file
- *     opened for reading and writing. The file handle should be
- *     closed with close(). In case of errors, -1 is returned
- *     and %errno will be set.
+ *   opened for reading and writing. The file handle should be
+ *   closed with close(). In case of errors, -1 is returned
+ *   and %errno will be set.
  * Since: 2.22
  */
 
@@ -26219,6 +26332,282 @@
 
 
 /**
+ * g_path_buf_clear:
+ * @buf: a path buffer
+ *
+ * Clears the contents of the path buffer.
+ *
+ * This function should be use to free the resources in a stack-allocated
+ * `GPathBuf` initialized using g_path_buf_init() or
+ * g_path_buf_init_from_path().
+ *
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_clear_to_path:
+ * @buf: a path buffer
+ *
+ * Clears the contents of the path buffer and returns the built path.
+ *
+ * This function returns `NULL` if the `GPathBuf` is empty.
+ *
+ * See also: g_path_buf_to_path()
+ *
+ * Returns: (transfer full) (nullable) (type filename): the built path
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_copy:
+ * @buf: (not nullable): a path buffer
+ *
+ * Copies the contents of a path buffer into a new `GPathBuf`.
+ *
+ * Returns: (transfer full): the newly allocated path buffer
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_equal:
+ * @v1: (not nullable): a path buffer to compare
+ * @v2: (not nullable): a path buffer to compare
+ *
+ * Compares two path buffers for equality and returns `TRUE`
+ * if they are equal.
+ *
+ * The path inside the paths buffers are not going to be normalized,
+ * so `X/Y/Z/A/..`, `X/./Y/Z` and `X/Y/Z` are not going to be considered
+ * equal.
+ *
+ * This function can be passed to g_hash_table_new() as the
+ * `key_equal_func` parameter.
+ *
+ * Returns: `TRUE` if the two path buffers are equal,
+ *   and `FALSE` otherwise
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_free:
+ * @buf: (transfer full) (not nullable): a path buffer
+ *
+ * Frees a `GPathBuf` allocated by g_path_buf_new().
+ *
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_free_to_path:
+ * @buf: (transfer full) (not nullable): a path buffer
+ *
+ * Frees a `GPathBuf` allocated by g_path_buf_new(), and
+ * returns the path inside the buffer.
+ *
+ * This function returns `NULL` if the `GPathBuf` is empty.
+ *
+ * See also: g_path_buf_to_path()
+ *
+ * Returns: (transfer full) (nullable) (type filename): the path
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_init:
+ * @buf: a path buffer
+ *
+ * Initializes a `GPathBuf` instance.
+ *
+ * Returns: (transfer none): the initialized path builder
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_init_from_path:
+ * @buf: a path buffer
+ * @path: (type filename) (nullable): a file system path
+ *
+ * Initializes a `GPathBuf` instance with the given path.
+ *
+ * Returns: (transfer none): the initialized path builder
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_new:
+ *
+ * Allocates a new `GPathBuf`.
+ *
+ * Returns: (transfer full): the newly allocated path buffer
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_new_from_path:
+ * @path: (type filename) (nullable): the path used to initialize the buffer
+ *
+ * Allocates a new `GPathBuf` with the given @path.
+ *
+ * Returns: (transfer full): the newly allocated path buffer
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_pop:
+ * @buf: a path buffer
+ *
+ * Removes the last element of the path buffer.
+ *
+ * If there is only one element in the path buffer (for example, `/` on
+ * Unix-like operating systems or the drive on Windows systems), it will
+ * not be removed and %FALSE will be returned instead.
+ *
+ * |[<!-- language="C" -->
+ * GPathBuf buf, cmp;
+ *
+ * g_path_buf_init_from_path (&buf, "/bin/sh");
+ *
+ * g_path_buf_pop (&buf);
+ * g_path_buf_init_from_path (&cmp, "/bin");
+ * g_assert_true (g_path_buf_equal (&buf, &cmp));
+ * g_path_buf_clear (&cmp);
+ *
+ * g_path_buf_pop (&buf);
+ * g_path_buf_init_from_path (&cmp, "/");
+ * g_assert_true (g_path_buf_equal (&buf, &cmp));
+ * g_path_buf_clear (&cmp);
+ *
+ * g_path_buf_clear (&buf);
+ * ]|
+ *
+ * Returns: `TRUE` if the buffer was modified and `FALSE` otherwise
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_push:
+ * @buf: a path buffer
+ * @path: (type filename): a path
+ *
+ * Extends the given path buffer with @path.
+ *
+ * If @path is absolute, it replaces the current path.
+ *
+ * If @path contains a directory separator, the buffer is extended by
+ * as many elements the path provides.
+ *
+ * On Windows, both forward slashes and backslashes are treated as
+ * directory separators. On other platforms, %G_DIR_SEPARATOR_S is the
+ * only directory separator.
+ *
+ * |[<!-- language="C" -->
+ * GPathBuf buf, cmp;
+ *
+ * g_path_buf_init_from_path (&buf, "/tmp");
+ * g_path_buf_push (&buf, ".X11-unix/X0");
+ * g_path_buf_init_from_path (&cmp, "/tmp/.X11-unix/X0");
+ * g_assert_true (g_path_buf_equal (&buf, &cmp));
+ * g_path_buf_clear (&cmp);
+ *
+ * g_path_buf_push (&buf, "/etc/locale.conf");
+ * g_path_buf_init_from_path (&cmp, "/etc/locale.conf");
+ * g_assert_true (g_path_buf_equal (&buf, &cmp));
+ * g_path_buf_clear (&cmp);
+ *
+ * g_path_buf_clear (&buf);
+ * ]|
+ *
+ * Returns: (transfer none): the same pointer to @buf, for convenience
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_set_extension:
+ * @buf: a path buffer
+ * @extension: (type filename) (nullable): the file extension
+ *
+ * Adds an extension to the file name in the path buffer.
+ *
+ * If @extension is `NULL`, the extension will be unset.
+ *
+ * If the path buffer does not have a file name set, this function returns
+ * `FALSE` and leaves the path buffer unmodified.
+ *
+ * Returns: `TRUE` if the extension was replaced, and `FALSE` otherwise
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_set_filename:
+ * @buf: a path buffer
+ * @file_name: (type filename) (not nullable): the file name in the path
+ *
+ * Sets the file name of the path.
+ *
+ * If the path buffer is empty, the filename is left unset and this
+ * function returns `FALSE`.
+ *
+ * If the path buffer only contains the root element (on Unix-like operating
+ * systems) or the drive (on Windows), this is the equivalent of pushing
+ * the new @file_name.
+ *
+ * If the path buffer contains a path, this is the equivalent of
+ * popping the path buffer and pushing @file_name, creating a
+ * sibling of the original path.
+ *
+ * |[<!-- language="C" -->
+ * GPathBuf buf, cmp;
+ *
+ * g_path_buf_init_from_path (&buf, "/");
+ *
+ * g_path_buf_set_filename (&buf, "bar");
+ * g_path_buf_init_from_path (&cmp, "/bar");
+ * g_assert_true (g_path_buf_equal (&buf, &cmp));
+ * g_path_buf_clear (&cmp);
+ *
+ * g_path_buf_set_filename (&buf, "baz.txt");
+ * g_path_buf_init_from_path (&cmp, "/baz.txt");
+ * g_assert_true (g_path_buf_equal (&buf, &cmp);
+ * g_path_buf_clear (&cmp);
+ *
+ * g_path_buf_clear (&buf);
+ * ]|
+ *
+ * Returns: `TRUE` if the file name was replaced, and `FALSE` otherwise
+ * Since: 2.76
+ */
+
+
+/**
+ * g_path_buf_to_path:
+ * @buf: a path buffer
+ *
+ * Retrieves the built path from the path buffer.
+ *
+ * On Windows, the result contains backslashes as directory separators,
+ * even if forward slashes were used in input.
+ *
+ * If the path buffer is empty, this function returns `NULL`.
+ *
+ * Returns: (transfer full) (type filename) (nullable): the path
+ * Since: 2.76
+ */
+
+
+/**
  * g_path_get_basename:
  * @file_name: (type filename): the name of the file
  *
@@ -26230,7 +26619,7 @@
  * separator is returned. If @file_name is empty, it gets ".".
  *
  * Returns: (type filename) (transfer full): a newly allocated string
- *    containing the last component of the filename
+ *   containing the last component of the filename
  */
 
 
@@ -30794,7 +31183,7 @@
  * Since GLib 2.76 this always uses the system malloc() implementation
  * internally.
  *
- * Returns: a pointer to the allocated memory block, which will
+ * Returns: (nullable): a pointer to the allocated memory block, which will
  *   be %NULL if and only if @mem_size is 0
  * Since: 2.10
  */
@@ -30810,8 +31199,8 @@
  * Since GLib 2.76 this always uses the system malloc() implementation
  * internally.
  *
- * Returns: a pointer to the allocated block, which will be %NULL if and only
- *    if @mem_size is 0
+ * Returns: (nullable): a pointer to the allocated block, which will be %NULL
+ *    if and only if @mem_size is 0
  * Since: 2.10
  */
 
@@ -30829,8 +31218,8 @@
  * Since GLib 2.76 this always uses the system malloc() implementation
  * internally.
  *
- * Returns: a pointer to the allocated memory block, which will be %NULL if and
- *    only if @mem_size is 0
+ * Returns: (nullable): a pointer to the allocated memory block,
+ *    which will be %NULL if and only if @mem_size is 0
  * Since: 2.14
  */
 
@@ -30861,7 +31250,7 @@
 /**
  * g_slice_free:
  * @type: the type of the block to free, typically a structure name
- * @mem: a pointer to the block to free
+ * @mem: (nullable): a pointer to the block to free
  *
  * A convenience macro to free a block of memory that has
  * been allocated from the slice allocator.
@@ -30882,7 +31271,7 @@
 /**
  * g_slice_free1:
  * @block_size: the size of the block
- * @mem_block: a pointer to the block to free
+ * @mem_block: (nullable): a pointer to the block to free
  *
  * Frees a block of memory.
  *
@@ -30894,7 +31283,8 @@
  *
  * If @mem_block is %NULL, this function does nothing.
  *
- * Since GLib 2.76 this always uses the system free() implementation internally.
+ * Since GLib 2.76 this always uses the system free_sized() implementation
+ * internally.
  *
  * Since: 2.10
  */
@@ -30903,7 +31293,7 @@
 /**
  * g_slice_free_chain:
  * @type: the type of the @mem_chain blocks
- * @mem_chain: a pointer to the first block of the chain
+ * @mem_chain: (nullable): a pointer to the first block of the chain
  * @next: the field name of the next pointer in @type
  *
  * Frees a linked list of memory blocks of structure type @type.
@@ -30926,7 +31316,7 @@
 /**
  * g_slice_free_chain_with_offset:
  * @block_size: the size of the blocks
- * @mem_chain: a pointer to the first block of the chain
+ * @mem_chain: (nullable): a pointer to the first block of the chain
  * @next_offset: the offset of the @next field in the blocks
  *
  * Frees a linked list of memory blocks of structure type @type.
@@ -30940,7 +31330,8 @@
  *
  * If @mem_chain is %NULL, this function does nothing.
  *
- * Since GLib 2.76 this always uses the system free() implementation internally.
+ * Since GLib 2.76 this always uses the system free_sized() implementation
+ * internally.
  *
  * Since: 2.10
  */

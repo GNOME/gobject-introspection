@@ -14886,12 +14886,14 @@
  * @inbuf: (array length=inbuf_size) (element-type guint8): the buffer
  *         containing the data to convert.
  * @inbuf_size: the number of bytes in @inbuf
- * @outbuf: (element-type guint8) (array length=outbuf_size): a buffer to write
- *    converted data in.
+ * @outbuf: (element-type guint8) (array length=outbuf_size) (not nullable): a
+ *    buffer to write converted data in.
  * @outbuf_size: the number of bytes in @outbuf, must be at least one
  * @flags: a #GConverterFlags controlling the conversion details
- * @bytes_read: (out): will be set to the number of bytes read from @inbuf on success
- * @bytes_written: (out): will be set to the number of bytes written to @outbuf on success
+ * @bytes_read: (out) (not nullable): will be set to the number of bytes read
+ *    from @inbuf on success
+ * @bytes_written: (out) (not nullable): will be set to the number of bytes
+ *    written to @outbuf on success
  * @error: location to store the error occurring, or %NULL to ignore
  *
  * This is the main operation used when converting data. It is to be called
