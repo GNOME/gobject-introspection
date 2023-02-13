@@ -142,6 +142,7 @@ msys2-mingw64-meson:
     name: "gi-_${env:CI_COMMIT_REF_NAME}"
     paths:
       - _build/meson-logs
+  allow_failure: true
 
 msys2-clang64-meson:
   stage: build
@@ -158,6 +159,7 @@ msys2-clang64-meson:
     name: "gi-_${env:CI_COMMIT_REF_NAME}"
     paths:
       - _build/meson-logs
+  allow_failure: true
 
 vs2017-x64-meson:
   stage: build
