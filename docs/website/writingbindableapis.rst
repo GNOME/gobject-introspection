@@ -224,3 +224,29 @@ That is, don't do this:
 
 Instead, put initialization code in the ``foo_bar_init()`` function or the
 ``foo_bar_constructed()`` virtual function.
+
+
+Transfer-none return values from the binding
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If your library expects to call a function from C which may be implemented in
+another language and exposed through the binding (for example, a signal handler,
+or a GObject vfunc), it's best not to return transfer-none strings, because what
+you assume about storage lifetime in C may not apply in other languages.
+
+For example,
+
+.. code-block:: c
+
+    typedef struct {
+        GTypeInterface iface;
+
+        const char * (*my_vfunc)        (FooBaz *self);  /* Don't do this! */
+        char       * (*my_better_vfunc) (FooBaz *self);  /* Do this instead! */
+    } FooBazIface;
+
+A class that implements ``FooBazIface`` in another programming language may not
+be able to return a static string here, because the language may not have a
+concept of static storage lifetime, or it may not store strings as
+zero-terminated UTF-8 bytes as C code would expect. This can cause memory leaks.
+Instead, duplicate the string before returning it, and use transfer-full.
