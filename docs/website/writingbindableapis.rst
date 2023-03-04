@@ -29,8 +29,8 @@ Example to avoid:
       guint flags;
 
 
-Functionality only accessible through a C macro
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Functionality only accessible through a C macro or inline function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The scanner does not support C macros as API. Solution - add a function
 accessor rather than a macro. This also has the side effect of making
@@ -43,6 +43,9 @@ Example:
     #define GTK_WIDGET_FLAGS(wid)             (GTK_OBJECT_FLAGS (wid))
 
     GtkWidgetFlags gtk_widget_get_flags (GtkWidget *widget); /* Actually, see http://bugzilla.gnome.org/show_bug.cgi?id=69872 */
+
+Likewise, inline functions cannot be loaded from a dynamic library. Make sure to
+provide a non-inline equivalent.
 
 
 Direct C structure access for objects
@@ -89,6 +92,9 @@ You can also expose the array variant under the name of the varargs variant
 using the ``rename-to`` annotation:
 ``gtk_list_store_newv: (rename-to gtk_list_store_new)``
 
+Also consider using C99's compound literals and designated initializers to avoid
+``va_list`` even in the C API, which is more type-safe.
+
 
 Multiple out parameters
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,11 +113,61 @@ gint x; gint y; }`` structure).
                                              gint           *y);
 
 
+In-out parameters
+~~~~~~~~~~~~~~~~~
+
+Don't use in-out arguments, especially not for non-scalar values. It's difficult
+to enforce or validate the conventions for in-out arguments, which can easily
+lead to crashes.
+
+Instead, pass the input as an in argument, and receive the output as either a
+return value or an out argument.
+
+.. code-block:: c
+
+    FooBoxed *foo_bar_scale_boxed(FooBar   *self,
+                                  FooBoxed *boxed);
+
+    void foo_bar_scale_boxed(FooBar    *self,
+                             FooBoxed  *boxed_in,
+                             FooBoxed **boxed_out);
+
+In particular, don't require the caller to pass in a ``GValue`` which a C
+function modifies.
+
+
 Arrays
 ~~~~~~
 
 For reference types, zero-terminated arrays are the easiest to work with.
 Arrays of primitive type such as "int" will require length metadata.
+
+In a general-purpose library, it's best not to expose GLib array and hash types
+such as ``GArray``, ``GPtrArray``, ``GByteArray``, ``GList``, ``GSList``,
+``GQueue``, and ``GHashTable`` in the public API. They are fine for internal
+libraries, but difficult in general for consumers of introspected libraries to
+deal with.
+
+
+Strings
+~~~~~~~
+
+C treats strings as arrays of bytes, but many other languages do not. So don't
+write APIs that treat ``const char *`` parameters as arrays that need an
+``array length`` annotation.
+
+Treat all ``const char *`` parameters as zero-terminated strings. Don't use the
+same entry point for zero-terminated strings as for byte arrays which may
+contain embedded zeroes.
+
+.. code-block:: c
+
+    void foo_bar_snarf_string(FooBar     *self,
+                              const char *str);
+
+    void foo_bar_snarf_bytes(FooBar        *self,
+                             const uint8_t *bytes,
+                             size_t         length);
 
 
 Callbacks
