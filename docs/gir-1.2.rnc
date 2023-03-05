@@ -255,7 +255,7 @@ grammar {
     ## Binary attribute which is "0" (false) if the element is not introspectable. It doesn't exist in the bindings, due in general to missing information in the annotations in the original C code
     attribute introspectable { "0" | "1" }?,
     ## Binary attribute which is "1" (true) if the element has been deprecated
-    attribute deprecated { xsd:string }?,
+    attribute deprecated { "0" | "1" }?,
     ## Version number from which this element is deprecated
     attribute deprecated-version { xsd:string }?,
     ## version number of an element
