@@ -17837,7 +17837,7 @@
  *    }
  *
  *  // DO THIS INSTEAD
- *  fd = g_open (filename, O_WRONLY | O_NOFOLLOW);
+ *  fd = g_open (filename, O_WRONLY | O_NOFOLLOW | O_CLOEXEC);
  *  if (fd == -1)
  *    {
  *      // check error
@@ -35885,8 +35885,9 @@
  * Returns: %TRUE for the forked child and %FALSE for the executing parent process.
  * Since: 2.16
  * Deprecated: This function is implemented only on Unix platforms,
- * and is not always reliable due to problems inherent in
- * fork-without-exec. Use g_test_trap_subprocess() instead.
+ * is not always reliable due to problems inherent in fork-without-exec
+ * and doesn't set close-on-exec flag on its file descriptors.
+ * Use g_test_trap_subprocess() instead.
  */
 
 

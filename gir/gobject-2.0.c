@@ -6528,7 +6528,7 @@
  * other validly registered type ID, but randomized type IDs should
  * not be passed in and will most likely lead to a crash.
  *
- * Returns: static type name or %NULL
+ * Returns: (nullable): static type name or %NULL
  */
 
 
@@ -6905,7 +6905,7 @@
  * g_boxed_free(), e.g. like: g_boxed_free (G_VALUE_TYPE (@value),
  * return_value);
  *
- * Returns: boxed contents of @value
+ * Returns: (transfer full) (nullable): boxed contents of @value
  */
 
 
@@ -6917,7 +6917,7 @@
  * its reference count. If the contents of the #GValue are %NULL, then
  * %NULL will be returned.
  *
- * Returns: (type GObject.Object) (transfer full): object content of @value,
+ * Returns: (type GObject.Object) (transfer full) (nullable): object content of @value,
  *          should be unreferenced when no longer needed.
  */
 
@@ -6940,7 +6940,7 @@
  *
  * Get a copy the contents of a %G_TYPE_STRING #GValue.
  *
- * Returns: a newly allocated copy of the string content of @value
+ * Returns: (nullable) (transfer full): a newly allocated copy of the string content of @value
  */
 
 
@@ -6984,7 +6984,7 @@
  *
  * Get the contents of a %G_TYPE_BOXED derived #GValue.
  *
- * Returns: (transfer none): boxed contents of @value
+ * Returns: (transfer none) (nullable): boxed contents of @value
  */
 
 
@@ -7089,7 +7089,7 @@
  *
  * Get the contents of a %G_TYPE_OBJECT derived #GValue.
  *
- * Returns: (type GObject.Object) (transfer none): object contents of @value
+ * Returns: (type GObject.Object) (transfer none) (nullable): object contents of @value
  */
 
 
@@ -7130,7 +7130,7 @@
  *
  * Get the contents of a %G_TYPE_STRING #GValue.
  *
- * Returns: string content of @value
+ * Returns: (nullable) (transfer none): string content of @value
  */
 
 
