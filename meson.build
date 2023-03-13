@@ -1,5 +1,5 @@
 project('gobject-introspection', 'c',
-  version: '1.75.7',
+  version: '1.76.0',
   meson_version: '>= 0.60.0',
   default_options: [
     'c_std=gnu99',
@@ -124,7 +124,7 @@ else
 endif
 
 # Reset to 0 if g-i micro version exceeds GLib's
-glib_micro_version = 0  # gi_version[2]
+glib_micro_version = gi_versions[2]
 glib_version = '>=2.@0@.@1@'.format(gi_versions[1], glib_micro_version)
 
 glib_dep = dependency('glib-2.0', version: glib_version,
