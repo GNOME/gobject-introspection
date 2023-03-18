@@ -132,8 +132,9 @@ return value or an out argument.
                              FooBoxed  *boxed_in,
                              FooBoxed **boxed_out);
 
-In particular, don't require the caller to pass in a ``GValue`` which a C
-function modifies.
+In particular, do not require the caller to pass an initialized ``GValue`` to
+avoid the in-out annotation; instead, pass a ``GValue`` as an out argument, and
+have the function initialize it.
 
 
 Arrays
@@ -152,7 +153,7 @@ deal with.
 Strings
 ~~~~~~~
 
-C treats strings as arrays of bytes, but many other languages do not. So don't
+C treats strings as zero-terminated arrays of bytes, but many other languages do not. So don't
 write APIs that treat ``const char *`` parameters as arrays that need an
 ``array length`` annotation.
 
@@ -169,6 +170,9 @@ contain embedded zeroes.
                              const uint8_t *bytes,
                              size_t         length);
 
+In particular, avoid functions taking a ``const char *`` with a signed length
+that can be set to a negative value to let the function compute the string
+length in bytes. These functions are hard to bind, and require manual overrides.
 
 Callbacks
 ~~~~~~~~~
@@ -231,7 +235,7 @@ Transfer-none return values from the binding
 
 If your library expects to call a function from C which may be implemented in
 another language and exposed through the binding (for example, a signal handler,
-or a GObject vfunc), it's best not to return transfer-none strings, because what
+or a GObject vfunc), it's best not to return transfer-none values, because what
 you assume about storage lifetime in C may not apply in other languages.
 
 For example,
@@ -249,4 +253,6 @@ A class that implements ``FooBazIface`` in another programming language may not
 be able to return a static string here, because the language may not have a
 concept of static storage lifetime, or it may not store strings as
 zero-terminated UTF-8 bytes as C code would expect. This can cause memory leaks.
-Instead, duplicate the string before returning it, and use transfer-full.
+Instead, duplicate the string before returning it, and use transfer-full. This
+recommendation applies to any data type with an ownership, including boxed and
+object types.
