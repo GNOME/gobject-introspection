@@ -5771,6 +5771,7 @@ gi_marshalling_tests_properties_object_finalize (GObject *obj)
   g_clear_pointer (&self->some_string, g_free);
   g_clear_pointer (&self->some_strv, g_strfreev);
   g_clear_pointer (&self->some_boxed_struct, gi_marshalling_tests_boxed_struct_free);
+  g_clear_pointer (&self->some_byte_array, g_byte_array_unref);
   g_clear_pointer (&self->some_variant, g_variant_unref);
   g_clear_pointer (&self->some_boxed_glist, g_list_free);
   g_clear_object (&self->some_object);
