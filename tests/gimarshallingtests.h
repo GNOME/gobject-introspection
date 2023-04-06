@@ -1152,6 +1152,8 @@ void gi_marshalling_tests_gvalue_flat_array (guint         n_values,
 _GI_TEST_EXTERN
 GValue *gi_marshalling_tests_return_gvalue_flat_array (void);
 
+_GI_TEST_EXTERN
+GValue *gi_marshalling_tests_return_gvalue_zero_terminated_array (void);
 
 _GI_TEST_EXTERN
 GValue *gi_marshalling_tests_gvalue_round_trip (GValue *value);

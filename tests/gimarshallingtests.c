@@ -3594,6 +3594,28 @@ gi_marshalling_tests_return_gvalue_flat_array (void)
 }
 
 /**
+ * gi_marshalling_tests_return_gvalue_zero_terminated_array:
+ *
+ * Returns: (array zero-terminated) (transfer full): a flat GValue array
+ */
+GValue *
+gi_marshalling_tests_return_gvalue_zero_terminated_array (void)
+{
+  GValue *array = g_new0 (GValue, 4);
+
+  g_value_init (&array[0], G_TYPE_INT);
+  g_value_set_int (&array[0], 42);
+
+  g_value_init (&array[1], G_TYPE_STRING);
+  g_value_set_static_string (&array[1], "42");
+
+  g_value_init (&array[2], G_TYPE_BOOLEAN);
+  g_value_set_boolean (&array[2], TRUE);
+
+  return array;
+}
+
+/**
  * gi_marshalling_tests_gvalue_round_trip:
  * @value: The first GValue
  *
