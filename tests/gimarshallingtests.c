@@ -2011,11 +2011,13 @@ gi_marshalling_tests_garray_boxed_struct_full_return (void)
   gint i;
 
   array = g_array_new (TRUE, TRUE, sizeof (GIMarshallingTestsBoxedStruct));
+  g_array_set_size (array, 3);
   for (i = 0; i < 3; i++)
     {
-      GIMarshallingTestsBoxedStruct *new_struct = gi_marshalling_tests_boxed_struct_new ();
+      GIMarshallingTestsBoxedStruct *new_struct;
+      new_struct = &g_array_index (array, GIMarshallingTestsBoxedStruct, i);
+      memset (new_struct, 0, sizeof (GIMarshallingTestsSimpleStruct));
       new_struct->long_ = long_values[i];
-      g_array_append_val (array, *new_struct);
     }
 
   return array;
