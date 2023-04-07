@@ -1880,12 +1880,18 @@ gi_marshalling_tests_array_gvariant_full_in (GVariant **variants)
   g_assert (variants[2] == NULL);
 
   /* To catch different behaviors we reconstruct one variant from scratch,
-   * while leaving the other untouched. Both approaches are legal with full
+   * while taking the refernce of the other. Both approaches are legal with full
    * transfer in and out */
   container = g_new0 (GVariant *, 3);
-  container[0] = g_variant_new_int32 (g_variant_get_int32 (variants[0]));
+  container[0] = g_variant_ref_sink (
+    g_variant_new_int32 (g_variant_get_int32 (variants[0])));
   g_variant_unref (variants[0]);
-  container[1] = variants[1];
+
+  /* In case the variant is floating, we want to transform it into a full
+   * reference, so that's fully owned by the container like if the case
+   * above, otherwise we just steal it since it has already a strong reference.
+   */
+  container[1] = g_variant_take_ref (variants[1]);
   g_free (variants);
 
   return container;
