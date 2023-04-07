@@ -1856,7 +1856,8 @@ gi_marshalling_tests_array_gvariant_container_in (GVariant **variants)
   g_assert (variants[2] == NULL);
 
   container = g_new0 (GVariant *, 3);
-  container[0] = variants[0];
+  /* This is a floating reference, so it's fine for transfer container */
+  container[0] = g_variant_new_int32 (g_variant_get_int32 (variants[0]));
   container[1] = variants[1];
   g_free (variants);
 
