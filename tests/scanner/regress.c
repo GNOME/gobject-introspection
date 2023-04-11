@@ -3904,6 +3904,7 @@ fundamental_object_no_get_set_func_transform_to_compatible_with_fundamental_sub_
   dest_object = regress_test_fundamental_sub_object_new (src_object->data);
 
   g_value_set_instance (dest_value, dest_object);
+  regress_test_fundamental_object_unref ((RegressTestFundamentalObject*) dest_object);
 }
 
 void
