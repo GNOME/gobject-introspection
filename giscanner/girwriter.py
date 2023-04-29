@@ -53,6 +53,8 @@ class GIRWriter(XMLWriter):
                 self._write_pkgconfig_pkg(pkg)
             for c_include in sorted(set(namespace.c_includes)):
                 self._write_c_include(c_include)
+            if namespace.doc_format:
+                self._write_doc_format(namespace.doc_format)
             self._namespace = namespace
             self._write_namespace(namespace)
             self._namespace = None
@@ -68,6 +70,10 @@ class GIRWriter(XMLWriter):
     def _write_c_include(self, c_include):
         attrs = [('name', c_include)]
         self.write_tag('c:include', attrs)
+
+    def _write_doc_format(self, doc_format):
+        attrs = [('name', doc_format)]
+        self.write_tag('doc:format', attrs)
 
     def _write_namespace(self, namespace):
         attrs = [('name', namespace.name),

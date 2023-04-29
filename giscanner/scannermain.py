@@ -220,6 +220,11 @@ match the namespace prefix.""")
     parser.add_option("", "--compiler",
                       action="store", dest="compiler", default=None,
                       help="the C compiler to use internally")
+    parser.add_option("", "--doc-format",
+                      action="store", dest="doc_format",
+                      help=("name of the documentation format used in the project, "
+                            "should be one of gi-docgen, gtk-doc-markdown or "
+                            "gtk-doc-docbook"))
 
     group = get_preprocessor_option_group(parser)
     parser.add_option_group(group)
@@ -581,6 +586,9 @@ def scanner_main(args):
             or options.header_only):
         _error("Must specify --program or --library")
 
+    if options.doc_format and options.doc_format not in [ 'gi-docgen', 'gtk-doc-markdown', 'gtk-doc-docbook' ]:
+        _error("Unknown doc-type: %s" % (options.doc_format, ))
+
     namespace = create_namespace(options)
     logger = message.MessageLogger.get(namespace=namespace)
     if options.warn_all:
@@ -639,6 +647,7 @@ def scanner_main(args):
 
     transformer.namespace.c_includes = options.c_includes
     transformer.namespace.exported_packages = exported_packages
+    transformer.namespace.doc_format = options.doc_format
 
     sources_top_dirs = get_source_root_dirs(options, filenames)
     writer = Writer(transformer.namespace, sources_top_dirs)
