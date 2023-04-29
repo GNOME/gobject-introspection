@@ -21,4 +21,5 @@ gnome.generate_gir(
   identifier_prefix : 'GISample',
   includes : ['GObject-2.0'],
   install : true,
+  extra_args : ['--doc-format=gtk-doc-markdown'],
 )

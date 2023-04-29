@@ -29,6 +29,7 @@ GISample_1_0_gir_FILES = $(source_c) $(source_h)
 GISample_1_0_gir_CFLAGS = -I$(top_srcdir) -I$(top_builddir) $(GISAMPLE_CFLAGS)
 GISample_1_0_gir_INCLUDES = GObject-2.0
 GISample_1_0_gir_SCANNERFLAGS = --warn-all --symbol-prefix=gi_sample
+GISample_1_0_gir_DOC_FORMAT = gtk-doc-markdown
 
 girdir = $(datadir)/gir-1.0
 dist_gir_DATA = GISample-1.0.gir

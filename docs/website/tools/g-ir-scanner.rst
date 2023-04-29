@@ -83,6 +83,10 @@ OPTIONS
     Headers which should be included in C programs. This option can be
     specified multiple times to include more than one header.
 
+--doc-format=DOC_FORMAT
+    The format of the inline documentation. This option can either be gi-docgen,
+    gtk-doc-markdown, gtk-doc-docbook or hotdoc.
+
 -n, --namespace=NAME
     The namespace name. This name should be capitalized, eg the first letter
     should be upper case. Examples: Gtk, Clutter, WebKit.

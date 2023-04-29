@@ -29,6 +29,7 @@ from .message import Position
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
 C_NS = "http://www.gtk.org/introspection/c/1.0"
+DOC_NS = "http://www.gtk.org/introspection/doc/1.0"
 GLIB_NS = "http://www.gtk.org/introspection/glib/1.0"
 
 
@@ -42,6 +43,10 @@ def _glibns(tag):
 
 def _cns(tag):
     return '{%s}%s' % (C_NS, tag)
+
+
+def _docns(tag):
+    return '{%s}%s' % (DOC_NS, tag)
 
 
 class GIRParser(object):
@@ -65,6 +70,7 @@ class GIRParser(object):
         self._pkgconfig_packages = set()
         self._includes = set()
         self._c_includes = set()
+        self._doc_format = "unknown"
         self._c_prefix = None
         self._parse_api(tree.getroot())
 
@@ -110,6 +116,8 @@ class GIRParser(object):
                 self._parse_pkgconfig_package(node)
             elif node.tag == _cns('include'):
                 self._parse_c_include(node)
+            elif node.tag == _docns('format'):
+                self._parse_doc_format(node)
 
         ns = root.find(_corens('namespace'))
         assert ns is not None
@@ -127,6 +135,7 @@ class GIRParser(object):
             self._namespace.shared_libraries = ns.attrib['shared-library'].split(',')
         self._namespace.includes = self._includes
         self._namespace.c_includes = self._c_includes
+        self._namespace.doc_format = self._doc_format
         self._namespace.exported_packages = self._pkgconfig_packages
 
         parser_methods = {
@@ -166,6 +175,9 @@ class GIRParser(object):
 
     def _parse_c_include(self, node):
         self._c_includes.add(node.attrib['name'])
+
+    def _parse_doc_format(self, node):
+        self._doc_format = node.attrib['name']
 
     def _parse_alias(self, node):
         typeval = self._parse_type(node)

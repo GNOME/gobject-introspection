@@ -1,5 +1,6 @@
 default namespace core = "http://www.gtk.org/introspection/core/1.0"
 namespace c = "http://www.gtk.org/introspection/c/1.0"
+namespace doc = "http://www.gtk.org/introspection/doc/1.0"
 namespace glib = "http://www.gtk.org/introspection/glib/1.0"
 
 start = Repository
@@ -18,7 +19,8 @@ Repository =
     (Include*
      & CInclude*
      & Package*
-     & Namespace*)
+     & Namespace*
+     & DocFormat*)
   }
 
 Namespace =
@@ -68,6 +70,15 @@ CInclude =
   # Dependant C header file which should be included in C programs
   element c:include {
     ## File name of the C header file. The path can be relative.
+    attribute name { xsd:string },
+
+    empty
+  }
+
+DocFormat =
+  ## Format used for the included documentation.
+  element doc:format {
+    ## Name of the documentation format. For example, 'gi-docgen' or 'gtk-doc'.
     attribute name { xsd:string },
 
     empty

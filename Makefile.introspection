@@ -63,6 +63,7 @@ _gir_packages = $(foreach pkg,$($(_gir_name)_PACKAGES),--pkg=$(pkg))
 _gir_includes = $(foreach include,$($(_gir_name)_INCLUDES),--include=$(include))
 _gir_export_packages = $(foreach pkg,$($(_gir_name)_EXPORT_PACKAGES),--pkg-export=$(pkg))
 _gir_c_includes = $(foreach include,$($(_gir_name)_C_INCLUDES),--c-include=$(include))
+_gir_doc_format = $(if $($(_gir_name)_DOC_FORMAT),--doc-format=$($(_gir_name)_DOC_FORMAT))
 
 # Reuse the LIBTOOL variable from automake if it's set
 _gir_libtool = $(if $(LIBTOOL),--libtool="$(LIBTOOL)")
@@ -116,6 +117,7 @@ _gir_default_scanner_env = CPPFLAGS="$(CPPFLAGS)" CFLAGS="$(CFLAGS)" LDFLAGS="$(
 #   By default the names in the PACKAGES variable will be used.
 # C_INCLUDES - List of public C headers which need to be included by
 #   consumers at compile time to make use of the API
+# DOC_FORMAT - Format of the inline documentation of the API
 #
 
 define introspection-scanner
@@ -141,6 +143,7 @@ $(1): $$($(_gir_name)_FILES)
 	  $(_gir_includes) \
 	  $(_gir_export_packages) \
 	  $(_gir_c_includes) \
+	  $(_gir_doc_format) \
 	  $(_gir_program) \
 	  $(_gir_libraries) \
 	  $($(_gir_name)_SCANNERFLAGS) \

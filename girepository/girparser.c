@@ -104,7 +104,8 @@ typedef enum
   STATE_ALIAS,
   STATE_TYPE,
   STATE_ATTRIBUTE,
-  STATE_PASSTHROUGH
+  STATE_PASSTHROUGH,
+  STATE_DOC_FORMAT  /* 35 */
 } ParseState;
 
 typedef struct _ParseContext ParseContext;
@@ -2996,6 +2997,11 @@ start_element_handler (GMarkupParseContext *context,
           state_switch (ctx, STATE_PASSTHROUGH);
           goto out;
         }
+      else if (strcmp (element_name, "doc:format") == 0)
+	{
+	  state_switch (ctx, STATE_DOC_FORMAT);
+	  goto out;
+	}
       break;
 
     case 'e':
@@ -3676,6 +3682,13 @@ end_element_handler (GMarkupParseContext *context,
       g_assert (ctx->unknown_depth >= 0);
       if (ctx->unknown_depth == 0)
         state_switch (ctx, ctx->prev_state);
+      break;
+
+    case STATE_DOC_FORMAT:
+      if (require_end_element (context, ctx, "doc:format", element_name, error))
+	{
+          state_switch (ctx, STATE_REPOSITORY);
+        }
       break;
     default:
       g_error ("Unhandled state %d in end_element_handler\n", ctx->state);
