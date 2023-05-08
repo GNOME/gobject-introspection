@@ -516,7 +516,7 @@
  *   g_value_set_boxed (value, mystruct);
  *   // [... your code ....]
  *   g_value_unset (value);
- *   g_value_free (value);
+ *   g_free (value);
  * }
  * ]|
  */
@@ -617,6 +617,20 @@
  * be at least three characters long. There is no upper length limit. The first
  * character must be a letter (a–z or A–Z) or an underscore (‘_’). Subsequent
  * characters can be letters, numbers or any of ‘-_+’.
+ *
+ * # Runtime Debugging
+ *
+ * When `G_ENABLE_DEBUG` is defined during compilation, the GObject library
+ * supports an environment variable `GOBJECT_DEBUG` that can be set to a
+ * combination of flags to trigger debugging messages about
+ * object bookkeeping and signal emissions during runtime.
+ *
+ * The currently supported flags are:
+ *  - `objects`: Tracks all #GObject instances in a global hash table called
+ *    `debug_objects_ht`, and prints the still-alive objects on exit.
+ *  - `instance-count`: Tracks the number of instances of every #GType and makes
+ *    it available via the g_type_get_instance_count() function.
+ *  - `signals`: Currently unused.
  */
 
 
@@ -723,7 +737,7 @@
  * @see_also: #GParamSpecObject, g_param_spec_object()
  *
  * GObject is the fundamental type providing the common attributes and
- * methods for all object types in GTK+, Pango and other libraries
+ * methods for all object types in GTK, Pango and other libraries
  * based on GObject.  The GObject class provides methods for object
  * construction and destruction, property access methods, and signal
  * support.  Signals are described in detail [here][gobject-Signals].
@@ -5258,12 +5272,18 @@
  * @data: (nullable) (closure closure): The closure data of the handlers' closures.
  *
  * Blocks all handlers on an instance that match a certain selection criteria.
- * The criteria mask is passed as an OR-ed combination of #GSignalMatchType
- * flags, and the criteria values are passed as arguments.
- * Passing at least one of the %G_SIGNAL_MATCH_CLOSURE, %G_SIGNAL_MATCH_FUNC
+ *
+ * The criteria mask is passed as a combination of #GSignalMatchType flags, and
+ * the criteria values are passed as arguments. A handler must match on all
+ * flags set in @mask to be blocked (i.e. the match is conjunctive).
+ *
+ * Passing at least one of the %G_SIGNAL_MATCH_ID, %G_SIGNAL_MATCH_CLOSURE,
+ * %G_SIGNAL_MATCH_FUNC
  * or %G_SIGNAL_MATCH_DATA match flags is required for successful matches.
  * If no handlers were found, 0 is returned, the number of blocked handlers
  * otherwise.
+ *
+ * Support for %G_SIGNAL_MATCH_ID was added in GLib 2.78.
  *
  * Returns: The number of handlers that matched.
  */
@@ -5291,13 +5311,19 @@
  * @data: (nullable) (closure closure): The closure data of the handlers' closures.
  *
  * Disconnects all handlers on an instance that match a certain
- * selection criteria. The criteria mask is passed as an OR-ed
- * combination of #GSignalMatchType flags, and the criteria values are
- * passed as arguments.  Passing at least one of the
- * %G_SIGNAL_MATCH_CLOSURE, %G_SIGNAL_MATCH_FUNC or
+ * selection criteria.
+ *
+ * The criteria mask is passed as a combination of #GSignalMatchType flags, and
+ * the criteria values are passed as arguments. A handler must match on all
+ * flags set in @mask to be disconnected (i.e. the match is conjunctive).
+ *
+ * Passing at least one of the %G_SIGNAL_MATCH_ID, %G_SIGNAL_MATCH_CLOSURE,
+ * %G_SIGNAL_MATCH_FUNC or
  * %G_SIGNAL_MATCH_DATA match flags is required for successful
  * matches.  If no handlers were found, 0 is returned, the number of
  * disconnected handlers otherwise.
+ *
+ * Support for %G_SIGNAL_MATCH_ID was added in GLib 2.78.
  *
  * Returns: The number of handlers that matched.
  */
@@ -5315,13 +5341,20 @@
  * @data: (nullable) (closure closure): The closure data of the handlers' closures.
  *
  * Unblocks all handlers on an instance that match a certain selection
- * criteria. The criteria mask is passed as an OR-ed combination of
- * #GSignalMatchType flags, and the criteria values are passed as arguments.
- * Passing at least one of the %G_SIGNAL_MATCH_CLOSURE, %G_SIGNAL_MATCH_FUNC
+ * criteria.
+ *
+ * The criteria mask is passed as a combination of #GSignalMatchType flags, and
+ * the criteria values are passed as arguments. A handler must match on all
+ * flags set in @mask to be unblocked (i.e. the match is conjunctive).
+ *
+ * Passing at least one of the %G_SIGNAL_MATCH_ID, %G_SIGNAL_MATCH_CLOSURE,
+ * %G_SIGNAL_MATCH_FUNC
  * or %G_SIGNAL_MATCH_DATA match flags is required for successful matches.
  * If no handlers were found, 0 is returned, the number of unblocked handlers
  * otherwise. The match criteria should not apply to any handlers that are
  * not currently blocked.
+ *
+ * Support for %G_SIGNAL_MATCH_ID was added in GLib 2.78.
  *
  * Returns: The number of handlers that matched.
  */
@@ -6193,8 +6226,8 @@
  *
  * Returns the number of instances allocated of the particular type;
  * this is only available if GLib is built with debugging support and
- * the instance_count debug flag is set (by setting the GOBJECT_DEBUG
- * variable to include instance-count).
+ * the `instance-count` debug flag is set (by setting the `GOBJECT_DEBUG`
+ * variable to include `instance-count`).
  *
  * Returns: the number of instances allocated of the given type;
  *   if instance counts are not available, returns 0.
@@ -6263,7 +6296,7 @@
  * flags.  Since GLib 2.36, the type system is initialised automatically
  * and this function does nothing.
  *
- * If you need to enable debugging features, use the GOBJECT_DEBUG
+ * If you need to enable debugging features, use the `GOBJECT_DEBUG`
  * environment variable.
  *
  * Deprecated: 2.36: the type system is now initialised automatically

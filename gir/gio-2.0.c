@@ -229,8 +229,10 @@
 /**
  * GAppInfoMonitor::changed:
  *
- * Signal emitted when the app info database for changes (ie: newly installed
- * or removed applications).
+ * Signal emitted when the app info database changes, when applications are
+ * installed or removed.
+ *
+ * Since: 2.40
  */
 
 
@@ -3031,6 +3033,23 @@
 
 
 /**
+ * GRegistrySettingsBackend:registry-key:
+ *
+ * The location where settings are stored in the registry. Must
+ * start with one of the following:
+ * - `HKEY_CLASSES_ROOT`
+ * - `HKEY_CURRENT_CONFIG`
+ * - `HKEY_CURRENT_USER`
+ * - `HKEY_LOCAL_MACHINE`
+ * - `HKEY_USERS`
+ *
+ * Defaults to `HKEY_CURRENT_USER\Software\GSettings`.
+ *
+ * Since: 2.78
+ */
+
+
+/**
  * GRemoteActionGroup:
  *
  * #GRemoteActionGroup is an opaque data structure and can only be accessed
@@ -3066,6 +3085,24 @@
  *
  * Emitted when the resolver notices that the system resolver
  * configuration has changed.
+ */
+
+
+/**
+ * GResolver:timeout:
+ *
+ * The timeout applied to all resolver lookups, in milliseconds.
+ *
+ * This may be changed through the lifetime of the #GResolver. The new value
+ * will apply to any lookups started after the change, but not to any
+ * already-ongoing lookups.
+ *
+ * If this is `0`, no timeout is applied to lookups.
+ *
+ * No timeout was applied to lookups before this property was added in
+ * GLib 2.78.
+ *
+ * Since: 2.78
  */
 
 
@@ -5114,19 +5151,34 @@
  * @short_description: Monitor application information for changes
  *
  * #GAppInfoMonitor is a very simple object used for monitoring the app
- * info database for changes (ie: newly installed or removed
- * applications).
+ * info database for changes (newly installed or removed applications).
  *
  * Call g_app_info_monitor_get() to get a #GAppInfoMonitor and connect
- * to the "changed" signal.
+ * to the #GAppInfoMonitor::changed signal. The signal will be emitted once when
+ * the app info database changes, and will not be emitted again until after the
+ * next call to g_app_info_get_all() or another `g_app_info_*()` function. This
+ * is because monitoring the app info database for changes is expensive.
+ *
+ * The following functions will re-arm the #GAppInfoMonitor::changed signal so
+ * it can be emitted again:
+ *  - g_app_info_get_all()
+ *  - g_app_info_get_all_for_type()
+ *  - g_app_info_get_default_for_type()
+ *  - g_app_info_get_fallback_for_type()
+ *  - g_app_info_get_recommended_for_type()
+ *  - g_desktop_app_info_get_implementations()
+ *  - g_desktop_app_info_new()
+ *  - g_desktop_app_info_new_from_filename()
+ *  - g_desktop_app_info_new_from_keyfile()
+ *  - g_desktop_app_info_search()
  *
  * In the usual case, applications should try to make note of the change
  * (doing things like invalidating caches) but not act on it.  In
  * particular, applications should avoid making calls to #GAppInfo APIs
  * in response to the change signal, deferring these until the time that
- * the data is actually required.  The exception to this case is when
+ * the updated data is actually required.  The exception to this case is when
  * application information is actually being displayed on the screen
- * (eg: during a search or when the list of all applications is shown).
+ * (for example, during a search or when the list of all applications is shown).
  * The reason for this is that changes to the list of installed
  * applications often come in groups (like during system updates) and
  * rescanning the list on every change is pointless and expensive.
@@ -6533,9 +6585,10 @@
  * #GDebugController:debug-enabled and, by default, g_log_get_debug_enabled().
  * default.
  *
- * By default, all processes will be able to call `SetDebugEnabled()`. If this
- * process is privileged, or might expose sensitive information in its debug
- * output, you may want to restrict the ability to enable debug output to
+ * By default, no processes are allowed to call `SetDebugEnabled()` unless a
+ * #GDebugControllerDBus::authorize signal handler is installed. This is because
+ * the process may be privileged, or might expose sensitive information in its
+ * debug output. You may want to restrict the ability to enable debug output to
  * privileged users or processes.
  *
  * One option is to install a D-Bus security policy which restricts access to
@@ -8003,6 +8056,11 @@
  * interfacing with a non-GIO API that expects
  * UNIX-file-descriptor-style asynchronous I/O rather than GIO-style.
  *
+ * Some classes may implement #GPollableInputStream but have only certain
+ * instances of that class be pollable. If g_pollable_input_stream_can_poll()
+ * returns %FALSE, then the behavior of other #GPollableInputStream methods is
+ * undefined.
+ *
  * Since: 2.28
  */
 
@@ -8017,6 +8075,11 @@
  * can be polled for readiness to write. This can be used when
  * interfacing with a non-GIO API that expects
  * UNIX-file-descriptor-style asynchronous I/O rather than GIO-style.
+ *
+ * Some classes may implement #GPollableOutputStream but have only certain
+ * instances of that class be pollable. If g_pollable_output_stream_can_poll()
+ * returns %FALSE, then the behavior of other #GPollableOutputStream methods is
+ * undefined.
  *
  * Since: 2.28
  */
@@ -8229,6 +8292,10 @@
  * #GNetworkAddress and #GNetworkService provide wrappers around
  * #GResolver functionality that also implement #GSocketConnectable,
  * making it easy to connect to a remote host/service.
+ *
+ * The default resolver (see g_resolver_get_default()) has a timeout of 30s set
+ * on it since GLib 2.78. Earlier versions of GLib did not support resolver
+ * timeouts.
  */
 
 
@@ -12191,6 +12258,10 @@
  * thread-default main context whenever the list of installed
  * applications (as reported by g_app_info_get_all()) may have changed.
  *
+ * The #GAppInfoMonitor::changed signal will only be emitted once until
+ * g_app_info_get_all() (or another `g_app_info_*()` function) is called. Doing
+ * so will re-arm the signal ready to notify about the next change.
+ *
  * You must only call g_object_unref() on the return value from under
  * the same main context as you created it.
  *
@@ -12982,7 +13053,7 @@
  * Increases the use count of @application.
  *
  * Use this function to indicate that the application has a reason to
- * continue to run.  For example, g_application_hold() is called by GTK+
+ * continue to run.  For example, g_application_hold() is called by GTK
  * when a toplevel window is on the screen.
  *
  * To cancel the hold, call g_application_release().
@@ -23140,22 +23211,67 @@
  * @user_data: (closure): the data to pass to callback function
  *
  * Request information for a number of files from the enumerator asynchronously.
- * When all i/o for the operation is finished the @callback will be called with
+ * When all I/O for the operation is finished the @callback will be called with
  * the requested information.
  *
  * See the documentation of #GFileEnumerator for information about the
  * order of returned files.
  *
- * The callback can be called with less than @num_files files in case of error
- * or at the end of the enumerator. In case of a partial error the callback will
- * be called with any succeeding items and no error, and on the next request the
- * error will be reported. If a request is cancelled the callback will be called
- * with %G_IO_ERROR_CANCELLED.
+ * Once the end of the enumerator is reached, or if an error occurs, the
+ * @callback will be called with an empty list. In this case, the previous call
+ * to g_file_enumerator_next_files_async() will typically have returned fewer
+ * than @num_files items.
+ *
+ * If a request is cancelled the callback will be called with
+ * %G_IO_ERROR_CANCELLED.
+ *
+ * This leads to the following pseudo-code usage:
+ * |[
+ * g_autoptr(GFile) dir = get_directory ();
+ * g_autoptr(GFileEnumerator) enumerator = NULL;
+ * g_autolist(GFileInfo) files = NULL;
+ * g_autoptr(GError) local_error = NULL;
+ *
+ * enumerator = yield g_file_enumerate_children_async (dir,
+ *                                                     G_FILE_ATTRIBUTE_STANDARD_NAME ","
+ *                                                     G_FILE_ATTRIBUTE_STANDARD_TYPE,
+ *                                                     G_FILE_QUERY_INFO_NONE,
+ *                                                     G_PRIORITY_DEFAULT,
+ *                                                     cancellable,
+ *                                                     …,
+ *                                                     &local_error);
+ * if (enumerator == NULL)
+ *   g_error ("Error enumerating: %s", local_error->message);
+ *
+ * // Loop until no files are returned, either because the end of the enumerator
+ * // has been reached, or an error was returned.
+ * do
+ *   {
+ *     files = yield g_file_enumerator_next_files_async (enumerator,
+ *                                                       5,  // number of files to request
+ *                                                       G_PRIORITY_DEFAULT,
+ *                                                       cancellable,
+ *                                                       …,
+ *                                                       &local_error);
+ *
+ *     // Process the returned files, but don’t assume that exactly 5 were returned.
+ *     for (GList *l = files; l != NULL; l = l->next)
+ *       {
+ *         GFileInfo *info = l->data;
+ *         handle_file_info (info);
+ *       }
+ *   }
+ * while (files != NULL);
+ *
+ * if (local_error != NULL &&
+ *     !g_error_matches (local_error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+ *   g_error ("Error while enumerating: %s", local_error->message);
+ * ]|
  *
  * During an async request no other sync and async calls are allowed, and will
  * result in %G_IO_ERROR_PENDING errors.
  *
- * Any outstanding i/o request with higher priority (lower numerical value) will
+ * Any outstanding I/O request with higher priority (lower numerical value) will
  * be executed before an outstanding request with lower priority. Default
  * priority is %G_PRIORITY_DEFAULT.
  */
@@ -32338,6 +32454,9 @@
  * triggers, so you should use g_pollable_input_stream_read_nonblocking()
  * rather than g_input_stream_read() from the callback.
  *
+ * The behaviour of this method is undefined if
+ * g_pollable_input_stream_can_poll() returns %FALSE for @stream.
+ *
  * Returns: (transfer full): a new #GSource
  * Since: 2.28
  */
@@ -32355,6 +32474,9 @@
  * non-blocking behavior, you should always use
  * g_pollable_input_stream_read_nonblocking(), which will return a
  * %G_IO_ERROR_WOULD_BLOCK error rather than blocking.
+ *
+ * The behaviour of this method is undefined if
+ * g_pollable_input_stream_can_poll() returns %FALSE for @stream.
  *
  * Returns: %TRUE if @stream is readable, %FALSE if not. If an error
  *   has occurred on @stream, this will result in
@@ -32384,6 +32506,9 @@
  * if @cancellable has already been cancelled when you call, which
  * may happen if you call this method after a source triggers due
  * to having been cancelled.
+ *
+ * The behaviour of this method is undefined if
+ * g_pollable_input_stream_can_poll() returns %FALSE for @stream.
  *
  * Returns: the number of bytes read, or -1 on error (including
  *   %G_IO_ERROR_WOULD_BLOCK).
@@ -32421,6 +32546,9 @@
  * triggers, so you should use g_pollable_output_stream_write_nonblocking()
  * rather than g_output_stream_write() from the callback.
  *
+ * The behaviour of this method is undefined if
+ * g_pollable_output_stream_can_poll() returns %FALSE for @stream.
+ *
  * Returns: (transfer full): a new #GSource
  * Since: 2.28
  */
@@ -32438,6 +32566,9 @@
  * non-blocking behavior, you should always use
  * g_pollable_output_stream_write_nonblocking(), which will return a
  * %G_IO_ERROR_WOULD_BLOCK error rather than blocking.
+ *
+ * The behaviour of this method is undefined if
+ * g_pollable_output_stream_can_poll() returns %FALSE for @stream.
  *
  * Returns: %TRUE if @stream is writable, %FALSE if not. If an error
  *   has occurred on @stream, this will result in
@@ -32472,6 +32603,9 @@
  * transports like D/TLS require that you re-send the same @buffer and
  * @count in the next write call.
  *
+ * The behaviour of this method is undefined if
+ * g_pollable_output_stream_can_poll() returns %FALSE for @stream.
+ *
  * Returns: the number of bytes written, or -1 on error (including
  *   %G_IO_ERROR_WOULD_BLOCK).
  */
@@ -32503,6 +32637,9 @@
  * Also note that if %G_POLLABLE_RETURN_WOULD_BLOCK is returned some underlying
  * transports like D/TLS require that you re-send the same @vectors and
  * @n_vectors in the next write call.
+ *
+ * The behaviour of this method is undefined if
+ * g_pollable_output_stream_can_poll() returns %FALSE for @stream.
  *
  * Returns: %@G_POLLABLE_RETURN_OK on success, %G_POLLABLE_RETURN_WOULD_BLOCK
  * if the stream is not currently writable (and @error is *not* set), or
@@ -32948,6 +33085,19 @@
 
 
 /**
+ * g_registry_settings_backend_new:
+ * @registry_key: (nullable): the path to the registry key where
+ *                settings are stored, or %NULL.
+ *
+ * If @registry_key is %NULL then the default path
+ * `HKEY_CURRENT_USER\Software\GSettings` is used.
+ *
+ * Returns: (transfer full): a registry-backed #GSettingsBackend
+ * Since: 2.78
+ */
+
+
+/**
  * g_remote_action_group_activate_action_full:
  * @remote: a #GDBusActionGroup
  * @action_name: the name of the action to activate
@@ -33034,6 +33184,17 @@
  *
  * Returns: (transfer full): the default #GResolver.
  * Since: 2.22
+ */
+
+
+/**
+ * g_resolver_get_timeout:
+ * @resolver: a #GResolver
+ *
+ * Get the timeout applied to all resolver lookups. See #GResolver:timeout.
+ *
+ * Returns: the resolver timeout, in milliseconds, or `0` for no timeout
+ * Since: 2.78
  */
 
 
@@ -33391,6 +33552,17 @@
  * itself as the default resolver for all later code to use.
  *
  * Since: 2.22
+ */
+
+
+/**
+ * g_resolver_set_timeout:
+ * @resolver: a #GResolver
+ * @timeout_ms: timeout in milliseconds, or `0` for no timeouts
+ *
+ * Set the timeout applied to all resolver lookups. See #GResolver:timeout.
+ *
+ * Since: 2.78
  */
 
 
@@ -37952,7 +38124,7 @@
  * @socket: a #GSocket
  * @buffer: (array length=size) (element-type guint8) (out caller-allocates):
  *     a buffer to read data into (which should be at least @size bytes long).
- * @size: the number of bytes you want to read from the socket
+ * @size: (in): the number of bytes you want to read from the socket
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -37993,7 +38165,7 @@
  *     pointer, or %NULL
  * @buffer: (array length=size) (element-type guint8) (out caller-allocates):
  *     a buffer to read data into (which should be at least @size bytes long).
- * @size: the number of bytes you want to read from the socket
+ * @size: (in): the number of bytes you want to read from the socket
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -38168,7 +38340,7 @@
  * @socket: a #GSocket
  * @buffer: (array length=size) (element-type guint8) (out caller-allocates):
  *     a buffer to read data into (which should be at least @size bytes long).
- * @size: the number of bytes you want to read from the socket
+ * @size: (in): the number of bytes you want to read from the socket
  * @blocking: whether to do blocking or non-blocking I/O
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
@@ -40121,6 +40293,13 @@
  * do this. If you have a very large number of tasks to run (several tens of
  * tasks), but don't want them to all run at once, you should only queue a
  * limited number of them (around ten) at a time.
+ *
+ * Be aware that if your task depends on other tasks to complete, use of this
+ * function could lead to a livelock if the other tasks also use this function
+ * and enough of them (around 10) execute in a dependency chain, as that will
+ * exhaust the thread pool. If this situation is possible, consider using a
+ * separate worker thread or thread pool explicitly, rather than using
+ * g_task_run_in_thread().
  *
  * Since: 2.36
  */

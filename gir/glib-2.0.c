@@ -4201,7 +4201,7 @@
  * not advisable, as it cannot be filtered against using the `G_MESSAGES_DEBUG`
  * environment variable.
  *
- * For example, GTK+ uses this in its `Makefile.am`:
+ * For example, GTK uses this in its `Makefile.am`:
  * |[
  * AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Gtk\"
  * ]|
@@ -5641,7 +5641,7 @@
  * Character:  P  r  e  s  e  n  t  a  c  i  ó     n  .  s  x  i
  * Hex code:   50 72 65 73 65 6e 74 61 63 69 c3 b3 6e 2e 73 78 69
  * ]|
- * Glib uses UTF-8 for its strings, and GUI toolkits like GTK+ that use
+ * GLib uses UTF-8 for its strings, and GUI toolkits like GTK that use
  * GLib do the same thing. If you get a file name from the file system,
  * for example, from readdir() or from g_dir_read_name(), and you wish
  * to display the file name to the user, you  will need to convert it
@@ -5898,7 +5898,7 @@
  * These two kinds of errors are fundamentally different: runtime errors
  * should be handled or reported to the user, programming errors should
  * be eliminated by fixing the bug in the program. This is why most
- * functions in GLib and GTK+ do not use the #GError facility.
+ * functions in GLib and GTK do not use the #GError facility.
  *
  * Functions that can fail take a return location for a #GError as their
  * last argument. On error, a new #GError instance will be allocated and
@@ -6399,6 +6399,167 @@
  * ASCII-Compatible Encoding of any given Unicode name, which can be
  * used with non-IDN-aware applications and protocols. (For example,
  * "Παν語.org" maps to "xn--4wa8awb4637h.org".)
+ */
+
+
+/**
+ * SECTION:goptioncontext
+ * @Short_description: parses commandline options
+ * @Title: Commandline option parser
+ *
+ * The GOption commandline parser is intended to be a simpler replacement
+ * for the popt library. It supports short and long commandline options,
+ * as shown in the following example:
+ *
+ * `testtreemodel -r 1 --max-size 20 --rand --display=:1.0 -vb -- file1 file2`
+ *
+ * The example demonstrates a number of features of the GOption
+ * commandline parser:
+ *
+ * - Options can be single letters, prefixed by a single dash.
+ *
+ * - Multiple short options can be grouped behind a single dash.
+ *
+ * - Long options are prefixed by two consecutive dashes.
+ *
+ * - Options can have an extra argument, which can be a number, a string or
+ *   a filename. For long options, the extra argument can be appended with
+ *   an equals sign after the option name, which is useful if the extra
+ *   argument starts with a dash, which would otherwise cause it to be
+ *   interpreted as another option.
+ *
+ * - Non-option arguments are returned to the application as rest arguments.
+ *
+ * - An argument consisting solely of two dashes turns off further parsing,
+ *   any remaining arguments (even those starting with a dash) are returned
+ *   to the application as rest arguments.
+ *
+ * Another important feature of GOption is that it can automatically
+ * generate nicely formatted help output. Unless it is explicitly turned
+ * off with g_option_context_set_help_enabled(), GOption will recognize
+ * the `--help`, `-?`, `--help-all` and `--help-groupname` options
+ * (where `groupname` is the name of a #GOptionGroup) and write a text
+ * similar to the one shown in the following example to stdout.
+ *
+ * |[
+ * Usage:
+ *   testtreemodel [OPTION...] - test tree model performance
+ *  
+ * Help Options:
+ *   -h, --help               Show help options
+ *   --help-all               Show all help options
+ *   --help-gtk               Show GTK Options
+ *  
+ * Application Options:
+ *   -r, --repeats=N          Average over N repetitions
+ *   -m, --max-size=M         Test up to 2^M items
+ *   --display=DISPLAY        X display to use
+ *   -v, --verbose            Be verbose
+ *   -b, --beep               Beep when done
+ *   --rand                   Randomize the data
+ * ]|
+ *
+ * GOption groups options in #GOptionGroups, which makes it easy to
+ * incorporate options from multiple sources. The intended use for this is
+ * to let applications collect option groups from the libraries it uses,
+ * add them to their #GOptionContext, and parse all options by a single call
+ * to g_option_context_parse(). See gtk_get_option_group() for an example.
+ *
+ * If an option is declared to be of type string or filename, GOption takes
+ * care of converting it to the right encoding; strings are returned in
+ * UTF-8, filenames are returned in the GLib filename encoding. Note that
+ * this only works if setlocale() has been called before
+ * g_option_context_parse().
+ *
+ * Here is a complete example of setting up GOption to parse the example
+ * commandline above and produce the example help output.
+ * |[<!-- language="C" -->
+ * static gint repeats = 2;
+ * static gint max_size = 8;
+ * static gboolean verbose = FALSE;
+ * static gboolean beep = FALSE;
+ * static gboolean randomize = FALSE;
+ *
+ * static GOptionEntry entries[] =
+ * {
+ *   { "repeats", 'r', 0, G_OPTION_ARG_INT, &repeats, "Average over N repetitions", "N" },
+ *   { "max-size", 'm', 0, G_OPTION_ARG_INT, &max_size, "Test up to 2^M items", "M" },
+ *   { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Be verbose", NULL },
+ *   { "beep", 'b', 0, G_OPTION_ARG_NONE, &beep, "Beep when done", NULL },
+ *   { "rand", 0, 0, G_OPTION_ARG_NONE, &randomize, "Randomize the data", NULL },
+ *   G_OPTION_ENTRY_NULL
+ * };
+ *
+ * int
+ * main (int argc, char *argv[])
+ * {
+ *   GError *error = NULL;
+ *   GOptionContext *context;
+ *
+ *   context = g_option_context_new ("- test tree model performance");
+ *   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
+ *   g_option_context_add_group (context, gtk_get_option_group (TRUE));
+ *   if (!g_option_context_parse (context, &argc, &argv, &error))
+ *     {
+ *       g_print ("option parsing failed: %s\n", error->message);
+ *       exit (1);
+ *     }
+ *
+ *   ...
+ *
+ * }
+ * ]|
+ *
+ * On UNIX systems, the argv that is passed to main() has no particular
+ * encoding, even to the extent that different parts of it may have
+ * different encodings.  In general, normal arguments and flags will be
+ * in the current locale and filenames should be considered to be opaque
+ * byte strings.  Proper use of %G_OPTION_ARG_FILENAME vs
+ * %G_OPTION_ARG_STRING is therefore important.
+ *
+ * Note that on Windows, filenames do have an encoding, but using
+ * #GOptionContext with the argv as passed to main() will result in a
+ * program that can only accept commandline arguments with characters
+ * from the system codepage.  This can cause problems when attempting to
+ * deal with filenames containing Unicode characters that fall outside
+ * of the codepage.
+ *
+ * A solution to this is to use g_win32_get_command_line() and
+ * g_option_context_parse_strv() which will properly handle full Unicode
+ * filenames.  If you are using #GApplication, this is done
+ * automatically for you.
+ *
+ * The following example shows how you can use #GOptionContext directly
+ * in order to correctly deal with Unicode filenames on Windows:
+ *
+ * |[<!-- language="C" -->
+ * int
+ * main (int argc, char **argv)
+ * {
+ *   GError *error = NULL;
+ *   GOptionContext *context;
+ *   gchar **args;
+ *
+ * #ifdef G_OS_WIN32
+ *   args = g_win32_get_command_line ();
+ * #else
+ *   args = g_strdupv (argv);
+ * #endif
+ *
+ *   // set up context
+ *
+ *   if (!g_option_context_parse_strv (context, &args, &error))
+ *     {
+ *       // error happened
+ *     }
+ *
+ *   ...
+ *
+ *   g_strfreev (args);
+ *
+ *   ...
+ * }
+ * ]|
  */
 
 
@@ -7555,7 +7716,7 @@
  * @short_description: manages all available sources of events
  *
  * The main event loop manages all the available sources of events for
- * GLib and GTK+ applications. These events can come from any number of
+ * GLib and GTK applications. These events can come from any number of
  * different types of sources such as file descriptors (plain files,
  * pipes or sockets) and timeouts. New types of event sources can also
  * be added using g_source_attach().
@@ -7587,12 +7748,12 @@
  * exit the main loop, and g_main_loop_run() returns.
  *
  * It is possible to create new instances of #GMainLoop recursively.
- * This is often used in GTK+ applications when showing modal dialog
+ * This is often used in GTK applications when showing modal dialog
  * boxes. Note that event sources are associated with a particular
  * #GMainContext, and will be checked and dispatched for all main
  * loops associated with that GMainContext.
  *
- * GTK+ contains wrappers of some of these functions, e.g. gtk_main(),
+ * GTK contains wrappers of some of these functions, e.g. gtk_main(),
  * gtk_main_quit() and gtk_events_pending().
  *
  * ## Creating new source types
@@ -7725,6 +7886,11 @@
  * - Character references
  *
  * - Sections marked as CDATA
+ *
+ * ## An example parser # {#example}
+ *
+ * Here is an example for a markup parser:
+ * [markup-example.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/glib/tests/markup-example.c)
  */
 
 
@@ -7985,167 +8151,6 @@
  * supported (used for storage) by at least Intel, PPC and Sparc. See
  * [IEEE 754-2008](http://en.wikipedia.org/wiki/IEEE_float)
  * for more information about IEEE number formats.
- */
-
-
-/**
- * SECTION:option
- * @Short_description: parses commandline options
- * @Title: Commandline option parser
- *
- * The GOption commandline parser is intended to be a simpler replacement
- * for the popt library. It supports short and long commandline options,
- * as shown in the following example:
- *
- * `testtreemodel -r 1 --max-size 20 --rand --display=:1.0 -vb -- file1 file2`
- *
- * The example demonstrates a number of features of the GOption
- * commandline parser:
- *
- * - Options can be single letters, prefixed by a single dash.
- *
- * - Multiple short options can be grouped behind a single dash.
- *
- * - Long options are prefixed by two consecutive dashes.
- *
- * - Options can have an extra argument, which can be a number, a string or
- *   a filename. For long options, the extra argument can be appended with
- *   an equals sign after the option name, which is useful if the extra
- *   argument starts with a dash, which would otherwise cause it to be
- *   interpreted as another option.
- *
- * - Non-option arguments are returned to the application as rest arguments.
- *
- * - An argument consisting solely of two dashes turns off further parsing,
- *   any remaining arguments (even those starting with a dash) are returned
- *   to the application as rest arguments.
- *
- * Another important feature of GOption is that it can automatically
- * generate nicely formatted help output. Unless it is explicitly turned
- * off with g_option_context_set_help_enabled(), GOption will recognize
- * the `--help`, `-?`, `--help-all` and `--help-groupname` options
- * (where `groupname` is the name of a #GOptionGroup) and write a text
- * similar to the one shown in the following example to stdout.
- *
- * |[
- * Usage:
- *   testtreemodel [OPTION...] - test tree model performance
- *  
- * Help Options:
- *   -h, --help               Show help options
- *   --help-all               Show all help options
- *   --help-gtk               Show GTK+ Options
- *  
- * Application Options:
- *   -r, --repeats=N          Average over N repetitions
- *   -m, --max-size=M         Test up to 2^M items
- *   --display=DISPLAY        X display to use
- *   -v, --verbose            Be verbose
- *   -b, --beep               Beep when done
- *   --rand                   Randomize the data
- * ]|
- *
- * GOption groups options in #GOptionGroups, which makes it easy to
- * incorporate options from multiple sources. The intended use for this is
- * to let applications collect option groups from the libraries it uses,
- * add them to their #GOptionContext, and parse all options by a single call
- * to g_option_context_parse(). See gtk_get_option_group() for an example.
- *
- * If an option is declared to be of type string or filename, GOption takes
- * care of converting it to the right encoding; strings are returned in
- * UTF-8, filenames are returned in the GLib filename encoding. Note that
- * this only works if setlocale() has been called before
- * g_option_context_parse().
- *
- * Here is a complete example of setting up GOption to parse the example
- * commandline above and produce the example help output.
- * |[<!-- language="C" -->
- * static gint repeats = 2;
- * static gint max_size = 8;
- * static gboolean verbose = FALSE;
- * static gboolean beep = FALSE;
- * static gboolean randomize = FALSE;
- *
- * static GOptionEntry entries[] =
- * {
- *   { "repeats", 'r', 0, G_OPTION_ARG_INT, &repeats, "Average over N repetitions", "N" },
- *   { "max-size", 'm', 0, G_OPTION_ARG_INT, &max_size, "Test up to 2^M items", "M" },
- *   { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Be verbose", NULL },
- *   { "beep", 'b', 0, G_OPTION_ARG_NONE, &beep, "Beep when done", NULL },
- *   { "rand", 0, 0, G_OPTION_ARG_NONE, &randomize, "Randomize the data", NULL },
- *   G_OPTION_ENTRY_NULL
- * };
- *
- * int
- * main (int argc, char *argv[])
- * {
- *   GError *error = NULL;
- *   GOptionContext *context;
- *
- *   context = g_option_context_new ("- test tree model performance");
- *   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
- *   g_option_context_add_group (context, gtk_get_option_group (TRUE));
- *   if (!g_option_context_parse (context, &argc, &argv, &error))
- *     {
- *       g_print ("option parsing failed: %s\n", error->message);
- *       exit (1);
- *     }
- *
- *   ...
- *
- * }
- * ]|
- *
- * On UNIX systems, the argv that is passed to main() has no particular
- * encoding, even to the extent that different parts of it may have
- * different encodings.  In general, normal arguments and flags will be
- * in the current locale and filenames should be considered to be opaque
- * byte strings.  Proper use of %G_OPTION_ARG_FILENAME vs
- * %G_OPTION_ARG_STRING is therefore important.
- *
- * Note that on Windows, filenames do have an encoding, but using
- * #GOptionContext with the argv as passed to main() will result in a
- * program that can only accept commandline arguments with characters
- * from the system codepage.  This can cause problems when attempting to
- * deal with filenames containing Unicode characters that fall outside
- * of the codepage.
- *
- * A solution to this is to use g_win32_get_command_line() and
- * g_option_context_parse_strv() which will properly handle full Unicode
- * filenames.  If you are using #GApplication, this is done
- * automatically for you.
- *
- * The following example shows how you can use #GOptionContext directly
- * in order to correctly deal with Unicode filenames on Windows:
- *
- * |[<!-- language="C" -->
- * int
- * main (int argc, char **argv)
- * {
- *   GError *error = NULL;
- *   GOptionContext *context;
- *   gchar **args;
- *
- * #ifdef G_OS_WIN32
- *   args = g_win32_get_command_line ();
- * #else
- *   args = g_strdupv (argv);
- * #endif
- *
- *   // set up context
- *
- *   if (!g_option_context_parse_strv (context, &args, &error))
- *     {
- *       // error happened
- *     }
- *
- *   ...
- *
- *   g_strfreev (args);
- *
- *   ...
- * }
- * ]|
  */
 
 
@@ -8761,10 +8766,14 @@
  * The API is designed to handle creation and registration of test suites
  * and test cases implicitly. A simple call like
  * |[<!-- language="C" -->
+ *   g_test_init (&argc, &argv, G_TEST_OPTION_ISOLATE_DIRS, NULL);
+ *
  *   g_test_add_func ("/misc/assertions", test_assertions);
  * ]|
  * creates a test suite called "misc" with a single test case named
  * "assertions", which consists of running the test_assertions function.
+ *
+ * g_test_init() should be called before calling any other test functions.
  *
  * In addition to the traditional g_assert_true(), the test framework provides
  * an extended set of assertions for comparisons: g_assert_cmpfloat(),
@@ -8842,7 +8851,7 @@
  * }
  * ]|
  *
- * ### Integrating GTest in your project
+ * ## Integrating GTest in your project
  *
  * If you are using the [Meson](http://mesonbuild.com) build system, you will
  * typically use the provided `test()` primitive to call the test binaries,
@@ -9200,7 +9209,7 @@
  * @title: Type Conversion Macros
  * @short_description: portably storing integers in pointer variables
  *
- * Many times GLib, GTK+, and other libraries allow you to pass "user
+ * Many times GLib, GTK, and other libraries allow you to pass "user
  * data" to a callback, in the form of a void pointer. From time to time
  * you want to pass an integer instead of a pointer. You could allocate
  * an integer, with something like:
@@ -9446,6 +9455,21 @@
  * GLib installation folder. The path is in the system codepage. We
  * have to use system codepage as bindtextdomain() doesn't have a
  * UTF-8 interface.
+ */
+
+
+/**
+ * ensure_cmd_environment:
+ *
+ * Workaround for an issue in the universal C Runtime library (UCRT). This adds
+ * a custom environment variable to this process's environment block that looks
+ * like the cmd.exe's shell-related environment variables, i.e the name starts
+ * with an equal sign character: '='. This is needed because the UCRT may crash
+ * if those environment variables are missing from the calling process's block.
+ *
+ * Reference:
+ *
+ * https://developercommunity.visualstudio.com/t/UCRT-Crash-in-_wspawne-functions/10262748
  */
 
 
@@ -16205,103 +16229,103 @@
  * Creates a newly allocated string representing the requested @format.
  *
  * The format strings understood by this function are a subset of the
- * strftime() format language as specified by C99.  The \%D, \%U and \%W
- * conversions are not supported, nor is the 'E' modifier.  The GNU
- * extensions \%k, \%l, \%s and \%P are supported, however, as are the
- * '0', '_' and '-' modifiers. The Python extension \%f is also supported.
+ * `strftime()` format language as specified by C99.  The `%D`, `%U` and `%W`
+ * conversions are not supported, nor is the `E` modifier.  The GNU
+ * extensions `%k`, `%l`, `%s` and `%P` are supported, however, as are the
+ * `0`, `_` and `-` modifiers. The Python extension `%f` is also supported.
  *
- * In contrast to strftime(), this function always produces a UTF-8
+ * In contrast to `strftime()`, this function always produces a UTF-8
  * string, regardless of the current locale.  Note that the rendering of
- * many formats is locale-dependent and may not match the strftime()
+ * many formats is locale-dependent and may not match the `strftime()`
  * output exactly.
  *
  * The following format specifiers are supported:
  *
- * - \%a: the abbreviated weekday name according to the current locale
- * - \%A: the full weekday name according to the current locale
- * - \%b: the abbreviated month name according to the current locale
- * - \%B: the full month name according to the current locale
- * - \%c: the preferred date and time representation for the current locale
- * - \%C: the century number (year/100) as a 2-digit integer (00-99)
- * - \%d: the day of the month as a decimal number (range 01 to 31)
- * - \%e: the day of the month as a decimal number (range 1 to 31);
- *   single digits are preceded by a figure space
- * - \%F: equivalent to `%Y-%m-%d` (the ISO 8601 date format)
- * - \%g: the last two digits of the ISO 8601 week-based year as a
- *   decimal number (00-99). This works well with \%V and \%u.
- * - \%G: the ISO 8601 week-based year as a decimal number. This works
- *   well with \%V and \%u.
- * - \%h: equivalent to \%b
- * - \%H: the hour as a decimal number using a 24-hour clock (range 00 to 23)
- * - \%I: the hour as a decimal number using a 12-hour clock (range 01 to 12)
- * - \%j: the day of the year as a decimal number (range 001 to 366)
- * - \%k: the hour (24-hour clock) as a decimal number (range 0 to 23);
- *   single digits are preceded by a figure space
- * - \%l: the hour (12-hour clock) as a decimal number (range 1 to 12);
- *   single digits are preceded by a figure space
- * - \%m: the month as a decimal number (range 01 to 12)
- * - \%M: the minute as a decimal number (range 00 to 59)
- * - \%f: the microsecond as a decimal number (range 000000 to 999999)
- * - \%p: either "AM" or "PM" according to the given time value, or the
+ * - `%a`: the abbreviated weekday name according to the current locale
+ * - `%A`: the full weekday name according to the current locale
+ * - `%b`: the abbreviated month name according to the current locale
+ * - `%B`: the full month name according to the current locale
+ * - `%c`: the preferred date and time representation for the current locale
+ * - `%C`: the century number (year/100) as a 2-digit integer (00-99)
+ * - `%d`: the day of the month as a decimal number (range 01 to 31)
+ * - `%e`: the day of the month as a decimal number (range 1 to 31);
+ *   single digits are preceded by a figure space (U+2007)
+ * - `%F`: equivalent to `%Y-%m-%d` (the ISO 8601 date format)
+ * - `%g`: the last two digits of the ISO 8601 week-based year as a
+ *   decimal number (00-99). This works well with `%V` and `%u`.
+ * - `%G`: the ISO 8601 week-based year as a decimal number. This works
+ *   well with `%V` and `%u`.
+ * - `%h`: equivalent to `%b`
+ * - `%H`: the hour as a decimal number using a 24-hour clock (range 00 to 23)
+ * - `%I`: the hour as a decimal number using a 12-hour clock (range 01 to 12)
+ * - `%j`: the day of the year as a decimal number (range 001 to 366)
+ * - `%k`: the hour (24-hour clock) as a decimal number (range 0 to 23);
+ *   single digits are preceded by a figure space (U+2007)
+ * - `%l`: the hour (12-hour clock) as a decimal number (range 1 to 12);
+ *   single digits are preceded by a figure space (U+2007)
+ * - `%m`: the month as a decimal number (range 01 to 12)
+ * - `%M`: the minute as a decimal number (range 00 to 59)
+ * - `%f`: the microsecond as a decimal number (range 000000 to 999999)
+ * - `%p`: either ‘AM’ or ‘PM’ according to the given time value, or the
  *   corresponding  strings for the current locale.  Noon is treated as
- *   "PM" and midnight as "AM". Use of this format specifier is discouraged, as
- *   many locales have no concept of AM/PM formatting. Use \%c or \%X instead.
- * - \%P: like \%p but lowercase: "am" or "pm" or a corresponding string for
+ *   ‘PM’ and midnight as ‘AM’. Use of this format specifier is discouraged, as
+ *   many locales have no concept of AM/PM formatting. Use `%c` or `%X` instead.
+ * - `%P`: like `%p` but lowercase: ‘am’ or ‘pm’ or a corresponding string for
  *   the current locale. Use of this format specifier is discouraged, as
- *   many locales have no concept of AM/PM formatting. Use \%c or \%X instead.
- * - \%r: the time in a.m. or p.m. notation. Use of this format specifier is
- *   discouraged, as many locales have no concept of AM/PM formatting. Use \%c
- *   or \%X instead.
- * - \%R: the time in 24-hour notation (\%H:\%M)
- * - \%s: the number of seconds since the Epoch, that is, since 1970-01-01
+ *   many locales have no concept of AM/PM formatting. Use `%c` or `%X` instead.
+ * - `%r`: the time in a.m. or p.m. notation. Use of this format specifier is
+ *   discouraged, as many locales have no concept of AM/PM formatting. Use `%c`
+ *   or `%X` instead.
+ * - `%R`: the time in 24-hour notation (`%H:%M`)
+ * - `%s`: the number of seconds since the Epoch, that is, since 1970-01-01
  *   00:00:00 UTC
- * - \%S: the second as a decimal number (range 00 to 60)
- * - \%t: a tab character
- * - \%T: the time in 24-hour notation with seconds (\%H:\%M:\%S)
- * - \%u: the ISO 8601 standard day of the week as a decimal, range 1 to 7,
- *    Monday being 1. This works well with \%G and \%V.
- * - \%V: the ISO 8601 standard week number of the current year as a decimal
+ * - `%S`: the second as a decimal number (range 00 to 60)
+ * - `%t`: a tab character
+ * - `%T`: the time in 24-hour notation with seconds (`%H:%M:%S`)
+ * - `%u`: the ISO 8601 standard day of the week as a decimal, range 1 to 7,
+ *    Monday being 1. This works well with `%G` and `%V`.
+ * - `%V`: the ISO 8601 standard week number of the current year as a decimal
  *   number, range 01 to 53, where week 1 is the first week that has at
  *   least 4 days in the new year. See g_date_time_get_week_of_year().
- *   This works well with \%G and \%u.
- * - \%w: the day of the week as a decimal, range 0 to 6, Sunday being 0.
- *   This is not the ISO 8601 standard format -- use \%u instead.
- * - \%x: the preferred date representation for the current locale without
+ *   This works well with `%G` and `%u`.
+ * - `%w`: the day of the week as a decimal, range 0 to 6, Sunday being 0.
+ *   This is not the ISO 8601 standard format — use `%u` instead.
+ * - `%x`: the preferred date representation for the current locale without
  *   the time
- * - \%X: the preferred time representation for the current locale without
+ * - `%X`: the preferred time representation for the current locale without
  *   the date
- * - \%y: the year as a decimal number without the century
- * - \%Y: the year as a decimal number including the century
- * - \%z: the time zone as an offset from UTC (+hhmm)
- * - \%:z: the time zone as an offset from UTC (+hh:mm).
- *   This is a gnulib strftime() extension. Since: 2.38
- * - \%::z: the time zone as an offset from UTC (+hh:mm:ss). This is a
- *   gnulib strftime() extension. Since: 2.38
- * - \%:::z: the time zone as an offset from UTC, with : to necessary
- *   precision (e.g., -04, +05:30). This is a gnulib strftime() extension. Since: 2.38
- * - \%Z: the time zone or name or abbreviation
- * - \%\%: a literal \% character
+ * - `%y`: the year as a decimal number without the century
+ * - `%Y`: the year as a decimal number including the century
+ * - `%z`: the time zone as an offset from UTC (`+hhmm`)
+ * - `%:z`: the time zone as an offset from UTC (`+hh:mm`).
+ *   This is a gnulib `strftime()` extension. Since: 2.38
+ * - `%::z`: the time zone as an offset from UTC (`+hh:mm:ss`). This is a
+ *   gnulib `strftime()` extension. Since: 2.38
+ * - `%:::z`: the time zone as an offset from UTC, with `:` to necessary
+ *   precision (e.g., `-04`, `+05:30`). This is a gnulib `strftime()` extension. Since: 2.38
+ * - `%Z`: the time zone or name or abbreviation
+ * - `%%`: a literal `%` character
  *
  * Some conversion specifications can be modified by preceding the
  * conversion specifier by one or more modifier characters. The
  * following modifiers are supported for many of the numeric
  * conversions:
  *
- * - O: Use alternative numeric symbols, if the current locale supports those.
- * - _: Pad a numeric result with spaces. This overrides the default padding
+ * - `O`: Use alternative numeric symbols, if the current locale supports those.
+ * - `_`: Pad a numeric result with spaces. This overrides the default padding
  *   for the specifier.
- * - -: Do not pad a numeric result. This overrides the default padding
+ * - `-`: Do not pad a numeric result. This overrides the default padding
  *   for the specifier.
- * - 0: Pad a numeric result with zeros. This overrides the default padding
+ * - `0`: Pad a numeric result with zeros. This overrides the default padding
  *   for the specifier.
  *
- * Additionally, when O is used with B, b, or h, it produces the alternative
+ * Additionally, when `O` is used with `B`, `b`, or `h`, it produces the alternative
  * form of a month name. The alternative form should be used when the month
  * name is used without a day number (e.g., standalone). It is required in
  * some languages (Baltic, Slavic, Greek, and more) due to their grammatical
- * rules. For other languages there is no difference. \%OB is a GNU and BSD
- * strftime() extension expected to be added to the future POSIX specification,
- * \%Ob and \%Oh are GNU strftime() extensions. Since: 2.56
+ * rules. For other languages there is no difference. `%OB` is a GNU and BSD
+ * `strftime()` extension expected to be added to the future POSIX specification,
+ * `%Ob` and `%Oh` are GNU `strftime()` extensions. Since: 2.56
  *
  * Returns: (transfer full) (nullable): a newly allocated string formatted to
  *    the requested format or %NULL in the case that there was an error (such
@@ -17123,12 +17147,12 @@
  * translations for the current locale.
  *
  * The advantage of using this function over dgettext() proper is that
- * libraries using this function (like GTK+) will not use translations
+ * libraries using this function (like GTK) will not use translations
  * if the application using the library does not have translations for
  * the current locale.  This results in a consistent English-only
  * interface instead of one having partial translations.  For this
  * feature to work, the call to textdomain() and setlocale() should
- * precede any g_dgettext() invocations.  For GTK+, it means calling
+ * precede any g_dgettext() invocations.  For GTK, it means calling
  * textdomain() before gtk_init or its variants.
  *
  * This function disables translations if and only if upon its first
@@ -17146,7 +17170,7 @@
  *
  * Note that this behavior may not be desired for example if an application
  * has its untranslated messages in a language other than English. In those
- * cases the application should call textdomain() after initializing GTK+.
+ * cases the application should call textdomain() after initializing GTK.
  *
  * Applications should normally not use this function directly,
  * but use the _() macro for translations.
@@ -18611,7 +18635,7 @@
  * in contrast to g_get_application_name().
  *
  * If you are using #GApplication the program name is set in
- * g_application_run(). In case of GDK or GTK+ it is set in
+ * g_application_run(). In case of GDK or GTK it is set in
  * gdk_init(), which is called by gtk_init() and the
  * #GtkApplication::startup handler. The program name is found by
  * taking the last component of @argv[0].
@@ -22795,7 +22819,7 @@
  *                    | G_LOG_FLAG_RECURSION, my_log_handler, NULL);
  * ]|
  *
- * This example adds a log handler for all critical messages from GTK+:
+ * This example adds a log handler for all critical messages from GTK:
  *
  * |[<!-- language="C" -->
  * g_log_set_handler ("Gtk", G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL
@@ -23273,7 +23297,7 @@
  *
  * You must be the owner of a context before you
  * can call g_main_context_prepare(), g_main_context_query(),
- * g_main_context_check(), g_main_context_dispatch().
+ * g_main_context_check(), g_main_context_dispatch(), g_main_context_release().
  *
  * Since 2.76 @context can be %NULL to use the global-default
  * main context.
@@ -23697,6 +23721,9 @@
  * with g_main_context_acquire(). If the context was acquired multiple
  * times, the ownership will be released only when g_main_context_release()
  * is called as many times as it was acquired.
+ *
+ * You must have successfully acquired the context with
+ * g_main_context_acquire() before you may call this function.
  */
 
 
@@ -23806,7 +23833,7 @@
  *
  * Returns the depth of the stack of calls to
  * g_main_context_dispatch() on any #GMainContext in the current thread.
- *  That is, when called from the toplevel, it gives 0. When
+ * That is, when called from the toplevel, it gives 0. When
  * called from within a callback from g_main_context_iteration()
  * (or g_main_loop_run(), etc.) it returns 1. When called from within
  * a callback to a recursive call to g_main_context_iteration(),
@@ -26316,7 +26343,7 @@
  *
  * Parses a string containing debugging options
  * into a %guint containing bit flags. This is used
- * within GDK and GTK+ to parse the debug options passed on the
+ * within GDK and GTK to parse the debug options passed on the
  * command line or through environment variables.
  *
  * If @string is equal to "all", all flags are set. Any flags
@@ -27895,7 +27922,7 @@
  * with statically allocated strings in the main program, but not with
  * statically allocated memory in dynamically loaded modules, if you
  * expect to ever unload the module again (e.g. do not use this
- * function in GTK+ theme engines).
+ * function in GTK theme engines).
  *
  * This function must not be used before library constructors have finished
  * running. In particular, this means it cannot be used to initialize global
@@ -30955,7 +30982,7 @@
  * in contrast to g_set_application_name().
  *
  * If you are using #GApplication the program name is set in
- * g_application_run(). In case of GDK or GTK+ it is set in
+ * g_application_run(). In case of GDK or GTK it is set in
  * gdk_init(), which is called by gtk_init() and the
  * #GtkApplication::startup handler. The program name is found by
  * taking the last component of @argv[0].
@@ -30977,7 +31004,7 @@
  * Any messages passed to g_print() will be output via
  * the new handler. The default handler outputs
  * the encoded message to stdout. By providing your own handler
- * you can redirect the output, to a GTK+ widget or a
+ * you can redirect the output, to a GTK widget or a
  * log file for example.
  *
  * Since 2.76 this functions always returns a valid
@@ -31002,7 +31029,7 @@
  * Any messages passed to g_printerr() will be output via
  * the new handler. The default handler outputs the encoded
  * message to stderr. By providing your own handler you can
- * redirect the output, to a GTK+ widget or a log file for
+ * redirect the output, to a GTK widget or a log file for
  * example.
  *
  * Since 2.76 this functions always returns a valid
@@ -32492,7 +32519,7 @@
  *
  * The source name should describe in a human-readable way
  * what the source does. For example, "X11 event queue"
- * or "GTK+ repaint idle handler" or whatever it is.
+ * or "GTK repaint idle handler" or whatever it is.
  *
  * It is permitted to call this function multiple times, but is not
  * recommended due to the potential performance impact.  For example,
@@ -34623,7 +34650,7 @@
  *
  * Searches the string @haystack for the first occurrence
  * of the string @needle, limiting the length of the search
- * to @haystack_len.
+ * to @haystack_len or a nul terminator byte (whichever is reached first).
  *
  * Returns: a pointer to the found occurrence, or
  *    %NULL if not found.
@@ -35218,6 +35245,8 @@
  * Initialize the GLib testing framework, e.g. by seeding the
  * test random number generator, the name for g_get_prgname()
  * and parsing test related command line args.
+ *
+ * This should be called before calling any other `g_test_*()` functions.
  *
  * So far, the following arguments are understood:
  *
@@ -36224,10 +36253,14 @@
  * since their threads are never considered idle and returned to the
  * global pool.
  *
- * Note that the threads used by exclusive threadpools will all inherit the
+ * Note that the threads used by exclusive thread pools will all inherit the
  * scheduler settings of the current thread while the threads used by
- * non-exclusive threadpools will inherit the scheduler settings from the
- * first thread that created such a threadpool.
+ * non-exclusive thread pools will inherit the scheduler settings from the
+ * first thread that created such a thread pool.
+ *
+ * At least one thread will be spawned when this function is called, either to
+ * create the @max_threads exclusive threads, or to preserve the scheduler
+ * settings of the current thread for future spawns.
  *
  * @error can be %NULL to ignore errors, or non-%NULL to report
  * errors. An error can only occur when @exclusive is set to %TRUE
@@ -36255,6 +36288,9 @@
  * but allowing @item_free_func to be specified to free the data passed
  * to g_thread_pool_push() in the case that the #GThreadPool is stopped
  * and freed before all tasks have been executed.
+ *
+ * @item_free_func will *not* be called on items successfully passed to @func.
+ * @func is responsible for freeing the items passed to it.
  *
  * Returns: (transfer full): the new #GThreadPool
  * Since: 2.70
@@ -37050,6 +37086,19 @@
  *
  * Returns: the ID (greater than 0) of the event source.
  * Since: 2.14
+ */
+
+
+/**
+ * g_timeout_add_seconds_once:
+ * @interval: the time after which the function will be called, in seconds
+ * @function: function to call
+ * @data: data to pass to @function
+ *
+ * This function behaves like g_timeout_add_once() but with a range in seconds.
+ *
+ * Returns: the ID (greater than 0) of the event source
+ * Since: 2.78
  */
 
 
@@ -38507,12 +38556,15 @@
 /**
  * g_unix_fd_source_new:
  * @fd: a file descriptor
- * @condition: IO conditions to watch for on @fd
+ * @condition: I/O conditions to watch for on @fd
  *
- * Creates a #GSource to watch for a particular IO condition on a file
+ * Creates a #GSource to watch for a particular I/O condition on a file
  * descriptor.
  *
- * The source will never close the fd -- you must do it yourself.
+ * The source will never close the @fd — you must do it yourself.
+ *
+ * Any callback attached to the returned #GSource must have type
+ * #GUnixFDSourceFunc.
  *
  * Returns: the newly created #GSource
  * Since: 2.36
@@ -38550,11 +38602,16 @@
  *
  * Similar to the UNIX pipe() call, but on modern systems like Linux
  * uses the pipe2() system call, which atomically creates a pipe with
- * the configured flags. The only supported flag currently is
- * %FD_CLOEXEC. If for example you want to configure %O_NONBLOCK, that
- * must still be done separately with fcntl().
+ * the configured flags.
  *
- * This function does not take %O_CLOEXEC, it takes %FD_CLOEXEC as if
+ * As of GLib 2.78, the supported flags are `FD_CLOEXEC` and `O_NONBLOCK`. Prior
+ * to GLib 2.78, only `FD_CLOEXEC` was supported — if you wanted to configure
+ * `O_NONBLOCK` then that had to be done separately with `fcntl()`.
+ *
+ * It is a programmer error to call this function with unsupported flags, and a
+ * critical warning will be raised.
+ *
+ * This function does not take `O_CLOEXEC`, it takes `FD_CLOEXEC` as if
  * for fcntl(); these are different on Linux/glibc.
  *
  * Returns: %TRUE on success, %FALSE if not (and errno will be set).
@@ -38970,7 +39027,7 @@
  *
  * When @host is present, @path must either be empty or begin with a slash (`/`)
  * character. When @host is not present, @path cannot begin with two slash
- *    characters (`//`). See
+ * characters (`//`). See
  * [RFC 3986, section 3](https://tools.ietf.org/html/rfc3986#section-3).
  *
  * See also g_uri_join_with_user(), which allows specifying the
@@ -40068,7 +40125,7 @@
  * Note that g_utf8_validate() returns %FALSE if @max_len is
  * positive and any of the @max_len bytes are nul.
  *
- * Returns %TRUE if all of @str was valid. Many GLib and GTK+
+ * Returns %TRUE if all of @str was valid. Many GLib and GTK
  * routines require valid UTF-8 as input; so data read from a file
  * or the network should be checked with g_utf8_validate() before
  * doing anything else with it.
@@ -40652,7 +40709,8 @@
  *
  * This function is a wrapper around g_variant_dict_lookup_value() and
  * g_variant_get().  In the case that %NULL would have been returned,
- * this function returns %FALSE.  Otherwise, it unpacks the returned
+ * this function returns %FALSE and does not modify the values of the arguments
+ * passed in to @....  Otherwise, it unpacks the returned
  * value and returns %TRUE.
  *
  * @format_string determines the C types that are used for unpacking the
@@ -42225,8 +42283,8 @@
  * g_variant_new_object_path:
  * @object_path: a normal C nul-terminated string
  *
- * Creates a D-Bus object path #GVariant with the contents of @string.
- * @string must be a valid D-Bus object path.  Use
+ * Creates a D-Bus object path #GVariant with the contents of @object_path.
+ * @object_path must be a valid D-Bus object path.  Use
  * g_variant_is_object_path() if you're not sure.
  *
  * Returns: (transfer none): a floating reference to a new object path #GVariant instance
