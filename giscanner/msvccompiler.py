@@ -21,9 +21,7 @@
 import os
 import distutils
 
-from distutils.errors import DistutilsExecError, CompileError
-from distutils.ccompiler import CCompiler, gen_preprocess_options
-from distutils.dep_util import newer
+from distutils.ccompiler import CCompiler
 
 # Distutil's MSVCCompiler does not provide a preprocess()
 # Implementation, so do our own here.
@@ -55,52 +53,6 @@ class MSVCCompiler(distutils.msvccompiler.MSVCCompiler):
             if len(cc_cmd) > 1:
                 self.compile_options.extend(cc_cmd[1:])
             self.initialized = True
-
-    def preprocess(self,
-                   source,
-                   output_file=None,
-                   macros=None,
-                   include_dirs=None,
-                   extra_preargs=None,
-                   extra_postargs=None):
-        if self.initialized is False:
-            self.initialize()
-
-        (_, macros, include_dirs) = \
-            self._fix_compile_args(None, macros, include_dirs)
-        pp_opts = gen_preprocess_options(macros, include_dirs)
-        preprocess_options = ['-E']
-        source_basename = None
-
-        if output_file is not None:
-            preprocess_options.append('-P')
-            source_basename = self._get_file_basename(source)
-        cpp_args = self.cc.split()
-        if extra_preargs is not None:
-            cpp_args[:0] = extra_preargs
-        if extra_postargs is not None:
-            preprocess_options.extend(extra_postargs)
-        cpp_args.extend(preprocess_options)
-        cpp_args.extend(pp_opts)
-        cpp_args.append(source)
-
-        # We need to preprocess: either we're being forced to, or the
-        # source file is newer than the target (or the target doesn't
-        # exist).
-        if self.force or output_file is None or newer(source, output_file):
-            try:
-                self.spawn(cpp_args)
-            except DistutilsExecError as msg:
-                print(msg)
-                raise CompileError
-
-        # The /P option for the MSVC preprocessor will output the results
-        # of the preprocessor to a file, as <source_without_extension>.i,
-        # so in order to output the specified filename, we need to rename
-        # that file
-        if output_file is not None:
-            if output_file != source_basename + '.i':
-                os.rename(source_basename + '.i', output_file)
 
     def _get_file_basename(self, filename):
         if filename is None:

@@ -288,34 +288,44 @@ class CCompiler(object):
                     args.append('-l' + library)
 
     def preprocess(self, source, output, cpp_options):
-        extra_postargs = ['-C']
-        (include_paths, macros, postargs) = self._set_cpp_options(cpp_options)
+        (include_paths, macros, postargs, whole_options) = self._set_cpp_options(cpp_options)
+
+        if self.compiler.compiler_type == "unix":
+            preprocess_cmd = self.compiler.preprocessor
+        else:
+            preprocess_cmd = [self.compiler_cmd, '-E']
 
         # We always want to include the current path
-        include_dirs = ['.']
-
-        include_dirs.extend(include_paths)
-        extra_postargs.extend(postargs)
+        preprocess_cmd.extend(['-I.', '-C'])
 
         # Define these macros when using Visual C++ to silence many warnings,
         # and prevent stepping on many Visual Studio-specific items, so that
-        # we don't have to handle them specifically in scannerlexer.l
-        if self.check_is_msvc() and not self.compiler.check_is_clang_cl():
-            macros.append(('_USE_DECLSPECS_FOR_SAL', None))
-            macros.append(('_CRT_SECURE_NO_WARNINGS', None))
-            macros.append(('_CRT_NONSTDC_NO_WARNINGS', None))
-            macros.append(('SAL_NO_ATTRIBUTE_DECLARATIONS', None))
+        # we don't have to handle them specifically in scannerlexer.l.  We
+        # also want to pass in '-P' as well for preprocessing
+        if self.check_is_msvc():
+            if output is not None:
+                preprocess_cmd.append('-P')
+            if not self.compiler.check_is_clang_cl():
+                preprocess_cmd.append('-D_USE_DECLSPECS_FOR_SAL')
+                preprocess_cmd.append('-D_CRT_SECURE_NO_WARNINGS')
+                preprocess_cmd.append('-D_CRT_NONSTDC_NO_WARNINGS')
+                preprocess_cmd.append('-DSAL_NO_ATTRIBUTE_DECLARATIONS')
 
-        self.compiler.preprocess(source=source,
-                                 output_file=output,
-                                 macros=macros,
-                                 include_dirs=include_dirs,
-                                 extra_postargs=extra_postargs)
+        preprocess_cmd.extend(whole_options)
+        preprocess_cmd.append(source)
+
+        if output is not None:
+            if self.check_is_msvc():
+                preprocess_cmd.append('-Fi' + output)
+            else:
+                preprocess_cmd.extend(['-o', output])
+
+        self.compiler.spawn(preprocess_cmd)
 
     def compile(self, pkg_config_cflags, cpp_includes, source, init_sections):
         extra_postargs = []
         includes = []
-        (include_paths, macros, extra_args) = \
+        (include_paths, macros, extra_args, whole_options) = \
             self._set_cpp_options(pkg_config_cflags)
 
         for include in cpp_includes:
@@ -460,9 +470,13 @@ class CCompiler(object):
         includes = []
         macros = []
         other_options = []
+        preprocess_options = []
 
         for o in options:
             option = utils.cflag_real_include_path(o)
+
+            # XXX: Start of part to drop after switching
+            #      constructing compile commandline manually
             if option.startswith('-I'):
                 includes.append(option[len('-I'):])
             elif option.startswith('-D'):
@@ -489,4 +503,11 @@ class CCompiler(object):
                 # up high enough that won't happen, so don't add those flags. Bug #720504
                 if option not in FLAGS_RETAINING_MACROS:
                     other_options.append(option)
-        return (includes, macros, other_options)
+            # XXX: End of part to drop after switching
+            #      constructing compile commandline manually
+
+            # We expect the preprocessor to remove macros. If debugging is turned
+            # up high enough that won't happen, so don't add those flags. Bug #720504
+            if option not in FLAGS_RETAINING_MACROS:
+                preprocess_options.append(option)
+        return (includes, macros, other_options, preprocess_options)
