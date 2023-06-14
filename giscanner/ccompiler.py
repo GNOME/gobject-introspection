@@ -288,7 +288,7 @@ class CCompiler(object):
                     args.append('-l' + library)
 
     def preprocess(self, source, output, cpp_options):
-        (include_paths, macros, postargs, whole_options) = self._set_cpp_options(cpp_options)
+        whole_options = self._set_cpp_options(cpp_options)
 
         if self.compiler.compiler_type == "unix":
             preprocess_cmd = self.compiler.preprocessor
@@ -323,13 +323,17 @@ class CCompiler(object):
         self.compiler.spawn(preprocess_cmd)
 
     def compile(self, pkg_config_cflags, cpp_includes, source, init_sections):
-        extra_postargs = []
-        includes = []
-        (include_paths, macros, extra_args, whole_options) = \
-            self._set_cpp_options(pkg_config_cflags)
+        if isinstance(self.compiler, UnixCCompiler):
+            compiler_cmd = self.compiler.compiler
+        else:
+            compiler_cmd = [self.compiler_cmd]
+        objs = self.compiler.object_filenames(source, strip_dir=0,
+                                              output_dir=os.path.abspath(os.sep))
+
+        whole_options_pkgconfig = self._set_cpp_options(pkg_config_cflags)
 
         for include in cpp_includes:
-            includes.append(include)
+            compiler_cmd.append('-I' + include)
 
         if isinstance(self.compiler, UnixCCompiler):
             # This is to handle the case where macros are defined in CFLAGS
@@ -337,29 +341,23 @@ class CCompiler(object):
             if cflags:
                 for i, cflag in enumerate(shlex.split(cflags)):
                     if cflag.startswith('-D'):
-                        stridx = cflag.find('=')
-                        if stridx > -1:
-                            macroset = (cflag[2:stridx],
-                                        cflag[stridx + 1:])
-                        else:
-                            macroset = (cflag[2:], None)
-                        if macroset not in macros:
-                            macros.append(macroset)
+                        if cflag not in whole_options_pkgconfig:
+                            whole_options_pkgconfig.append(cflag)
 
         # Do not add -Wall when using init code as we do not include any
         # header of the library being introspected
         if self.compiler_cmd == 'gcc' and not init_sections:
-            extra_postargs.append('-Wall')
-        extra_postargs.append(self._cflags_no_deprecation_warnings)
-
-        includes.extend(include_paths)
-        extra_postargs.extend(extra_args)
-
-        return self.compiler.compile(sources=source,
-                                     macros=macros,
-                                     include_dirs=includes,
-                                     extra_postargs=extra_postargs,
-                                     output_dir=os.path.abspath(os.sep))
+            compiler_cmd.append('-Wall')
+        compiler_cmd.extend(whole_options_pkgconfig)
+        compiler_cmd.append('-c')
+        compiler_cmd.extend(source)
+        if self.check_is_msvc():
+            compiler_cmd.append('-Fo' + objs[0])
+        else:
+            compiler_cmd.extend(['-o', objs[0]])
+        compiler_cmd.append(self._cflags_no_deprecation_warnings)
+        self.compiler.spawn(compiler_cmd)
+        return objs
 
     def resolve_windows_libs(self, libraries, options):
         args = []
@@ -467,47 +465,13 @@ class CCompiler(object):
 
     # Private APIs
     def _set_cpp_options(self, options):
-        includes = []
-        macros = []
-        other_options = []
         preprocess_options = []
 
         for o in options:
             option = utils.cflag_real_include_path(o)
 
-            # XXX: Start of part to drop after switching
-            #      constructing compile commandline manually
-            if option.startswith('-I'):
-                includes.append(option[len('-I'):])
-            elif option.startswith('-D'):
-                macro = option[len('-D'):]
-                macro_index = macro.find('=')
-                if macro_index == -1:
-                    macro_name = macro
-                    macro_value = None
-                else:
-                    macro_name = macro[:macro_index]
-                    macro_value = macro[macro_index + 1:]
-
-                    # Somehow the quotes used in defining
-                    # macros for compiling using distutils
-                    # get dropped for MSVC builds, so
-                    # escape the escape character.
-                    if isinstance(self.compiler, MSVCCompiler):
-                        macro_value = macro_value.replace('\"', '\\\"')
-                macros.append((macro_name, macro_value))
-            elif option.startswith('-U'):
-                macros.append((option[len('-U'):],))
-            else:
-                # We expect the preprocessor to remove macros. If debugging is turned
-                # up high enough that won't happen, so don't add those flags. Bug #720504
-                if option not in FLAGS_RETAINING_MACROS:
-                    other_options.append(option)
-            # XXX: End of part to drop after switching
-            #      constructing compile commandline manually
-
             # We expect the preprocessor to remove macros. If debugging is turned
             # up high enough that won't happen, so don't add those flags. Bug #720504
             if option not in FLAGS_RETAINING_MACROS:
                 preprocess_options.append(option)
-        return (includes, macros, other_options, preprocess_options)
+        return preprocess_options

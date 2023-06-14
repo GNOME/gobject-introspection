@@ -25,6 +25,8 @@ import shlex
 import subprocess
 import tempfile
 
+from distutils.errors import DistutilsExecError
+
 from .gdumpparser import IntrospectionBinary
 from . import pkgconfig, utils
 from .ccompiler import CCompiler
@@ -161,7 +163,7 @@ class DumpCompiler(object):
 
         try:
             introspection_obj = self._compile(c_path)
-        except CompilerError as e:
+        except (CompilerError, DistutilsExecError) as e:
             if not utils.have_debug_flag('save-temps'):
                 utils.rmtree(tmpdir)
             raise SystemExit('compilation of temporary binary failed:' + str(e))
