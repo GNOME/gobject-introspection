@@ -1686,23 +1686,26 @@ method or constructor of some type."""
             func_name = method.name + '_finish'
             if method.name.endswith('_async'):
                 func_name = method.name[:-6] + '_finish'
+            found_async_callback_param = False
             for params in method.parameters:
                 if (params.type.ctype == 'GAsyncReadyCallback'):
-                    break
-            else:
+                    found_async_callback_param = True
+
+            if not found_async_callback_param:
                 continue
-            found = False
+
+            found_finish_method = False
             for candidate_method in methods:
-                if found:
+                if found_finish_method:
                     break
                 if candidate_method.name != func_name:
                     continue
                 for candidate_param in candidate_method.parameters:
                     if candidate_param.type.ctype == 'GAsyncResult*':
                         method.finish_func = candidate_method.name
-                        found = True
+                        found_finish_method = True
                         break
-            if not found:
+            if not found_finish_method:
                 message.warn_node(method,
                 "Couldn't find '%s' for the corresponding async function: '%s'"
                 % (func_name, method.name))
