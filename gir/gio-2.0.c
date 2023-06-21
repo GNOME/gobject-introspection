@@ -5260,6 +5260,10 @@
  * conveniently access them remotely. GIO provides a #GDBusMenuModel wrapper
  * for remote access to exported #GMenuModels.
  *
+ * Note: Due to the fact that actions are exported on the session bus,
+ * using `maybe` parameters is not supported, since D-Bus does not support
+ * `maybe` types.
+ *
  * There is a number of different entry points into a GApplication:
  *
  * - via 'Activate' (i.e. just starting the application)
@@ -6836,7 +6840,7 @@
  * - g_file_new_tmp_async() to asynchronously create a temporary file.
  * - g_file_new_tmp_dir_async() to asynchronously create a temporary directory.
  * - g_file_parse_name() from a UTF-8 string gotten from g_file_get_parse_name().
- * - g_file_new_build_filename() to create a file from path elements.
+ * - g_file_new_build_filename() or g_file_new_build_filenamev() to create a file from path elements.
  *
  * One way to think of a #GFile is as an abstraction of a pathname. For
  * normal files the system pathname is what is stored internally, but as
@@ -11661,6 +11665,40 @@
  * If no action of this name is in the map then nothing happens.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * g_action_map_remove_action_entries:
+ * @action_map: The #GActionMap
+ * @entries: (array length=n_entries) (element-type GActionEntry): a pointer to
+ *           the first item in an array of #GActionEntry structs
+ * @n_entries: the length of @entries, or -1 if @entries is %NULL-terminated
+ *
+ * Remove actions from a #GActionMap. This is meant as the reverse of
+ * g_action_map_add_action_entries().
+ *
+ *
+ * |[<!-- language="C" -->
+ * static const GActionEntry entries[] = {
+ *     { "quit",         activate_quit              },
+ *     { "print-string", activate_print_string, "s" }
+ * };
+ *
+ * void
+ * add_actions (GActionMap *map)
+ * {
+ *   g_action_map_add_action_entries (map, entries, G_N_ELEMENTS (entries), NULL);
+ * }
+ *
+ * void
+ * remove_actions (GActionMap *map)
+ * {
+ *   g_action_map_remove_action_entries (map, entries, G_N_ELEMENTS (entries));
+ * }
+ * ]|
+ *
+ * Since: 2.78
  */
 
 
@@ -24116,7 +24154,7 @@
  * It is an error to call this if the #GFileInfo does not contain
  * %G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET.
  *
- * Returns: (nullable): a string containing the symlink target.
+ * Returns: (type filename) (nullable): a string containing the symlink target.
  */
 
 
@@ -24495,7 +24533,7 @@
 /**
  * g_file_info_set_symlink_target:
  * @info: a #GFileInfo.
- * @symlink_target: a static string containing a path to a symlink target.
+ * @symlink_target: (type filename): a static string containing a path to a symlink target.
  *
  * Sets the %G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET attribute in the file info
  * to the given symlink target.
@@ -25377,6 +25415,22 @@
  *
  * Returns: (transfer full): a new #GFile
  * Since: 2.56
+ */
+
+
+/**
+ * g_file_new_build_filenamev:
+ * @args: (array zero-terminated=1) (element-type filename): %NULL-terminated
+ *   array of strings containing the path elements.
+ *
+ * Constructs a #GFile from a vector of elements using the correct
+ * separator for filenames.
+ *
+ * Using this function is equivalent to calling g_build_filenamev(),
+ * followed by g_file_new_for_path() on the result.
+ *
+ * Returns: (transfer full): a new #GFile
+ * Since: 2.78
  */
 
 

@@ -5486,52 +5486,6 @@
 
 
 /**
- * SECTION:bookmarkfile
- * @title: Bookmark file parser
- * @short_description: parses files containing bookmarks
- *
- * GBookmarkFile lets you parse, edit or create files containing bookmarks
- * to URI, along with some meta-data about the resource pointed by the URI
- * like its MIME type, the application that is registering the bookmark and
- * the icon that should be used to represent the bookmark. The data is stored
- * using the
- * [Desktop Bookmark Specification](http://www.gnome.org/~ebassi/bookmark-spec).
- *
- * The syntax of the bookmark files is described in detail inside the
- * Desktop Bookmark Specification, here is a quick summary: bookmark
- * files use a sub-class of the XML Bookmark Exchange Language
- * specification, consisting of valid UTF-8 encoded XML, under the
- * <xbel> root element; each bookmark is stored inside a
- * <bookmark> element, using its URI: no relative paths can
- * be used inside a bookmark file. The bookmark may have a user defined
- * title and description, to be used instead of the URI. Under the
- * <metadata> element, with its owner attribute set to
- * `http://freedesktop.org`, is stored the meta-data about a resource
- * pointed by its URI. The meta-data consists of the resource's MIME
- * type; the applications that have registered a bookmark; the groups
- * to which a bookmark belongs to; a visibility flag, used to set the
- * bookmark as "private" to the applications and groups that has it
- * registered; the URI and MIME type of an icon, to be used when
- * displaying the bookmark inside a GUI.
- *
- * Here is an example of a bookmark file:
- * [bookmarks.xbel](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/glib/tests/bookmarks.xbel)
- *
- * A bookmark file might contain more than one bookmark; each bookmark
- * is accessed through its URI.
- *
- * The important caveat of bookmark files is that when you add a new
- * bookmark you must also add the application that is registering it, using
- * g_bookmark_file_add_application() or g_bookmark_file_set_application_info().
- * If a bookmark has no applications then it won't be dumped when creating
- * the on disk representation, using g_bookmark_file_to_data() or
- * g_bookmark_file_to_file().
- *
- * The #GBookmarkFile parser was added in GLib 2.12.
- */
-
-
-/**
  * SECTION:byte_order
  * @title: Byte Order Macros
  * @short_description: a portable way to convert between different byte orders
@@ -6384,6 +6338,52 @@
 
 
 /**
+ * SECTION:gbookmarkfile
+ * @title: Bookmark file parser
+ * @short_description: parses files containing bookmarks
+ *
+ * GBookmarkFile lets you parse, edit or create files containing bookmarks
+ * to URI, along with some meta-data about the resource pointed by the URI
+ * like its MIME type, the application that is registering the bookmark and
+ * the icon that should be used to represent the bookmark. The data is stored
+ * using the
+ * [Desktop Bookmark Specification](http://www.gnome.org/~ebassi/bookmark-spec).
+ *
+ * The syntax of the bookmark files is described in detail inside the
+ * Desktop Bookmark Specification, here is a quick summary: bookmark
+ * files use a sub-class of the XML Bookmark Exchange Language
+ * specification, consisting of valid UTF-8 encoded XML, under the
+ * <xbel> root element; each bookmark is stored inside a
+ * <bookmark> element, using its URI: no relative paths can
+ * be used inside a bookmark file. The bookmark may have a user defined
+ * title and description, to be used instead of the URI. Under the
+ * <metadata> element, with its owner attribute set to
+ * `http://freedesktop.org`, is stored the meta-data about a resource
+ * pointed by its URI. The meta-data consists of the resource's MIME
+ * type; the applications that have registered a bookmark; the groups
+ * to which a bookmark belongs to; a visibility flag, used to set the
+ * bookmark as "private" to the applications and groups that has it
+ * registered; the URI and MIME type of an icon, to be used when
+ * displaying the bookmark inside a GUI.
+ *
+ * Here is an example of a bookmark file:
+ * [bookmarks.xbel](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/glib/tests/bookmarks.xbel)
+ *
+ * A bookmark file might contain more than one bookmark; each bookmark
+ * is accessed through its URI.
+ *
+ * The important caveat of bookmark files is that when you add a new
+ * bookmark you must also add the application that is registering it, using
+ * g_bookmark_file_add_application() or g_bookmark_file_set_application_info().
+ * If a bookmark has no applications then it won't be dumped when creating
+ * the on disk representation, using g_bookmark_file_to_data() or
+ * g_bookmark_file_to_file().
+ *
+ * The #GBookmarkFile parser was added in GLib 2.12.
+ */
+
+
+/**
  * SECTION:ghostutils
  * @short_description: Internet hostname utilities
  *
@@ -6399,6 +6399,148 @@
  * ASCII-Compatible Encoding of any given Unicode name, which can be
  * used with non-IDN-aware applications and protocols. (For example,
  * "Παν語.org" maps to "xn--4wa8awb4637h.org".)
+ */
+
+
+/**
+ * SECTION:gkeyfile
+ * @title: Key-value file parser
+ * @short_description: parses .ini-like config files
+ *
+ * #GKeyFile lets you parse, edit or create files containing groups of
+ * key-value pairs, which we call "key files" for lack of a better name.
+ * Several freedesktop.org specifications use key files now, e.g the
+ * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec)
+ * and the
+ * [Icon Theme Specification](http://freedesktop.org/Standards/icon-theme-spec).
+ *
+ * The syntax of key files is described in detail in the
+ * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec),
+ * here is a quick summary: Key files
+ * consists of groups of key-value pairs, interspersed with comments.
+ *
+ * |[
+ * # this is just an example
+ * # there can be comments before the first group
+ *
+ * [First Group]
+ *
+ * Name=Key File Example\tthis value shows\nescaping
+ *
+ * # localized strings are stored in multiple key-value pairs
+ * Welcome=Hello
+ * Welcome[de]=Hallo
+ * Welcome[fr_FR]=Bonjour
+ * Welcome[it]=Ciao
+ * Welcome[be@latin]=Hello
+ *
+ * [Another Group]
+ *
+ * Numbers=2;20;-200;0
+ *
+ * Booleans=true;false;true;true
+ * ]|
+ *
+ * Lines beginning with a '#' and blank lines are considered comments.
+ *
+ * Groups are started by a header line containing the group name enclosed
+ * in '[' and ']', and ended implicitly by the start of the next group or
+ * the end of the file. Each key-value pair must be contained in a group.
+ *
+ * Key-value pairs generally have the form `key=value`, with the
+ * exception of localized strings, which have the form
+ * `key[locale]=value`, with a locale identifier of the
+ * form `lang_COUNTRY@MODIFIER` where `COUNTRY` and `MODIFIER`
+ * are optional.
+ * Space before and after the '=' character are ignored. Newline, tab,
+ * carriage return and backslash characters in value are escaped as \n,
+ * \t, \r, and \\\\, respectively. To preserve leading spaces in values,
+ * these can also be escaped as \s.
+ *
+ * Key files can store strings (possibly with localized variants), integers,
+ * booleans and lists of these. Lists are separated by a separator character,
+ * typically ';' or ','. To use the list separator character in a value in
+ * a list, it has to be escaped by prefixing it with a backslash.
+ *
+ * This syntax is obviously inspired by the .ini files commonly met
+ * on Windows, but there are some important differences:
+ *
+ * - .ini files use the ';' character to begin comments,
+ *   key files use the '#' character.
+ *
+ * - Key files do not allow for ungrouped keys meaning only
+ *   comments can precede the first group.
+ *
+ * - Key files are always encoded in UTF-8.
+ *
+ * - Key and Group names are case-sensitive. For example, a group called
+ *   [GROUP] is a different from [group].
+ *
+ * - .ini files don't have a strongly typed boolean entry type,
+ *    they only have GetProfileInt(). In key files, only
+ *    true and false (in lower case) are allowed.
+ *
+ * Note that in contrast to the
+ * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec),
+ * groups in key files may contain the same
+ * key multiple times; the last entry wins. Key files may also contain
+ * multiple groups with the same name; they are merged together.
+ * Another difference is that keys and group names in key files are not
+ * restricted to ASCII characters.
+ *
+ * Here is an example of loading a key file and reading a value:
+ *
+ * |[<!-- language="C" -->
+ * g_autoptr(GError) error = NULL;
+ * g_autoptr(GKeyFile) key_file = g_key_file_new ();
+ *
+ * if (!g_key_file_load_from_file (key_file, "key-file.ini", flags, &error))
+ *   {
+ *     if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+ *       g_warning ("Error loading key file: %s", error->message);
+ *     return;
+ *   }
+ *
+ * g_autofree gchar *val = g_key_file_get_string (key_file, "Group Name", "SomeKey", &error);
+ * if (val == NULL &&
+ *     !g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+ *   {
+ *     g_warning ("Error finding key in key file: %s", error->message);
+ *     return;
+ *   }
+ * else if (val == NULL)
+ *   {
+ *     // Fall back to a default value.
+ *     val = g_strdup ("default-value");
+ *   }
+ * ]|
+ *
+ * Here is an example of creating and saving a key file:
+ *
+ * |[<!-- language="C" -->
+ * g_autoptr(GKeyFile) key_file = g_key_file_new ();
+ * const gchar *val = …;
+ * g_autoptr(GError) error = NULL;
+ *
+ * g_key_file_set_string (key_file, "Group Name", "SomeKey", val);
+ *
+ * // Save as a file.
+ * if (!g_key_file_save_to_file (key_file, "key-file.ini", &error))
+ *   {
+ *     g_warning ("Error saving key file: %s", error->message);
+ *     return;
+ *   }
+ *
+ * // Or store to a GBytes for use elsewhere.
+ * gsize data_len;
+ * g_autofree guint8 *data = (guint8 *) g_key_file_to_data (key_file, &data_len, &error);
+ * if (data == NULL)
+ *   {
+ *     g_warning ("Error saving key file: %s", error->message);
+ *     return;
+ *   }
+ * g_autoptr(GBytes) bytes = g_bytes_new_take (g_steal_pointer (&data), data_len);
+ * ]|
  */
 
 
@@ -7411,146 +7553,6 @@
  * g_io_channel_seek_position(), and g_io_channel_flush() should not be
  * mixed with the deprecated functions g_io_channel_read(),
  * g_io_channel_write(), and g_io_channel_seek() on the same channel.
- */
-
-
-/**
- * SECTION:keyfile
- * @title: Key-value file parser
- * @short_description: parses .ini-like config files
- *
- * #GKeyFile lets you parse, edit or create files containing groups of
- * key-value pairs, which we call "key files" for lack of a better name.
- * Several freedesktop.org specifications use key files now, e.g the
- * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec)
- * and the
- * [Icon Theme Specification](http://freedesktop.org/Standards/icon-theme-spec).
- *
- * The syntax of key files is described in detail in the
- * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec),
- * here is a quick summary: Key files
- * consists of groups of key-value pairs, interspersed with comments.
- *
- * |[
- * # this is just an example
- * # there can be comments before the first group
- *
- * [First Group]
- *
- * Name=Key File Example\tthis value shows\nescaping
- *
- * # localized strings are stored in multiple key-value pairs
- * Welcome=Hello
- * Welcome[de]=Hallo
- * Welcome[fr_FR]=Bonjour
- * Welcome[it]=Ciao
- * Welcome[be@latin]=Hello
- *
- * [Another Group]
- *
- * Numbers=2;20;-200;0
- *
- * Booleans=true;false;true;true
- * ]|
- *
- * Lines beginning with a '#' and blank lines are considered comments.
- *
- * Groups are started by a header line containing the group name enclosed
- * in '[' and ']', and ended implicitly by the start of the next group or
- * the end of the file. Each key-value pair must be contained in a group.
- *
- * Key-value pairs generally have the form `key=value`, with the
- * exception of localized strings, which have the form
- * `key[locale]=value`, with a locale identifier of the
- * form `lang_COUNTRY@MODIFIER` where `COUNTRY` and `MODIFIER`
- * are optional.
- * Space before and after the '=' character are ignored. Newline, tab,
- * carriage return and backslash characters in value are escaped as \n,
- * \t, \r, and \\\\, respectively. To preserve leading spaces in values,
- * these can also be escaped as \s.
- *
- * Key files can store strings (possibly with localized variants), integers,
- * booleans and lists of these. Lists are separated by a separator character,
- * typically ';' or ','. To use the list separator character in a value in
- * a list, it has to be escaped by prefixing it with a backslash.
- *
- * This syntax is obviously inspired by the .ini files commonly met
- * on Windows, but there are some important differences:
- *
- * - .ini files use the ';' character to begin comments,
- *   key files use the '#' character.
- *
- * - Key files do not allow for ungrouped keys meaning only
- *   comments can precede the first group.
- *
- * - Key files are always encoded in UTF-8.
- *
- * - Key and Group names are case-sensitive. For example, a group called
- *   [GROUP] is a different from [group].
- *
- * - .ini files don't have a strongly typed boolean entry type,
- *    they only have GetProfileInt(). In key files, only
- *    true and false (in lower case) are allowed.
- *
- * Note that in contrast to the
- * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec),
- * groups in key files may contain the same
- * key multiple times; the last entry wins. Key files may also contain
- * multiple groups with the same name; they are merged together.
- * Another difference is that keys and group names in key files are not
- * restricted to ASCII characters.
- *
- * Here is an example of loading a key file and reading a value:
- * |[<!-- language="C" -->
- * g_autoptr(GError) error = NULL;
- * g_autoptr(GKeyFile) key_file = g_key_file_new ();
- *
- * if (!g_key_file_load_from_file (key_file, "key-file.ini", flags, &error))
- *   {
- *     if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
- *       g_warning ("Error loading key file: %s", error->message);
- *     return;
- *   }
- *
- * g_autofree gchar *val = g_key_file_get_string (key_file, "Group Name", "SomeKey", &error);
- * if (val == NULL &&
- *     !g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
- *   {
- *     g_warning ("Error finding key in key file: %s", error->message);
- *     return;
- *   }
- * else if (val == NULL)
- *   {
- *     // Fall back to a default value.
- *     val = g_strdup ("default-value");
- *   }
- * ]|
- *
- * Here is an example of creating and saving a key file:
- * |[<!-- language="C" -->
- * g_autoptr(GKeyFile) key_file = g_key_file_new ();
- * const gchar *val = …;
- * g_autoptr(GError) error = NULL;
- *
- * g_key_file_set_string (key_file, "Group Name", "SomeKey", val);
- *
- * // Save as a file.
- * if (!g_key_file_save_to_file (key_file, "key-file.ini", &error))
- *   {
- *     g_warning ("Error saving key file: %s", error->message);
- *     return;
- *   }
- *
- * // Or store to a GBytes for use elsewhere.
- * gsize data_len;
- * g_autofree guint8 *data = (guint8 *) g_key_file_to_data (key_file, &data_len, &error);
- * if (data == NULL)
- *   {
- *     g_warning ("Error saving key file: %s", error->message);
- *     return;
- *   }
- * g_autoptr(GBytes) bytes = g_bytes_new_take (g_steal_pointer (&data), data_len);
- * ]|
  */
 
 
@@ -9802,8 +9804,10 @@
  * reference count of 1.
  *
  * This avoids having to copy the data manually, when it can just be
- * inherited. @data will eventually be freed using g_free(), so must
- * have been allocated with a suitable allocator.
+ * inherited.
+ * After this call, @data belongs to the #GArray and may no longer be
+ * modified by the caller. The memory of @data has to be dynamically
+ * allocated and will eventually be freed with g_free().
  *
  * In case the elements need to be cleared when the array is freed, use
  * g_array_set_clear_func() to set a #GDestroyNotify function to perform
@@ -9829,8 +9833,10 @@
  * and setting the reference count to 1.
  *
  * This avoids having to copy the data manually, when it can just be
- * inherited. @data will eventually be freed using g_free(), so must
- * have been allocated with a suitable allocator.
+ * inherited.
+ * After this call, @data belongs to the #GArray and may no longer be
+ * modified by the caller. The memory of @data has to be dynamically
+ * allocated and will eventually be freed with g_free().
  *
  * The length is calculated by iterating through @data until the first %NULL
  * element is found.
@@ -13712,8 +13718,10 @@
  * @data: (transfer full) (array length=len): byte data for the array
  * @len: length of @data
  *
- * Create byte array containing the data. The data will be owned by the array
- * and will be freed with g_free(), i.e. it could be allocated using g_strdup().
+ * Creates a byte array containing the @data.
+ * After this call, @data belongs to the #GByteArray and may no longer be
+ * modified by the caller. The memory of @data has to be dynamically
+ * allocated and will eventually be freed with g_free().
  *
  * Do not use it if @len is greater than %G_MAXUINT. #GByteArray
  * stores the length of its data in #guint, which may be shorter than
@@ -14050,11 +14058,9 @@
  *
  * Creates a new #GBytes from @data.
  *
- * After this call, @data belongs to the bytes and may no longer be
- * modified by the caller.  g_free() will be called on @data when the
- * bytes is no longer in use. Because of this @data must have been created by
- * a call to g_malloc(), g_malloc0() or g_realloc() or by one of the many
- * functions that wrap these calls (such as g_new(), g_strdup(), etc).
+ * After this call, @data belongs to the #GBytes and may no longer be
+ * modified by the caller. The memory of @data has to be dynamically
+ * allocated and will eventually be freed with g_free().
  *
  * For creating #GBytes with memory from other allocators, see
  * g_bytes_new_with_free_func().
@@ -14416,6 +14422,14 @@
  *   mechanism, including `waitpid(pid, ...)` or a second child-watch
  *   source for the same @pid
  * * the application must not ignore `SIGCHLD`
+ * * Before 2.78, the application could not send a signal (`kill()`) to the
+ *   watched @pid in a race free manner. Since 2.78, you can do that while the
+ *   associated #GMainContext is acquired.
+ * * Before 2.78, even after destroying the #GSource, you could not
+ *   be sure that @pid wasn't already reaped. Hence, it was also not
+ *   safe to `kill()` or `waitpid()` on the process ID after the child watch
+ *   source was gone. Destroying the source before it fired made it
+ *   impossible to reliably reap the process.
  *
  * If any of those conditions are not met, this and related APIs will
  * not work correctly. This can often be diagnosed via a GLib warning
@@ -14475,8 +14489,13 @@
  * stored in both %errno and @error. If this function succeeds,
  * %errno is undefined.
  *
- * This function is async-signal-safe if @error is %NULL and @fd_ptr
- * points to either a negative number or a valid file descriptor.
+ * On POSIX platforms, this function is async-signal safe
+ * if @error is %NULL and @fd_ptr points to either a negative number or a
+ * valid open file descriptor.
+ * This makes it safe to call from a signal handler or a #GSpawnChildSetupFunc
+ * under those conditions.
+ * See [`signal(7)`](man:signal(7)) and
+ * [`signal-safety(7)`](man:signal-safety(7)) for more details.
  *
  * It is a programming error for @fd_ptr to point to a non-negative
  * number that is not a valid file descriptor.
@@ -14605,8 +14624,12 @@
  *
  * It is a bug to call this function with an invalid file descriptor.
  *
- * Since 2.76, this function is guaranteed to be async-signal-safe if (and only
- * if) @error is %NULL and @fd is a valid open file descriptor.
+ * On POSIX platforms since GLib 2.76, this function is async-signal safe
+ * if (and only if) @error is %NULL and @fd is a valid open file descriptor.
+ * This makes it safe to call from a signal handler or a #GSpawnChildSetupFunc
+ * under those conditions.
+ * See [`signal(7)`](man:signal(7)) and
+ * [`signal-safety(7)`](man:signal-safety(7)) for more details.
  *
  * Returns: %TRUE on success, %FALSE if there was an error.
  * Since: 2.36
@@ -18225,6 +18248,12 @@
  * If you know the allocated size of @mem, calling g_free_sized() may be faster,
  * depending on the libc implementation in use.
  *
+ * Starting from GLib 2.78, this may happen automatically in case a GCC
+ * compatible compiler is used with some optimization level and the allocated
+ * size is known at compile time (see [documentation of
+ * `__builtin_object_size()`](https://gcc.gnu.org/onlinedocs/gcc/Object-Size-Checking.html)
+ * to understand its caveats).
+ *
  * If @mem is %NULL it simply returns, so there is no need to check @mem
  * against %NULL before calling this function.
  */
@@ -18242,6 +18271,10 @@
  * It is an error if @size doesn’t match the size passed when @mem was
  * allocated. @size is passed to this function to allow optimizations in the
  * allocator. If you don’t know the allocation size, use g_free() instead.
+ *
+ * In case a GCC compatible compiler is used, this function may be used
+ * automatically via g_free() if the allocated size is known at compile time,
+ * since GLib 2.78.
  *
  * Since: 2.76
  */
@@ -27452,8 +27485,10 @@
  * Creates a new #GPtrArray with @data as pointers, @len as length and a
  * reference count of 1.
  *
- * This avoids having to copy such data manually. @data will eventually be
- * freed using g_free(), so must have been allocated with a suitable allocator.
+ * This avoids having to copy such data manually.
+ * After this call, @data belongs to the #GPtrArray and may no longer be
+ * modified by the caller. The memory of @data has to be dynamically
+ * allocated and will eventually be freed with g_free().
  *
  * It also sets @element_free_func for freeing each element when the array is
  * destroyed either via g_ptr_array_unref(), when g_ptr_array_free() is called
@@ -27478,8 +27513,10 @@
  * Creates a new #GPtrArray with @data as pointers, computing the length of it
  * and setting the reference count to 1.
  *
- * This avoids having to copy such data manually. @data will eventually be
- * freed using g_free(), so must have been allocated with a suitable allocator.
+ * This avoids having to copy such data manually.
+ * After this call, @data belongs to the #GPtrArray and may no longer be
+ * modified by the caller. The memory of @data has to be dynamically
+ * allocated and will eventually be freed with g_free().
  *
  * The length is calculated by iterating through @data until the first %NULL
  * element is found.
@@ -33225,6 +33262,8 @@
  * [`signal-safety(7)`](man:signal-safety(7))), making it safe to call from a
  * signal handler or a #GSpawnChildSetupFunc.
  *
+ * This function preserves the value of `errno`.
+ *
  * Returns: the value that @fd_ptr previously had
  * Since: 2.70
  */
@@ -34136,6 +34175,23 @@
  * bytes.
  *
  * Returns: (transfer full): a new #GString
+ */
+
+
+/**
+ * g_string_new_take: (constructor)
+ * @init: (nullable) (transfer full): initial text used as the string.
+ *     Ownership of the string is transferred to the #GString.
+ *     Passing %NULL creates an empty string.
+ *
+ * Creates a new #GString, initialized with the given string.
+ *
+ * After this call, @init belongs to the #GString and may no longer be
+ * modified by the caller. The memory of @data has to be dynamically
+ * allocated and will eventually be freed with g_free().
+ *
+ * Returns: (transfer full): the new #GString
+ * Since: 2.78
  */
 
 
@@ -40109,6 +40165,22 @@
 
 
 /**
+ * g_utf8_truncate_middle:
+ * @string: (transfer none): a nul-terminated UTF-8 encoded string
+ * @truncate_length: the new size of @string, in characters, including the ellipsis character
+ *
+ * Cuts off the middle of the string, preserving half of @truncate_length
+ * characters at the beginning and half at the end.
+ *
+ * If @string is already short enough, this returns a copy of @string.
+ * If @truncate_length is `0`, an empty string is returned.
+ *
+ * Returns: (transfer full): a newly-allocated copy of @string ellipsized in the middle
+ * Since: 2.78
+ */
+
+
+/**
  * g_utf8_validate:
  * @str: (array length=max_len) (element-type guint8): a pointer to character data
  * @max_len: max bytes to validate, or -1 to go until NUL
@@ -42452,8 +42524,9 @@
  * @string must be valid UTF-8, and must not be %NULL. To encode
  * potentially-%NULL strings, use this with g_variant_new_maybe().
  *
- * This function consumes @string.  g_free() will be called on @string
- * when it is no longer required.
+ * After this call, @string belongs to the #GVariant and may no longer be
+ * modified by the caller. The memory of @data has to be dynamically
+ * allocated and will eventually be freed with g_free().
  *
  * You must not modify or access @string in any other way after passing
  * it to this function.  It is even possible that @string is immediately
