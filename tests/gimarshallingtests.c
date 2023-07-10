@@ -6211,7 +6211,7 @@ gi_marshalling_tests_signals_object_emit_boxed_gptrarray_utf8 (GIMarshallingTest
 {
   GPtrArray *ptrarray;
 
-  ptrarray = gi_marshalling_tests_gptrarray_utf8_full_return ();
+  ptrarray = gi_marshalling_tests_gptrarray_utf8_container_return ();
   g_signal_emit_by_name (object, "some-boxed-gptrarray-utf8",
                          ptrarray);
   g_ptr_array_unref (ptrarray);
@@ -6225,5 +6225,6 @@ gi_marshalling_tests_signals_object_emit_boxed_gptrarray_boxed_struct (GIMarshal
   ptrarray = gi_marshalling_tests_gptrarray_boxed_struct_full_return ();
   g_signal_emit_by_name (object, "some-boxed-gptrarray-boxed-struct",
                          ptrarray);
+  g_ptr_array_set_free_func (ptrarray, (GDestroyNotify) gi_marshalling_tests_boxed_struct_free);
   g_ptr_array_unref (ptrarray);
 }
