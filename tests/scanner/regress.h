@@ -853,6 +853,12 @@ _GI_TEST_EXTERN
 void       regress_test_obj_emit_sig_with_obj (RegressTestObj *obj);
 
 _GI_TEST_EXTERN
+void       regress_test_obj_emit_sig_with_obj_full (RegressTestObj *obj);
+
+_GI_TEST_EXTERN
+void       regress_test_obj_emit_sig_with_gstrv_full (RegressTestObj *obj);
+
+_GI_TEST_EXTERN
 void       regress_test_obj_emit_sig_with_foreign_struct (RegressTestObj *obj);
 
 _GI_TEST_EXTERN
