@@ -2198,4 +2198,10 @@ void gi_marshalling_tests_signals_object_emit_hash_table_utf8_int_container (GIM
 _GI_TEST_EXTERN
 void gi_marshalling_tests_signals_object_emit_hash_table_utf8_int_full (GIMarshallingTestsSignalsObject *object);
 
+_GI_TEST_EXTERN
+void gi_marshalling_tests_signals_object_emit_boxed_struct (GIMarshallingTestsSignalsObject *object);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_signals_object_emit_boxed_struct_full (GIMarshallingTestsSignalsObject *object);
+
 #endif /* _GI_MARSHALLING_TESTS_H_ */

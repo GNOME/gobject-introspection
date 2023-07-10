@@ -6281,6 +6281,30 @@ gi_marshalling_tests_signals_object_class_init (GIMarshallingTestsSignalsObjectC
                 0, NULL, NULL, NULL,
                 G_TYPE_NONE, 1,
                 G_TYPE_HASH_TABLE);
+
+  /**
+   * GIMarshallingTestsSignalsObject::some-boxed-struct:
+   * @self:
+   * @arg:
+   */
+  g_signal_new ("some-boxed-struct",
+                G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE, 1,
+                gi_marshalling_tests_boxed_struct_get_type ());
+
+  /**
+   * GIMarshallingTestsSignalsObject::some-boxed-struct-full:
+   * @self:
+   * @arg: (transfer full):
+   */
+  g_signal_new ("some-boxed-struct-full",
+                G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE, 1,
+                gi_marshalling_tests_boxed_struct_get_type ());
 }
 
 GIMarshallingTestsSignalsObject *
@@ -6387,4 +6411,27 @@ gi_marshalling_tests_signals_object_emit_hash_table_utf8_int_full (GIMarshalling
 
   g_signal_emit_by_name (object, "some-hash-table-utf8-int-full",
                          g_steal_pointer (&hash_table));
+}
+
+void
+gi_marshalling_tests_signals_object_emit_boxed_struct (GIMarshallingTestsSignalsObject *object)
+{
+  GIMarshallingTestsBoxedStruct *boxed = gi_marshalling_tests_boxed_struct_new ();
+  boxed->long_ = 99;
+  boxed->string_ = g_strdup ("a string");
+  boxed->g_strv = g_strdupv ((GStrv) (const char*[]) {"foo", "bar", "baz", NULL });
+
+  g_signal_emit_by_name (object, "some-boxed-struct", boxed);
+  g_clear_pointer (&boxed, gi_marshalling_tests_boxed_struct_free);
+}
+
+void
+gi_marshalling_tests_signals_object_emit_boxed_struct_full (GIMarshallingTestsSignalsObject *object)
+{
+  GIMarshallingTestsBoxedStruct *boxed = gi_marshalling_tests_boxed_struct_new ();
+
+  boxed->long_ = 99;
+  boxed->string_ = g_strdup ("a string");
+  boxed->g_strv = g_strdupv ((GStrv) (const char*[]) {"foo", "bar", "baz", NULL });
+  g_signal_emit_by_name (object, "some-boxed-struct-full", g_steal_pointer (&boxed));
 }
