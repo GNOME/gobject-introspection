@@ -2175,6 +2175,18 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_signals_object_emit_boxed_gptrarray_utf8 (GIMarshallingTestsSignalsObject *object);
 
 _GI_TEST_EXTERN
+void gi_marshalling_tests_signals_object_emit_boxed_gptrarray_utf8_container (GIMarshallingTestsSignalsObject *object);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_signals_object_emit_boxed_gptrarray_utf8_full (GIMarshallingTestsSignalsObject *object);
+
+_GI_TEST_EXTERN
 void gi_marshalling_tests_signals_object_emit_boxed_gptrarray_boxed_struct (GIMarshallingTestsSignalsObject *object);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_signals_object_emit_boxed_gptrarray_boxed_struct_container (GIMarshallingTestsSignalsObject *object);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_signals_object_emit_boxed_gptrarray_boxed_struct_full (GIMarshallingTestsSignalsObject *object);
 
 #endif /* _GI_MARSHALLING_TESTS_H_ */
