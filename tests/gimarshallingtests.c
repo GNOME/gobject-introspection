@@ -6245,6 +6245,42 @@ gi_marshalling_tests_signals_object_class_init (GIMarshallingTestsSignalsObjectC
                 0, NULL, NULL, NULL,
                 G_TYPE_NONE, 1,
                 G_TYPE_PTR_ARRAY);
+
+  /**
+   * GIMarshallingTestsSignalsObject::some-hash-table-utf8-int:
+   * @self:
+   * @arg: (type GHashTable) (element-type utf8 int):
+   */
+  g_signal_new ("some-hash-table-utf8-int",
+                G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE, 1,
+                G_TYPE_HASH_TABLE);
+
+  /**
+   * GIMarshallingTestsSignalsObject::some-hash-table-utf8-int-container:
+   * @self:
+   * @arg: (type GHashTable) (element-type utf8 int) (transfer container):
+   */
+  g_signal_new ("some-hash-table-utf8-int-container",
+                G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE, 1,
+                G_TYPE_HASH_TABLE);
+
+  /**
+   * GIMarshallingTestsSignalsObject::some-hash-table-utf8-int-full:
+   * @self:
+   * @arg: (type GHashTable) (element-type utf8 int) (transfer full):
+   */
+  g_signal_new ("some-hash-table-utf8-int-full",
+                G_TYPE_FROM_CLASS (klass),
+                G_SIGNAL_RUN_LAST,
+                0, NULL, NULL, NULL,
+                G_TYPE_NONE, 1,
+                G_TYPE_HASH_TABLE);
 }
 
 GIMarshallingTestsSignalsObject *
@@ -6308,3 +6344,47 @@ gi_marshalling_tests_signals_object_emit_boxed_gptrarray_boxed_struct_full (GIMa
                          gi_marshalling_tests_gptrarray_boxed_struct_full_return ());
 }
 
+void
+gi_marshalling_tests_signals_object_emit_hash_table_utf8_int (GIMarshallingTestsSignalsObject *object)
+{
+  GHashTable *hash_table;
+
+  hash_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  g_hash_table_insert (hash_table, g_strdup ("-1"), GINT_TO_POINTER (1));
+  g_hash_table_insert (hash_table, g_strdup ("0"), GINT_TO_POINTER (0));
+  g_hash_table_insert (hash_table, g_strdup ("1"), GINT_TO_POINTER (-1));
+  g_hash_table_insert (hash_table, g_strdup ("2"), GINT_TO_POINTER (-2));
+
+  g_signal_emit_by_name (object, "some-hash-table-utf8-int", hash_table);
+  g_hash_table_unref (hash_table);
+}
+
+void
+gi_marshalling_tests_signals_object_emit_hash_table_utf8_int_container (GIMarshallingTestsSignalsObject *object)
+{
+  GHashTable *hash_table;
+
+  hash_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  g_hash_table_insert (hash_table, g_strdup ("-1"), GINT_TO_POINTER (1));
+  g_hash_table_insert (hash_table, g_strdup ("0"), GINT_TO_POINTER (0));
+  g_hash_table_insert (hash_table, g_strdup ("1"), GINT_TO_POINTER (-1));
+  g_hash_table_insert (hash_table, g_strdup ("2"), GINT_TO_POINTER (-2));
+
+  g_signal_emit_by_name (object, "some-hash-table-utf8-int-container",
+                         g_steal_pointer (&hash_table));
+}
+
+void
+gi_marshalling_tests_signals_object_emit_hash_table_utf8_int_full (GIMarshallingTestsSignalsObject *object)
+{
+  GHashTable *hash_table;
+
+  hash_table = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_insert (hash_table, g_strdup ("-1"), GINT_TO_POINTER (1));
+  g_hash_table_insert (hash_table, g_strdup ("0"), GINT_TO_POINTER (0));
+  g_hash_table_insert (hash_table, g_strdup ("1"), GINT_TO_POINTER (-1));
+  g_hash_table_insert (hash_table, g_strdup ("2"), GINT_TO_POINTER (-2));
+
+  g_signal_emit_by_name (object, "some-hash-table-utf8-int-full",
+                         g_steal_pointer (&hash_table));
+}
