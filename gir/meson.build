@@ -134,14 +134,13 @@ elif dep_type == 'internal'
   # XXX: This is a pile of hacks to allow gobject-introspection to parse the
   #      GLib source files when GLib is used as a subproject
   #      Assumes that the builddir layout is 'mirror'
-  #      Assumes the location of the glib subproject dir
   #      We should add API to meson to get a specific file from a specific
   #      subproject
   # We know exactly what headers will be installed, so just fetch that
   glib_subproject = subproject('glib')
 
-  glibproj_sourcedir = join_paths(meson.global_source_root(), subprojdir, 'glib')
-  glibproj_builddir = join_paths(meson.global_build_root(), subprojdir, 'glib')
+  glibproj_sourcedir = glib_subproject.get_variable('glib_source_dir', join_paths(meson.global_source_root(), subprojdir, 'glib'))
+  glibproj_builddir = glib_subproject.get_variable('glib_build_dir', join_paths(meson.global_build_root(), subprojdir, 'glib'))
 
   glib_files += glib_subproject.get_variable('glib_types_h')
 
