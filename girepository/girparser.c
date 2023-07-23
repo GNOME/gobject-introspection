@@ -2481,6 +2481,7 @@ start_glib_signal (GMarkupParseContext *context,
   const gchar *action;
   const gchar *no_hooks;
   const gchar *has_class_closure;
+  const gchar *deprecated;
   GIrNodeInterface *iface;
   GIrNodeSignal *signal;
 
@@ -2499,6 +2500,7 @@ start_glib_signal (GMarkupParseContext *context,
   action = find_attribute ("action", attribute_names, attribute_values);
   no_hooks = find_attribute ("no-hooks", attribute_names, attribute_values);
   has_class_closure = find_attribute ("has-class-closure", attribute_names, attribute_values);
+  deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
 
   if (name == NULL)
     {
@@ -2510,6 +2512,10 @@ start_glib_signal (GMarkupParseContext *context,
 
   ((GIrNode *)signal)->name = g_strdup (name);
 
+  if (deprecated && strcmp (deprecated, "1") == 0)
+    signal->deprecated = TRUE;
+  else
+    signal->deprecated = FALSE;
   signal->run_first = FALSE;
   signal->run_last = FALSE;
   signal->run_cleanup = FALSE;
