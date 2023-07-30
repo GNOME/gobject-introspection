@@ -140,7 +140,7 @@ class MessageLogger(object):
         if not self._enable_warnings and log_type in (WARNING, ERROR):
             return
 
-        if type(positions) == set:
+        if isinstance(positions, set):
             positions = list(positions)
         if isinstance(positions, Position):
             positions = [positions]
