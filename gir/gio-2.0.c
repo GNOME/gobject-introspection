@@ -2261,6 +2261,8 @@
  * %NULL is never returned for an index that is smaller than the length
  * of the list.  See g_list_model_get_n_items().
  *
+ * The same #GObject instance may not appear more than once in a #GListModel.
+ *
  * Returns: (type GObject) (transfer full) (nullable): the object at @position.
  * Since: 2.44
  */
@@ -2750,14 +2752,18 @@
 /**
  * GNetworkMonitor:network-metered:
  *
- * Whether the network is considered metered. That is, whether the
+ * Whether the network is considered metered.
+ *
+ * That is, whether the
  * system has traffic flowing through the default connection that is
  * subject to limitations set by service providers. For example, traffic
  * might be billed by the amount of data transmitted, or there might be a
  * quota on the amount of traffic per month. This is typical with tethered
  * connections (3G and 4G) and in such situations, bandwidth intensive
  * applications may wish to avoid network activity where possible if it will
- * cost the user money or use up their limited quota.
+ * cost the user money or use up their limited quota. Anything more than a
+ * few hundreds of kilobytes of data usage per hour should be avoided without
+ * asking permission from the user.
  *
  * If more information is required about specific devices then the
  * system network management API should be used instead (for example,
@@ -5231,8 +5237,8 @@
  * instance and g_application_run() promptly returns. See the code
  * examples below.
  *
- * If used, the expected form of an application identifier is the same as
- * that of of a
+ * If used, the expected form of an application identifier is the
+ * same as that of a
  * [D-Bus well-known bus name](https://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names-bus).
  * Examples include: `com.example.MyApp`, `org.example.internal_apps.Calculator`,
  * `org._7_zip.Archiver`.
@@ -12438,7 +12444,7 @@
  * g_app_launch_context_get_startup_notify_id:
  * @context: a #GAppLaunchContext
  * @info: a #GAppInfo
- * @files: (element-type GFile): a #GList of of #GFile objects
+ * @files: (element-type GFile): a #GList of #GFile objects
  *
  * Initiates startup notification for the application and returns the
  * `XDG_ACTIVATION_TOKEN` or `DESKTOP_STARTUP_ID` for the launched operation,
@@ -13894,8 +13900,8 @@
  * @count: the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object
- * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): a #gpointer
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ * @user_data: a #gpointer
  *
  * Reads data into @stream's buffer asynchronously, up to @count size.
  * @io_priority can be used to prioritize reads. For the synchronous
@@ -15413,8 +15419,8 @@
  * @stream: a given #GDataInputStream.
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied.
- * @user_data: (closure): the data to pass to callback function.
+ * @callback: (scope async) (closure user_data): callback to call when the request is satisfied.
+ * @user_data: the data to pass to callback function.
  *
  * The asynchronous version of g_data_input_stream_read_line().  It is
  * an error to have two outstanding calls to this function.
@@ -18181,14 +18187,14 @@
 
 
 /**
- * g_dbus_interface_skeleton_get_vtable: (skip)
+ * g_dbus_interface_skeleton_get_vtable:
  * @interface_: A #GDBusInterfaceSkeleton.
  *
  * Gets the interface vtable for the D-Bus interface implemented by
  * @interface_. The returned function pointers should expect @interface_
  * itself to be passed as @user_data.
  *
- * Returns: A #GDBusInterfaceVTable (never %NULL).
+ * Returns: (not nullable) (transfer none): the vtable of the D-Bus interface implemented by the skeleton
  * Since: 2.30
  */
 
@@ -22260,9 +22266,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously opens @file for appending.
  *
@@ -22594,11 +22600,13 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @progress_callback: (nullable) (scope notified): function to callback with progress
- *   information, or %NULL if progress information is not needed
- * @progress_callback_data: (closure progress_callback) (nullable): user data to pass to @progress_callback
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: (closure callback): the data to pass to callback function
+ * @progress_callback: (nullable) (scope notified) (closure progress_callback_data):
+ *   function to callback with progress information, or %NULL if
+ *   progress information is not needed
+ * @progress_callback_data: user data to pass to @progress_callback
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback
  *
  * Copies the file @source to the location specified by @destination
  * asynchronously. For details of the behaviour, see g_file_copy().
@@ -22689,9 +22697,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously creates a new file and returns an output stream
  * for writing to it. The file must not already exist.
@@ -22765,9 +22773,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously creates a new file and returns a stream
  * for reading and writing to it. The file must not already exist.
@@ -22899,9 +22907,9 @@
  * @flags: flags affecting the operation
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async) (nullable): a #GAsyncReadyCallback to call
- *   when the request is satisfied, or %NULL
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (nullable) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Starts an asynchronous eject on a mountable.
  * When this operation has completed, @callback will be called with
@@ -22940,9 +22948,9 @@
  *   or %NULL to avoid user interaction
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async) (nullable): a #GAsyncReadyCallback to call
- *   when the request is satisfied, or %NULL
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (nullable) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Starts an asynchronous eject on a mountable.
  * When this operation has completed, @callback will be called with
@@ -23020,9 +23028,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call when the
- *   request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously gets the requested information about the files
  * in a directory. The result is a #GFileEnumerator object that will
@@ -23074,8 +23082,9 @@
  * @enumerator: a #GFileEnumerator.
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously closes the file enumerator.
  *
@@ -23245,8 +23254,9 @@
  * @num_files: the number of file info objects to request
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request information for a number of files from the enumerator asynchronously.
  * When all I/O for the operation is finished the @callback will be called with
@@ -23385,9 +23395,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously gets the mount for the file.
  *
@@ -23780,6 +23790,24 @@
  *
  * Returns: (transfer none): %TRUE if @info has an attribute named @attribute,
  *      %FALSE otherwise.
+ */
+
+
+/**
+ * g_file_info_get_attribute_file_path:
+ * @info: a #GFileInfo.
+ * @attribute: a file attribute key.
+ *
+ * Gets the value of a byte string attribute as a file path.
+ *
+ * If the attribute does not contain a byte string, `NULL` will be returned.
+ *
+ * This function is meant to be used by language bindings that have specific
+ * handling for Unix paths.
+ *
+ * Returns: (type filename) (nullable): the contents of the @attribute value as
+ * a file path, or %NULL otherwise.
+ * Since: 2.78
  */
 
 
@@ -24266,6 +24294,22 @@
 
 
 /**
+ * g_file_info_set_attribute_file_path:
+ * @info: a #GFileInfo.
+ * @attribute: a file attribute key.
+ * @attr_value: (type filename): a file path.
+ *
+ * Sets the @attribute to contain the given @attr_value,
+ * if possible.
+ *
+ * This function is meant to be used by language bindings that have specific
+ * handling for Unix paths.
+ *
+ * Since: 2.78
+ */
+
+
+/**
  * g_file_info_set_attribute_int32:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
@@ -24573,8 +24617,9 @@
  * @attributes: a file attribute query string.
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Queries the stream information asynchronously.
  * When the operation is finished @callback will be called.
@@ -24652,8 +24697,9 @@
  * @attributes: a file attribute query string.
  * @io_priority: the [I/O priority][gio-GIOScheduler] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously queries the @stream for a #GFileInfo. When completed,
  * @callback will be called with a #GAsyncResult which can be used to
@@ -24729,9 +24775,9 @@
  * g_file_load_bytes_async:
  * @file: a #GFile
  * @cancellable: (nullable): a #GCancellable or %NULL
- * @callback: (scope async): a #GAsyncReadyCallback to call when the
- *   request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously loads the contents of @file as #GBytes.
  *
@@ -25273,9 +25319,9 @@
  *   or %NULL to avoid user interaction
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async) (nullable): a #GAsyncReadyCallback to call
- *   when the request is satisfied, or %NULL
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Mounts a file of type G_FILE_TYPE_MOUNTABLE.
  * Using @mount_operation, you can request callbacks when, for instance,
@@ -25366,12 +25412,11 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @progress_callback: (nullable) (scope call): #GFileProgressCallback
- *   function for updates
- * @progress_callback_data: (closure): gpointer to user data for
- *   the callback function
- * @callback: a #GAsyncReadyCallback to call
- *   when the request is satisfied
+ * @progress_callback: (nullable) (scope call) (closure progress_callback_data):
+ *   #GFileProgressCallback function for updates
+ * @progress_callback_data: gpointer to user data for the callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
  * @user_data: the data to pass to callback function
  *
  * Asynchronously moves a file @source to the location of @destination. For details of the behaviour, see g_file_move().
@@ -25635,9 +25680,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously opens @file for reading and writing.
  *
@@ -25956,9 +26001,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously gets the requested information about the filesystem
  * that the specified @file is on. The result is a #GFileInfo object
@@ -26042,9 +26087,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call when the
- *   request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously gets the requested information about specified @file.
  * The result is a #GFileInfo object that contains key-value attributes
@@ -26147,9 +26192,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously opens @file for reading.
  *
@@ -26244,9 +26289,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously overwrites the file, replacing the contents,
  * possibly creating a backup copy of the file first.
@@ -26424,9 +26469,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously overwrites the file in read-write mode,
  * replacing the contents, possibly creating a backup copy
@@ -26638,8 +26683,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): a #gpointer
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously sets the attributes of @file with @info.
  *
@@ -26728,9 +26774,9 @@
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async): a #GAsyncReadyCallback to call
- *   when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously sets the display name for a given #GFile.
  *
@@ -26914,9 +26960,9 @@
  * @flags: flags affecting the operation
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async) (nullable): a #GAsyncReadyCallback to call
- *   when the request is satisfied, or %NULL
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (nullable) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Unmounts a file of type G_FILE_TYPE_MOUNTABLE.
  *
@@ -26958,9 +27004,9 @@
  *   or %NULL to avoid user interaction
  * @cancellable: (nullable): optional #GCancellable object,
  *   %NULL to ignore
- * @callback: (scope async) (nullable): a #GAsyncReadyCallback to call
- *   when the request is satisfied, or %NULL
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (nullable) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Unmounts a file of type %G_FILE_TYPE_MOUNTABLE.
  *
@@ -27756,8 +27802,9 @@
  * @stream: A #GInputStream.
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional cancellable object
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Requests an asynchronous closes of the stream, releasing resources related to it.
  * When the operation is finished @callback will be called.
@@ -27882,8 +27929,9 @@
  * @count: (in): the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request an asynchronous read of @count bytes from the stream into the
  * buffer starting at @buffer.
@@ -27931,8 +27979,9 @@
  * @io_priority: the [I/O priority][io-priority]
  * of the request.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request an asynchronous read of @count bytes from the stream into the buffer
  * starting at @buffer. When the operation is finished @callback will be called.
@@ -28003,8 +28052,9 @@
  * @count: the number of bytes that will be read from the stream
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request an asynchronous read of @count bytes from the stream into a
  * new #GBytes. When the operation is finished @callback will be
@@ -28104,8 +28154,9 @@
  * @count: the number of bytes that will be skipped from the stream
  * @io_priority: the [I/O priority][io-priority] of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request an asynchronous skip of @count bytes from the stream.
  * When the operation is finished @callback will be called.
@@ -28599,8 +28650,9 @@
  * @stream: a #GIOStream
  * @io_priority: the io priority of the request
  * @cancellable: (nullable): optional cancellable object
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Requests an asynchronous close of the stream, releasing resources
  * related to it. When the operation is finished @callback will be
@@ -28701,8 +28753,9 @@
  * @flags: a set of #GIOStreamSpliceFlags.
  * @io_priority: the io priority of the request.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback.
- * @user_data: (closure): user data passed to @callback.
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously splice the output stream of @stream1 to the input stream of
  * @stream2, and splice the output stream of @stream2 to the input stream of
@@ -28959,8 +29012,8 @@
  * g_list_store_find_with_equal_func_full:
  * @store: a #GListStore
  * @item: (type GObject) (nullable): an item
- * @equal_func: (scope call): A custom equality check function
- * @user_data: (closure): user data for @equal_func
+ * @equal_func: (scope call) (closure user_data): A custom equality check function
+ * @user_data: user data for @equal_func
  * @position: (out) (optional): the first position of @item, if it was found.
  *
  * Like g_list_store_find_with_equal_func() but with an additional @user_data
@@ -28999,8 +29052,8 @@
  * g_list_store_insert_sorted:
  * @store: a #GListStore
  * @item: (type GObject): the new item
- * @compare_func: (scope call): pairwise comparison function for sorting
- * @user_data: (closure): user data for @compare_func
+ * @compare_func: (scope call) (closure user_data): pairwise comparison function for sorting
+ * @user_data: user data for @compare_func
  *
  * Inserts @item into @store at a position to be determined by the
  * @compare_func.
@@ -29056,8 +29109,8 @@
 /**
  * g_list_store_sort:
  * @store: a #GListStore
- * @compare_func: (scope call): pairwise comparison function for sorting
- * @user_data: (closure): user data for @compare_func
+ * @compare_func: (scope call) (closure user_data): pairwise comparison function for sorting
+ * @user_data: user data for @compare_func
  *
  * Sort the items in @store according to @compare_func.
  *
@@ -29114,9 +29167,9 @@
  * @icon: a #GLoadableIcon.
  * @size: an integer.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the
- *            request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Loads an icon asynchronously. To finish this function, see
  * g_loadable_icon_load_finish(). For the synchronous, blocking
@@ -31175,9 +31228,9 @@
  * @monitor: a #GNetworkMonitor
  * @connectable: a #GSocketConnectable
  * @cancellable: (nullable): a #GCancellable, or %NULL
- * @callback: (scope async): a #GAsyncReadyCallback to call when the
- *     request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *     to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously attempts to determine whether or not the host
  * pointed to by @connectable can be reached, without actually
@@ -31629,8 +31682,9 @@
  * @stream: A #GOutputStream.
  * @io_priority: the io priority of the request.
  * @cancellable: (nullable): optional cancellable object
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Requests an asynchronous close of the stream, releasing resources
  * related to it. When the operation is finished @callback will be
@@ -31683,8 +31737,9 @@
  * @stream: a #GOutputStream.
  * @io_priority: the io priority of the request.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Forces an asynchronous write of all user-space buffered data for
  * the given @stream.
@@ -31811,8 +31866,9 @@
  * @flags: a set of #GOutputStreamSpliceFlags.
  * @io_priority: the io priority of the request.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback.
- * @user_data: (closure): user data passed to @callback.
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Splices a stream asynchronously.
  * When the operation is finished @callback will be called.
@@ -31942,8 +31998,9 @@
  * @count: the number of bytes to write
  * @io_priority: the io priority of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *     to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request an asynchronous write of @count bytes from @buffer into
  * the stream. When the operation is finished @callback will be called.
@@ -31995,8 +32052,9 @@
  * @count: the number of bytes to write
  * @io_priority: the io priority of the request.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *     to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request an asynchronous write of @count bytes from @buffer into
  * the stream. When the operation is finished @callback will be called.
@@ -32065,8 +32123,9 @@
  * @bytes: The bytes to write
  * @io_priority: the io priority of the request.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * This function is similar to g_output_stream_write_async(), but
  * takes a #GBytes as input.  Due to the refcounted nature of #GBytes,
@@ -32194,8 +32253,9 @@
  * @n_vectors: the number of vectors to write
  * @io_priority: the I/O priority of the request
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *     to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request an asynchronous write of the bytes contained in the @n_vectors @vectors into
  * the stream. When the operation is finished @callback will be called.
@@ -32248,8 +32308,9 @@
  * @n_vectors: the number of vectors to write
  * @io_priority: the I/O priority of the request.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *     to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Request an asynchronous write of the bytes contained in @n_vectors @vectors into
  * the stream. When the operation is finished @callback will be called.
@@ -33001,7 +33062,7 @@
  * @proxy_address: a #GProxyAddress
  * @cancellable: (nullable): a #GCancellable
  * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): callback data
+ * @user_data: callback data
  *
  * Asynchronous version of g_proxy_connect().
  *
@@ -33095,7 +33156,7 @@
  * @uri: a URI representing the destination to connect to
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: (scope async): callback to call after resolution completes
- * @user_data: (closure): data for @callback
+ * @user_data: data for @callback
  *
  * Asynchronous lookup of proxy. See g_proxy_resolver_lookup() for more
  * details.
@@ -33280,8 +33341,8 @@
  * @resolver: a #GResolver
  * @address: the address to reverse-resolve
  * @cancellable: (nullable): a #GCancellable, or %NULL
- * @callback: (scope async): callback to call after resolution completes
- * @user_data: (closure): data for @callback
+ * @callback: (scope async) (closure user_data): callback to call after resolution completes
+ * @user_data: data for @callback
  *
  * Begins asynchronously reverse-resolving @address to determine its
  * associated hostname, and eventually calls @callback, which must
@@ -33354,8 +33415,8 @@
  * @resolver: a #GResolver
  * @hostname: the hostname to look up the address of
  * @cancellable: (nullable): a #GCancellable, or %NULL
- * @callback: (scope async): callback to call after resolution completes
- * @user_data: (closure): data for @callback
+ * @callback: (scope async) (closure user_data): callback to call after resolution completes
+ * @user_data: data for @callback
  *
  * Begins asynchronously resolving @hostname to determine its
  * associated IP address(es), and eventually calls @callback, which
@@ -33412,8 +33473,8 @@
  * @hostname: the hostname to look up the address of
  * @flags: extra #GResolverNameLookupFlags for the lookup
  * @cancellable: (nullable): a #GCancellable, or %NULL
- * @callback: (scope async): callback to call after resolution completes
- * @user_data: (closure): data for @callback
+ * @callback: (scope async) (closure user_data): callback to call after resolution completes
+ * @user_data: data for @callback
  *
  * Begins asynchronously resolving @hostname to determine its
  * associated IP address(es), and eventually calls @callback, which
@@ -33477,8 +33538,8 @@
  * @rrname: the DNS name to look up the record for
  * @record_type: the type of DNS record to look up
  * @cancellable: (nullable): a #GCancellable, or %NULL
- * @callback: (scope async): callback to call after resolution completes
- * @user_data: (closure): data for @callback
+ * @callback: (scope async) (closure user_data): callback to call after resolution completes
+ * @user_data: data for @callback
  *
  * Begins asynchronously performing a DNS lookup for the given
  * @rrname, and eventually calls @callback, which must call
@@ -33558,8 +33619,8 @@
  * @protocol: the networking protocol to use for @service (eg, "tcp")
  * @domain: the DNS domain to look up the service in
  * @cancellable: (nullable): a #GCancellable, or %NULL
- * @callback: (scope async): callback to call after resolution completes
- * @user_data: (closure): data for @callback
+ * @callback: (scope async) (closure user_data): callback to call after resolution completes
+ * @user_data: data for @callback
  *
  * Begins asynchronously performing a DNS SRV lookup for the given
  * @service and @protocol in the given @domain, and eventually calls
@@ -35759,7 +35820,7 @@
  * g_simple_async_report_gerror_in_idle:
  * @object: (nullable): a #GObject, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback.
- * @user_data: (closure): user data passed to @callback.
+ * @user_data: user data passed to @callback.
  * @error: the #GError to report
  *
  * Reports an error in an idle function. Similar to
@@ -35892,7 +35953,7 @@
  * g_simple_async_result_new:
  * @source_object: (nullable): a #GObject, or %NULL.
  * @callback: (scope async): a #GAsyncReadyCallback.
- * @user_data: (closure): user data passed to @callback.
+ * @user_data: user data passed to @callback.
  * @source_tag: the asynchronous function.
  *
  * Creates a #GSimpleAsyncResult.
@@ -35915,7 +35976,7 @@
  * g_simple_async_result_new_error:
  * @source_object: (nullable): a #GObject, or %NULL.
  * @callback: (scope async): a #GAsyncReadyCallback.
- * @user_data: (closure): user data passed to @callback.
+ * @user_data: user data passed to @callback.
  * @domain: a #GQuark.
  * @code: an error code.
  * @format: a string with format characters.
@@ -35932,7 +35993,7 @@
  * g_simple_async_result_new_from_error:
  * @source_object: (nullable): a #GObject, or %NULL.
  * @callback: (scope async): a #GAsyncReadyCallback.
- * @user_data: (closure): user data passed to @callback.
+ * @user_data: user data passed to @callback.
  * @error: a #GError
  *
  * Creates a #GSimpleAsyncResult from an error condition.
@@ -35945,8 +36006,8 @@
 /**
  * g_simple_async_result_new_take_error: (skip)
  * @source_object: (nullable): a #GObject, or %NULL
- * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): user data passed to @callback
+ * @callback: (scope async): a #GAsyncReadyCallback.
+ * @user_data: user data passed to @callback.
  * @error: a #GError
  *
  * Creates a #GSimpleAsyncResult from an error condition, and takes over the
@@ -36268,9 +36329,9 @@
  * g_socket_address_enumerator_next_async:
  * @enumerator: a #GSocketAddressEnumerator
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request
- *     is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): a #GAsyncReadyCallback to call
+ *   when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously retrieves the next #GSocketAddress from @enumerator
  * and then calls @callback, which must call
@@ -36471,7 +36532,7 @@
  * @connectable: a #GSocketConnectable specifying the remote address.
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): user data for the callback
+ * @user_data: user data for the callback
  *
  * This is the asynchronous version of g_socket_client_connect().
  *
@@ -36557,7 +36618,7 @@
  * @default_port: the default port to connect to
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): user data for the callback
+ * @user_data: user data for the callback
  *
  * This is the asynchronous version of g_socket_client_connect_to_host().
  *
@@ -36617,7 +36678,7 @@
  * @service: the name of the service to connect to
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): user data for the callback
+ * @user_data: user data for the callback
  *
  * This is the asynchronous version of
  * g_socket_client_connect_to_service().
@@ -36682,7 +36743,7 @@
  * @default_port: the default port to connect to
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): user data for the callback
+ * @user_data: user data for the callback
  *
  * This is the asynchronous version of g_socket_client_connect_to_uri().
  *
@@ -37215,7 +37276,7 @@
  * @address: a #GSocketAddress specifying the remote address.
  * @cancellable: (nullable): a %GCancellable or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): user data for the callback
+ * @user_data: user data for the callback
  *
  * Asynchronously connect @connection to the specified remote address.
  *
@@ -37885,7 +37946,7 @@
  * @listener: a #GSocketListener
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): user data for the callback
+ * @user_data: user data for the callback
  *
  * This is the asynchronous version of g_socket_listener_accept().
  *
@@ -37944,7 +38005,7 @@
  * @listener: a #GSocketListener
  * @cancellable: (nullable): a #GCancellable, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback
- * @user_data: (closure): user data for the callback
+ * @user_data: user data for the callback
  *
  * This is the asynchronous version of g_socket_listener_accept_socket().
  *
@@ -40052,7 +40113,7 @@
  *   this task, or %NULL.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): a #GAsyncReadyCallback.
- * @callback_data: (closure): user data passed to @callback.
+ * @callback_data: user data passed to @callback.
  *
  * Creates a #GTask acting on @source_object, which will eventually be
  * used to invoke @callback in the current
@@ -40157,8 +40218,8 @@
  * g_task_report_error:
  * @source_object: (nullable) (type GObject): the #GObject that owns
  *   this task, or %NULL.
- * @callback: (scope async): a #GAsyncReadyCallback.
- * @callback_data: (closure): user data passed to @callback.
+ * @callback: (scope async) (closure callback_data): a #GAsyncReadyCallback.
+ * @callback_data: user data passed to @callback.
  * @source_tag: an opaque pointer indicating the source of this task
  * @error: (transfer full): error to report
  *
@@ -40179,8 +40240,8 @@
  * g_task_report_new_error:
  * @source_object: (nullable) (type GObject): the #GObject that owns
  *   this task, or %NULL.
- * @callback: (scope async): a #GAsyncReadyCallback.
- * @callback_data: (closure): user data passed to @callback.
+ * @callback: (scope async) (closure callback_data): a #GAsyncReadyCallback.
+ * @callback_data: user data passed to @callback.
  * @source_tag: an opaque pointer indicating the source of this task
  * @domain: a #GQuark.
  * @code: an error code.
@@ -42056,7 +42117,7 @@
  * g_tls_database_lookup_certificates_issued_by() for more information.
  *
  * The database may choose to hold a reference to the issuer byte array for the duration
- * of of this asynchronous operation. The byte array should not be modified during
+ * of this asynchronous operation. The byte array should not be modified during
  * this time.
  *
  * Since: 2.30
@@ -42631,8 +42692,9 @@
  * g_unix_connection_receive_credentials_async:
  * @connection: A #GUnixConnection.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously receive credentials.
  *
@@ -42715,8 +42777,9 @@
  * g_unix_connection_send_credentials_async:
  * @connection: A #GUnixConnection.
  * @cancellable: (nullable): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async): a #GAsyncReadyCallback
+ *   to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously send credentials.
  *

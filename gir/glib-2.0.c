@@ -15120,8 +15120,8 @@
 /**
  * g_datalist_foreach:
  * @datalist: a datalist.
- * @func: (scope call): the function to call for each data element.
- * @user_data: (closure): user data to pass to the function.
+ * @func: (scope call) (closure user_data): the function to call for each data element.
+ * @user_data: user data to pass to the function.
  *
  * Calls the given function for each data element of the datalist. The
  * function is called with each data element's #GQuark id and data,
@@ -15165,8 +15165,8 @@
  * g_datalist_id_dup_data: (skip)
  * @datalist: location of a datalist
  * @key_id: the #GQuark identifying a data element
- * @dup_func: (nullable) (scope call): function to duplicate the old value
- * @user_data: (closure): passed as user_data to @dup_func
+ * @dup_func: (scope call) (closure user_data): function to duplicate the old value
+ * @user_data: passed as user_data to @dup_func
  *
  * This is a variant of g_datalist_id_get_data() which
  * returns a 'duplicate' of the value. @dup_func defines the
@@ -15401,8 +15401,8 @@
 /**
  * g_dataset_foreach:
  * @dataset_location: (not nullable): the location identifying the dataset.
- * @func: (scope call): the function to call for each data element.
- * @user_data: (closure): user data to pass to the function.
+ * @func: (scope call) (closure user_data): the function to call for each data element.
+ * @user_data: user data to pass to the function.
  *
  * Calls the given function for each data element which is associated
  * with the given location. Note that this function is NOT thread-safe.
@@ -17982,6 +17982,11 @@
  *
  * Converts an escaped ASCII-encoded URI to a local filename in the
  * encoding used for filenames.
+ *
+ * Since GLib 2.78, the query string and fragment can be present in the URI,
+ * but are not part of the resulting filename.
+ * We take inspiration from https://url.spec.whatwg.org/#file-state,
+ * but we don't support the entire standard.
  *
  * Returns: (type filename): a newly-allocated string holding
  *               the resulting filename, or %NULL on an error.
@@ -26274,6 +26279,11 @@
  *
  * Creates a new #GOptionGroup.
  *
+ * @description is typically used to provide a title for the group. If so, it
+ * is recommended that it’s written in title case, and has a trailing colon so
+ * that it matches the style of built-in GLib group titles such as
+ * ‘Application Options:’.
+ *
  * Returns: a newly created option group. It should be added
  *   to a #GOptionContext or freed with g_option_group_unref().
  * Since: 2.6
@@ -27698,7 +27708,7 @@
  * take the pointers from the array as arguments, it takes pointers to
  * the pointers in the array.
  *
- * Use g_ptr_array_sort_with_data() if you want to use normal
+ * Use g_ptr_array_sort_values() if you want to use normal
  * #GCompareFuncs, otherwise here is a full example of use:
  *
  * |[<!-- language="C" -->
@@ -27774,7 +27784,7 @@
  * doesn't take the pointers from the array as arguments, it takes
  * pointers to the pointers in the array.
  *
- * Use g_ptr_array_sort_with_data() if you want to use normal
+ * Use g_ptr_array_sort_values_with_data() if you want to use normal
  * #GCompareDataFuncs, otherwise here is a full example of use:
  *
  * |[<!-- language="C" -->
@@ -32697,8 +32707,8 @@
  * @envp: (array zero-terminated=1) (element-type filename) (nullable):
  *     child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async) (nullable): function to run in the child just before exec()
- * @user_data: (closure): user data for @child_setup
+ * @child_setup: (scope async): function to run in the child just before exec()
+ * @user_data: user data for @child_setup
  * @child_pid: (out) (optional): return location for child process reference, or %NULL
  * @error: return location for error
  *
@@ -32730,8 +32740,8 @@
  *   it must be non-empty and %NULL-terminated
  * @envp: (array zero-terminated=1) (nullable): child's environment, or %NULL to inherit parent's, in the GLib file name encoding
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async) (nullable): function to run in the child just before exec()
- * @user_data: (closure): user data for @child_setup
+ * @child_setup: (scope async) (closure user_data): function to run in the child just before exec()
+ * @user_data: user data for @child_setup
  * @child_pid: (out) (optional): return location for child process ID, or %NULL
  * @stdin_fd: file descriptor to use for child's stdin, or `-1`
  * @stdout_fd: file descriptor to use for child's stdout, or `-1`
@@ -32758,8 +32768,8 @@
  *     child's environment, or %NULL to inherit parent's, in the GLib file
  *     name encoding
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async) (nullable): function to run in the child just before exec()
- * @user_data: (closure): user data for @child_setup
+ * @child_setup: (scope async): function to run in the child just before exec()
+ * @user_data: user data for @child_setup
  * @child_pid: (out) (optional): return location for child process ID, or %NULL
  * @standard_input: (out) (optional): return location for file descriptor to write to child's stdin, or %NULL
  * @standard_output: (out) (optional): return location for file descriptor to read child's stdout, or %NULL
@@ -32783,8 +32793,8 @@
  *     child's environment, or %NULL to inherit parent's, in the GLib file
  *     name encoding
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async) (nullable): function to run in the child just before `exec()`
- * @user_data: (closure): user data for @child_setup
+ * @child_setup: (scope async) (closure user_data): function to run in the child just before `exec()`
+ * @user_data: user data for @child_setup
  * @stdin_fd: file descriptor to use for child's stdin, or `-1`
  * @stdout_fd: file descriptor to use for child's stdout, or `-1`
  * @stderr_fd: file descriptor to use for child's stderr, or `-1`
@@ -33153,8 +33163,8 @@
  * @envp: (array zero-terminated=1) (element-type filename) (nullable):
  *     child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async) (nullable): function to run in the child just before exec()
- * @user_data: (closure): user data for @child_setup
+ * @child_setup: (scope async): function to run in the child just before exec()
+ * @user_data: user data for @child_setup
  * @standard_output: (out) (array zero-terminated=1) (element-type guint8) (optional): return location for child output, or %NULL
  * @standard_error: (out) (array zero-terminated=1) (element-type guint8) (optional): return location for child error messages, or %NULL
  * @wait_status: (out) (optional): return location for child wait status, as returned by waitpid(), or %NULL
@@ -34655,8 +34665,8 @@
  * to represent empty elements, you'll need to check for the empty string
  * before calling g_strsplit().
  *
- * Returns: a newly-allocated %NULL-terminated array of strings. Use
- *    g_strfreev() to free it.
+ * Returns: (transfer full): a newly-allocated %NULL-terminated array of
+ *    strings. Use g_strfreev() to free it.
  */
 
 
@@ -34691,8 +34701,8 @@
  * Note that this function works on bytes not characters, so it can't be used
  * to delimit UTF-8 strings for anything but ASCII characters.
  *
- * Returns: a newly-allocated %NULL-terminated array of strings. Use
- *    g_strfreev() to free it.
+ * Returns: (transfer full): a newly-allocated %NULL-terminated array of
+ *    strings. Use g_strfreev() to free it.
  * Since: 2.4
  */
 
@@ -35087,6 +35097,19 @@
  *
  * Returns: A newly allocated #GTestSuite instance.
  * Since: 2.16
+ */
+
+
+/**
+ * g_test_disable_crash_reporting:
+ *
+ * Attempt to disable system crash reporting infrastructure.
+ *
+ * This function should be called before exercising code paths that are
+ * expected or intended to crash, to avoid wasting resources in system-wide
+ * crash collection infrastructure such as systemd-coredump or abrt.
+ *
+ * Since: 2.78
  */
 
 
@@ -38147,7 +38170,7 @@
 /**
  * g_unichar_get_mirror_char:
  * @ch: a Unicode character
- * @mirrored_ch: location to store the mirrored character
+ * @mirrored_ch: (out): location to store the mirrored character
  *
  * In Unicode, some characters are "mirrored". This means that their
  * images are mirrored horizontally in text that is laid out from right
