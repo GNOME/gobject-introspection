@@ -46,7 +46,7 @@ Debian/Ubuntu:
 Fedora:
     .. code:: shell
 
-        sudo dnf install pkg-config flex bison cairo-devel
+        sudo dnf install pkg-config flex bison cairo-devel \
             cairo-gobject-devel python3-mako gcc \
             python3-markdown meson libffi-devel python3-devel \
             python3 gtk-doc 
