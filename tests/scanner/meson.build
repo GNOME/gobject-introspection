@@ -420,7 +420,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '--namespace=Identfilter',
       '--nsversion=1.0',
       '--header-only',
-      '--identifier-filter-cmd=' + python_path + ' ' +  join_paths(meson.current_source_dir(), 'identfilter.py'),
+      '--identifier-filter-cmd=' + python_path + ' "' +  join_paths(meson.current_source_dir(), 'identfilter.py' + '"'),
       extra_giscanner_args,
       '@INPUT@',
     ]
