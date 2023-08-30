@@ -15165,7 +15165,8 @@
  * g_datalist_id_dup_data: (skip)
  * @datalist: location of a datalist
  * @key_id: the #GQuark identifying a data element
- * @dup_func: (scope call) (closure user_data): function to duplicate the old value
+ * @dup_func: (scope call) (closure user_data) (nullable): function to
+ *   duplicate the old value
  * @user_data: passed as user_data to @dup_func
  *
  * This is a variant of g_datalist_id_get_data() which
@@ -32707,7 +32708,8 @@
  * @envp: (array zero-terminated=1) (element-type filename) (nullable):
  *     child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async): function to run in the child just before exec()
+ * @child_setup: (scope async) (closure user_data) (nullable): function to run
+ *     in the child just before `exec()`
  * @user_data: user data for @child_setup
  * @child_pid: (out) (optional): return location for child process reference, or %NULL
  * @error: return location for error
@@ -32740,7 +32742,8 @@
  *   it must be non-empty and %NULL-terminated
  * @envp: (array zero-terminated=1) (nullable): child's environment, or %NULL to inherit parent's, in the GLib file name encoding
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async) (closure user_data): function to run in the child just before exec()
+ * @child_setup: (scope async) (closure user_data) (nullable): function to run
+ *   in the child just before `exec()`
  * @user_data: user data for @child_setup
  * @child_pid: (out) (optional): return location for child process ID, or %NULL
  * @stdin_fd: file descriptor to use for child's stdin, or `-1`
@@ -32768,7 +32771,8 @@
  *     child's environment, or %NULL to inherit parent's, in the GLib file
  *     name encoding
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async): function to run in the child just before exec()
+ * @child_setup: (scope async) (closure user_data) (nullable): function to run
+ *     in the child just before `exec()`
  * @user_data: user data for @child_setup
  * @child_pid: (out) (optional): return location for child process ID, or %NULL
  * @standard_input: (out) (optional): return location for file descriptor to write to child's stdin, or %NULL
@@ -32793,7 +32797,8 @@
  *     child's environment, or %NULL to inherit parent's, in the GLib file
  *     name encoding
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async) (closure user_data): function to run in the child just before `exec()`
+ * @child_setup: (scope async) (closure user_data) (nullable): function to run
+ *     in the child just before `exec()`
  * @user_data: user data for @child_setup
  * @stdin_fd: file descriptor to use for child's stdin, or `-1`
  * @stdout_fd: file descriptor to use for child's stdout, or `-1`
@@ -33163,7 +33168,8 @@
  * @envp: (array zero-terminated=1) (element-type filename) (nullable):
  *     child's environment, or %NULL to inherit parent's
  * @flags: flags from #GSpawnFlags
- * @child_setup: (scope async): function to run in the child just before exec()
+ * @child_setup: (scope call) (closure user_data) (nullable): function to run
+ *     in the child just before `exec()`
  * @user_data: user data for @child_setup
  * @standard_output: (out) (array zero-terminated=1) (element-type guint8) (optional): return location for child output, or %NULL
  * @standard_error: (out) (array zero-terminated=1) (element-type guint8) (optional): return location for child error messages, or %NULL
@@ -36056,6 +36062,11 @@
  * the subprocess, you can call g_test_subprocess() (after calling
  * g_test_init()) to see whether you are in a subprocess.
  *
+ * Internally, this function tracks the child process using
+ * g_child_watch_source_new(), so your process must not ignore `SIGCHLD`, and
+ * must not attempt to watch or wait for the child process via another
+ * mechanism.
+ *
  * The following example tests that calling
  * `my_object_new(1000000)` will abort with an error
  * message.
@@ -37455,7 +37466,8 @@
  * result in a O(n log(n)) operation where most of the other operations
  * are O(log(n)).
  *
- * Returns: (transfer none): the inserted (or set) node.
+ * Returns: (transfer none) (nullable): the inserted (or set) node or %NULL
+ * if insertion would overflow the tree node counter.
  * Since: 2.68
  */
 
@@ -37576,6 +37588,11 @@
  * Gets the number of nodes in a #GTree.
  *
  * Returns: the number of nodes in @tree
+ *
+ * The node counter value type is really a #guint,
+ * but it is returned as a #gint due to backward
+ * compatibility issues (can be cast back to #guint to
+ * support its full range of values).
  */
 
 
@@ -37721,7 +37738,8 @@
  * The tree is automatically 'balanced' as new key/value pairs are added,
  * so that the distance from the root to every leaf is as small as possible.
  *
- * Returns: (transfer none): the inserted (or set) node.
+ * Returns: (transfer none) (nullable): the inserted (or set) node or %NULL
+ * if insertion would overflow the tree node counter.
  * Since: 2.68
  */
 
@@ -38683,15 +38701,18 @@
  * uses the pipe2() system call, which atomically creates a pipe with
  * the configured flags.
  *
- * As of GLib 2.78, the supported flags are `FD_CLOEXEC` and `O_NONBLOCK`. Prior
- * to GLib 2.78, only `FD_CLOEXEC` was supported — if you wanted to configure
- * `O_NONBLOCK` then that had to be done separately with `fcntl()`.
+ * As of GLib 2.78, the supported flags are `O_CLOEXEC`/`FD_CLOEXEC` (see below)
+ * and `O_NONBLOCK`. Prior to GLib 2.78, only `FD_CLOEXEC` was supported — if
+ * you wanted to configure `O_NONBLOCK` then that had to be done separately with
+ * `fcntl()`.
  *
  * It is a programmer error to call this function with unsupported flags, and a
  * critical warning will be raised.
  *
- * This function does not take `O_CLOEXEC`, it takes `FD_CLOEXEC` as if
- * for fcntl(); these are different on Linux/glibc.
+ * As of GLib 2.78, it is preferred to pass `O_CLOEXEC` in, rather than
+ * `FD_CLOEXEC`, as that matches the underlying `pipe()` API more closely. Prior
+ * to 2.78, only `FD_CLOEXEC` was supported. Support for `FD_CLOEXEC` may be
+ * deprecated and removed in future.
  *
  * Returns: %TRUE on success, %FALSE if not (and errno will be set).
  * Since: 2.30
