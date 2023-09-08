@@ -2626,7 +2626,7 @@ exposed to language bindings.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="GOOD_EXPR_CONSTANT"
-              value="-2305843009213693952"
+              value="1408"
               c:type="REGRESS_GOOD_EXPR_CONSTANT">
       <source-position filename="regress.h" line="527"/>
       <type name="gint" c:type="gint"/>
