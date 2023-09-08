@@ -1,3 +1,14 @@
+1.78.0 - 2023-09-08
+-------------------
+
+* Update the GIR data for GLib, GObject, and GIO
+* Add GObject as a dependency for the Cairo GIR
+* Add more tests for GI marshalling
+* Update regression test suite
+* Fix build on Windows for paths using '\' as a separator
+* Support different prefix for finding GIR data
+* Add GI_GIR_PATH environment variable for controlling GIR paths
+
 1.76.1 - 2023-03-22
 -------------------
 
