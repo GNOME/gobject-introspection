@@ -238,6 +238,11 @@ Type signature
       can pass ``NULL`` to ignore this output parameter.
     - :commit:`1.42 <1459ff3e>`
       :bzbug:`660879`
+  * - ``(not optional)``
+    - parameters
+    - For ``(out)`` or ``(inout)`` parameters, signifies that the caller
+      cannot pass ``NULL`` to ignore this output parameter.
+    - v1.80
   * - ``(in)``
     - parameters
     - In parameter.
