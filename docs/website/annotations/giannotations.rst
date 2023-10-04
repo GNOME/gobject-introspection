@@ -712,7 +712,7 @@ be unspecified and should therefore not be used or freed.
 
 
 mylib_hash_table_iter_next() demonstrates the difference between (nullable) and
-(optional) for (out) parameters. For an (out) parameter, (optional) indicates
+(optional) for (out) parameters. For an (out) or (inout) parameter, (optional) indicates
 that NULL may be passed by the caller to indicate they don’t want to receive
 the (out) value. (nullable) indicates that NULL may be passed out by the
 callee as the returned value.
