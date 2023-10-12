@@ -1087,8 +1087,138 @@
 /**
  * GKeyFile:
  *
- * The GKeyFile struct contains only private data
- * and should not be accessed directly.
+ * `GKeyFile` parses .ini-like config files.
+ *
+ * `GKeyFile` lets you parse, edit or create files containing groups of
+ * key-value pairs, which we call "key files" for lack of a better name.
+ * Several freedesktop.org specifications use key files now, e.g the
+ * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec)
+ * and the [Icon Theme Specification](http://freedesktop.org/Standards/icon-theme-spec).
+ *
+ * The syntax of key files is described in detail in the
+ * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec),
+ * here is a quick summary: Key files consists of groups of key-value pairs, interspersed
+ * with comments.
+ *
+ * ```txt
+ * # this is just an example
+ * # there can be comments before the first group
+ *
+ * [First Group]
+ *
+ * Name=Key File Example\tthis value shows\nescaping
+ *
+ * # localized strings are stored in multiple key-value pairs
+ * Welcome=Hello
+ * Welcome[de]=Hallo
+ * Welcome[fr_FR]=Bonjour
+ * Welcome[it]=Ciao
+ * Welcome[be@latin]=Hello
+ *
+ * [Another Group]
+ *
+ * Numbers=2;20;-200;0
+ *
+ * Booleans=true;false;true;true
+ * ```
+ *
+ * Lines beginning with a '#' and blank lines are considered comments.
+ *
+ * Groups are started by a header line containing the group name enclosed
+ * in '[' and ']', and ended implicitly by the start of the next group or
+ * the end of the file. Each key-value pair must be contained in a group.
+ *
+ * Key-value pairs generally have the form `key=value`, with the exception
+ * of localized strings, which have the form `key[locale]=value`, with a
+ * locale identifier of the form `lang_COUNTRY@MODIFIER` where `COUNTRY`
+ * and `MODIFIER` are optional. Space before and after the '=' character
+ * are ignored. Newline, tab, carriage return and backslash characters in
+ * value are escaped as `\n`, `\t`, `\r`, and `\\\\`, respectively. To preserve
+ * leading spaces in values, these can also be escaped as `\s`.
+ *
+ * Key files can store strings (possibly with localized variants), integers,
+ * booleans and lists of these. Lists are separated by a separator character,
+ * typically ';' or ','. To use the list separator character in a value in
+ * a list, it has to be escaped by prefixing it with a backslash.
+ *
+ * This syntax is obviously inspired by the .ini files commonly met
+ * on Windows, but there are some important differences:
+ *
+ * - .ini files use the ';' character to begin comments,
+ *   key files use the '#' character.
+ *
+ * - Key files do not allow for ungrouped keys meaning only
+ *   comments can precede the first group.
+ *
+ * - Key files are always encoded in UTF-8.
+ *
+ * - Key and Group names are case-sensitive. For example, a group called
+ *   [GROUP] is a different from [group].
+ *
+ * - .ini files don't have a strongly typed boolean entry type,
+ *    they only have GetProfileInt(). In key files, only
+ *    true and false (in lower case) are allowed.
+ *
+ * Note that in contrast to the
+ * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec),
+ * groups in key files may contain the same key multiple times; the last entry wins.
+ * Key files may also contain multiple groups with the same name; they are merged
+ * together. Another difference is that keys and group names in key files are not
+ * restricted to ASCII characters.
+ *
+ * Here is an example of loading a key file and reading a value:
+ *
+ * ```c
+ * g_autoptr(GError) error = NULL;
+ * g_autoptr(GKeyFile) key_file = g_key_file_new ();
+ *
+ * if (!g_key_file_load_from_file (key_file, "key-file.ini", flags, &error))
+ *   {
+ *     if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+ *       g_warning ("Error loading key file: %s", error->message);
+ *     return;
+ *   }
+ *
+ * g_autofree gchar *val = g_key_file_get_string (key_file, "Group Name", "SomeKey", &error);
+ * if (val == NULL &&
+ *     !g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+ *   {
+ *     g_warning ("Error finding key in key file: %s", error->message);
+ *     return;
+ *   }
+ * else if (val == NULL)
+ *   {
+ *     // Fall back to a default value.
+ *     val = g_strdup ("default-value");
+ *   }
+ * ```
+ *
+ * Here is an example of creating and saving a key file:
+ *
+ * ```c
+ * g_autoptr(GKeyFile) key_file = g_key_file_new ();
+ * const gchar *val = …;
+ * g_autoptr(GError) error = NULL;
+ *
+ * g_key_file_set_string (key_file, "Group Name", "SomeKey", val);
+ *
+ * // Save as a file.
+ * if (!g_key_file_save_to_file (key_file, "key-file.ini", &error))
+ *   {
+ *     g_warning ("Error saving key file: %s", error->message);
+ *     return;
+ *   }
+ *
+ * // Or store to a GBytes for use elsewhere.
+ * gsize data_len;
+ * g_autofree guint8 *data = (guint8 *) g_key_file_to_data (key_file, &data_len, &error);
+ * if (data == NULL)
+ *   {
+ *     g_warning ("Error saving key file: %s", error->message);
+ *     return;
+ *   }
+ * g_autoptr(GBytes) bytes = g_bytes_new_take (g_steal_pointer (&data), data_len);
+ * ```
  */
 
 
@@ -1469,10 +1599,62 @@
 
 
 /**
+ * GPathBuf:
+ *
+ * `GPathBuf` is a helper type that allows you to easily build paths from
+ * individual elements, using the platform specific conventions for path
+ * separators.
+ *
+ * ```c
+ * g_auto (GPathBuf) path;
+ *
+ * g_path_buf_init (&path);
+ *
+ * g_path_buf_push (&path, "usr");
+ * g_path_buf_push (&path, "bin");
+ * g_path_buf_push (&path, "echo");
+ *
+ * g_autofree char *echo = g_path_buf_to_path (&path);
+ * g_assert_cmpstr (echo, ==, "/usr/bin/echo");
+ * ```
+ *
+ * You can also load a full path and then operate on its components:
+ *
+ * ```c
+ * g_auto (GPathBuf) path;
+ *
+ * g_path_buf_init_from_path (&path, "/usr/bin/echo");
+ *
+ * g_path_buf_pop (&path);
+ * g_path_buf_push (&path, "sh");
+ *
+ * g_autofree char *sh = g_path_buf_to_path (&path);
+ * g_assert_cmpstr (sh, ==, "/usr/bin/sh");
+ * ```
+ *
+ * Since: 2.76
+ */
+
+
+/**
  * GPatternSpec:
  *
- * A GPatternSpec struct is the 'compiled' form of a pattern. This
- * structure is opaque and its fields cannot be accessed directly.
+ * A `GPatternSpec` struct is the 'compiled' form of a glob-style pattern.
+ *
+ * The [func@g_pattern_match_simple] and [method@GLib.PatternSpec.match] functions
+ * match a string against a pattern containing '*' and '?' wildcards with similar
+ * semantics as the standard `glob()` function: '*' matches an arbitrary,
+ * possibly empty, string, '?' matches an arbitrary character.
+ *
+ * Note that in contrast to `glob()`, the '/' character can be matched by
+ * the wildcards, there are no '[...]' character ranges and '*' and '?'
+ * can not be escaped to include them literally in a pattern.
+ *
+ * When multiple strings must be matched against the same pattern, it is better
+ * to compile the pattern to a [struct@GLib.PatternSpec] using
+ * [method@GLib.PatternSpec.new] and use [method@GLib.PatternSpec.match_string]
+ * instead of [func@g_pattern_match_simple]. This avoids the overhead of repeated
+ * pattern compilation.
  */
 
 
@@ -1513,7 +1695,31 @@
  * GQuark:
  *
  * A GQuark is a non-zero integer which uniquely identifies a
- * particular string. A GQuark value of zero is associated to %NULL.
+ * particular string.
+ *
+ * A GQuark value of zero is associated to `NULL`.
+ *
+ * Given either the string or the `GQuark` identifier it is possible to
+ * retrieve the other.
+ *
+ * Quarks are used for both [datasets][glib-Datasets] and
+ * [keyed data lists][glib-Keyed-Data-Lists].
+ *
+ * To create a new quark from a string, use [func@GLib.quark_from_string]
+ * or [func@GLib.quark_from_static_string].
+ *
+ * To find the string corresponding to a given `GQuark`, use
+ * [func@GLib.quark_to_string].
+ *
+ * To find the `GQuark` corresponding to a given string, use
+ * [func@GLib.quark_try_string].
+ *
+ * Another use for the string pool maintained for the quark functions
+ * is string interning, using [func@GLib.intern_string] or
+ * [func@GLib.intern_static_string]. An interned string is a canonical
+ * representation for a string. One important advantage of interned
+ * strings is that they can be compared for equality by a simple
+ * pointer comparison, rather than using `strcmp()`.
  */
 
 
@@ -1613,6 +1819,66 @@
  * g_rec_mutex_ functions.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * GRegex:
+ *
+ * A `GRegex` is the "compiled" form of a regular expression pattern.
+ *
+ * `GRegex` implements regular expression pattern matching using syntax and
+ * semantics similar to Perl regular expression.
+ *
+ * Some functions accept a @start_position argument, setting it differs
+ * from just passing over a shortened string and setting %G_REGEX_MATCH_NOTBOL
+ * in the case of a pattern that begins with any kind of lookbehind assertion.
+ * For example, consider the pattern "\Biss\B" which finds occurrences of "iss"
+ * in the middle of words. ("\B" matches only if the current position in the
+ * subject is not a word boundary.) When applied to the string "Mississipi"
+ * from the fourth byte, namely "issipi", it does not match, because "\B" is
+ * always false at the start of the subject, which is deemed to be a word
+ * boundary. However, if the entire string is passed , but with
+ * @start_position set to 4, it finds the second occurrence of "iss" because
+ * it is able to look behind the starting point to discover that it is
+ * preceded by a letter.
+ *
+ * Note that, unless you set the %G_REGEX_RAW flag, all the strings passed
+ * to these functions must be encoded in UTF-8. The lengths and the positions
+ * inside the strings are in bytes and not in characters, so, for instance,
+ * "\xc3\xa0" (i.e. "à") is two bytes long but it is treated as a
+ * single character. If you set %G_REGEX_RAW the strings can be non-valid
+ * UTF-8 strings and a byte is treated as a character, so "\xc3\xa0" is two
+ * bytes and two characters long.
+ *
+ * When matching a pattern, "\n" matches only against a "\n" character in
+ * the string, and "\r" matches only a "\r" character. To match any newline
+ * sequence use "\R". This particular group matches either the two-character
+ * sequence CR + LF ("\r\n"), or one of the single characters LF (linefeed,
+ * U+000A, "\n"), VT vertical tab, U+000B, "\v"), FF (formfeed, U+000C, "\f"),
+ * CR (carriage return, U+000D, "\r"), NEL (next line, U+0085), LS (line
+ * separator, U+2028), or PS (paragraph separator, U+2029).
+ *
+ * The behaviour of the dot, circumflex, and dollar metacharacters are
+ * affected by newline characters, the default is to recognize any newline
+ * character (the same characters recognized by "\R"). This can be changed
+ * with `G_REGEX_NEWLINE_CR`, `G_REGEX_NEWLINE_LF` and `G_REGEX_NEWLINE_CRLF`
+ * compile options, and with `G_REGEX_MATCH_NEWLINE_ANY`,
+ * `G_REGEX_MATCH_NEWLINE_CR`, `G_REGEX_MATCH_NEWLINE_LF` and
+ * `G_REGEX_MATCH_NEWLINE_CRLF` match options. These settings are also
+ * relevant when compiling a pattern if `G_REGEX_EXTENDED` is set, and an
+ * unescaped "#" outside a character class is encountered. This indicates
+ * a comment that lasts until after the next newline.
+ *
+ * Creating and manipulating the same `GRegex` structure from different
+ * threads is not a problem as `GRegex` does not modify its internal
+ * state between creation and destruction, on the other hand `GMatchInfo`
+ * is not threadsafe.
+ *
+ * The regular expressions low-level functionalities are obtained through
+ * the excellent [PCRE](http://www.pcre.org/) library written by Philip Hazel.
+ *
+ * Since: 2.14
  */
 
 
@@ -1734,7 +2000,7 @@
  * @next_position: char number of the last token from g_scanner_peek_next_token()
  * @msg_handler: handler function for _warn and _error
  *
- * The data structure representing a lexical scanner.
+ * `GScanner` provides a general-purpose lexical scanner.
  *
  * You should set @input_name after creating the scanner, since
  * it is used by the default message handler when displaying
@@ -1899,15 +2165,45 @@
  * @allocated_len: the number of bytes that can be stored in the
  *   string before it needs to be reallocated. May be larger than @len.
  *
- * The GString struct contains the public fields of a GString.
+ * A `GString` is an object that handles the memory management of a C string.
+ *
+ * The emphasis of `GString` is on text, typically UTF-8. Crucially, the "str" member
+ * of a `GString` is guaranteed to have a trailing nul character, and it is therefore
+ * always safe to call functions such as `strchr()` or `strdup()` on it.
+ *
+ * However, a `GString` can also hold arbitrary binary data, because it has a "len" member,
+ * which includes any possible embedded nul characters in the data. Conceptually then,
+ * `GString` is like a `GByteArray` with the addition of many convenience methods for
+ * text, and a guaranteed nul terminator.
  */
 
 
 /**
  * GStringChunk:
  *
- * An opaque data structure representing String Chunks.
- * It should only be accessed by using the following functions.
+ * `GStringChunk` provides efficient storage of groups of strings
+ *
+ * String chunks are used to store groups of strings. Memory is
+ * allocated in blocks, and as strings are added to the `GStringChunk`
+ * they are copied into the next free position in a block. When a block
+ * is full a new block is allocated.
+ *
+ * When storing a large number of strings, string chunks are more
+ * efficient than using [func@g_strdup] since fewer calls to `malloc()`
+ * are needed, and less memory is wasted in memory allocation overheads.
+ *
+ * By adding strings with [method@GLib.StringChunk.insert_const] it is also
+ * possible to remove duplicates.
+ *
+ * To create a new `GStringChunk` use [method@GLib.StringChunk.new].
+ *
+ * To add strings to a `GStringChunk` use [method@GLib.Stringchunk.insert].
+ *
+ * To add strings to a `GStringChunk`, but without duplicating strings
+ * which are already in the `GStringChunk`, use [method@GLib.StringChunk.insert_const].
+ *
+ * To free the entire `GStringChunk` use [method@GLib.Stringchunk.free].
+ * It is not possible to free individual strings.
  */
 
 
@@ -1916,6 +2212,24 @@
  *
  * A typedef alias for gchar**. This is mostly useful when used together with
  * g_auto().
+ */
+
+
+/**
+ * GStrvBuilder:
+ *
+ * `GStrvBuilder` is a helper object to build a %NULL-terminated string arrays.
+ *
+ * The following example shows how to build a two element array:
+ *
+ * ```c
+ *   g_autoptr(GStrvBuilder) builder = g_strv_builder_new ();
+ *   g_strv_builder_add (builder, "hello");
+ *   g_strv_builder_add (builder, "world");
+ *   g_auto(GStrv) array = g_strv_builder_end (builder);
+ * ```
+ *
+ * Since: 2.68
  */
 
 
@@ -2066,9 +2380,32 @@
  * @user_data: the user data for the threads of this pool
  * @exclusive: are all threads exclusive to this pool
  *
- * The #GThreadPool struct represents a thread pool. It has three
- * public read-only members, but the underlying struct is bigger,
- * so you must not copy this struct.
+ * The `GThreadPool` struct represents a thread pool.
+ *
+ * A thread pool is useful when you wish to asynchronously fork out the execution of work
+ * and continue working in your own thread. If that will happen often, the overhead of starting
+ * and destroying a thread each time might be too high. In such cases reusing already started
+ * threads seems like a good idea. And it indeed is, but implementing this can be tedious
+ * and error-prone.
+ *
+ * Therefore GLib provides thread pools for your convenience. An added advantage is, that the
+ * threads can be shared between the different subsystems of your program, when they are using GLib.
+ *
+ * To create a new thread pool, you use [method@GLib.ThreadPool.new].
+ * It is destroyed by [method@GLib.ThreadPool.free].
+ *
+ * If you want to execute a certain task within a thread pool, use [method@GLib.ThreadPool.push].
+ *
+ * To get the current number of running threads you call [method@GLib.ThreadPool.get_num_threads].
+ * To get the number of still unprocessed tasks you call [method@GLib.ThreadPool.unprocessed].
+ * To control the maximum number of threads for a thread pool, you use
+ * [method@GLib.ThreadPool.get_max_threads]. and [method@GLib.ThreadPool.set_max_threads].
+ *
+ * Finally you can control the number of unused threads, that are kept alive by GLib for future use.
+ * The current number can be fetched with [method@GLib.ThreadPool.get_num_unused_threads].
+ * The maximum number can be controlled by [method@GLib.ThreadPool.get_max_unused_threads] and
+ * [method@GLib.ThreadPool.set_max_unused_threads]. All currently unused threads
+ * can be stopped by calling [method@GLib.ThreadPool.stop_unused_threads()].
  */
 
 
@@ -2125,8 +2462,32 @@
 /**
  * GTimeZone:
  *
- * #GTimeZone is an opaque structure whose members cannot be accessed
- * directly.
+ * A `GTimeZone` represents a time zone, at no particular point in time.
+ *
+ * The `GTimeZone` struct is refcounted and immutable.
+ *
+ * Each time zone has an identifier (for example, ‘Europe/London’) which is
+ * platform dependent. See [method@GLib.TimeZone.new] for information on the
+ * identifier formats. The identifier of a time zone can be retrieved using
+ * [method@GLib.TimeZone.get_identifier].
+ *
+ * A time zone contains a number of intervals. Each interval has an abbreviation
+ * to describe it (for example, ‘PDT’), an offset to UTC and a flag indicating
+ * if the daylight savings time is in effect during that interval. A time zone
+ * always has at least one interval — interval 0. Note that interval abbreviations
+ * are not the same as time zone identifiers (apart from ‘UTC’), and cannot be
+ * passed to [method@GLib.TimeZone.new].
+ *
+ * Every UTC time is contained within exactly one interval, but a given
+ * local time may be contained within zero, one or two intervals (due to
+ * incontinuities associated with daylight savings time).
+ *
+ * An interval may refer to a specific period of time (eg: the duration
+ * of daylight savings time during 2010) or it may refer to many periods
+ * of time that share the same properties (eg: all periods of daylight
+ * savings time).  It is also possible (usually for political reasons)
+ * that some properties (like the abbreviation) change between intervals
+ * without other properties changing.
  *
  * Since: 2.26
  */
@@ -2135,7 +2496,11 @@
 /**
  * GTimer:
  *
- * Opaque datatype that records a start time.
+ * `GTimer` records a start time, and counts microseconds elapsed since
+ * that time.
+ *
+ * This is done somewhat differently on different platforms, and can be
+ * tricky to get exactly right, so `GTimer` provides a portable/convenient interface.
  */
 
 
@@ -5105,319 +5470,6 @@
 
 
 /**
- * SECTION:arcbox
- * @Title: Atomically reference counted data
- * @Short_description: Allocated memory with atomic reference counting semantics
- *
- * An "atomically reference counted box", or "ArcBox", is an opaque wrapper
- * data type that is guaranteed to be as big as the size of a given data type,
- * and which augments the given data type with thread safe reference counting
- * semantics for its memory management.
- *
- * ArcBox is useful if you have a plain old data type, like a structure
- * typically placed on the stack, and you wish to provide additional API
- * to use it on the heap; or if you want to implement a new type to be
- * passed around by reference without necessarily implementing copy/free
- * semantics or your own reference counting.
- *
- * The typical use is:
- *
- * |[<!-- language="C" -->
- * typedef struct {
- *   char *name;
- *   char *address;
- *   char *city;
- *   char *state;
- *   int age;
- * } Person;
- *
- * Person *
- * person_new (void)
- * {
- *   return g_atomic_rc_box_new0 (Person);
- * }
- * ]|
- *
- * Every time you wish to acquire a reference on the memory, you should
- * call g_atomic_rc_box_acquire(); similarly, when you wish to release a reference
- * you should call g_atomic_rc_box_release():
- *
- * |[<!-- language="C" -->
- * // Add a Person to the Database; the Database acquires ownership
- * // of the Person instance
- * void
- * add_person_to_database (Database *db, Person *p)
- * {
- *   db->persons = g_list_prepend (db->persons, g_atomic_rc_box_acquire (p));
- * }
- *
- * // Removes a Person from the Database; the reference acquired by
- * // add_person_to_database() is released here
- * void
- * remove_person_from_database (Database *db, Person *p)
- * {
- *   db->persons = g_list_remove (db->persons, p);
- *   g_atomic_rc_box_release (p);
- * }
- * ]|
- *
- * If you have additional memory allocated inside the structure, you can
- * use g_atomic_rc_box_release_full(), which takes a function pointer, which
- * will be called if the reference released was the last:
- *
- * |[<!-- language="C" -->
- * void
- * person_clear (Person *p)
- * {
- *   g_free (p->name);
- *   g_free (p->address);
- *   g_free (p->city);
- *   g_free (p->state);
- * }
- *
- * void
- * remove_person_from_database (Database *db, Person *p)
- * {
- *   db->persons = g_list_remove (db->persons, p);
- *   g_atomic_rc_box_release_full (p, (GDestroyNotify) person_clear);
- * }
- * ]|
- *
- * If you wish to transfer the ownership of a reference counted data
- * type without increasing the reference count, you can use g_steal_pointer():
- *
- * |[<!-- language="C" -->
- *   Person *p = g_atomic_rc_box_new (Person);
- *
- *   fill_person_details (p);
- *
- *   add_person_to_database (db, g_steal_pointer (&p));
- * ]|
- *
- * ## Thread safety
- *
- * The reference counting operations on data allocated using g_atomic_rc_box_alloc(),
- * g_atomic_rc_box_new(), and g_atomic_rc_box_dup() are guaranteed to be atomic, and thus
- * can be safely be performed by different threads. It is important to note that
- * only the reference acquisition and release are atomic; changes to the content
- * of the data are your responsibility.
- *
- * ## Automatic pointer clean up
- *
- * If you want to add g_autoptr() support to your plain old data type through
- * reference counting, you can use the G_DEFINE_AUTOPTR_CLEANUP_FUNC() and
- * g_atomic_rc_box_release():
- *
- * |[<!-- language="C" -->
- * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, g_atomic_rc_box_release)
- * ]|
- *
- * If you need to clear the contents of the data, you will need to use an
- * ancillary function that calls g_rc_box_release_full():
- *
- * |[<!-- language="C" -->
- * static void
- * my_data_struct_release (MyDataStruct *data)
- * {
- *   // my_data_struct_clear() is defined elsewhere
- *   g_atomic_rc_box_release_full (data, (GDestroyNotify) my_data_struct_clear);
- * }
- *
- * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_release)
- * ]|
- *
- * Since: 2.58
- */
-
-
-/**
- * SECTION:arrays
- * @title: Arrays
- * @short_description: arrays of arbitrary elements which grow
- *     automatically as elements are added
- *
- * Arrays are similar to standard C arrays, except that they grow
- * automatically as elements are added.
- *
- * Array elements can be of any size (though all elements of one array
- * are the same size), and the array can be automatically cleared to
- * '0's and zero-terminated.
- *
- * To create a new array use g_array_new().
- *
- * To add elements to an array with a cost of O(n) at worst, use
- * g_array_append_val(), g_array_append_vals(), g_array_prepend_val(),
- * g_array_prepend_vals(), g_array_insert_val() and g_array_insert_vals().
- *
- * To access an element of an array in O(1) (to read it or to write it),
- * use g_array_index().
- *
- * To set the size of an array, use g_array_set_size().
- *
- * To free an array, use g_array_unref() or g_array_free().
- *
- * All the sort functions are internally calling a quick-sort (or similar)
- * function with an average cost of O(n log(n)) and a worst case
- * cost of O(n^2).
- *
- * Here is an example that stores integers in a #GArray:
- * |[<!-- language="C" -->
- *   GArray *garray;
- *   gint i;
- *   // We create a new array to store gint values.
- *   // We don't want it zero-terminated or cleared to 0's.
- *   garray = g_array_new (FALSE, FALSE, sizeof (gint));
- *   for (i = 0; i < 10000; i++)
- *     g_array_append_val (garray, i);
- *   for (i = 0; i < 10000; i++)
- *     if (g_array_index (garray, gint, i) != i)
- *       g_print ("ERROR: got %d instead of %d\n",
- *                g_array_index (garray, gint, i), i);
- *   g_array_free (garray, TRUE);
- * ]|
- */
-
-
-/**
- * SECTION:arrays_byte
- * @title: Byte Arrays
- * @short_description: arrays of bytes
- *
- * #GByteArray is a mutable array of bytes based on #GArray, to provide arrays
- * of bytes which grow automatically as elements are added.
- *
- * To create a new #GByteArray use g_byte_array_new(). To add elements to a
- * #GByteArray, use g_byte_array_append(), and g_byte_array_prepend().
- *
- * To set the size of a #GByteArray, use g_byte_array_set_size().
- *
- * To free a #GByteArray, use g_byte_array_free().
- *
- * An example for using a #GByteArray:
- * |[<!-- language="C" -->
- *   GByteArray *gbarray;
- *   gint i;
- *
- *   gbarray = g_byte_array_new ();
- *   for (i = 0; i < 10000; i++)
- *     g_byte_array_append (gbarray, (guint8*) "abcd", 4);
- *
- *   for (i = 0; i < 10000; i++)
- *     {
- *       g_assert (gbarray->data[4*i] == 'a');
- *       g_assert (gbarray->data[4*i+1] == 'b');
- *       g_assert (gbarray->data[4*i+2] == 'c');
- *       g_assert (gbarray->data[4*i+3] == 'd');
- *     }
- *
- *   g_byte_array_free (gbarray, TRUE);
- * ]|
- *
- * See #GBytes if you are interested in an immutable object representing a
- * sequence of bytes.
- */
-
-
-/**
- * SECTION:arrays_pointer
- * @title: Pointer Arrays
- * @short_description: arrays of pointers to any type of data, which
- *     grow automatically as new elements are added
- *
- * Pointer Arrays are similar to Arrays but are used only for storing
- * pointers.
- *
- * If you remove elements from the array, elements at the end of the
- * array are moved into the space previously occupied by the removed
- * element. This means that you should not rely on the index of particular
- * elements remaining the same. You should also be careful when deleting
- * elements while iterating over the array.
- *
- * To create a pointer array, use g_ptr_array_new().
- *
- * To add elements to a pointer array, use g_ptr_array_add().
- *
- * To remove elements from a pointer array, use g_ptr_array_remove(),
- * g_ptr_array_remove_index() or g_ptr_array_remove_index_fast().
- *
- * To access an element of a pointer array, use g_ptr_array_index().
- *
- * To set the size of a pointer array, use g_ptr_array_set_size().
- *
- * To free a pointer array, use g_ptr_array_free().
- *
- * An example using a #GPtrArray:
- * |[<!-- language="C" -->
- *   GPtrArray *array;
- *   gchar *string1 = "one";
- *   gchar *string2 = "two";
- *   gchar *string3 = "three";
- *
- *   array = g_ptr_array_new ();
- *   g_ptr_array_add (array, (gpointer) string1);
- *   g_ptr_array_add (array, (gpointer) string2);
- *   g_ptr_array_add (array, (gpointer) string3);
- *
- *   if (g_ptr_array_index (array, 0) != (gpointer) string1)
- *     g_print ("ERROR: got %p instead of %p\n",
- *              g_ptr_array_index (array, 0), string1);
- *
- *   g_ptr_array_free (array, TRUE);
- * ]|
- */
-
-
-/**
- * SECTION:async_queues
- * @title: Asynchronous Queues
- * @short_description: asynchronous communication between threads
- * @see_also: #GThreadPool
- *
- * Often you need to communicate between different threads. In general
- * it's safer not to do this by shared memory, but by explicit message
- * passing. These messages only make sense asynchronously for
- * multi-threaded applications though, as a synchronous operation could
- * as well be done in the same thread.
- *
- * Asynchronous queues are an exception from most other GLib data
- * structures, as they can be used simultaneously from multiple threads
- * without explicit locking and they bring their own builtin reference
- * counting. This is because the nature of an asynchronous queue is that
- * it will always be used by at least 2 concurrent threads.
- *
- * For using an asynchronous queue you first have to create one with
- * g_async_queue_new(). #GAsyncQueue structs are reference counted,
- * use g_async_queue_ref() and g_async_queue_unref() to manage your
- * references.
- *
- * A thread which wants to send a message to that queue simply calls
- * g_async_queue_push() to push the message to the queue.
- *
- * A thread which is expecting messages from an asynchronous queue
- * simply calls g_async_queue_pop() for that queue. If no message is
- * available in the queue at that point, the thread is now put to sleep
- * until a message arrives. The message will be removed from the queue
- * and returned. The functions g_async_queue_try_pop() and
- * g_async_queue_timeout_pop() can be used to only check for the presence
- * of messages or to only wait a certain time for messages respectively.
- *
- * For almost every function there exist two variants, one that locks
- * the queue and one that doesn't. That way you can hold the queue lock
- * (acquire it with g_async_queue_lock() and release it with
- * g_async_queue_unlock()) over multiple queue accessing instructions.
- * This can be necessary to ensure the integrity of the queue, but should
- * only be used when really necessary, as it can make your life harder
- * if used unwisely. Normally you should only use the locking function
- * variants (those without the _unlocked suffix).
- *
- * In many cases, it may be more convenient to use #GThreadPool when
- * you need to distribute work to a set of worker threads instead of
- * using #GAsyncQueue manually. #GThreadPool uses a GAsyncQueue
- * internally.
- */
-
-
-/**
  * SECTION:atomic_operations
  * @title: Atomic Operations
  * @short_description: basic atomic integer and pointer operations
@@ -5486,42 +5538,6 @@
 
 
 /**
- * SECTION:byte_order
- * @title: Byte Order Macros
- * @short_description: a portable way to convert between different byte orders
- *
- * These macros provide a portable way to determine the host byte order
- * and to convert values between different byte orders.
- *
- * The byte order is the order in which bytes are stored to create larger
- * data types such as the #gint and #glong values.
- * The host byte order is the byte order used on the current machine.
- *
- * Some processors store the most significant bytes (i.e. the bytes that
- * hold the largest part of the value) first. These are known as big-endian
- * processors. Other processors (notably the x86 family) store the most
- * significant byte last. These are known as little-endian processors.
- *
- * Finally, to complicate matters, some other processors store the bytes in
- * a rather curious order known as PDP-endian. For a 4-byte word, the 3rd
- * most significant byte is stored first, then the 4th, then the 1st and
- * finally the 2nd.
- *
- * Obviously there is a problem when these different processors communicate
- * with each other, for example over networks or by using binary file formats.
- * This is where these macros come in. They are typically used to convert
- * values into a byte order which has been agreed on for use when
- * communicating between different processors. The Internet uses what is
- * known as 'network byte order' as the standard byte order (which is in
- * fact the big-endian byte order).
- *
- * Note that the byte order conversion macros may evaluate their arguments
- * multiple times, thus you should not use them with arguments which have
- * side-effects.
- */
-
-
-/**
  * SECTION:checkedmath
  * @title: Bounds-checking integer arithmetic
  * @short_description: a set of helpers for performing checked integer arithmetic
@@ -5564,106 +5580,6 @@
  * and g_compute_checksum_for_string(), respectively.
  *
  * Support for checksums has been added in GLib 2.16
- */
-
-
-/**
- * SECTION:conversions
- * @title: Character Set Conversion
- * @short_description: convert strings between different character sets
- *
- * The g_convert() family of function wraps the functionality of iconv().
- * In addition to pure character set conversions, GLib has functions to
- * deal with the extra complications of encodings for file names.
- *
- * ## File Name Encodings
- *
- * Historically, UNIX has not had a defined encoding for file names:
- * a file name is valid as long as it does not have path separators
- * in it ("/"). However, displaying file names may require conversion:
- * from the character set in which they were created, to the character
- * set in which the application operates. Consider the Spanish file name
- * "Presentación.sxi". If the application which created it uses
- * ISO-8859-1 for its encoding,
- * |[
- * Character:  P  r  e  s  e  n  t  a  c  i  ó  n  .  s  x  i
- * Hex code:   50 72 65 73 65 6e 74 61 63 69 f3 6e 2e 73 78 69
- * ]|
- * However, if the application use UTF-8, the actual file name on
- * disk would look like this:
- * |[
- * Character:  P  r  e  s  e  n  t  a  c  i  ó     n  .  s  x  i
- * Hex code:   50 72 65 73 65 6e 74 61 63 69 c3 b3 6e 2e 73 78 69
- * ]|
- * GLib uses UTF-8 for its strings, and GUI toolkits like GTK that use
- * GLib do the same thing. If you get a file name from the file system,
- * for example, from readdir() or from g_dir_read_name(), and you wish
- * to display the file name to the user, you  will need to convert it
- * into UTF-8. The opposite case is when the user types the name of a
- * file they wish to save: the toolkit will give you that string in
- * UTF-8 encoding, and you will need to convert it to the character
- * set used for file names before you can create the file with open()
- * or fopen().
- *
- * By default, GLib assumes that file names on disk are in UTF-8
- * encoding. This is a valid assumption for file systems which
- * were created relatively recently: most applications use UTF-8
- * encoding for their strings, and that is also what they use for
- * the file names they create. However, older file systems may
- * still contain file names created in "older" encodings, such as
- * ISO-8859-1. In this case, for compatibility reasons, you may want
- * to instruct GLib to use that particular encoding for file names
- * rather than UTF-8. You can do this by specifying the encoding for
- * file names in the [`G_FILENAME_ENCODING`][G_FILENAME_ENCODING]
- * environment variable. For example, if your installation uses
- * ISO-8859-1 for file names, you can put this in your `~/.profile`:
- * |[
- * export G_FILENAME_ENCODING=ISO-8859-1
- * ]|
- * GLib provides the functions g_filename_to_utf8() and
- * g_filename_from_utf8() to perform the necessary conversions.
- * These functions convert file names from the encoding specified
- * in `G_FILENAME_ENCODING` to UTF-8 and vice-versa. This
- * [diagram][file-name-encodings-diagram] illustrates how
- * these functions are used to convert between UTF-8 and the
- * encoding for file names in the file system.
- *
- * ## Conversion between file name encodings # {#file-name-encodings-diagram)
- *
- * ![](file-name-encodings.png)
- *
- * ## Checklist for Application Writers
- *
- * This section is a practical summary of the detailed
- * things to do to make sure your applications process file
- * name encodings correctly.
- *
- * 1. If you get a file name from the file system from a function
- *    such as readdir() or gtk_file_chooser_get_filename(), you do
- *    not need to do any conversion to pass that file name to
- *    functions like open(), rename(), or fopen() -- those are "raw"
- *    file names which the file system understands.
- *
- * 2. If you need to display a file name, convert it to UTF-8 first
- *    by using g_filename_to_utf8(). If conversion fails, display a
- *    string like "Unknown file name". Do not convert this string back
- *    into the encoding used for file names if you wish to pass it to
- *    the file system; use the original file name instead.
- *
- *    For example, the document window of a word processor could display
- *    "Unknown file name" in its title bar but still let the user save
- *    the file, as it would keep the raw file name internally. This
- *    can happen if the user has not set the `G_FILENAME_ENCODING`
- *    environment variable even though they have files whose names are
- *    not encoded in UTF-8.
- *
- * 3. If your user interface lets the user type a file name for saving
- *    or renaming, convert it to the encoding used for file names in
- *    the file system by using g_filename_from_utf8(). Pass the converted
- *    file name to functions like fopen(). If conversion fails, ask the
- *    user to enter a different file name. This can happen if the user
- *    types Japanese characters when `G_FILENAME_ENCODING` is set to
- *    `ISO-8859-1`, for example.
  */
 
 
@@ -5743,563 +5659,6 @@
 
 
 /**
- * SECTION:date
- * @title: Date and Time Functions
- * @short_description: calendrical calculations and miscellaneous time stuff
- *
- * The #GDate data structure represents a day between January 1, Year 1,
- * and sometime a few thousand years in the future (right now it will go
- * to the year 65535 or so, but g_date_set_parse() only parses up to the
- * year 8000 or so - just count on "a few thousand"). #GDate is meant to
- * represent everyday dates, not astronomical dates or historical dates
- * or ISO timestamps or the like. It extrapolates the current Gregorian
- * calendar forward and backward in time; there is no attempt to change
- * the calendar to match time periods or locations. #GDate does not store
- * time information; it represents a day.
- *
- * The #GDate implementation has several nice features; it is only a
- * 64-bit struct, so storing large numbers of dates is very efficient. It
- * can keep both a Julian and day-month-year representation of the date,
- * since some calculations are much easier with one representation or the
- * other. A Julian representation is simply a count of days since some
- * fixed day in the past; for #GDate the fixed day is January 1, 1 AD.
- * ("Julian" dates in the #GDate API aren't really Julian dates in the
- * technical sense; technically, Julian dates count from the start of the
- * Julian period, Jan 1, 4713 BC).
- *
- * #GDate is simple to use. First you need a "blank" date; you can get a
- * dynamically allocated date from g_date_new(), or you can declare an
- * automatic variable or array and initialize it by
- * calling g_date_clear(). A cleared date is safe; it's safe to call
- * g_date_set_dmy() and the other mutator functions to initialize the
- * value of a cleared date. However, a cleared date is initially
- * invalid, meaning that it doesn't represent a day that exists.
- * It is undefined to call any of the date calculation routines on an
- * invalid date. If you obtain a date from a user or other
- * unpredictable source, you should check its validity with the
- * g_date_valid() predicate. g_date_valid() is also used to check for
- * errors with g_date_set_parse() and other functions that can
- * fail. Dates can be invalidated by calling g_date_clear() again.
- *
- * It is very important to use the API to access the #GDate
- * struct. Often only the day-month-year or only the Julian
- * representation is valid. Sometimes neither is valid. Use the API.
- *
- * GLib also features #GDateTime which represents a precise time.
- */
-
-
-/**
- * SECTION:date-time
- * @title: GDateTime
- * @short_description: a structure representing Date and Time
- * @see_also: #GTimeZone
- *
- * #GDateTime is a structure that combines a Gregorian date and time
- * into a single structure.  It provides many conversion and methods to
- * manipulate dates and times.  Time precision is provided down to
- * microseconds and the time can range (proleptically) from 0001-01-01
- * 00:00:00 to 9999-12-31 23:59:59.999999.  #GDateTime follows POSIX
- * time in the sense that it is oblivious to leap seconds.
- *
- * #GDateTime is an immutable object; once it has been created it cannot
- * be modified further.  All modifiers will create a new #GDateTime.
- * Nearly all such functions can fail due to the date or time going out
- * of range, in which case %NULL will be returned.
- *
- * #GDateTime is reference counted: the reference count is increased by calling
- * g_date_time_ref() and decreased by calling g_date_time_unref(). When the
- * reference count drops to 0, the resources allocated by the #GDateTime
- * structure are released.
- *
- * Many parts of the API may produce non-obvious results.  As an
- * example, adding two months to January 31st will yield March 31st
- * whereas adding one month and then one month again will yield either
- * March 28th or March 29th.  Also note that adding 24 hours is not
- * always the same as adding one day (since days containing daylight
- * savings time transitions are either 23 or 25 hours in length).
- *
- * #GDateTime is available since GLib 2.26.
- */
-
-
-/**
- * SECTION:error_reporting
- * @Title: Error Reporting
- * @Short_description: a system for reporting errors
- *
- * GLib provides a standard method of reporting errors from a called
- * function to the calling code. (This is the same problem solved by
- * exceptions in other languages.) It's important to understand that
- * this method is both a data type (the #GError struct) and a [set of
- * rules][gerror-rules]. If you use #GError incorrectly, then your code will not
- * properly interoperate with other code that uses #GError, and users
- * of your API will probably get confused. In most cases, [using #GError is
- * preferred over numeric error codes][gerror-comparison], but there are
- * situations where numeric error codes are useful for performance.
- *
- * First and foremost: #GError should only be used to report recoverable
- * runtime errors, never to report programming errors. If the programmer
- * has screwed up, then you should use g_warning(), g_return_if_fail(),
- * g_assert(), g_error(), or some similar facility. (Incidentally,
- * remember that the g_error() function should only be used for
- * programming errors, it should not be used to print any error
- * reportable via #GError.)
- *
- * Examples of recoverable runtime errors are "file not found" or
- * "failed to parse input." Examples of programming errors are "NULL
- * passed to strcmp()" or "attempted to free the same pointer twice."
- * These two kinds of errors are fundamentally different: runtime errors
- * should be handled or reported to the user, programming errors should
- * be eliminated by fixing the bug in the program. This is why most
- * functions in GLib and GTK do not use the #GError facility.
- *
- * Functions that can fail take a return location for a #GError as their
- * last argument. On error, a new #GError instance will be allocated and
- * returned to the caller via this argument. For example:
- * |[<!-- language="C" -->
- * gboolean g_file_get_contents (const gchar  *filename,
- *                               gchar       **contents,
- *                               gsize        *length,
- *                               GError      **error);
- * ]|
- * If you pass a non-%NULL value for the `error` argument, it should
- * point to a location where an error can be placed. For example:
- * |[<!-- language="C" -->
- * gchar *contents;
- * GError *err = NULL;
- *
- * g_file_get_contents ("foo.txt", &contents, NULL, &err);
- * g_assert ((contents == NULL && err != NULL) || (contents != NULL && err == NULL));
- * if (err != NULL)
- *   {
- *     // Report error to user, and free error
- *     g_assert (contents == NULL);
- *     fprintf (stderr, "Unable to read file: %s\n", err->message);
- *     g_error_free (err);
- *   }
- * else
- *   {
- *     // Use file contents
- *     g_assert (contents != NULL);
- *   }
- * ]|
- * Note that `err != NULL` in this example is a reliable indicator
- * of whether g_file_get_contents() failed. Additionally,
- * g_file_get_contents() returns a boolean which
- * indicates whether it was successful.
- *
- * Because g_file_get_contents() returns %FALSE on failure, if you
- * are only interested in whether it failed and don't need to display
- * an error message, you can pass %NULL for the @error argument:
- * |[<!-- language="C" -->
- * if (g_file_get_contents ("foo.txt", &contents, NULL, NULL)) // ignore errors
- *   // no error occurred
- *   ;
- * else
- *   // error
- *   ;
- * ]|
- *
- * The #GError object contains three fields: @domain indicates the module
- * the error-reporting function is located in, @code indicates the specific
- * error that occurred, and @message is a user-readable error message with
- * as many details as possible. Several functions are provided to deal
- * with an error received from a called function: g_error_matches()
- * returns %TRUE if the error matches a given domain and code,
- * g_propagate_error() copies an error into an error location (so the
- * calling function will receive it), and g_clear_error() clears an
- * error location by freeing the error and resetting the location to
- * %NULL. To display an error to the user, simply display the @message,
- * perhaps along with additional context known only to the calling
- * function (the file being opened, or whatever - though in the
- * g_file_get_contents() case, the @message already contains a filename).
- *
- * Since error messages may be displayed to the user, they need to be valid
- * UTF-8 (all GTK widgets expect text to be UTF-8). Keep this in mind in
- * particular when formatting error messages with filenames, which are in
- * the 'filename encoding', and need to be turned into UTF-8 using
- * g_filename_to_utf8(), g_filename_display_name() or g_utf8_make_valid().
- *
- * Note, however, that many error messages are too technical to display to the
- * user in an application, so prefer to use g_error_matches() to categorize errors
- * from called functions, and build an appropriate error message for the context
- * within your application. Error messages from a #GError are more appropriate
- * to be printed in system logs or on the command line. They are typically
- * translated.
- *
- * When implementing a function that can report errors, the basic
- * tool is g_set_error(). Typically, if a fatal error occurs you
- * want to g_set_error(), then return immediately. g_set_error()
- * does nothing if the error location passed to it is %NULL.
- * Here's an example:
- * |[<!-- language="C" -->
- * gint
- * foo_open_file (GError **error)
- * {
- *   gint fd;
- *   int saved_errno;
- *
- *   g_return_val_if_fail (error == NULL || *error == NULL, -1);
- *
- *   fd = open ("file.txt", O_RDONLY);
- *   saved_errno = errno;
- *
- *   if (fd < 0)
- *     {
- *       g_set_error (error,
- *                    FOO_ERROR,                 // error domain
- *                    FOO_ERROR_BLAH,            // error code
- *                    "Failed to open file: %s", // error message format string
- *                    g_strerror (saved_errno));
- *       return -1;
- *     }
- *   else
- *     return fd;
- * }
- * ]|
- *
- * Things are somewhat more complicated if you yourself call another
- * function that can report a #GError. If the sub-function indicates
- * fatal errors in some way other than reporting a #GError, such as
- * by returning %TRUE on success, you can simply do the following:
- * |[<!-- language="C" -->
- * gboolean
- * my_function_that_can_fail (GError **err)
- * {
- *   g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
- *
- *   if (!sub_function_that_can_fail (err))
- *     {
- *       // assert that error was set by the sub-function
- *       g_assert (err == NULL || *err != NULL);
- *       return FALSE;
- *     }
- *
- *   // otherwise continue, no error occurred
- *   g_assert (err == NULL || *err == NULL);
- * }
- * ]|
- *
- * If the sub-function does not indicate errors other than by
- * reporting a #GError (or if its return value does not reliably indicate
- * errors) you need to create a temporary #GError
- * since the passed-in one may be %NULL. g_propagate_error() is
- * intended for use in this case.
- * |[<!-- language="C" -->
- * gboolean
- * my_function_that_can_fail (GError **err)
- * {
- *   GError *tmp_error;
- *
- *   g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
- *
- *   tmp_error = NULL;
- *   sub_function_that_can_fail (&tmp_error);
- *
- *   if (tmp_error != NULL)
- *     {
- *       // store tmp_error in err, if err != NULL,
- *       // otherwise call g_error_free() on tmp_error
- *       g_propagate_error (err, tmp_error);
- *       return FALSE;
- *     }
- *
- *   // otherwise continue, no error occurred
- * }
- * ]|
- *
- * Error pileups are always a bug. For example, this code is incorrect:
- * |[<!-- language="C" -->
- * gboolean
- * my_function_that_can_fail (GError **err)
- * {
- *   GError *tmp_error;
- *
- *   g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
- *
- *   tmp_error = NULL;
- *   sub_function_that_can_fail (&tmp_error);
- *   other_function_that_can_fail (&tmp_error);
- *
- *   if (tmp_error != NULL)
- *     {
- *       g_propagate_error (err, tmp_error);
- *       return FALSE;
- *     }
- * }
- * ]|
- * @tmp_error should be checked immediately after sub_function_that_can_fail(),
- * and either cleared or propagated upward. The rule is: after each error,
- * you must either handle the error, or return it to the calling function.
- *
- * Note that passing %NULL for the error location is the equivalent
- * of handling an error by always doing nothing about it. So the
- * following code is fine, assuming errors in sub_function_that_can_fail()
- * are not fatal to my_function_that_can_fail():
- * |[<!-- language="C" -->
- * gboolean
- * my_function_that_can_fail (GError **err)
- * {
- *   GError *tmp_error;
- *
- *   g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
- *
- *   sub_function_that_can_fail (NULL); // ignore errors
- *
- *   tmp_error = NULL;
- *   other_function_that_can_fail (&tmp_error);
- *
- *   if (tmp_error != NULL)
- *     {
- *       g_propagate_error (err, tmp_error);
- *       return FALSE;
- *     }
- * }
- * ]|
- *
- * Note that passing %NULL for the error location ignores errors;
- * it's equivalent to
- * `try { sub_function_that_can_fail (); } catch (...) {}`
- * in C++. It does not mean to leave errors unhandled; it means
- * to handle them by doing nothing.
- *
- * Error domains and codes are conventionally named as follows:
- *
- * - The error domain is called <NAMESPACE>_<MODULE>_ERROR,
- *   for example %G_SPAWN_ERROR or %G_THREAD_ERROR:
- *   |[<!-- language="C" -->
- *   #define G_SPAWN_ERROR g_spawn_error_quark ()
- *
- *   G_DEFINE_QUARK (g-spawn-error-quark, g_spawn_error)
- *   ]|
- *
- * - The quark function for the error domain is called
- *   <namespace>_<module>_error_quark,
- *   for example g_spawn_error_quark() or g_thread_error_quark().
- *
- * - The error codes are in an enumeration called
- *   <Namespace><Module>Error;
- *   for example, #GThreadError or #GSpawnError.
- *
- * - Members of the error code enumeration are called
- *   <NAMESPACE>_<MODULE>_ERROR_<CODE>,
- *   for example %G_SPAWN_ERROR_FORK or %G_THREAD_ERROR_AGAIN.
- *
- * - If there's a "generic" or "unknown" error code for unrecoverable
- *   errors it doesn't make sense to distinguish with specific codes,
- *   it should be called <NAMESPACE>_<MODULE>_ERROR_FAILED,
- *   for example %G_SPAWN_ERROR_FAILED. In the case of error code
- *   enumerations that may be extended in future releases, you should
- *   generally not handle this error code explicitly, but should
- *   instead treat any unrecognized error code as equivalent to
- *   FAILED.
- *
- * ## Comparison of #GError and traditional error handling # {#gerror-comparison}
- *
- * #GError has several advantages over traditional numeric error codes:
- * importantly, tools like
- * [gobject-introspection](https://developer.gnome.org/gi/stable/) understand
- * #GErrors and convert them to exceptions in bindings; the message includes
- * more information than just a code; and use of a domain helps prevent
- * misinterpretation of error codes.
- *
- * #GError has disadvantages though: it requires a memory allocation, and
- * formatting the error message string has a performance overhead. This makes it
- * unsuitable for use in retry loops where errors are a common case, rather than
- * being unusual. For example, using %G_IO_ERROR_WOULD_BLOCK means hitting these
- * overheads in the normal control flow. String formatting overhead can be
- * eliminated by using g_set_error_literal() in some cases.
- *
- * These performance issues can be compounded if a function wraps the #GErrors
- * returned by the functions it calls: this multiplies the number of allocations
- * and string formatting operations. This can be partially mitigated by using
- * g_prefix_error().
- *
- * ## Rules for use of #GError # {#gerror-rules}
- *
- * Summary of rules for use of #GError:
- *
- * - Do not report programming errors via #GError.
- *
- * - The last argument of a function that returns an error should
- *   be a location where a #GError can be placed (i.e. `GError **error`).
- *   If #GError is used with varargs, the `GError**` should be the last
- *   argument before the `...`.
- *
- * - The caller may pass %NULL for the `GError**` if they are not interested
- *   in details of the exact error that occurred.
- *
- * - If %NULL is passed for the `GError**` argument, then errors should
- *   not be returned to the caller, but your function should still
- *   abort and return if an error occurs. That is, control flow should
- *   not be affected by whether the caller wants to get a #GError.
- *
- * - If a #GError is reported, then your function by definition had a
- *   fatal failure and did not complete whatever it was supposed to do.
- *   If the failure was not fatal, then you handled it and you should not
- *   report it. If it was fatal, then you must report it and discontinue
- *   whatever you were doing immediately.
- *
- * - If a #GError is reported, out parameters are not guaranteed to
- *   be set to any defined value.
- *
- * - A `GError*` must be initialized to %NULL before passing its address
- *   to a function that can report errors.
- *
- * - #GError structs must not be stack-allocated.
- *
- * - "Piling up" errors is always a bug. That is, if you assign a
- *   new #GError to a `GError*` that is non-%NULL, thus overwriting
- *   the previous error, it indicates that you should have aborted
- *   the operation instead of continuing. If you were able to continue,
- *   you should have cleared the previous error with g_clear_error().
- *   g_set_error() will complain if you pile up errors.
- *
- * - By convention, if you return a boolean value indicating success
- *   then %TRUE means success and %FALSE means failure. Avoid creating
- *   functions which have a boolean return value and a #GError parameter,
- *   but where the boolean does something other than signal whether the
- *   #GError is set.  Among other problems, it requires C callers to allocate
- *   a temporary error.  Instead, provide a `gboolean *` out parameter.
- *   There are functions in GLib itself such as g_key_file_has_key() that
- *   are hard to use because of this. If %FALSE is returned, the error must
- *   be set to a non-%NULL value.  One exception to this is that in situations
- *   that are already considered to be undefined behaviour (such as when a
- *   g_return_val_if_fail() check fails), the error need not be set.
- *   Instead of checking separately whether the error is set, callers
- *   should ensure that they do not provoke undefined behaviour, then
- *   assume that the error will be set on failure.
- *
- * - A %NULL return value is also frequently used to mean that an error
- *   occurred. You should make clear in your documentation whether %NULL
- *   is a valid return value in non-error cases; if %NULL is a valid value,
- *   then users must check whether an error was returned to see if the
- *   function succeeded.
- *
- * - When implementing a function that can report errors, you may want
- *   to add a check at the top of your function that the error return
- *   location is either %NULL or contains a %NULL error (e.g.
- *   `g_return_if_fail (error == NULL || *error == NULL);`).
- *
- * ## Extended #GError Domains # {#gerror-extended-domains}
- *
- * Since GLib 2.68 it is possible to extend the #GError type. This is
- * done with the G_DEFINE_EXTENDED_ERROR() macro. To create an
- * extended #GError type do something like this in the header file:
- * |[<!-- language="C" -->
- * typedef enum
- * {
- *   MY_ERROR_BAD_REQUEST,
- * } MyError;
- * #define MY_ERROR (my_error_quark ())
- * GQuark my_error_quark (void);
- * int
- * my_error_get_parse_error_id (GError *error);
- * const char *
- * my_error_get_bad_request_details (GError *error);
- * ]|
- * and in implementation:
- * |[<!-- language="C" -->
- * typedef struct
- * {
- *   int parse_error_id;
- *   char *bad_request_details;
- * } MyErrorPrivate;
- *
- * static void
- * my_error_private_init (MyErrorPrivate *priv)
- * {
- *   priv->parse_error_id = -1;
- *   // No need to set priv->bad_request_details to NULL,
- *   // the struct is initialized with zeros.
- * }
- *
- * static void
- * my_error_private_copy (const MyErrorPrivate *src_priv, MyErrorPrivate *dest_priv)
- * {
- *   dest_priv->parse_error_id = src_priv->parse_error_id;
- *   dest_priv->bad_request_details = g_strdup (src_priv->bad_request_details);
- * }
- *
- * static void
- * my_error_private_clear (MyErrorPrivate *priv)
- * {
- *   g_free (priv->bad_request_details);
- * }
- *
- * // This defines the my_error_get_private and my_error_quark functions.
- * G_DEFINE_EXTENDED_ERROR (MyError, my_error)
- *
- * int
- * my_error_get_parse_error_id (GError *error)
- * {
- *   MyErrorPrivate *priv = my_error_get_private (error);
- *   g_return_val_if_fail (priv != NULL, -1);
- *   return priv->parse_error_id;
- * }
- *
- * const char *
- * my_error_get_bad_request_details (GError *error)
- * {
- *   MyErrorPrivate *priv = my_error_get_private (error);
- *   g_return_val_if_fail (priv != NULL, NULL);
- *   g_return_val_if_fail (error->code != MY_ERROR_BAD_REQUEST, NULL);
- *   return priv->bad_request_details;
- * }
- *
- * static void
- * my_error_set_bad_request (GError     **error,
- *                           const char  *reason,
- *                           int          error_id,
- *                           const char  *details)
- * {
- *   MyErrorPrivate *priv;
- *   g_set_error (error, MY_ERROR, MY_ERROR_BAD_REQUEST, "Invalid request: %s", reason);
- *   if (error != NULL && *error != NULL)
- *     {
- *       priv = my_error_get_private (error);
- *       g_return_val_if_fail (priv != NULL, NULL);
- *       priv->parse_error_id = error_id;
- *       priv->bad_request_details = g_strdup (details);
- *     }
- * }
- * ]|
- * An example of use of the error could be:
- * |[<!-- language="C" -->
- * gboolean
- * send_request (GBytes *request, GError **error)
- * {
- *   ParseFailedStatus *failure = validate_request (request);
- *   if (failure != NULL)
- *     {
- *       my_error_set_bad_request (error, failure->reason, failure->error_id, failure->details);
- *       parse_failed_status_free (failure);
- *       return FALSE;
- *     }
- *
- *   return send_one (request, error);
- * }
- * ]|
- *
- * Please note that if you are a library author and your library
- * exposes an existing error domain, then you can't make this error
- * domain an extended one without breaking ABI. This is because
- * earlier it was possible to create an error with this error domain
- * on the stack and then copy it with g_error_copy(). If the new
- * version of your library makes the error domain an extended one,
- * then g_error_copy() called by code that allocated the error on the
- * stack will try to copy more data than it used to, which will lead
- * to undefined behavior. You must not stack-allocate errors with an
- * extended error domain, and it is bad practice to stack-allocate any
- * other #GErrors.
- *
- * Extended error domains in unloadable plugins/modules are not
- * supported.
- */
-
-
-/**
  * SECTION:fileutils
  * @title: File Utilities
  * @short_description: various file-related functions
@@ -6338,52 +5697,6 @@
 
 
 /**
- * SECTION:gbookmarkfile
- * @title: Bookmark file parser
- * @short_description: parses files containing bookmarks
- *
- * GBookmarkFile lets you parse, edit or create files containing bookmarks
- * to URI, along with some meta-data about the resource pointed by the URI
- * like its MIME type, the application that is registering the bookmark and
- * the icon that should be used to represent the bookmark. The data is stored
- * using the
- * [Desktop Bookmark Specification](http://www.gnome.org/~ebassi/bookmark-spec).
- *
- * The syntax of the bookmark files is described in detail inside the
- * Desktop Bookmark Specification, here is a quick summary: bookmark
- * files use a sub-class of the XML Bookmark Exchange Language
- * specification, consisting of valid UTF-8 encoded XML, under the
- * <xbel> root element; each bookmark is stored inside a
- * <bookmark> element, using its URI: no relative paths can
- * be used inside a bookmark file. The bookmark may have a user defined
- * title and description, to be used instead of the URI. Under the
- * <metadata> element, with its owner attribute set to
- * `http://freedesktop.org`, is stored the meta-data about a resource
- * pointed by its URI. The meta-data consists of the resource's MIME
- * type; the applications that have registered a bookmark; the groups
- * to which a bookmark belongs to; a visibility flag, used to set the
- * bookmark as "private" to the applications and groups that has it
- * registered; the URI and MIME type of an icon, to be used when
- * displaying the bookmark inside a GUI.
- *
- * Here is an example of a bookmark file:
- * [bookmarks.xbel](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/glib/tests/bookmarks.xbel)
- *
- * A bookmark file might contain more than one bookmark; each bookmark
- * is accessed through its URI.
- *
- * The important caveat of bookmark files is that when you add a new
- * bookmark you must also add the application that is registering it, using
- * g_bookmark_file_add_application() or g_bookmark_file_set_application_info().
- * If a bookmark has no applications then it won't be dumped when creating
- * the on disk representation, using g_bookmark_file_to_data() or
- * g_bookmark_file_to_file().
- *
- * The #GBookmarkFile parser was added in GLib 2.12.
- */
-
-
-/**
  * SECTION:ghostutils
  * @short_description: Internet hostname utilities
  *
@@ -6399,432 +5712,6 @@
  * ASCII-Compatible Encoding of any given Unicode name, which can be
  * used with non-IDN-aware applications and protocols. (For example,
  * "Παν語.org" maps to "xn--4wa8awb4637h.org".)
- */
-
-
-/**
- * SECTION:gkeyfile
- * @title: Key-value file parser
- * @short_description: parses .ini-like config files
- *
- * #GKeyFile lets you parse, edit or create files containing groups of
- * key-value pairs, which we call "key files" for lack of a better name.
- * Several freedesktop.org specifications use key files now, e.g the
- * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec)
- * and the
- * [Icon Theme Specification](http://freedesktop.org/Standards/icon-theme-spec).
- *
- * The syntax of key files is described in detail in the
- * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec),
- * here is a quick summary: Key files
- * consists of groups of key-value pairs, interspersed with comments.
- *
- * |[
- * # this is just an example
- * # there can be comments before the first group
- *
- * [First Group]
- *
- * Name=Key File Example\tthis value shows\nescaping
- *
- * # localized strings are stored in multiple key-value pairs
- * Welcome=Hello
- * Welcome[de]=Hallo
- * Welcome[fr_FR]=Bonjour
- * Welcome[it]=Ciao
- * Welcome[be@latin]=Hello
- *
- * [Another Group]
- *
- * Numbers=2;20;-200;0
- *
- * Booleans=true;false;true;true
- * ]|
- *
- * Lines beginning with a '#' and blank lines are considered comments.
- *
- * Groups are started by a header line containing the group name enclosed
- * in '[' and ']', and ended implicitly by the start of the next group or
- * the end of the file. Each key-value pair must be contained in a group.
- *
- * Key-value pairs generally have the form `key=value`, with the
- * exception of localized strings, which have the form
- * `key[locale]=value`, with a locale identifier of the
- * form `lang_COUNTRY@MODIFIER` where `COUNTRY` and `MODIFIER`
- * are optional.
- * Space before and after the '=' character are ignored. Newline, tab,
- * carriage return and backslash characters in value are escaped as \n,
- * \t, \r, and \\\\, respectively. To preserve leading spaces in values,
- * these can also be escaped as \s.
- *
- * Key files can store strings (possibly with localized variants), integers,
- * booleans and lists of these. Lists are separated by a separator character,
- * typically ';' or ','. To use the list separator character in a value in
- * a list, it has to be escaped by prefixing it with a backslash.
- *
- * This syntax is obviously inspired by the .ini files commonly met
- * on Windows, but there are some important differences:
- *
- * - .ini files use the ';' character to begin comments,
- *   key files use the '#' character.
- *
- * - Key files do not allow for ungrouped keys meaning only
- *   comments can precede the first group.
- *
- * - Key files are always encoded in UTF-8.
- *
- * - Key and Group names are case-sensitive. For example, a group called
- *   [GROUP] is a different from [group].
- *
- * - .ini files don't have a strongly typed boolean entry type,
- *    they only have GetProfileInt(). In key files, only
- *    true and false (in lower case) are allowed.
- *
- * Note that in contrast to the
- * [Desktop Entry Specification](http://freedesktop.org/Standards/desktop-entry-spec),
- * groups in key files may contain the same
- * key multiple times; the last entry wins. Key files may also contain
- * multiple groups with the same name; they are merged together.
- * Another difference is that keys and group names in key files are not
- * restricted to ASCII characters.
- *
- * Here is an example of loading a key file and reading a value:
- *
- * |[<!-- language="C" -->
- * g_autoptr(GError) error = NULL;
- * g_autoptr(GKeyFile) key_file = g_key_file_new ();
- *
- * if (!g_key_file_load_from_file (key_file, "key-file.ini", flags, &error))
- *   {
- *     if (!g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT))
- *       g_warning ("Error loading key file: %s", error->message);
- *     return;
- *   }
- *
- * g_autofree gchar *val = g_key_file_get_string (key_file, "Group Name", "SomeKey", &error);
- * if (val == NULL &&
- *     !g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
- *   {
- *     g_warning ("Error finding key in key file: %s", error->message);
- *     return;
- *   }
- * else if (val == NULL)
- *   {
- *     // Fall back to a default value.
- *     val = g_strdup ("default-value");
- *   }
- * ]|
- *
- * Here is an example of creating and saving a key file:
- *
- * |[<!-- language="C" -->
- * g_autoptr(GKeyFile) key_file = g_key_file_new ();
- * const gchar *val = …;
- * g_autoptr(GError) error = NULL;
- *
- * g_key_file_set_string (key_file, "Group Name", "SomeKey", val);
- *
- * // Save as a file.
- * if (!g_key_file_save_to_file (key_file, "key-file.ini", &error))
- *   {
- *     g_warning ("Error saving key file: %s", error->message);
- *     return;
- *   }
- *
- * // Or store to a GBytes for use elsewhere.
- * gsize data_len;
- * g_autofree guint8 *data = (guint8 *) g_key_file_to_data (key_file, &data_len, &error);
- * if (data == NULL)
- *   {
- *     g_warning ("Error saving key file: %s", error->message);
- *     return;
- *   }
- * g_autoptr(GBytes) bytes = g_bytes_new_take (g_steal_pointer (&data), data_len);
- * ]|
- */
-
-
-/**
- * SECTION:goptioncontext
- * @Short_description: parses commandline options
- * @Title: Commandline option parser
- *
- * The GOption commandline parser is intended to be a simpler replacement
- * for the popt library. It supports short and long commandline options,
- * as shown in the following example:
- *
- * `testtreemodel -r 1 --max-size 20 --rand --display=:1.0 -vb -- file1 file2`
- *
- * The example demonstrates a number of features of the GOption
- * commandline parser:
- *
- * - Options can be single letters, prefixed by a single dash.
- *
- * - Multiple short options can be grouped behind a single dash.
- *
- * - Long options are prefixed by two consecutive dashes.
- *
- * - Options can have an extra argument, which can be a number, a string or
- *   a filename. For long options, the extra argument can be appended with
- *   an equals sign after the option name, which is useful if the extra
- *   argument starts with a dash, which would otherwise cause it to be
- *   interpreted as another option.
- *
- * - Non-option arguments are returned to the application as rest arguments.
- *
- * - An argument consisting solely of two dashes turns off further parsing,
- *   any remaining arguments (even those starting with a dash) are returned
- *   to the application as rest arguments.
- *
- * Another important feature of GOption is that it can automatically
- * generate nicely formatted help output. Unless it is explicitly turned
- * off with g_option_context_set_help_enabled(), GOption will recognize
- * the `--help`, `-?`, `--help-all` and `--help-groupname` options
- * (where `groupname` is the name of a #GOptionGroup) and write a text
- * similar to the one shown in the following example to stdout.
- *
- * |[
- * Usage:
- *   testtreemodel [OPTION...] - test tree model performance
- *  
- * Help Options:
- *   -h, --help               Show help options
- *   --help-all               Show all help options
- *   --help-gtk               Show GTK Options
- *  
- * Application Options:
- *   -r, --repeats=N          Average over N repetitions
- *   -m, --max-size=M         Test up to 2^M items
- *   --display=DISPLAY        X display to use
- *   -v, --verbose            Be verbose
- *   -b, --beep               Beep when done
- *   --rand                   Randomize the data
- * ]|
- *
- * GOption groups options in #GOptionGroups, which makes it easy to
- * incorporate options from multiple sources. The intended use for this is
- * to let applications collect option groups from the libraries it uses,
- * add them to their #GOptionContext, and parse all options by a single call
- * to g_option_context_parse(). See gtk_get_option_group() for an example.
- *
- * If an option is declared to be of type string or filename, GOption takes
- * care of converting it to the right encoding; strings are returned in
- * UTF-8, filenames are returned in the GLib filename encoding. Note that
- * this only works if setlocale() has been called before
- * g_option_context_parse().
- *
- * Here is a complete example of setting up GOption to parse the example
- * commandline above and produce the example help output.
- * |[<!-- language="C" -->
- * static gint repeats = 2;
- * static gint max_size = 8;
- * static gboolean verbose = FALSE;
- * static gboolean beep = FALSE;
- * static gboolean randomize = FALSE;
- *
- * static GOptionEntry entries[] =
- * {
- *   { "repeats", 'r', 0, G_OPTION_ARG_INT, &repeats, "Average over N repetitions", "N" },
- *   { "max-size", 'm', 0, G_OPTION_ARG_INT, &max_size, "Test up to 2^M items", "M" },
- *   { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "Be verbose", NULL },
- *   { "beep", 'b', 0, G_OPTION_ARG_NONE, &beep, "Beep when done", NULL },
- *   { "rand", 0, 0, G_OPTION_ARG_NONE, &randomize, "Randomize the data", NULL },
- *   G_OPTION_ENTRY_NULL
- * };
- *
- * int
- * main (int argc, char *argv[])
- * {
- *   GError *error = NULL;
- *   GOptionContext *context;
- *
- *   context = g_option_context_new ("- test tree model performance");
- *   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
- *   g_option_context_add_group (context, gtk_get_option_group (TRUE));
- *   if (!g_option_context_parse (context, &argc, &argv, &error))
- *     {
- *       g_print ("option parsing failed: %s\n", error->message);
- *       exit (1);
- *     }
- *
- *   ...
- *
- * }
- * ]|
- *
- * On UNIX systems, the argv that is passed to main() has no particular
- * encoding, even to the extent that different parts of it may have
- * different encodings.  In general, normal arguments and flags will be
- * in the current locale and filenames should be considered to be opaque
- * byte strings.  Proper use of %G_OPTION_ARG_FILENAME vs
- * %G_OPTION_ARG_STRING is therefore important.
- *
- * Note that on Windows, filenames do have an encoding, but using
- * #GOptionContext with the argv as passed to main() will result in a
- * program that can only accept commandline arguments with characters
- * from the system codepage.  This can cause problems when attempting to
- * deal with filenames containing Unicode characters that fall outside
- * of the codepage.
- *
- * A solution to this is to use g_win32_get_command_line() and
- * g_option_context_parse_strv() which will properly handle full Unicode
- * filenames.  If you are using #GApplication, this is done
- * automatically for you.
- *
- * The following example shows how you can use #GOptionContext directly
- * in order to correctly deal with Unicode filenames on Windows:
- *
- * |[<!-- language="C" -->
- * int
- * main (int argc, char **argv)
- * {
- *   GError *error = NULL;
- *   GOptionContext *context;
- *   gchar **args;
- *
- * #ifdef G_OS_WIN32
- *   args = g_win32_get_command_line ();
- * #else
- *   args = g_strdupv (argv);
- * #endif
- *
- *   // set up context
- *
- *   if (!g_option_context_parse_strv (context, &args, &error))
- *     {
- *       // error happened
- *     }
- *
- *   ...
- *
- *   g_strfreev (args);
- *
- *   ...
- * }
- * ]|
- */
-
-
-/**
- * SECTION:gpathbuf
- * @Title: GPathBuf
- * @Short_description: A mutable path builder
- *
- * `GPathBuf` is a helper type that allows you to easily build paths from
- * individual elements, using the platform specific conventions for path
- * separators.
- *
- * |[<!-- language="C" -->
- * g_auto (GPathBuf) path;
- *
- * g_path_buf_init (&path);
- *
- * g_path_buf_push (&path, "usr");
- * g_path_buf_push (&path, "bin");
- * g_path_buf_push (&path, "echo");
- *
- * g_autofree char *echo = g_path_buf_to_path (&path);
- * g_assert_cmpstr (echo, ==, "/usr/bin/echo");
- * ]|
- *
- * You can also load a full path and then operate on its components:
- *
- * |[<!-- language="C" -->
- * g_auto (GPathBuf) path;
- *
- * g_path_buf_init_from_path (&path, "/usr/bin/echo");
- *
- * g_path_buf_pop (&path);
- * g_path_buf_push (&path, "sh");
- *
- * g_autofree char *sh = g_path_buf_to_path (&path);
- * g_assert_cmpstr (sh, ==, "/usr/bin/sh");
- * ]|
- *
- * `GPathBuf` is available since GLib 2.76.
- */
-
-
-/**
- * SECTION:gregex
- * @title: Perl-compatible regular expressions
- * @short_description: matches strings against regular expressions
- * @see_also: [Regular expression syntax][glib-regex-syntax]
- *
- * The g_regex_*() functions implement regular
- * expression pattern matching using syntax and semantics similar to
- * Perl regular expression.
- *
- * Some functions accept a @start_position argument, setting it differs
- * from just passing over a shortened string and setting %G_REGEX_MATCH_NOTBOL
- * in the case of a pattern that begins with any kind of lookbehind assertion.
- * For example, consider the pattern "\Biss\B" which finds occurrences of "iss"
- * in the middle of words. ("\B" matches only if the current position in the
- * subject is not a word boundary.) When applied to the string "Mississipi"
- * from the fourth byte, namely "issipi", it does not match, because "\B" is
- * always false at the start of the subject, which is deemed to be a word
- * boundary. However, if the entire string is passed , but with
- * @start_position set to 4, it finds the second occurrence of "iss" because
- * it is able to look behind the starting point to discover that it is
- * preceded by a letter.
- *
- * Note that, unless you set the %G_REGEX_RAW flag, all the strings passed
- * to these functions must be encoded in UTF-8. The lengths and the positions
- * inside the strings are in bytes and not in characters, so, for instance,
- * "\xc3\xa0" (i.e. "à") is two bytes long but it is treated as a
- * single character. If you set %G_REGEX_RAW the strings can be non-valid
- * UTF-8 strings and a byte is treated as a character, so "\xc3\xa0" is two
- * bytes and two characters long.
- *
- * When matching a pattern, "\n" matches only against a "\n" character in
- * the string, and "\r" matches only a "\r" character. To match any newline
- * sequence use "\R". This particular group matches either the two-character
- * sequence CR + LF ("\r\n"), or one of the single characters LF (linefeed,
- * U+000A, "\n"), VT vertical tab, U+000B, "\v"), FF (formfeed, U+000C, "\f"),
- * CR (carriage return, U+000D, "\r"), NEL (next line, U+0085), LS (line
- * separator, U+2028), or PS (paragraph separator, U+2029).
- *
- * The behaviour of the dot, circumflex, and dollar metacharacters are
- * affected by newline characters, the default is to recognize any newline
- * character (the same characters recognized by "\R"). This can be changed
- * with %G_REGEX_NEWLINE_CR, %G_REGEX_NEWLINE_LF and %G_REGEX_NEWLINE_CRLF
- * compile options, and with %G_REGEX_MATCH_NEWLINE_ANY,
- * %G_REGEX_MATCH_NEWLINE_CR, %G_REGEX_MATCH_NEWLINE_LF and
- * %G_REGEX_MATCH_NEWLINE_CRLF match options. These settings are also
- * relevant when compiling a pattern if %G_REGEX_EXTENDED is set, and an
- * unescaped "#" outside a character class is encountered. This indicates
- * a comment that lasts until after the next newline.
- *
- * Creating and manipulating the same #GRegex structure from different
- * threads is not a problem as #GRegex does not modify its internal
- * state between creation and destruction, on the other hand #GMatchInfo
- * is not threadsafe.
- *
- * The regular expressions low-level functionalities are obtained through
- * the excellent
- * [PCRE](http://www.pcre.org/)
- * library written by Philip Hazel.
- */
-
-
-/**
- * SECTION:gstrvbuilder
- * @title: GStrvBuilder
- * @short_description: Helper to create NULL-terminated string arrays.
- *
- * #GStrvBuilder is a method of easily building dynamically sized
- * NULL-terminated string arrays.
- *
- * The following example shows how to build a two element array:
- *
- * |[<!-- language="C" -->
- *   g_autoptr(GStrvBuilder) builder = g_strv_builder_new ();
- *   g_strv_builder_add (builder, "hello");
- *   g_strv_builder_add (builder, "world");
- *   g_auto(GStrv) array = g_strv_builder_end (builder);
- * ]|
- *
- * Since: 2.68
  */
 
 
@@ -7370,66 +6257,6 @@
 
 
 /**
- * SECTION:hash_tables
- * @title: Hash Tables
- * @short_description: associations between keys and values so that
- *     given a key the value can be found quickly
- *
- * A #GHashTable provides associations between keys and values which is
- * optimized so that given a key, the associated value can be found,
- * inserted or removed in amortized O(1). All operations going through
- * each element take O(n) time (list all keys/values, table resize, etc.).
- *
- * Note that neither keys nor values are copied when inserted into the
- * #GHashTable, so they must exist for the lifetime of the #GHashTable.
- * This means that the use of static strings is OK, but temporary
- * strings (i.e. those created in buffers and those returned by GTK
- * widgets) should be copied with g_strdup() before being inserted.
- *
- * If keys or values are dynamically allocated, you must be careful to
- * ensure that they are freed when they are removed from the
- * #GHashTable, and also when they are overwritten by new insertions
- * into the #GHashTable. It is also not advisable to mix static strings
- * and dynamically-allocated strings in a #GHashTable, because it then
- * becomes difficult to determine whether the string should be freed.
- *
- * To create a #GHashTable, use g_hash_table_new().
- *
- * To insert a key and value into a #GHashTable, use
- * g_hash_table_insert().
- *
- * To look up a value corresponding to a given key, use
- * g_hash_table_lookup() and g_hash_table_lookup_extended().
- *
- * g_hash_table_lookup_extended() can also be used to simply
- * check if a key is present in the hash table.
- *
- * To remove a key and value, use g_hash_table_remove().
- *
- * To call a function for each key and value pair use
- * g_hash_table_foreach() or use an iterator to iterate over the
- * key/value pairs in the hash table, see #GHashTableIter. The iteration order
- * of a hash table is not defined, and you must not rely on iterating over
- * keys/values in the same order as they were inserted.
- *
- * To destroy a #GHashTable use g_hash_table_destroy().
- *
- * A common use-case for hash tables is to store information about a
- * set of keys, without associating any particular value with each
- * key. GHashTable optimizes one way of doing so: If you store only
- * key-value pairs where key == value, then GHashTable does not
- * allocate memory to store the values, which can be a considerable
- * space saving, if your set is large. The functions
- * g_hash_table_add() and g_hash_table_contains() are designed to be
- * used when using #GHashTable this way.
- *
- * #GHashTable is not designed to be statically initialised with keys and
- * values known at compile time. To build a static hash table, use a tool such
- * as [gperf](https://www.gnu.org/software/gperf/).
- */
-
-
-/**
  * SECTION:hmac
  * @title: Secure HMAC Digests
  * @short_description: computes the HMAC for data
@@ -7457,57 +6284,6 @@
  * The #GHookList, #GHook and their related functions provide support for
  * lists of hook functions. Functions can be added and removed from the lists,
  * and the list of hook functions can be invoked.
- */
-
-
-/**
- * SECTION:i18n
- * @title: Internationalization
- * @short_description: gettext support macros
- * @see_also: the gettext manual
- *
- * GLib doesn't force any particular localization method upon its users.
- * But since GLib itself is localized using the gettext() mechanism, it seems
- * natural to offer the de-facto standard gettext() support macros in an
- * easy-to-use form.
- *
- * In order to use these macros in an application, you must include
- * `<glib/gi18n.h>`. For use in a library, you must include
- * `<glib/gi18n-lib.h>`
- * after defining the %GETTEXT_PACKAGE macro suitably for your library:
- * |[<!-- language="C" -->
- * #define GETTEXT_PACKAGE "gtk20"
- * #include <glib/gi18n-lib.h>
- * ]|
- * For an application, note that you also have to call bindtextdomain(),
- * bind_textdomain_codeset(), textdomain() and setlocale() early on in your
- * main() to make gettext() work. For example:
- * |[<!-- language="C" -->
- * #include <glib/gi18n.h>
- * #include <locale.h>
- *
- * int
- * main (int argc, char **argv)
- * {
- *   setlocale (LC_ALL, "");
- *   bindtextdomain (GETTEXT_PACKAGE, DATADIR "/locale");
- *   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
- *   textdomain (GETTEXT_PACKAGE);
- *
- *   // Rest of your application.
- * }
- * ]|
- * where `DATADIR` is as typically provided by automake or Meson.
- *
- * For a library, you only have to call bindtextdomain() and
- * bind_textdomain_codeset() in your initialization function. If your library
- * doesn't have an initialization function, you can call the functions before
- * the first translated message.
- *
- * The
- * [gettext manual](http://www.gnu.org/software/gettext/manual/gettext.html#Maintainers)
- * covers details of how to integrate gettext into a project’s build system and
- * workflow.
  */
 
 
@@ -7557,346 +6333,6 @@
 
 
 /**
- * SECTION:linked_lists_double
- * @title: Doubly-Linked Lists
- * @short_description: linked lists that can be iterated over in both directions
- *
- * The #GList structure and its associated functions provide a standard
- * doubly-linked list data structure. The benefit of this data-structure
- * is to provide insertion/deletion operations in O(1) complexity where
- * access/search operations are in O(n). The benefit of #GList over
- * #GSList (singly linked list) is that the worst case on access/search
- * operations is divided by two which comes at a cost in space as we need
- * to retain two pointers in place of one.
- *
- * Each element in the list contains a piece of data, together with
- * pointers which link to the previous and next elements in the list.
- * Using these pointers it is possible to move through the list in both
- * directions (unlike the singly-linked [GSList][glib-Singly-Linked-Lists],
- * which only allows movement through the list in the forward direction).
- *
- * The double linked list does not keep track of the number of items
- * and does not keep track of both the start and end of the list. If
- * you want fast access to both the start and the end of the list,
- * and/or the number of items in the list, use a
- * [GQueue][glib-Double-ended-Queues] instead.
- *
- * The data contained in each element can be either integer values, by
- * using one of the [Type Conversion Macros][glib-Type-Conversion-Macros],
- * or simply pointers to any type of data.
- *
- * List elements are allocated from the [slice allocator][glib-Memory-Slices],
- * which is more efficient than allocating elements individually.
- *
- * Note that most of the #GList functions expect to be passed a pointer
- * to the first element in the list. The functions which insert
- * elements return the new start of the list, which may have changed.
- *
- * There is no function to create a #GList. %NULL is considered to be
- * a valid, empty list so you simply set a #GList* to %NULL to initialize
- * it.
- *
- * To add elements, use g_list_append(), g_list_prepend(),
- * g_list_insert() and g_list_insert_sorted().
- *
- * To visit all elements in the list, use a loop over the list:
- * |[<!-- language="C" -->
- * GList *l;
- * for (l = list; l != NULL; l = l->next)
- *   {
- *     // do something with l->data
- *   }
- * ]|
- *
- * To call a function for each element in the list, use g_list_foreach().
- *
- * To loop over the list and modify it (e.g. remove a certain element)
- * a while loop is more appropriate, for example:
- * |[<!-- language="C" -->
- * GList *l = list;
- * while (l != NULL)
- *   {
- *     GList *next = l->next;
- *     if (should_be_removed (l))
- *       {
- *         // possibly free l->data
- *         list = g_list_delete_link (list, l);
- *       }
- *     l = next;
- *   }
- * ]|
- *
- * To remove elements, use g_list_remove().
- *
- * To navigate in a list, use g_list_first(), g_list_last(),
- * g_list_next(), g_list_previous().
- *
- * To find elements in the list use g_list_nth(), g_list_nth_data(),
- * g_list_find() and g_list_find_custom().
- *
- * To find the index of an element use g_list_position() and
- * g_list_index().
- *
- * To free the entire list, use g_list_free() or g_list_free_full().
- */
-
-
-/**
- * SECTION:linked_lists_single
- * @title: Singly-Linked Lists
- * @short_description: linked lists that can be iterated in one direction
- *
- * The #GSList structure and its associated functions provide a
- * standard singly-linked list data structure. The benefit of this
- * data-structure is to provide insertion/deletion operations in O(1)
- * complexity where access/search operations are in O(n). The benefit
- * of #GSList over #GList (doubly linked list) is that they are lighter
- * in space as they only need to retain one pointer but it double the
- * cost of the worst case access/search operations.
- *
- * Each element in the list contains a piece of data, together with a
- * pointer which links to the next element in the list. Using this
- * pointer it is possible to move through the list in one direction
- * only (unlike the [double-linked lists][glib-Doubly-Linked-Lists],
- * which allow movement in both directions).
- *
- * The data contained in each element can be either integer values, by
- * using one of the [Type Conversion Macros][glib-Type-Conversion-Macros],
- * or simply pointers to any type of data.
- *
- * List elements are allocated from the [slice allocator][glib-Memory-Slices],
- * which is more efficient than allocating elements individually.
- *
- * Note that most of the #GSList functions expect to be passed a
- * pointer to the first element in the list. The functions which insert
- * elements return the new start of the list, which may have changed.
- *
- * There is no function to create a #GSList. %NULL is considered to be
- * the empty list so you simply set a #GSList* to %NULL.
- *
- * To add elements, use g_slist_append(), g_slist_prepend(),
- * g_slist_insert() and g_slist_insert_sorted().
- *
- * To remove elements, use g_slist_remove().
- *
- * To find elements in the list use g_slist_last(), g_slist_next(),
- * g_slist_nth(), g_slist_nth_data(), g_slist_find() and
- * g_slist_find_custom().
- *
- * To find the index of an element use g_slist_position() and
- * g_slist_index().
- *
- * To call a function for each element in the list use
- * g_slist_foreach().
- *
- * To free the entire list, use g_slist_free().
- */
-
-
-/**
- * SECTION:macros
- * @title: Standard Macros
- * @short_description: commonly-used macros
- *
- * These macros provide a few commonly-used features.
- */
-
-
-/**
- * SECTION:macros_misc
- * @title: Miscellaneous Macros
- * @short_description: specialized macros which are not used often
- *
- * These macros provide more specialized features which are not
- * needed so often by application programmers.
- */
-
-
-/**
- * SECTION:main
- * @title: The Main Event Loop
- * @short_description: manages all available sources of events
- *
- * The main event loop manages all the available sources of events for
- * GLib and GTK applications. These events can come from any number of
- * different types of sources such as file descriptors (plain files,
- * pipes or sockets) and timeouts. New types of event sources can also
- * be added using g_source_attach().
- *
- * To allow multiple independent sets of sources to be handled in
- * different threads, each source is associated with a #GMainContext.
- * A #GMainContext can only be running in a single thread, but
- * sources can be added to it and removed from it from other threads. All
- * functions which operate on a #GMainContext or a built-in #GSource are
- * thread-safe.
- *
- * Each event source is assigned a priority. The default priority,
- * %G_PRIORITY_DEFAULT, is 0. Values less than 0 denote higher priorities.
- * Values greater than 0 denote lower priorities. Events from high priority
- * sources are always processed before events from lower priority sources: if
- * several sources are ready to dispatch, the ones with equal-highest priority
- * will be dispatched on the current #GMainContext iteration, and the rest wait
- * until a subsequent #GMainContext iteration when they have the highest
- * priority of the sources which are ready for dispatch.
- *
- * Idle functions can also be added, and assigned a priority. These will
- * be run whenever no events with a higher priority are ready to be dispatched.
- *
- * The #GMainLoop data type represents a main event loop. A GMainLoop is
- * created with g_main_loop_new(). After adding the initial event sources,
- * g_main_loop_run() is called. This continuously checks for new events from
- * each of the event sources and dispatches them. Finally, the processing of
- * an event from one of the sources leads to a call to g_main_loop_quit() to
- * exit the main loop, and g_main_loop_run() returns.
- *
- * It is possible to create new instances of #GMainLoop recursively.
- * This is often used in GTK applications when showing modal dialog
- * boxes. Note that event sources are associated with a particular
- * #GMainContext, and will be checked and dispatched for all main
- * loops associated with that GMainContext.
- *
- * GTK contains wrappers of some of these functions, e.g. gtk_main(),
- * gtk_main_quit() and gtk_events_pending().
- *
- * ## Creating new source types
- *
- * One of the unusual features of the #GMainLoop functionality
- * is that new types of event source can be created and used in
- * addition to the builtin type of event source. A new event source
- * type is used for handling GDK events. A new source type is created
- * by "deriving" from the #GSource structure. The derived type of
- * source is represented by a structure that has the #GSource structure
- * as a first element, and other elements specific to the new source
- * type. To create an instance of the new source type, call
- * g_source_new() passing in the size of the derived structure and
- * a table of functions. These #GSourceFuncs determine the behavior of
- * the new source type.
- *
- * New source types basically interact with the main context
- * in two ways. Their prepare function in #GSourceFuncs can set a timeout
- * to determine the maximum amount of time that the main loop will sleep
- * before checking the source again. In addition, or as well, the source
- * can add file descriptors to the set that the main context checks using
- * g_source_add_poll().
- *
- * ## Customizing the main loop iteration
- *
- * Single iterations of a #GMainContext can be run with
- * g_main_context_iteration(). In some cases, more detailed control
- * of exactly how the details of the main loop work is desired, for
- * instance, when integrating the #GMainLoop with an external main loop.
- * In such cases, you can call the component functions of
- * g_main_context_iteration() directly. These functions are
- * g_main_context_prepare(), g_main_context_query(),
- * g_main_context_check() and g_main_context_dispatch().
- *
- * If the event loop thread releases #GMainContext ownership until the results
- * required by g_main_context_check() are ready you must create a context with
- * the flag %G_MAIN_CONTEXT_FLAGS_OWNERLESS_POLLING or else you'll lose
- * g_source_attach() notifications. This happens for instance when you integrate
- * the GLib event loop into implementations that follow the proactor pattern
- * (i.e. in these contexts the `poll()` implementation will reclaim the thread for
- * other tasks until the results are ready). One example of the proactor pattern
- * is the Boost.Asio library.
- *
- * ## State of a Main Context # {#mainloop-states}
- *
- * The operation of these functions can best be seen in terms
- * of a state diagram, as shown in this image.
- *
- * ![](mainloop-states.gif)
- *
- * On UNIX, the GLib mainloop is incompatible with fork(). Any program
- * using the mainloop must either exec() or exit() from the child
- * without returning to the mainloop.
- *
- * ## Memory management of sources # {#mainloop-memory-management}
- *
- * There are two options for memory management of the user data passed to a
- * #GSource to be passed to its callback on invocation. This data is provided
- * in calls to g_timeout_add(), g_timeout_add_full(), g_idle_add(), etc. and
- * more generally, using g_source_set_callback(). This data is typically an
- * object which ‘owns’ the timeout or idle callback, such as a widget or a
- * network protocol implementation. In many cases, it is an error for the
- * callback to be invoked after this owning object has been destroyed, as that
- * results in use of freed memory.
- *
- * The first, and preferred, option is to store the source ID returned by
- * functions such as g_timeout_add() or g_source_attach(), and explicitly
- * remove that source from the main context using g_source_remove() when the
- * owning object is finalized. This ensures that the callback can only be
- * invoked while the object is still alive.
- *
- * The second option is to hold a strong reference to the object in the
- * callback, and to release it in the callback’s #GDestroyNotify. This ensures
- * that the object is kept alive until after the source is finalized, which is
- * guaranteed to be after it is invoked for the final time. The #GDestroyNotify
- * is another callback passed to the ‘full’ variants of #GSource functions (for
- * example, g_timeout_add_full()). It is called when the source is finalized,
- * and is designed for releasing references like this.
- *
- * One important caveat of this second approach is that it will keep the object
- * alive indefinitely if the main loop is stopped before the #GSource is
- * invoked, which may be undesirable.
- */
-
-
-/**
- * SECTION:markup
- * @Title: Simple XML Subset Parser
- * @Short_description: parses a subset of XML
- * @See_also: [XML Specification](http://www.w3.org/TR/REC-xml/)
- *
- * The "GMarkup" parser is intended to parse a simple markup format
- * that's a subset of XML. This is a small, efficient, easy-to-use
- * parser. It should not be used if you expect to interoperate with
- * other applications generating full-scale XML, and must not be used if you
- * expect to parse untrusted input. However, it's very
- * useful for application data files, config files, etc. where you
- * know your application will be the only one writing the file.
- * Full-scale XML parsers should be able to parse the subset used by
- * GMarkup, so you can easily migrate to full-scale XML at a later
- * time if the need arises.
- *
- * GMarkup is not guaranteed to signal an error on all invalid XML;
- * the parser may accept documents that an XML parser would not.
- * However, XML documents which are not well-formed (which is a
- * weaker condition than being valid. See the
- * [XML specification](http://www.w3.org/TR/REC-xml/)
- * for definitions of these terms.) are not considered valid GMarkup
- * documents.
- *
- * Simplifications to XML include:
- *
- * - Only UTF-8 encoding is allowed
- *
- * - No user-defined entities
- *
- * - Processing instructions, comments and the doctype declaration
- *   are "passed through" but are not interpreted in any way
- *
- * - No DTD or validation
- *
- * The markup format does support:
- *
- * - Elements
- *
- * - Attributes
- *
- * - 5 standard entities: &amp; &lt; &gt; &quot; &apos;
- *
- * - Character references
- *
- * - Sections marked as CDATA
- *
- * ## An example parser # {#example}
- *
- * Here is an example for a markup parser:
- * [markup-example.c](https://gitlab.gnome.org/GNOME/glib/-/blob/HEAD/glib/tests/markup-example.c)
- */
-
-
-/**
  * SECTION:memory
  * @Short_Description: general memory-handling
  * @Title: Memory Allocation
@@ -7928,208 +6364,6 @@
 
 
 /**
- * SECTION:memory_slices
- * @title: Memory Slices
- * @short_description: efficient way to allocate groups of equal-sized
- *     chunks of memory
- *
- * GSlice was a space-efficient and multi-processing scalable way to allocate
- * equal sized pieces of memory. Since GLib 2.76, its implementation has been
- * removed and it calls g_malloc() and g_free_sized(), because the performance
- * of the system-default allocators has improved on all platforms since GSlice
- * was written.
- *
- * The GSlice APIs have not been deprecated, as they are widely in use and doing
- * so would be very disruptive for little benefit.
- *
- * New code should be written using g_new()/g_malloc() and g_free_sized() or
- * g_free(). There is no particular benefit in porting existing code away from
- * g_slice_new()/g_slice_free() unless it’s being rewritten anyway.
- *
- * Here is an example for using the slice allocator:
- * |[<!-- language="C" -->
- * gchar *mem[10000];
- * gint i;
- *
- * // Allocate 10000 blocks.
- * for (i = 0; i < 10000; i++)
- *   {
- *     mem[i] = g_slice_alloc (50);
- *
- *     // Fill in the memory with some junk.
- *     for (j = 0; j < 50; j++)
- *       mem[i][j] = i * j;
- *   }
- *
- * // Now free all of the blocks.
- * for (i = 0; i < 10000; i++)
- *   g_slice_free1 (50, mem[i]);
- * ]|
- *
- * And here is an example for using the using the slice allocator
- * with data structures:
- * |[<!-- language="C" -->
- * GRealArray *array;
- *
- * // Allocate one block, using the g_slice_new() macro.
- * array = g_slice_new (GRealArray);
- *
- * // We can now use array just like a normal pointer to a structure.
- * array->data            = NULL;
- * array->len             = 0;
- * array->alloc           = 0;
- * array->zero_terminated = (zero_terminated ? 1 : 0);
- * array->clear           = (clear ? 1 : 0);
- * array->elt_size        = elt_size;
- *
- * // We can free the block, so it can be reused.
- * g_slice_free (GRealArray, array);
- * ]|
- */
-
-
-/**
- * SECTION:messages
- * @Title: Message Output and Debugging Functions
- * @Short_description: functions to output messages and help debug applications
- *
- * These functions provide support for outputting messages.
- *
- * The g_return family of macros (g_return_if_fail(),
- * g_return_val_if_fail(), g_return_if_reached(),
- * g_return_val_if_reached()) should only be used for programming
- * errors, a typical use case is checking for invalid parameters at
- * the beginning of a public function. They should not be used if
- * you just mean "if (error) return", they should only be used if
- * you mean "if (bug in program) return". The program behavior is
- * generally considered undefined after one of these checks fails.
- * They are not intended for normal control flow, only to give a
- * perhaps-helpful warning before giving up.
- *
- * Structured logging output is supported using g_log_structured(). This differs
- * from the traditional g_log() API in that log messages are handled as a
- * collection of key–value pairs representing individual pieces of information,
- * rather than as a single string containing all the information in an arbitrary
- * format.
- *
- * The convenience macros g_info(), g_message(), g_debug(), g_warning() and g_error()
- * will use the traditional g_log() API unless you define the symbol
- * %G_LOG_USE_STRUCTURED before including `glib.h`. But note that even messages
- * logged through the traditional g_log() API are ultimatively passed to
- * g_log_structured(), so that all log messages end up in same destination.
- * If %G_LOG_USE_STRUCTURED is defined, g_test_expect_message() will become
- * ineffective for the wrapper macros g_warning() and friends (see
- * [Testing for Messages][testing-for-messages]).
- *
- * The support for structured logging was motivated by the following needs (some
- * of which were supported previously; others weren’t):
- *  * Support for multiple logging levels.
- *  * Structured log support with the ability to add `MESSAGE_ID`s (see
- *    g_log_structured()).
- *  * Moving the responsibility for filtering log messages from the program to
- *    the log viewer — instead of libraries and programs installing log handlers
- *    (with g_log_set_handler()) which filter messages before output, all log
- *    messages are outputted, and the log viewer program (such as `journalctl`)
- *    must filter them. This is based on the idea that bugs are sometimes hard
- *    to reproduce, so it is better to log everything possible and then use
- *    tools to analyse the logs than it is to not be able to reproduce a bug to
- *    get additional log data. Code which uses logging in performance-critical
- *    sections should compile out the g_log_structured() calls in
- *    release builds, and compile them in in debugging builds.
- *  * A single writer function which handles all log messages in a process, from
- *    all libraries and program code; rather than multiple log handlers with
- *    poorly defined interactions between them. This allows a program to easily
- *    change its logging policy by changing the writer function, for example to
- *    log to an additional location or to change what logging output fallbacks
- *    are used. The log writer functions provided by GLib are exposed publicly
- *    so they can be used from programs’ log writers. This allows log writer
- *    policy and implementation to be kept separate.
- *  * If a library wants to add standard information to all of its log messages
- *    (such as library state) or to redact private data (such as passwords or
- *    network credentials), it should use a wrapper function around its
- *    g_log_structured() calls or implement that in the single log writer
- *    function.
- *  * If a program wants to pass context data from a g_log_structured() call to
- *    its log writer function so that, for example, it can use the correct
- *    server connection to submit logs to, that user data can be passed as a
- *    zero-length #GLogField to g_log_structured_array().
- *  * Color output needed to be supported on the terminal, to make reading
- *    through logs easier.
- *
- * ## Using Structured Logging ## {#using-structured-logging}
- *
- * To use structured logging (rather than the old-style logging), either use
- * the g_log_structured() and g_log_structured_array() functions; or define
- * `G_LOG_USE_STRUCTURED` before including any GLib header, and use the
- * g_message(), g_debug(), g_error() (etc.) macros.
- *
- * You do not need to define `G_LOG_USE_STRUCTURED` to use g_log_structured(),
- * but it is a good idea to avoid confusion.
- *
- * ## Log Domains ## {#log-domains}
- *
- * Log domains may be used to broadly split up the origins of log messages.
- * Typically, there are one or a few log domains per application or library.
- * %G_LOG_DOMAIN should be used to define the default log domain for the current
- * compilation unit — it is typically defined at the top of a source file, or in
- * the preprocessor flags for a group of source files.
- *
- * Log domains must be unique, and it is recommended that they are the
- * application or library name, optionally followed by a hyphen and a sub-domain
- * name. For example, `bloatpad` or `bloatpad-io`.
- *
- * ## Debug Message Output ## {#debug-message-output}
- *
- * The default log functions (g_log_default_handler() for the old-style API and
- * g_log_writer_default() for the structured API) both drop debug and
- * informational messages by default, unless the log domains of those messages
- * are listed in the `G_MESSAGES_DEBUG` environment variable (or it is set to
- * `all`).
- *
- * It is recommended that custom log writer functions re-use the
- * `G_MESSAGES_DEBUG` environment variable, rather than inventing a custom one,
- * so that developers can re-use the same debugging techniques and tools across
- * projects. Since GLib 2.68, this can be implemented by dropping messages
- * for which g_log_writer_default_would_drop() returns %TRUE.
- *
- * ## Testing for Messages ## {#testing-for-messages}
- *
- * With the old g_log() API, g_test_expect_message() and
- * g_test_assert_expected_messages() could be used in simple cases to check
- * whether some code under test had emitted a given log message. These
- * functions have been deprecated with the structured logging API, for several
- * reasons:
- *  * They relied on an internal queue which was too inflexible for many use
- *    cases, where messages might be emitted in several orders, some
- *    messages might not be emitted deterministically, or messages might be
- *    emitted by unrelated log domains.
- *  * They do not support structured log fields.
- *  * Examining the log output of code is a bad approach to testing it, and
- *    while it might be necessary for legacy code which uses g_log(), it should
- *    be avoided for new code using g_log_structured().
- *
- * They will continue to work as before if g_log() is in use (and
- * %G_LOG_USE_STRUCTURED is not defined). They will do nothing if used with the
- * structured logging API.
- *
- * Examining the log output of code is discouraged: libraries should not emit to
- * `stderr` during defined behaviour, and hence this should not be tested. If
- * the log emissions of a library during undefined behaviour need to be tested,
- * they should be limited to asserting that the library aborts and prints a
- * suitable error message before aborting. This should be done with
- * g_test_trap_assert_stderr().
- *
- * If it is really necessary to test the structured log messages emitted by a
- * particular piece of code – and the code cannot be restructured to be more
- * suitable to more conventional unit testing – you should write a custom log
- * writer function (see g_log_set_writer_func()) which appends all log messages
- * to a queue. When you want to check the log messages, examine and clear the
- * queue, ignoring irrelevant log messages (for example, from log domains other
- * than the one under test).
- */
-
-
-/**
  * SECTION:misc_utils
  * @title: Miscellaneous Utility Functions
  * @short_description: a selection of portable utility functions
@@ -8153,91 +6387,6 @@
  * supported (used for storage) by at least Intel, PPC and Sparc. See
  * [IEEE 754-2008](http://en.wikipedia.org/wiki/IEEE_float)
  * for more information about IEEE number formats.
- */
-
-
-/**
- * SECTION:patterns
- * @title: Glob-style pattern matching
- * @short_description: matches strings against patterns containing '*'
- *                     (wildcard) and '?' (joker)
- *
- * The g_pattern_match* functions match a string
- * against a pattern containing '*' and '?' wildcards with similar
- * semantics as the standard glob() function: '*' matches an arbitrary,
- * possibly empty, string, '?' matches an arbitrary character.
- *
- * Note that in contrast to glob(), the '/' character can be matched by
- * the wildcards, there are no '[...]' character ranges and '*' and '?'
- * can not be escaped to include them literally in a pattern.
- *
- * When multiple strings must be matched against the same pattern, it
- * is better to compile the pattern to a #GPatternSpec using
- * g_pattern_spec_new() and use g_pattern_match_string() instead of
- * g_pattern_match_simple(). This avoids the overhead of repeated
- * pattern compilation.
- */
-
-
-/**
- * SECTION:quarks
- * @title: Quarks
- * @short_description: a 2-way association between a string and a
- *     unique integer identifier
- *
- * Quarks are associations between strings and integer identifiers.
- * Given either the string or the #GQuark identifier it is possible to
- * retrieve the other.
- *
- * Quarks are used for both [datasets][glib-Datasets] and
- * [keyed data lists][glib-Keyed-Data-Lists].
- *
- * To create a new quark from a string, use g_quark_from_string() or
- * g_quark_from_static_string().
- *
- * To find the string corresponding to a given #GQuark, use
- * g_quark_to_string().
- *
- * To find the #GQuark corresponding to a given string, use
- * g_quark_try_string().
- *
- * Another use for the string pool maintained for the quark functions
- * is string interning, using g_intern_string() or
- * g_intern_static_string(). An interned string is a canonical
- * representation for a string. One important advantage of interned
- * strings is that they can be compared for equality by a simple
- * pointer comparison, rather than using strcmp().
- */
-
-
-/**
- * SECTION:queue
- * @Title: Double-ended Queues
- * @Short_description: double-ended queue data structure
- *
- * The #GQueue structure and its associated functions provide a standard
- * queue data structure. Internally, GQueue uses the same data structure
- * as #GList to store elements with the same complexity over
- * insertion/deletion (O(1)) and access/search (O(n)) operations.
- *
- * The data contained in each element can be either integer values, by
- * using one of the [Type Conversion Macros][glib-Type-Conversion-Macros],
- * or simply pointers to any type of data.
- *
- * As with all other GLib data structures, #GQueue is not thread-safe.
- * For a thread-safe queue, use #GAsyncQueue.
- *
- * To create a new GQueue, use g_queue_new().
- *
- * To initialize a statically-allocated GQueue, use %G_QUEUE_INIT or
- * g_queue_init().
- *
- * To add elements, use g_queue_push_head(), g_queue_push_head_link(),
- * g_queue_push_tail() and g_queue_push_tail_link().
- *
- * To remove elements, use g_queue_pop_head() and g_queue_pop_tail().
- *
- * To free the entire queue, use g_queue_free().
  */
 
 
@@ -8290,290 +6439,6 @@
  * environment variable `G_RANDOM_VERSION` to the value of '2.0'.
  * Use the GLib-2.0 algorithms only if you have sequences of numbers
  * generated with Glib-2.0 that you need to reproduce exactly.
- */
-
-
-/**
- * SECTION:rcbox
- * @Title: Reference counted data
- * @Short_description: Allocated memory with reference counting semantics
- *
- * A "reference counted box", or "RcBox", is an opaque wrapper data type
- * that is guaranteed to be as big as the size of a given data type, and
- * which augments the given data type with reference counting semantics
- * for its memory management.
- *
- * RcBox is useful if you have a plain old data type, like a structure
- * typically placed on the stack, and you wish to provide additional API
- * to use it on the heap; or if you want to implement a new type to be
- * passed around by reference without necessarily implementing copy/free
- * semantics or your own reference counting.
- *
- * The typical use is:
- *
- * |[<!-- language="C" -->
- * typedef struct {
- *   char *name;
- *   char *address;
- *   char *city;
- *   char *state;
- *   int age;
- * } Person;
- *
- * Person *
- * person_new (void)
- * {
- *   return g_rc_box_new0 (Person);
- * }
- * ]|
- *
- * Every time you wish to acquire a reference on the memory, you should
- * call g_rc_box_acquire(); similarly, when you wish to release a reference
- * you should call g_rc_box_release():
- *
- * |[<!-- language="C" -->
- * // Add a Person to the Database; the Database acquires ownership
- * // of the Person instance
- * void
- * add_person_to_database (Database *db, Person *p)
- * {
- *   db->persons = g_list_prepend (db->persons, g_rc_box_acquire (p));
- * }
- *
- * // Removes a Person from the Database; the reference acquired by
- * // add_person_to_database() is released here
- * void
- * remove_person_from_database (Database *db, Person *p)
- * {
- *   db->persons = g_list_remove (db->persons, p);
- *   g_rc_box_release (p);
- * }
- * ]|
- *
- * If you have additional memory allocated inside the structure, you can
- * use g_rc_box_release_full(), which takes a function pointer, which
- * will be called if the reference released was the last:
- *
- * |[<!-- language="C" -->
- * void
- * person_clear (Person *p)
- * {
- *   g_free (p->name);
- *   g_free (p->address);
- *   g_free (p->city);
- *   g_free (p->state);
- * }
- *
- * void
- * remove_person_from_database (Database *db, Person *p)
- * {
- *   db->persons = g_list_remove (db->persons, p);
- *   g_rc_box_release_full (p, (GDestroyNotify) person_clear);
- * }
- * ]|
- *
- * If you wish to transfer the ownership of a reference counted data
- * type without increasing the reference count, you can use g_steal_pointer():
- *
- * |[<!-- language="C" -->
- *   Person *p = g_rc_box_new (Person);
- *
- *   // fill_person_details() is defined elsewhere
- *   fill_person_details (p);
- *
- *   // add_person_to_database_no_ref() is defined elsewhere; it adds
- *   // a Person to the Database without taking a reference
- *   add_person_to_database_no_ref (db, g_steal_pointer (&p));
- * ]|
- *
- * ## Thread safety
- *
- * The reference counting operations on data allocated using g_rc_box_alloc(),
- * g_rc_box_new(), and g_rc_box_dup() are not thread safe; it is your code's
- * responsibility to ensure that references are acquired are released on the
- * same thread.
- *
- * If you need thread safe reference counting, see the [atomic reference counted
- * data][arcbox] API.
- *
- * ## Automatic pointer clean up
- *
- * If you want to add g_autoptr() support to your plain old data type through
- * reference counting, you can use the G_DEFINE_AUTOPTR_CLEANUP_FUNC() and
- * g_rc_box_release():
- *
- * |[<!-- language="C" -->
- * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, g_rc_box_release)
- * ]|
- *
- * If you need to clear the contents of the data, you will need to use an
- * ancillary function that calls g_rc_box_release_full():
- *
- * |[<!-- language="C" -->
- * static void
- * my_data_struct_release (MyDataStruct *data)
- * {
- *   // my_data_struct_clear() is defined elsewhere
- *   g_rc_box_release_full (data, (GDestroyNotify) my_data_struct_clear);
- * }
- *
- * G_DEFINE_AUTOPTR_CLEANUP_FUNC (MyDataStruct, my_data_struct_release)
- * ]|
- *
- * Since: 2.58
- */
-
-
-/**
- * SECTION:refcount
- * @Title: Reference counting
- * @Short_description: Reference counting types and functions
- *
- * Reference counting is a garbage collection mechanism that is based on
- * assigning a counter to a data type, or any memory area; the counter is
- * increased whenever a new reference to that data type is acquired, and
- * decreased whenever the reference is released. Once the last reference
- * is released, the resources associated to that data type are freed.
- *
- * GLib uses reference counting in many of its data types, and provides
- * the #grefcount and #gatomicrefcount types to implement safe and atomic
- * reference counting semantics in new data types.
- *
- * It is important to note that #grefcount and #gatomicrefcount should be
- * considered completely opaque types; you should always use the provided
- * API to increase and decrease the counters, and you should never check
- * their content directly, or compare their content with other values.
- *
- * Since: 2.58
- */
-
-
-/**
- * SECTION:refstring
- * @Title: Reference counted strings
- * @Short_description: Strings with reference counted memory management
- *
- * Reference counted strings are normal C strings that have been augmented
- * with a reference counter to manage their resources. You allocate a new
- * reference counted string and acquire and release references as needed,
- * instead of copying the string among callers; when the last reference on
- * the string is released, the resources allocated for it are freed.
- *
- * Typically, reference counted strings can be used when parsing data from
- * files and storing them into data structures that are passed to various
- * callers:
- *
- * |[<!-- language="C" -->
- * PersonDetails *
- * person_details_from_data (const char *data)
- * {
- *   // Use g_autoptr() to simplify error cases
- *   g_autoptr(GRefString) full_name = NULL;
- *   g_autoptr(GRefString) address =  NULL;
- *   g_autoptr(GRefString) city = NULL;
- *   g_autoptr(GRefString) state = NULL;
- *   g_autoptr(GRefString) zip_code = NULL;
- *
- *   // parse_person_details() is defined elsewhere; returns refcounted strings
- *   if (!parse_person_details (data, &full_name, &address, &city, &state, &zip_code))
- *     return NULL;
- *
- *   if (!validate_zip_code (zip_code))
- *     return NULL;
- *
- *   // add_address_to_cache() and add_full_name_to_cache() are defined
- *   // elsewhere; they add strings to various caches, using refcounted
- *   // strings to avoid copying data over and over again
- *   add_address_to_cache (address, city, state, zip_code);
- *   add_full_name_to_cache (full_name);
- *
- *   // person_details_new() is defined elsewhere; it takes a reference
- *   // on each string
- *   PersonDetails *res = person_details_new (full_name,
- *                                            address,
- *                                            city,
- *                                            state,
- *                                            zip_code);
- *
- *   return res;
- * }
- * ]|
- *
- * In the example above, we have multiple functions taking the same strings
- * for different uses; with typical C strings, we'd have to copy the strings
- * every time the life time rules of the data differ from the life time of
- * the string parsed from the original buffer. With reference counted strings,
- * each caller can take a reference on the data, and keep it as long as it
- * needs to own the string.
- *
- * Reference counted strings can also be "interned" inside a global table
- * owned by GLib; while an interned string has at least a reference, creating
- * a new interned reference counted string with the same contents will return
- * a reference to the existing string instead of creating a new reference
- * counted string instance. Once the string loses its last reference, it will
- * be automatically removed from the global interned strings table.
- *
- * Since: 2.58
- */
-
-
-/**
- * SECTION:scanner
- * @title: Lexical Scanner
- * @short_description: a general purpose lexical scanner
- *
- * The #GScanner and its associated functions provide a
- * general purpose lexical scanner.
- */
-
-
-/**
- * SECTION:sequence
- * @title: Sequences
- * @short_description: scalable lists
- *
- * The #GSequence data structure has the API of a list, but is
- * implemented internally with a balanced binary tree. This means that
- * most of the operations  (access, search, insertion, deletion, ...) on
- * #GSequence are O(log(n)) in average and O(n) in worst case for time
- * complexity. But, note that maintaining a balanced sorted list of n
- * elements is done in time O(n log(n)).
- * The data contained in each element can be either integer values, by using
- * of the [Type Conversion Macros][glib-Type-Conversion-Macros], or simply
- * pointers to any type of data.
- *
- * A #GSequence is accessed through "iterators", represented by a
- * #GSequenceIter. An iterator represents a position between two
- * elements of the sequence. For example, the "begin" iterator
- * represents the gap immediately before the first element of the
- * sequence, and the "end" iterator represents the gap immediately
- * after the last element. In an empty sequence, the begin and end
- * iterators are the same.
- *
- * Some methods on #GSequence operate on ranges of items. For example
- * g_sequence_foreach_range() will call a user-specified function on
- * each element with the given range. The range is delimited by the
- * gaps represented by the passed-in iterators, so if you pass in the
- * begin and end iterators, the range in question is the entire
- * sequence.
- *
- * The function g_sequence_get() is used with an iterator to access the
- * element immediately following the gap that the iterator represents.
- * The iterator is said to "point" to that element.
- *
- * Iterators are stable across most operations on a #GSequence. For
- * example an iterator pointing to some element of a sequence will
- * continue to point to that element even after the sequence is sorted.
- * Even moving an element to another sequence using for example
- * g_sequence_move_range() will not invalidate the iterators pointing
- * to it. The only operation that will invalidate an iterator is when
- * the element it points to is removed from any sequence.
- *
- * To sort the data, either use g_sequence_insert_sorted() or
- * g_sequence_insert_sorted_iter() to add data to the #GSequence or, if
- * you want to add a large amount of data, it is more efficient to call
- * g_sequence_sort() or g_sequence_sort_iter() after doing unsorted
- * insertions.
  */
 
 
@@ -8654,36 +6519,6 @@
 
 
 /**
- * SECTION:string_chunks
- * @title: String Chunks
- * @short_description: efficient storage of groups of strings
- *
- * String chunks are used to store groups of strings. Memory is
- * allocated in blocks, and as strings are added to the #GStringChunk
- * they are copied into the next free position in a block. When a block
- * is full a new block is allocated.
- *
- * When storing a large number of strings, string chunks are more
- * efficient than using g_strdup() since fewer calls to malloc() are
- * needed, and less memory is wasted in memory allocation overheads.
- *
- * By adding strings with g_string_chunk_insert_const() it is also
- * possible to remove duplicates.
- *
- * To create a new #GStringChunk use g_string_chunk_new().
- *
- * To add strings to a #GStringChunk use g_string_chunk_insert().
- *
- * To add strings to a #GStringChunk, but without duplicating strings
- * which are already in the #GStringChunk, use
- * g_string_chunk_insert_const().
- *
- * To free the entire #GStringChunk use g_string_chunk_free(). It is
- * not possible to free individual strings.
- */
-
-
-/**
  * SECTION:string_utils
  * @title: String Utility Functions
  * @short_description: various string-related functions
@@ -8723,399 +6558,6 @@
 
 
 /**
- * SECTION:strings
- * @title: Strings
- * @short_description: text buffers which grow automatically
- *     as text is added
- *
- * A #GString is an object that handles the memory management of a C
- * string for you.  The emphasis of #GString is on text, typically
- * UTF-8.  Crucially, the "str" member of a #GString is guaranteed to
- * have a trailing nul character, and it is therefore always safe to
- * call functions such as strchr() or g_strdup() on it.
- *
- * However, a #GString can also hold arbitrary binary data, because it
- * has a "len" member, which includes any possible embedded nul
- * characters in the data.  Conceptually then, #GString is like a
- * #GByteArray with the addition of many convenience methods for text,
- * and a guaranteed nul terminator.
- */
-
-
-/**
- * SECTION:testing
- * @title: Testing
- * @short_description: a test framework
- *
- * GLib provides a framework for writing and maintaining unit tests
- * in parallel to the code they are testing. The API is designed according
- * to established concepts found in the other test frameworks (JUnit, NUnit,
- * RUnit), which in turn is based on smalltalk unit testing concepts.
- *
- * - Test case: Tests (test methods) are grouped together with their
- *   fixture into test cases.
- *
- * - Fixture: A test fixture consists of fixture data and setup and
- *   teardown methods to establish the environment for the test
- *   functions. We use fresh fixtures, i.e. fixtures are newly set
- *   up and torn down around each test invocation to avoid dependencies
- *   between tests.
- *
- * - Test suite: Test cases can be grouped into test suites, to allow
- *   subsets of the available tests to be run. Test suites can be
- *   grouped into other test suites as well.
- *
- * The API is designed to handle creation and registration of test suites
- * and test cases implicitly. A simple call like
- * |[<!-- language="C" -->
- *   g_test_init (&argc, &argv, G_TEST_OPTION_ISOLATE_DIRS, NULL);
- *
- *   g_test_add_func ("/misc/assertions", test_assertions);
- * ]|
- * creates a test suite called "misc" with a single test case named
- * "assertions", which consists of running the test_assertions function.
- *
- * g_test_init() should be called before calling any other test functions.
- *
- * In addition to the traditional g_assert_true(), the test framework provides
- * an extended set of assertions for comparisons: g_assert_cmpfloat(),
- * g_assert_cmpfloat_with_epsilon(), g_assert_cmpint(), g_assert_cmpuint(),
- * g_assert_cmphex(), g_assert_cmpstr(), g_assert_cmpmem() and
- * g_assert_cmpvariant(). The
- * advantage of these variants over plain g_assert_true() is that the assertion
- * messages can be more elaborate, and include the values of the compared
- * entities.
- *
- * Note that g_assert() should not be used in unit tests, since it is a no-op
- * when compiling with `G_DISABLE_ASSERT`. Use g_assert() in production code,
- * and g_assert_true() in unit tests.
- *
- * A full example of creating a test suite with two tests using fixtures:
- * |[<!-- language="C" -->
- * #include <glib.h>
- * #include <locale.h>
- *
- * typedef struct {
- *   MyObject *obj;
- *   OtherObject *helper;
- * } MyObjectFixture;
- *
- * static void
- * my_object_fixture_set_up (MyObjectFixture *fixture,
- *                           gconstpointer user_data)
- * {
- *   fixture->obj = my_object_new ();
- *   my_object_set_prop1 (fixture->obj, "some-value");
- *   my_object_do_some_complex_setup (fixture->obj, user_data);
- *
- *   fixture->helper = other_object_new ();
- * }
- *
- * static void
- * my_object_fixture_tear_down (MyObjectFixture *fixture,
- *                              gconstpointer user_data)
- * {
- *   g_clear_object (&fixture->helper);
- *   g_clear_object (&fixture->obj);
- * }
- *
- * static void
- * test_my_object_test1 (MyObjectFixture *fixture,
- *                       gconstpointer user_data)
- * {
- *   g_assert_cmpstr (my_object_get_property (fixture->obj), ==, "initial-value");
- * }
- *
- * static void
- * test_my_object_test2 (MyObjectFixture *fixture,
- *                       gconstpointer user_data)
- * {
- *   my_object_do_some_work_using_helper (fixture->obj, fixture->helper);
- *   g_assert_cmpstr (my_object_get_property (fixture->obj), ==, "updated-value");
- * }
- *
- * int
- * main (int argc, char *argv[])
- * {
- *   setlocale (LC_ALL, "");
- *
- *   g_test_init (&argc, &argv, NULL);
- *
- *   // Define the tests.
- *   g_test_add ("/my-object/test1", MyObjectFixture, "some-user-data",
- *               my_object_fixture_set_up, test_my_object_test1,
- *               my_object_fixture_tear_down);
- *   g_test_add ("/my-object/test2", MyObjectFixture, "some-user-data",
- *               my_object_fixture_set_up, test_my_object_test2,
- *               my_object_fixture_tear_down);
- *
- *   return g_test_run ();
- * }
- * ]|
- *
- * ## Integrating GTest in your project
- *
- * If you are using the [Meson](http://mesonbuild.com) build system, you will
- * typically use the provided `test()` primitive to call the test binaries,
- * e.g.:
- *
- * |[<!-- language="plain" -->
- *   test(
- *     'foo',
- *     executable('foo', 'foo.c', dependencies: deps),
- *     env: [
- *       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
- *       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
- *     ],
- *   )
- *
- *   test(
- *     'bar',
- *     executable('bar', 'bar.c', dependencies: deps),
- *     env: [
- *       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
- *       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
- *     ],
- *   )
- * ]|
- *
- * If you are using Autotools, you're strongly encouraged to use the Automake
- * [TAP](https://testanything.org/) harness; GLib provides template files for
- * easily integrating with it:
- *
- *   - [glib-tap.mk](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/glib-tap.mk)
- *   - [tap-test](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/tap-test)
- *   - [tap-driver.sh](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/tap-driver.sh)
- *
- * You can copy these files in your own project's root directory, and then
- * set up your `Makefile.am` file to reference them, for instance:
- *
- * |[<!-- language="plain" -->
- * include $(top_srcdir)/glib-tap.mk
- *
- * # test binaries
- * test_programs = \
- *   foo \
- *   bar
- *
- * # data distributed in the tarball
- * dist_test_data = \
- *   foo.data.txt \
- *   bar.data.txt
- *
- * # data not distributed in the tarball
- * test_data = \
- *   blah.data.txt
- * ]|
- *
- * Make sure to distribute the TAP files, using something like the following
- * in your top-level `Makefile.am`:
- *
- * |[<!-- language="plain" -->
- * EXTRA_DIST += \
- *   tap-driver.sh \
- *   tap-test
- * ]|
- *
- * `glib-tap.mk` will be distributed implicitly due to being included in a
- * `Makefile.am`. All three files should be added to version control.
- *
- * If you don't have access to the Autotools TAP harness, you can use the
- * [gtester][gtester] and [gtester-report][gtester-report] tools, and use
- * the [glib.mk](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/glib.mk)
- * Automake template provided by GLib. Note, however, that since GLib 2.62,
- * [gtester][gtester] and [gtester-report][gtester-report] have been deprecated
- * in favour of using TAP. The `--tap` argument to tests is enabled by default
- * as of GLib 2.62.
- */
-
-
-/**
- * SECTION:thread_pools
- * @title: Thread Pools
- * @short_description: pools of threads to execute work concurrently
- * @see_also: #GThread
- *
- * Sometimes you wish to asynchronously fork out the execution of work
- * and continue working in your own thread. If that will happen often,
- * the overhead of starting and destroying a thread each time might be
- * too high. In such cases reusing already started threads seems like a
- * good idea. And it indeed is, but implementing this can be tedious
- * and error-prone.
- *
- * Therefore GLib provides thread pools for your convenience. An added
- * advantage is, that the threads can be shared between the different
- * subsystems of your program, when they are using GLib.
- *
- * To create a new thread pool, you use g_thread_pool_new().
- * It is destroyed by g_thread_pool_free().
- *
- * If you want to execute a certain task within a thread pool,
- * you call g_thread_pool_push().
- *
- * To get the current number of running threads you call
- * g_thread_pool_get_num_threads(). To get the number of still
- * unprocessed tasks you call g_thread_pool_unprocessed(). To control
- * the maximal number of threads for a thread pool, you use
- * g_thread_pool_get_max_threads() and g_thread_pool_set_max_threads().
- *
- * Finally you can control the number of unused threads, that are kept
- * alive by GLib for future use. The current number can be fetched with
- * g_thread_pool_get_num_unused_threads(). The maximal number can be
- * controlled by g_thread_pool_get_max_unused_threads() and
- * g_thread_pool_set_max_unused_threads(). All currently unused threads
- * can be stopped by calling g_thread_pool_stop_unused_threads().
- */
-
-
-/**
- * SECTION:threads
- * @title: Threads
- * @short_description: portable support for threads, mutexes, locks,
- *     conditions and thread private data
- * @see_also: #GThreadPool, #GAsyncQueue
- *
- * Threads act almost like processes, but unlike processes all threads
- * of one process share the same memory. This is good, as it provides
- * easy communication between the involved threads via this shared
- * memory, and it is bad, because strange things (so called
- * "Heisenbugs") might happen if the program is not carefully designed.
- * In particular, due to the concurrent nature of threads, no
- * assumptions on the order of execution of code running in different
- * threads can be made, unless order is explicitly forced by the
- * programmer through synchronization primitives.
- *
- * The aim of the thread-related functions in GLib is to provide a
- * portable means for writing multi-threaded software. There are
- * primitives for mutexes to protect the access to portions of memory
- * (#GMutex, #GRecMutex and #GRWLock). There is a facility to use
- * individual bits for locks (g_bit_lock()). There are primitives
- * for condition variables to allow synchronization of threads (#GCond).
- * There are primitives for thread-private data - data that every
- * thread has a private instance of (#GPrivate). There are facilities
- * for one-time initialization (#GOnce, g_once_init_enter()). Finally,
- * there are primitives to create and manage threads (#GThread).
- *
- * The GLib threading system used to be initialized with g_thread_init().
- * This is no longer necessary. Since version 2.32, the GLib threading
- * system is automatically initialized at the start of your program,
- * and all thread-creation functions and synchronization primitives
- * are available right away.
- *
- * Note that it is not safe to assume that your program has no threads
- * even if you don't call g_thread_new() yourself. GLib and GIO can
- * and will create threads for their own purposes in some cases, such
- * as when using g_unix_signal_source_new() or when using GDBus.
- *
- * Originally, UNIX did not have threads, and therefore some traditional
- * UNIX APIs are problematic in threaded programs. Some notable examples
- * are
- *
- * - C library functions that return data in statically allocated
- *   buffers, such as strtok() or strerror(). For many of these,
- *   there are thread-safe variants with a _r suffix, or you can
- *   look at corresponding GLib APIs (like g_strsplit() or g_strerror()).
- *
- * - The functions setenv() and unsetenv() manipulate the process
- *   environment in a not thread-safe way, and may interfere with getenv()
- *   calls in other threads. Note that getenv() calls may be hidden behind
- *   other APIs. For example, GNU gettext() calls getenv() under the
- *   covers. In general, it is best to treat the environment as readonly.
- *   If you absolutely have to modify the environment, do it early in
- *   main(), when no other threads are around yet.
- *
- * - The setlocale() function changes the locale for the entire process,
- *   affecting all threads. Temporary changes to the locale are often made
- *   to change the behavior of string scanning or formatting functions
- *   like scanf() or printf(). GLib offers a number of string APIs
- *   (like g_ascii_formatd() or g_ascii_strtod()) that can often be
- *   used as an alternative. Or you can use the uselocale() function
- *   to change the locale only for the current thread.
- *
- * - The fork() function only takes the calling thread into the child's
- *   copy of the process image. If other threads were executing in critical
- *   sections they could have left mutexes locked which could easily
- *   cause deadlocks in the new child. For this reason, you should
- *   call exit() or exec() as soon as possible in the child and only
- *   make signal-safe library calls before that.
- *
- * - The daemon() function uses fork() in a way contrary to what is
- *   described above. It should not be used with GLib programs.
- *
- * GLib itself is internally completely thread-safe (all global data is
- * automatically locked), but individual data structure instances are
- * not automatically locked for performance reasons. For example,
- * you must coordinate accesses to the same #GHashTable from multiple
- * threads. The two notable exceptions from this rule are #GMainLoop
- * and #GAsyncQueue, which are thread-safe and need no further
- * application-level locking to be accessed from multiple threads.
- * Most refcounting functions such as g_object_ref() are also thread-safe.
- *
- * A common use for #GThreads is to move a long-running blocking operation out
- * of the main thread and into a worker thread. For GLib functions, such as
- * single GIO operations, this is not necessary, and complicates the code.
- * Instead, the `…_async()` version of the function should be used from the main
- * thread, eliminating the need for locking and synchronisation between multiple
- * threads. If an operation does need to be moved to a worker thread, consider
- * using g_task_run_in_thread(), or a #GThreadPool. #GThreadPool is often a
- * better choice than #GThread, as it handles thread reuse and task queueing;
- * #GTask uses this internally.
- *
- * However, if multiple blocking operations need to be performed in sequence,
- * and it is not possible to use #GTask for them, moving them to a worker thread
- * can clarify the code.
- */
-
-
-/**
- * SECTION:timers
- * @title: Timers
- * @short_description: keep track of elapsed time
- *
- * #GTimer records a start time, and counts microseconds elapsed since
- * that time. This is done somewhat differently on different platforms,
- * and can be tricky to get exactly right, so #GTimer provides a
- * portable/convenient interface.
- */
-
-
-/**
- * SECTION:timezone
- * @title: GTimeZone
- * @short_description: a structure representing a time zone
- * @see_also: #GDateTime
- *
- * #GTimeZone is a structure that represents a time zone, at no
- * particular point in time.  It is refcounted and immutable.
- *
- * Each time zone has an identifier (for example, ‘Europe/London’) which is
- * platform dependent. See g_time_zone_new() for information on the identifier
- * formats. The identifier of a time zone can be retrieved using
- * g_time_zone_get_identifier().
- *
- * A time zone contains a number of intervals.  Each interval has
- * an abbreviation to describe it (for example, ‘PDT’), an offset to UTC and a
- * flag indicating if the daylight savings time is in effect during that
- * interval.  A time zone always has at least one interval — interval 0. Note
- * that interval abbreviations are not the same as time zone identifiers
- * (apart from ‘UTC’), and cannot be passed to g_time_zone_new().
- *
- * Every UTC time is contained within exactly one interval, but a given
- * local time may be contained within zero, one or two intervals (due to
- * incontinuities associated with daylight savings time).
- *
- * An interval may refer to a specific period of time (eg: the duration
- * of daylight savings time during 2010) or it may refer to many periods
- * of time that share the same properties (eg: all periods of daylight
- * savings time).  It is also possible (usually for political reasons)
- * that some properties (like the abbreviation) change between intervals
- * without other properties changing.
- *
- * #GTimeZone is available since GLib 2.26.
- */
-
-
-/**
  * SECTION:trash_stack
  * @title: Trash Stacks
  * @short_description: maintain a stack of unused allocated memory chunks
@@ -9132,120 +6574,6 @@
  * extra pieces of memory, free() them and allocate them again later.
  *
  * Deprecated: 2.48: #GTrashStack is deprecated without replacement
- */
-
-
-/**
- * SECTION:trees-binary
- * @title: Balanced Binary Trees
- * @short_description: a sorted collection of key/value pairs optimized
- *                     for searching and traversing in order
- *
- * The #GTree structure and its associated functions provide a sorted
- * collection of key/value pairs optimized for searching and traversing
- * in order. This means that most of the operations  (access, search,
- * insertion, deletion, ...) on #GTree are O(log(n)) in average and O(n)
- * in worst case for time complexity. But, note that maintaining a
- * balanced sorted #GTree of n elements is done in time O(n log(n)).
- *
- * To create a new #GTree use g_tree_new().
- *
- * To insert a key/value pair into a #GTree use g_tree_insert()
- * (O(n log(n))).
- *
- * To remove a key/value pair use g_tree_remove() (O(n log(n))).
- *
- * To look up the value corresponding to a given key, use
- * g_tree_lookup() and g_tree_lookup_extended().
- *
- * To find out the number of nodes in a #GTree, use g_tree_nnodes(). To
- * get the height of a #GTree, use g_tree_height().
- *
- * To traverse a #GTree, calling a function for each node visited in
- * the traversal, use g_tree_foreach().
- *
- * To destroy a #GTree, use g_tree_destroy().
- */
-
-
-/**
- * SECTION:trees-nary
- * @title: N-ary Trees
- * @short_description: trees of data with any number of branches
- *
- * The #GNode struct and its associated functions provide a N-ary tree
- * data structure, where nodes in the tree can contain arbitrary data.
- *
- * To create a new tree use g_node_new().
- *
- * To insert a node into a tree use g_node_insert(),
- * g_node_insert_before(), g_node_append() and g_node_prepend().
- *
- * To create a new node and insert it into a tree use
- * g_node_insert_data(), g_node_insert_data_after(),
- * g_node_insert_data_before(), g_node_append_data()
- * and g_node_prepend_data().
- *
- * To reverse the children of a node use g_node_reverse_children().
- *
- * To find a node use g_node_get_root(), g_node_find(),
- * g_node_find_child(), g_node_child_index(), g_node_child_position(),
- * g_node_first_child(), g_node_last_child(), g_node_nth_child(),
- * g_node_first_sibling(), g_node_prev_sibling(), g_node_next_sibling()
- * or g_node_last_sibling().
- *
- * To get information about a node or tree use G_NODE_IS_LEAF(),
- * G_NODE_IS_ROOT(), g_node_depth(), g_node_n_nodes(),
- * g_node_n_children(), g_node_is_ancestor() or g_node_max_height().
- *
- * To traverse a tree, calling a function for each node visited in the
- * traversal, use g_node_traverse() or g_node_children_foreach().
- *
- * To remove a node or subtree from a tree use g_node_unlink() or
- * g_node_destroy().
- */
-
-
-/**
- * SECTION:type_conversion
- * @title: Type Conversion Macros
- * @short_description: portably storing integers in pointer variables
- *
- * Many times GLib, GTK, and other libraries allow you to pass "user
- * data" to a callback, in the form of a void pointer. From time to time
- * you want to pass an integer instead of a pointer. You could allocate
- * an integer, with something like:
- * |[<!-- language="C" -->
- *   int *ip = g_new (int, 1);
- *   *ip = 42;
- * ]|
- * But this is inconvenient, and it's annoying to have to free the
- * memory at some later time.
- *
- * Pointers are always at least 32 bits in size (on all platforms GLib
- * intends to support). Thus you can store at least 32-bit integer values
- * in a pointer value. Naively, you might try this, but it's incorrect:
- * |[<!-- language="C" -->
- *   gpointer p;
- *   int i;
- *   p = (void*) 42;
- *   i = (int) p;
- * ]|
- * Again, that example was not correct, don't copy it.
- * The problem is that on some systems you need to do this:
- * |[<!-- language="C" -->
- *   gpointer p;
- *   int i;
- *   p = (void*) (long) 42;
- *   i = (int) (long) p;
- * ]|
- * The GLib macros GPOINTER_TO_INT(), GINT_TO_POINTER(), etc. take care
- * to do the right thing on every platform.
- *
- * Warning: You may not store pointers in integers. This is not
- * portable in any way, shape or form. These macros only allow storing
- * integers in pointers, and only preserve 32 bits of the integer; values
- * outside the range of a 32-bit integer will be mangled.
  */
 
 
@@ -9280,44 +6608,6 @@
  * because GLib might use a different printf() implementation internally.
  * The format macros will always work with GLib API (like g_print()), and with
  * any C99 compatible printf() implementation.
- */
-
-
-/**
- * SECTION:unicode
- * @Title: Unicode Manipulation
- * @Short_description: functions operating on Unicode characters and
- *     UTF-8 strings
- * @See_also: g_locale_to_utf8(), g_locale_from_utf8()
- *
- * This section describes a number of functions for dealing with
- * Unicode characters and strings. There are analogues of the
- * traditional `ctype.h` character classification and case conversion
- * functions, UTF-8 analogues of some string utility functions,
- * functions to perform normalization, case conversion and collation
- * on UTF-8 strings and finally functions to convert between the UTF-8,
- * UTF-16 and UCS-4 encodings of Unicode.
- *
- * The implementations of the Unicode functions in GLib are based
- * on the Unicode Character Data tables, which are available from
- * [www.unicode.org](http://www.unicode.org/).
- *
- *  * Unicode 4.0 was added in GLib 2.8
- *  * Unicode 4.1 was added in GLib 2.10
- *  * Unicode 5.0 was added in GLib 2.12
- *  * Unicode 5.1 was added in GLib 2.16.3
- *  * Unicode 6.0 was added in GLib 2.30
- *  * Unicode 6.1 was added in GLib 2.32
- *  * Unicode 6.2 was added in GLib 2.36
- *  * Unicode 6.3 was added in GLib 2.40
- *  * Unicode 7.0 was added in GLib 2.42
- *  * Unicode 8.0 was added in GLib 2.48
- *  * Unicode 9.0 was added in GLib 2.50.1
- *  * Unicode 10.0 was added in GLib 2.54
- *  * Unicode 11.10 was added in GLib 2.58
- *  * Unicode 12.0 was added in GLib 2.62
- *  * Unicode 12.1 was added in GLib 2.62
- *  * Unicode 13.0 was added in GLib 2.66
  */
 
 
@@ -11047,23 +8337,23 @@
 
 
 /**
- * g_async_queue_new:
+ * g_async_queue_new: (constructor)
  *
  * Creates a new asynchronous queue.
  *
- * Returns: a new #GAsyncQueue. Free with g_async_queue_unref()
+ * Returns: (transfer full): a new #GAsyncQueue. Free with g_async_queue_unref()
  */
 
 
 /**
- * g_async_queue_new_full:
+ * g_async_queue_new_full: (constructor)
  * @item_free_func: (nullable): function to free queue elements
  *
  * Creates a new asynchronous queue and sets up a destroy notify
  * function that is used to free any remaining queue items when
  * the queue is destroyed after the final unref.
  *
- * Returns: a new #GAsyncQueue. Free with g_async_queue_unref()
+ * Returns: (transfer full): a new #GAsyncQueue. Free with g_async_queue_unref()
  * Since: 2.16
  */
 
@@ -11202,7 +8492,7 @@
  * Increases the reference count of the asynchronous @queue by 1.
  * You do not need to hold the lock to call this function.
  *
- * Returns: the @queue that was passed in (since 2.6)
+ * Returns: (transfer full): the @queue that was passed in (since 2.6)
  */
 
 
@@ -11409,7 +8699,7 @@
 
 /**
  * g_async_queue_unref:
- * @queue: a #GAsyncQueue.
+ * @queue: (transfer full): a #GAsyncQueue.
  *
  * Decreases the reference count of the asynchronous @queue by 1.
  *
@@ -16331,8 +13621,9 @@
  * - `%%`: a literal `%` character
  *
  * Some conversion specifications can be modified by preceding the
- * conversion specifier by one or more modifier characters. The
- * following modifiers are supported for many of the numeric
+ * conversion specifier by one or more modifier characters.
+ *
+ * The following modifiers are supported for many of the numeric
  * conversions:
  *
  * - `O`: Use alternative numeric symbols, if the current locale supports those.
@@ -16342,6 +13633,13 @@
  *   for the specifier.
  * - `0`: Pad a numeric result with zeros. This overrides the default padding
  *   for the specifier.
+ *
+ * The following modifiers are supported for many of the alphabetic conversions:
+ *
+ * - `^`: Use upper case if possible. This is a gnulib `strftime()` extension.
+ *   Since: 2.80
+ * - `#`: Use opposite case if possible. This is a gnulib `strftime()`
+ *   extension. Since: 2.80
  *
  * Additionally, when `O` is used with `B`, `b`, or `h`, it produces the alternative
  * form of a month name. The alternative form should be used when the month
@@ -17206,7 +14504,7 @@
 
 /**
  * g_dir_close:
- * @dir: a #GDir* created by g_dir_open()
+ * @dir: (transfer full): a #GDir* created by g_dir_open()
  *
  * Closes the directory and deallocates all related resources.
  */
@@ -17239,7 +14537,7 @@
 
 
 /**
- * g_dir_open:
+ * g_dir_open: (constructor)
  * @path: the path to the directory you are interested in. On Unix
  *         in the on-disk encoding. On Windows in UTF-8
  * @flags: Currently must be set to 0. Reserved for future use.
@@ -17251,7 +14549,7 @@
  * directory can then be retrieved using g_dir_read_name().  Note
  * that the ordering is not defined.
  *
- * Returns: a newly allocated #GDir on success, %NULL on failure.
+ * Returns: (transfer full): a newly allocated #GDir on success, %NULL on failure.
  *   If non-%NULL, you must free the result with g_dir_close()
  *   when you are finished with it.
  */
@@ -19675,7 +16973,7 @@
  * g_hmac_get_string() or g_hmac_get_digest(), the copied
  * HMAC will be closed as well.
  *
- * Returns: the copy of the passed #GHmac. Use g_hmac_unref()
+ * Returns: (transfer full): the copy of the passed #GHmac. Use g_hmac_unref()
  *   when finished using it.
  * Since: 2.30
  */
@@ -19717,7 +17015,7 @@
 
 
 /**
- * g_hmac_new:
+ * g_hmac_new: (constructor)
  * @digest_type: the desired type of digest
  * @key: (array length=key_len): the key for the HMAC
  * @key_len: the length of the keys
@@ -19739,7 +17037,7 @@
  * Support for digests of type %G_CHECKSUM_SHA512 has been added in GLib 2.42.
  * Support for %G_CHECKSUM_SHA384 was added in GLib 2.52.
  *
- * Returns: the newly created #GHmac, or %NULL.
+ * Returns: (nullable) (transfer full): the newly created #GHmac, or %NULL.
  *   Use g_hmac_unref() to free the memory allocated by it.
  * Since: 2.30
  */
@@ -19753,14 +17051,14 @@
  *
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: the passed in #GHmac.
+ * Returns: (transfer full): the passed in #GHmac.
  * Since: 2.30
  */
 
 
 /**
  * g_hmac_unref:
- * @hmac: a #GHmac
+ * @hmac: (transfer full): a #GHmac
  *
  * Atomically decrements the reference count of @hmac by one.
  *
@@ -25774,7 +23072,7 @@
 
 /**
  * g_once_init_enter:
- * @location: (not nullable): location of a static initializable variable
+ * @location: (inout) (not optional): location of a static initializable variable
  *    containing 0
  *
  * Function to be called when starting a critical initialization
@@ -25810,8 +23108,35 @@
 
 
 /**
- * g_once_init_leave:
+ * g_once_init_enter_pointer:
  * @location: (not nullable): location of a static initializable variable
+ *    containing `NULL`
+ *
+ * This functions behaves in the same way as g_once_init_enter(), but can
+ * can be used to initialize pointers (or #guintptr) instead of #gsize.
+ *
+ * |[<!-- language="C" -->
+ *   static MyStruct *interesting_struct = NULL;
+ *
+ *   if (g_once_init_enter_pointer (&interesting_struct))
+ *     {
+ *       MyStruct *setup_value = allocate_my_struct (); // initialization code here
+ *
+ *       g_once_init_leave_pointer (&interesting_struct, g_steal_pointer (&setup_value));
+ *     }
+ *
+ *   // use interesting_struct here
+ * ]|
+ *
+ * Returns: %TRUE if the initialization section should be entered,
+ *     %FALSE and blocks otherwise
+ * Since: 2.80
+ */
+
+
+/**
+ * g_once_init_leave:
+ * @location: (inout) (not optional): location of a static initializable variable
  *    containing 0
  * @result: new non-0 value for *@value_location
  *
@@ -25825,6 +23150,25 @@
  * the pointer passed to it should not be `volatile`.
  *
  * Since: 2.14
+ */
+
+
+/**
+ * g_once_init_leave_pointer:
+ * @location: (not nullable): location of a static initializable variable
+ *    containing `NULL`
+ * @result: new non-`NULL` value for `*location`
+ *
+ * Counterpart to g_once_init_enter_pointer(). Expects a location of a static
+ * `NULL`-initialized initialization variable, and an initialization value
+ * other than `NULL`. Sets the variable to the initialization value, and
+ * releases concurrent threads blocking in g_once_init_enter_pointer() on this
+ * initialization variable.
+ *
+ * This functions behaves in the same way as g_once_init_leave(), but
+ * can be used to initialize pointers (or #guintptr) instead of #gsize.
+ *
+ * Since: 2.80
  */
 
 
@@ -25891,7 +23235,7 @@
 
 /**
  * g_option_context_free:
- * @context: a #GOptionContext
+ * @context: (transfer full): a #GOptionContext
  *
  * Frees context and all the groups which have been
  * added to it.
@@ -25995,7 +23339,7 @@
 
 
 /**
- * g_option_context_new:
+ * g_option_context_new: (constructor)
  * @parameter_string: (nullable): a string which is displayed in
  *    the first line of `--help` output, after the usage summary
  *    `programname [OPTION...]`
@@ -26020,7 +23364,7 @@
  * function set with g_option_context_set_translate_func(), so
  * it should normally be passed untranslated.
  *
- * Returns: a newly created #GOptionContext, which must be
+ * Returns: (transfer full): a newly created #GOptionContext, which must be
  *    freed with g_option_context_free() after use.
  * Since: 2.6
  */
@@ -28579,7 +25923,7 @@
  * This way you can take a snapshot of the random number generator for
  * replaying later.
  *
- * Returns: the new #GRand
+ * Returns: (transfer full): the new #GRand
  * Since: 2.4
  */
 
@@ -28641,7 +25985,7 @@
 
 
 /**
- * g_rand_new:
+ * g_rand_new: (constructor)
  *
  * Creates a new random number generator initialized with a seed taken
  * either from `/dev/urandom` (if existing) or from the current time
@@ -28649,29 +25993,29 @@
  *
  * On Windows, the seed is taken from rand_s().
  *
- * Returns: the new #GRand
+ * Returns: (transfer full): the new #GRand
  */
 
 
 /**
- * g_rand_new_with_seed:
+ * g_rand_new_with_seed: (constructor)
  * @seed: a value to initialize the random number generator
  *
  * Creates a new random number generator initialized with @seed.
  *
- * Returns: the new #GRand
+ * Returns: (transfer full): the new #GRand
  */
 
 
 /**
- * g_rand_new_with_seed_array:
+ * g_rand_new_with_seed_array: (constructor)
  * @seed: an array of seeds to initialize the random number generator
  * @seed_length: an array of seeds to initialize the random number
  *     generator
  *
  * Creates a new random number generator initialized with @seed.
  *
- * Returns: the new #GRand
+ * Returns: (transfer full): the new #GRand
  * Since: 2.4
  */
 
@@ -33700,7 +31044,7 @@
  * the array itself. g_strfreev() does this for you. If called
  * on a %NULL value, g_strdupv() simply returns %NULL.
  *
- * Returns: (nullable): a new %NULL-terminated array of strings.
+ * Returns: (nullable) (transfer full): a new %NULL-terminated array of strings.
  */
 
 
@@ -33754,7 +31098,7 @@
 
 /**
  * g_strfreev:
- * @str_array: (nullable): a %NULL-terminated array of strings to free
+ * @str_array: (nullable) (transfer full): a %NULL-terminated array of strings to free
  *
  * Frees a %NULL-terminated array of strings, as well as each
  * string it contains.
@@ -33915,7 +31259,7 @@
 
 /**
  * g_string_chunk_free:
- * @chunk: a #GStringChunk
+ * @chunk: (transfer full): a #GStringChunk
  *
  * Frees all memory allocated by the #GStringChunk.
  * After calling g_string_chunk_free() it is not safe to
@@ -33992,7 +31336,7 @@
 
 
 /**
- * g_string_chunk_new:
+ * g_string_chunk_new: (constructor)
  * @size: the default size of the blocks of memory which are
  *     allocated to store the strings. If a particular string
  *     is larger than this default size, a larger block of
@@ -34000,7 +31344,7 @@
  *
  * Creates a new #GStringChunk.
  *
- * Returns: a new #GStringChunk
+ * Returns: (transfer full): a new #GStringChunk
  */
 
 
@@ -37281,12 +34625,12 @@
 
 
 /**
- * g_timer_new:
+ * g_timer_new: (constructor)
  *
  * Creates a new timer, and starts timing (i.e. g_timer_start() is
  * implicitly called for you).
  *
- * Returns: a new #GTimer.
+ * Returns: (transfer full): a new #GTimer.
  */
 
 
@@ -38705,6 +36049,9 @@
  * and `O_NONBLOCK`. Prior to GLib 2.78, only `FD_CLOEXEC` was supported — if
  * you wanted to configure `O_NONBLOCK` then that had to be done separately with
  * `fcntl()`.
+ *
+ * Since GLib 2.80, the constants %G_UNIX_PIPE_END_READ and
+ * %G_UNIX_PIPE_END_WRITE can be used as mnemonic indexes in @fds.
  *
  * It is a programmer error to call this function with unsupported flags, and a
  * critical warning will be raised.
@@ -43548,75 +40895,6 @@
  *
  * Returns: the number of bytes printed.
  * Since: 2.2
- */
-
-
-/**
- * g_wakeup_acknowledge:
- * @wakeup: a #GWakeup
- *
- * Acknowledges receipt of a wakeup signal on @wakeup.
- *
- * You must call this after @wakeup polls as ready.  If not, it will
- * continue to poll as ready until you do so.
- *
- * If you call this function and @wakeup is not signaled, nothing
- * happens.
- *
- * Since: 2.30
- */
-
-
-/**
- * g_wakeup_free:
- * @wakeup: a #GWakeup
- *
- * Frees @wakeup.
- *
- * You must not currently be polling on the #GPollFD returned by
- * g_wakeup_get_pollfd(), or the result is undefined.
- */
-
-
-/**
- * g_wakeup_get_pollfd:
- * @wakeup: a #GWakeup
- * @poll_fd: a #GPollFD
- *
- * Prepares a @poll_fd such that polling on it will succeed when
- * g_wakeup_signal() has been called on @wakeup.
- *
- * @poll_fd is valid until @wakeup is freed.
- *
- * Since: 2.30
- */
-
-
-/**
- * g_wakeup_new:
- *
- * Creates a new #GWakeup.
- *
- * You should use g_wakeup_free() to free it when you are done.
- *
- * Returns: a new #GWakeup
- * Since: 2.30
- */
-
-
-/**
- * g_wakeup_signal:
- * @wakeup: a #GWakeup
- *
- * Signals @wakeup.
- *
- * Any future (or present) polling on the #GPollFD returned by
- * g_wakeup_get_pollfd() will immediately succeed until such a time as
- * g_wakeup_acknowledge() is called.
- *
- * This function is safe to call from a UNIX signal handler.
- *
- * Since: 2.30
  */
 
 
