@@ -18,7 +18,7 @@ Symbol visibility
     - :commit:`v0.6.4 <7549c8053d0229a12d9196cc8abae54a01a555d0>`
       :bzbug:`556628`
   * -
-    - paremeters, return value
+    - parameters, return value
     - Indicate that the parameter or return value is only useful in C and
       should be skipped.
     - :commit:`v1.29.0 <9c6797e0478b5025c3f2f37b1331c1328cf34f4d>`
@@ -749,7 +749,7 @@ callee as the returned value.
 Rename to
 ~~~~~~~~~
 
-Rename to is an advisory annotation. It's not required to fulfill the advisory
+Rename to is an advisory annotation. It's not required to fulfil the advisory
 when generating or making a language binding. The way it is currently
 implemented, if you rename a function to a name already in use, it will remove
 the other binding. This is useful to eliminate unwanted/deprecated functions
