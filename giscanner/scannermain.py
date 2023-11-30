@@ -433,16 +433,13 @@ def create_binary(transformer, options, args):
 
     shlibs = resolve_shlibs(options, binary, options.libraries)
     if options.wrapper:
-        # The wrapper needs the binary itself, not the libtool wrapper script,
-        # so we check if libtool has sneaked the binary into .libs subdirectory
-        # and adjust the path accordingly
-        import os.path
-        dir_name, binary_name = os.path.split(binary.args[0])
-        libtool_binary = os.path.join(dir_name, '.libs', binary_name)
-        if os.path.exists(libtool_binary):
-            binary.args[0] = libtool_binary
-        # Then prepend the wrapper to the command line to execute
         binary.args = [options.wrapper] + binary.args
+
+        libtool = utils.get_libtool_command(options)
+
+        if libtool is not None:
+            binary.args = libtool + ['--mode=execute'] + binary.args
+
     gdump_parser.set_introspection_binary(binary)
     gdump_parser.parse()
     return shlibs
