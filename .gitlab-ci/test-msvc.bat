@@ -11,7 +11,7 @@ SET PATH=%CD%;%CD%\win_flex_bison;%PATH%
 SET PKG_CONFIG=%CD%\pkg-config.exe
 SET PKG_CONFIG_PATH=%CD%\_build\meson-uninstalled
 
-pip3 install --upgrade --user meson==0.60 || goto :error
+pip3 install --upgrade --user meson==1.2.3 || goto :error
 
 meson subprojects download glib
 meson wrap promote subprojects\glib\subprojects\pcre.wrap
