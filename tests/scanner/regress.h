@@ -1251,6 +1251,17 @@ int regress_test_callback_thaw_async (void);
 _GI_TEST_EXTERN
 void regress_test_async_ready_callback (GAsyncReadyCallback callback);
 
+_GI_TEST_EXTERN
+void regress_test_function_async (int                 io_priority,
+                                  GCancellable       *cancellable,
+                                  GAsyncReadyCallback callback,
+                                  gpointer            user_data);
+
+_GI_TEST_EXTERN
+gboolean regress_test_function_finish (GAsyncResult *res, GError **error);
+
+_GI_TEST_EXTERN
+gboolean regress_test_function_sync (int io_priority);
 
 _GI_TEST_EXTERN
 void regress_test_obj_instance_method_callback (RegressTestObj *obj, RegressTestCallback callback);
@@ -1611,6 +1622,19 @@ void regress_test_array_struct_in_full (RegressTestStructA *arr, gsize len);
 
 _GI_TEST_EXTERN
 void regress_test_array_struct_in_none (RegressTestStructA *arr, gsize len);
+
+_GI_TEST_EXTERN
+void regress_test_obj_function_async (RegressTestObj     *self,
+                                      int                 io_priority,
+                                      GCancellable       *cancellable,
+                                      GAsyncReadyCallback callback,
+                                      gpointer            user_data);
+
+_GI_TEST_EXTERN
+gboolean regress_test_obj_function_finish (RegressTestObj *self, GAsyncResult *res, GError **error);
+
+_GI_TEST_EXTERN
+gboolean regress_test_obj_function_sync (RegressTestObj *self, int io_priority);
 
 static inline gboolean regress_test_inline_function(gboolean foo);
 /*
