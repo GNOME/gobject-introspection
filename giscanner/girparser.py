@@ -399,6 +399,9 @@ class GIRParser(object):
         func.shadows = node.attrib.get('shadows', None)
         func.shadowed_by = node.attrib.get('shadowed-by', None)
         func.moved_to = node.attrib.get('moved-to', None)
+        func.finish_func = node.attrib.get(_glibns('finish-func'), None)
+        func.sync_func = node.attrib.get(_glibns('sync-func'), None)
+        func.async_func = node.attrib.get(_glibns('async-func'), None)
         func.parent = parent
 
         parameters_node = node.find(_corens('parameters'))

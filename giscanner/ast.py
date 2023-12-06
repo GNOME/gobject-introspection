@@ -684,6 +684,9 @@ class Callable(Node):
         self.throws = not not throws
         self.instance_parameter = None  # Parameter
         self.parent = None  # A Class or Interface
+        self.finish_func = None
+        self.sync_func = None
+        self.async_func = None
 
     def _get_retval(self):
         return self._retval

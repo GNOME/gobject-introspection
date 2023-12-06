@@ -228,6 +228,12 @@ class GIRWriter(XMLWriter):
             attrs.append(('glib:set-property', func.set_property))
         if func.get_property is not None:
             attrs.append(('glib:get-property', func.get_property))
+        if func.finish_func is not None:
+            attrs.append(('glib:finish-func', func.finish_func))
+        if func.sync_func is not None:
+            attrs.append(('glib:sync-func', func.sync_func))
+        if func.async_func is not None:
+            attrs.append(('glib:async-func', func.async_func))
         self._write_callable(func, tag_name, attrs)
 
     def _write_function_macro(self, macro):

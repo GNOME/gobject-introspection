@@ -190,6 +190,7 @@ ANN_RPAR = ')'
 #      Note: when adding new annotations, GTK-Doc project's gtkdoc-mkdb needs to be modified too!
 ANN_ALLOW_NONE = 'allow-none'
 ANN_ARRAY = 'array'
+ANN_ASYNC_FUNC = 'async-func'
 ANN_ATTRIBUTES = 'attributes'
 ANN_CLOSURE = 'closure'
 ANN_CONSTRUCTOR = 'constructor'
@@ -198,6 +199,7 @@ ANN_DEFAULT_VALUE = 'default-value'
 ANN_DESTROY = 'destroy'
 ANN_ELEMENT_TYPE = 'element-type'
 ANN_EMITTER = 'emitter'
+ANN_FINISH_FUNC = 'finish-func'
 ANN_FOREIGN = 'foreign'
 ANN_FREE_FUNC = 'free-func'
 ANN_GET_PROPERTY = 'get-property'
@@ -217,6 +219,7 @@ ANN_SET_PROPERTY = 'set-property'
 ANN_SET_VALUE_FUNC = 'set-value-func'
 ANN_SETTER = 'setter'
 ANN_SKIP = 'skip'
+ANN_SYNC_FUNC = 'sync-func'
 ANN_TRANSFER = 'transfer'
 ANN_TYPE = 'type'
 ANN_UNREF_FUNC = 'unref-func'
@@ -228,6 +231,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_OPTIONAL,
            ANN_NOT,
            ANN_ARRAY,
+           ANN_ASYNC_FUNC,
            ANN_ATTRIBUTES,
            ANN_CLOSURE,
            ANN_CONSTRUCTOR,
@@ -235,6 +239,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_DESTROY,
            ANN_ELEMENT_TYPE,
            ANN_EMITTER,
+           ANN_FINISH_FUNC,
            ANN_FOREIGN,
            ANN_GET_PROPERTY,
            ANN_GET_VALUE_FUNC,
@@ -250,6 +255,7 @@ GI_ANNS = [ANN_ALLOW_NONE,
            ANN_SET_VALUE_FUNC,
            ANN_SETTER,
            ANN_SKIP,
+           ANN_SYNC_FUNC,
            ANN_TRANSFER,
            ANN_TYPE,
            ANN_UNREF_FUNC,
@@ -763,6 +769,18 @@ class GtkDocAnnotatable(object):
                 warn('invalid "%s" annotation option: "%s"' % (ann_name, option),
                      position)
 
+    def _do_validate_async_func(self, position, ann_name, options):
+        '''
+        Validate the ``(async-func)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
+
     def _do_validate_attributes(self, position, ann_name, options):
         '''
         Validate the ``(attributes)`` annotation.
@@ -852,6 +870,18 @@ class GtkDocAnnotatable(object):
     def _do_validate_emitter(self, position, ann_name, options):
         '''
         Validate the ``(emitter)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
+
+    def _do_validate_finish_func(self, position, ann_name, options):
+        '''
+        Validate the ``(finish-func)`` annotation.
 
         :param position: :class:`giscanner.message.Position` of the line in the source file
                          containing the annotation to be validated
@@ -1092,6 +1122,18 @@ class GtkDocAnnotatable(object):
 
         self._validate_annotation(position, ann_name, options, exact_n_options=0)
 
+    def _do_validate_sync_func(self, position, ann_name, options):
+        '''
+        Validate the ``(sync-func)`` annotation.
+
+        :param position: :class:`giscanner.message.Position` of the line in the source file
+                         containing the annotation to be validated
+        :param ann_name: name of the annotation holding the options to validate
+        :param options: annotation options to validate
+        '''
+
+        self._validate_annotation(position, ann_name, options, exact_n_options=1)
+
     def _do_validate_transfer(self, position, ann_name, options):
         '''
         Validate the ``(transfer)`` annotation.
@@ -1240,10 +1282,12 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
     #: Valid annotation names for the GTK-Doc comment block identifier part.
     valid_annotations = (
         ANN_ATTRIBUTES,
+        ANN_ASYNC_FUNC,
         ANN_CONSTRUCTOR,
         ANN_COPY_FUNC,
         ANN_DEFAULT_VALUE,
         ANN_EMITTER,
+        ANN_FINISH_FUNC,
         ANN_FOREIGN,
         ANN_FREE_FUNC,
         ANN_GET_PROPERTY,
@@ -1256,6 +1300,7 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
         ANN_SET_VALUE_FUNC,
         ANN_SETTER,
         ANN_SKIP,
+        ANN_SYNC_FUNC,
         ANN_TRANSFER,
         ANN_TYPE,
         ANN_UNREF_FUNC,

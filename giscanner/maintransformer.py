@@ -57,6 +57,9 @@ from .annotationparser import (
     ANN_NULLABLE,
     ANN_OPTIONAL,
     ANN_NOT,
+    ANN_FINISH_FUNC,
+    ANN_SYNC_FUNC,
+    ANN_ASYNC_FUNC,
 )
 from .annotationparser import (
     OPT_ARRAY_FIXED_SIZE,
@@ -922,6 +925,18 @@ class MainTransformer(object):
                 param.position)
 
     def _apply_annotations_callable(self, node, chain, block):
+        if block is not None:
+            finish_func = block.annotations.get(ANN_FINISH_FUNC)
+            if finish_func is not None and isinstance(node, ast.Callable):
+                node.finish_func = finish_func[0]
+
+            sync_func = block.annotations.get(ANN_SYNC_FUNC)
+            if sync_func is not None and isinstance(node, ast.Callable):
+                node.sync_func = sync_func[0]
+
+            async_func = block.annotations.get(ANN_ASYNC_FUNC)
+            if async_func is not None and isinstance(node, ast.Callable):
+                node.async_func = async_func[0]
         self._apply_annotations_annotated(node, block)
         self._apply_annotations_params(node, node.parameters, block)
         self._apply_annotations_return(node, node.retval, block)
@@ -1587,12 +1602,156 @@ method or constructor of some type."""
         if isinstance(node, ast.Callable):
             self._pass3_callable_callbacks(node)
             self._pass3_callable_throws(node)
+            self._pass3_callable_async_finish(node)
+            self._pass3_callable_async_sync(node)
+        elif isinstance(node, (ast.Class, ast.Interface)):
+            self._pass3_class_async_finish(node)
+            self._pass3_class_async_sync(node)
         return True
+
+    def _pass3_class_async_finish(self, node):
+        self._match_class_async_methods(node.methods)
+        self._match_class_async_methods(node.virtual_methods)
+        self._match_class_async_methods(node.static_methods)
+
+    def _pass3_class_async_sync(self, node):
+        self._match_class_sync_methods(node.methods)
+        self._match_class_sync_methods(node.virtual_methods)
+        self._match_class_sync_methods(node.static_methods)
+
+    def _pass3_callable_async_finish(self, node):
+        if node.finish_func is not None:
+            return
+        for param in node.parameters:
+            if param.type.ctype is None or param.type.ctype not in ('GAsyncReadyCallback'):
+                continue
+            func_name = node.name + '_finish'
+            if (node.name.endswith('_async')):
+                func_name = node.name[:-6] + '_finish'
+            if node.parent is None:
+                continue
+            if ('GAsyncResult') in node.parent.ctypes:
+                if func_name in node.parent:
+                    node.finish_func = func_name
+                    break
+                else:
+                    message.warn_node(node,
+                    "Couldn't find '%s' for the corresponding async function: '%s'"
+                    % (func_name, node.name))
+
+    def _pass3_callable_async_sync(self, node):
+        if node.sync_func is not None or node.finish_func is None:
+            return
+        if (node.name.endswith('_async')):
+            sync_name = node.name[:-6]
+        else:
+            sync_name = node.name + '_sync'
+        if node.parent is None:
+            return
+        finish_func = node.parent.get(node.finish_func)
+        if finish_func is None:
+            return
+        candidate_method = node.parent.get(sync_name)
+        if candidate_method is None:
+            return
+        if finish_func.retval.type.ctype != candidate_method.retval.type.ctype:
+            return
+        param_matched = True
+        for param in candidate_method.parameters:
+            if param.direction == ast.PARAM_DIRECTION_IN:
+                for candidate_param in node.parameters:
+                    if (candidate_param.direction == ast.PARAM_DIRECTION_IN and
+                            candidate_param.name == param.name):
+                        break
+                else:
+                    param_matched = False
+                    break
+            elif param.direction == ast.PARAM_DIRECTION_OUT:
+                for candidate_param in finish_func.parameters:
+                    if (candidate_param.direction == ast.PARAM_DIRECTION_OUT and
+                            candidate_param.name == param.name):
+                        break
+                else:
+                    param_matched = False
+                    break
+        if param_matched:
+            node.sync_func = candidate_method.name
+            candidate_method.async_func = node.name
+            return
+
+    def _match_class_async_methods(self, methods):
+        for method in methods:
+            if method.finish_func is not None:
+                continue
+            func_name = method.name + '_finish'
+            if method.name.endswith('_async'):
+                func_name = method.name[:-6] + '_finish'
+            for params in method.parameters:
+                if (params.type.ctype == 'GAsyncReadyCallback'):
+                    break
+            else:
+                continue
+            found = False
+            for candidate_method in methods:
+                if found:
+                    break
+                if candidate_method.name != func_name:
+                    continue
+                for candidate_param in candidate_method.parameters:
+                    if candidate_param.type.ctype == 'GAsyncResult*':
+                        method.finish_func = candidate_method.name
+                        found = True
+                        break
+            if not found:
+                message.warn_node(method,
+                "Couldn't find '%s' for the corresponding async function: '%s'"
+                % (func_name, method.name))
+
+    def _match_class_sync_methods(self, methods):
+        for method in methods:
+            if method.sync_func is not None or method.finish_func is None:
+                continue
+            if method.name.endswith('_async'):
+                sync_name = method.name[:-6]
+            else:
+                sync_name = method.name + '_sync'
+            param_matched = True
+            for finish_candidate_method in methods:
+                type_name = finish_candidate_method.retval.type.ctype
+                if finish_candidate_method.name == method.finish_func:
+                    type_name = finish_candidate_method.retval.type.ctype
+                    break
+            for candidate_method in methods:
+                if candidate_method.name != sync_name:
+                    continue
+                if type_name != candidate_method.retval.type.ctype:
+                    param_matched = False
+                    break
+                for param in candidate_method.parameters:
+                    if param.direction == ast.PARAM_DIRECTION_IN:
+                        for candidate_param in method.parameters:
+                            if (candidate_param.direction == ast.PARAM_DIRECTION_IN and
+                                    candidate_param.name == param.name):
+                                break
+                        else:
+                            param_matched = False
+                            break
+                    elif param.direction == ast.PARAM_DIRECTION_OUT:
+                        for candidate_param in finish_candidate_method.parameters:
+                            if (candidate_param.direction == ast.PARAM_DIRECTION_OUT and
+                                    candidate_param.name == param.name):
+                                break
+                        else:
+                            param_matched = False
+                            break
+                if param_matched:
+                    method.sync_func = candidate_method.name
+                    candidate_method.async_func = method.name
+                    break
 
     def _pass3_callable_callbacks(self, node):
         """Check to see if we have anything that looks like a
         callback+user_data+GDestroyNotify set."""
-
         params = node.parameters
 
         # First, do defaults for well-known callback types
