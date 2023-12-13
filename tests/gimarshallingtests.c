@@ -60,6 +60,16 @@ gi_marshalling_tests_boolean_out_false (gboolean *v)
 }
 
 /**
+ * gi_marshalling_tests_boolean_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_boolean_out_uninitialized (gboolean *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_boolean_inout_true_false:
  * @v: (inout):
  */
@@ -129,6 +139,16 @@ gi_marshalling_tests_int8_out_min (gint8 *v)
 }
 
 /**
+ * gi_marshalling_tests_int8_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_int8_out_uninitialized (gint8 *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_int8_inout_max_min:
  * @v: (inout):
  */
@@ -171,6 +191,16 @@ void
 gi_marshalling_tests_uint8_out (guint8 *v)
 {
   *v = G_MAXUINT8;
+}
+
+/**
+ * gi_marshalling_tests_uint8_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_uint8_out_uninitialized (guint8 *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -230,6 +260,16 @@ gi_marshalling_tests_int16_out_min (gint16 *v)
 }
 
 /**
+ * gi_marshalling_tests_int16_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_int16_out_uninitialized (gint16 *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_int16_inout_max_min:
  * @v: (inout):
  */
@@ -272,6 +312,16 @@ void
 gi_marshalling_tests_uint16_out (guint16 *v)
 {
   *v = G_MAXUINT16;
+}
+
+/**
+ * gi_marshalling_tests_uint16_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_uint16_out_uninitialized (guint16 *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -331,6 +381,16 @@ gi_marshalling_tests_int32_out_min (gint32 *v)
 }
 
 /**
+ * gi_marshalling_tests_int32_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_int32_out_uninitialized (gint32 *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_int32_inout_max_min:
  * @v: (inout):
  */
@@ -373,6 +433,16 @@ void
 gi_marshalling_tests_uint32_out (guint32 *v)
 {
   *v = G_MAXUINT32;
+}
+
+/**
+ * gi_marshalling_tests_uint32_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_uint32_out_uninitialized (guint32 *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -432,6 +502,16 @@ gi_marshalling_tests_int64_out_min (gint64 *v)
 }
 
 /**
+ * gi_marshalling_tests_int64_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_int64_out_uninitialized (gint64 *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_int64_inout_max_min:
  * @v: (inout):
  */
@@ -474,6 +554,16 @@ void
 gi_marshalling_tests_uint64_out (guint64 *v)
 {
   *v = G_MAXUINT64;
+}
+
+/**
+ * gi_marshalling_tests_uint64_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_uint64_out_uninitialized (guint64 *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -533,6 +623,16 @@ gi_marshalling_tests_short_out_min (gshort *short_)
 }
 
 /**
+ * gi_marshalling_tests_short_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_short_out_uninitialized (gshort *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_short_inout_max_min:
  * @short_: (inout):
  */
@@ -575,6 +675,16 @@ void
 gi_marshalling_tests_ushort_out (gushort *ushort_)
 {
   *ushort_ = G_MAXUSHORT;
+}
+
+/**
+ * gi_marshalling_tests_ushort_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_ushort_out_uninitialized (gushort *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -634,6 +744,16 @@ gi_marshalling_tests_int_out_min (gint *int_)
 }
 
 /**
+ * gi_marshalling_tests_int_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_int_out_uninitialized (gint *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_int_inout_max_min:
  * @int_: (inout):
  */
@@ -676,6 +796,16 @@ void
 gi_marshalling_tests_uint_out (guint *uint_)
 {
   *uint_ = G_MAXUINT;
+}
+
+/**
+ * gi_marshalling_tests_uint_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_uint_out_uninitialized (guint *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -735,6 +865,16 @@ gi_marshalling_tests_long_out_min (glong *long_)
 }
 
 /**
+ * gi_marshalling_tests_long_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_long_out_uninitialized (glong *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_long_inout_max_min:
  * @long_: (inout):
  */
@@ -777,6 +917,16 @@ void
 gi_marshalling_tests_ulong_out (gulong *ulong_)
 {
   *ulong_ = G_MAXULONG;
+}
+
+/**
+ * gi_marshalling_tests_ulong_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_ulong_out_uninitialized (gulong *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -836,6 +986,16 @@ gi_marshalling_tests_ssize_out_min (gssize *ssize)
 }
 
 /**
+ * gi_marshalling_tests_ssize_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_ssize_out_uninitialized (gssize *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_ssize_inout_max_min:
  * @ssize: (inout):
  */
@@ -881,6 +1041,16 @@ gi_marshalling_tests_size_out (gsize *size)
 }
 
 /**
+ * gi_marshalling_tests_size_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_size_out_uninitialized (gsize *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_size_inout:
  * @size: (inout):
  */
@@ -912,6 +1082,16 @@ void
 gi_marshalling_tests_float_out (gfloat *v)
 {
   *v = G_MAXFLOAT;
+}
+
+/**
+ * gi_marshalling_tests_float_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_float_out_uninitialized (gfloat *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -949,6 +1129,16 @@ gi_marshalling_tests_double_out (gdouble *v)
 }
 
 /**
+ * gi_marshalling_tests_double_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_double_out_uninitialized (gdouble *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_double_inout:
  * @v: (inout):
  */
@@ -980,6 +1170,16 @@ void
 gi_marshalling_tests_time_t_out (time_t *v)
 {
   *v = 1234567890;
+}
+
+/**
+ * gi_marshalling_tests_time_t_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_time_t_out_uninitialized (time_t *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -1027,6 +1227,16 @@ void
 gi_marshalling_tests_gtype_out (GType *gtype)
 {
   *gtype = G_TYPE_NONE;
+}
+
+/**
+ * gi_marshalling_tests_gtype_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_gtype_out_uninitialized (GType *v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -1094,6 +1304,16 @@ void
 gi_marshalling_tests_utf8_none_out (const gchar **utf8)
 {
   *utf8 = GI_MARSHALLING_TESTS_CONSTANT_UTF8;
+}
+
+/**
+ * gi_marshalling_tests_utf8_none_out_uninitialized:
+ * @v: (out) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_utf8_none_out_uninitialized (const gchar **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -1242,6 +1462,16 @@ gi_marshalling_tests_array_fixed_out (gint **ints)
 }
 
 /**
+ * gi_marshalling_tests_array_fixed_out_uninitialized:
+ * @v: (out) (array fixed-size=4) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_array_fixed_out_uninitialized (gint **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_array_fixed_out_struct:
  * @structs: (out) (array fixed-size=2) (transfer none):
  */
@@ -1262,6 +1492,16 @@ gi_marshalling_tests_array_fixed_out_struct (GIMarshallingTestsSimpleStruct **st
     }
 
   *structs = values;
+}
+
+/**
+ * gi_marshalling_tests_array_fixed_out_struct_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_array_fixed_out_struct_uninitialized (GIMarshallingTestsSimpleStruct **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -1606,6 +1846,17 @@ gi_marshalling_tests_array_out (gint **ints, gint *length)
 }
 
 /**
+ * gi_marshalling_tests_array_out_uninitialized:
+ * @v: (out) (array length=length) (transfer none):
+ * @length:
+ */
+gboolean
+gi_marshalling_tests_array_out_uninitialized (gint **v G_GNUC_UNUSED, gint *length G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_array_out_etc:
  * @first:
  * @ints: (out) (array length=length) (transfer none):
@@ -1794,6 +2045,16 @@ gi_marshalling_tests_array_zero_terminated_out (const gchar ***utf8s)
 {
   static const gchar *values[] = { "0", "1", "2", NULL };
   *utf8s = values;
+}
+
+/**
+ * gi_marshalling_tests_array_zero_terminated_out_uninitialized:
+ * @v: (out) (array zero-terminated) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_array_zero_terminated_out_uninitialized (const gchar ***v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -2091,6 +2352,16 @@ gi_marshalling_tests_garray_utf8_none_out (GArray **array_)
 }
 
 /**
+ * gi_marshalling_tests_garray_utf8_none_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_garray_utf8_none_out_uninitialized (GArray **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_garray_utf8_container_out:
  * @array_: (out) (element-type utf8) (transfer container):
  */
@@ -2105,6 +2376,16 @@ gi_marshalling_tests_garray_utf8_container_out (GArray **array_)
   *array_ = g_array_new (TRUE, TRUE, sizeof (gchar *));
   for (i = 0; values[i]; i++)
     g_array_append_val (*array_, values[i]);
+}
+
+/**
+ * gi_marshalling_tests_garray_utf8_container_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer container):
+ */
+gboolean
+gi_marshalling_tests_garray_utf8_container_out_uninitialized (GArray **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -2125,6 +2406,16 @@ gi_marshalling_tests_garray_utf8_full_out (GArray **array_)
       gchar *str = g_strdup (values[i]);
       g_array_append_val (*array_, str);
     }
+}
+
+/**
+ * gi_marshalling_tests_garray_utf8_full_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer full):
+ */
+gboolean
+gi_marshalling_tests_garray_utf8_full_out_uninitialized (GArray **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -2379,6 +2670,16 @@ gi_marshalling_tests_gptrarray_utf8_none_out (GPtrArray **parray_)
 }
 
 /**
+ * gi_marshalling_tests_gptrarray_utf8_none_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_gptrarray_utf8_none_out_uninitialized (GPtrArray **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_gptrarray_utf8_container_out:
  * @parray_: (out) (element-type utf8) (transfer container):
  */
@@ -2393,6 +2694,16 @@ gi_marshalling_tests_gptrarray_utf8_container_out (GPtrArray **parray_)
   *parray_ = g_ptr_array_new ();
   for (i = 0; values[i]; i++)
     g_ptr_array_add (*parray_, (gpointer) values[i]);
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_container_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer container):
+ */
+gboolean
+gi_marshalling_tests_gptrarray_utf8_container_out_uninitialized (GPtrArray **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -2413,6 +2724,16 @@ gi_marshalling_tests_gptrarray_utf8_full_out (GPtrArray **parray_)
       gchar *str = g_strdup (values[i]);
       g_ptr_array_add (*parray_, (gpointer) str);
     }
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_full_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer full):
+ */
+gboolean
+gi_marshalling_tests_gptrarray_utf8_full_out_uninitialized (GPtrArray **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -2603,6 +2924,16 @@ gi_marshalling_tests_gstrv_out (GStrv *g_strv)
 }
 
 /**
+ * gi_marshalling_tests_gstrv_out_uninitialized:
+ * @v: (out) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_gstrv_out_uninitialized (GStrv *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_gstrv_inout:
  * @g_strv: (inout) (transfer none):
  */
@@ -2772,6 +3103,16 @@ gi_marshalling_tests_glist_utf8_none_out (GList **list)
 }
 
 /**
+ * gi_marshalling_tests_glist_utf8_none_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_glist_utf8_none_out_uninitialized (GList **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_glist_utf8_container_out:
  * @list: (out) (element-type utf8) (transfer container):
  */
@@ -2786,6 +3127,16 @@ gi_marshalling_tests_glist_utf8_container_out (GList **list)
 }
 
 /**
+ * gi_marshalling_tests_glist_utf8_container_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer container):
+ */
+gboolean
+gi_marshalling_tests_glist_utf8_container_out_uninitialized (GList **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_glist_utf8_full_out:
  * @list: (out) (element-type utf8) (transfer full):
  */
@@ -2797,6 +3148,16 @@ gi_marshalling_tests_glist_utf8_full_out (GList **list)
   *list = g_list_append (*list, g_strdup ("0"));
   *list = g_list_append (*list, g_strdup ("1"));
   *list = g_list_append (*list, g_strdup ("2"));
+}
+
+/**
+ * gi_marshalling_tests_glist_utf8_full_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer full):
+ */
+gboolean
+gi_marshalling_tests_glist_utf8_full_out_uninitialized (GList **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -2998,6 +3359,16 @@ gi_marshalling_tests_gslist_utf8_none_out (GSList **list)
 }
 
 /**
+ * gi_marshalling_tests_gslist_utf8_none_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_gslist_utf8_none_out_uninitialized (GSList **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_gslist_utf8_container_out:
  * @list: (out) (element-type utf8) (transfer container):
  */
@@ -3013,6 +3384,16 @@ gi_marshalling_tests_gslist_utf8_container_out (GSList **list)
 }
 
 /**
+ * gi_marshalling_tests_gslist_utf8_container_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer container):
+ */
+gboolean
+gi_marshalling_tests_gslist_utf8_container_out_uninitialized (GSList **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_gslist_utf8_full_out:
  * @list: (out) (element-type utf8) (transfer full):
  */
@@ -3025,6 +3406,16 @@ gi_marshalling_tests_gslist_utf8_full_out (GSList **list)
   *list = g_slist_prepend (*list, g_strdup ("1"));
   *list = g_slist_prepend (*list, g_strdup ("2"));
   *list = g_slist_reverse (*list);
+}
+
+/**
+ * gi_marshalling_tests_gslist_utf8_full_out_uninitialized:
+ * @v: (out) (element-type utf8) (transfer full):
+ */
+gboolean
+gi_marshalling_tests_gslist_utf8_full_out_uninitialized (GSList **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -3314,6 +3705,16 @@ gi_marshalling_tests_ghashtable_utf8_none_out (GHashTable **hash_table)
 }
 
 /**
+ * gi_marshalling_tests_ghashtable_utf8_none_out_uninitialized:
+ * @v: (out) (element-type utf8 utf8) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_ghashtable_utf8_none_out_uninitialized (GHashTable **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_ghashtable_utf8_container_out:
  * @hash_table: (out) (element-type utf8 utf8) (transfer container):
  */
@@ -3328,6 +3729,16 @@ gi_marshalling_tests_ghashtable_utf8_container_out (GHashTable **hash_table)
 }
 
 /**
+ * gi_marshalling_tests_ghashtable_utf8_container_out_uninitialized:
+ * @v: (out) (element-type utf8 utf8) (transfer container):
+ */
+gboolean
+gi_marshalling_tests_ghashtable_utf8_container_out_uninitialized (GHashTable **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_ghashtable_utf8_full_out:
  * @hash_table: (out) (element-type utf8 utf8) (transfer full):
  */
@@ -3339,6 +3750,16 @@ gi_marshalling_tests_ghashtable_utf8_full_out (GHashTable **hash_table)
   g_hash_table_insert (*hash_table, g_strdup ("0"), g_strdup ("0"));
   g_hash_table_insert (*hash_table, g_strdup ("1"), g_strdup ("-1"));
   g_hash_table_insert (*hash_table, g_strdup ("2"), g_strdup ("-2"));
+}
+
+/**
+ * gi_marshalling_tests_ghashtable_utf8_full_out_uninitialized:
+ * @v: (out) (element-type utf8 utf8) (transfer full):
+ */
+gboolean
+gi_marshalling_tests_ghashtable_utf8_full_out_uninitialized (GHashTable **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -3518,6 +3939,16 @@ gi_marshalling_tests_gvalue_out (GValue **value)
     }
 
   *value = new_value;
+}
+
+/**
+ * gi_marshalling_tests_gvalue_out_uninitialized:
+ * @v: (out) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_gvalue_out_uninitialized (GValue **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -3840,6 +4271,16 @@ gi_marshalling_tests_genum_out (GIMarshallingTestsGEnum *v)
 }
 
 /**
+ * gi_marshalling_tests_genum_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_genum_out_uninitialized (GIMarshallingTestsGEnum *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_genum_inout:
  * @v: (inout):
  */
@@ -3871,6 +4312,16 @@ void
 gi_marshalling_tests_enum_out (GIMarshallingTestsEnum *v)
 {
   *v = GI_MARSHALLING_TESTS_ENUM_VALUE3;
+}
+
+/**
+ * gi_marshalling_tests_enum_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_enum_out_uninitialized (GIMarshallingTestsEnum **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -3939,6 +4390,16 @@ gi_marshalling_tests_flags_out (GIMarshallingTestsFlags *v)
 }
 
 /**
+ * gi_marshalling_tests_flags_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_flags_out_uninitialized (GIMarshallingTestsFlags *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_flags_inout:
  * @v: (inout):
  */
@@ -3976,6 +4437,16 @@ void
 gi_marshalling_tests_no_type_flags_out (GIMarshallingTestsNoTypeFlags *v)
 {
   *v = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2;
+}
+
+/**
+ * gi_marshalling_tests_no_type_flags_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_no_type_flags_out_uninitialized (GIMarshallingTestsNoTypeFlags **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -4190,6 +4661,16 @@ gi_marshalling_tests_boxed_struct_out (GIMarshallingTestsBoxedStruct **struct_)
     }
 
   *struct_ = new_struct;
+}
+
+/**
+ * gi_marshalling_tests_boxed_struct_out_uninitialized:
+ * @v: (out) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_boxed_struct_out_uninitialized (GIMarshallingTestsBoxedStruct **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -4764,6 +5245,16 @@ gi_marshalling_tests_object_none_out (GIMarshallingTestsObject **object)
 }
 
 /**
+ * gi_marshalling_tests_object_none_out_uninitialized:
+ * @v: (out) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_object_none_out_uninitialized (GIMarshallingTestsObject **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_object_full_out:
  * @object: (out) (transfer full):
  */
@@ -4771,6 +5262,16 @@ void
 gi_marshalling_tests_object_full_out (GIMarshallingTestsObject **object)
 {
   *object = g_object_new (GI_MARSHALLING_TESTS_TYPE_OBJECT, NULL);
+}
+
+/**
+ * gi_marshalling_tests_object_full_out_uninitialized:
+ * @v: (out) (transfer full):
+ */
+gboolean
+gi_marshalling_tests_object_full_out_uninitialized (GIMarshallingTestsObject **v G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -5571,6 +6072,17 @@ gi_marshalling_tests_gerror_out (GError **error, gchar **debug)
 }
 
 /**
+ * gi_marshalling_tests_gerror_out_uninitialized:
+ * @v: (out) (allow-none) (transfer full):
+ * @v2: (out) (allow-none) (transfer full):
+ */
+gboolean
+gi_marshalling_tests_gerror_out_uninitialized (GError **v G_GNUC_UNUSED, gchar **v2 G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
  * gi_marshalling_tests_gerror_out_transfer_none:
  * @err: (out) (allow-none) (transfer none): location for the GError.
  * @debug: (out) (allow-none) (transfer none): location for the debug message
@@ -5588,6 +6100,17 @@ gi_marshalling_tests_gerror_out_transfer_none (GError **err, const gchar **debug
   error.domain = g_quark_from_static_string (GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN);
   *err = &error;
   *debug = GI_MARSHALLING_TESTS_CONSTANT_GERROR_DEBUG_MESSAGE;
+}
+
+/**
+ * gi_marshalling_tests_gerror_out_transfer_none_uninitialized:
+ * @v: (out) (allow-none) (transfer none):
+ * @v2: (out) (allow-none) (transfer none):
+ */
+gboolean
+gi_marshalling_tests_gerror_out_transfer_none_uninitialized (GError **v G_GNUC_UNUSED, const gchar **v2 G_GNUC_UNUSED)
+{
+  return FALSE;
 }
 
 /**
@@ -5752,6 +6275,15 @@ gi_marshalling_tests_param_spec_out (GParamSpec **param)
   *param = g_param_spec_string ("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
 }
 
+/**
+ * gi_marshalling_tests_param_spec_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_param_spec_out_uninitialized (GParamSpec **v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
 
 enum
 {
