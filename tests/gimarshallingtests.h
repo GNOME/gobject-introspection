@@ -471,6 +471,9 @@ _GI_TEST_EXTERN
 void gi_marshalling_tests_float_out (gfloat *v);
 
 _GI_TEST_EXTERN
+void gi_marshalling_tests_float_noncanonical_nan_out (gfloat *v);
+
+_GI_TEST_EXTERN
 gboolean gi_marshalling_tests_float_out_uninitialized (gfloat *v G_GNUC_UNUSED);
 
 
@@ -489,6 +492,9 @@ void gi_marshalling_tests_double_in (gdouble v);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_double_out (gdouble *v);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_double_noncanonical_nan_out (gdouble *v);
 
 _GI_TEST_EXTERN
 gboolean gi_marshalling_tests_double_out_uninitialized (gdouble *v G_GNUC_UNUSED);
@@ -1247,6 +1253,11 @@ void gi_marshalling_tests_ghashtable_utf8_full_inout (GHashTable **hash_table);
 _GI_TEST_EXTERN
 GValue *gi_marshalling_tests_gvalue_return (void);
 
+_GI_TEST_EXTERN
+GValue *gi_marshalling_tests_gvalue_noncanonical_nan_float (void);
+
+_GI_TEST_EXTERN
+GValue *gi_marshalling_tests_gvalue_noncanonical_nan_double (void);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_gvalue_in (GValue *value);

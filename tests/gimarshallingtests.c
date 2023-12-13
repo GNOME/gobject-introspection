@@ -1084,6 +1084,37 @@ gi_marshalling_tests_float_out (gfloat *v)
   *v = G_MAXFLOAT;
 }
 
+#define NONCANONICAL_NAN_BIT_PATTERN_32 0xfffb1236;
+#define NONCANONICAL_NAN_BIT_PATTERN_64 0xfffb1236fedcba98;
+
+static gfloat noncanonical_nan_float(void) {
+  gfloat retval;
+
+  if (sizeof (gfloat) == sizeof (guint32))
+    {
+      guint32 bit_pattern = NONCANONICAL_NAN_BIT_PATTERN_32;
+      memcpy (&retval, &bit_pattern, sizeof(gfloat));
+    }
+  else
+    {
+      g_assert (sizeof (gfloat) == sizeof (guint64) && "gfloat must be 32 or 64 bits");
+      guint64 bit_pattern = NONCANONICAL_NAN_BIT_PATTERN_64;
+      memcpy (&retval, &bit_pattern, sizeof (gfloat));
+    }
+
+  return retval;
+}
+
+/**
+ * gi_marshalling_tests_float_noncanonical_nan_out:
+ * @v: (out):
+ */
+void
+gi_marshalling_tests_float_noncanonical_nan_out (gfloat *v)
+{
+  *v = noncanonical_nan_float();
+}
+
 /**
  * gi_marshalling_tests_float_out_uninitialized:
  * @v: (out):
@@ -1126,6 +1157,28 @@ void
 gi_marshalling_tests_double_out (gdouble *v)
 {
   *v = G_MAXDOUBLE;
+}
+
+static gdouble noncanonical_nan_double(void)
+{
+  gdouble retval;
+
+  g_assert (sizeof (gdouble) == sizeof (guint64) && "gdouble must be 64 bits");
+
+  guint64 bit_pattern = NONCANONICAL_NAN_BIT_PATTERN_64;
+  memcpy (&retval, &bit_pattern, sizeof (gdouble));
+
+  return retval;
+}
+
+/**
+ * gi_marshalling_tests_double_noncanonical_nan_out:
+ * @v: (out):
+ */
+void
+gi_marshalling_tests_double_noncanonical_nan_out (gdouble *v)
+{
+  *v = noncanonical_nan_double();
 }
 
 /**
@@ -3848,6 +3901,46 @@ gi_marshalling_tests_gvalue_return (void)
       value = g_new0 (GValue, 1);
       g_value_init (value, G_TYPE_INT);
       g_value_set_int (value, 42);
+    }
+
+  return value;
+}
+
+/**
+ * gi_marshalling_tests_gvalue_noncanonical_nan_float:
+ *
+ * Returns: (transfer none):
+ */
+GValue *
+gi_marshalling_tests_gvalue_noncanonical_nan_float (void)
+{
+  static GValue *value = NULL;
+
+  if (value == NULL)
+    {
+      value = g_new0 (GValue, 1);
+      g_value_init (value, G_TYPE_FLOAT);
+      g_value_set_float (value, noncanonical_nan_float());
+    }
+
+  return value;
+}
+
+/**
+ * gi_marshalling_tests_gvalue_noncanonical_nan_double:
+ *
+ * Returns: (transfer none):
+ */
+GValue *
+gi_marshalling_tests_gvalue_noncanonical_nan_double (void)
+{
+  static GValue *value = NULL;
+
+  if (value == NULL)
+    {
+      value = g_new0 (GValue, 1);
+      g_value_init (value, G_TYPE_DOUBLE);
+      g_value_set_double (value, noncanonical_nan_double());
     }
 
   return value;
