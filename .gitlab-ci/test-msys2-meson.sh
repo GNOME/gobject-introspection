@@ -12,10 +12,11 @@ pacman --noconfirm -S --needed \
     ${MINGW_PACKAGE_PREFIX}-meson \
     ${MINGW_PACKAGE_PREFIX}-python3 \
     ${MINGW_PACKAGE_PREFIX}-python3-pip \
+    ${MINGW_PACKAGE_PREFIX}-python3-packaging \
     ${MINGW_PACKAGE_PREFIX}-python3-mako \
     ${MINGW_PACKAGE_PREFIX}-python3-markdown \
     ${MINGW_PACKAGE_PREFIX}-libffi \
-    ${MINGW_PACKAGE_PREFIX}-pkg-config \
+    ${MINGW_PACKAGE_PREFIX}-pkgconf \
     ${MINGW_PACKAGE_PREFIX}-cairo \
     ${MINGW_PACKAGE_PREFIX}-pcre2 \
     ${MINGW_PACKAGE_PREFIX}-zlib \
