@@ -3,6 +3,8 @@
  *
  * Copyright (C) 2008 Colin Walters <walters@verbum.org>
  *
+ * SPDX-License-Identifier: LGPL-2.1-or-later
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -19,12 +21,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdlib.h>
-
-#include <glib.h>
-#include <glib-object.h>
-#include <gio/gio.h>
-
 /* This file is both compiled into libgirepository.so, and installed
  * on the filesystem.  But for the dumper, we want to avoid linking
  * to libgirepository; see
@@ -35,13 +31,75 @@
 #include "girepository.h"
 #endif
 
+#include <glib.h>
+#include <glib-object.h>
+#include <gmodule.h>
+
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
-static void
-escaped_printf (GOutputStream *out, const char *fmt, ...) G_GNUC_PRINTF (2, 3);
+/* Analogue of g_output_stream_write_all(). */
+static gboolean
+write_all (FILE          *out,
+           const void    *buffer,
+           gsize          count,
+           gsize         *bytes_written,
+           GError       **error)
+{
+  size_t ret;
+
+  ret = fwrite (buffer, 1, count, out);
+
+  if (bytes_written != NULL)
+    *bytes_written = ret;
+
+  if (ret < count)
+    {
+      g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                   "Failed to write to file");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+/* Analogue of g_data_input_stream_read_line(). */
+static char *
+read_line (FILE   *input,
+           size_t *len_out)
+{
+  GByteArray *buffer = g_byte_array_new ();
+  const guint8 nul = '\0';
+
+  while (TRUE)
+    {
+      size_t ret;
+      guint8 byte;
+
+      ret = fread (&byte, 1, 1, input);
+      if (ret == 0)
+        break;
+
+      if (byte == '\n')
+        break;
+
+      g_byte_array_append (buffer, &byte, 1);
+    }
+
+  g_byte_array_append (buffer, &nul, 1);
+
+  if (len_out != NULL)
+    *len_out = buffer->len - 1;  /* don’t include terminating nul */
+
+  return (char *) g_byte_array_free (buffer, FALSE);
+}
 
 static void
-escaped_printf (GOutputStream *out, const char *fmt, ...)
+escaped_printf (FILE *out, const char *fmt, ...) G_GNUC_PRINTF (2, 3);
+
+static void
+escaped_printf (FILE *out, const char *fmt, ...)
 {
   char *str;
   va_list args;
@@ -51,7 +109,7 @@ escaped_printf (GOutputStream *out, const char *fmt, ...)
   va_start (args, fmt);
 
   str = g_markup_vprintf_escaped (fmt, args);
-  if (!g_output_stream_write_all (out, str, strlen (str), &written, NULL, &error))
+  if (!write_all (out, str, strlen (str), &written, &error))
     {
       g_critical ("failed to write to iochannel: %s", error->message);
       g_clear_error (&error);
@@ -62,11 +120,11 @@ escaped_printf (GOutputStream *out, const char *fmt, ...)
 }
 
 static void
-goutput_write (GOutputStream *out, const char *str)
+goutput_write (FILE *out, const char *str)
 {
   gsize written;
   GError *error = NULL;
-  if (!g_output_stream_write_all (out, str, strlen (str), &written, NULL, &error))
+  if (!write_all (out, str, strlen (str), &written, &error))
     {
       g_critical ("failed to write to iochannel: %s", error->message);
       g_clear_error (&error);
@@ -85,8 +143,8 @@ invoke_get_type (GModule *self, const char *symbol, GError **error)
   if (!g_module_symbol (self, symbol, (void**)&sym))
     {
       g_set_error (error,
-		   G_IO_ERROR,
-		   G_IO_ERROR_FAILED,
+		   G_FILE_ERROR,
+		   G_FILE_ERROR_FAILED,
 		   "Failed to find symbol '%s'", symbol);
       return G_TYPE_INVALID;
     }
@@ -95,8 +153,8 @@ invoke_get_type (GModule *self, const char *symbol, GError **error)
   if (ret == G_TYPE_INVALID)
     {
       g_set_error (error,
-		   G_IO_ERROR,
-		   G_IO_ERROR_FAILED,
+		   G_FILE_ERROR,
+		   G_FILE_ERROR_FAILED,
 		   "Function '%s' returned G_TYPE_INVALID", symbol);
     }
   return ret;
@@ -110,8 +168,8 @@ invoke_error_quark (GModule *self, const char *symbol, GError **error)
   if (!g_module_symbol (self, symbol, (void**)&sym))
     {
       g_set_error (error,
-		   G_IO_ERROR,
-		   G_IO_ERROR_FAILED,
+		   G_FILE_ERROR,
+		   G_FILE_ERROR_FAILED,
 		   "Failed to find symbol '%s'", symbol);
       return G_TYPE_INVALID;
     }
@@ -190,10 +248,10 @@ value_to_string (const GValue *value)
 }
 
 static void
-dump_properties (GType type, GOutputStream *out)
+dump_properties (GType type, FILE *out)
 {
   guint i;
-  guint n_properties;
+  guint n_properties = 0;
   GParamSpec **props;
 
   if (G_TYPE_FUNDAMENTAL (type) == G_TYPE_OBJECT)
@@ -243,7 +301,7 @@ dump_properties (GType type, GOutputStream *out)
 }
 
 static void
-dump_signals (GType type, GOutputStream *out)
+dump_signals (GType type, FILE *out)
 {
   guint i;
   guint n_sigs;
@@ -268,10 +326,8 @@ dump_signals (GType type, GOutputStream *out)
         escaped_printf (out, " when=\"last\"");
       else if (query.signal_flags & G_SIGNAL_RUN_CLEANUP)
         escaped_printf (out, " when=\"cleanup\"");
-#if GLIB_CHECK_VERSION(2, 29, 15)
       else if (query.signal_flags & G_SIGNAL_MUST_COLLECT)
         escaped_printf (out, " when=\"must-collect\"");
-#endif
       if (query.signal_flags & G_SIGNAL_NO_RECURSE)
         escaped_printf (out, " no-recurse=\"1\"");
 
@@ -297,7 +353,7 @@ dump_signals (GType type, GOutputStream *out)
 }
 
 static void
-dump_object_type (GType type, const char *symbol, GOutputStream *out)
+dump_object_type (GType type, const char *symbol, FILE *out)
 {
   guint n_interfaces;
   guint i;
@@ -331,10 +387,8 @@ dump_object_type (GType type, const char *symbol, GOutputStream *out)
   if (G_TYPE_IS_ABSTRACT (type))
     escaped_printf (out, " abstract=\"1\"");
 
-#if GLIB_CHECK_VERSION (2, 70, 0)
   if (G_TYPE_IS_FINAL (type))
     escaped_printf (out, " final=\"1\"");
-#endif
 
   goutput_write (out, ">\n");
 
@@ -353,7 +407,7 @@ dump_object_type (GType type, const char *symbol, GOutputStream *out)
 }
 
 static void
-dump_interface_type (GType type, const char *symbol, GOutputStream *out)
+dump_interface_type (GType type, const char *symbol, FILE *out)
 {
   guint n_interfaces;
   guint i;
@@ -386,14 +440,14 @@ dump_interface_type (GType type, const char *symbol, GOutputStream *out)
 }
 
 static void
-dump_boxed_type (GType type, const char *symbol, GOutputStream *out)
+dump_boxed_type (GType type, const char *symbol, FILE *out)
 {
   escaped_printf (out, "  <boxed name=\"%s\" get-type=\"%s\"/>\n",
 		  g_type_name (type), symbol);
 }
 
 static void
-dump_flags_type (GType type, const char *symbol, GOutputStream *out)
+dump_flags_type (GType type, const char *symbol, FILE *out)
 {
   guint i;
   GFlagsClass *klass;
@@ -413,7 +467,7 @@ dump_flags_type (GType type, const char *symbol, GOutputStream *out)
 }
 
 static void
-dump_enum_type (GType type, const char *symbol, GOutputStream *out)
+dump_enum_type (GType type, const char *symbol, FILE *out)
 {
   guint i;
   GEnumClass *klass;
@@ -433,7 +487,7 @@ dump_enum_type (GType type, const char *symbol, GOutputStream *out)
 }
 
 static void
-dump_fundamental_type (GType type, const char *symbol, GOutputStream *out)
+dump_fundamental_type (GType type, const char *symbol, FILE *out)
 {
   guint n_interfaces;
   guint i;
@@ -449,10 +503,8 @@ dump_fundamental_type (GType type, const char *symbol, GOutputStream *out)
   if (G_TYPE_IS_ABSTRACT (type))
     escaped_printf (out, " abstract=\"1\"");
 
-#if GLIB_CHECK_VERSION (2, 70, 0)
   if (G_TYPE_IS_FINAL (type))
     escaped_printf (out, " final=\"1\"");
-#endif
 
   if (G_TYPE_IS_INSTANTIATABLE (type))
     escaped_printf (out, " instantiatable=\"1\"");
@@ -489,8 +541,16 @@ dump_fundamental_type (GType type, const char *symbol, GOutputStream *out)
 }
 
 static void
-dump_type (GType type, const char *symbol, GOutputStream *out)
+dump_type (GType type, const char *symbol, FILE *out)
 {
+  /* XXX: We need to ensure that global ancillary structures like
+   * GParamSpecPool are initialized before we use the GType and
+   * GObject reflection API to poke at things like properties and
+   * signals; we cannot rely on GObject being instantiated at this
+   * point.
+   */
+  GObjectClass *gobject_class = g_type_class_ref (G_TYPE_OBJECT);
+
   switch (g_type_fundamental (type))
     {
     case G_TYPE_OBJECT:
@@ -515,10 +575,12 @@ dump_type (GType type, const char *symbol, GOutputStream *out)
       dump_fundamental_type (type, symbol, out);
       break;
     }
+
+  g_type_class_unref ((GTypeClass *) gobject_class);
 }
 
 static void
-dump_error_quark (GQuark quark, const char *symbol, GOutputStream *out)
+dump_error_quark (GQuark quark, const char *symbol, FILE *out)
 {
   escaped_printf (out, "  <error-quark function=\"%s\" domain=\"%s\"/>\n",
 		  symbol, g_quark_to_string (quark));
@@ -526,90 +588,98 @@ dump_error_quark (GQuark quark, const char *symbol, GOutputStream *out)
 
 /**
  * g_irepository_dump:
- * @arg: Comma-separated pair of input and output filenames
+ * @input_filename: (type filename): Input filename (for example `input.txt`)
+ * @output_filename: (type filename): Output filename (for example `output.xml`)
  * @error: a %GError
  *
- * Argument specified is a comma-separated pair of filenames; i.e. of
- * the form "input.txt,output.xml".  The input file should be a
+ * Dump the introspection data from the types specified in @input_filename to
+ * @output_filename.
+ *
+ * The input file should be a
  * UTF-8 Unix-line-ending text file, with each line containing either
- * "get-type:" followed by the name of a GType _get_type function, or
- * "error-quark:" followed by the name of an error quark function.  No
- * extra whitespace is allowed.
+ * `get-type:` followed by the name of a [type@GObject.Type] `_get_type`
+ * function, or `error-quark:` followed by the name of an error quark function.
+ * No extra whitespace is allowed.
  *
- * The output file should already exist, but be empty.  This function will
- * overwrite its contents.
+ * This function will overwrite the contents of the output file.
  *
- * Returns: %TRUE on success, %FALSE on error
+ * Returns: true on success, false on error
+ * Since: 2.80
  */
 #ifndef G_IREPOSITORY_COMPILATION
 static gboolean
-dump_irepository (const char *arg, GError **error) G_GNUC_UNUSED;
+dump_irepository (const char  *arg,
+                  GError     **error) G_GNUC_UNUSED;
 static gboolean
-dump_irepository (const char *arg, GError **error)
+dump_irepository (const char  *arg,
+                  GError     **error)
 #else
 gboolean
-g_irepository_dump (const char *arg, GError **error)
+g_irepository_dump (const char  *arg,
+                    GError     **error)
 #endif
 {
   GHashTable *output_types;
-  char **args;
-  GFile *input_file;
-  GFile *output_file;
-  GFileInputStream *input;
-  GFileOutputStream *output;
-  GDataInputStream *in;
+  FILE *input;
+  FILE *output;
   GModule *self;
   gboolean caught_error = FALSE;
+
+  char **args = g_strsplit (arg, ",", 2);
+  if (args == NULL)
+    return FALSE;
+
+  const char *input_filename = args[0];
+  const char *output_filename = args[1];
 
   self = g_module_open (NULL, 0);
   if (!self)
     {
       g_set_error (error,
-		   G_IO_ERROR,
-		   G_IO_ERROR_FAILED,
+		   G_FILE_ERROR,
+		   G_FILE_ERROR_FAILED,
 		   "failed to open self: %s",
 		   g_module_error ());
+      g_strfreev (args);
       return FALSE;
     }
 
-  args = g_strsplit (arg, ",", 2);
-
-  input_file = g_file_new_for_path (args[0]);
-  output_file = g_file_new_for_path (args[1]);
-
-  g_strfreev (args);
-
-  input = g_file_read (input_file, NULL, error);
-  g_object_unref (input_file);
-
+  input = fopen (input_filename, "rb");
   if (input == NULL)
     {
-      g_object_unref (output_file);
+      int saved_errno = errno;
+      g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (saved_errno),
+                   "Failed to open ‘%s’: %s", input_filename, g_strerror (saved_errno));
+
+      g_module_close (self);
+      g_strfreev (args);
+
       return FALSE;
     }
 
-  output = g_file_replace (output_file, NULL, FALSE, 0, NULL, error);
-  g_object_unref (output_file);
-
+  output = fopen (output_filename, "wb");
   if (output == NULL)
     {
-      g_input_stream_close (G_INPUT_STREAM (input), NULL, NULL);
-      g_object_unref (input);
+      int saved_errno = errno;
+      g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (saved_errno),
+                   "Failed to open ‘%s’: %s", output_filename, g_strerror (saved_errno));
+
+      fclose (input);
+      g_module_close (self);
+      g_strfreev (args);
+
       return FALSE;
     }
 
-  goutput_write (G_OUTPUT_STREAM (output), "<?xml version=\"1.0\"?>\n");
-  goutput_write (G_OUTPUT_STREAM (output), "<dump>\n");
+  goutput_write (output, "<?xml version=\"1.0\"?>\n");
+  goutput_write (output, "<dump>\n");
 
   output_types = g_hash_table_new (NULL, NULL);
-
-  in = g_data_input_stream_new (G_INPUT_STREAM (input));
-  g_object_unref (input);
 
   while (TRUE)
     {
       gsize len;
-      char *line = g_data_input_stream_read_line (in, &len, NULL, NULL);
+      char *line = read_line (input, &len);
       const char *function;
 
       if (line == NULL || *line == '\0')
@@ -640,7 +710,7 @@ g_irepository_dump (const char *arg, GError **error)
             goto next;
           g_hash_table_insert (output_types, (gpointer) type, (gpointer) type);
 
-          dump_type (type, function, G_OUTPUT_STREAM (output));
+          dump_type (type, function, output);
         }
       else if (strncmp (line, "error-quark:", strlen ("error-quark:")) == 0)
         {
@@ -656,7 +726,7 @@ g_irepository_dump (const char *arg, GError **error)
               break;
             }
 
-          dump_error_quark (quark, function, G_OUTPUT_STREAM (output));
+          dump_error_quark (quark, function, output);
         }
 
 
@@ -666,18 +736,32 @@ g_irepository_dump (const char *arg, GError **error)
 
   g_hash_table_destroy (output_types);
 
-  goutput_write (G_OUTPUT_STREAM (output), "</dump>\n");
+  goutput_write (output, "</dump>\n");
 
   {
     /* Avoid overwriting an earlier set error */
-    caught_error |= !g_input_stream_close (G_INPUT_STREAM (in), NULL,
-                                           caught_error ? NULL : error);
-    caught_error |= !g_output_stream_close (G_OUTPUT_STREAM (output), NULL,
-                                            caught_error ? NULL : error);
+    if (fclose (input) != 0 && !caught_error)
+      {
+        int saved_errno = errno;
+
+        g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (saved_errno),
+                     "Error closing input file ‘%s’: %s", input_filename,
+                     g_strerror (saved_errno));
+        caught_error = TRUE;
+      }
+
+    if (fclose (output) != 0 && !caught_error)
+      {
+        int saved_errno = errno;
+
+        g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (saved_errno),
+                     "Error closing output file ‘%s’: %s", output_filename,
+                     g_strerror (saved_errno));
+        caught_error = TRUE;
+      }
   }
 
-  g_object_unref (in);
-  g_object_unref (output);
+  g_strfreev (args);
 
   return !caught_error;
 }

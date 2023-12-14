@@ -61,6 +61,7 @@ gircompiler = executable('g-ir-compiler', 'compiler.c',
   dependencies: [
     girepo_internals_dep,
     girepo_dep,
+    gio_dep,
   ],
   install: true,
   c_args: custom_c_args,
@@ -71,6 +72,7 @@ girgenerate = executable('g-ir-generate', 'generate.c',
   dependencies: [
     girepo_internals_dep,
     girepo_dep,
+    gio_dep,
   ],
   install: true,
   c_args: custom_c_args,
@@ -78,7 +80,10 @@ girgenerate = executable('g-ir-generate', 'generate.c',
 meson.override_find_program('g-ir-generate', girgenerate)
 
 girinspect = executable('g-ir-inspect', 'g-ir-inspect.c',
-  dependencies: girepo_dep,
+  dependencies: [
+    girepo_dep,
+    gio_dep,
+  ],
   install: true,
   c_args: custom_c_args,
 )

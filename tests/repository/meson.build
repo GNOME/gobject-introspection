@@ -30,7 +30,7 @@ if glib_dep.type_name() == 'pkgconfig'
   foreach test_name, depends : repository_tests
     source = files(test_name + '.c')
     exe = executable(test_name, source,
-      dependencies: [girepo_dep],
+      dependencies: [girepo_dep, gio_dep],
       c_args: custom_c_args)
     test(test_name, exe, env: repository_test_env, depends: depends)
   endforeach

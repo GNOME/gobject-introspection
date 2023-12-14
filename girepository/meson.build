@@ -178,8 +178,12 @@ girepo_lib = shared_library('girepository-1.0',
   include_directories : configinc,
   c_args: gi_hidden_visibility_cflags + ['-DG_IREPOSITORY_COMPILATION'] +
           custom_c_args,
-  dependencies: [glib_dep, gobject_dep, gmodule_dep,
-                 gio_dep, girepo_internals_dep],
+  dependencies: [
+    glib_dep,
+    gobject_dep,
+    gmodule_dep,
+    girepo_internals_dep,
+  ],
   version: lib_version,
   darwin_versions: lib_osx_version,
   install: true,
@@ -187,7 +191,7 @@ girepo_lib = shared_library('girepository-1.0',
 
 girepo_dep = declare_dependency(
   link_with: girepo_lib,
-  dependencies: [glib_dep, gobject_dep, gio_dep, gmodule_dep],
+  dependencies: [glib_dep, gobject_dep, gmodule_dep],
   include_directories: include_directories('.'),
 )
 
