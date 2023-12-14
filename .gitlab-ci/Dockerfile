@@ -41,6 +41,7 @@ RUN dnf -y install \
     python3-devel \
     python3-mako \
     python3-markdown \
+    python3-packaging \
     python3-pip \
     python3-wheel \
     readline-devel \

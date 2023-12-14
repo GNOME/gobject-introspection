@@ -12,6 +12,7 @@ RUN dnf -y install \
     pkgconf \
     python3 \
     python3-devel \
+    python3-packaging \
     python3-pip \
     python3-wheel \
     zlib-devel \
