@@ -20,7 +20,7 @@ pymod = import('python')
 python = pymod.find_installation(get_option('python'))
 
 python_version = python.language_version()
-python_version_req = '>=3.6'
+python_version_req = '>=3.8'
 if not python_version.version_compare(python_version_req)
   error('Requires Python @0@, @1@ found.'.format(python_version_req, python_version))
 endif
