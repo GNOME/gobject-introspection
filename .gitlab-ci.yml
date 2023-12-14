@@ -113,12 +113,12 @@ fedora-x86_64-no-introspection-data:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - public
 
-fedora-x86_64-python3.6:
+fedora-x86_64-python3.8:
   stage: build
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
-    PYENV_VERSION: "3.6.12"
+    PYENV_VERSION: "3.8.17"
   script:
     - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
     - .gitlab-ci/show-git-commits.sh || true
