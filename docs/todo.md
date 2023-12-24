@@ -4,12 +4,10 @@ GIR XML format
 - Add attributes to connect signals to their default handlers
   and wrappers to their vfuncs
 - Add a way to specify default values
-- Add a way to mark init functions like gtk_init
-- For argument/return values etc, store only c:identifier in the
-  <class/> definition. Requires a link to the references type in the 
+- Add a way to mark init functions like `gtk_init`
+- For argument/return values etc, store only `c:identifier` in the
+  `<class/>` definition. Requires a link to the references type in the 
   Type node.
-- replace gidl/gdk-pixbuf.gidl with something generated from headers,
-  verify all information is available, possible to write
 
 Binary format
 -------------
@@ -46,5 +44,5 @@ C API
   boxed, etc.
 - no way to construct a boxed type
 - no way to access struct fields (should have a way to go field -> GArgument)
-- types namespaced GI, functions namespaced g_
+- types namespaced GI, functions namespaced `g_`
 - no way to get GType given a GIRegisteredTypeInfo
