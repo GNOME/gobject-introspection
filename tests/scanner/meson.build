@@ -222,7 +222,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
     'generate-typelib-sletter',
     input: sletter_gir,
     output: '@BASENAME@.typelib',
-    depends: [gio_gir],
+    depends: [],
     command: gircompiler_command,
   )
 
@@ -257,7 +257,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
     'generate-typelib-warnlib',
     input: warnlib_gir,
     output: '@BASENAME@.typelib',
-    depends: [gio_gir],
+    depends: [],
     command: gircompiler_command,
   )
 
