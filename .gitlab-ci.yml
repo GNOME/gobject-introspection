@@ -11,42 +11,6 @@ cache:
 variables:
   COMMON_MESON_FLAGS: "--prefix /usr --libdir lib64 --buildtype=debug -Dglib:werror=false -Dcairo=enabled -Dpython=python3"
 
-example-meson:
-  stage: build
-  variables:
-    EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true"
-  script:
-    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
-    - .gitlab-ci/show-git-commits.sh || true
-    - meson compile -C _build
-    - sudo meson install -C _build
-    - g-ir-scanner --version
-    - cd examples/library
-    - meson setup --prefix /usr --default-library=both _build .
-    - meson compile -C _build
-    - sudo meson install -C _build
-    - g-ir-inspect --print-typelibs --print-shlibs GISample
-    # also build a small program using libgirepository
-    - cd ../girepository
-    - meson setup _build
-    - meson compile -C _build
-
-example-autotools:
-  stage: build
-  variables:
-    EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true"
-  script:
-    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
-    - .gitlab-ci/show-git-commits.sh || true
-    - meson compile -C _build
-    - sudo meson install -C _build
-    - g-ir-scanner --version
-    - cd examples/library
-    - ./autogen.sh --prefix /usr
-    - make -j
-    - sudo make install
-    - g-ir-inspect --print-typelibs --print-shlibs GISample
-
 fedora-x86_64-meson:
   stage: build
   variables:
