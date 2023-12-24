@@ -236,7 +236,6 @@ else
   # for tests
   typelibs = disabler()
   gobject_gir = disabler()
-  gio_gir = disabler()
 endif
 subdir('docs')
 
