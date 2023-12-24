@@ -316,6 +316,55 @@ gobject_gir = custom_target('gir-gobject',
 
 gir_files += gobject_gir
 
+# GModule
+gmodule_files = []
+gmodule_command = scanner_command + [
+  '--identifier-prefix=G',
+  '--symbol-prefix=g',
+  '--c-include=gmodule.h',
+  '--namespace=GModule',
+  '--nsversion=2.0',
+  '--library=gmodule-2.0',
+]
+
+if dep_type == 'pkgconfig'
+  gmodule_command += ['--external-library', '--pkg=gmodule-2.0']
+  gmodule_files += join_paths(glib_incdir, 'gmodule.h')
+  if glib_srcdir != ''
+    gmodule_files += join_paths(glib_srcdir, 'gmodule', 'gmodule.c')
+  endif
+  gmodule_gir_dep = []
+else
+  gmodule_command += ['--pkg-export=gmodule-2.0']
+  gmodule_command += glib_libpaths
+  gmodule_files += [
+    glib_subproject.get_variable('gmodule_h'),
+    glib_subproject.get_variable('gmodule_c'),
+    glib_subproject.get_variable('gmoduleconf_h'),
+  ]
+  gmodule_gir_dep = glib_subproject.get_variable('libgmodule')
+endif
+
+# NOTE: Always add this last so that we prefer the annotations in the sources
+# (if they are available) since it contains 'backup' annotations that can be
+# out of date.
+gmodule_files += files('gmodule-2.0.c')
+
+gir_files += custom_target('gir-gmodule',
+  input: gmodule_files,
+  output: 'GModule-2.0.gir',
+  depends: [glib_gir, gir_giscanner_pymod, gmodule_gir_dep],
+  depend_files: gir_giscanner_built_files,
+  env: g_ir_scanner_env,
+  command: gmodule_command + [
+    '--include-uninstalled=' + glib_gir.full_path(),
+    '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
+    '-DGMODULE_COMPILATION',
+    '--cflags-end',
+    '@INPUT@',
+  ]
+)
+
 # GIRepository
 
 girepository_command = scanner_command + [
