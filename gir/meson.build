@@ -365,6 +365,104 @@ gir_files += custom_target('gir-gmodule',
   ]
 )
 
+## Gio
+gio_files = []
+gio_command = scanner_command + [
+  '--identifier-prefix=G',
+  '--symbol-prefix=g',
+  '--c-include=gio/gio.h',
+  '--namespace=Gio',
+  '--nsversion=2.0',
+  '--library=gio-2.0',
+]
+
+if dep_type == 'pkgconfig'
+  gio_command += ['--external-library', '--pkg=gio-2.0']
+  # Get the installed header list
+  ret = run_command(python, '-c', globber.format(join_paths(glib_incdir, 'gio', '*.h')), check: true)
+  if ret.returncode() != 0
+    error('Failed to get gio header list')
+  endif
+  gio_headers = ret.stdout().strip().split('\n')
+  # Get all gio (and gio-unix) sources. This is not entirely correct, but it's
+  # probably fine since it matches what Autotools does. We are more exact in
+  # the subproject case.
+  if glib_srcdir != ''
+    ret = run_command(python, '-c', globber.format(join_paths(glib_srcdir, 'gio', '*.c')), check: true)
+    if ret.returncode() != 0
+      error('Failed to get gio source list')
+    endif
+    gio_files += ret.stdout().strip().split('\n')
+  endif
+  gio_gir_dep = []
+else
+  gio_command += ['--pkg-export=gio-2.0']
+  gio_headers = glib_subproject.get_variable('gio_headers')
+  gio_files += [
+    glib_subproject.get_variable('gio_sources'),
+    glib_subproject.get_variable('gioenumtypes_h'),
+    glib_subproject.get_variable('gnetworking_h'),
+  ]
+  gio_command += glib_libpaths
+  gio_gir_dep = glib_subproject.get_variable('libgio')
+endif
+
+foreach h : gio_headers
+  hstr = '@0@'.format(h)
+  if not hstr.endswith('autocleanups.h')
+    gio_files += h
+  endif
+endforeach
+
+if giounix_dep.found()
+  dep_type = giounix_dep.type_name()
+  if dep_type == 'pkgconfig'
+    gio_command += ['--pkg=gio-unix-2.0']
+    giounix_includedir = get_option('gi_cross_pkgconfig_sysroot_path') + join_paths(giounix_dep.get_variable(pkgconfig: 'includedir'), 'gio-unix-2.0')
+    # Get the installed gio-unix header list
+    ret = run_command(python, '-c', globber.format(join_paths(giounix_includedir, 'gio', '*.h')), check: true)
+    if ret.returncode() != 0
+      error('Failed to get gio-unix header list')
+    endif
+    giounix_headers = ret.stdout().strip().split('\n')
+  else
+    gio_command += ['--pkg-export=gio-unix-2.0']
+    giounix_headers = glib_subproject.get_variable('gio_unix_include_headers')
+  endif
+  # No filtering needed
+  gio_files += giounix_headers
+  # GIO Unix headers must be included explicitly since there is no catch-all
+  # header that includes all of them unlike gio/gio.h above
+  foreach header : giounix_headers
+    hstr = '@0@'.format(header)
+    hbase = hstr.split('/')[-1]
+    gio_command += '--c-include=gio/@0@'.format(hbase)
+  endforeach
+endif
+
+# NOTE: Always add this last so that we prefer the annotations in the sources
+# (if they are available) since it contains 'backup' annotations that can be
+# out of date.
+gio_files += files('gio-2.0.c')
+
+gio_gir = custom_target('gir-gio',
+  input: gio_files,
+  output: 'Gio-2.0.gir',
+  depends: [gobject_gir, gir_giscanner_pymod, gio_gir_dep],
+  depend_files: gir_giscanner_built_files,
+  env: g_ir_scanner_env,
+  command: gio_command + [
+    '--include-uninstalled=' + gobject_gir.full_path(),
+    '--cflags-begin'] + glib_includes + extra_giscanner_cflags + [
+    '-DGIO_COMPILATION',
+    '-DG_SETTINGS_ENABLE_BACKEND',
+    '--cflags-end',
+    '@INPUT@',
+  ]
+)
+
+gir_files += gio_gir
+
 # GIRepository
 
 girepository_command = scanner_command + [
@@ -404,16 +502,14 @@ gir_files += custom_target('gir-girepository',
 
 typelibs = []
 if get_option('gi_cross_binary_wrapper') != ''
-  gircompiler_command = [get_option('gi_cross_binary_wrapper'), gircompiler.full_path(), ]
+    gircompiler_command = [get_option('gi_cross_binary_wrapper'), gircompiler.full_path(), ]
 else
-  gircompiler_command = [gircompiler, ]
+    gircompiler_command = [gircompiler, ]
 endif
 
-gircompiler_command += [
-  '-o', '@OUTPUT@',
-  '@INPUT@',
-  '--includedir', meson.current_build_dir(),
-  '--includedir', meson.current_source_dir(),
+gircompiler_command += [ '-o', '@OUTPUT@', '@INPUT@',
+              '--includedir', meson.current_build_dir(),
+              '--includedir', meson.current_source_dir(),
 ]
 
 foreach gir : gir_files
