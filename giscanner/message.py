@@ -23,7 +23,7 @@ import os
 import sys
 import operator
 
-from . import utils
+from .utils import break_on_debug_flag
 
 (WARNING,
  ERROR,
@@ -133,7 +133,7 @@ class MessageLogger(object):
         Log a warning, using optional file positioning information.
         If the warning is related to a ast.Node type, see log_node().
         """
-        utils.break_on_debug_flag('warning')
+        break_on_debug_flag('warning')
 
         self._warning_count += 1
 
@@ -179,7 +179,7 @@ class MessageLogger(object):
         self._output.write(text)
 
         if log_type == FATAL:
-            utils.break_on_debug_flag('fatal')
+            break_on_debug_flag('fatal')
             raise SystemExit(text)
 
     def log_node(self, log_type, node, text, context=None, positions=None):

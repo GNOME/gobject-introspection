@@ -24,10 +24,8 @@ import operator
 from itertools import chain
 from collections import OrderedDict
 
-from . import message
-
 from .sourcescanner import CTYPE_TYPEDEF, CSYMBOL_TYPE_TYPEDEF
-from .message import Position
+from .message import Position, warn
 from .utils import to_underscores
 
 
@@ -779,7 +777,7 @@ class Function(Callable):
         # Returns GType
         rettype = self.retval.type
         if (not rettype.is_equiv(TYPE_GTYPE) and rettype.target_giname != 'Gtk.Type'):
-            message.warn("function '%s' returns '%r', not a GType" % (self.name, rettype))
+            warn("function '%s' returns '%r', not a GType" % (self.name, rettype))
             return False
 
         return True
