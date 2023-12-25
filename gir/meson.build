@@ -12,10 +12,13 @@ gir_files = [
   'xrandr-1.3.gir',
   'win32-1.0.gir',
 ]
+
+uninstalled_gir_files = []
+
 # Copy gir files to build directory to have them all in a single place.
 # This is needed when gobject-introspection is a subproject because Meson
 # will add --includedir pointing to build directory automatically.
-foreach gir : gir_files
+foreach gir: gir_files
   configure_file(input: gir, output: gir, copy: true)
 endforeach
 
@@ -248,7 +251,7 @@ glib_gir = custom_target('gir-glib',
   ]
 )
 
-gir_files += glib_gir
+uninstalled_gir_files += glib_gir
 
 # GObject
 gobject_files = []
@@ -314,7 +317,7 @@ gobject_gir = custom_target('gir-gobject',
   ]
 )
 
-gir_files += gobject_gir
+uninstalled_gir_files += gobject_gir
 
 # GModule
 gmodule_files = []
@@ -350,7 +353,7 @@ endif
 # out of date.
 gmodule_files += files('gmodule-2.0.c')
 
-gir_files += custom_target('gir-gmodule',
+uninstalled_gir_files += custom_target('gir-gmodule',
   input: gmodule_files,
   output: 'GModule-2.0.gir',
   depends: [glib_gir, gir_giscanner_pymod, gmodule_gir_dep],
@@ -461,7 +464,7 @@ gio_gir = custom_target('gir-gio',
   ]
 )
 
-gir_files += gio_gir
+uninstalled_gir_files += gio_gir
 
 # GIRepository
 
@@ -502,17 +505,19 @@ gir_files += custom_target('gir-girepository',
 
 typelibs = []
 if get_option('gi_cross_binary_wrapper') != ''
-    gircompiler_command = [get_option('gi_cross_binary_wrapper'), gircompiler.full_path(), ]
+  gircompiler_command = [get_option('gi_cross_binary_wrapper'), gircompiler.full_path(), ]
 else
-    gircompiler_command = [gircompiler, ]
+  gircompiler_command = [gircompiler, ]
 endif
 
-gircompiler_command += [ '-o', '@OUTPUT@', '@INPUT@',
-              '--includedir', meson.current_build_dir(),
-              '--includedir', meson.current_source_dir(),
+gircompiler_command += [
+  '-o', '@OUTPUT@',
+  '@INPUT@',
+  '--includedir', meson.current_build_dir(),
+  '--includedir', meson.current_source_dir(),
 ]
 
-foreach gir : gir_files
+foreach gir: gir_files
   typelibs += custom_target('generate-typelib-@0@'.format(gir).underscorify(),
     input: gir,
     output: '@BASENAME@.typelib',
@@ -520,5 +525,14 @@ foreach gir : gir_files
     command: gircompiler_command,
     install: true,
     install_dir: typelibdir,
+  )
+endforeach
+
+foreach gir: uninstalled_gir_files
+  typelibs += custom_target('generate-typelib-@0@'.format(gir).underscorify(),
+    input: gir,
+    output: '@BASENAME@.typelib',
+    depends: [gobject_gir, gircompiler, ],
+    command: gircompiler_command,
   )
 endforeach
