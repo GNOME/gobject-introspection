@@ -23,10 +23,7 @@ warn_tests = [
 warn_test_env = environment()
 warn_test_env.set('UNINSTALLED_INTROSPECTION_SRCDIR', source_root)
 warn_test_env.set('TOP_BUILDDIR', build_root)
-warn_test_env.set(
-  'PYTHONPATH',
-  build_root,
-  join_paths(build_root, 'giscanner'))
+warn_test_env.set('GISCANNER_DIR', build_root, build_root / 'giscanner')
 
 # FIXME: Glib as a subproject (used on Windows mostly).
 if glib_dep.type_name() == 'pkgconfig'

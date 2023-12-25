@@ -1,7 +1,7 @@
 scanner_test_env = environment()
 scanner_test_env.prepend('PYTHONPATH', test_env_common_pypath)
 if test_env_common_path.length() > 0
-    scanner_test_env.prepend('PATH', test_env_common_path)
+  scanner_test_env.prepend('PATH', test_env_common_path)
 endif
 
 scanner_test_files = [
