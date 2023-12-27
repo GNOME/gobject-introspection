@@ -536,3 +536,32 @@ foreach gir: uninstalled_gir_files
     command: gircompiler_command,
   )
 endforeach
+
+rnc2rng = find_program('rnc2rng', native: true, required: false)
+if rnc2rng.found()
+  validate_gir = find_program('../misc/validate-gir.py')
+
+  foreach gir: gir_files
+    test('validate-@0@'.format(gir).underscorify(),
+      python,
+      args: [
+        validate_gir.full_path(),
+        '--schema=@0@'.format(meson.current_source_dir() / '../docs/gir-1.2.rnc'),
+        gir,
+      ],
+      workdir: meson.current_build_dir(),
+    )
+  endforeach
+
+  foreach gir: uninstalled_gir_files
+    gir_name = gir.full_path().split('/')[-1]
+    test('validate-@0@'.format(gir_name).underscorify(),
+      python,
+      args: [
+        validate_gir.full_path(),
+        '--schema=@0@'.format(meson.current_source_dir() / '../docs/gir-1.2.rnc'),
+        gir,
+      ],
+    )
+  endforeach
+endif
