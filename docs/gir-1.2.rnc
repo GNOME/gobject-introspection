@@ -132,6 +132,7 @@ Interface =
      & Function*
      & Constructor?
      & Method*
+     & MethodInline*
      & VirtualMethod*
      & Field*
      & Property*
@@ -179,6 +180,7 @@ Class =
      & Implements*
      & Constructor*
      & Method*
+     & MethodInline*
      & Function*
      & VirtualMethod*
      & Field*
@@ -248,6 +250,7 @@ Record =
      & Function*
      & Union*
      & Method*
+     & MethodInline*
      & Constructor*)
   }
 
@@ -633,6 +636,16 @@ Method =
      & Callable.return?)
   }
 
+MethodInline =
+  ## element defining an inline method from a type
+  element method-inline {
+    Callable.attrs,
+
+    (Info.elements
+     & Callable.params?
+     & Callable.return?)
+  }
+
 VirtualMethod =
   # element defining a virtual method from a class, concept similar to C++
   element virtual-method {
@@ -668,6 +681,7 @@ Union =
      & Field*
      & Constructor*
      & Method*
+     & MethodInline*
      & Function*
      & Record*)
   }
