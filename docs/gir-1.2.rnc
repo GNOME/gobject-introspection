@@ -45,6 +45,7 @@ grammar {
        & Record*
        & Enum*
        & Function*
+       & FunctionMacro*
        & Union*
        & BitField*
        & Callback*
@@ -603,6 +604,15 @@ grammar {
 
       (Callable.params?
        & Callable.return?
+       & DocElements)
+    }
+
+  FunctionMacro =
+    ## element defining a pre-processor macro that behaves like a function. Unlike functions, function macros do not have a return value.
+    element function-macro {
+      Callable.attrs,
+
+      (Callable.params?
        & DocElements)
     }
 
