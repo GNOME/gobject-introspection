@@ -2,7 +2,11 @@ import argparse
 import os
 import sys
 
-from lxml import etree
+try:
+    from lxml import etree
+except ImportError:
+    # Skip the test if lxml is not available
+    sys.exit(77)
 
 
 args = argparse.ArgumentParser(prog="validate-gir")
