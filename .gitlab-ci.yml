@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-image: registry.gitlab.gnome.org/gnome/gobject-introspection:v12
+image: registry.gitlab.gnome.org/gnome/gobject-introspection:v13
 
 cache:
   paths:
