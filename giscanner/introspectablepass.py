@@ -211,6 +211,9 @@ class IntrospectablePass(object):
             if not self._type_is_introspectable(obj.retval.type):
                 obj.introspectable = False
                 return True
+        if isinstance(obj, ast.Function) and obj.is_inline:
+            obj.introspectable = False
+            return True
         if isinstance(obj, ast.Signal):
             if obj.emitter is None:
                 return False
