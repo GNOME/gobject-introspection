@@ -1,19 +1,20 @@
-sub_build_root = join_paths(meson.project_build_root(), 'subprojects')
+sub_build_root = meson.project_build_root() / 'subprojects'
 test_env_common_path = []
 if glib_dep.type_name() == 'internal' and host_system == 'windows'
   test_env_common_path += [
-    join_paths(sub_build_root, 'glib', 'glib'),
-    join_paths(sub_build_root, 'glib', 'gobject'),
-    join_paths(sub_build_root, 'glib', 'gio'),
-    join_paths(sub_build_root, 'glib', 'gmodule'),
-    join_paths(sub_build_root, 'proxy-libintl'),
-    join_paths(sub_build_root, 'zlib'),
+    sub_build_root / 'glib/glib',
+    sub_build_root / 'glib/gobject',
+    sub_build_root / 'glib/gio',
+    sub_build_root / 'glib/gmodule',
+    sub_build_root / 'proxy-libintl',
+    sub_build_root / 'zlib',
   ]
 endif
 if libffi_dep.type_name() == 'internal' and host_system == 'windows'
-  test_env_common_path += [join_paths(sub_build_root, 'libffi',  'src')]
+  test_env_common_path += [ sub_build_root / 'libffi/src' ]
 endif
-test_env_common_pypath = [meson.project_build_root()]
+
+test_env_common_pypath = [ meson.project_build_root() ]
 
 
 test_regress_sources = files('scanner/regress.c')
@@ -43,7 +44,7 @@ installed_sources = [
   'gitestmacros.h',
 ]
 
-test_install_dir = join_paths(get_option('datadir'), 'gobject-introspection-1.0', 'tests')
+test_install_dir = get_option('datadir') / 'gobject-introspection-1.0/tests'
 
 install_data(installed_sources, install_dir: test_install_dir)
 
@@ -123,8 +124,8 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
-      '--add-include-path', join_paths(source_root, 'gir'),
-      '--add-include-path', join_paths(build_root, 'gir'),
+      '--add-include-path=@0@'.format(source_root / 'gir'),
+      '--add-include-path=@0@'.format(build_root / 'gir'),
       '--warn-all',
       '--warn-error',
       '--namespace=Everything',
@@ -148,8 +149,8 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '--output=@OUTPUT@',
       '--no-libtool',
       '--reparse-validate',
-      '--add-include-path', join_paths(source_root, 'gir'),
-      '--add-include-path', join_paths(build_root, 'gir'),
+      '--add-include-path=@0@'.format(source_root / 'gir'),
+      '--add-include-path=@0@'.format(build_root / 'gir'),
       '--warn-all',
       '--warn-error',
       '--namespace=GIMarshallingTests',
@@ -169,9 +170,12 @@ if (glib_dep.type_name() == 'pkgconfig' and
       input: gir,
       output: '@BASENAME@.typelib',
       depends: [gobject_gir, ],
-      command: [test_gircompiler, '-o', '@OUTPUT@', '@INPUT@',
-                '--includedir', join_paths(build_root, 'gir'),
-                '--includedir', meson.current_build_dir()
+      command: [
+        test_gircompiler,
+        '-o', '@OUTPUT@',
+        '@INPUT@',
+        '--includedir=@0@'.format(build_root / 'gir'),
+        '--includedir=@0@'.format(meson.current_build_dir()),
       ],
     )
   endforeach
