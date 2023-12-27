@@ -4326,9 +4326,8 @@ case.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="inline_method"
-              c:identifier="regress_test_obj_inline_method"
-              is-inline="1">
+      <method-inline name="inline_method"
+                     c:identifier="regress_test_obj_inline_method">
         <source-position filename="regress.h" line="1626"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
@@ -4341,7 +4340,7 @@ case.</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
-      </method>
+      </method-inline>
       <method name="instance_method"
               c:identifier="regress_test_obj_instance_method">
         <source-position filename="regress.h" line="883"/>
@@ -8266,9 +8265,8 @@ element-type annotation.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="test_inline_function"
-              c:identifier="regress_test_inline_function"
-              is-inline="1">
+    <function-inline name="test_inline_function"
+                     c:identifier="regress_test_inline_function">
       <source-position filename="regress.h" line="1615"/>
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
@@ -8278,7 +8276,7 @@ element-type annotation.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </parameter>
       </parameters>
-    </function>
+    </function-inline>
     <function name="test_int" c:identifier="regress_test_int">
       <source-position filename="regress.h" line="67"/>
       <return-value transfer-ownership="none">

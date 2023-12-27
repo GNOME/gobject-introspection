@@ -212,7 +212,7 @@ class GIRWriter(XMLWriter):
             self._write_return_type(callable.retval, parent=callable)
             self._write_parameters(callable)
 
-    def _write_function(self, func, tag_name='function'):
+    def _write_function_common(self, func, tag_name='function'):
         if func.internal_skipped:
             return
         attrs = []
@@ -228,8 +228,6 @@ class GIRWriter(XMLWriter):
             attrs.append(('glib:set-property', func.set_property))
         if func.get_property is not None:
             attrs.append(('glib:get-property', func.get_property))
-        if func.is_inline:
-            attrs.append(('is-inline', '1'))
         self._write_callable(func, tag_name, attrs)
 
     def _write_function_macro(self, macro):
@@ -241,14 +239,23 @@ class GIRWriter(XMLWriter):
             self._write_generic(macro)
             self._write_untyped_parameters(macro)
 
+    def _write_function(self, function):
+        if function.is_inline:
+            self._write_function_common(function, tag_name='function-inline')
+        else:
+            self._write_function_common(function, tag_name='function')
+
     def _write_method(self, method):
-        self._write_function(method, tag_name='method')
+        if method.is_inline:
+            self._write_function_common(method, tag_name='method-inline')
+        else:
+            self._write_function_common(method, tag_name='method')
 
     def _write_static_method(self, method):
-        self._write_function(method, tag_name='function')
+        self._write_function_common(method, tag_name='function')
 
     def _write_constructor(self, method):
-        self._write_function(method, tag_name='constructor')
+        self._write_function_common(method, tag_name='constructor')
 
     def _write_return_type(self, return_, parent=None):
         if not return_:

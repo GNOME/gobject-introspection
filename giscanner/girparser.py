@@ -143,6 +143,7 @@ class GIRParser(object):
 
         if not self._types_only:
             parser_methods[_corens('constant')] = self._parse_constant
+            parser_methods[_corens('function-inline')] = self._parse_function_inline
             parser_methods[_corens('function-macro')] = self._parse_function_macro
             parser_methods[_corens('function')] = self._parse_function
 
@@ -294,6 +295,11 @@ class GIRParser(object):
             func = self._parse_function_common(method, ast.Function, obj)
             func.is_method = True
             obj.methods.append(func)
+        for method in self._find_children(node, _corens('method-inline')):
+            func = self._parse_function_common(method, ast.Function, obj)
+            func.is_method = True
+            func.is_inline = True
+            obj.methods.append(func)
         for method in self._find_children(node, _corens('virtual-method')):
             func = self._parse_function_common(method, ast.VFunction, obj)
             self._parse_generic_attribs(method, func)
@@ -318,6 +324,11 @@ class GIRParser(object):
 
     def _parse_function(self, node):
         function = self._parse_function_common(node, ast.Function)
+        self._namespace.append(function)
+
+    def _parse_function_inline(self, node):
+        function = self._parse_function_common(node, ast.Function)
+        function.is_inline = True
         self._namespace.append(function)
 
     def _parse_function_macro(self, node):
@@ -388,7 +399,6 @@ class GIRParser(object):
         func.shadows = node.attrib.get('shadows', None)
         func.shadowed_by = node.attrib.get('shadowed-by', None)
         func.moved_to = node.attrib.get('moved-to', None)
-        func.is_inline = node.attrib.get('is-inline') == '1'
         func.parent = parent
 
         parameters_node = node.find(_corens('parameters'))
@@ -449,6 +459,11 @@ class GIRParser(object):
             for method in self._find_children(node, _corens('method')):
                 func = self._parse_function_common(method, ast.Function, compound)
                 func.is_method = True
+                compound.methods.append(func)
+            for method in self._find_children(node, _corens('method-inline')):
+                func = self._parse_function_common(method, ast.Function, compound)
+                func.is_method = True
+                func.is_inline = True
                 compound.methods.append(func)
             for i, fieldnode in enumerate(self._find_children(node, _corens('field'))):
                 field = compound.fields[i]
@@ -568,6 +583,11 @@ class GIRParser(object):
 
         for method in self._find_children(node, _corens('method')):
             func = self._parse_function_common(method, ast.Function, obj)
+            func.is_method = True
+            obj.methods.append(func)
+        for method in self._find_children(node, _corens('method-inline')):
+            func = self._parse_function_common(method, ast.Function, obj)
+            func.is_inline = True
             func.is_method = True
             obj.methods.append(func)
         for ctor in self._find_children(node, _corens('constructor')):
