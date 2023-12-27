@@ -12,8 +12,10 @@ RUN dnf -y install \
     pkgconf \
     python3 \
     python3-devel \
+    python3-lxml \
     python3-packaging \
     python3-pip \
+    python3-rnc2rng \
     python3-wheel \
     zlib-devel \
  && dnf clean all

@@ -38,7 +38,7 @@ fedora-x86_64-meson:
       - public
 
 fedora-x86_64-subprojects:
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v5
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v6
   stage: build
   variables:
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
