@@ -259,8 +259,6 @@ if host_system == 'windows' or host_system == 'cygwin'
 endif
 
 pkgconfig_variables = [
-  'datadir=' + '${prefix}' / get_option('datadir'),
-  'bindir=' + '${prefix}' / get_option('bindir'),
   'g_ir_scanner=${bindir}/g-ir-scanner',
   'g_ir_compiler=${bindir}/g-ir-compiler@0@'.format(exe_ext),
   'g_ir_generate=${bindir}/g-ir-generate@0@'.format(exe_ext),
