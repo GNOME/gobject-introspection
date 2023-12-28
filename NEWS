@@ -1,3 +1,13 @@
+1.79.1 - 2023-12-28
+-------------------
+
+* Build fixes
+* Require Meson ≥ 1.2
+* Avoid test failures with Python ≥ 3.12
+* Update the GIR schema, and validate GIR files as part of the test suite
+* Support (not optional) annotation
+* Allow ownership transfer of structure types with copy/free functions
+
 1.79.0 - 2023-12-24
 -------------------
 
