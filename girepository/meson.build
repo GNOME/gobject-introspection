@@ -1,5 +1,7 @@
 subdir('cmph')
 
+install_data('gdump.c', install_dir: get_option('datadir') / 'gobject-introspection-1.0')
+
 custom_c_args = []
 
 if cc.get_id() != 'msvc'

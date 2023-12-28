@@ -19,7 +19,7 @@ uninstalled_gir_files = []
 # This is needed when gobject-introspection is a subproject because Meson
 # will add --includedir pointing to build directory automatically.
 foreach gir: gir_files
-  configure_file(input: gir, output: gir, copy: true)
+  fs.copyfile(gir)
 endforeach
 
 cairo_conf = configuration_data()
@@ -237,7 +237,7 @@ endif
 glib_gir = custom_target('gir-glib',
   input: glib_files,
   output: 'GLib-2.0.gir',
-  depends: [gir_giscanner_pymod, glib_gir_dep],
+  depends: [gir_giscanner_pymod, glib_gir_dep, gdump],
   depend_files: gir_giscanner_built_files,
   env: g_ir_scanner_env,
   command: glib_command + [
@@ -304,7 +304,7 @@ gobject_files += files('gobject-2.0.c')
 gobject_gir = custom_target('gir-gobject',
   input: gobject_files,
   output: 'GObject-2.0.gir',
-  depends: [glib_gir, gir_giscanner_pymod, gobject_gir_dep],
+  depends: [glib_gir, gir_giscanner_pymod, gobject_gir_dep, gdump],
   depend_files: gir_giscanner_built_files,
   env: g_ir_scanner_env,
   command: gobject_command + [
@@ -356,7 +356,7 @@ gmodule_files += files('gmodule-2.0.c')
 uninstalled_gir_files += custom_target('gir-gmodule',
   input: gmodule_files,
   output: 'GModule-2.0.gir',
-  depends: [glib_gir, gir_giscanner_pymod, gmodule_gir_dep],
+  depends: [glib_gir, gir_giscanner_pymod, gmodule_gir_dep, gdump],
   depend_files: gir_giscanner_built_files,
   env: g_ir_scanner_env,
   command: gmodule_command + [
@@ -451,7 +451,7 @@ gio_files += files('gio-2.0.c')
 gio_gir = custom_target('gir-gio',
   input: gio_files,
   output: 'Gio-2.0.gir',
-  depends: [gobject_gir, gir_giscanner_pymod, gio_gir_dep],
+  depends: [gobject_gir, gir_giscanner_pymod, gio_gir_dep, gdump],
   depend_files: gir_giscanner_built_files,
   env: g_ir_scanner_env,
   command: gio_command + [
@@ -487,7 +487,7 @@ endif
 gir_files += custom_target('gir-girepository',
   input: girepo_gir_sources,
   output: 'GIRepository-2.0.gir',
-  depends: [gobject_gir, gir_giscanner_pymod, girepo_lib],
+  depends: [gobject_gir, gir_giscanner_pymod, girepo_lib, gdump],
   depend_files: gir_giscanner_built_files,
   install: true,
   install_dir: girdir,

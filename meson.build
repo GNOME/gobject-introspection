@@ -223,6 +223,8 @@ if not with_doctool
   warning('Not building with doctool support, not all tests will be run')
 endif
 
+fs = import('fs')
+
 subdir('girepository')
 subdir('tools')
 subdir('giscanner')

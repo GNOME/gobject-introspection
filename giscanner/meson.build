@@ -44,12 +44,9 @@ foreach f : giscanner_files
                                           configuration : giscanner_conf_data)
 endforeach
 
+
 # Copy to builddir for use with dumper.py when running uninstalled
-configure_file(input : '../girepository/gdump.c',
-  output : 'gdump.c',
-  copy: true,
-  install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'),
-)
+gdump = fs.copyfile('../girepository/gdump.c', 'gdump.c')
 
 install_subdir('doctemplates', install_dir: giscannerdir)
 
@@ -114,8 +111,13 @@ giscanner_pymod = python.extension_module('_giscanner', ['giscannermodule.c'],
   link_with: giscanner_lib,
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   include_directories : configinc,
-  dependencies: [glib_dep, gobject_dep, gio_dep, gmodule_dep,
-                 python_ext_dep],
+  dependencies: [
+    glib_dep,
+    gobject_dep,
+    gio_dep,
+    gmodule_dep,
+    python_ext_dep,
+  ],
   install: true,
   install_dir: giscannerdir,
 )
