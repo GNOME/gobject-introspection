@@ -54,6 +54,13 @@
  * and the g_irepository_prepend_search_path() calls.
  */
 
+/* The namespace and version corresponding to libgirepository itself, so
+ * that we can refuse to load typelibs corresponding to the newer,
+ * incompatible version of this same library in GLib. */
+#define GIREPOSITORY_TYPELIB_NAME "GIRepository"
+#define GIREPOSITORY_TYPELIB_VERSION "2.0"
+#define GIREPOSITORY_TYPELIB_FILENAME \
+  GIREPOSITORY_TYPELIB_NAME "-" GIREPOSITORY_TYPELIB_VERSION ".typelib"
 
 static GIRepository *default_repository = NULL;
 static GSList *typelib_search_path = NULL;
@@ -1255,6 +1262,16 @@ find_namespace_version (const gchar  *namespace,
   GMappedFile *mfile = NULL;
   char *fname;
 
+  if (g_str_equal (namespace, GIREPOSITORY_TYPELIB_NAME) &&
+      !g_str_equal (version, GIREPOSITORY_TYPELIB_VERSION))
+    {
+      g_debug ("Ignoring %s-%s.typelib because this libgirepository "
+              "corresponds to %s-%s",
+               namespace, version,
+               namespace, GIREPOSITORY_TYPELIB_VERSION);
+      return NULL;
+    }
+
   fname = g_strdup_printf ("%s-%s.typelib", namespace, version);
 
   for (ldir = search_path; ldir; ldir = ldir->next)
@@ -1405,6 +1422,15 @@ enumerate_namespace_versions (const gchar *namespace,
 	      const char *last_dash;
 	      const char *name_end;
 	      int major, minor;
+
+	     if (g_str_equal (namespace, GIREPOSITORY_TYPELIB_NAME) &&
+		 !g_str_equal (entry, GIREPOSITORY_TYPELIB_FILENAME))
+	       {
+		 g_debug ("Ignoring %s because this libgirepository "
+			  "corresponds to %s",
+			  entry, GIREPOSITORY_TYPELIB_FILENAME);
+		 continue;
+	       }
 
 	      name_end = strrchr (entry, '.');
 	      last_dash = strrchr (entry, '-');
