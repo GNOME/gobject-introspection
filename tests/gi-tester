@@ -99,12 +99,12 @@ def main(argv):
     elif targetname.rsplit("-")[-1] in ("C", "Python", "Gjs"):
         expected = os.path.join(srcdir, targetbase + "-expected")
         actual = os.path.join(builddir, targetbase)
-        assert_no_diff(expected, actual, ignore=['^\s*$'])
+        assert_no_diff(expected, actual, ignore=[r'^\s*$'])
     elif targetname.endswith("-sections.txt"):
         expected = os.path.join(
             srcdir, os.path.splitext(targetname)[0] + "-expected.txt")
         actual = os.path.join(builddir, targetname)
-        assert_no_diff(expected, actual, ignore=['^\s*$'])
+        assert_no_diff(expected, actual, ignore=[r'^\s*$'])
     elif targetname.endswith(".py"):
         env = os.environ.copy()
         env["PYTHONPATH"] = os.pathsep.join(
