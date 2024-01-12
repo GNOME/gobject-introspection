@@ -607,15 +607,7 @@ static struct PyModuleDef moduledef = {
 MOD_INIT(_giscanner)
 {
     PyObject *m, *d;
-    gboolean is_uninstalled;
-    const char *module_name;
-
-    /* Hack to avoid having to create a fake directory structure; when
-     * running uninstalled, the module will be in the top builddir,
-     * with no _giscanner prefix.
-     */
-    is_uninstalled = g_getenv ("UNINSTALLED_INTROSPECTION_SRCDIR") != NULL;
-    module_name = is_uninstalled ? "_giscanner" : "giscanner._giscanner";
+    const char *module_name = "giscanner._giscanner";
 
 #if PY_MAJOR_VERSION >= 3
     moduledef.m_name = module_name;

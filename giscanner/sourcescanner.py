@@ -28,10 +28,7 @@ from .utils import have_debug_flag, dll_dirs
 
 dlldirs = dll_dirs()
 dlldirs.add_dll_dirs(['gio-2.0'])
-if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
-    from _giscanner import SourceScanner as CSourceScanner
-else:
-    from giscanner._giscanner import SourceScanner as CSourceScanner
+from giscanner._giscanner import SourceScanner as CSourceScanner
 dlldirs.cleanup_dll_dirs()
 
 HEADER_EXTS = ['.h', '.hpp', '.hxx']

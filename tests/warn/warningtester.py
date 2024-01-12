@@ -11,14 +11,9 @@ sys.path.insert(0, path)
 builtins.__dict__['DATADIR'] = path
 builtins.__dict__['GIR_DIR'] = path
 
-# We cannot use PYTHONPATH, because it would prepend the giscanner
-# root, and we have an "ast" module that conflicts with Python's
-# own ast. In some cases, Python's distutils ends up importing ast,
-# and that will end up trying to import giscanner.ast
-path = os.getenv('GISCANNER_DIR', None)
+path = os.getenv('TOP_BUILDDIR', None)
 assert path is not None
-for p in path.split(os.pathsep):
-    sys.path.append(p)
+sys.path.insert(0, path)
 
 from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Include, Namespace
