@@ -25,6 +25,10 @@ if not python_version.version_compare(python_version_req)
   error('Requires Python @0@, @1@ found.'.format(python_version_req, python_version))
 endif
 
+if python_version.version_compare('>=3.12')
+  pymod.find_installation(get_option('python'), modules: ['setuptools'])
+endif
+
 cc = meson.get_compiler('c')
 
 project_c_args = []
