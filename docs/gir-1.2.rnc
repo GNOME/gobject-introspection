@@ -520,7 +520,13 @@ Callable.attrs = (
   ## Binary attribute, true if the callable can throw an error
   attribute throws { "0" | "1" }?,
   ## if for backward compatibility reason the callable has a name in the source code but should be known by another one, this attribute contains the new name
-  attribute moved-to { xsd:string }?
+  attribute moved-to { xsd:string }?,
+  ## The name of the asynchronous version of this callable
+  attribute glib:async-func { xsd:string }?,
+  ## The name of the synchronous version of this callable
+  attribute glib:sync-func { xsd:string }?,
+  ## The name of the callable which finishes the asynchronuos operation of this function
+  attribute glib:finish-func { xsd:string }?
 )
 
 VarArgs =
