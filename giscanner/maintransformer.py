@@ -1499,7 +1499,12 @@ method or constructor of some type."""
             vfunc.inherit_file_positions(callback)
 
             prefix = self._get_annotation_name(class_struct)
+            # Prefer full docblocks, but fall back to the field description
+            # if there isn't a full one, to avoid an undocumented symbol
             block = self._blocks.get('%s::%s' % (prefix, vfunc.name))
+            if block is None:
+                vfunc.doc = field.doc
+                vfunc.doc_position = field.doc_position
             self._apply_annotations_callable(vfunc, [node], block)
             node.virtual_methods.append(vfunc)
 
