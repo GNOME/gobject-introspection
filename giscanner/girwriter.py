@@ -651,6 +651,7 @@ class GIRWriter(XMLWriter):
                 attrs = [('name', field.name)]
                 self._append_node_generic(field, attrs)
                 with self.tagcontext('field', attrs):
+                    self._write_generic(field)
                     self._write_callback(field.anonymous_node)
             elif isinstance(field.anonymous_node, ast.Record):
                 self._write_record(field.anonymous_node)
