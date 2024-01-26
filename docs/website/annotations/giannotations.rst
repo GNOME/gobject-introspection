@@ -314,6 +314,21 @@ Type signature
       in a g-i supported library.
     - :commit:`v0.6.12 <1edeccd2>`
       :bzbug:`619450`
+  * - ``(sync-func FUNC)``
+    - identifier
+    - ``FUNC`` is the identifier of the function which implements the synchronous
+      version of the asynchronous function referred to by the annotated symbol.
+    -
+  * - ``(async-func FUNC)``
+    - identifier
+    - ``FUNC`` is the identifier of the function which implements the asynchronous
+      version of the synchronous function referred to by the annotated symbol.
+    -
+  * - ``(finish-func FUNC)``
+    - identifier
+    - ``FUNC`` is the identifier of the function which returns the result of the
+      asynchronous function referred to by the annotated symbol.
+    -
   * - ``(scope TYPE)``
     - parameters
     - The parameter is a callback, the ``TYPE`` option indicates the lifetime
