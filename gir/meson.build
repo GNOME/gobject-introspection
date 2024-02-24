@@ -155,7 +155,9 @@ elif dep_type == 'internal'
 
   if giounix_dep.found()
     glib_files += [
-      glib_subproject.get_variable('glib_unix_h')
+      # Variable was renamed in 2.79.2
+      # https://gitlab.gnome.org/GNOME/glib/-/commit/1f9e44d6232c3e96caa8a96d9b1cc2c65cf5848c
+      glib_subproject.get_variable('glib_unix_headers')
     ]
   endif
 
