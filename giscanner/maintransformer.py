@@ -1612,7 +1612,7 @@ method or constructor of some type."""
     def _pass3_class_async_finish(self, node):
         self._match_class_async_methods(node.methods)
         self._match_class_async_methods(node.virtual_methods)
-        self._match_class_async_methods(node.static_methods)
+        self._match_class_async_methods(node.static_methods + node.constructors)
 
     def _pass3_class_async_sync(self, node):
         self._match_class_sync_methods(node.methods)
