@@ -4396,7 +4396,7 @@ case.</doc>
       <method-inline name="inline_method"
                      c:identifier="regress_test_obj_inline_method"
                      introspectable="0">
-        <source-position filename="regress.h" line="1626"/>
+        <source-position filename="regress.h" line="1650"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -8393,7 +8393,7 @@ element-type annotation.</doc>
     <function-inline name="test_inline_function"
                      c:identifier="regress_test_inline_function"
                      introspectable="0">
-      <source-position filename="regress.h" line="1615"/>
+      <source-position filename="regress.h" line="1639"/>
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
