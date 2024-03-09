@@ -91,7 +91,7 @@ def main(argv):
         # The "shared-library" field of the GIR is platform-dependent.
         # For example, on OSX, shared libraries have the extension .dylib.
         # Ignore this field when determining whether the output succeeded.
-        ignore = ['shared-library=".*"$']
+        ignore = [r'shared-library=".*"$']
         expected = os.path.join(
             srcdir, os.path.splitext(targetbase)[0] + "-expected.gir")
         actual = os.path.join(builddir, targetname)
@@ -99,12 +99,12 @@ def main(argv):
     elif targetname.rsplit("-")[-1] in ("C", "Python", "Gjs"):
         expected = os.path.join(srcdir, targetbase + "-expected")
         actual = os.path.join(builddir, targetbase)
-        assert_no_diff(expected, actual, ignore=['^\s*$'])
+        assert_no_diff(expected, actual, ignore=[r'^\s*$'])
     elif targetname.endswith("-sections.txt"):
         expected = os.path.join(
             srcdir, os.path.splitext(targetname)[0] + "-expected.txt")
         actual = os.path.join(builddir, targetname)
-        assert_no_diff(expected, actual, ignore=['^\s*$'])
+        assert_no_diff(expected, actual, ignore=[r'^\s*$'])
     elif targetname.endswith(".py"):
         env = os.environ.copy()
         env["PYTHONPATH"] = os.pathsep.join(
