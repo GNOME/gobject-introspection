@@ -782,6 +782,8 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
             "gulong": "int",
             "gint64": "int",
             "guint64": "int",
+            "time_t": "int",
+            "off_t": "int",
             "gfloat": "float",
             "gdouble": "float",
             "gchararray": "str",

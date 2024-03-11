@@ -13,14 +13,14 @@
       </api:returns>
       <api:name>regress_foo_object_is_it_time_yet</api:name>
       <api:arg>
-        <api:type>Number(glong)</api:type>
+        <api:type>Number(time_t)</api:type>
         <api:name>time</api:name>
       </api:arg>
     </api:function>
   </info>
   <title>Regress.FooObject.prototype.is_it_time_yet</title>
   <synopsis><code mime="text/x-gjs">
-function is_it_time_yet(time: Number(glong)): void {
+function is_it_time_yet(time: Number(time_t)): void {
     // Gjs wrapper for regress_foo_object_is_it_time_yet()
 }
   </code></synopsis>

@@ -2034,7 +2034,7 @@ uses a C sugar return type.</doc>
             <type name="FooObject" c:type="RegressFooObject*"/>
           </instance-parameter>
           <parameter name="time" transfer-ownership="none">
-            <type name="glong" c:type="time_t"/>
+            <type name="time_t" c:type="time_t"/>
           </parameter>
         </parameters>
       </method>
@@ -8828,11 +8828,11 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
     <function name="test_timet" c:identifier="regress_test_timet">
       <source-position filename="regress.h" line="94"/>
       <return-value transfer-ownership="none">
-        <type name="glong" c:type="time_t"/>
+        <type name="time_t" c:type="time_t"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="glong" c:type="time_t"/>
+          <type name="time_t" c:type="time_t"/>
         </parameter>
       </parameters>
     </function>
