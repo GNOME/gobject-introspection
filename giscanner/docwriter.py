@@ -923,6 +923,8 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             "gulong": "Number(gulong)",
             "gint64": "Number(gint64)",
             "guint64": "Number(guint64)",
+            "time_t": "Number(time_t)",
+            "off_t": "Number(off_t)",
             "long double": "Number(long double)",
             "long long": "Number(long long)",
             "unsigned long long": "Number(unsigned long long)"}
@@ -1149,7 +1151,7 @@ class DevDocsFormatterGjs(DocFormatterGjs):
                     "gchar", "guchar", "gshort", "gint", "guint", "gfloat",
                     "gdouble", "gsize", "gssize", "gintptr", "guintptr",
                     "glong", "gulong", "gint64", "guint64", "long double",
-                    "long long", "unsigned long long"]:
+                    "long long", "unsigned long long", "time_t", "off_t"]:
             return "Number"  # gsize and up cannot fully be represented in GJS
         if name in ["none", "gpointer"]:
             return "void"
