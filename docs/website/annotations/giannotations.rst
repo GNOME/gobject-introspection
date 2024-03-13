@@ -352,9 +352,11 @@ An example of a function using the ``call`` scope is ``g_slist_foreach()``.
 For ``async`` there is ``g_file_read_async()`` and for notified
 ``g_idle_add_full()``.
 
-Default Annotations: To avoid having the developers annotate everything the
-introspection framework is providing sane default annotation values for a
-couple of situations:
+Default Annotations
+~~~~~~~~~~~~~~~~~~~
+
+The introspection framework provides default values for parameters, return
+values, and certain types.
 
 * ``(in)`` parameters: ``(transfer none)``
 * ``(inout)`` and ``(out)`` parameters: ``(transfer full)``
