@@ -307,7 +307,7 @@ pkg.generate(
 )
 
 # Dependency object used by Meson's GNOME module. This dependency variable must
-# be named girepo_dep for backward compatibility with projects that where already
+# be named girepo_dep for backward compatibility with projects that were already
 # using that name as fallback: dependency('gobject-introspection-1.0',
 # fallback : ['gobject-introspection', 'girepo_dep'])
 if get_option('build_introspection_data') == true
