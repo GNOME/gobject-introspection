@@ -7,6 +7,10 @@
 
 #include <glib-object.h>
 
+#ifdef G_OS_UNIX
+#include <sys/socket.h>
+#endif
+
 #include "gitestmacros.h"
 
 #ifndef __GI_MARSHALLING_TESTS_H__
@@ -547,6 +551,116 @@ gboolean gi_marshalling_tests_off_t_out_uninitialized (off_t *v G_GNUC_UNUSED);
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_off_t_inout (off_t *v);
+
+
+#ifdef G_OS_UNIX
+
+
+/* Unix device number */
+
+_GI_TEST_EXTERN
+dev_t gi_marshalling_tests_dev_t_return (void);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_dev_t_in (dev_t v);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_dev_t_out (dev_t *v);
+
+_GI_TEST_EXTERN
+gboolean gi_marshalling_tests_dev_t_out_uninitialized (dev_t *v G_GNUC_UNUSED);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_dev_t_inout (dev_t *v);
+
+
+/* Unix group */
+
+_GI_TEST_EXTERN
+gid_t gi_marshalling_tests_gid_t_return (void);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_gid_t_in (gid_t v);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_gid_t_out (gid_t *v);
+
+_GI_TEST_EXTERN
+gboolean gi_marshalling_tests_gid_t_out_uninitialized (gid_t *v G_GNUC_UNUSED);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_gid_t_inout (gid_t *v);
+
+
+/* Unix process */
+
+_GI_TEST_EXTERN
+pid_t gi_marshalling_tests_pid_t_return (void);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_pid_t_in (pid_t v);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_pid_t_out (pid_t *v);
+
+_GI_TEST_EXTERN
+gboolean gi_marshalling_tests_pid_t_out_uninitialized (pid_t *v G_GNUC_UNUSED);
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_pid_t_inout (pid_t *v);
+
+
+/* Unix socket address length */
+
+_GI_TEST_EXTERN
+socklen_t gi_marshalling_tests_socklen_t_return (void);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_socklen_t_in (socklen_t v);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_socklen_t_out (socklen_t *v);
+
+_GI_TEST_EXTERN
+gboolean gi_marshalling_tests_socklen_t_out_uninitialized (socklen_t *v G_GNUC_UNUSED);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_socklen_t_inout (socklen_t *v);
+
+
+/* Unix user */
+
+_GI_TEST_EXTERN
+uid_t gi_marshalling_tests_uid_t_return (void);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_uid_t_in (uid_t v);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_uid_t_out (uid_t *v);
+
+_GI_TEST_EXTERN
+gboolean gi_marshalling_tests_uid_t_out_uninitialized (uid_t *v G_GNUC_UNUSED);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_uid_t_inout (uid_t *v);
+
+
+#endif /* G_OS_UNIX */
 
 
 /* GType */

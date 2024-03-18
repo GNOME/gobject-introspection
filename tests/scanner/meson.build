@@ -96,7 +96,13 @@ else
 endif
 
 regress_lib = shared_library('regress-1.0',
-  sources: ['regress.c', 'annotation.c', 'foo.c', 'drawable.c'],
+  sources: [
+    'annotation.c',
+    'drawable.c',
+    'foo.c',
+    'regress-unix.c',
+    'regress.c',
+  ],
   include_directories : [configinc, include_directories('..')],
   c_args: gi_hidden_visibility_cflags + regress_c_args + custom_c_args,
   dependencies: [gobject_dep, gio_dep] + regress_deps,
@@ -504,8 +510,49 @@ if (glib_dep.type_name() == 'pkgconfig' and
     command: gircompiler_command,
   )
   test_typelibs += regress_typelib
+
+  if host_system != 'windows'
+    regress_unix_gir = custom_target('gir-regress-unix',
+      input: ['regress-unix.c', 'regress-unix.h'],
+      output: 'RegressUnix-1.0.gir',
+      depends: [regress_lib] + typelibs + [utility_gir],
+      command: [
+        test_girscanner,
+        '--quiet',
+        '--output=@OUTPUT@',
+        '--no-libtool',
+        '--reparse-validate',
+        '--add-include-path', join_paths(source_root, 'gir'),
+        '--add-include-path', join_paths(build_root, 'gir'),
+        '--add-include-path', meson.current_build_dir(),
+        '--namespace=RegressUnix',
+        '--nsversion=1.0',
+        '--include=Gio-2.0',
+        '--include=Utility-1.0',
+        '--library=regress-1.0',
+        '--c-include=regress-unix.h',
+        '-L', meson.current_build_dir(),
+        '-I', meson.current_source_dir(),
+        '-I', join_paths(meson.current_source_dir(), '..'),
+        extra_giscanner_args,
+        '@INPUT@',
+      ]
+    )
+    test_girs += regress_unix_gir
+
+    regress_unix_typelib = custom_target(
+      'generate-typelib-regress-unix',
+      input: regress_unix_gir,
+      output: '@BASENAME@.typelib',
+      command: gircompiler_command,
+    )
+    test_typelibs += regress_unix_typelib
+  else
+    regress_unix_gir = disabler()
+  endif
 else
   regress_gir = disabler()
+  regress_unix_gir = disabler()
 endif
 
 gi_tester = files(join_paths('..', 'gi-tester'))

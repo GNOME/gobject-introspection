@@ -1290,6 +1290,229 @@ gi_marshalling_tests_off_t_inout (off_t *v)
   *v = 0;
 }
 
+#ifdef G_OS_UNIX
+
+dev_t
+gi_marshalling_tests_dev_t_return (void)
+{
+  return 1234567890;
+}
+
+void
+gi_marshalling_tests_dev_t_in (dev_t v)
+{
+  g_assert_cmpuint (v, ==, 1234567890);
+}
+
+/**
+ * gi_marshalling_tests_dev_t_out:
+ * @v: (out):
+ */
+void
+gi_marshalling_tests_dev_t_out (dev_t *v)
+{
+  *v = 1234567890;
+}
+
+/**
+ * gi_marshalling_tests_dev_t_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_dev_t_out_uninitialized (dev_t *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
+ * gi_marshalling_tests_dev_t_inout:
+ * @v: (inout):
+ */
+void
+gi_marshalling_tests_dev_t_inout (dev_t *v)
+{
+  g_assert_cmpuint (*v, ==, 1234567890);
+  *v = 0;
+}
+
+
+gid_t
+gi_marshalling_tests_gid_t_return (void)
+{
+  return 65534;
+}
+
+void
+gi_marshalling_tests_gid_t_in (gid_t v)
+{
+  g_assert_cmpuint (v, ==, 65534);
+}
+
+/**
+ * gi_marshalling_tests_gid_t_out:
+ * @v: (out):
+ */
+void
+gi_marshalling_tests_gid_t_out (gid_t *v)
+{
+  *v = 65534;
+}
+
+/**
+ * gi_marshalling_tests_gid_t_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_gid_t_out_uninitialized (gid_t *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
+ * gi_marshalling_tests_gid_t_inout:
+ * @v: (inout):
+ */
+void
+gi_marshalling_tests_gid_t_inout (gid_t *v)
+{
+  g_assert_cmpuint (*v, ==, 65534);
+  *v = 0;
+}
+
+
+pid_t
+gi_marshalling_tests_pid_t_return (void)
+{
+  return 12345;
+}
+
+void
+gi_marshalling_tests_pid_t_in (pid_t v)
+{
+  g_assert_cmpuint (v, ==, 12345);
+}
+
+/**
+ * gi_marshalling_tests_pid_t_out:
+ * @v: (out):
+ */
+void
+gi_marshalling_tests_pid_t_out (pid_t *v)
+{
+  *v = 12345;
+}
+
+/**
+ * gi_marshalling_tests_pid_t_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_pid_t_out_uninitialized (pid_t *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
+ * gi_marshalling_tests_pid_t_inout:
+ * @v: (inout):
+ */
+void
+gi_marshalling_tests_pid_t_inout (pid_t *v)
+{
+  g_assert_cmpuint (*v, ==, 12345);
+  *v = 0;
+}
+
+
+socklen_t
+gi_marshalling_tests_socklen_t_return (void)
+{
+  return 123;
+}
+
+void
+gi_marshalling_tests_socklen_t_in (socklen_t v)
+{
+  g_assert_cmpuint (v, ==, 123);
+}
+
+/**
+ * gi_marshalling_tests_socklen_t_out:
+ * @v: (out):
+ */
+void
+gi_marshalling_tests_socklen_t_out (socklen_t *v)
+{
+  *v = 123;
+}
+
+/**
+ * gi_marshalling_tests_socklen_t_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_socklen_t_out_uninitialized (socklen_t *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
+ * gi_marshalling_tests_socklen_t_inout:
+ * @v: (inout):
+ */
+void
+gi_marshalling_tests_socklen_t_inout (socklen_t *v)
+{
+  g_assert_cmpuint (*v, ==, 123);
+  *v = 0;
+}
+
+
+uid_t
+gi_marshalling_tests_uid_t_return (void)
+{
+  return 65534;
+}
+
+void
+gi_marshalling_tests_uid_t_in (uid_t v)
+{
+  g_assert_cmpuint (v, ==, 65534);
+}
+
+/**
+ * gi_marshalling_tests_uid_t_out:
+ * @v: (out):
+ */
+void
+gi_marshalling_tests_uid_t_out (uid_t *v)
+{
+  *v = 65534;
+}
+
+/**
+ * gi_marshalling_tests_uid_t_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_uid_t_out_uninitialized (uid_t *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
+ * gi_marshalling_tests_uid_t_inout:
+ * @v: (inout):
+ */
+void
+gi_marshalling_tests_uid_t_inout (uid_t *v)
+{
+  g_assert_cmpuint (*v, ==, 65534);
+  *v = 0;
+}
+
+#endif /* G_OS_UNIX */
+
 
 GType
 gi_marshalling_tests_gtype_return (void)
