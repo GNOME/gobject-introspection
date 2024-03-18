@@ -270,6 +270,11 @@ regress_foo_object_is_it_time_yet (RegressFooObject *object, time_t time)
 {
 }
 
+void
+regress_foo_object_seek (RegressFooObject *object, off_t offset)
+{
+}
+
 /**
  * regress_foo_object_new_cookie: (skip)
  * @object:

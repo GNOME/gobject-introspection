@@ -1247,6 +1247,50 @@ gi_marshalling_tests_time_t_inout (time_t *v)
 }
 
 
+off_t
+gi_marshalling_tests_off_t_return (void)
+{
+  return 1234567890;
+}
+
+void
+gi_marshalling_tests_off_t_in (off_t v)
+{
+  g_assert_cmpuint (v, ==, 1234567890);
+}
+
+/**
+ * gi_marshalling_tests_off_t_out:
+ * @v: (out):
+ */
+void
+gi_marshalling_tests_off_t_out (off_t *v)
+{
+  *v = 1234567890;
+}
+
+/**
+ * gi_marshalling_tests_off_t_out_uninitialized:
+ * @v: (out):
+ */
+gboolean
+gi_marshalling_tests_off_t_out_uninitialized (off_t *v G_GNUC_UNUSED)
+{
+  return FALSE;
+}
+
+/**
+ * gi_marshalling_tests_off_t_inout:
+ * @v: (inout):
+ */
+void
+gi_marshalling_tests_off_t_inout (off_t *v)
+{
+  g_assert_cmpuint (*v, ==, 1234567890);
+  *v = 0;
+}
+
+
 GType
 gi_marshalling_tests_gtype_return (void)
 {

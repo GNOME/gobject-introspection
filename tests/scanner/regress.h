@@ -10,6 +10,7 @@
 #include <time.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/types.h>
 
 #include "gitestmacros.h"
 
@@ -92,6 +93,9 @@ gunichar regress_test_unichar (gunichar in);
 
 _GI_TEST_EXTERN
 time_t regress_test_timet (time_t in);
+
+_GI_TEST_EXTERN
+off_t regress_test_offt (off_t in);
 
 _GI_TEST_EXTERN
 GType regress_test_gtype (GType in);

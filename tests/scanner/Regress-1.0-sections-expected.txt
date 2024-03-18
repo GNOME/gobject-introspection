@@ -171,6 +171,7 @@ regress_test_nested_parameter
 regress_test_noptr_callback
 regress_test_null_gerror_callback
 regress_test_null_strv_in_gvalue
+regress_test_offt
 regress_test_owned_gerror_callback
 regress_test_return_allow_none
 regress_test_return_nullable
@@ -279,6 +280,7 @@ regress_foo_object_handle_glyph
 regress_foo_object_is_it_time_yet
 regress_foo_object_new_cookie
 regress_foo_object_read
+regress_foo_object_seek
 regress_foo_object_skipped_method
 regress_foo_object_take_all
 regress_foo_object_various

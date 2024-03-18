@@ -190,6 +190,12 @@ regress_test_timet (time_t in)
   return in;
 }
 
+off_t
+regress_test_offt (off_t in)
+{
+  return in;
+}
+
 GType
 regress_test_gtype (GType in)
 {

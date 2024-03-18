@@ -1,6 +1,9 @@
 #ifndef __REGRESS_FOO_OBJECT_H__
 #define __REGRESS_FOO_OBJECT_H__
 
+#include <sys/types.h>  /* off_t */
+#include <time.h>       /* time_t */
+
 #include <glib-object.h>
 #include <gio/gio.h> /* GAsyncReadyCallback */
 
@@ -154,6 +157,10 @@ RegressFooObjectCookie       regress_foo_object_new_cookie        (RegressFooObj
 
 _GI_TEST_EXTERN
 void                  regress_foo_object_is_it_time_yet    (RegressFooObject *object, time_t time);
+
+
+_GI_TEST_EXTERN
+void                  regress_foo_object_seek              (RegressFooObject *object, off_t offset);
 
 
 _GI_TEST_EXTERN

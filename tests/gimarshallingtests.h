@@ -2,6 +2,9 @@
  * vim: tabstop=4 shiftwidth=4 expandtab
  */
 
+#include <sys/types.h>  /* off_t */
+#include <time.h>       /* time_t */
+
 #include <glib-object.h>
 
 #include "gitestmacros.h"
@@ -523,6 +526,27 @@ gboolean gi_marshalling_tests_time_t_out_uninitialized (time_t *v G_GNUC_UNUSED)
 
 _GI_TEST_EXTERN
 void gi_marshalling_tests_time_t_inout (time_t *v);
+
+
+/* Platform file offset (avoid this, use goffset instead) */
+
+_GI_TEST_EXTERN
+off_t gi_marshalling_tests_off_t_return (void);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_off_t_in (off_t v);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_off_t_out (off_t *v);
+
+_GI_TEST_EXTERN
+gboolean gi_marshalling_tests_off_t_out_uninitialized (off_t *v G_GNUC_UNUSED);
+
+
+_GI_TEST_EXTERN
+void gi_marshalling_tests_off_t_inout (off_t *v);
 
 
 /* GType */
