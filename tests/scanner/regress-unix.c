@@ -6,6 +6,8 @@
 
 #include "regress-unix.h"
 
+#ifdef G_OS_UNIX
+
 dev_t
 regress_unix_test_devt (dev_t in)
 {
@@ -35,3 +37,5 @@ regress_unix_test_uidt (uid_t in)
 {
   return in;
 }
+
+#endif
