@@ -234,6 +234,12 @@ TYPE_UNICHAR = Type(target_fundamental='gunichar', ctype='gunichar')
 # Platform-specific types
 TYPE_TIME_T = Type(target_fundamental='time_t', ctype='time_t')
 TYPE_OFF_T = Type(target_fundamental='off_t', ctype='off_t')
+# Unix-specific types that are handled here for historical reasons
+TYPE_DEV_T = Type(target_fundamental='dev_t', ctype='dev_t')
+TYPE_GID_T = Type(target_fundamental='gid_t', ctype='gid_t')
+TYPE_PID_T = Type(target_fundamental='pid_t', ctype='pid_t')
+TYPE_SOCKLEN_T = Type(target_fundamental='socklen_t', ctype='socklen_t')
+TYPE_UID_T = Type(target_fundamental='uid_t', ctype='uid_t')
 
 # C types with semantics overlaid
 TYPE_GTYPE = Type(target_fundamental='GType', ctype='GType')
@@ -270,6 +276,11 @@ BASIC_TYPES = [
     TYPE_LONG_DOUBLE,
     TYPE_UNICHAR,
     TYPE_GTYPE,
+    TYPE_DEV_T,
+    TYPE_GID_T,
+    TYPE_PID_T,
+    TYPE_SOCKLEN_T,
+    TYPE_UID_T,
 ]
 
 BASIC_GIR_TYPES = [TYPE_INTPTR, TYPE_UINTPTR]
@@ -291,6 +302,11 @@ for v in [
     TYPE_LONG_ULONG,
     TYPE_LONG_DOUBLE,
     TYPE_VALIST,
+    TYPE_DEV_T,
+    TYPE_GID_T,
+    TYPE_PID_T,
+    TYPE_SOCKLEN_T,
+    TYPE_UID_T,
 ]:
     INTROSPECTABLE_BASIC.remove(v)
 
@@ -376,11 +392,11 @@ type_names['uintptr_t'] = type_names['guintptr']
 type_names['intptr_t'] = type_names['gintptr']
 type_names['time_t'] = TYPE_TIME_T
 type_names['off_t'] = TYPE_OFF_T
-type_names['pid_t'] = TYPE_INT
-type_names['uid_t'] = TYPE_UINT
-type_names['gid_t'] = TYPE_UINT
-type_names['dev_t'] = TYPE_INT
-type_names['socklen_t'] = TYPE_INT32
+type_names['pid_t'] = TYPE_PID_T
+type_names['uid_t'] = TYPE_UID_T
+type_names['gid_t'] = TYPE_GID_T
+type_names['dev_t'] = TYPE_DEV_T
+type_names['socklen_t'] = TYPE_SOCKLEN_T
 
 # Obj-C
 type_names['id'] = TYPE_ANY

@@ -44,6 +44,10 @@ test_girscanner = find_program('g-ir-scanner', native: true, required : false)
 test_gircompiler = find_program('g-ir-compiler', native: false, required : false)
 
 # Generate everything.h and everything.c:
+everything_args = []
+if host_system != 'windows'
+  everything_args += '--include-last-in-header=sys/socket.h'
+endif
 test_everything_files = custom_target('everything',
   output: ['everything.h', 'everything.c'],
   depends: typelibs,
@@ -57,7 +61,7 @@ test_everything_files = custom_target('everything',
     '--include-last-in-header=gitestmacros.h',
     '--include-last-in-header=sys/types.h',
     '--include-last-in-header=time.h',
-  ],
+  ] + everything_args,
   install: true,
   install_dir: test_install_dir,
 )

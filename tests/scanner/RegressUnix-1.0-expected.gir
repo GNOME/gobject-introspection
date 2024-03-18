@@ -17,55 +17,55 @@ and/or use gtk-doc annotations.  -->
     <function name="test_devt" c:identifier="regress_unix_test_devt">
       <source-position filename="regress-unix.h" line="13"/>
       <return-value transfer-ownership="none">
-        <type name="gint" c:type="dev_t"/>
+        <type name="dev_t" c:type="dev_t"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="gint" c:type="dev_t"/>
+          <type name="dev_t" c:type="dev_t"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_gidt" c:identifier="regress_unix_test_gidt">
       <source-position filename="regress-unix.h" line="16"/>
       <return-value transfer-ownership="none">
-        <type name="guint" c:type="gid_t"/>
+        <type name="gid_t" c:type="gid_t"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="guint" c:type="gid_t"/>
+          <type name="gid_t" c:type="gid_t"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_pidt" c:identifier="regress_unix_test_pidt">
       <source-position filename="regress-unix.h" line="19"/>
       <return-value transfer-ownership="none">
-        <type name="gint" c:type="pid_t"/>
+        <type name="pid_t" c:type="pid_t"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="gint" c:type="pid_t"/>
+          <type name="pid_t" c:type="pid_t"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_socklent" c:identifier="regress_unix_test_socklent">
       <source-position filename="regress-unix.h" line="22"/>
       <return-value transfer-ownership="none">
-        <type name="gint32" c:type="socklen_t"/>
+        <type name="socklen_t" c:type="socklen_t"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="gint32" c:type="socklen_t"/>
+          <type name="socklen_t" c:type="socklen_t"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_uidt" c:identifier="regress_unix_test_uidt">
       <source-position filename="regress-unix.h" line="25"/>
       <return-value transfer-ownership="none">
-        <type name="guint" c:type="uid_t"/>
+        <type name="uid_t" c:type="uid_t"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="guint" c:type="uid_t"/>
+          <type name="uid_t" c:type="uid_t"/>
         </parameter>
       </parameters>
     </function>
