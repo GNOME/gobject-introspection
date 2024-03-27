@@ -163,10 +163,21 @@ endif
 # the correct env in the custom_target
 pkg_config = find_program('pkg-config')
 g_ir_scanner_env = environment()
+
+pkg_config_path_win = []
 dep_type = glib_dep.type_name()
 if dep_type == 'internal'
   g_ir_scanner_env.append('PKG_CONFIG_PATH', meson.global_build_root() + '/meson-uninstalled')
   g_ir_scanner_env.set('PKG_CONFIG', pkg_config.full_path())
+else
+  # Needed on Windows for Python 3.8.x+ if project is configured with
+  # --pkg-config-path or -Dpkg_config_path
+  if host_system == 'windows'
+    pkg_config_path_win = get_option('pkg_config_path')
+	if pkg_config_path_win.length() > 0
+      g_ir_scanner_env.prepend('PKG_CONFIG_PATH', pkg_config_path_win)
+    endif
+  endif
 endif
 
 configure_file(

@@ -14,6 +14,13 @@ if libffi_dep.type_name() == 'internal' and host_system == 'windows'
   test_env_common_path += [ sub_build_root / 'libffi/src' ]
 endif
 
+# Needed for Python 3.8.x or later on Windows to run g-ir-scanner, when we use
+# --pkg-config-path/-Dpkg_config_path in the Meson configure line
+tests_scanner_run_env = environment()
+if pkg_config_path_win.length() > 0
+  tests_scanner_run_env.prepend('PKG_CONFIG_PATH', pkg_config_path_win)
+endif
+
 test_env_common_pypath = [ meson.project_build_root() ]
 
 installed_sources = [
@@ -128,7 +135,8 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '-I', meson.current_source_dir(),
       extra_giscanner_args,
       '@INPUT@',
-    ]
+    ],
+    env: tests_scanner_run_env,
   )]
 
   test_gir_files += [custom_target('gir-gimarshallingtests',
@@ -154,7 +162,8 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '--c-include="tests/gimarshallingtests.h"',
       extra_giscanner_args,
       '@INPUT@',
-    ]
+    ],
+    env: tests_scanner_run_env,
   )]
 
   foreach gir : test_gir_files
