@@ -1279,6 +1279,15 @@ RegressTestObj *regress_test_obj_new_callback (RegressTestCallbackUserData callb
                                 GDestroyNotify notify);
 
 _GI_TEST_EXTERN
+void regress_test_obj_new_async (const char          *x G_GNUC_UNUSED,
+                                 GCancellable        *cancellable G_GNUC_UNUSED,
+                                 GAsyncReadyCallback  callback G_GNUC_UNUSED,
+                                 gpointer             user_data G_GNUC_UNUSED);
+_GI_TEST_EXTERN
+RegressTestObj *regress_test_obj_new_finish (GAsyncResult  *res G_GNUC_UNUSED,
+                                             GError       **error G_GNUC_UNUSED);
+
+_GI_TEST_EXTERN
 void regress_test_hash_table_callback (GHashTable *data, RegressTestCallbackHashtable callback);
 
 _GI_TEST_EXTERN

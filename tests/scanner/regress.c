@@ -4324,6 +4324,29 @@ regress_test_obj_new_callback (RegressTestCallbackUserData callback, gpointer us
 }
 
 /**
+ * regress_test_obj_new_async:
+ *
+ */
+void
+regress_test_obj_new_async (const char          *x G_GNUC_UNUSED,
+                            GCancellable        *cancellable G_GNUC_UNUSED,
+                            GAsyncReadyCallback  callback G_GNUC_UNUSED,
+                            gpointer             user_data G_GNUC_UNUSED)
+{
+}
+
+/**
+ * regress_test_obj_new_finish:
+ *
+ */
+RegressTestObj *
+regress_test_obj_new_finish (GAsyncResult  *res G_GNUC_UNUSED,
+                             GError       **error G_GNUC_UNUSED)
+{
+  return g_object_new (REGRESS_TEST_TYPE_OBJ, NULL);
+}
+
+/**
  * regress_test_hash_table_callback:
  * @data: (element-type utf8 gint): GHashTable that gets passed to callback
  * @callback: (scope call):
