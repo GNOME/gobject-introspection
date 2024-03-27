@@ -26,6 +26,12 @@ warn_test_env = environment()
 warn_test_env.set('UNINSTALLED_INTROSPECTION_SRCDIR', source_root)
 warn_test_env.set('TOP_BUILDDIR', build_root)
 
+# Needed on Windows for Python 3.8.x+ if project is configured with
+# --pkg-config-path or -Dpkg_config_path
+if pkg_config_path_win.length() > 0
+  warn_test_env.prepend('PKG_CONFIG_PATH', pkg_config_path_win)
+endif
+
 # FIXME: Glib as a subproject (used on Windows mostly).
 if glib_dep.type_name() == 'pkgconfig'
   foreach warn_fn : warn_tests
