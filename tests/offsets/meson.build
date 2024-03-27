@@ -36,7 +36,8 @@ if glib_dep.type_name() == 'pkgconfig'
       '-I', join_paths(source_root, 'tests'),
       extra_giscanner_args,
       '@INPUT@',
-    ]
+    ],
+    env: tests_scanner_run_env,
   )
 
   test_offsets_typelib = custom_target(
