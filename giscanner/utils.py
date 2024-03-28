@@ -338,12 +338,33 @@ class dll_dirs(metaclass=Singleton):
                     if os.path.isdir(path):
                         self._add_dll_dir(path)
 
+            # If GLib is built as part of the gobject-introspection build, include the paths in %PATH%
+            if 'GLIB_BUILD_DIR' in os.environ:
+                uninstalled_pc_dir = os.path.join(os.environ['GLIB_BUILD_DIR'], 'meson-uninstalled')
+                pkg_config_paths = []
+                if 'PKG_CONFIG_PATH' in os.environ:
+                    pkg_config_paths = os.environ['PKG_CONFIG_PATH'].split(os.pathsep)
+                    if pkg_config_paths[0] != uninstalled_pc_dir:
+                        pkg_config_paths.insert(0, uninstalled_pc_dir)
+                else:
+                    pkg_config_paths = [uninstalled_pc_dir]
+
+                os.environ['PKG_CONFIG_PATH'] = os.pathsep.join(pkg_config_paths)
+
             for path in giscanner.pkgconfig.libs_only_L(pkgs, True):
                 libpath = path.replace('-L', '')
                 self._add_dll_dir(libpath)
 
             for path in giscanner.pkgconfig.bindir(pkgs):
                 self._add_dll_dir(path)
+
+            # If we are building GLib when building GLib's introspection files, also
+            # include paths in %PATH% if the paths exist
+            if 'GLIB_BUILD_DIR' in os.environ:
+                path_envvar = os.environ['PATH'].split(os.pathsep)
+                for path in path_envvar:
+                    if os.path.isdir(path):
+                        self._add_dll_dir(path)
 
     def cleanup_dll_dirs(self):
         if self._cached_added_dll_dirs is not None:
