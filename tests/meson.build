@@ -1,19 +1,3 @@
-sub_build_root = meson.project_build_root() / 'subprojects'
-test_env_common_path = []
-if glib_dep.type_name() == 'internal' and host_system == 'windows'
-  test_env_common_path += [
-    sub_build_root / 'glib/glib',
-    sub_build_root / 'glib/gobject',
-    sub_build_root / 'glib/gio',
-    sub_build_root / 'glib/gmodule',
-    sub_build_root / 'proxy-libintl',
-    sub_build_root / 'zlib',
-  ]
-endif
-if libffi_dep.type_name() == 'internal' and host_system == 'windows'
-  test_env_common_path += [ sub_build_root / 'libffi/src' ]
-endif
-
 # Needed for Python 3.8.x or later on Windows to run g-ir-scanner, when we use
 # --pkg-config-path/-Dpkg_config_path in the Meson configure line
 tests_scanner_run_env = environment()

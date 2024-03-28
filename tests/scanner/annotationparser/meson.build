@@ -1,7 +1,7 @@
 annotationparser_test_env = environment()
 annotationparser_test_env.prepend('PYTHONPATH', test_env_common_pypath)
-if test_env_common_path.length() > 0
-    annotationparser_test_env.prepend('PATH', test_env_common_path)
+if internal_deps_dll_paths.length() > 0
+    annotationparser_test_env.prepend('PATH', internal_deps_dll_paths)
 endif
 
 # Needed on Windows for Python 3.8.x+ if project is configured with
