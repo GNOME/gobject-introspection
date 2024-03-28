@@ -178,10 +178,19 @@ if dep_type == 'internal'
       sub_build_root / 'glib/glib',
       sub_build_root / 'glib/gobject',
       sub_build_root / 'glib/gio',
-      sub_build_root / 'glib/gmodule',
-      sub_build_root / 'proxy-libintl',
-      sub_build_root / 'zlib',
+      sub_build_root / 'glib/gmodule'
     ]
+
+    # Check whether ZLib and proxy-intl are indeed built as subprojects, else os.add_dll_directory()
+    # will complain
+    fs = import('fs')
+    # Keep in sync with GLib's subprojects
+    foreach dep: ['proxy-intl', 'zlib-1.2.11', 'pcre2-10.42']
+      dep_dir = sub_build_root / dep
+      if fs.exists(dep_dir) and fs.is_dir(dep_dir)
+        internal_deps_dll_paths += [dep_dir]
+      endif
+    endforeach
   endif
 else
   # Needed on Windows for Python 3.8.x+ if project is configured with
@@ -204,6 +213,16 @@ if host_system == 'windows'
       g_ir_scanner_env.prepend('PKG_CONFIG_PATH', pkg_config_path_win)
     endif
   endif
+endif
+
+if internal_deps_dll_paths.length() > 0
+  # Also assume the installation bindir to be considered for DLLs
+  message('Ensure that if GLib is built as a subproject, all of its dependent non-system DLLs that are not built')
+  message('alongside with it can be found in \'@0@\''.format(get_option('prefix') / get_option('bindir')))
+  message('Check this if building .gir files fail due to \'ImportError: DLL load failed while importing _giscanner\'')
+  internal_deps_dll_paths += get_option('prefix') / get_option('bindir')
+
+  g_ir_scanner_env.set('GI_EXTRA_BASE_DLL_DIRS', internal_deps_dll_paths)
 endif
 
 configure_file(

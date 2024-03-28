@@ -4,6 +4,9 @@ tests_scanner_run_env = environment()
 if pkg_config_path_win.length() > 0
   tests_scanner_run_env.prepend('PKG_CONFIG_PATH', pkg_config_path_win)
 endif
+if internal_deps_dll_paths.length() > 0
+  tests_scanner_run_env.set('GI_EXTRA_BASE_DLL_DIRS', internal_deps_dll_paths)
+endif
 
 test_env_common_pypath = [ meson.project_build_root() ]
 
