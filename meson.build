@@ -167,8 +167,15 @@ g_ir_scanner_env = environment()
 pkg_config_path_win = []
 dep_type = glib_dep.type_name()
 if dep_type == 'internal'
+  g_ir_scanner_env.set('GLIB_BUILD_DIR', meson.global_build_root())
   g_ir_scanner_env.append('PKG_CONFIG_PATH', meson.global_build_root() + '/meson-uninstalled')
   g_ir_scanner_env.set('PKG_CONFIG', pkg_config.full_path())
+
+  # Also assume the existing paths in %PATH% to be considered for DLLs
+  # when building GLib as a subproject
+  message('Ensure that if GLib is built as a subproject, all of its dependent non-system DLLs that are not built')
+  message('alongside with it can be found in %PATH%')
+  message('Check this if building .gir files fail due to \'ImportError: DLL load failed while importing _giscanner\'')
 else
   # Needed on Windows for Python 3.8.x+ if project is configured with
   # --pkg-config-path or -Dpkg_config_path
