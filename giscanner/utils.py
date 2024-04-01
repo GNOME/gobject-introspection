@@ -319,7 +319,7 @@ class Singleton(type):
 # more explicit on where dependent DLLs are located, via the use of
 # os.add_dll_directory().
 # To acquire the paths where dependent DLLs could be found we use:
-#  *  The envvar GI_EXTRA_BASE_DLL_DIRS
+#  *  The envvar GI_EXTRA_BASE_DLL_DIRS, if the path(s) exist
 #  *  The bindir variable from gio-2.0.pc when dependencies are installed in a prefix
 #  *  -L directories from pkg-config --libs-only-L for uninstalled dependencies
 class dll_dirs(metaclass=Singleton):
@@ -335,7 +335,8 @@ class dll_dirs(metaclass=Singleton):
         if os.name == 'nt' and hasattr(os, 'add_dll_directory'):
             if 'GI_EXTRA_BASE_DLL_DIRS' in os.environ:
                 for path in os.environ.get('GI_EXTRA_BASE_DLL_DIRS').split(os.pathsep):
-                    self._add_dll_dir(path)
+                    if os.path.isdir(path):
+                        self._add_dll_dir(path)
 
             for path in giscanner.pkgconfig.libs_only_L(pkgs, True):
                 libpath = path.replace('-L', '')
