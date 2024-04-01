@@ -14,7 +14,7 @@ SET PKG_CONFIG_PATH=%CD%\_build\meson-uninstalled
 pip3 install --upgrade --user meson==1.2.3 || goto :error
 
 meson subprojects download glib
-meson wrap promote subprojects\glib\subprojects\pcre.wrap
+meson wrap promote subprojects\glib\subprojects\pcre2.wrap
 
 meson setup _build || goto :error
 meson compile -C _build || goto :error
