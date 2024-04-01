@@ -1,3 +1,10 @@
+1.80.1 - 2024-04-01
+-------------------
+
+* Require Python 3.8 when running mypy
+* Ensure that POSIX types follow the target architecture
+* Look for finish functions inside the list of constructors
+
 1.80.0 - 2024-03-09
 -------------------
 
