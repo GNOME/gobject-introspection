@@ -10,6 +10,12 @@ if pkg_config_path_win.length() > 0
   scanner_test_env.prepend('PKG_CONFIG_PATH', pkg_config_path_win)
 endif
 
+# Use the gio-2.0-uninstalled.pc and the paths in %PATH% when GLib is built as a subproject so
+# that the freshly-built GLib DLLs and their dependent DLLs can be found when running the tests
+if host_system == 'windows' and glib_dep.type_name() == 'internal'
+  scanner_test_env.set('GLIB_BUILD_DIR', meson.global_build_root())
+endif
+
 scanner_test_files = [
   'test_ccompiler.py',
   'test_shlibs.py',
