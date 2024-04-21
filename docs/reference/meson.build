@@ -24,6 +24,7 @@ gnome.gtkdoc('gi',
   src_dir: 'girepository',
   content_files: [
     'gi-struct-hierarchy.xml',
+    version_xml,
   ],
   scan_args: [
     '--rebuild-types',
