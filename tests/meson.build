@@ -16,16 +16,6 @@ endif
 
 test_env_common_pypath = [ meson.project_build_root() ]
 
-
-test_regress_sources = files('scanner/regress.c')
-test_regress_headers = files('scanner/regress.h')
-test_warnlib_sources = files('scanner/warnlib.c')
-test_warnlib_headers = files('scanner/warnlib.h')
-test_marshalling_sources = files('gimarshallingtests.c')
-test_marshalling_headers = files('gimarshallingtests.h')
-
-test_regress_incdirs = include_directories(['.', 'scanner'])
-
 installed_sources = [
   'scanner/annotation.c',
   'scanner/annotation.h',
@@ -97,7 +87,7 @@ if cc.get_id() != 'msvc'
 endif
 
 gimarshallingtests_lib = shared_library('gimarshallingtests-1.0',
-  sources: test_marshalling_sources,
+  sources: 'gimarshallingtests.c',
   include_directories : configinc,
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [glib_dep, gobject_dep],
@@ -142,7 +132,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
   )]
 
   test_gir_files += [custom_target('gir-gimarshallingtests',
-    input: test_marshalling_sources + test_marshalling_headers,
+    input: ['gimarshallingtests.c', 'gimarshallingtests.h'],
     output: 'GIMarshallingTests-1.0.gir',
     depends: [gimarshallingtests_lib] + typelibs,
     command: [
