@@ -158,7 +158,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
   )]
 
   foreach gir : test_gir_files
-    test_typelibs += custom_target('generate-typelib-@0@'.format(gir).underscorify(),
+    test_typelibs += custom_target(
       input: gir,
       output: '@BASENAME@.typelib',
       depends: [gobject_gir, ],

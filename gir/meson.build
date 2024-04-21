@@ -520,7 +520,7 @@ gircompiler_command += [
 ]
 
 foreach gir: gir_files
-  typelibs += custom_target('generate-typelib-@0@'.format(gir).underscorify(),
+  typelibs += custom_target(
     input: gir,
     output: '@BASENAME@.typelib',
     depends: [gobject_gir, gircompiler, ],
@@ -531,7 +531,7 @@ foreach gir: gir_files
 endforeach
 
 foreach gir: uninstalled_gir_files
-  typelibs += custom_target('generate-typelib-@0@'.format(gir).underscorify(),
+  typelibs += custom_target(
     input: gir,
     output: '@BASENAME@.typelib',
     depends: [gobject_gir, gircompiler, ],
