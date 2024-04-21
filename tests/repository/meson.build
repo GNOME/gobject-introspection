@@ -18,6 +18,10 @@ if glib_dep.type_name() == 'pkgconfig'
     'LD_LIBRARY_PATH',
     join_paths(build_root, 'tests', 'scanner'),
   )
+  repository_test_env.prepend(
+    'DYLD_LIBRARY_PATH',
+    join_paths(build_root, 'tests', 'scanner'),
+  )
   if host_system == 'windows'
     repository_test_env.prepend(
       'PATH', join_paths(build_root, 'tests', 'scanner'))
