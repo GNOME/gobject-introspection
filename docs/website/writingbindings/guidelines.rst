@@ -29,7 +29,7 @@ binding for the GObject Introspection framework.
 
 * Use the same coding style as your language. If libraries for your language
   normally uses underscores do that as well. For instance, Java bindings
-  should have a method on it's GtkButton wrapper called ``setLabel`` and not
+  should have a method on its GtkButton wrapper called ``setLabel`` and not
   ``set_label``.
 
 * If there are existing GObject bindings, reuse them for improved
