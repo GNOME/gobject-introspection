@@ -226,6 +226,8 @@ stringtext				([^\\\"])|(\\.)
 "_Float128x"                            { return BASIC_TYPE; }
 "__float80"                             { return BASIC_TYPE; }
 "__float128"                            { return BASIC_TYPE; }
+"__Float32x4_t"                         { return BASIC_TYPE; }
+"__Float64x2_t"                         { return BASIC_TYPE; }
 "for"					{ return FOR; }
 "goto"					{ return GOTO; }
 "if"					{ return IF; }
@@ -247,6 +249,9 @@ stringtext				([^\\\"])|(\\.)
 "sizeof"				{ return SIZEOF; }
 "static"				{ return STATIC; }
 "struct"				{ return STRUCT; }
+"__SVFloat32_t"                         { return BASIC_TYPE; }
+"__SVFloat64_t"                         { return BASIC_TYPE; }
+"__SVBool_t"                            { return BASIC_TYPE; }
 "switch"				{ return SWITCH; }
 "typedef"				{ return TYPEDEF; }
 "union"					{ return UNION; }
