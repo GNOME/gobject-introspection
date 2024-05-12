@@ -34,6 +34,17 @@ from distutils.sysconfig import customize_compiler as orig_customize_compiler
 from . import utils
 
 
+def no_as_needed(linker):
+    """\
+    Filter out -Wl,--as-needed from the shell-quoted arguments in linker.
+    """
+    return ' '.join(
+        [shlex.quote(arg)
+         for arg in shlex.split(linker)
+         if arg != '-Wl,--as-needed']
+    )
+
+
 def customize_compiler(compiler):
     """This is a version of distutils.sysconfig.customize_compiler, without
     any macOS specific bits and which tries to avoid using any Python specific
@@ -87,8 +98,8 @@ def customize_compiler(compiler):
             compiler=cc_cmd,
             compiler_so=cc_cmd,
             compiler_cxx=cxx,
-            linker_so=ldshared,
-            linker_exe=cc,
+            linker_so=no_as_needed(ldshared),
+            linker_exe=no_as_needed(cc),
             archiver=archiver)
 
         compiler.shared_lib_extension = shlib_suffix
@@ -229,10 +240,10 @@ class CCompiler(object):
                 # https://bugzilla.gnome.org/show_bug.cgi?id=625195
                 args.append('-Wl,-rpath,.')
 
-                # Ensure libraries are always linked as we are going to use ldd to work
-                # out their names later
-                if sys.platform != 'darwin':
-                    args.append('-Wl,--no-as-needed')
+            # Ensure libraries are always linked as we are going to use ldd to work
+            # out their names later
+            if sys.platform != 'darwin':
+                args.append('-Wl,--no-as-needed')
 
         for library_path in libpaths:
             # The dumper program needs to look for dynamic libraries
@@ -277,6 +288,11 @@ class CCompiler(object):
         # An "external" link is where the library to be introspected
         # is installed on the system; this case is used for the scanning
         # of GLib in gobject-introspection itself.
+
+        # Ensure libraries are always linked as we are going to use ldd to work
+        # out their names later
+        if os.name != 'nt' and sys.platform != 'darwin':
+            args.append('-Wl,--no-as-needed')
 
         for library in libraries:
             if os.path.isfile(library):
