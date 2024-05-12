@@ -254,7 +254,8 @@ class DumpCompiler(object):
 
         if not self._compiler.check_is_msvc():
             for ldflag in shlex.split(os.environ.get('LDFLAGS', '')):
-                args.append(ldflag)
+                if ldflag != '-Wl,--as-needed':
+                    args.append(ldflag)
 
         dll_dirs = utils.dll_dirs()
         dll_dirs.add_dll_dirs(self._packages)
