@@ -99,11 +99,6 @@ Additionally, the following restrictions are in effect:
 
 #. Taking the above restrictions into account, spanning multiple paragraphs is
    limited to the `comment block description` part and `tag description` fields.
-
-Refer to the `GTK-Doc manual`_ for more detailed usage information.
-
-.. _GTK-Doc manual:
-        http://developer-old.gnome.org/gtk-doc-manual/1.18/documenting.html.en
 '''
 
 import os
