@@ -252,6 +252,12 @@ class DumpCompiler(object):
             args.extend(pkg_config_libs)
             self._compiler.get_external_link_flags(args, self._options.libraries)
 
+        if sys.platform == 'darwin':
+            # If the libraries' ID are of the form (@rpath/libfoo.dylib),
+            # then nothing previously can have added the needed rpaths
+            rpath_entries_to_add = [lib.replace('-L/', '-Wl,-rpath,/') for lib in pkg_config_libs if lib.startswith('-L/')]
+            args.extend(rpath_entries_to_add)
+
         if not self._compiler.check_is_msvc():
             for ldflag in shlex.split(os.environ.get('LDFLAGS', '')):
                 if ldflag != '-Wl,--as-needed':
