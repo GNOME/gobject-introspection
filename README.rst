@@ -78,4 +78,4 @@ Bugs should be reported in https://gitlab.gnome.org/GNOME/gobject-introspection/
 Contact
 -------
 :Discourse: https://discourse.gnome.org/tag/introspection
-:IRC: #introspection@irc.gnome.org
+:Matrix: `#introspection:gnome.org <https://matrix.to/#/#introspection:gnome.org>`_
