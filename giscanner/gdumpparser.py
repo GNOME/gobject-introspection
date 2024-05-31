@@ -71,6 +71,7 @@ class GDumpParser(object):
         self._error_quark_functions = []
         self._error_domains = {}
         self._boxed_types = {}
+        self._pointer_types = {}
         self._private_internal_types = {}
 
     # Public API
@@ -117,6 +118,8 @@ class GDumpParser(object):
         # Pair up boxed types and class records
         for name, boxed in self._boxed_types.items():
             self._pair_boxed_type(boxed)
+        for name, pointer in self._pointer_types.items():
+            self._pair_pointer_type(pointer)
         for node in list(self._namespace.values()):
             if isinstance(node, (ast.Class, ast.Interface)):
                 self._find_class_record(node)
@@ -247,6 +250,8 @@ blob containing data gleaned from GObject's primitive introspection."""
             self._introspect_interface(xmlnode)
         elif xmlnode.tag == 'boxed':
             self._introspect_boxed(xmlnode)
+        elif xmlnode.tag == 'pointer':
+            self._introspect_pointer(xmlnode)
         elif xmlnode.tag == 'fundamental':
             self._introspect_fundamental(xmlnode)
         else:
@@ -402,6 +407,18 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
                          c_symbol_prefix=c_symbol_prefix)
         self._boxed_types[node.gtype_name] = node
 
+    def _introspect_pointer(self, xmlnode):
+        type_name = xmlnode.attrib['name']
+        try:
+            name = self._transformer.strip_identifier(type_name)
+        except TransformerException as e:
+            message.fatal(e)
+        (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
+        node = ast.Pointer(name, gtype_name=type_name,
+                           get_type=get_type,
+                           c_symbol_prefix=c_symbol_prefix)
+        self._pointer_types[node.gtype_name] = node
+
     def _introspect_implemented_interfaces(self, node, xmlnode):
         gt_interfaces = []
         for interface in xmlnode.findall('implements'):
@@ -531,6 +548,20 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             pair_node.disguised = False
         else:
             return False
+
+    def _pair_pointer_type(self, pointer):
+        try:
+            name = self._transformer.strip_identifier(pointer.gtype_name)
+        except TransformerException as e:
+            message.fatal(e)
+        pair_node = self._namespace.get(name)
+        if pair_node is None:
+            # Skip the "bare" pointer type for backward compatibility
+            return
+        elif isinstance(pair_node, (ast.Record, ast.Union)):
+            pair_node.add_gtype(pointer.gtype_name, pointer.get_type)
+            assert pointer.c_symbol_prefix is not None
+            pair_node.c_symbol_prefix = pointer.c_symbol_prefix
 
     def _find_class_record(self, cls):
         pair_record = None

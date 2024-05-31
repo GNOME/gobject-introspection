@@ -461,7 +461,7 @@ but adds it to things like ctypes, symbols, and type_names.
             self.type_names[node.gtype_name] = node
         elif isinstance(node, Function):
             self.symbols[node.symbol] = node
-        if isinstance(node, (Compound, Class, Interface, Boxed)):
+        if isinstance(node, (Compound, Class, Interface, Boxed, Pointer)):
             for fn in chain(node.methods, node.static_methods, node.constructors):
                 if not isinstance(fn, Function):
                     continue
@@ -1205,6 +1205,32 @@ class Union(Compound):
 
 class Boxed(Node, Registered):
     """A boxed type with no known associated structure/union."""
+    def __init__(self, name,
+                 gtype_name=None,
+                 get_type=None,
+                 c_symbol_prefix=None):
+        assert gtype_name is not None
+        assert get_type is not None
+        Node.__init__(self, name)
+        Registered.__init__(self, gtype_name, get_type)
+        if get_type is not None:
+            assert c_symbol_prefix is not None
+        self.c_symbol_prefix = c_symbol_prefix
+        self.constructors = []
+        self.methods = []
+        self.static_methods = []
+
+    def _walk(self, callback, chain):
+        for ctor in self.constructors:
+            ctor.walk(callback, chain)
+        for meth in self.methods:
+            meth.walk(callback, chain)
+        for meth in self.static_methods:
+            meth.walk(callback, chain)
+
+
+class Pointer(Node, Registered):
+    """A pointer type with no known associated structure/union."""
     def __init__(self, name,
                  gtype_name=None,
                  get_type=None,
