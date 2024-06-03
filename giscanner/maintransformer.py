@@ -1551,10 +1551,10 @@ method or constructor of some type."""
     def _pair_property_accessors(self, node):
         """Look for accessor methods for class properties"""
         for prop in node.properties:
+            normalized_name = prop.name.replace('-', '_')
             if not prop.introspectable:
                 continue
             if prop.setter is None:
-                normalized_name = prop.name.replace('-', '_')
                 if prop.writable and not prop.construct_only:
                     setter = 'set_' + normalized_name
                 else:
