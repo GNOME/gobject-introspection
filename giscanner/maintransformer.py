@@ -836,7 +836,7 @@ class MainTransformer(object):
         block = self._get_block(node)
         self._apply_annotations_annotated(node, block)
 
-    def _apply_annotations_param(self, parent, param, tag):
+    def _apply_annotations_param(self, parent, param, tag, block):
         annotations = tag.annotations if tag else {}
 
         if isinstance(parent, (ast.Function, ast.VFunction)):
@@ -869,6 +869,10 @@ class MainTransformer(object):
                 # argument, and tags a parameter that is a closure. We
                 # represent it (weirdly) in the gir and typelib by
                 # setting param.closure_name to itself.
+                closure_annotation = annotations.get(ANN_CLOSURE)
+                if len(closure_annotation) > 0:
+                    message.warn(f'{block.name}: "closure" annotation takes no option in callback types',
+                                 annotations.position)
                 param.closure_name = param.argname
 
         self._apply_annotations_param_ret_common(parent, param, tag)
@@ -893,7 +897,7 @@ class MainTransformer(object):
                 doc_param = block.params.get(parent.instance_parameter.argname)
             else:
                 doc_param = None
-            self._apply_annotations_param(parent, parent.instance_parameter, doc_param)
+            self._apply_annotations_param(parent, parent.instance_parameter, doc_param, block)
             declparams.add(parent.instance_parameter.argname)
 
         for param in params:
@@ -901,7 +905,7 @@ class MainTransformer(object):
                 doc_param = block.params.get(param.argname)
             else:
                 doc_param = None
-            self._apply_annotations_param(parent, param, doc_param)
+            self._apply_annotations_param(parent, param, doc_param, block)
             declparams.add(param.argname)
 
         if not block:
@@ -1032,7 +1036,7 @@ class MainTransformer(object):
                                                             param, parent)
             else:
                 tag = None
-            self._apply_annotations_param(signal, param, tag)
+            self._apply_annotations_param(signal, param, tag, block)
         self._apply_annotations_return(signal, signal.retval, block)
 
     def _apply_annotations_constant(self, node):
