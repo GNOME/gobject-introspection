@@ -1564,6 +1564,10 @@ method or constructor of some type."""
             if prop.getter is None:
                 if prop.readable:
                     getter = ['get_' + normalized_name]
+                    # Heuristic: boolean properties can have getters that are
+                    # prefixed by is_property_name, like: gtk_window_is_maximized()
+                    if prop.type.is_equiv(ast.TYPE_BOOLEAN) and not normalized_name.startswith("is_"):
+                        getter.append(f"is_{normalized_name}")
                     # Heuristic: read-only properties can have getters that are
                     # just the property name, like: gtk_widget_has_focus()
                     if not prop.writable and prop.type.is_equiv(ast.TYPE_BOOLEAN):
