@@ -1554,11 +1554,11 @@ method or constructor of some type."""
             normalized_name = prop.name.replace('-', '_')
             if not prop.introspectable:
                 continue
+            setter = None
+            getter = []
             if prop.setter is None:
                 if prop.writable and not prop.construct_only:
                     setter = 'set_' + normalized_name
-                else:
-                    setter = None
             else:
                 setter = prop.setter
             if prop.getter is None:
@@ -1568,8 +1568,6 @@ method or constructor of some type."""
                     # just the property name, like: gtk_widget_has_focus()
                     if not prop.writable and prop.type.is_equiv(ast.TYPE_BOOLEAN):
                         getter.append(normalized_name)
-                else:
-                    getter = []
             else:
                 getter = [prop.getter]
             for method in node.methods:
