@@ -168,6 +168,7 @@ stringtext				([^\\\"])|(\\.)
 "__attribute" 		                { if (!parse_ignored_macro()) REJECT; }
 "__const"                               { return CONST; }
 "__extension__"                         { return EXTENSION; }
+"__forceinline"                         { return INLINE; }
 "__inline__"                            { return INLINE; }
 "__inline"				{ return INLINE; }
 "__nonnull" 			        { if (!parse_ignored_macro()) REJECT; }
