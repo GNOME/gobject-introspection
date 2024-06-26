@@ -296,7 +296,7 @@ def test_codegen(optstring,
                                       include_last_src)
         gen.write()
     else:
-        _error("Invaild namespace '%s'" % (namespace, ))
+        _error("Invalid namespace '%s'" % (namespace, ))
     return 0
 
 
