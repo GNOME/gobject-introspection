@@ -836,44 +836,72 @@ class MainTransformer(object):
         block = self._get_block(node)
         self._apply_annotations_annotated(node, block)
 
-    def _apply_annotations_param(self, parent, param, tag, block):
+    def _apply_annotations_param_callback(self, parent, param, tag):
         annotations = tag.annotations if tag else {}
 
+        target = self._transformer.lookup_typenode(param.type)
+        target = self._transformer.resolve_aliases(target)
+        if not isinstance(target, ast.Callback):
+            for ann in (ANN_SCOPE, ANN_DESTROY, ANN_CLOSURE):
+                if ann in annotations:
+                    message.warn(f'invalid "{ann}" annotation: only valid on callback parameters', annotations.position)
+            return
+
+        scope_annotation = annotations.get(ANN_SCOPE)
+        if scope_annotation and len(scope_annotation) == 1:
+            param.scope = scope_annotation[0]
+
+        destroy_annotation = annotations.get(ANN_DESTROY)
+        if destroy_annotation and len(destroy_annotation) == 1:
+            param.destroy_name = self._get_validate_parameter_name(parent, destroy_annotation[0], param)
+            if param.destroy_name is not None:
+                param.scope = ast.PARAM_SCOPE_NOTIFIED
+                destroy_param = parent.get_parameter(param.destroy_name)
+                # This is technically bogus: destroy parameters are not
+                # notified; we handle this in the final transformation pass
+                destroy_param.scope = ast.PARAM_SCOPE_NOTIFIED
+
+        closure_annotation = annotations.get(ANN_CLOSURE)
+        if closure_annotation and len(closure_annotation) == 1:
+            param.closure_name = self._get_validate_parameter_name(parent, closure_annotation[0], param)
+            closure_param = parent.get_parameter(param.closure_name)
+            closure_target = self._transformer.lookup_typenode(closure_param.type)
+            closure_target = self._transformer.resolve_aliases(closure_target)
+            if not isinstance(closure_target, ast.Type):
+                closure_target = closure_param.type
+
+            if closure_target != ast.TYPE_ANY:
+                message.warn('invalid "closure" annotation: only valid on gpointer parameters', annotations.position)
+
+    def _apply_annotations_param_closure(self, parent, param, tag):
+        annotations = tag.annotations if tag else {}
+        if ANN_CLOSURE not in annotations:
+            return
+
+        closure_annotation = annotations.get(ANN_CLOSURE)
+        if len(closure_annotation) != 0:
+            message.warn('invalid "closure" annotation with argument on a callback type', annotations.position)
+            return
+
+        # For callback types, (closure) appears without an argument, and it
+        # is used to mark the parameter that contains the user data; it is
+        # weirdly represented in the GIR and typelib by setting the
+        # param.closure_name field to itself
+        param.closure_name = param.argname
+
+        target = self._transformer.lookup_typenode(param.type)
+        target = self._transformer.resolve_aliases(target)
+        if not isinstance(target, ast.Type):
+            target = param.type
+
+        if target != ast.TYPE_ANY:
+            message.warn('invalid "closure" annotation: only valid on gpointer parameters', annotations.position)
+
+    def _apply_annotations_param(self, parent, param, tag, block):
         if isinstance(parent, (ast.Function, ast.VFunction)):
-            scope_annotation = annotations.get(ANN_SCOPE)
-            if scope_annotation and len(scope_annotation) == 1:
-                param.scope = scope_annotation[0]
-                param.transfer = ast.PARAM_TRANSFER_NONE
-
-            destroy_annotation = annotations.get(ANN_DESTROY)
-            if destroy_annotation:
-                param.destroy_name = self._get_validate_parameter_name(parent,
-                                                                       destroy_annotation[0],
-                                                                       param)
-                if param.destroy_name is not None:
-                    param.scope = ast.PARAM_SCOPE_NOTIFIED
-                    destroy_param = parent.get_parameter(param.destroy_name)
-                    # This is technically bogus; we're setting the scope on the destroy
-                    # itself.  But this helps avoid tripping a warning from finaltransformer,
-                    # since we don't have a way right now to flag this callback a destroy.
-                    destroy_param.scope = ast.PARAM_SCOPE_NOTIFIED
-
-            closure_annotation = annotations.get(ANN_CLOSURE)
-            if closure_annotation and len(closure_annotation) == 1:
-                param.closure_name = self._get_validate_parameter_name(parent,
-                                                                   closure_annotation[0],
-                                                                   param)
+            self._apply_annotations_param_callback(parent, param, tag)
         elif isinstance(parent, ast.Callback):
-            if ANN_CLOSURE in annotations:
-                # For callbacks, (closure) appears without an
-                # argument, and tags a parameter that is a closure. We
-                # represent it (weirdly) in the gir and typelib by
-                # setting param.closure_name to itself.
-                closure_annotation = annotations.get(ANN_CLOSURE)
-                if len(closure_annotation) > 0:
-                    message.warn(f'{block.name}: "closure" annotation takes no option in callback types',
-                                 annotations.position)
-                param.closure_name = param.argname
+            self._apply_annotations_param_closure(parent, param, tag)
 
         self._apply_annotations_param_ret_common(parent, param, tag)
 
@@ -1776,18 +1804,19 @@ method or constructor of some type."""
         # First, do defaults for well-known callback types
         for param in params:
             argnode = self._transformer.lookup_typenode(param.type)
+            argnode = self._transformer.resolve_aliases(argnode)
             if isinstance(argnode, ast.Callback):
-                if param.type.target_giname in ('Gio.AsyncReadyCallback',
-                                                'GLib.DestroyNotify'):
+                if argnode.gi_name in ('Gio.AsyncReadyCallback', 'GLib.DestroyNotify'):
                     param.scope = ast.PARAM_SCOPE_ASYNC
                     param.transfer = ast.PARAM_TRANSFER_NONE
 
         callback_param = None
         for param in params:
             argnode = self._transformer.lookup_typenode(param.type)
+            argnode = self._transformer.resolve_aliases(argnode)
             is_destroynotify = False
             if isinstance(argnode, ast.Callback):
-                if param.type.target_giname == 'GLib.DestroyNotify':
+                if argnode.gi_name == 'GLib.DestroyNotify':
                     is_destroynotify = True
                 else:
                     callback_param = param
