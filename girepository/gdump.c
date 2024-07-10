@@ -634,7 +634,13 @@ g_irepository_dump (const char  *arg,
 
   char **args = g_strsplit (arg, ",", 2);
   if (args == NULL)
-    return FALSE;
+    {
+      g_set_error (error,
+		   G_FILE_ERROR,
+		   G_FILE_ERROR_FAILED,
+		   "Usage: --introspect-dump=input,output");
+      return FALSE;
+    }
 
   const char *input_filename = args[0];
   const char *output_filename = args[1];
