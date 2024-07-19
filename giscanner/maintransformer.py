@@ -1636,9 +1636,9 @@ method or constructor of some type."""
         """Validate the name of the members of enumeration types."""
         for member in node.members:
             if re.match(r"^[0-9]", member.name):
-                message.warn_node(node,
-                                  f"Member {member.symbol} for enumeration {node.ctype} "
-                                  "starts with a number")
+                message.strict_node(node,
+                                    f"Member {member.symbol} for enumeration {node.ctype} "
+                                     "starts with a number")
 
     def _pass3(self, node, chain):
         """Pass 3 is after we've loaded GType data and performed type

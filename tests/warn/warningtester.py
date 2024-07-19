@@ -101,6 +101,7 @@ def check(args):
     namespace = Namespace('Test', '1.0')
     logger = MessageLogger.get(namespace=namespace, output=output)
     logger.enable_warnings(True)
+    logger.enable_strict(True)
 
     transformer = Transformer(namespace)
     transformer.set_include_paths([
