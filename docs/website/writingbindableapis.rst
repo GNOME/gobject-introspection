@@ -2,6 +2,25 @@
 Writing Bindable APIs
 =====================
 
+Things to do
+------------
+
+Type and function naming
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Follow the [GObject naming conventions](https://docs.gtk.org/gobject/concepts.html#conventions).
+This allows the introspection tooling to group C functions together as methods
+on types, and to group types and methods together into namespaces.
+
+If these conventions are not followed, C functions may be incorrectly
+introspected as functions rather than methods; methods may end up on the
+incorrect class; class names may end up incorrectly including part of the
+namespace in their name; amongst other problems.
+
+Some of these problems can be worked around by passing additional arguments to
+the introspection tooling to explicitly specify namespacing, but the tools work
+better if C naming avoids that ambiguity.
+
 Things to avoid
 ---------------
 
