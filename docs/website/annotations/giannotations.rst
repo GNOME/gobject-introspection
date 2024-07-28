@@ -138,6 +138,20 @@ Support for GObject objects
 Support for GObject closures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Callbacks in C are conceptually a tuple of three items: a pointer to the
+function to call, a user data parameter that is given at connect time and passed
+to each invocation of the callback, and an optional destroy function (usually of
+type ``GDestroyNotify``) that is called on the user data when the callback will
+no longer be called.
+These are usually passed as two or three separate arguments in C APIs, but most
+language bindings will only pass one argument here.
+
+GObject-Introspection can usually autodetect which two or three arguments belong
+together as a callback.
+These annotations are for cases that the autodetection can't handle.
+
+See also the examples later on this page.
+
 .. list-table::
   :header-rows: 1
   :widths: 1 1 10 1
@@ -146,24 +160,23 @@ Support for GObject closures
     - Applies to
     - Description
     - Since
-  * - ``(destroy)``
-    - parameters
-    - The parameter is part of a callback type and containing the ``destroy_data``.
+  * - ``(destroy PARAM_NAME)``
+    - function parameter
+    - This annotation is placed on the callback pointer argument.
+      ``PARAM_NAME`` is the name of the parameter that is the destroy function.
     - :commit:`v0.6.3 <cf7621f3>`
       :bzbug:`574284`
-  * - ``(destroy DESTROY)``
-    - parameters
-    - The parameter defines the ``destroy_data`` for a given callback. The
-      ``DESTROY`` option points to the parameter that is the actual callback.
+  * - ``(closure PARAM_NAME)``
+    - function parameter
+    - This annotation is placed on the callback pointer argument.
+      ``PARAM_NAME`` is the name of the parameter that is the user data for the
+      callback.
+      Many bindings can pass ``NULL`` here.
     -
   * - ``(closure)``
-    - parameters
-    - The parameter is part of a callback type and containing the ``user_data``.
-    -
-  * - ``(closure CLOSURE)``
-    - parameters
-    - The parameter defines the ``user_data`` for a given callback. The ``CLOSURE`` option
-      points to the parameter that is the actual callback. Many bindings can pass ``NULL`` here.
+    - callback parameter
+    - This annotation is placed on a callback typedef's user data argument.
+      Note, not on a user data argument to a function.
     -
 
 
@@ -855,3 +868,34 @@ Constants
    * A constant.
    */
   #define MY_CONSTANT 10 * 10
+
+Callbacks
+~~~~~~~~~
+
+A parameter named ``user_data`` in a callback will automatically be detected as
+the user data for the callback.
+When the parameter is named differently, the ``(closure)`` annotation is needed.
+
+::
+
+  /**
+   * MyMethodCallback:
+   * @your_number: The number from the method.
+   * @your_data: (closure): User data passed to my_object_do_method().
+   */
+  typedef void (*MyMethodCallback)(int your_number, void *your_data);
+
+  /**
+   * my_object_do_method:
+   * @self: The object.
+   * @call_me_maybe: (scope call) (closure my_data) (destroy now_im_done): A
+   *   pointer to the function to call.
+   * @my_data: User data to pass to @call_me_maybe.
+   * @now_im_done: Function to call when finished with @my_data.
+   */
+  my_object_do_method(MyObject *self,
+                      MyMethodCallback call_me_maybe,
+                      void *my_data,
+                      GDestroyNotify now_im_done) {
+    /* ... */
+  }
