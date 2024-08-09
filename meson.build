@@ -118,13 +118,21 @@ add_project_arguments(['-DHAVE_CONFIG_H'], language: 'c')
 gi_hidden_visibility_cflags = []
 if host_system == 'windows'
   config.set('DLL_EXPORT', true)
-  config.set('_GI_EXTERN', '__declspec(dllexport) extern')
+  extern_decl = '__declspec(dllexport) extern'
   if cc.get_id() != 'msvc'
     gi_hidden_visibility_cflags += '-fvisibility=hidden'
   endif
 else
-  config.set('_GI_EXTERN', '__attribute__((visibility("default"))) extern')
+  extern_decl = '__attribute__((visibility("default"))) extern'
   gi_hidden_visibility_cflags += '-fvisibility=hidden'
+endif
+config.set('_GI_EXTERN', extern_decl)
+if cc.get_id() == 'msvc'
+  add_project_arguments('/DGI_TEST_EXTERN=@0@'.format(extern_decl),
+    language: 'c')
+else
+  add_project_arguments('-DGI_TEST_EXTERN=@0@'.format(extern_decl),
+    language: 'c')
 endif
 
 # Reset to 0 if g-i micro version exceeds GLib's

@@ -14,6 +14,7 @@ variables:
 fedora-x86_64-meson:
   stage: build
   variables:
+    GIT_SUBMODULE_STRATEGY: normal
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
     EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true -Dwerror=true"
@@ -41,6 +42,7 @@ fedora-x86_64-subprojects:
   image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v6
   stage: build
   variables:
+    GIT_SUBMODULE_STRATEGY: normal
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
   script:
@@ -60,6 +62,7 @@ fedora-x86_64-subprojects:
 fedora-x86_64-no-introspection-data:
   stage: build
   variables:
+    GIT_SUBMODULE_STRATEGY: normal
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
     EXTRA_MESON_FLAGS: "-Dwerror=true"
@@ -80,6 +83,7 @@ fedora-x86_64-no-introspection-data:
 fedora-x86_64-python3.8:
   stage: build
   variables:
+    GIT_SUBMODULE_STRATEGY: normal
     CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
     CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
     PYENV_VERSION: "3.8.17"
@@ -102,6 +106,7 @@ msys2-mingw64-meson:
   tags:
     - win32-ps
   variables:
+    GIT_SUBMODULE_STRATEGY: normal
     MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
   script:
@@ -119,6 +124,7 @@ msys2-clang64-meson:
   tags:
     - win32-ps
   variables:
+    GIT_SUBMODULE_STRATEGY: normal
     MSYSTEM: "CLANG64"
     CHERE_INVOKING: "yes"
   script:
@@ -135,6 +141,8 @@ vs2017-x64-meson:
   stage: build
   tags:
     - win32-ps
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
   script:
     - .gitlab-ci/test-msvc.bat
   artifacts:

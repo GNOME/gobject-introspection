@@ -1,0 +1,3 @@
+[submodule "gobject-introspection-tests"]
+	path = gobject-introspection-tests
+	url = ../gobject-introspection-tests
