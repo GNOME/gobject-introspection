@@ -13,7 +13,7 @@ modules:
 Pango:
   https://gitlab.gnome.org/GNOME/pango/blob/main/pango/meson.build
 
-  .. code-block:: python
+  .. code-block:: meson
 
     pango_gir = gnome.generate_gir(
       libpango,
@@ -32,7 +32,7 @@ Pango:
 json-glib:
   https://gitlab.gnome.org/GNOME/json-glib/blob/main/json-glib/meson.build
 
-  .. code-block:: python
+  .. code-block:: meson
 
     json_glib_gir = gnome.generate_gir(
       json_lib,
