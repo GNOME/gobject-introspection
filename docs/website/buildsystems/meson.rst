@@ -17,13 +17,14 @@ Pango:
 
     pango_gir = gnome.generate_gir(
       libpango,
-      sources: pango_sources + pango_headers + [ pango_enum_h ],
+      sources: pango_sources + pango_headers + [ pango_enum_h, pango_features_h ],
       namespace: 'Pango',
       nsversion: pango_api_version,
       identifier_prefix: 'Pango',
       symbol_prefix: 'pango',
       export_packages: 'pango',
-      includes: [ 'GObject-2.0', 'cairo-1.0', ],
+      dependencies: pango_deps,
+      includes: [ 'HarfBuzz-0.0', 'GObject-2.0', 'Gio-2.0', 'cairo-1.0' ],
       header: 'pango/pango.h',
       install: true,
       extra_args: gir_args,
@@ -46,4 +47,5 @@ json-glib:
       header: 'json-glib/json-glib.h',
       install: true,
       extra_args: gir_args,
+      fatal_warnings: get_option('werror'),
     )
