@@ -11,7 +11,7 @@ For some real examples, see the meson build definitions of various GNOME
 modules:
 
 Pango:
-  https://gitlab.gnome.org/GNOME/pango/blob/master/pango/meson.build
+  https://gitlab.gnome.org/GNOME/pango/blob/main/pango/meson.build
 
   .. code-block:: python
 
@@ -30,7 +30,7 @@ Pango:
     )
 
 json-glib:
-  https://gitlab.gnome.org/GNOME/json-glib/blob/master/json-glib/meson.build
+  https://gitlab.gnome.org/GNOME/json-glib/blob/main/json-glib/meson.build
 
   .. code-block:: python
 
