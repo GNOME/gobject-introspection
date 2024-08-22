@@ -471,7 +471,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
   if cairo_deps_found
     regress_scanner_cairo_args = ['--include=cairo-1.0']
   else
-    regress_scanner_cairo_args = ['-D_GI_DISABLE_CAIRO',]
+    regress_scanner_cairo_args = ['-DGI_TEST_DISABLE_CAIRO',]
   endif
 
   regress_gir = custom_target('gir-regress',
