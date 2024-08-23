@@ -2,7 +2,7 @@
 
 #include <offsets.h>
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 void offsets_dummy(void);
 
 /* To avoid an empty compilation unit */

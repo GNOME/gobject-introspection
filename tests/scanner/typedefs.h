@@ -43,7 +43,7 @@ struct _TypedefsBoxedWithTypedefBefore {
     int value;
 };
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType typedefs_boxed_with_typedef_before_get_type (void) G_GNUC_CONST;
 
 
@@ -53,7 +53,7 @@ struct _TypedefsBoxedWithTypedefAfter {
 };
 typedef struct _TypedefsBoxedWithTypedefAfter TypedefsBoxedWithTypedefAfter;
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType typedefs_boxed_with_typedef_after_get_type (void) G_GNUC_CONST;
 
 
@@ -62,7 +62,7 @@ typedef struct _TypedefsBoxedWithTagAndTypedef {
     int value;
 } TypedefsBoxedWithTagAndTypedef;
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType typedefs_boxed_with_tag_and_typedef_get_type (void) G_GNUC_CONST;
 
 
@@ -71,14 +71,14 @@ typedef struct {
     int value;
 } TypedefsBoxedWithAnonymousTypedef;
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType typedefs_boxed_with_anonymous_typedef_get_type (void) G_GNUC_CONST;
 
 
 /* BUG: uses <record> instead of <glib:boxed> */
 typedef struct _TypedefsBoxedWithHiddenStruct TypedefsBoxedWithHiddenStruct;
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType typedefs_boxed_with_hidden_struct_get_type (void) G_GNUC_CONST;
 
 

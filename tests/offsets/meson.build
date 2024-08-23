@@ -1,7 +1,7 @@
 test_offsets_sources = files('offsets.c')
 test_offsets_headers = files('offsets.h')
 
-test_offsets_inc = include_directories('.', '..')
+test_offsets_inc = include_directories('.', '..', '../../gobject-introspection-tests')
 
 test_offsets_lib = shared_library('offsets-1.0',
   sources: test_offsets_sources,
@@ -34,6 +34,7 @@ if glib_dep.type_name() == 'pkgconfig'
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(source_root, 'tests'),
+      '-I', join_paths(source_root, 'gobject-introspection-tests'),
       extra_giscanner_args,
       '@INPUT@',
     ]

@@ -20,14 +20,14 @@ struct BarBazClass
   GObjectClass parent_class;
 };
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType bar_baz_get_type          (void) G_GNUC_CONST;
 
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 void bar_app_func (void);
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 void bar_app_func2 (int x, double y);
 
 
@@ -52,8 +52,8 @@ struct MutterWindowClass
   GObjectClass parent_class;
 };
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType mutter_window_get_type          (void) G_GNUC_CONST;
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 void mutter_window_func (MutterWindow *window, guint v);

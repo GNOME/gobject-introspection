@@ -21,20 +21,20 @@ struct _GetTypeObjectClass
   GObjectClass parent_class;
 };
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType           gettype_object_get_type          (void) G_GNUC_CONST;
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GetTypeObject*  gettype_object_new               (void);
 
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 GType           gettype_object_nonmeta1_get_type (GetTypeObject *obj);
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 gboolean        gettype_object_nonmeta2_get_type (void);
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 gboolean        gettype_object_nonmeta_get_gtype (void);
 
 #endif /* __GETTYPE_OBJECT_H__ */

@@ -7,7 +7,7 @@
 
 /* A global function */
 
-_GI_TEST_EXTERN
+GI_TEST_EXTERN
 void gtk_frob_language_manager_get_default (void);
 
 #endif /* __GTKFROB_H__ */

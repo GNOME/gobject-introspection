@@ -30,16 +30,18 @@ if cc.get_id() != 'msvc'
   ])
 endif
 
+gitests_inc = include_directories('../../gobject-introspection-tests')
+
 typedef_lib = shared_library('typedef-1.0',
   sources: ['typedefs.c'],
-  include_directories : [configinc, include_directories('..')],
+  include_directories : [configinc, gitests_inc, include_directories('..')],
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [gobject_dep],
 )
 
 sletter_lib = shared_library('sletter-1.0',
   sources: ['sletter.c'],
-  include_directories : [configinc, include_directories('..')],
+  include_directories : [configinc, gitests_inc, include_directories('..')],
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [gio_dep],
 )
@@ -60,21 +62,21 @@ utility_lib = shared_library('utility-1.0',
 
 gtkfrob_lib = shared_library('gtkfrob-1.0',
   sources: ['gtkfrob.c'],
-  include_directories : [configinc, include_directories('..')],
+  include_directories : [configinc, gitests_inc, include_directories('..')],
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [gobject_dep],
 )
 
 gettype_lib = shared_library('gettype-1.0',
   sources: ['gettype.c'],
-  include_directories : [configinc, include_directories('..')],
+  include_directories : [configinc, gitests_inc, include_directories('..')],
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [gobject_dep],
 )
 
 barapp_lib = shared_library('barapp-1.0',
   sources: ['barapp.c'],
-  include_directories : [configinc, include_directories('..')],
+  include_directories : [configinc, gitests_inc, include_directories('..')],
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [gobject_dep, girepo_dep],
 )
@@ -143,6 +145,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      '-I', join_paths(source_root, 'gobject-introspection-tests'),
       extra_giscanner_args,
       '@INPUT@',
     ]
@@ -181,6 +184,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '-L', join_paths(build_root, 'girepository'),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      '-I', join_paths(source_root, 'gobject-introspection-tests'),
       extra_giscanner_args,
       '@INPUT@',
     ]
@@ -218,6 +222,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      '-I', join_paths(source_root, 'gobject-introspection-tests'),
       extra_giscanner_args,
       '@INPUT@',
     ]
@@ -334,6 +339,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      '-I', join_paths(source_root, 'gobject-introspection-tests'),
       extra_giscanner_args,
       '@INPUT@',
     ]
@@ -371,6 +377,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
       '-L', meson.current_build_dir(),
       '-I', meson.current_source_dir(),
       '-I', join_paths(meson.current_source_dir(), '..'),
+      '-I', join_paths(source_root, 'gobject-introspection-tests'),
       extra_giscanner_args,
       '@INPUT@',
     ]
