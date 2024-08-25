@@ -16,6 +16,17 @@ endif
 
 test_env_common_pypath = [ meson.project_build_root() ]
 
+# While these variables are unused in gobject-introspection
+# they are used by pygobject when building with a subproject
+test_regress_sources = files('../gobject-introspection-tests/regress.c')
+test_regress_headers = files('../gobject-introspection-tests/regress.h')
+test_warnlib_sources = files('../gobject-introspection-tests/warnlib.c')
+test_warnlib_headers = files('../gobject-introspection-tests/warnlib.h')
+test_marshalling_sources = files('../gobject-introspection-tests/gimarshallingtests.c')
+test_marshalling_headers = files('../gobject-introspection-tests/gimarshallingtests.h')
+
+test_regress_incdirs = include_directories(['../gobject-introspection-tests', 'scanner'])
+
 # Continue installing the sources for the time being, for back compatibility
 installed_sources = [
   '../gobject-introspection-tests/annotation.c',
@@ -24,17 +35,17 @@ installed_sources = [
   '../gobject-introspection-tests/drawable.h',
   '../gobject-introspection-tests/foo.c',
   '../gobject-introspection-tests/foo.h',
-  '../gobject-introspection-tests/regress.c',
-  '../gobject-introspection-tests/regress.h',
   '../gobject-introspection-tests/regress-unix.c',
   '../gobject-introspection-tests/regress-unix.h',
   '../gobject-introspection-tests/utility.c',
   '../gobject-introspection-tests/utility.h',
-  '../gobject-introspection-tests/warnlib.c',
-  '../gobject-introspection-tests/warnlib.h',
-  '../gobject-introspection-tests/gimarshallingtests.c',
-  '../gobject-introspection-tests/gimarshallingtests.h',
   '../gobject-introspection-tests/gitestmacros.h',
+  test_regress_sources,
+  test_regress_headers,
+  test_warnlib_sources,
+  test_warnlib_headers,
+  test_marshalling_sources,
+  test_marshalling_headers,
 ]
 
 test_install_dir = get_option('datadir') / 'gobject-introspection-1.0/tests'
@@ -94,7 +105,7 @@ if cc.get_id() != 'msvc'
 endif
 
 gimarshallingtests_lib = shared_library('gimarshallingtests-1.0',
-  sources: '../gobject-introspection-tests/gimarshallingtests.c',
+  sources: test_marshalling_sources,
   include_directories : configinc,
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [glib_dep, gobject_dep],
@@ -140,10 +151,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
   )]
 
   test_gir_files += [custom_target('gir-gimarshallingtests',
-    input: [
-      '../gobject-introspection-tests/gimarshallingtests.c',
-      '../gobject-introspection-tests/gimarshallingtests.h',
-    ],
+    input: test_marshalling_sources + test_marshalling_headers,
     output: 'GIMarshallingTests-1.0.gir',
     depends: [gimarshallingtests_lib] + typelibs,
     command: [
