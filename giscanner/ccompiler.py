@@ -26,7 +26,6 @@ import tempfile
 import sys
 import distutils
 
-from distutils.msvccompiler import MSVCCompiler
 from distutils.unixccompiler import UnixCCompiler
 from distutils.cygwinccompiler import Mingw32CCompiler
 from distutils.sysconfig import get_config_vars
@@ -167,7 +166,7 @@ class CCompiler(object):
         # Now, create the distutils ccompiler instance based on the info we have.
         if compiler_name == 'msvc':
             # For MSVC, we need to create a instance of a subclass of distutil's
-            # MSVC9Compiler class, as it does not provide a preprocess()
+            # MSVCCompiler class, as it does not provide a preprocess()
             # implementation
             from . import msvccompiler
             self.compiler = msvccompiler.get_msvc_compiler()
@@ -460,7 +459,7 @@ class CCompiler(object):
             return self.compiler.linker_exe
 
     def check_is_msvc(self):
-        return isinstance(self.compiler, MSVCCompiler)
+        return self.compiler.compiler_type == "msvc"
 
     # Private APIs
     def _set_cpp_options(self, options):
@@ -486,7 +485,7 @@ class CCompiler(object):
                     # macros for compiling using distutils
                     # get dropped for MSVC builds, so
                     # escape the escape character.
-                    if isinstance(self.compiler, MSVCCompiler):
+                    if self.check_is_msvc():
                         macro_value = macro_value.replace('\"', '\\\"')
                 macros.append((macro_name, macro_value))
             elif option.startswith('-U'):

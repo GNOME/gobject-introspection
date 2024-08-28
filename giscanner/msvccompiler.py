@@ -19,30 +19,30 @@
 #
 
 import os
-import distutils
+from typing import Type
 
 from distutils.errors import DistutilsExecError, CompileError
-from distutils.ccompiler import CCompiler, gen_preprocess_options
+from distutils.ccompiler import CCompiler, gen_preprocess_options, new_compiler
 from distutils.dep_util import newer
 
 # Distutil's MSVCCompiler does not provide a preprocess()
 # Implementation, so do our own here.
 
 
+DistutilsMSVCCompiler: Type = type(new_compiler(compiler="msvc"))
+
+
 def get_msvc_compiler():
     return MSVCCompiler()
 
 
-class MSVCCompiler(distutils.msvccompiler.MSVCCompiler):
+class MSVCCompiler(DistutilsMSVCCompiler):
 
     def __init__(self, verbose=0, dry_run=0, force=0):
-        super(distutils.msvccompiler.MSVCCompiler, self).__init__()
+        super(DistutilsMSVCCompiler, self).__init__()
         CCompiler.__init__(self, verbose, dry_run, force)
         self.__paths = []
         self.__arch = None  # deprecated name
-        if os.name == 'nt':
-            if isinstance(self, distutils.msvc9compiler.MSVCCompiler):
-                self.__version = distutils.msvc9compiler.VERSION
         self.initialized = False
         self.preprocess_options = None
         if self.check_is_clang_cl():
