@@ -549,6 +549,8 @@ typelibs += custom_target(
   output: '@BASENAME@.typelib',
   depends: [gobject_gir, gircompiler, ],
   command: gircompiler_command,
+  install: true,
+  install_dir: typelibdir,
 )
 
 rnc2rng = find_program('rnc2rng', native: true, required: false)
