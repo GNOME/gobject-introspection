@@ -1,3 +1,23 @@
+1.81.2 - 2024-09-03
+-------------------
+
+* Add strict mode warning for enumeration members starting with a number [#418]
+* Set deprecation message for signals and properties
+* Fix HTML definition lists in the documentation generator
+* Catch up with Python-Markdown 3.4 extension API changes [#439]
+* Propagate scanner errors [#453]
+* Do not break when parsing ARM SVE types in system headers [#502]
+* Pair pointer GTypes with their opaque structure [#508]
+* Fix property accessor pairing
+* Handle pid_t, etc. as their own top-level types
+* Add warning for closure annotation [#449, #450]
+* Warn on invalid callback annotations [#137]
+* Make sure to set a GError with an invalid introspect-dump string [#495]
+* Move gobject-introspection tests to a submodule [#489]
+* Remove dependency on distutils.msvccompiler [#515]
+* Be more thorough about applying -Wl,--no-as-needed option [#505]
+* Documentation and build fixes
+
 1.80.1 - 2024-04-01
 -------------------
 
