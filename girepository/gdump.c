@@ -713,7 +713,8 @@ g_irepository_dump (const char  *arg,
 
           if (type == G_TYPE_INVALID)
             {
-              g_printerr ("Invalid GType function: '%s'\n", function);
+              g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                           "Invalid GType function: %s", function);
               caught_error = TRUE;
               g_free (line);
               break;
@@ -733,7 +734,8 @@ g_irepository_dump (const char  *arg,
 
           if (quark == 0)
             {
-              g_printerr ("Invalid error quark function: '%s'\n", function);
+              g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                           "Invalid error quark function: %s", function);
               caught_error = TRUE;
               g_free (line);
               break;
