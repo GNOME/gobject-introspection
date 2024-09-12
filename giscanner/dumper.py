@@ -58,7 +58,7 @@ main(int argc, char **argv)
 
   if (argc != 2 || !g_str_has_prefix (argv[1], introspect_dump_prefix))
     {
-      g_printerr ("Usage: %%s --introspect-dump=input,output", argv[0]);
+      g_printerr ("Usage: %%s --introspect-dump=input,output\\n", argv[0]);
       exit (1);
     }
 
