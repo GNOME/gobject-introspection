@@ -64,6 +64,7 @@ main(int argc, char **argv)
 
   if (!dump_irepository (argv[1] + strlen (introspect_dump_prefix), &error))
     {
+      g_assert (error != NULL);  /* help the static analyser */
       g_printerr ("%%s\\n", error->message);
       exit (1);
     }
