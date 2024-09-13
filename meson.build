@@ -135,9 +135,7 @@ else
     language: 'c')
 endif
 
-# Reset to 0 if g-i micro version exceeds GLib's
-glib_micro_version = 0  # gi_versions[2]
-glib_version = '>=2.@0@.@1@'.format(gi_versions[1], glib_micro_version)
+glib_version = '>=2.82.0'
 
 glib_dep = dependency('glib-2.0', version: glib_version,
   default_options: [
