@@ -78,11 +78,29 @@ endif
 project_c_args = cc.get_supported_arguments(project_c_args)
 add_project_arguments(project_c_args, language: 'c')
 
-if cc.get_id() == 'msvc' and project_c_args.contains('-utf-8')
-  extra_giscanner_cflags = ['-utf-8']
+extra_giscanner_cflags = []
+if cc.get_argument_syntax() == 'msvc'
+  if cc.get_id() == 'msvc' and project_c_args.contains('-utf-8')
+    extra_giscanner_cflags += ['-utf-8']
+  endif
+
+  # For the latest Windows SDK (10.0.26100.0)+, we need to compile the dumper program with the CRT cflags
+  # (i.e. /MD, /MDd, etc, based on the build type that we are using, as the latest SDK enforces building
+  # and linking in CRT check directives, which are determined by the CRT cflag
+  msvc_crt_cflag = []
+  b_vscrt = get_option('b_vscrt')
+  if b_vscrt in ['from_buildtype', 'static_from_buildtype']
+    if get_option('buildtype') == 'debug'
+      msvc_crt_cflag = b_vscrt == 'static_from_buildtype' ? '/MTd' : '/MDd'
+    else
+      msvc_crt_cflag = b_vscrt == 'static_from_buildtype' ? '/MT' : '/MD'
+    endif
+  else
+    msvc_crt_cflag = b_vscrt
+  endif
+  extra_giscanner_cflags += msvc_crt_cflag
   extra_giscanner_args = ['--cflags-begin'] + extra_giscanner_cflags + ['--cflags-end']
 else
-  extra_giscanner_cflags = []
   extra_giscanner_args = []
 endif
 
