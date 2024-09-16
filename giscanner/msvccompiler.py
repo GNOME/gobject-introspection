@@ -55,6 +55,8 @@ class MSVCCompiler(DistutilsMSVCCompiler):
             if len(cc_cmd) > 1:
                 self.compile_options.extend(cc_cmd[1:])
             self.initialized = True
+        else:
+            self.initialize()
 
     def preprocess(self,
                    source,
