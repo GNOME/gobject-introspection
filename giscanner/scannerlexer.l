@@ -192,6 +192,7 @@ stringtext				([^\\\"])|(\\.)
 "__declspec(deprecated(".*"))"		{ /* Ignore */ }
 "__declspec"[\t ]*"("[a-z\t ]+")"	{ /* Ignore */ }
 "__stdcall" 			        { /* ignore */ }
+"__fastcall" 			        { /* ignore */ }
 "__w64"					{ /* ignore */ }
 
 "G_GINT64_CONSTANT"			{ return INTL_CONST; }
