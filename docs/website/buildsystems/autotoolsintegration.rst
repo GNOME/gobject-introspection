@@ -69,7 +69,7 @@ to.
     endif
 
   You can also check out a complete example at
-  https://gitlab.gnome.org/GNOME/gtk/blob/c0ba041c73214f82d2c32b2ca1fa8f3c388c6170/gtk/Makefile.am#L1571
+  https://gitlab.gnome.org/GNOME/gtk/blob/c0ba041c73214f82d2c32b2ca1fa8f3c388c6170/gtk/Makefile.am#L1571-1621
 
 
 Makefile variable documentation

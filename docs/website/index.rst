@@ -59,9 +59,9 @@ Reporting bugs
 --------------
 
 For a list of existing bugs and feature requests, see the `issues page
-<https://gitlab.gnome.org/GNOME/gobject-introspection/issues>`__. You can also
+<https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues>`__. You can also
 `open an issue
-<https://gitlab.gnome.org/GNOME/gobject-introspection/issues/new>`__.
+<https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/new>`__.
 
 
 Contact
