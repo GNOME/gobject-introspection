@@ -42,15 +42,16 @@ extlinks = {
 
 
 _FRAGMENT_MATCH = re.compile(r'L(\d+)(-\d*)?$')
+
+
 def rewrite_gitlab_source_anchors(app: Sphinx, uri: str):
     parsed = urlparse(uri)
     if (parsed.hostname in ["gitlab.gnome.org", "gitlab.com"]
             and parsed.fragment
             and _FRAGMENT_MATCH.match(parsed.fragment)):
-       return urlunparse(parsed._replace(fragment=''))
+        return urlunparse(parsed._replace(fragment=''))
     return None
 
 
 def setup(app: Sphinx):
     app.connect('linkcheck-process-uri', rewrite_gitlab_source_anchors)
-
