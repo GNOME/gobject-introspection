@@ -6,7 +6,7 @@ Bindings based on GObject-Introspection
 ---------------------------------------
 
  * `Vala <https://wiki.gnome.org/Projects/Vala>`__ - Compiler for the GObject type system (compile time)
- * `Genie <https://wiki.gnome.org/Projects/Genie>`__ - Genie Language (compile time) 
+ * `Genie <https://wiki.gnome.org/Projects/Genie>`__ - Genie Language (compile time)
  * `PyGObject <https://wiki.gnome.org/Projects/PyGObject>`__ - Python bindings (runtime)
  * `pygir-ctypes <https://code.google.com/archive/p/pygir-ctypes/>`__ - Pure Python GObject Introspection Repository (GIR) wrapper using ctypes (runtime)
  * `pgi <https://github.com/pygobject/pgi>`__ - Pure Python GObject Introspection Bindings (runtime)
@@ -23,7 +23,7 @@ Bindings based on GObject-Introspection
  * `lgi <https://github.com/lgi-devs/lgi>`__ - Lua bindings (runtime)
  * `node-gir <https://github.com/creationix/node-gir>`__ - Node.js bindings to the girepository
  * `go-gir <https://github.com/linuxdeepin/go-gir>`__ - Go bindings (compile time)
- * `haskell-gi <https://wiki.haskell.org/GObjectIntrospection>`__ -  a Haskell binding for the GIRepository C library, and a Haskell code generator built upon it. It is very much a work in progress. 
+ * `haskell-gi <https://wiki.haskell.org/GObjectIntrospection>`__ -  a Haskell binding for the GIRepository C library, and a Haskell code generator built upon it. It is very much a work in progress.
  * `cl-gobject-introspection <https://github.com/andy128k/cl-gobject-introspection>`__ - A bridge between Common Lisp and GObject.
  * `gir2pascal <https://wiki.freepascal.org/gir2pascal>`__ - gir2pascal is a program to convert gir files into into pascal files
  * `PLGI <https://github.com/keriharris/plgi>`__ - Prolog bindings (runtime)
