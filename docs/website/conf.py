@@ -27,10 +27,10 @@ html_context = {
 }
 
 extlinks = {
-    'bzbug': ('https://bugzilla.gnome.org/show_bug.cgi?id=%s', 'bz#'),
-    'commit': ('https://gitlab.gnome.org/GNOME/gobject-introspection/commit/%s', ''),
-    'issue': ('https://gitlab.gnome.org/GNOME/gobject-introspection/issues/%s', '#'),
+    'bzbug': ('https://bugzilla.gnome.org/show_bug.cgi?id=%s', 'bz#%s'),
+    'commit': ('https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/%s', None),
+    'issue': ('https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/%s', '#%s'),
     'mr': (
-        'https://gitlab.gnome.org/GNOME/gobject-introspection/merge_requests/%s', '!'),
-    'user': ('https://gitlab.gnome.org/%s', ''),
+        'https://gitlab.gnome.org/GNOME/gobject-introspection/-/merge_requests/%s', '!%s'),
+    'user': ('https://gitlab.gnome.org/%s', None),
 }
