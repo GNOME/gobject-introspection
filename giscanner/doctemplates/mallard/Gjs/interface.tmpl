@@ -1,7 +1,7 @@
 <%inherit file="/class.tmpl"/>
 <%block name="synopsis">
   <synopsis><code>
-const ${namespace.name} = imports.gi.${namespace.name};
+import ${namespace.name} from 'gi://${namespace.name}';
 
 let ${formatter.to_underscores(node).lower()} = new ${namespace.name}.${node.name}(\
 % if len(node.properties) > 0:

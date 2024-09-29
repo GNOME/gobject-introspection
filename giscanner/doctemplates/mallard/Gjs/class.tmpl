@@ -3,7 +3,7 @@
   <synopsis>\
 % if node.namespace is not None:
 <code>
-const ${namespace.name} = imports.gi.${namespace.name};
+import ${namespace.name} from 'gi://${namespace.name}';
 
 let ${formatter.to_lower_camel_case(node.name)} = new ${namespace.name}.${node.name}(\
 % if isinstance(node, (ast.Class, ast.Interface)):
