@@ -166,6 +166,7 @@ stringtext				([^\\\"])|(\\.)
 "__asm__" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "__attribute__" 		        { if (!parse_ignored_macro()) REJECT; }
 "__attribute" 		                { if (!parse_ignored_macro()) REJECT; }
+"_Alignas" 		                { if (!parse_ignored_macro()) REJECT; }
 "__const"                               { return CONST; }
 "__extension__"                         { return EXTENSION; }
 "__forceinline"                         { return INLINE; }
