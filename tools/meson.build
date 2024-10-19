@@ -9,7 +9,7 @@ if with_doctool
   tools += [['g-ir-doc-tool', 'docmain', 'doc_main']]
 endif
 
-if cc.get_id() == 'msvc'
+if not python.path().startswith('/usr/bin')
   python_cmd = '/usr/bin/env ' + python.path()
 else
   python_cmd = '/usr/bin/env python@0@'.format(python.language_version().split('.')[0])
