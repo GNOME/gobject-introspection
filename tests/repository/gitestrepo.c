@@ -126,6 +126,8 @@ main(int argc, char **argv)
   siginfo = g_object_info_find_signal ((GIObjectInfo*) info, "changed");
   g_assert (siginfo != NULL);
   g_base_info_unref (siginfo);
+  siginfo = g_object_info_find_signal ((GIObjectInfo*) info, "does-not-exist");
+  g_assert (siginfo == NULL);
 
   /* Test notify on gobject */
 

@@ -546,6 +546,22 @@ g_object_info_get_n_signals (GIObjectInfo *info)
   return blob->n_signals;
 }
 
+static guint32
+object_get_signal_offset (GIObjectInfo *info, gint n)
+{
+  GIRealInfo *rinfo = (GIRealInfo *) info;
+  Header *header = (Header *) rinfo->typelib->data;
+  ObjectBlob *blob = (ObjectBlob *) &rinfo->typelib->data[rinfo->offset];
+
+  return rinfo->offset + header->object_blob_size
+    + (blob->n_interfaces + blob->n_interfaces % 2) * 2
+    + blob->n_fields * header->field_blob_size
+    + blob->n_field_callbacks * header->callback_blob_size
+    + blob->n_properties * header->property_blob_size
+    + blob->n_methods * header->function_blob_size
+    + n * header->signal_blob_size;
+}
+
 /**
  * g_object_info_get_signal:
  * @info: a #GIObjectInfo
@@ -560,27 +576,36 @@ GISignalInfo *
 g_object_info_get_signal (GIObjectInfo *info,
 			  gint          n)
 {
-  gint offset;
   GIRealInfo *rinfo = (GIRealInfo *)info;
-  Header *header;
-  ObjectBlob *blob;
 
   g_return_val_if_fail (info != NULL, NULL);
   g_return_val_if_fail (GI_IS_OBJECT_INFO (info), NULL);
 
-  header = (Header *)rinfo->typelib->data;
-  blob = (ObjectBlob *)&rinfo->typelib->data[rinfo->offset];
-
-  offset = rinfo->offset + header->object_blob_size
-    + (blob->n_interfaces + blob->n_interfaces % 2) * 2
-    + blob->n_fields * header->field_blob_size
-    + blob->n_field_callbacks * header->callback_blob_size
-    + blob->n_properties * header->property_blob_size
-    + blob->n_methods * header->function_blob_size
-    + n * header->signal_blob_size;
-
   return (GISignalInfo *) g_info_new (GI_INFO_TYPE_SIGNAL, (GIBaseInfo*)info,
-				      rinfo->typelib, offset);
+				      rinfo->typelib, object_get_signal_offset (info, n));
+}
+
+static GISignalInfo *
+find_signal (GIRealInfo   *rinfo,
+	     guint32       offset,
+	     gint          n_signals,
+	     const gchar  *name)
+{
+  Header *header = (Header *) rinfo->typelib->data;
+
+  for (gint i = 0; i < n_signals; i++)
+    {
+      const SignalBlob *sblob = (SignalBlob *) &rinfo->typelib->data[offset];
+      const gchar *sname = g_typelib_get_string (rinfo->typelib, sblob->name);
+
+      if (strcmp (name, sname) == 0)
+        return (GISignalInfo *) g_info_new (GI_INFO_TYPE_SIGNAL, (GIBaseInfo *) rinfo,
+                                            rinfo->typelib, offset);
+
+      offset += header->signal_blob_size;
+    }
+
+  return NULL;
 }
 
 /**
@@ -596,23 +621,13 @@ GISignalInfo *
 g_object_info_find_signal (GIObjectInfo *info,
 			   const gchar  *name)
 {
-  gint n_signals;
-  gint i;
+  GIRealInfo *rinfo = (GIRealInfo *) info;
 
-  n_signals = g_object_info_get_n_signals (info);
-  for (i = 0; i < n_signals; i++)
-    {
-      GISignalInfo *siginfo = g_object_info_get_signal (info, i);
+  g_return_val_if_fail (info != NULL, NULL);
+  g_return_val_if_fail (GI_IS_OBJECT_INFO (info), NULL);
 
-      if (g_strcmp0 (g_base_info_get_name (siginfo), name) != 0)
-	{
-	  g_base_info_unref ((GIBaseInfo*)siginfo);
-	  continue;
-	}
-
-      return siginfo;
-    }
-  return NULL;
+  return find_signal (rinfo, object_get_signal_offset (info, 0),
+		      g_object_info_get_n_signals (info), name);
 }
 
 
