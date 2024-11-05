@@ -35,22 +35,3 @@ Bindings based on GObject-Introspection
 * `hbgi <https://github.com/tuffnatty/hbgi>`__ - Harbour bindings for GObject Introspection (runtime)
 * `cppgir <https://www.gitlab.com/mnauw/cppgir>`__ - C++ bindings (compile time, using typelib)
 * `crystal-gobject <https://github.com/jhass/crystal-gobject>`__ - gobject-introspection for Crystal (compile time)
-
-Projects using GObject Introspection
-------------------------------------
-
- * `Folks <http://telepathy.freedesktop.org/wiki/Folks>`__ - the Gnome contact aggregator
- * `GnomeShell <https://wiki.gnome.org/Projects/GnomeShell>`__ - prototyping the future gnome shell
- * `Midgard2 <http://www.midgard2.org/>`__ - language bindings to the Midgard content repository
- * `libpeas <http://git.gnome.org/browse/libpeas/tree/>`__ - library providing a generic plugin framework
- * `telepathy-glib <http://telepathy.freedesktop.org/wiki/Telepathy%20GLib>`__ - GLib bindings for Telepathy
- * `gir2xmi <https://github.com/jralls/gir2xmi>`__ - UML model generator for GObject-Introspection Gir files. 
- * `playerctl <https://github.com/acrisci/playerctl>`__ - a library and cli for controlling media players that implement the MPRIS DBus interface
- * `i3ipc-glib <https://github.com/acrisci/i3ipc-glib>`__ - a library for extensions to the i3 window manager
- * `gabi <https://gitlab.gnome.org/tmiasko/gabi>`__ - a C/typelib ABI cross-validator
-
-Projects that could use GObject-Introspection
----------------------------------------------
-
- * `Mono GAPI <http://www.mono-project.com/GAPI>`__ could replace its gapi2-parser by using GOject-Introspection.
- * `gtkmm <http://www.gtkmm.org/>`__ could use GObject-Introspection in its `gmmproc <http://www.gtkmm.org/docs/gtkmm-2.4/docs/tutorial/html/chapter-wrapping-c-libraries.html>`__ to generate C++ library bindings
