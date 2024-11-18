@@ -899,3 +899,40 @@ When the parameter is named differently, the ``(closure)`` annotation is needed.
                       GDestroyNotify now_im_done) {
     /* ... */
   }
+
+Virtual methods
+~~~~~~~~~~~~~~~
+Virtual methods can be documented as follows
+
+::
+
+  /**
+   * MyFrobnicatorClass::frobnicate:
+   * @data: Data to frobnicate
+   *
+   * Frobnicates the data, tastefully.
+   */
+  void (* frobnicate) (MyFrobnicator *self,
+                       const char    *data);
+
+If a virtual method is invoked by a signal, and the signal is emitted by a
+method, for example:
+
+::
+
+  /**
+   * my_frobnicator_frobnicate:
+   * @self: a frobnicator
+   * @data: Data to frobnicate
+   *
+   * Frobnicates the `data`, tastefully.
+   *
+   * Emits the frobnicate signal.
+   */
+  void
+  my_frobnicator_frobnicate (MyFrobnicator *self,
+                             const char    *data)
+
+then unless there is explicit documentation for the virtual method, the
+introspection data for the virtual method will be generated using the emitter's
+introspection data.
