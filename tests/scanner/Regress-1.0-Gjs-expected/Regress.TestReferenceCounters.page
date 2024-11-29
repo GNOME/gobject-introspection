@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestReferenceCounters</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testReferenceCounters = new Regress.TestReferenceCounters({
     <link xref='Regress.TestReferenceCounters-refcount'>refcount</link>: value

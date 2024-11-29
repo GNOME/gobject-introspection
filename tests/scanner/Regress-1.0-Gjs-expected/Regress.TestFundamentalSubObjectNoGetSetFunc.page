@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestFundamentalSubObjectNoGetSetFunc</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testFundamentalSubObjectNoGetSetFunc = new Regress.TestFundamentalSubObjectNoGetSetFunc();
   </code></synopsis>

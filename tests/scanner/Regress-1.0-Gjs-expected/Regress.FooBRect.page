@@ -10,7 +10,7 @@
   </info>
   <title>Regress.FooBRect</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let fooBRect = new Regress.FooBRect({
     <link xref='Regress.FooBRect-x'>x</link>: value

@@ -10,7 +10,7 @@
   </info>
   <title>Regress.FooRectangle</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let fooRectangle = new Regress.FooRectangle({
     <link xref='Regress.FooRectangle-x'>x</link>: value

@@ -10,7 +10,7 @@
   </info>
   <title>Regress.FooInterface</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let foo_interface = new Regress.FooInterface();
   </code></synopsis>

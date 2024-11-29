@@ -10,7 +10,7 @@
   </info>
   <title>Regress.FooThingWithArray</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let fooThingWithArray = new Regress.FooThingWithArray({
     <link xref='Regress.FooThingWithArray-x'>x</link>: value

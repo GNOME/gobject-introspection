@@ -39,7 +39,6 @@ function new_async(x: String, cancellable: <link href="../Gio-2.0/Gio.Cancellabl
 <title><code>x</code></title>
 
 </item>
-
 <item>
 <title><code>cancellable</code></title>
 

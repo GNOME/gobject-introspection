@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestInheritDrawable</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testInheritDrawable = new Regress.TestInheritDrawable();
   </code></synopsis>

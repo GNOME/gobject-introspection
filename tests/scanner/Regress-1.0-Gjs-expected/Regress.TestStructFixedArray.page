@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestStructFixedArray</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testStructFixedArray = new Regress.TestStructFixedArray({
     <link xref='Regress.TestStructFixedArray-just_int'>just_int</link>: value

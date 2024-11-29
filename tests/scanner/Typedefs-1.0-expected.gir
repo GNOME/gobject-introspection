@@ -11,7 +11,7 @@ and/or use gtk-doc annotations.  -->
   <c:include name="typedefs.h"/>
   <namespace name="Typedefs"
              version="1.0"
-             shared-library="libtypedefs.so"
+             shared-library="libtypedef-1.0.so"
              c:identifier-prefixes="Typedefs"
              c:symbol-prefixes="typedefs">
     <record name="BoxedWithAnonymousTypedef"

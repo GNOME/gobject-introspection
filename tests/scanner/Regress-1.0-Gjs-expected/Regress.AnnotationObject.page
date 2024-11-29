@@ -10,7 +10,7 @@
   </info>
   <title>Regress.AnnotationObject</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let annotationObject = new Regress.AnnotationObject({
     <link xref='Regress.AnnotationObject-function-property'>function_property</link>: value,

@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestFundamentalObject</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testFundamentalObject = new Regress.TestFundamentalObject();
   </code></synopsis>

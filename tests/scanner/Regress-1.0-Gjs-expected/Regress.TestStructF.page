@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestStructF</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testStructF = new Regress.TestStructF({
     <link xref='Regress.TestStructF-ref_count'>ref_count</link>: value

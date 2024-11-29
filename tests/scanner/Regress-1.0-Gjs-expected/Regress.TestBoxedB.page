@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestBoxedB</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testBoxedB = new Regress.TestBoxedB({
     <link xref='Regress.TestBoxedB-some_int8'>some_int8</link>: value

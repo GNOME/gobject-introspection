@@ -10,11 +10,12 @@
   </info>
   <title>Regress.TestBoxedC</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testBoxedC = new Regress.TestBoxedC({
     <link xref='Regress.TestBoxedC-refcount'>refcount</link>: value
     <link xref='Regress.TestBoxedC-another_thing'>another_thing</link>: value
+    <link xref='Regress.TestBoxedC-name_conflict'>name_conflict</link>: value
 });
   </code></synopsis>
 

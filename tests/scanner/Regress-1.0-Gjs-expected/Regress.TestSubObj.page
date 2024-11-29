@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestSubObj</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testSubObj = new Regress.TestSubObj({
     <link xref='Regress.TestSubObj-boolean'>boolean</link>: value,

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<page id="Regress.foo_test_unsigned_qualifier"
+<page id="Regress.foo_test_unsigned"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
@@ -9,21 +9,20 @@
     <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>none</api:type>
+        <api:type>void</api:type>
       </api:returns>
-      <api:name>regress_foo_test_unsigned_qualifier</api:name>
+      <api:name>regress_foo_test_unsigned</api:name>
       <api:arg>
-        <api:type>int</api:type>
+        <api:type>Number(guint)</api:type>
         <api:name>unsigned_param</api:name>
       </api:arg>
     </api:function>
   </info>
-  <title>Regress.foo_test_unsigned_qualifier</title>
-  <synopsis><code mime="text/x-python">
-@accepts(int)
-@returns(none)
-def foo_test_unsigned_qualifier(unsigned_param):
-    # Python wrapper for regress_foo_test_unsigned_qualifier()
+  <title>Regress.foo_test_unsigned</title>
+  <synopsis><code mime="text/x-gjs">
+function foo_test_unsigned(unsigned_param: Number(guint)): void {
+    // Gjs wrapper for regress_foo_test_unsigned()
+}
   </code></synopsis>
 
 

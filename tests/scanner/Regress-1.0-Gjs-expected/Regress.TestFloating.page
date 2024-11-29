@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestFloating</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testFloating = new Regress.TestFloating();
   </code></synopsis>

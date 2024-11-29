@@ -10,7 +10,7 @@
   </info>
   <title>Regress.LikeXklConfigItem</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let likeXklConfigItem = new Regress.LikeXklConfigItem({
     <link xref='Regress.LikeXklConfigItem-name'>name</link>: value

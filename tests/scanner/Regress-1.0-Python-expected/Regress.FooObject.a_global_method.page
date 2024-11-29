@@ -25,12 +25,12 @@
 def a_global_method(obj):
     # Python wrapper for regress_foo_object_a_global_method()
   </code></synopsis>
-
+  <p>This shouldn't be scanned as a method of UtilityObject.</p>
 
 <terms>
 <item>
 <title><code>obj</code></title>
-
+  <p>a <link href="../Utility-1.0/Utility.Object.html">Utility.Object</link></p>
 </item>
 </terms>
 

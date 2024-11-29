@@ -15,7 +15,7 @@ and/or use gtk-doc annotations.  -->
              c:identifier-prefixes="RegressUnix"
              c:symbol-prefixes="regress_unix">
     <function name="test_devt" c:identifier="regress_unix_test_devt">
-      <source-position filename="regress-unix.h" line="17"/>
+      <source-position filename="regress-unix.h" line="18"/>
       <return-value transfer-ownership="none">
         <type name="dev_t" c:type="dev_t"/>
       </return-value>
@@ -26,7 +26,7 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </function>
     <function name="test_gidt" c:identifier="regress_unix_test_gidt">
-      <source-position filename="regress-unix.h" line="20"/>
+      <source-position filename="regress-unix.h" line="21"/>
       <return-value transfer-ownership="none">
         <type name="gid_t" c:type="gid_t"/>
       </return-value>
@@ -37,7 +37,7 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </function>
     <function name="test_pidt" c:identifier="regress_unix_test_pidt">
-      <source-position filename="regress-unix.h" line="23"/>
+      <source-position filename="regress-unix.h" line="24"/>
       <return-value transfer-ownership="none">
         <type name="pid_t" c:type="pid_t"/>
       </return-value>
@@ -48,7 +48,7 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </function>
     <function name="test_socklent" c:identifier="regress_unix_test_socklent">
-      <source-position filename="regress-unix.h" line="26"/>
+      <source-position filename="regress-unix.h" line="27"/>
       <return-value transfer-ownership="none">
         <type name="socklen_t" c:type="socklen_t"/>
       </return-value>
@@ -59,7 +59,7 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </function>
     <function name="test_uidt" c:identifier="regress_unix_test_uidt">
-      <source-position filename="regress-unix.h" line="29"/>
+      <source-position filename="regress-unix.h" line="30"/>
       <return-value transfer-ownership="none">
         <type name="uid_t" c:type="uid_t"/>
       </return-value>

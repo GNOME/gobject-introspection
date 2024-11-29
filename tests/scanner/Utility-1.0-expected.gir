@@ -15,13 +15,13 @@ and/or use gtk-doc annotations.  -->
              c:identifier-prefixes="Utility"
              c:symbol-prefixes="utility">
     <alias name="Glyph" c:type="UtilityGlyph">
-      <source-position filename="utility.h" line="32"/>
+      <source-position filename="utility.h" line="36"/>
       <type name="guint32" c:type="guint32"/>
     </alias>
     <record name="Buffer" c:type="UtilityBuffer">
-      <source-position filename="utility.h" line="60"/>
+      <source-position filename="utility.h" line="64"/>
       <field name="data" writable="1">
-        <doc xml:space="preserve" filename="utility.c" line="12">the data</doc>
+        <doc xml:space="preserve" filename="utility.c" line="13">the data</doc>
         <type name="gpointer"/>
       </field>
       <field name="length" writable="1">
@@ -29,12 +29,12 @@ and/or use gtk-doc annotations.  -->
       </field>
     </record>
     <union name="Byte" c:type="UtilityByte">
-      <source-position filename="utility.h" line="53"/>
+      <source-position filename="utility.h" line="57"/>
       <field name="value" writable="1">
         <type name="guint8" c:type="guint8"/>
       </field>
       <record name="parts" c:type="parts">
-        <source-position filename="utility.h" line="52"/>
+        <source-position filename="utility.h" line="56"/>
         <field name="first_nibble" writable="1" bits="4">
           <type name="guint8" c:type="guint8"/>
         </field>
@@ -44,7 +44,7 @@ and/or use gtk-doc annotations.  -->
       </record>
     </union>
     <enumeration name="EnumType" c:type="UtilityEnumType">
-      <source-position filename="utility.h" line="79"/>
+      <source-position filename="utility.h" line="83"/>
       <member name="a" value="0" c:identifier="UTILITY_ENUM_A">
       </member>
       <member name="b" value="1" c:identifier="UTILITY_ENUM_B">
@@ -53,7 +53,7 @@ and/or use gtk-doc annotations.  -->
       </member>
     </enumeration>
     <callback name="FileFunc" c:type="UtilityFileFunc">
-      <source-position filename="utility.h" line="62"/>
+      <source-position filename="utility.h" line="66"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -71,7 +71,7 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </callback>
     <bitfield name="FlagType" c:type="UtilityFlagType">
-      <source-position filename="utility.h" line="87"/>
+      <source-position filename="utility.h" line="91"/>
       <member name="a" value="1" c:identifier="UTILITY_FLAG_A">
       </member>
       <member name="b" value="2" c:identifier="UTILITY_FLAG_B">
@@ -82,7 +82,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_OBJECT"
                     c:identifier="UTILITY_IS_OBJECT"
                     introspectable="0">
-      <source-position filename="utility.h" line="16"/>
+      <source-position filename="utility.h" line="17"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -91,7 +91,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="OBJECT"
                     c:identifier="UTILITY_OBJECT"
                     introspectable="0">
-      <source-position filename="utility.h" line="15"/>
+      <source-position filename="utility.h" line="16"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -104,9 +104,9 @@ and/or use gtk-doc annotations.  -->
            glib:type-name="UtilityObject"
            glib:get-type="utility_object_get_type"
            glib:type-struct="ObjectClass">
-      <source-position filename="utility.h" line="29"/>
+      <source-position filename="utility.h" line="33"/>
       <method name="watch_dir" c:identifier="utility_object_watch_dir">
-        <source-position filename="utility.h" line="68"/>
+        <source-position filename="utility.h" line="72"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -138,17 +138,23 @@ and/or use gtk-doc annotations.  -->
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
+      <field name="user_data" readable="0" private="1">
+        <type name="gpointer" c:type="void*"/>
+      </field>
+      <field name="destroy_notify" readable="0" private="1">
+        <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+      </field>
     </class>
     <record name="ObjectClass"
             c:type="UtilityObjectClass"
             glib:is-gtype-struct-for="Object">
-      <source-position filename="utility.h" line="29"/>
+      <source-position filename="utility.h" line="33"/>
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
     <record name="Struct" c:type="UtilityStruct">
-      <source-position filename="utility.h" line="95"/>
+      <source-position filename="utility.h" line="99"/>
       <field name="field" writable="1">
         <type name="gint" c:type="int"/>
       </field>
@@ -165,12 +171,12 @@ and/or use gtk-doc annotations.  -->
       </field>
     </record>
     <record name="TaggedValue" c:type="UtilityTaggedValue">
-      <source-position filename="utility.h" line="43"/>
+      <source-position filename="utility.h" line="47"/>
       <field name="tag" writable="1">
         <type name="gint" c:type="int"/>
       </field>
       <union name="value" c:type="value">
-        <source-position filename="utility.h" line="42"/>
+        <source-position filename="utility.h" line="46"/>
         <field name="v_pointer" writable="1">
           <type name="gpointer" c:type="gpointer"/>
         </field>
@@ -183,7 +189,7 @@ and/or use gtk-doc annotations.  -->
       </union>
     </record>
     <union name="Union" c:type="UtilityUnion">
-      <source-position filename="utility.h" line="102"/>
+      <source-position filename="utility.h" line="106"/>
       <field name="pointer" writable="1">
         <type name="utf8" c:type="char*"/>
       </field>
@@ -195,7 +201,7 @@ and/or use gtk-doc annotations.  -->
       </field>
     </union>
     <function name="dir_foreach" c:identifier="utility_dir_foreach">
-      <source-position filename="utility.h" line="105"/>
+      <source-position filename="utility.h" line="109"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>

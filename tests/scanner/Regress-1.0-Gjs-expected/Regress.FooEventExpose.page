@@ -10,7 +10,7 @@
   </info>
   <title>Regress.FooEventExpose</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let fooEventExpose = new Regress.FooEventExpose({
     <link xref='Regress.FooEventExpose-send_event'>send_event</link>: value

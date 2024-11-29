@@ -10,7 +10,7 @@
   </info>
   <title>Regress.AnnotationFields</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let annotationFields = new Regress.AnnotationFields({
     <link xref='Regress.AnnotationFields-field1'>field1</link>: value

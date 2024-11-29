@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestPrivateStruct</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testPrivateStruct = new Regress.TestPrivateStruct({
     <link xref='Regress.TestPrivateStruct-this_is_public_before'>this_is_public_before</link>: value

@@ -10,7 +10,7 @@ and/or use gtk-doc annotations.  -->
   <c:include name="sletter.h"/>
   <namespace name="SLetter"
              version="1.0"
-             shared-library="libsletter.so"
+             shared-library="libsletter-1.0.so"
              c:identifier-prefixes="S"
              c:symbol-prefixes="s">
     <enumeration name="DBusError"

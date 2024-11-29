@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
-<page id="Regress.FooSubobject.new"
+<page id="Regress.test_function_thaw_async"
       type="topic"
-      style="constructor"
+      style="function"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
-    <link xref="Regress.FooSubobject" group="constructor" type="guide"/>
+    <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
-        <api:type>Regress.FooSubobject</api:type>
+        <api:type>Number(gint)</api:type>
       </api:returns>
-      <api:name>regress_foo_subobject_new</api:name>
+      <api:name>regress_test_function_thaw_async</api:name>
     </api:function>
   </info>
-  <title>Regress.FooSubobject.new</title>
+  <title>Regress.test_function_thaw_async</title>
   <synopsis><code mime="text/x-gjs">
-function new(): <link xref="Regress.FooSubobject">Regress.FooSubobject</link> {
-    // Gjs wrapper for regress_foo_subobject_new()
+function test_function_thaw_async(): Number(gint) {
+    // Gjs wrapper for regress_test_function_thaw_async()
 }
   </code></synopsis>
 
@@ -25,7 +25,7 @@ function new(): <link xref="Regress.FooSubobject">Regress.FooSubobject</link> {
 <terms>
 <item>
 <title><code>Returns</code></title>
-
+  <p>the number of callbacks that were thawed.</p>
 </item>
 </terms>
 

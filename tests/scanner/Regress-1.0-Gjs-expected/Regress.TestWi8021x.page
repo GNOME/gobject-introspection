@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestWi8021x</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testWi8021x = new Regress.TestWi8021x({
 });

@@ -10,7 +10,7 @@
   </info>
   <title>Regress.FooEvent</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let fooEvent = new Regress.FooEvent();
   </code></synopsis>

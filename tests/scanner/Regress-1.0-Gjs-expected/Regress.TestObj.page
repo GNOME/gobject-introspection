@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestObj</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let testObj = new Regress.TestObj({
     <link xref='Regress.TestObj-byte-array'>byte_array</link>: value,

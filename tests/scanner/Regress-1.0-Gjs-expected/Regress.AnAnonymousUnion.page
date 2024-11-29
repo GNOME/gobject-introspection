@@ -10,7 +10,7 @@
   </info>
   <title>Regress.AnAnonymousUnion</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let anAnonymousUnion = new Regress.AnAnonymousUnion({
     <link xref='Regress.AnAnonymousUnion-x'>x</link>: value

@@ -10,7 +10,7 @@
   </info>
   <title>Regress.TestInterface</title>
   <synopsis><code>
-const Regress = imports.gi.Regress;
+import Regress from 'gi://Regress';
 
 let test_interface = new Regress.TestInterface({
     <link xref='Regress.TestInterface-number'>number</link>: value,

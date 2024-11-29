@@ -13,27 +13,27 @@
 
 <terms>
 <item>
-<title><code>TestReferenceEnum.0</code></title>
+<title><code>TestReferenceEnum.ZERO</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum.1</code></title>
+<title><code>TestReferenceEnum.ONE</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum.2</code></title>
+<title><code>TestReferenceEnum.TWO</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum.3</code></title>
+<title><code>TestReferenceEnum.THREE</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum.4</code></title>
+<title><code>TestReferenceEnum.FOUR</code></title>
 
 </item>
 <item>
-<title><code>TestReferenceEnum.5</code></title>
+<title><code>TestReferenceEnum.FIVE</code></title>
 
 </item>
 </terms>
