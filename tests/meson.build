@@ -105,7 +105,8 @@ if cc.get_id() != 'msvc'
 endif
 
 gimarshallingtests_lib = shared_library('gimarshallingtests-1.0',
-  sources: test_marshalling_sources,
+  sources: test_marshalling_sources +
+    ['../gobject-introspection-tests/gimarshallingtestsextra.c'],
   include_directories : configinc,
   c_args: gi_hidden_visibility_cflags + custom_c_args,
   dependencies: [glib_dep, gobject_dep],
@@ -151,7 +152,10 @@ if (glib_dep.type_name() == 'pkgconfig' and
   )]
 
   test_gir_files += [custom_target('gir-gimarshallingtests',
-    input: test_marshalling_sources + test_marshalling_headers,
+    input: test_marshalling_sources + test_marshalling_headers + [
+      '../gobject-introspection-tests/gimarshallingtestsextra.c',
+      '../gobject-introspection-tests/gimarshallingtestsextra.h',
+    ],
     output: 'GIMarshallingTests-1.0.gir',
     depends: [gimarshallingtests_lib] + typelibs,
     command: [

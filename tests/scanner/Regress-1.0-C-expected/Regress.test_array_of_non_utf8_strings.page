@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<page id="Regress.test_array_of_non_utf8_strings"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    <link xref="index" group="function" type="guide"/>
+    <api:function>
+      <api:returns>
+        <api:type>utf8*</api:type>
+      </api:returns>
+      <api:name>regress_test_array_of_non_utf8_strings</api:name>
+    </api:function>
+  </info>
+  <title>regress_test_array_of_non_utf8_strings</title>
+  <synopsis><code mime="text/x-csrc">
+gchar** regress_test_array_of_non_utf8_strings (void);
+  </code></synopsis>
+
+
+<terms>
+<item>
+<title><code>Returns</code></title>
+  <p>Array of strings</p>
+</item>
+</terms>
+
+</page>

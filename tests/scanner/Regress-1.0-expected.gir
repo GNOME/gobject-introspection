@@ -1266,6 +1266,17 @@ it says it's pointer but it's actually a string.</doc>
       <source-position filename="regress.h" line="576"/>
       <type name="gboolean" c:type="gboolean"/>
     </constant>
+    <class name="Bitmask"
+           c:symbol-prefix="bitmask"
+           glib:type-name="RegressBitmask"
+           glib:get-type="regress_bitmask_get_type"
+           glib:fundamental="1">
+      <doc xml:space="preserve"
+           filename="regressextra.h"
+           line="105">A fundamental type that describes a 64-bit bitmask.
+
+This type resembles GStreamer's Bitmask type.</doc>
+    </class>
     <constant name="DOUBLE_CONSTANT"
               value="44.220000"
               c:type="REGRESS_DOUBLE_CONSTANT">
@@ -3019,6 +3030,49 @@ use it should be.</doc>
         </return-value>
       </function>
     </enumeration>
+    <class name="TestAction"
+           c:symbol-prefix="test_action"
+           c:type="RegressTestAction"
+           parent="GObject.InitiallyUnowned"
+           glib:type-name="RegressTestAction"
+           glib:get-type="regress_test_action_get_type"
+           glib:type-struct="TestActionClass">
+      <source-position filename="regressextra.h" line="100"/>
+      <field name="parent">
+        <type name="GObject.InitiallyUnowned" c:type="GInitiallyUnowned"/>
+      </field>
+      <glib:signal name="action" when="last" action="1">
+        <doc xml:space="preserve"
+             filename="regressextra.c"
+             line="482">An action signal.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="487">another #RegressTestAction</doc>
+          <type name="TestAction"/>
+        </return-value>
+      </glib:signal>
+      <glib:signal name="action2" when="last" action="1">
+        <doc xml:space="preserve"
+             filename="regressextra.c"
+             line="495">Another action signal.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="500">another #RegressTestAction</doc>
+          <type name="TestAction"/>
+        </return-value>
+      </glib:signal>
+    </class>
+    <record name="TestActionClass"
+            c:type="RegressTestActionClass"
+            glib:is-gtype-struct-for="TestAction">
+      <source-position filename="regressextra.h" line="100"/>
+      <field name="parent_class">
+        <type name="GObject.InitiallyUnownedClass"
+              c:type="GInitiallyUnownedClass"/>
+      </field>
+    </record>
     <record name="TestBoxed"
             c:type="RegressTestBoxed"
             glib:type-name="RegressTestBoxed"
@@ -3186,6 +3240,48 @@ use it should be.</doc>
         <parameters>
           <instance-parameter name="boxed" transfer-ownership="none">
             <type name="TestBoxedC" c:type="RegressTestBoxedC*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+    </record>
+    <record name="TestBoxedCWrapper"
+            c:type="RegressTestBoxedCWrapper"
+            opaque="1"
+            glib:type-name="RegressTestBoxedCWrapper"
+            glib:get-type="regress_test_boxed_c_wrapper_get_type"
+            c:symbol-prefix="test_boxed_c_wrapper">
+      <source-position filename="regressextra.h" line="17"/>
+      <constructor name="new" c:identifier="regress_test_boxed_c_wrapper_new">
+        <source-position filename="regressextra.h" line="23"/>
+        <return-value transfer-ownership="full">
+          <type name="TestBoxedCWrapper" c:type="RegressTestBoxedCWrapper*"/>
+        </return-value>
+      </constructor>
+      <method name="copy" c:identifier="regress_test_boxed_c_wrapper_copy">
+        <source-position filename="regressextra.h" line="25"/>
+        <return-value transfer-ownership="full">
+          <type name="TestBoxedCWrapper" c:type="RegressTestBoxedCWrapper*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="TestBoxedCWrapper" c:type="RegressTestBoxedCWrapper*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get" c:identifier="regress_test_boxed_c_wrapper_get">
+        <source-position filename="regressextra.h" line="27"/>
+        <return-value transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="55">associated #RegressTestBoxedC</doc>
+          <type name="TestBoxedC" c:type="RegressTestBoxedC*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <doc xml:space="preserve"
+                 filename="regressextra.c"
+                 line="53">a #RegressTestBoxedCWrapper objects</doc>
+            <type name="TestBoxedCWrapper" c:type="RegressTestBoxedCWrapper*"/>
           </instance-parameter>
         </parameters>
       </method>
@@ -7023,6 +7119,28 @@ in particular, but it should be serialized in the gir nevertheless.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_fixed_boxed_none_out"
+              c:identifier="regress_test_array_fixed_boxed_none_out">
+      <source-position filename="regressextra.h" line="32"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="objs"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="78">An array of #RegressTestBoxedC</doc>
+          <array zero-terminated="0"
+                 c:type="RegressTestBoxedC***"
+                 fixed-size="2">
+            <type name="TestBoxedC" c:type="RegressTestBoxedC**"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_array_fixed_out_objects"
               c:identifier="regress_test_array_fixed_out_objects">
       <source-position filename="regress.h" line="946"/>
@@ -7386,6 +7504,69 @@ in particular, but it should be serialized in the gir nevertheless.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_of_fundamental_objects_in"
+              c:identifier="regress_test_array_of_fundamental_objects_in">
+      <source-position filename="regressextra.h" line="41"/>
+      <return-value transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="list" transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="151">An array of #RegressTestFundamentalObject</doc>
+          <array length="1"
+                 zero-terminated="0"
+                 c:type="RegressTestFundamentalObject**">
+            <type name="TestFundamentalObject"/>
+          </array>
+        </parameter>
+        <parameter name="len" transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="152">length of the list</doc>
+          <type name="gsize" c:type="gsize"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_of_fundamental_objects_out"
+              c:identifier="regress_test_array_of_fundamental_objects_out">
+      <source-position filename="regressextra.h" line="43"/>
+      <return-value transfer-ownership="full">
+        <doc xml:space="preserve"
+             filename="regressextra.c"
+             line="172">An array of #RegressTestFundamentalObject</doc>
+        <array length="0"
+               zero-terminated="0"
+               c:type="RegressTestFundamentalObject**">
+          <type name="TestFundamentalObject"
+                c:type="RegressTestFundamentalObject*"/>
+        </array>
+      </return-value>
+      <parameters>
+        <parameter name="len"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="171">length of the list</doc>
+          <type name="gsize" c:type="gsize*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_of_non_utf8_strings"
+              c:identifier="regress_test_array_of_non_utf8_strings">
+      <source-position filename="regressextra.h" line="30"/>
+      <return-value transfer-ownership="full" nullable="1">
+        <doc xml:space="preserve"
+             filename="regressextra.c"
+             line="65">Array of strings</doc>
+        <array c:type="gchar**">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+    </function>
     <function name="test_array_static_in_int"
               c:identifier="regress_test_array_static_in_int">
       <source-position filename="regress.h" line="954"/>
@@ -7687,6 +7868,18 @@ Similar to:
         <type name="none" c:type="void"/>
       </return-value>
     </function>
+    <function name="test_cairo_context_full_in"
+              c:identifier="regress_test_cairo_context_full_in">
+      <source-position filename="regressextra.h" line="54"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="context" transfer-ownership="full">
+          <type name="cairo.Context" c:type="cairo_t*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_cairo_context_full_return"
               c:identifier="regress_test_cairo_context_full_return">
       <source-position filename="regress.h" line="381"/>
@@ -7703,6 +7896,178 @@ Similar to:
       <parameters>
         <parameter name="context" transfer-ownership="none">
           <type name="cairo.Context" c:type="cairo_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_context_none_return"
+              c:identifier="regress_test_cairo_context_none_return">
+      <source-position filename="regressextra.h" line="52"/>
+      <return-value transfer-ownership="none">
+        <type name="cairo.Context" c:type="cairo_t*"/>
+      </return-value>
+    </function>
+    <function name="test_cairo_font_options_full_in"
+              c:identifier="regress_test_cairo_font_options_full_in">
+      <source-position filename="regressextra.h" line="74"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="options" transfer-ownership="full">
+          <type name="cairo.FontOptions" c:type="cairo_font_options_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_font_options_full_return"
+              c:identifier="regress_test_cairo_font_options_full_return">
+      <source-position filename="regressextra.h" line="70"/>
+      <return-value transfer-ownership="full">
+        <type name="cairo.FontOptions" c:type="cairo_font_options_t*"/>
+      </return-value>
+    </function>
+    <function name="test_cairo_font_options_none_in"
+              c:identifier="regress_test_cairo_font_options_none_in">
+      <source-position filename="regressextra.h" line="76"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="options" transfer-ownership="none">
+          <type name="cairo.FontOptions" c:type="cairo_font_options_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_font_options_none_return"
+              c:identifier="regress_test_cairo_font_options_none_return">
+      <source-position filename="regressextra.h" line="72"/>
+      <return-value transfer-ownership="none">
+        <type name="cairo.FontOptions" c:type="cairo_font_options_t*"/>
+      </return-value>
+    </function>
+    <function name="test_cairo_matrix_none_in"
+              c:identifier="regress_test_cairo_matrix_none_in">
+      <source-position filename="regressextra.h" line="82"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="matrix" transfer-ownership="none">
+          <type name="cairo.Matrix" c:type="const cairo_matrix_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_matrix_none_return"
+              c:identifier="regress_test_cairo_matrix_none_return">
+      <source-position filename="regressextra.h" line="84"/>
+      <return-value transfer-ownership="none">
+        <type name="cairo.Matrix" c:type="cairo_matrix_t*"/>
+      </return-value>
+    </function>
+    <function name="test_cairo_matrix_out_caller_allocates"
+              c:identifier="regress_test_cairo_matrix_out_caller_allocates">
+      <source-position filename="regressextra.h" line="86"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="matrix"
+                   direction="out"
+                   caller-allocates="1"
+                   transfer-ownership="none">
+          <type name="cairo.Matrix" c:type="cairo_matrix_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_path_full_in_full_return"
+              c:identifier="regress_test_cairo_path_full_in_full_return">
+      <source-position filename="regressextra.h" line="60"/>
+      <return-value transfer-ownership="full">
+        <type name="cairo.Path" c:type="cairo_path_t*"/>
+      </return-value>
+      <parameters>
+        <parameter name="path" transfer-ownership="full">
+          <type name="cairo.Path" c:type="cairo_path_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_path_full_return"
+              c:identifier="regress_test_cairo_path_full_return">
+      <source-position filename="regressextra.h" line="56"/>
+      <return-value transfer-ownership="full">
+        <type name="cairo.Path" c:type="cairo_path_t*"/>
+      </return-value>
+    </function>
+    <function name="test_cairo_path_none_in"
+              c:identifier="regress_test_cairo_path_none_in">
+      <source-position filename="regressextra.h" line="58"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="path" transfer-ownership="none">
+          <type name="cairo.Path" c:type="cairo_path_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_pattern_full_in"
+              c:identifier="regress_test_cairo_pattern_full_in">
+      <source-position filename="regressextra.h" line="62"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="pattern" transfer-ownership="full">
+          <type name="cairo.Pattern" c:type="cairo_pattern_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_pattern_full_return"
+              c:identifier="regress_test_cairo_pattern_full_return">
+      <source-position filename="regressextra.h" line="68"/>
+      <return-value transfer-ownership="full">
+        <type name="cairo.Pattern" c:type="cairo_pattern_t*"/>
+      </return-value>
+    </function>
+    <function name="test_cairo_pattern_none_in"
+              c:identifier="regress_test_cairo_pattern_none_in">
+      <source-position filename="regressextra.h" line="64"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="pattern" transfer-ownership="none">
+          <type name="cairo.Pattern" c:type="cairo_pattern_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_pattern_none_return"
+              c:identifier="regress_test_cairo_pattern_none_return">
+      <source-position filename="regressextra.h" line="66"/>
+      <return-value transfer-ownership="none">
+        <type name="cairo.Pattern" c:type="cairo_pattern_t*"/>
+      </return-value>
+    </function>
+    <function name="test_cairo_region_full_in"
+              c:identifier="regress_test_cairo_region_full_in">
+      <source-position filename="regressextra.h" line="78"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="region" transfer-ownership="full">
+          <type name="cairo.Region" c:type="cairo_region_t*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_cairo_surface_full_in"
+              c:identifier="regress_test_cairo_surface_full_in">
+      <source-position filename="regressextra.h" line="80"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="surface" transfer-ownership="full">
+          <type name="cairo.Surface" c:type="cairo_surface_t*"/>
         </parameter>
       </parameters>
     </function>
@@ -8090,6 +8455,42 @@ call and can be released on return.</doc>
         <type name="gint" c:type="int"/>
       </return-value>
     </function>
+    <function name="test_fundamental_argument_in"
+              c:identifier="regress_test_fundamental_argument_in">
+      <source-position filename="regressextra.h" line="45"/>
+      <return-value transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="192">A #RegressTestFundamentalObject</doc>
+          <type name="TestFundamentalObject"
+                c:type="RegressTestFundamentalObject*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_fundamental_argument_out"
+              c:identifier="regress_test_fundamental_argument_out">
+      <source-position filename="regressextra.h" line="47"/>
+      <return-value transfer-ownership="none">
+        <doc xml:space="preserve"
+             filename="regressextra.c"
+             line="205">Same #RegressTestFundamentalObject</doc>
+        <type name="TestFundamentalObject"
+              c:type="RegressTestFundamentalObject*"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="204">A #RegressTestFundamentalObject</doc>
+          <type name="TestFundamentalObject"
+                c:type="RegressTestFundamentalObject*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_garray_container_return"
               c:identifier="regress_test_garray_container_return">
       <source-position filename="regress.h" line="354"/>
@@ -8299,6 +8700,34 @@ element-type annotation.</doc>
           <type name="utf8"/>
         </type>
       </return-value>
+    </function>
+    <function name="test_glist_boxed_full_return"
+              c:identifier="regress_test_glist_boxed_full_return">
+      <source-position filename="regressextra.h" line="38"/>
+      <return-value transfer-ownership="full">
+        <type name="GLib.List" c:type="GList*">
+          <type name="TestBoxedC"/>
+        </type>
+      </return-value>
+      <parameters>
+        <parameter name="count" transfer-ownership="none">
+          <type name="guint" c:type="guint"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_glist_boxed_none_return"
+              c:identifier="regress_test_glist_boxed_none_return">
+      <source-position filename="regressextra.h" line="36"/>
+      <return-value transfer-ownership="none">
+        <type name="GLib.List" c:type="GList*">
+          <type name="TestBoxedC"/>
+        </type>
+      </return-value>
+      <parameters>
+        <parameter name="count" transfer-ownership="none">
+          <type name="guint" c:type="guint"/>
+        </parameter>
+      </parameters>
     </function>
     <function name="test_glist_container_return"
               c:identifier="regress_test_glist_container_return">
@@ -8522,6 +8951,30 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="GType" c:type="GType"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_gvalue_out_boxed"
+              c:identifier="regress_test_gvalue_out_boxed">
+      <source-position filename="regressextra.h" line="34"/>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="value"
+                   direction="out"
+                   caller-allocates="1"
+                   transfer-ownership="full">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="97">the output gvalue</doc>
+          <type name="GObject.Value" c:type="GValue*"/>
+        </parameter>
+        <parameter name="init" transfer-ownership="none">
+          <doc xml:space="preserve"
+               filename="regressextra.c"
+               line="98">the initialisation value</doc>
+          <type name="gint" c:type="int"/>
         </parameter>
       </parameters>
     </function>

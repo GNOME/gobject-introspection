@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<page id="Regress.test_gvalue_out_boxed"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    <link xref="index" group="function" type="guide"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>regress_test_gvalue_out_boxed</api:name>
+      <api:arg>
+        <api:type>GObject.Value</api:type>
+        <api:name>value</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>int</api:type>
+        <api:name>init</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>Regress.test_gvalue_out_boxed</title>
+  <synopsis><code mime="text/x-python">
+@accepts(GObject.Value, int)
+@returns(none)
+def test_gvalue_out_boxed(value, init):
+    # Python wrapper for regress_test_gvalue_out_boxed()
+  </code></synopsis>
+
+
+<terms>
+<item>
+<title><code>value</code></title>
+  <p>the output gvalue</p>
+</item>
+<item>
+<title><code>init</code></title>
+  <p>the initialisation value</p>
+</item>
+</terms>
+
+</page>

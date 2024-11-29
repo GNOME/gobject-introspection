@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<page id="Regress.TestAction-action2"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    <link xref="Regress.TestAction" group="signal" type="guide"/>
+    <title type="link" role="topic">action2</title>
+  </info>
+  <title>Regress.TestAction::action2</title>
+  <synopsis><code mime="text/x-gjs">
+connect('action2', function (testAction, ): <link xref="Regress.TestAction">Regress.TestAction</link>);
+  </code></synopsis>
+  <p>Another action signal.</p>
+
+<terms>
+<item>
+<title><code>testAction</code></title>
+<p>instance of <link xref="Regress.TestAction"/> that is emitting the signal</p>
+</item>
+</terms>
+
+</page>

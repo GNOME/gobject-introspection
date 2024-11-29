@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<page id="Regress.test_array_of_fundamental_objects_out"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    <link xref="index" group="function" type="guide"/>
+    <api:function>
+      <api:returns>
+        <api:type>RegressTestFundamentalObject**</api:type>
+      </api:returns>
+      <api:name>regress_test_array_of_fundamental_objects_out</api:name>
+      <api:arg>
+        <api:type>gsize*</api:type>
+        <api:name>len</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>regress_test_array_of_fundamental_objects_out</title>
+  <synopsis><code mime="text/x-csrc">
+RegressTestFundamentalObject** regress_test_array_of_fundamental_objects_out (gsize* len);
+  </code></synopsis>
+
+
+<terms>
+<item>
+<title><code>len</code></title>
+  <p>length of the list</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+  <p>An array of <link xref="Regress.TestFundamentalObject"/></p>
+</item>
+</terms>
+
+</page>

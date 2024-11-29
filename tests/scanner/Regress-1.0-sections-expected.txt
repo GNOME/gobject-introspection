@@ -60,6 +60,7 @@ regress_random_function_with_skipped_structure
 regress_set_abort_on_error
 regress_test_abc_error_quark
 regress_test_array_callback
+regress_test_array_fixed_boxed_none_out
 regress_test_array_fixed_out_objects
 regress_test_array_fixed_size_int_in
 regress_test_array_fixed_size_int_out
@@ -77,6 +78,9 @@ regress_test_array_int_none_out
 regress_test_array_int_null_in
 regress_test_array_int_null_out
 regress_test_array_int_out
+regress_test_array_of_fundamental_objects_in
+regress_test_array_of_fundamental_objects_out
+regress_test_array_of_non_utf8_strings
 regress_test_array_static_in_int
 regress_test_array_struct_in_full
 regress_test_array_struct_in_none
@@ -91,8 +95,26 @@ regress_test_boolean_false
 regress_test_boolean_true
 regress_test_boxeds_not_a_method
 regress_test_boxeds_not_a_static
+regress_test_cairo_context_full_in
 regress_test_cairo_context_full_return
 regress_test_cairo_context_none_in
+regress_test_cairo_context_none_return
+regress_test_cairo_font_options_full_in
+regress_test_cairo_font_options_full_return
+regress_test_cairo_font_options_none_in
+regress_test_cairo_font_options_none_return
+regress_test_cairo_matrix_none_in
+regress_test_cairo_matrix_none_return
+regress_test_cairo_matrix_out_caller_allocates
+regress_test_cairo_path_full_in_full_return
+regress_test_cairo_path_full_return
+regress_test_cairo_path_none_in
+regress_test_cairo_pattern_full_in
+regress_test_cairo_pattern_full_return
+regress_test_cairo_pattern_none_in
+regress_test_cairo_pattern_none_return
+regress_test_cairo_region_full_in
+regress_test_cairo_surface_full_in
 regress_test_cairo_surface_full_out
 regress_test_cairo_surface_full_return
 regress_test_cairo_surface_none_in
@@ -120,6 +142,8 @@ regress_test_function_async
 regress_test_function_finish
 regress_test_function_sync
 regress_test_function_thaw_async
+regress_test_fundamental_argument_in
+regress_test_fundamental_argument_out
 regress_test_garray_container_return
 regress_test_garray_full_return
 regress_test_gerror_callback
@@ -136,6 +160,8 @@ regress_test_ghash_nothing_return2
 regress_test_ghash_null_in
 regress_test_ghash_null_out
 regress_test_ghash_null_return
+regress_test_glist_boxed_full_return
+regress_test_glist_boxed_none_return
 regress_test_glist_container_return
 regress_test_glist_everything_return
 regress_test_glist_gtype_container_in
@@ -154,6 +180,7 @@ regress_test_gslist_nothing_return2
 regress_test_gslist_null_in
 regress_test_gslist_null_out
 regress_test_gtype
+regress_test_gvalue_out_boxed
 regress_test_gvariant_as
 regress_test_gvariant_asv
 regress_test_gvariant_i
@@ -258,6 +285,11 @@ regress_annotation_object_watch_full
 regress_annotation_object_with_voidp
 
 <SECTION>
+<FILE>regress-bitmask</FILE>
+<TITLE>RegressBitmask</TITLE>
+RegressBitmask
+
+<SECTION>
 <FILE>regress-foo-buffer</FILE>
 <TITLE>RegressFooBuffer</TITLE>
 RegressFooBuffer
@@ -313,6 +345,12 @@ regress_foo_sub_interface_do_baz
 <TITLE>RegressFooSubobject</TITLE>
 RegressFooSubobject
 RegressFooSubobjectClass
+
+<SECTION>
+<FILE>regress-test-action</FILE>
+<TITLE>RegressTestAction</TITLE>
+RegressTestAction
+RegressTestActionClass
 
 <SECTION>
 <FILE>regress-test-floating</FILE>
