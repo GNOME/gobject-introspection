@@ -142,7 +142,10 @@ def generate_sections_file(transformer):
             file_name = to_underscores(gtype_name).replace('_', '-').lower()
             section = new_section(file_name, gtype_name)
             append_symbol(section, gtype_name)
-            append_symbol(section, node.glib_type_struct.target_giname.replace('.', ''))
+            if node.glib_type_struct is not None:
+                append_symbol(
+                    section,
+                    node.glib_type_struct.target_giname.replace('.', ''))
 
             for meth in node.methods:
                 append_symbol(section, meth.symbol)
