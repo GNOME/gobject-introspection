@@ -234,11 +234,21 @@ class MainTransformer(object):
         param = node.instance_parameter
         tag = block.params.get(param.argname)
         annotations = tag.annotations if tag else {}
+        transfer = annotations.get(ANN_TRANSFER, ['none'])[0]
 
         if ANN_NULLABLE in annotations:
             message.strict_node(node,
                 '"nullable" annotation on instance parameter of {0}: did you '
                 'really intend that?'.format(node.symbol))
+
+        if (transfer not in (OPT_TRANSFER_NONE, None) and
+                not node.name.startswith('free') and
+                not node.name.startswith('destroy')):
+            message.warn_node(node,
+                '"transfer" annotation of "{0}" on instance parameter of '
+                '{1}: should not be applied to a method\'s instance '
+                'parameter unless this is a free() or destroy() method'.format(
+                    transfer, node.symbol))
 
     def _apply_annotations_function(self, node, chain):
         block = self._blocks.get(node.symbol)

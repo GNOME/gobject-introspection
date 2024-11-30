@@ -53,3 +53,18 @@ void test_method_nullable_instance_param(TestMethod *self);
 
 // EXPECT:52: Warning: Test: "nullable" annotation on instance parameter of test_method_nullable_instance_param: did you really intend that?
 
+/**
+ * test_method_transfer_full_instance_param: (method)
+ * @self: (transfer full):
+ */
+void test_method_transfer_full_instance_param(TestMethod *self);
+
+// EXPECT:60: Warning: Test: "transfer" annotation of "full" on instance parameter of test_method_transfer_full_instance_param: should not be applied to a method's instance parameter unless this is a free() or destroy() method
+
+/**
+ * test_method_free: (method)
+ * @self: (transfer full):
+ *
+ * Should not warn because it's named "free"
+ */
+void test_method_free_data(TestMethod *self);
