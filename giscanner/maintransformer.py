@@ -1270,11 +1270,12 @@ method or constructor of some type."""
                     '%s: Methods must belong to the same namespace as the '
                     'class they belong to' % (func.symbol, ))
             return False
-        if first.direction == ast.PARAM_DIRECTION_OUT:
+        if first.direction in (ast.PARAM_DIRECTION_OUT,
+                               ast.PARAM_DIRECTION_INOUT):
             if func.is_method:
-                message.warn_node(func,
-                    '%s: The first argument of methods cannot be an '
-                    'out-argument' % (func.symbol, ))
+                message.error_node(func,
+                    '%s: The first argument of a method cannot be an '
+                    '%s-argument' % (func.symbol, first.direction))
             return False
 
         # A quick hack here...in the future we should catch C signature/GI signature
