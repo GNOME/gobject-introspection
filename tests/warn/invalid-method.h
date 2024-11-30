@@ -45,4 +45,11 @@ void test_method_inout_instance_param(TestMethod *self);
 
 // EXPECT:44: Error: Test: test_method_inout_instance_param: The first argument of a method cannot be an inout-argument
 
+/**
+ * test_method_nullable_instance_param: (method)
+ * @self: (nullable):
+ */
+void test_method_nullable_instance_param(TestMethod *self);
+
+// EXPECT:52: Warning: Test: "nullable" annotation on instance parameter of test_method_nullable_instance_param: did you really intend that?
 

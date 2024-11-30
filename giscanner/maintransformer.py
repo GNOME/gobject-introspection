@@ -227,6 +227,19 @@ class MainTransformer(object):
             target.shadowed_by = node.name
             node.shadows = target.name
 
+    def _check_instance_parameter(self, node, block):
+        if not node.is_method or not node.instance_parameter or not block:
+            return
+
+        param = node.instance_parameter
+        tag = block.params.get(param.argname)
+        annotations = tag.annotations if tag else {}
+
+        if ANN_NULLABLE in annotations:
+            message.strict_node(node,
+                '"nullable" annotation on instance parameter of {0}: did you '
+                'really intend that?'.format(node.symbol))
+
     def _apply_annotations_function(self, node, chain):
         block = self._blocks.get(node.symbol)
         self._apply_annotations_callable(node, chain, block)
@@ -1099,6 +1112,7 @@ class MainTransformer(object):
             block = self._blocks.get(node.symbol)
 
             self._apply_annotation_rename_to(node, chain, block)
+            self._check_instance_parameter(node, block)
 
             # Handle virtual invokers
             parent = chain[-1] if chain else None
