@@ -85,9 +85,9 @@ Include =
   }
 
 Package =
-  # Deprecated: package name containing the library
+  # The pkg-config file provided by the library
   element package {
-    ## name of the package
+    ## name of the pkg-config file, minus the extension
     attribute name { xsd:string },
 
     empty
