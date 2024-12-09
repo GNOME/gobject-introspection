@@ -45,3 +45,7 @@ option('build_introspection_data', type: 'boolean', value : true,
 option('gi_cross_pkgconfig_sysroot_path', type: 'string',
   description: 'Specify a sysroot path to prepend to pkgconfig output (useful when cross-compiling)'
 )
+
+option('tests', type: 'boolean', value: true,
+  description: 'Run tests'
+)

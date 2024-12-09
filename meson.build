@@ -272,7 +272,7 @@ subdir('docs')
 
 # The tests will also run, which is not possible if they
 # were built for a different architecture.
-if not meson.is_cross_build()
+if not meson.is_cross_build() and get_option('tests')
   subdir('tests')
 endif
 
