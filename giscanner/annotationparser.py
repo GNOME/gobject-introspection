@@ -285,10 +285,15 @@ OUT_OPTIONS = [OPT_OUT_CALLEE_ALLOCATES,
                OPT_OUT_CALLER_ALLOCATES]
 
 # (not) annotation options
+OPT_NOT_METHOD = 'method'
 OPT_NOT_NULLABLE = 'nullable'
 OPT_NOT_OPTIONAL = 'optional'
 
-NOT_OPTIONS = [OPT_NOT_NULLABLE, OPT_NOT_OPTIONAL]
+NOT_OPTIONS = [
+    OPT_NOT_METHOD,
+    OPT_NOT_NULLABLE,
+    OPT_NOT_OPTIONAL,
+]
 
 # (scope) annotation options
 OPT_SCOPE_ASYNC = 'async'
@@ -647,6 +652,10 @@ class GtkDocAnnotatable(object):
                         warn('cannot have both "%s" and "%s" present' %
                              (ANN_NOT + ' ' + OPT_NOT_OPTIONAL, ANN_OPTIONAL),
                              position)
+
+                if ann_name == ANN_NOT and OPT_NOT_METHOD in options:
+                    if ANN_METHOD in self.annotations:
+                        warn(f'cannot have both "{ANN_NOT} {ANN_METHOD}" and "{ANN_METHOD}" present', position)
 
     def _validate_options(self, position, ann_name, n_options, expected_n_options, operator,
                           message):

@@ -782,7 +782,8 @@ class MainTransformer(object):
             node.nullable = True
 
         # Final override for nullability
-        if ANN_NOT in annotations:
+        not_annotation = annotations.get(ANN_NOT)
+        if not_annotation is not None and not_annotation[0] == ANN_NULLABLE:
             node.nullable = False
             node.not_nullable = True
 
@@ -846,6 +847,10 @@ class MainTransformer(object):
 
         if ANN_METHOD in block.annotations:
             node.is_method = True
+
+        not_annotation = block.annotations.get(ANN_NOT)
+        if not_annotation is not None and not_annotation[0] == ANN_METHOD:
+            node.is_method = False
 
         set_property = block.annotations.get(ANN_SET_PROPERTY)
         if set_property is not None and isinstance(node, ast.Function):
