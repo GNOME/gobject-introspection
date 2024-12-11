@@ -47,5 +47,5 @@ option('gi_cross_pkgconfig_sysroot_path', type: 'string',
 )
 
 option('tests', type: 'boolean', value: true,
-  description: 'Run tests'
+  description: 'Build and run tests'
 )
