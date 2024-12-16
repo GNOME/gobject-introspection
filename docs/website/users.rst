@@ -10,7 +10,7 @@ Bindings based on GObject-Introspection
  * `PyGObject <https://wiki.gnome.org/Projects/PyGObject>`__ - Python bindings (runtime)
  * `pygir-ctypes <https://code.google.com/archive/p/pygir-ctypes/>`__ - Pure Python GObject Introspection Repository (GIR) wrapper using ctypes (runtime)
  * `pgi <https://github.com/pygobject/pgi>`__ - Pure Python GObject Introspection Bindings (runtime)
- * `GTK-Perl/Introspection <https://wiki.gnome.org/Projects/GTK-Perl/Introspection>`__ - Perl bindings (runtime)
+ * `GTK-Perl/Introspection <https://wiki.gnome.org/Projects(2f)GTK(2d)Perl(2f)Introspection.html>`__ - Perl bindings (runtime)
  * `JGIR <https://wiki.gnome.org/Projects/JGIR>`__ - Java/JVM bindings (compile time, using typelib)
  * `GJS <https://wiki.gnome.org/Projects/Gjs>`__ - Javascript (spidermonkey) bindings (runtime)
  * `Seed <https://wiki.gnome.org/Projects/Seed>`__ -  Javascript (JSCore, WebKit JS engine) bindings (runtime)
