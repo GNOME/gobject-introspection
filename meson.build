@@ -188,9 +188,14 @@ endif
 pkg_config = find_program('pkg-config')
 g_ir_scanner_env = environment()
 dep_type = glib_dep.type_name()
-if dep_type == 'internal'
-  g_ir_scanner_env.append('PKG_CONFIG_PATH', meson.global_build_root() + '/meson-uninstalled')
+if dep_type == 'internal' or meson.is_subproject()
+  g_ir_scanner_env.prepend('PKG_CONFIG_PATH', meson.global_build_root() + '/meson-uninstalled')
   g_ir_scanner_env.set('PKG_CONFIG', pkg_config.full_path())
+endif
+
+pkg_config_path = get_option('pkg_config_path')
+if pkg_config_path.length() > 0
+  g_ir_scanner_env.append('PKG_CONFIG_PATH', pkg_config_path)
 endif
 
 configure_file(
