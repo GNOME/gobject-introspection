@@ -273,7 +273,7 @@ class DumpCompiler(object):
             sys.stdout.flush()
 
         msys = os.environ.get('MSYSTEM', None)
-        if msys:
+        if msys and not self._compiler.check_is_msvc():
             shell = os.environ.get('SHELL', 'sh.exe')
             # Create a temporary script file that
             # runs the command we want
@@ -291,7 +291,7 @@ class DumpCompiler(object):
         except subprocess.CalledProcessError as e:
             raise LinkerError(e)
         finally:
-            if msys:
+            if msys and not self._compiler.check_is_msvc():
                 os.remove(tf_name)
             dll_dirs.cleanup_dll_dirs()
 
