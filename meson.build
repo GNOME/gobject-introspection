@@ -198,6 +198,30 @@ if pkg_config_path.length() > 0
   g_ir_scanner_env.append('PKG_CONFIG_PATH', pkg_config_path)
 endif
 
+# Set up the environment that will be fed to the build
+if host_system in ['darwin', 'ios']
+  var = 'DYLD_LIBRARY_PATH'
+elif host_system in ['windows', 'cygwin']
+  var = 'PATH'
+else
+  var = 'LD_LIBRARY_PATH'
+endif
+
+current_library_path = run_command(
+  [
+    python,
+    '-c',
+    'import os; print(os.environ["@0@"]) if "@0@" in os.environ else ""'.format(var)
+  ],
+  capture: true,
+  check: true,
+)
+
+g_ir_scanner_env.set(var, current_library_path.stdout().strip())
+if host_system in ['windows', 'cygwin']
+  g_ir_scanner_env.prepend(var, gio_dep.get_variable('giomoduledir'))
+endif
+
 configure_file(
   configuration: config,
   output: 'config.h'
