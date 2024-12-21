@@ -75,7 +75,7 @@ class MSVCCompiler(DistutilsMSVCCompiler):
         if output_file is not None:
             preprocess_options.append('-P')
             source_basename = self._get_file_basename(source)
-        cpp_args = self.cc.split()
+        cpp_args = [self.cc] if os.path.exists(self.cc) else self.cc.split()
         if extra_preargs is not None:
             cpp_args[:0] = extra_preargs
         if extra_postargs is not None:
