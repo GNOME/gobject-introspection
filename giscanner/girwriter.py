@@ -459,6 +459,7 @@ class GIRWriter(XMLWriter):
                  ('value', str(member.value)),
                  ('c:identifier', member.symbol)]
         self._append_version(member, attrs)
+        self._append_node_generic(member, attrs)
         if member.nick is not None:
             attrs.append(('glib:nick', member.nick))
         if member.dump_name is not None:
