@@ -651,6 +651,7 @@ parse_type_internal (GIrModule *module,
     }
   else if (g_str_has_prefix (str, "GLib.Error"))
     {
+      g_assert (str != NULL);  /* silence compiler error */
       str += strlen ("GLib.");
 
       type->tag = GI_TYPE_TAG_ERROR;
