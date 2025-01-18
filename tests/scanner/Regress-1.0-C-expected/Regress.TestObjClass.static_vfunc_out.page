@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObjClass.static_vfunc_out"
+      type="topic"
+      style="callback"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    <link xref="index" group="callback" type="guide"/>
+    </info>
+  <title>Regress.TestObjClass.static_vfunc_out</title>
+  <synopsis><code mime="text/x-csrc">
+void static_vfunc_out (RegressTestObj** two);
+  </code></synopsis>
+
+
+<terms>
+<item>
+<title><code>two</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
+
+</page>

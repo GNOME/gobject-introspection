@@ -18,8 +18,8 @@ and/or use gtk-doc annotations.  -->
     <alias name="AliasedTestBoxed" c:type="RegressAliasedTestBoxed">
       <doc xml:space="preserve"
            filename="regress.h"
-           line="1534">Typedef TestBoxed to test caller-allocates correctness</doc>
-      <source-position filename="regress.h" line="1539"/>
+           line="1554">Typedef TestBoxed to test caller-allocates correctness</doc>
+      <source-position filename="regress.h" line="1559"/>
       <type name="TestBoxed" c:type="RegressTestBoxed"/>
     </alias>
     <alias name="FooObjectCookie" c:type="RegressFooObjectCookie">
@@ -33,15 +33,15 @@ and/or use gtk-doc annotations.  -->
     <alias name="IntsetAlias" c:type="RegressIntsetAlias" introspectable="0">
       <doc xml:space="preserve"
            filename="regress.h"
-           line="1506">Compatibility typedef, like telepathy-glib's TpIntSet</doc>
-      <source-position filename="regress.h" line="1512"/>
+           line="1526">Compatibility typedef, like telepathy-glib's TpIntSet</doc>
+      <source-position filename="regress.h" line="1532"/>
       <type name="Intset" c:type="RegressIntset"/>
     </alias>
     <alias name="PtrArrayAlias" c:type="RegressPtrArrayAlias">
       <doc xml:space="preserve"
            filename="regress.h"
-           line="1514">Typedef'd GPtrArray for some reason</doc>
-      <source-position filename="regress.h" line="1519"/>
+           line="1534">Typedef'd GPtrArray for some reason</doc>
+      <source-position filename="regress.h" line="1539"/>
       <type name="GLib.PtrArray" c:type="GPtrArray"/>
     </alias>
     <alias name="TestTypeGUInt64" c:type="RegressTestTypeGUInt64">
@@ -51,8 +51,8 @@ and/or use gtk-doc annotations.  -->
     <alias name="VaListAlias" c:type="RegressVaListAlias" introspectable="0">
       <doc xml:space="preserve"
            filename="regress.h"
-           line="1524">Typedef'd va_list for additional reasons</doc>
-      <source-position filename="regress.h" line="1529"/>
+           line="1544">Typedef'd va_list for additional reasons</doc>
+      <source-position filename="regress.h" line="1549"/>
       <type name="va_list" c:type="va_list"/>
     </alias>
     <constant name="ANNOTATION_CALCULATED_DEFINE"
@@ -92,12 +92,12 @@ and/or use gtk-doc annotations.  -->
       </member>
     </enumeration>
     <record name="AnAnonymousUnion" c:type="RegressAnAnonymousUnion">
-      <source-position filename="regress.h" line="1645"/>
+      <source-position filename="regress.h" line="1665"/>
       <field name="x" writable="1">
         <type name="gint" c:type="int"/>
       </field>
       <union>
-        <source-position filename="regress.h" line="1644"/>
+        <source-position filename="regress.h" line="1664"/>
         <field name="a" writable="1">
           <array zero-terminated="0" fixed-size="2">
             <type name="LikeGnomeKeyringPasswordSchema"
@@ -1233,14 +1233,14 @@ it says it's pointer but it's actually a string.</doc>
     </record>
     <record name="AnonymousUnionAndStruct"
             c:type="RegressAnonymousUnionAndStruct">
-      <source-position filename="regress.h" line="1661"/>
+      <source-position filename="regress.h" line="1681"/>
       <field name="x" writable="1">
         <type name="gint" c:type="int"/>
       </field>
       <union>
-        <source-position filename="regress.h" line="1660"/>
+        <source-position filename="regress.h" line="1680"/>
         <record>
-          <source-position filename="regress.h" line="1657"/>
+          <source-position filename="regress.h" line="1677"/>
           <field name="a" writable="1">
             <type name="LikeGnomeKeyringPasswordSchema"
                   c:type="RegressLikeGnomeKeyringPasswordSchema*"/>
@@ -2662,13 +2662,13 @@ exposed to language bindings.</doc>
     <constant name="GI_SCANNER_ELSE"
               value="3"
               c:type="REGRESS_GI_SCANNER_ELSE">
-      <source-position filename="regress.h" line="1620"/>
+      <source-position filename="regress.h" line="1640"/>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="GI_SCANNER_IFDEF"
               value="3"
               c:type="REGRESS_GI_SCANNER_IFDEF">
-      <source-position filename="regress.h" line="1624"/>
+      <source-position filename="regress.h" line="1644"/>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="GOOD_EXPR_CONSTANT"
@@ -2702,18 +2702,18 @@ exposed to language bindings.</doc>
     <record name="Intset" c:type="RegressIntset" disguised="1" opaque="1">
       <doc xml:space="preserve"
            filename="regress.h"
-           line="1498">Like telepathy-glib's TpIntset.</doc>
-      <source-position filename="regress.h" line="1504"/>
+           line="1518">Like telepathy-glib's TpIntset.</doc>
+      <source-position filename="regress.h" line="1524"/>
     </record>
     <constant name="LONG_STRING_CONSTANT"
               value="TYPE,VALUE,ENCODING,CHARSET,LANGUAGE,DOM,INTL,POSTAL,PARCEL,HOME,WORK,PREF,VOICE,FAX,MSG,CELL,PAGER,BBS,MODEM,CAR,ISDN,VIDEO,AOL,APPLELINK,ATTMAIL,CIS,EWORLD,INTERNET,IBMMAIL,MCIMAIL,POWERSHARE,PRODIGY,TLX,X400,GIF,CGM,WMF,BMP,MET,PMB,DIB,PICT,TIFF,PDF,PS,JPEG,QTIME,MPEG,MPEG2,AVI,WAVE,AIFF,PCM,X509,PGP"
               c:type="REGRESS_LONG_STRING_CONSTANT">
-      <source-position filename="regress.h" line="1589"/>
+      <source-position filename="regress.h" line="1609"/>
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <record name="LikeGnomeKeyringPasswordSchema"
             c:type="RegressLikeGnomeKeyringPasswordSchema">
-      <source-position filename="regress.h" line="1610"/>
+      <source-position filename="regress.h" line="1630"/>
       <field name="dummy" writable="1">
         <type name="gint" c:type="int"/>
       </field>
@@ -2727,7 +2727,7 @@ exposed to language bindings.</doc>
       </field>
     </record>
     <record name="LikeXklConfigItem" c:type="RegressLikeXklConfigItem">
-      <source-position filename="regress.h" line="1576"/>
+      <source-position filename="regress.h" line="1596"/>
       <field name="name" writable="1">
         <array zero-terminated="0" fixed-size="32">
           <type name="gchar" c:type="gchar"/>
@@ -2735,7 +2735,7 @@ exposed to language bindings.</doc>
       </field>
       <method name="set_name"
               c:identifier="regress_like_xkl_config_item_set_name">
-        <source-position filename="regress.h" line="1579"/>
+        <source-position filename="regress.h" line="1599"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -2752,13 +2752,13 @@ exposed to language bindings.</doc>
     <constant name="MAXUINT64"
               value="18446744073709551615"
               c:type="REGRESS_MAXUINT64">
-      <source-position filename="regress.h" line="1614"/>
+      <source-position filename="regress.h" line="1634"/>
       <type name="guint64" c:type="guint64"/>
     </constant>
     <constant name="MININT64"
               value="-9223372036854775808"
               c:type="REGRESS_MININT64">
-      <source-position filename="regress.h" line="1613"/>
+      <source-position filename="regress.h" line="1633"/>
       <type name="gint64" c:type="gint64"/>
     </constant>
     <constant name="Mixed_Case_Constant"
@@ -2784,9 +2784,9 @@ exposed to language bindings.</doc>
             introspectable="0">
       <doc xml:space="preserve"
            filename="regress.h"
-           line="1481">This should be skipped, and moreover, all function which
+           line="1501">This should be skipped, and moreover, all function which
 use it should be.</doc>
-      <source-position filename="regress.h" line="1491"/>
+      <source-position filename="regress.h" line="1511"/>
       <field name="x" writable="1">
         <type name="gint" c:type="int"/>
       </field>
@@ -2797,7 +2797,7 @@ use it should be.</doc>
     <function-macro name="TEST_FLOATING"
                     c:identifier="REGRESS_TEST_FLOATING"
                     introspectable="0">
-      <source-position filename="regress.h" line="1413"/>
+      <source-position filename="regress.h" line="1433"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2806,7 +2806,7 @@ use it should be.</doc>
     <function-macro name="TEST_FLOATING_GET_CLASS"
                     c:identifier="REGRESS_TEST_FLOATING_GET_CLASS"
                     introspectable="0">
-      <source-position filename="regress.h" line="1415"/>
+      <source-position filename="regress.h" line="1435"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2815,7 +2815,7 @@ use it should be.</doc>
     <function-macro name="TEST_FUNDAMENTAL_OBJECT"
                     c:identifier="REGRESS_TEST_FUNDAMENTAL_OBJECT"
                     introspectable="0">
-      <source-position filename="regress.h" line="1088"/>
+      <source-position filename="regress.h" line="1108"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2824,7 +2824,7 @@ use it should be.</doc>
     <function-macro name="TEST_FUNDAMENTAL_OBJECT_CAST"
                     c:identifier="REGRESS_TEST_FUNDAMENTAL_OBJECT_CAST"
                     introspectable="0">
-      <source-position filename="regress.h" line="1090"/>
+      <source-position filename="regress.h" line="1110"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2833,7 +2833,7 @@ use it should be.</doc>
     <function-macro name="TEST_FUNDAMENTAL_OBJECT_CLASS"
                     c:identifier="REGRESS_TEST_FUNDAMENTAL_OBJECT_CLASS"
                     introspectable="0">
-      <source-position filename="regress.h" line="1089"/>
+      <source-position filename="regress.h" line="1109"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2842,7 +2842,7 @@ use it should be.</doc>
     <function-macro name="TEST_FUNDAMENTAL_OBJECT_GET_CLASS"
                     c:identifier="REGRESS_TEST_FUNDAMENTAL_OBJECT_GET_CLASS"
                     introspectable="0">
-      <source-position filename="regress.h" line="1087"/>
+      <source-position filename="regress.h" line="1107"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2851,7 +2851,7 @@ use it should be.</doc>
     <function-macro name="TEST_GNUC_EXTENSION_STMT"
                     c:identifier="REGRESS_TEST_GNUC_EXTENSION_STMT"
                     introspectable="0">
-      <source-position filename="regress.h" line="1585"/>
+      <source-position filename="regress.h" line="1605"/>
       <parameters>
         <parameter name="foo">
         </parameter>
@@ -2860,7 +2860,7 @@ use it should be.</doc>
     <function-macro name="TEST_INTERFACE"
                     c:identifier="REGRESS_TEST_INTERFACE"
                     introspectable="0">
-      <source-position filename="regress.h" line="1361"/>
+      <source-position filename="regress.h" line="1381"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2869,7 +2869,7 @@ use it should be.</doc>
     <function-macro name="TEST_INTERFACE_GET_IFACE"
                     c:identifier="REGRESS_TEST_INTERFACE_GET_IFACE"
                     introspectable="0">
-      <source-position filename="regress.h" line="1363"/>
+      <source-position filename="regress.h" line="1383"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2878,7 +2878,7 @@ use it should be.</doc>
     <function-macro name="TEST_IS_FLOATING"
                     c:identifier="REGRESS_TEST_IS_FLOATING"
                     introspectable="0">
-      <source-position filename="regress.h" line="1414"/>
+      <source-position filename="regress.h" line="1434"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2887,7 +2887,7 @@ use it should be.</doc>
     <function-macro name="TEST_IS_FUNDAMENTAL_OBJECT"
                     c:identifier="REGRESS_TEST_IS_FUNDAMENTAL_OBJECT"
                     introspectable="0">
-      <source-position filename="regress.h" line="1085"/>
+      <source-position filename="regress.h" line="1105"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2896,7 +2896,7 @@ use it should be.</doc>
     <function-macro name="TEST_IS_FUNDAMENTAL_OBJECT_CLASS"
                     c:identifier="REGRESS_TEST_IS_FUNDAMENTAL_OBJECT_CLASS"
                     introspectable="0">
-      <source-position filename="regress.h" line="1086"/>
+      <source-position filename="regress.h" line="1106"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2905,7 +2905,7 @@ use it should be.</doc>
     <function-macro name="TEST_IS_INTERFACE"
                     c:identifier="REGRESS_TEST_IS_INTERFACE"
                     introspectable="0">
-      <source-position filename="regress.h" line="1362"/>
+      <source-position filename="regress.h" line="1382"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2923,7 +2923,7 @@ use it should be.</doc>
     <function-macro name="TEST_IS_SUB_OBJECT"
                     c:identifier="REGRESS_TEST_IS_SUB_OBJECT"
                     introspectable="0">
-      <source-position filename="regress.h" line="1052"/>
+      <source-position filename="regress.h" line="1072"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2932,7 +2932,7 @@ use it should be.</doc>
     <function-macro name="TEST_IS_WI_802_1X"
                     c:identifier="REGRESS_TEST_IS_WI_802_1X"
                     introspectable="0">
-      <source-position filename="regress.h" line="1381"/>
+      <source-position filename="regress.h" line="1401"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2959,7 +2959,7 @@ use it should be.</doc>
     <function-macro name="TEST_SUB_OBJECT"
                     c:identifier="REGRESS_TEST_SUB_OBJECT"
                     introspectable="0">
-      <source-position filename="regress.h" line="1051"/>
+      <source-position filename="regress.h" line="1071"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2968,7 +2968,7 @@ use it should be.</doc>
     <function-macro name="TEST_SUB_OBJ_GET_CLASS"
                     c:identifier="REGRESS_TEST_SUB_OBJ_GET_CLASS"
                     introspectable="0">
-      <source-position filename="regress.h" line="1053"/>
+      <source-position filename="regress.h" line="1073"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2977,7 +2977,7 @@ use it should be.</doc>
     <function-macro name="TEST_VALUE_HOLDS_FUNDAMENTAL_OBJECT"
                     c:identifier="REGRESS_TEST_VALUE_HOLDS_FUNDAMENTAL_OBJECT"
                     introspectable="0">
-      <source-position filename="regress.h" line="1126"/>
+      <source-position filename="regress.h" line="1146"/>
       <parameters>
         <parameter name="value">
         </parameter>
@@ -2986,7 +2986,7 @@ use it should be.</doc>
     <function-macro name="TEST_WI_802_1X"
                     c:identifier="REGRESS_TEST_WI_802_1X"
                     introspectable="0">
-      <source-position filename="regress.h" line="1380"/>
+      <source-position filename="regress.h" line="1400"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2995,7 +2995,7 @@ use it should be.</doc>
     <function-macro name="TEST_WI_802_1X_GET_CLASS"
                     c:identifier="REGRESS_TEST_WI_802_1X_GET_CLASS"
                     introspectable="0">
-      <source-position filename="regress.h" line="1382"/>
+      <source-position filename="regress.h" line="1402"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -3350,13 +3350,13 @@ use it should be.</doc>
       <source-position filename="regress.h" line="728"/>
     </record>
     <callback name="TestCallback" c:type="RegressTestCallback">
-      <source-position filename="regress.h" line="1217"/>
+      <source-position filename="regress.h" line="1237"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
     </callback>
     <callback name="TestCallbackArray" c:type="RegressTestCallbackArray">
-      <source-position filename="regress.h" line="1249"/>
+      <source-position filename="regress.h" line="1269"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -3381,7 +3381,7 @@ use it should be.</doc>
     </callback>
     <callback name="TestCallbackArrayInOut"
               c:type="RegressTestCallbackArrayInOut">
-      <source-position filename="regress.h" line="1255"/>
+      <source-position filename="regress.h" line="1275"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -3403,7 +3403,7 @@ use it should be.</doc>
       </parameters>
     </callback>
     <callback name="TestCallbackFull" c:type="RegressTestCallbackFull">
-      <source-position filename="regress.h" line="1236"/>
+      <source-position filename="regress.h" line="1256"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -3411,25 +3411,25 @@ use it should be.</doc>
         <parameter name="foo" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.h"
-               line="1232">the investment rate</doc>
+               line="1252">the investment rate</doc>
           <type name="gint" c:type="int"/>
         </parameter>
         <parameter name="bar" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.h"
-               line="1233">how much money</doc>
+               line="1253">how much money</doc>
           <type name="gdouble" c:type="double"/>
         </parameter>
         <parameter name="path" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.h"
-               line="1234">Path to file</doc>
+               line="1254">Path to file</doc>
           <type name="filename" c:type="char*"/>
         </parameter>
       </parameters>
     </callback>
     <callback name="TestCallbackGError" c:type="RegressTestCallbackGError">
-      <source-position filename="regress.h" line="1224"/>
+      <source-position filename="regress.h" line="1244"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -3441,7 +3441,7 @@ use it should be.</doc>
     </callback>
     <callback name="TestCallbackHashtable"
               c:type="RegressTestCallbackHashtable">
-      <source-position filename="regress.h" line="1223"/>
+      <source-position filename="regress.h" line="1243"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -3449,7 +3449,7 @@ use it should be.</doc>
         <parameter name="data" transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.h"
-               line="1221">a hash table; will be modified</doc>
+               line="1241">a hash table; will be modified</doc>
           <type name="GLib.HashTable" c:type="GHashTable*">
             <type name="utf8"/>
             <type name="gint"/>
@@ -3459,7 +3459,7 @@ use it should be.</doc>
     </callback>
     <callback name="TestCallbackOwnedGError"
               c:type="RegressTestCallbackOwnedGError">
-      <source-position filename="regress.h" line="1229"/>
+      <source-position filename="regress.h" line="1249"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -3467,20 +3467,20 @@ use it should be.</doc>
         <parameter name="error" transfer-ownership="full">
           <doc xml:space="preserve"
                filename="regress.h"
-               line="1227">GError instance; must be freed by the callback</doc>
+               line="1247">GError instance; must be freed by the callback</doc>
           <type name="GLib.Error" c:type="GError*"/>
         </parameter>
       </parameters>
     </callback>
     <callback name="TestCallbackReturnFull"
               c:type="RegressTestCallbackReturnFull">
-      <source-position filename="regress.h" line="1241"/>
+      <source-position filename="regress.h" line="1261"/>
       <return-value transfer-ownership="full">
         <type name="TestObj" c:type="RegressTestObj*"/>
       </return-value>
     </callback>
     <callback name="TestCallbackUserData" c:type="RegressTestCallbackUserData">
-      <source-position filename="regress.h" line="1218"/>
+      <source-position filename="regress.h" line="1238"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -3662,9 +3662,9 @@ use it should be.</doc>
            glib:type-name="RegressTestFloating"
            glib:get-type="regress_test_floating_get_type"
            glib:type-struct="TestFloatingClass">
-      <source-position filename="regress.h" line="1425"/>
+      <source-position filename="regress.h" line="1445"/>
       <constructor name="new" c:identifier="regress_test_floating_new">
-        <source-position filename="regress.h" line="1431"/>
+        <source-position filename="regress.h" line="1451"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -3679,7 +3679,7 @@ use it should be.</doc>
     <record name="TestFloatingClass"
             c:type="RegressTestFloatingClass"
             glib:is-gtype-struct-for="TestFloating">
-      <source-position filename="regress.h" line="1425"/>
+      <source-position filename="regress.h" line="1445"/>
       <field name="parent_class">
         <type name="GObject.InitiallyUnownedClass"
               c:type="GInitiallyUnownedClass"/>
@@ -3697,9 +3697,9 @@ use it should be.</doc>
            glib:unref-func="regress_test_fundamental_object_unref"
            glib:set-value-func="regress_test_value_set_fundamental_object"
            glib:get-value-func="regress_test_value_get_fundamental_object">
-      <source-position filename="regress.h" line="1115"/>
+      <source-position filename="regress.h" line="1135"/>
       <virtual-method name="copy">
-        <source-position filename="regress.h" line="1099"/>
+        <source-position filename="regress.h" line="1119"/>
         <return-value transfer-ownership="full">
           <type name="TestFundamentalObject"
                 c:type="RegressTestFundamentalObject*"/>
@@ -3712,7 +3712,7 @@ use it should be.</doc>
         </parameters>
       </virtual-method>
       <virtual-method name="finalize">
-        <source-position filename="regress.h" line="1100"/>
+        <source-position filename="regress.h" line="1120"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3724,7 +3724,7 @@ use it should be.</doc>
         </parameters>
       </virtual-method>
       <method name="ref" c:identifier="regress_test_fundamental_object_ref">
-        <source-position filename="regress.h" line="1121"/>
+        <source-position filename="regress.h" line="1141"/>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -3742,7 +3742,7 @@ use it should be.</doc>
       </method>
       <method name="unref"
               c:identifier="regress_test_fundamental_object_unref">
-        <source-position filename="regress.h" line="1124"/>
+        <source-position filename="regress.h" line="1144"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -3767,7 +3767,7 @@ use it should be.</doc>
     <record name="TestFundamentalObjectClass"
             c:type="RegressTestFundamentalObjectClass"
             glib:is-gtype-struct-for="TestFundamentalObject">
-      <source-position filename="regress.h" line="1115"/>
+      <source-position filename="regress.h" line="1135"/>
       <field name="type_class">
         <type name="GObject.TypeClass" c:type="GTypeClass"/>
       </field>
@@ -3782,7 +3782,7 @@ use it should be.</doc>
     </record>
     <callback name="TestFundamentalObjectCopyFunction"
               c:type="RegressTestFundamentalObjectCopyFunction">
-      <source-position filename="regress.h" line="1099"/>
+      <source-position filename="regress.h" line="1119"/>
       <return-value transfer-ownership="full">
         <type name="TestFundamentalObject"
               c:type="RegressTestFundamentalObject*"/>
@@ -3796,7 +3796,7 @@ use it should be.</doc>
     </callback>
     <callback name="TestFundamentalObjectFinalizeFunction"
               c:type="RegressTestFundamentalObjectFinalizeFunction">
-      <source-position filename="regress.h" line="1100"/>
+      <source-position filename="regress.h" line="1120"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -3819,10 +3819,10 @@ use it should be.</doc>
       <doc xml:space="preserve"
            filename="regress.c"
            line="3898">Just like a #RegressTestFundamentalObject but without gvalue setter and getter</doc>
-      <source-position filename="regress.h" line="1165"/>
+      <source-position filename="regress.h" line="1185"/>
       <constructor name="new"
                    c:identifier="regress_test_fundamental_object_no_get_set_func_new">
-        <source-position filename="regress.h" line="1200"/>
+        <source-position filename="regress.h" line="1220"/>
         <return-value transfer-ownership="full">
           <type name="TestFundamentalObjectNoGetSetFunc"
                 c:type="RegressTestFundamentalObjectNoGetSetFunc*"/>
@@ -3835,14 +3835,14 @@ use it should be.</doc>
       </constructor>
       <function name="make_compatible_with_fundamental_sub_object"
                 c:identifier="regress_test_fundamental_object_no_get_set_func_make_compatible_with_fundamental_sub_object">
-        <source-position filename="regress.h" line="1212"/>
+        <source-position filename="regress.h" line="1232"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
       </function>
       <method name="get_data"
               c:identifier="regress_test_fundamental_object_no_get_set_func_get_data">
-        <source-position filename="regress.h" line="1204"/>
+        <source-position filename="regress.h" line="1224"/>
         <return-value transfer-ownership="none">
           <type name="utf8" c:type="const char*"/>
         </return-value>
@@ -3864,7 +3864,7 @@ use it should be.</doc>
     <record name="TestFundamentalObjectNoGetSetFuncClass"
             c:type="RegressTestFundamentalObjectNoGetSetFuncClass"
             glib:is-gtype-struct-for="TestFundamentalObjectNoGetSetFunc">
-      <source-position filename="regress.h" line="1165"/>
+      <source-position filename="regress.h" line="1185"/>
       <field name="fundamental_object_class">
         <type name="TestFundamentalObjectClass"
               c:type="RegressTestFundamentalObjectClass"/>
@@ -3878,10 +3878,10 @@ use it should be.</doc>
            glib:get-type="regress_test_fundamental_sub_object_get_type"
            glib:type-struct="TestFundamentalSubObjectClass"
            glib:fundamental="1">
-      <source-position filename="regress.h" line="1146"/>
+      <source-position filename="regress.h" line="1166"/>
       <constructor name="new"
                    c:identifier="regress_test_fundamental_sub_object_new">
-        <source-position filename="regress.h" line="1192"/>
+        <source-position filename="regress.h" line="1212"/>
         <return-value transfer-ownership="full">
           <type name="TestFundamentalSubObject"
                 c:type="RegressTestFundamentalSubObject*"/>
@@ -3903,7 +3903,7 @@ use it should be.</doc>
     <record name="TestFundamentalSubObjectClass"
             c:type="RegressTestFundamentalSubObjectClass"
             glib:is-gtype-struct-for="TestFundamentalSubObject">
-      <source-position filename="regress.h" line="1146"/>
+      <source-position filename="regress.h" line="1166"/>
       <field name="fundamental_object_class">
         <type name="TestFundamentalObjectClass"
               c:type="RegressTestFundamentalObjectClass"/>
@@ -3917,10 +3917,10 @@ use it should be.</doc>
            glib:get-type="regress_test_fundamental_sub_object_no_get_set_func_get_type"
            glib:type-struct="TestFundamentalSubObjectNoGetSetFuncClass"
            glib:fundamental="1">
-      <source-position filename="regress.h" line="1182"/>
+      <source-position filename="regress.h" line="1202"/>
       <constructor name="new"
                    c:identifier="regress_test_fundamental_sub_object_no_get_set_func_new">
-        <source-position filename="regress.h" line="1208"/>
+        <source-position filename="regress.h" line="1228"/>
         <return-value transfer-ownership="full">
           <type name="TestFundamentalSubObjectNoGetSetFunc"
                 c:type="RegressTestFundamentalSubObjectNoGetSetFunc*"/>
@@ -3939,7 +3939,7 @@ use it should be.</doc>
     <record name="TestFundamentalSubObjectNoGetSetFuncClass"
             c:type="RegressTestFundamentalSubObjectNoGetSetFuncClass"
             glib:is-gtype-struct-for="TestFundamentalSubObjectNoGetSetFunc">
-      <source-position filename="regress.h" line="1182"/>
+      <source-position filename="regress.h" line="1202"/>
       <field name="fundamental_object_class">
         <type name="TestFundamentalObjectNoGetSetFuncClass"
               c:type="RegressTestFundamentalObjectNoGetSetFuncClass"/>
@@ -4063,10 +4063,10 @@ use it should be.</doc>
                glib:type-name="RegressTestInterface"
                glib:get-type="regress_test_interface_get_type"
                glib:type-struct="TestInterfaceIface">
-      <source-position filename="regress.h" line="1370"/>
+      <source-position filename="regress.h" line="1390"/>
       <method name="emit_signal"
               c:identifier="regress_test_interface_emit_signal">
-        <source-position filename="regress.h" line="1376"/>
+        <source-position filename="regress.h" line="1396"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4104,13 +4104,13 @@ use it should be.</doc>
     <record name="TestInterfaceIface"
             c:type="RegressTestInterfaceIface"
             glib:is-gtype-struct-for="TestInterface">
-      <source-position filename="regress.h" line="1370"/>
+      <source-position filename="regress.h" line="1390"/>
       <field name="base_iface">
         <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
       </field>
     </record>
     <callback name="TestNoPtrCallback" c:type="RegressTestNoPtrCallback">
-      <source-position filename="regress.h" line="1216"/>
+      <source-position filename="regress.h" line="1236"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -4122,15 +4122,15 @@ use it should be.</doc>
            glib:type-name="RegressTestObj"
            glib:get-type="regress_test_obj_get_type"
            glib:type-struct="TestObjClass">
-      <source-position filename="regress.h" line="878"/>
+      <source-position filename="regress.h" line="898"/>
       <constructor name="constructor" c:identifier="regress_constructor">
-        <source-position filename="regress.h" line="887"/>
+        <source-position filename="regress.h" line="907"/>
         <return-value transfer-ownership="full">
           <type name="TestObj" c:type="RegressTestObj*"/>
         </return-value>
       </constructor>
       <constructor name="new" c:identifier="regress_test_obj_new">
-        <source-position filename="regress.h" line="884"/>
+        <source-position filename="regress.h" line="904"/>
         <return-value transfer-ownership="full">
           <type name="TestObj" c:type="RegressTestObj*"/>
         </return-value>
@@ -4145,7 +4145,7 @@ use it should be.</doc>
       </constructor>
       <constructor name="new_callback"
                    c:identifier="regress_test_obj_new_callback">
-        <source-position filename="regress.h" line="1325"/>
+        <source-position filename="regress.h" line="1345"/>
         <return-value transfer-ownership="full">
           <type name="TestObj" c:type="RegressTestObj*"/>
         </return-value>
@@ -4172,7 +4172,7 @@ use it should be.</doc>
       <constructor name="new_finish"
                    c:identifier="regress_test_obj_new_finish"
                    throws="1">
-        <source-position filename="regress.h" line="1339"/>
+        <source-position filename="regress.h" line="1359"/>
         <return-value transfer-ownership="full">
           <type name="TestObj" c:type="RegressTestObj*"/>
         </return-value>
@@ -4185,7 +4185,7 @@ use it should be.</doc>
       <constructor name="new_from_file"
                    c:identifier="regress_test_obj_new_from_file"
                    throws="1">
-        <source-position filename="regress.h" line="890"/>
+        <source-position filename="regress.h" line="910"/>
         <return-value transfer-ownership="full">
           <type name="TestObj" c:type="RegressTestObj*"/>
         </return-value>
@@ -4197,7 +4197,7 @@ use it should be.</doc>
       </constructor>
       <function name="constructor_thaw_async"
                 c:identifier="regress_test_obj_constructor_thaw_async">
-        <source-position filename="regress.h" line="1336"/>
+        <source-position filename="regress.h" line="1356"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -4208,7 +4208,7 @@ use it should be.</doc>
       <function name="new_async"
                 c:identifier="regress_test_obj_new_async"
                 glib:finish-func="new_finish">
-        <source-position filename="regress.h" line="1330"/>
+        <source-position filename="regress.h" line="1350"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4239,7 +4239,7 @@ use it should be.</doc>
         </parameters>
       </function>
       <function name="null_out" c:identifier="regress_test_obj_null_out">
-        <source-position filename="regress.h" line="1032"/>
+        <source-position filename="regress.h" line="1052"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4259,7 +4259,7 @@ use it should be.</doc>
       </function>
       <function name="static_method"
                 c:identifier="regress_test_obj_static_method">
-        <source-position filename="regress.h" line="940"/>
+        <source-position filename="regress.h" line="960"/>
         <return-value transfer-ownership="none">
           <type name="gdouble" c:type="double"/>
         </return-value>
@@ -4271,7 +4271,7 @@ use it should be.</doc>
       </function>
       <function name="static_method_callback"
                 c:identifier="regress_test_obj_static_method_callback">
-        <source-position filename="regress.h" line="1322"/>
+        <source-position filename="regress.h" line="1342"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4344,13 +4344,27 @@ case.</doc>
           </parameter>
         </parameters>
       </virtual-method>
+      <virtual-method name="static_vfunc_out">
+        <source-position filename="regress.h" line="888"/>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="two"
+                              direction="out"
+                              caller-allocates="0"
+                              transfer-ownership="full">
+            <type name="TestObj" c:type="RegressTestObj**"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
       <method name="do_matrix" c:identifier="regress_test_obj_do_matrix">
         <doc xml:space="preserve"
              filename="regress.c"
              line="3351">This method is virtual.  Notably its name differs from the virtual
 slot name, which makes it useful for testing bindings handle this
 case.</doc>
-        <source-position filename="regress.h" line="1026"/>
+        <source-position filename="regress.h" line="1046"/>
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
         </return-value>
@@ -4371,7 +4385,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_array_len_prop"
               c:identifier="regress_test_obj_emit_sig_with_array_len_prop">
-        <source-position filename="regress.h" line="922"/>
+        <source-position filename="regress.h" line="942"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4383,7 +4397,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_error"
               c:identifier="regress_test_obj_emit_sig_with_error">
-        <source-position filename="regress.h" line="928"/>
+        <source-position filename="regress.h" line="948"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4398,7 +4412,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_foreign_struct"
               c:identifier="regress_test_obj_emit_sig_with_foreign_struct">
-        <source-position filename="regress.h" line="913"/>
+        <source-position filename="regress.h" line="933"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4410,7 +4424,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_gstrv_full"
               c:identifier="regress_test_obj_emit_sig_with_gstrv_full">
-        <source-position filename="regress.h" line="909"/>
+        <source-position filename="regress.h" line="929"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4425,7 +4439,7 @@ case.</doc>
         <doc xml:space="preserve"
              filename="regress.c"
              line="3053">The signal handler must increment the inout parameter by 1.</doc>
-        <source-position filename="regress.h" line="925"/>
+        <source-position filename="regress.h" line="945"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4440,7 +4454,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_int64"
               c:identifier="regress_test_obj_emit_sig_with_int64">
-        <source-position filename="regress.h" line="916"/>
+        <source-position filename="regress.h" line="936"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4452,7 +4466,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_null_error"
               c:identifier="regress_test_obj_emit_sig_with_null_error">
-        <source-position filename="regress.h" line="931"/>
+        <source-position filename="regress.h" line="951"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4467,7 +4481,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_obj"
               c:identifier="regress_test_obj_emit_sig_with_obj">
-        <source-position filename="regress.h" line="902"/>
+        <source-position filename="regress.h" line="922"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4479,7 +4493,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_obj_full"
               c:identifier="regress_test_obj_emit_sig_with_obj_full">
-        <source-position filename="regress.h" line="905"/>
+        <source-position filename="regress.h" line="925"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4491,7 +4505,7 @@ case.</doc>
       </method>
       <method name="emit_sig_with_uint64"
               c:identifier="regress_test_obj_emit_sig_with_uint64">
-        <source-position filename="regress.h" line="919"/>
+        <source-position filename="regress.h" line="939"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4502,7 +4516,7 @@ case.</doc>
         </parameters>
       </method>
       <method name="forced_method" c:identifier="regress_forced_method">
-        <source-position filename="regress.h" line="943"/>
+        <source-position filename="regress.h" line="963"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4518,7 +4532,7 @@ case.</doc>
       <method name="function_async"
               c:identifier="regress_test_obj_function_async"
               glib:finish-func="function_finish">
-        <source-position filename="regress.h" line="1693"/>
+        <source-position filename="regress.h" line="1713"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4554,7 +4568,7 @@ case.</doc>
       <method name="function_finish"
               c:identifier="regress_test_obj_function_finish"
               throws="1">
-        <source-position filename="regress.h" line="1703"/>
+        <source-position filename="regress.h" line="1723"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -4569,7 +4583,7 @@ case.</doc>
       </method>
       <method name="function_sync"
               c:identifier="regress_test_obj_function_sync">
-        <source-position filename="regress.h" line="1706"/>
+        <source-position filename="regress.h" line="1726"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -4584,7 +4598,7 @@ case.</doc>
       </method>
       <method name="function_thaw_async"
               c:identifier="regress_test_obj_function_thaw_async">
-        <source-position filename="regress.h" line="1700"/>
+        <source-position filename="regress.h" line="1720"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -4600,7 +4614,7 @@ case.</doc>
       <method name="get_string"
               c:identifier="regress_test_obj_get_string"
               glib:get-property="string">
-        <source-position filename="regress.h" line="899"/>
+        <source-position filename="regress.h" line="919"/>
         <return-value transfer-ownership="none">
           <type name="utf8" c:type="const char*"/>
         </return-value>
@@ -4613,7 +4627,7 @@ case.</doc>
       <method-inline name="inline_method"
                      c:identifier="regress_test_obj_inline_method"
                      introspectable="0">
-        <source-position filename="regress.h" line="1720"/>
+        <source-position filename="regress.h" line="1740"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -4628,7 +4642,7 @@ case.</doc>
       </method-inline>
       <method name="instance_method"
               c:identifier="regress_test_obj_instance_method">
-        <source-position filename="regress.h" line="934"/>
+        <source-position filename="regress.h" line="954"/>
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
         </return-value>
@@ -4640,7 +4654,7 @@ case.</doc>
       </method>
       <method name="instance_method_callback"
               c:identifier="regress_test_obj_instance_method_callback">
-        <source-position filename="regress.h" line="1319"/>
+        <source-position filename="regress.h" line="1339"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4659,7 +4673,7 @@ case.</doc>
       </method>
       <method name="instance_method_full"
               c:identifier="regress_test_obj_instance_method_full">
-        <source-position filename="regress.h" line="937"/>
+        <source-position filename="regress.h" line="957"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4671,7 +4685,7 @@ case.</doc>
       </method>
       <method name="name_conflict"
               c:identifier="regress_test_obj_name_conflict">
-        <source-position filename="regress.h" line="1047"/>
+        <source-position filename="regress.h" line="1067"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4686,7 +4700,7 @@ case.</doc>
       </method>
       <method name="not_nullable_element_typed_gpointer_in"
               c:identifier="regress_test_obj_not_nullable_element_typed_gpointer_in">
-        <source-position filename="regress.h" line="1042"/>
+        <source-position filename="regress.h" line="1062"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4715,7 +4729,7 @@ case.</doc>
       </method>
       <method name="not_nullable_typed_gpointer_in"
               c:identifier="regress_test_obj_not_nullable_typed_gpointer_in">
-        <source-position filename="regress.h" line="1038"/>
+        <source-position filename="regress.h" line="1058"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4737,7 +4751,7 @@ case.</doc>
       <method name="set_bare"
               c:identifier="regress_test_obj_set_bare"
               glib:set-property="bare">
-        <source-position filename="regress.h" line="893"/>
+        <source-position filename="regress.h" line="913"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4756,7 +4770,7 @@ case.</doc>
       <method name="set_string"
               c:identifier="regress_test_obj_set_string"
               glib:set-property="string">
-        <source-position filename="regress.h" line="896"/>
+        <source-position filename="regress.h" line="916"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -4775,7 +4789,7 @@ case.</doc>
         <doc xml:space="preserve"
              filename="regress.c"
              line="3315">Check that the out value is skipped</doc>
-        <source-position filename="regress.h" line="1014"/>
+        <source-position filename="regress.h" line="1034"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -4849,7 +4863,7 @@ case.</doc>
         <doc xml:space="preserve"
              filename="regress.c"
              line="3279">Check that the out value is skipped</doc>
-        <source-position filename="regress.h" line="1003"/>
+        <source-position filename="regress.h" line="1023"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -4923,7 +4937,7 @@ case.</doc>
         <doc xml:space="preserve"
              filename="regress.c"
              line="3243">Check that a parameter is skipped</doc>
-        <source-position filename="regress.h" line="992"/>
+        <source-position filename="regress.h" line="1012"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -4996,7 +5010,7 @@ case.</doc>
         <doc xml:space="preserve"
              filename="regress.c"
              line="3180">Check that the return value is skipped</doc>
-        <source-position filename="regress.h" line="976"/>
+        <source-position filename="regress.h" line="996"/>
         <return-value transfer-ownership="none" skip="1">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -5070,7 +5084,7 @@ case.</doc>
              filename="regress.c"
              line="3216">Check that the return value is skipped. Succeed if a is nonzero, otherwise
 raise an error.</doc>
-        <source-position filename="regress.h" line="987"/>
+        <source-position filename="regress.h" line="1007"/>
         <return-value transfer-ownership="none" skip="1">
           <doc xml:space="preserve"
                filename="regress.c"
@@ -5094,7 +5108,7 @@ raise an error.</doc>
       </method>
       <method name="torture_signature_0"
               c:identifier="regress_test_obj_torture_signature_0">
-        <source-position filename="regress.h" line="957"/>
+        <source-position filename="regress.h" line="977"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -5140,7 +5154,7 @@ raise an error.</doc>
         <doc xml:space="preserve"
              filename="regress.c"
              line="3148">This function throws an error if m is odd.</doc>
-        <source-position filename="regress.h" line="966"/>
+        <source-position filename="regress.h" line="986"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -5612,7 +5626,7 @@ the introspection client langage.</doc>
     <record name="TestObjClass"
             c:type="RegressTestObjClass"
             glib:is-gtype-struct-for="TestObj">
-      <source-position filename="regress.h" line="878"/>
+      <source-position filename="regress.h" line="898"/>
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
@@ -5660,6 +5674,43 @@ the introspection client langage.</doc>
           </parameters>
         </callback>
       </field>
+      <field name="static_vfunc">
+        <callback name="static_vfunc">
+          <source-position filename="regress.h" line="873"/>
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+        </callback>
+      </field>
+      <field name="static_vfunc_params" introspectable="0">
+        <callback name="static_vfunc_params" introspectable="0" throws="1">
+          <source-position filename="regress.h" line="882"/>
+          <return-value>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </return-value>
+          <parameters>
+            <parameter name="value" transfer-ownership="none">
+              <type name="gint" c:type="gint"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="static_vfunc_out">
+        <callback name="static_vfunc_out">
+          <source-position filename="regress.h" line="888"/>
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="two"
+                       direction="out"
+                       caller-allocates="0"
+                       transfer-ownership="full">
+              <type name="TestObj" c:type="RegressTestObj**"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
       <field name="test_signal">
         <type name="guint" c:type="guint"/>
       </field>
@@ -5672,7 +5723,7 @@ the introspection client langage.</doc>
       </field>
       <field name="_regress_reserved1" introspectable="0">
         <callback name="_regress_reserved1">
-          <source-position filename="regress.h" line="876"/>
+          <source-position filename="regress.h" line="896"/>
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -5680,7 +5731,7 @@ the introspection client langage.</doc>
       </field>
       <field name="_regress_reserved2" introspectable="0">
         <callback name="_regress_reserved2">
-          <source-position filename="regress.h" line="877"/>
+          <source-position filename="regress.h" line="897"/>
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
@@ -5718,7 +5769,7 @@ the introspection client langage.</doc>
       </function>
     </enumeration>
     <bitfield name="TestPrivateEnum" c:type="RegressTestPrivateEnum">
-      <source-position filename="regress.h" line="1562"/>
+      <source-position filename="regress.h" line="1582"/>
       <member name="public_enum_before"
               value="1"
               c:identifier="REGRESS_TEST_PUBLIC_ENUM_BEFORE">
@@ -5729,7 +5780,7 @@ the introspection client langage.</doc>
       </member>
     </bitfield>
     <record name="TestPrivateStruct" c:type="RegressTestPrivateStruct">
-      <source-position filename="regress.h" line="1553"/>
+      <source-position filename="regress.h" line="1573"/>
       <field name="this_is_public_before" writable="1">
         <type name="gint" c:type="gint"/>
       </field>
@@ -5741,7 +5792,7 @@ the introspection client langage.</doc>
       </field>
     </record>
     <record name="TestReferenceCounters" c:type="RegressTestReferenceCounters">
-      <source-position filename="regress.h" line="1672"/>
+      <source-position filename="regress.h" line="1692"/>
       <field name="refcount" writable="1">
         <type name="gint" c:type="grefcount"/>
       </field>
@@ -5849,7 +5900,7 @@ the introspection client langage.</doc>
       </method>
     </record>
     <callback name="TestSimpleCallback" c:type="RegressTestSimpleCallback">
-      <source-position filename="regress.h" line="1215"/>
+      <source-position filename="regress.h" line="1235"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -6056,7 +6107,7 @@ the introspection client langage.</doc>
       </field>
     </record>
     <record name="TestStructFixedArray" c:type="RegressTestStructFixedArray">
-      <source-position filename="regress.h" line="1568"/>
+      <source-position filename="regress.h" line="1588"/>
       <field name="just_int" writable="1">
         <type name="gint" c:type="gint"/>
       </field>
@@ -6066,7 +6117,7 @@ the introspection client langage.</doc>
         </array>
       </field>
       <method name="frob" c:identifier="regress_test_struct_fixed_array_frob">
-        <source-position filename="regress.h" line="1571"/>
+        <source-position filename="regress.h" line="1591"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -6085,17 +6136,17 @@ the introspection client langage.</doc>
            glib:type-name="RegressTestSubObj"
            glib:get-type="regress_test_sub_obj_get_type"
            glib:type-struct="TestSubObjClass">
-      <source-position filename="regress.h" line="1069"/>
+      <source-position filename="regress.h" line="1089"/>
       <implements name="TestInterface"/>
       <constructor name="new" c:identifier="regress_test_sub_obj_new">
-        <source-position filename="regress.h" line="1075"/>
+        <source-position filename="regress.h" line="1095"/>
         <return-value transfer-ownership="full">
           <type name="TestObj" c:type="RegressTestObj*"/>
         </return-value>
       </constructor>
       <method name="instance_method"
               c:identifier="regress_test_sub_obj_instance_method">
-        <source-position filename="regress.h" line="1081"/>
+        <source-position filename="regress.h" line="1101"/>
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
         </return-value>
@@ -6106,7 +6157,7 @@ the introspection client langage.</doc>
         </parameters>
       </method>
       <method name="unset_bare" c:identifier="regress_test_sub_obj_unset_bare">
-        <source-position filename="regress.h" line="1078"/>
+        <source-position filename="regress.h" line="1098"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -6136,7 +6187,7 @@ the introspection client langage.</doc>
     <record name="TestSubObjClass"
             c:type="RegressTestSubObjClass"
             glib:is-gtype-struct-for="TestSubObj">
-      <source-position filename="regress.h" line="1069"/>
+      <source-position filename="regress.h" line="1089"/>
       <field name="parent_class">
         <type name="TestObjClass" c:type="RegressTestObjClass"/>
       </field>
@@ -6148,16 +6199,16 @@ the introspection client langage.</doc>
            glib:type-name="RegressTestWi8021x"
            glib:get-type="regress_test_wi_802_1x_get_type"
            glib:type-struct="TestWi8021xClass">
-      <source-position filename="regress.h" line="1394"/>
+      <source-position filename="regress.h" line="1414"/>
       <constructor name="new" c:identifier="regress_test_wi_802_1x_new">
-        <source-position filename="regress.h" line="1400"/>
+        <source-position filename="regress.h" line="1420"/>
         <return-value transfer-ownership="full">
           <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
         </return-value>
       </constructor>
       <function name="static_method"
                 c:identifier="regress_test_wi_802_1x_static_method">
-        <source-position filename="regress.h" line="1409"/>
+        <source-position filename="regress.h" line="1429"/>
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
         </return-value>
@@ -6170,7 +6221,7 @@ the introspection client langage.</doc>
       <method name="get_testbool"
               c:identifier="regress_test_wi_802_1x_get_testbool"
               glib:get-property="testbool">
-        <source-position filename="regress.h" line="1403"/>
+        <source-position filename="regress.h" line="1423"/>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -6183,7 +6234,7 @@ the introspection client langage.</doc>
       <method name="set_testbool"
               c:identifier="regress_test_wi_802_1x_set_testbool"
               glib:set-property="testbool">
-        <source-position filename="regress.h" line="1406"/>
+        <source-position filename="regress.h" line="1426"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -6214,7 +6265,7 @@ the introspection client langage.</doc>
     <record name="TestWi8021xClass"
             c:type="RegressTestWi8021xClass"
             glib:is-gtype-struct-for="TestWi8021x">
-      <source-position filename="regress.h" line="1394"/>
+      <source-position filename="regress.h" line="1414"/>
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
@@ -6222,12 +6273,12 @@ the introspection client langage.</doc>
     <constant name="UTF8_CONSTANT"
               value="const ♥ utf8"
               c:type="REGRESS_UTF8_CONSTANT">
-      <source-position filename="regress.h" line="1582"/>
+      <source-position filename="regress.h" line="1602"/>
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <function name="aliased_caller_alloc"
               c:identifier="regress_aliased_caller_alloc">
-      <source-position filename="regress.h" line="1542"/>
+      <source-position filename="regress.h" line="1562"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -6950,7 +7001,7 @@ exposed to language bindings.</doc>
       </parameters>
     </function>
     <function name="func_obj_null_in" c:identifier="regress_func_obj_null_in">
-      <source-position filename="regress.h" line="1029"/>
+      <source-position filename="regress.h" line="1049"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -6968,7 +7019,7 @@ exposed to language bindings.</doc>
     </function>
     <function name="func_obj_nullable_in"
               c:identifier="regress_func_obj_nullable_in">
-      <source-position filename="regress.h" line="1035"/>
+      <source-position filename="regress.h" line="1055"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -6985,7 +7036,7 @@ exposed to language bindings.</doc>
       </parameters>
     </function>
     <function name="get_variant" c:identifier="regress_get_variant">
-      <source-position filename="regress.h" line="1664"/>
+      <source-position filename="regress.h" line="1684"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="regress.c"
@@ -7017,7 +7068,7 @@ exposed to language bindings.</doc>
            filename="regress.c"
            line="4952">This test case mirrors GnomeKeyringPasswordSchema from
 libgnome-keyring.</doc>
-      <source-position filename="regress.h" line="1597"/>
+      <source-position filename="regress.h" line="1617"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7040,7 +7091,7 @@ libgnome-keyring.</doc>
     </function>
     <function name="introspectable_via_alias"
               c:identifier="regress_introspectable_via_alias">
-      <source-position filename="regress.h" line="1522"/>
+      <source-position filename="regress.h" line="1542"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7053,7 +7104,7 @@ libgnome-keyring.</doc>
     <function name="not_introspectable_via_alias"
               c:identifier="regress_not_introspectable_via_alias"
               introspectable="0">
-      <source-position filename="regress.h" line="1532"/>
+      <source-position filename="regress.h" line="1552"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7066,7 +7117,7 @@ libgnome-keyring.</doc>
     <function name="random_function_with_skipped_structure"
               c:identifier="regress_random_function_with_skipped_structure"
               introspectable="0">
-      <source-position filename="regress.h" line="1494"/>
+      <source-position filename="regress.h" line="1514"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7109,7 +7160,7 @@ in particular, but it should be serialized in the gir nevertheless.</doc>
     </function>
     <function name="test_array_callback"
               c:identifier="regress_test_array_callback">
-      <source-position filename="regress.h" line="1270"/>
+      <source-position filename="regress.h" line="1290"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -7143,7 +7194,7 @@ in particular, but it should be serialized in the gir nevertheless.</doc>
     </function>
     <function name="test_array_fixed_out_objects"
               c:identifier="regress_test_array_fixed_out_objects">
-      <source-position filename="regress.h" line="946"/>
+      <source-position filename="regress.h" line="966"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7318,7 +7369,7 @@ in particular, but it should be serialized in the gir nevertheless.</doc>
     </function>
     <function name="test_array_inout_callback"
               c:identifier="regress_test_array_inout_callback">
-      <source-position filename="regress.h" line="1273"/>
+      <source-position filename="regress.h" line="1293"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -7569,7 +7620,7 @@ in particular, but it should be serialized in the gir nevertheless.</doc>
     </function>
     <function name="test_array_static_in_int"
               c:identifier="regress_test_array_static_in_int">
-      <source-position filename="regress.h" line="954"/>
+      <source-position filename="regress.h" line="974"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7593,7 +7644,7 @@ in particular, but it should be serialized in the gir nevertheless.</doc>
 Similar to:
 - gsf_property_settings_free() with structs but they contain pointers
 - g_byte_array_new_take() with guint8s</doc>
-      <source-position filename="regress.h" line="1687"/>
+      <source-position filename="regress.h" line="1707"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7621,7 +7672,7 @@ Similar to:
            line="5104">Test flat array input with transfer none.
 
 Similar to g_main_context_check() or gtk_target_list_new().</doc>
-      <source-position filename="regress.h" line="1690"/>
+      <source-position filename="regress.h" line="1710"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7675,7 +7726,7 @@ Similar to g_main_context_check() or gtk_target_list_new().</doc>
            line="5063">Test flat caller-allocated array output.
 
 Similar to g_main_context_query().</doc>
-      <source-position filename="regress.h" line="1684"/>
+      <source-position filename="regress.h" line="1704"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7709,7 +7760,7 @@ Similar to g_main_context_query().</doc>
            line="5025">Test flat array output with transfer container.
 
 Similar to pango_layout_get_log_attrs().</doc>
-      <source-position filename="regress.h" line="1678"/>
+      <source-position filename="regress.h" line="1698"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7741,7 +7792,7 @@ Similar to pango_layout_get_log_attrs().</doc>
       <doc xml:space="preserve"
            filename="regress.c"
            line="5047">Test flat fixed-size array output with transfer full.</doc>
-      <source-position filename="regress.h" line="1681"/>
+      <source-position filename="regress.h" line="1701"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7771,7 +7822,7 @@ Similar to:
 - mm_modem_peek_ports() with structs
 - gdk_query_visual_types() with enums
 - gdk_event_get_axes() with doubles</doc>
-      <source-position filename="regress.h" line="1675"/>
+      <source-position filename="regress.h" line="1695"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -7800,7 +7851,7 @@ Similar to:
     </function>
     <function name="test_async_ready_callback"
               c:identifier="regress_test_async_ready_callback">
-      <source-position filename="regress.h" line="1301"/>
+      <source-position filename="regress.h" line="1321"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -8113,7 +8164,7 @@ Similar to:
       </return-value>
     </function>
     <function name="test_callback" c:identifier="regress_test_callback">
-      <source-position filename="regress.h" line="1264"/>
+      <source-position filename="regress.h" line="1284"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -8129,7 +8180,7 @@ Similar to:
     </function>
     <function name="test_callback_async"
               c:identifier="regress_test_callback_async">
-      <source-position filename="regress.h" line="1295"/>
+      <source-position filename="regress.h" line="1315"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -8155,7 +8206,7 @@ Similar to:
            filename="regress.c"
            line="4194">Notified - callback persists until a DestroyNotify delegate
 is invoked.</doc>
-      <source-position filename="regress.h" line="1283"/>
+      <source-position filename="regress.h" line="1303"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -8185,7 +8236,7 @@ is invoked.</doc>
            filename="regress.c"
            line="4221">Adds a scope notified callback with no user data. This can invoke an error
 condition in bindings which needs to be tested.</doc>
-      <source-position filename="regress.h" line="1288"/>
+      <source-position filename="regress.h" line="1308"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -8204,7 +8255,7 @@ condition in bindings which needs to be tested.</doc>
     </function>
     <function name="test_callback_return_full"
               c:identifier="regress_test_callback_return_full">
-      <source-position filename="regress.h" line="1280"/>
+      <source-position filename="regress.h" line="1300"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -8217,7 +8268,7 @@ condition in bindings which needs to be tested.</doc>
     </function>
     <function name="test_callback_thaw_async"
               c:identifier="regress_test_callback_thaw_async">
-      <source-position filename="regress.h" line="1298"/>
+      <source-position filename="regress.h" line="1318"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -8229,7 +8280,7 @@ condition in bindings which needs to be tested.</doc>
            line="4235">Invokes all callbacks installed by #test_callback_destroy_notify(),
 adding up their return values, and removes them, invoking the
 corresponding destroy notfications.</doc>
-      <source-position filename="regress.h" line="1292"/>
+      <source-position filename="regress.h" line="1312"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="regress.c"
@@ -8243,7 +8294,7 @@ corresponding destroy notfications.</doc>
            filename="regress.c"
            line="4163">Call - callback parameter persists for the duration of the method
 call and can be released on return.</doc>
-      <source-position filename="regress.h" line="1276"/>
+      <source-position filename="regress.h" line="1296"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -8315,7 +8366,7 @@ call and can be released on return.</doc>
     </function>
     <function name="test_create_fundamental_hidden_class_instance"
               c:identifier="regress_test_create_fundamental_hidden_class_instance">
-      <source-position filename="regress.h" line="1196"/>
+      <source-position filename="regress.h" line="1216"/>
       <return-value transfer-ownership="full">
         <type name="TestFundamentalObject"
               c:type="RegressTestFundamentalObject*"/>
@@ -8323,7 +8374,7 @@ call and can be released on return.</doc>
     </function>
     <function name="test_date_in_gvalue"
               c:identifier="regress_test_date_in_gvalue">
-      <source-position filename="regress.h" line="1464"/>
+      <source-position filename="regress.h" line="1484"/>
       <return-value transfer-ownership="full">
         <type name="GObject.Value" c:type="GValue*"/>
       </return-value>
@@ -8390,7 +8441,7 @@ call and can be released on return.</doc>
     </function>
     <function name="test_function_async"
               c:identifier="regress_test_function_async">
-      <source-position filename="regress.h" line="1304"/>
+      <source-position filename="regress.h" line="1324"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -8423,7 +8474,7 @@ call and can be released on return.</doc>
     <function name="test_function_finish"
               c:identifier="regress_test_function_finish"
               throws="1">
-      <source-position filename="regress.h" line="1313"/>
+      <source-position filename="regress.h" line="1333"/>
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
@@ -8435,7 +8486,7 @@ call and can be released on return.</doc>
     </function>
     <function name="test_function_sync"
               c:identifier="regress_test_function_sync">
-      <source-position filename="regress.h" line="1316"/>
+      <source-position filename="regress.h" line="1336"/>
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
@@ -8447,7 +8498,7 @@ call and can be released on return.</doc>
     </function>
     <function name="test_function_thaw_async"
               c:identifier="regress_test_function_thaw_async">
-      <source-position filename="regress.h" line="1310"/>
+      <source-position filename="regress.h" line="1330"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
              filename="regress.c"
@@ -8511,7 +8562,7 @@ call and can be released on return.</doc>
     </function>
     <function name="test_gerror_callback"
               c:identifier="regress_test_gerror_callback">
-      <source-position filename="regress.h" line="1346"/>
+      <source-position filename="regress.h" line="1366"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9026,7 +9077,7 @@ element-type annotation.</doc>
     </function>
     <function name="test_hash_table_callback"
               c:identifier="regress_test_hash_table_callback">
-      <source-position filename="regress.h" line="1343"/>
+      <source-position filename="regress.h" line="1363"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9049,7 +9100,7 @@ element-type annotation.</doc>
     <function-inline name="test_inline_function"
                      c:identifier="regress_test_inline_function"
                      introspectable="0">
-      <source-position filename="regress.h" line="1708"/>
+      <source-position filename="regress.h" line="1728"/>
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
@@ -9157,7 +9208,7 @@ element-type annotation.</doc>
     </function>
     <function name="test_multi_callback"
               c:identifier="regress_test_multi_callback">
-      <source-position filename="regress.h" line="1267"/>
+      <source-position filename="regress.h" line="1287"/>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -9206,7 +9257,7 @@ It has multiple lines in the documentation.
 The sky is blue.
 
 You will give me your credit card number.</doc>
-      <source-position filename="regress.h" line="1476"/>
+      <source-position filename="regress.h" line="1496"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9243,7 +9294,7 @@ rgb(20%, 30%, 0%)&lt;/literallayout&gt;&lt;/entry&gt;
 &lt;/informaltable&gt;
 
 What we're testing here is that the scanner ignores the @a nested inside XML.</doc>
-      <source-position filename="regress.h" line="1479"/>
+      <source-position filename="regress.h" line="1499"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9258,7 +9309,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
     </function>
     <function name="test_noptr_callback"
               c:identifier="regress_test_noptr_callback">
-      <source-position filename="regress.h" line="1261"/>
+      <source-position filename="regress.h" line="1281"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9274,7 +9325,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
     </function>
     <function name="test_null_gerror_callback"
               c:identifier="regress_test_null_gerror_callback">
-      <source-position filename="regress.h" line="1349"/>
+      <source-position filename="regress.h" line="1369"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9286,7 +9337,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
     </function>
     <function name="test_null_strv_in_gvalue"
               c:identifier="regress_test_null_strv_in_gvalue">
-      <source-position filename="regress.h" line="1470"/>
+      <source-position filename="regress.h" line="1490"/>
       <return-value transfer-ownership="full">
         <type name="GObject.Value" c:type="GValue*"/>
       </return-value>
@@ -9304,7 +9355,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
     </function>
     <function name="test_owned_gerror_callback"
               c:identifier="regress_test_owned_gerror_callback">
-      <source-position filename="regress.h" line="1352"/>
+      <source-position filename="regress.h" line="1372"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9350,7 +9401,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
     </function>
     <function name="test_simple_callback"
               c:identifier="regress_test_simple_callback">
-      <source-position filename="regress.h" line="1258"/>
+      <source-position filename="regress.h" line="1278"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9382,7 +9433,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
            filename="regress.c"
            line="4528">Should not emit a warning:
 https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
-      <source-position filename="regress.h" line="1355"/>
+      <source-position filename="regress.h" line="1375"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9446,7 +9497,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
     </function>
     <function name="test_strv_in_gvalue"
               c:identifier="regress_test_strv_in_gvalue">
-      <source-position filename="regress.h" line="1467"/>
+      <source-position filename="regress.h" line="1487"/>
       <return-value transfer-ownership="full">
         <type name="GObject.Value" c:type="GValue*"/>
       </return-value>
@@ -9505,7 +9556,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
     </function>
     <function name="test_torture_signature_0"
               c:identifier="regress_test_torture_signature_0">
-      <source-position filename="regress.h" line="1436"/>
+      <source-position filename="regress.h" line="1456"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9545,7 +9596,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
       <doc xml:space="preserve"
            filename="regress.c"
            line="4747">This function throws an error if m is odd.</doc>
-      <source-position filename="regress.h" line="1444"/>
+      <source-position filename="regress.h" line="1464"/>
       <return-value transfer-ownership="none">
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
@@ -9581,7 +9632,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
     </function>
     <function name="test_torture_signature_2"
               c:identifier="regress_test_torture_signature_2">
-      <source-position filename="regress.h" line="1453"/>
+      <source-position filename="regress.h" line="1473"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -9882,7 +9933,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
     <function name="test_value_get_fundamental_object"
               c:identifier="regress_test_value_get_fundamental_object"
               introspectable="0">
-      <source-position filename="regress.h" line="1132"/>
+      <source-position filename="regress.h" line="1152"/>
       <return-value>
         <type name="TestFundamentalObject"
               c:type="RegressTestFundamentalObject*"/>
@@ -9914,7 +9965,7 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
     <function name="test_value_set_fundamental_object"
               c:identifier="regress_test_value_set_fundamental_object"
               introspectable="0">
-      <source-position filename="regress.h" line="1129"/>
+      <source-position filename="regress.h" line="1149"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
