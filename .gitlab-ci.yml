@@ -16,8 +16,10 @@ variables:
 
 .gi.fedora:
   variables:
-    FDO_DISTRIBUTION_TAG: "2025-01-31.3"
+    FDO_DISTRIBUTION_TAG: "2025-01-31.4"
     FDO_DISTRIBUTION_VERSION: 41
+    PYENV_VERSION: "3.9.21"
+    PYENV_ROOT: "$CI_PROJECT_DIR/.pyenv"
   retry:
     max: 2
     when:
@@ -59,11 +61,13 @@ build-fedora-container:
   stage: prep
   variables:
     FDO_DISTRIBUTION_PACKAGES:
+      bash
       bison
       cairo-devel
       cairo-gobject-devel
       ccache
       chrpath
+      curl
       desktop-file-utils
       elfutils-libelf-devel
       flex
@@ -119,6 +123,15 @@ build-fedora-container:
       # Install Python modules for tests
       pip3 install flake8 mypy types-Markdown
 
+      # Install pyenv
+      export PATH="${PYENV_ROOT}/bin:/usr/bin:/bin:${PATH}"
+      if [ ! -d ${PYENV_ROOT} ]; then curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash; fi
+      eval "$(pyenv init -)"
+      eval "$(pyenv virtualenv-init -)"
+
+      # Install local Python
+      pyenv install ${PYENV_VERSION}
+
 
 .build.gi:
   variables:
@@ -163,100 +176,17 @@ build-fedora-x86_64@subprojects:
   needs:
     - job: build-fedora-container
 
-fedora-x86_64-meson:
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v14
-  stage: build
+build-fedora-x86_64@python3.9:
   variables:
-    GIT_SUBMODULE_STRATEGY: normal
-    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
-    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
     EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true -Dwerror=true"
-  script:
-    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
-    - .gitlab-ci/show-git-commits.sh || true
-    - meson compile -C _build
-    - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
-    - ninja -C _build gi-doc
-    - mkdir -p public
-    - mv _build/docs/reference/html/ public/girepository/
-    - python3 -m pip install --user flake8 mypy types-Markdown
-    - python3 -m flake8 --count
-    - python3 -m mypy _build
-  except:
-    - tags
-  artifacts:
-    when: always
-    name: "gi-_${CI_COMMIT_REF_NAME}"
-    paths:
-      - "${CI_PROJECT_DIR}/_build/meson-logs"
-      - public
+  extends:
+    - .fdo.distribution-image@fedora
+    - .gi.fedora
+    - .build.gi
+  needs:
+    - job: build-fedora-container
 
-fedora-x86_64-subprojects:
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v7
-  stage: build
-  variables:
-    GIT_SUBMODULE_STRATEGY: normal
-    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
-    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
-  script:
-    - meson setup _build .
-    - .gitlab-ci/show-git-commits.sh || true
-    - meson compile -C _build
-    - meson test -C _build --print-errorlogs --suite=gobject-introspection
-  except:
-    - tags
-  artifacts:
-    when: always
-    name: "gi-_${CI_COMMIT_REF_NAME}"
-    paths:
-      - "${CI_PROJECT_DIR}/_build/meson-logs"
-      - public
-
-fedora-x86_64-no-introspection-data:
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v14
-  stage: build
-  variables:
-    GIT_SUBMODULE_STRATEGY: normal
-    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
-    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
-    EXTRA_MESON_FLAGS: "-Dwerror=true"
-  script:
-    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
-    - .gitlab-ci/show-git-commits.sh || true
-    - meson compile -C _build
-    - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
-  except:
-    - tags
-  artifacts:
-    when: always
-    name: "gi-_${CI_COMMIT_REF_NAME}"
-    paths:
-      - "${CI_PROJECT_DIR}/_build/meson-logs"
-      - public
-
-fedora-x86_64-python3.8:
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v14
-  stage: build
-  variables:
-    GIT_SUBMODULE_STRATEGY: normal
-    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
-    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
-    PYENV_VERSION: "3.8.17"
-  script:
-    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
-    - .gitlab-ci/show-git-commits.sh || true
-    - meson compile -C _build
-    - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
-  except:
-    - tags
-  artifacts:
-    when: always
-    name: "gi-_${CI_COMMIT_REF_NAME}"
-    paths:
-      - "${CI_PROJECT_DIR}/_build/meson-logs"
-      - public
-
-msys2-mingw64-meson:
+msys2-mingw64:
   stage: build
   tags:
     - win32-ps
@@ -274,7 +204,7 @@ msys2-mingw64-meson:
       - _build/meson-logs
   allow_failure: true
 
-msys2-clang64-meson:
+msys2-clang64:
   stage: build
   tags:
     - win32-ps
@@ -292,7 +222,7 @@ msys2-clang64-meson:
       - _build/meson-logs
   allow_failure: true
 
-vs2017-x64-meson:
+vs2017-x64:
   stage: build
   tags:
     - win32-ps
@@ -308,8 +238,7 @@ vs2017-x64-meson:
 
 pages:
   stage: deploy
-  dependencies:
-    - fedora-x86_64-meson
+  needs: ['build-fedora-x86_64@default']
   script:
    - echo
   artifacts:
