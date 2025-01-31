@@ -1,17 +1,170 @@
+include:
+  - remote: 'https://gitlab.gnome.org/Infrastructure/freedesktop-ci-templates/-/raw/145b1bc7ef1702d2bd71584010d7113c6786a506/templates/fedora.yml'
+
 stages:
+  - prep
   - build
   - deploy
-
-image: registry.gitlab.gnome.org/gnome/gobject-introspection:v14
 
 cache:
   paths:
     - _ccache/
 
 variables:
+  FDO_UPSTREAM_REPO: GNOME/gobject-introspection
   COMMON_MESON_FLAGS: "--prefix /usr --libdir lib64 --buildtype=debug -Dglib:werror=false -Dcairo=enabled -Dpython=python3"
 
+.gi.fedora:
+  variables:
+    FDO_DISTRIBUTION_TAG: "2025-01-31.3"
+    FDO_DISTRIBUTION_VERSION: 41
+  retry:
+    max: 2
+    when:
+      - 'always'
+
+default:
+  interruptible: true
+  retry:
+    max: 1
+    when:
+      - 'runner_system_failure'
+      - 'stuck_or_timeout_failure'
+      - 'scheduler_failure'
+      - 'api_failure'
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+
+.pipeline-guard:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH =~ /^gnome-[0-9-]+$/'
+    - if: '$CI_COMMIT_BRANCH'
+      when: 'manual'
+
+build-fedora-container:
+  extends:
+    - .fdo.container-build@fedora
+    - .gi.fedora
+  stage: prep
+  variables:
+    FDO_DISTRIBUTION_PACKAGES:
+      bison
+      cairo-devel
+      cairo-gobject-devel
+      ccache
+      chrpath
+      desktop-file-utils
+      elfutils-libelf-devel
+      flex
+      fontconfig-devel
+      freetype-devel
+      gcc
+      gcc-c++
+      gettext
+      git
+      glib2-devel
+      glibc-devel
+      glibc-headers
+      gtk-doc
+      itstool
+      libattr-devel
+      libffi-devel
+      libmount-devel
+      libselinux-devel
+      libtool
+      libXfixes-devel
+      libXft-devel
+      libxml2-devel
+      libxslt
+      mesa-libGL-devel
+      ninja-build
+      openssl-devel
+      pcre-devel
+      python3
+      python3-devel
+      python3-lxml
+      python3-mako
+      python3-markdown
+      python3-packaging
+      python3-pip
+      python3-rnc2rng
+      python3-setuptools
+      python3-wheel
+      readline-devel
+      redhat-rpm-config
+      sudo
+      sqlite-devel
+      systemtap-sdt-devel
+      zlib-devel
+    FDO_DISTRIBUTION_EXEC: |
+      set -e
+
+      # Mark project directory as safe
+      git config --system --add safe.directory "$CI_PROJECT_DIR"
+
+      # Install the same version of Meson that we require
+      pip3 install meson==1.4.0
+
+      # Install Python modules for tests
+      pip3 install flake8 mypy types-Markdown
+
+
+.build.gi:
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
+    CCACHE_BASEDIR: "${CI_PROJECT_DIR}"
+    CCACHE_DIR: "${CI_PROJECT_DIR}/_ccache"
+  stage: build
+  script:
+    - meson setup ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} _build .
+    - .gitlab-ci/show-git-commits.sh || true
+    - meson compile -C _build
+    - meson test -C _build --print-errorlogs --suite=gobject-introspection --no-suite=glib
+    - ninja -C _build gi-doc
+    - mkdir -p public
+    - mv _build/docs/reference/html/ public/girepository/
+    - python3 -m flake8 --count
+    - python3 -m mypy _build
+  artifacts:
+    when: always
+    name: "gi-_${CI_COMMIT_REF_NAME}"
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - public
+
+build-fedora-x86_64@default:
+  variables:
+    EXTRA_MESON_FLAGS: "-Ddoctool=enabled -Dgtk_doc=true -Dwerror=true"
+  extends:
+    - .fdo.distribution-image@fedora
+    - .gi.fedora
+    - .build.gi
+  needs:
+    - job: build-fedora-container
+
+build-fedora-x86_64@subprojects:
+  variables:
+    EXTRA_MESON_FLAGS: "--wrap-mode=forcefallback -Ddoctool=enabled -Dgtk_doc=true -Dwerror=true"
+  extends:
+    - .fdo.distribution-image@fedora
+    - .gi.fedora
+    - .build.gi
+  needs:
+    - job: build-fedora-container
+
 fedora-x86_64-meson:
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v14
   stage: build
   variables:
     GIT_SUBMODULE_STRATEGY: normal
@@ -60,6 +213,7 @@ fedora-x86_64-subprojects:
       - public
 
 fedora-x86_64-no-introspection-data:
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v14
   stage: build
   variables:
     GIT_SUBMODULE_STRATEGY: normal
@@ -81,6 +235,7 @@ fedora-x86_64-no-introspection-data:
       - public
 
 fedora-x86_64-python3.8:
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:v14
   stage: build
   variables:
     GIT_SUBMODULE_STRATEGY: normal
