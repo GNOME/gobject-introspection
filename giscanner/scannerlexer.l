@@ -211,6 +211,7 @@ stringtext				([^\\\"])|(\\.)
 "break"					{ return BREAK; }
 "case"					{ return CASE; }
 "char"					{ return BASIC_TYPE; }
+"_Complex"				{ return COMPLEX; }
 "const"					{ return CONST; }
 "continue"				{ return CONTINUE; }
 "default"				{ return DEFAULT; }
