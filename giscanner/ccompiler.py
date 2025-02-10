@@ -161,7 +161,8 @@ class CCompiler(object):
             # as the official Python binaries are built with
             # Visual Studio
             if compiler_name is None:
-                if environ.get('MSYSTEM') == 'MINGW32' or environ.get('MSYSTEM') == 'MINGW64':
+                mingw = environ.get('MSYSTEM', '')
+                if mingw.startswith(('MINGW', 'CLANG', 'UCRT')) and environ.get('VCINSTALLDIR') is None:
                     compiler_name = 'mingw32'
                 else:
                     compiler_name = distutils.ccompiler.get_default_compiler()
