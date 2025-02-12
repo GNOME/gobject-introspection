@@ -125,6 +125,34 @@ DllMain (HINSTANCE hinstDLL,
   g_build_filename (g_win32_get_package_installation_directory_of_module (girepository_dll), \
 		    "lib", \
 		    NULL)
+#elif defined(__APPLE__)
+
+#include <dlfcn.h>
+
+#undef GOBJECT_INTROSPECTION_LIBDIR
+#define GOBJECT_INTROSPECTION_LIBDIR darwin_get_portable_libdir ()
+
+static char*
+darwin_get_portable_libdir (void)
+{
+  char *path, *p;
+  Dl_info info;
+
+  /* Get the location of the current dylib */
+  if (!dladdr (darwin_get_portable_libdir, &info))
+    return NULL;
+  path = strdup (info.dli_fname);
+
+  /* Get dylib directory: PREFIX/lib */
+  if ((p = strrchr (path, '/')) == NULL)
+    {
+      free (path);
+      return NULL;
+    }
+  *p = '\0';
+
+  return path;
+}
 
 #endif
 
