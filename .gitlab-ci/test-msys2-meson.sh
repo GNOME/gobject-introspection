@@ -10,11 +10,11 @@ pacman --noconfirm -S --needed \
     ${MINGW_PACKAGE_PREFIX}-toolchain \
     ${MINGW_PACKAGE_PREFIX}-ccache \
     ${MINGW_PACKAGE_PREFIX}-meson \
-    ${MINGW_PACKAGE_PREFIX}-python3 \
-    ${MINGW_PACKAGE_PREFIX}-python3-pip \
-    ${MINGW_PACKAGE_PREFIX}-python3-packaging \
-    ${MINGW_PACKAGE_PREFIX}-python3-mako \
-    ${MINGW_PACKAGE_PREFIX}-python3-markdown \
+    ${MINGW_PACKAGE_PREFIX}-python \
+    ${MINGW_PACKAGE_PREFIX}-python-pip \
+    ${MINGW_PACKAGE_PREFIX}-python-packaging \
+    ${MINGW_PACKAGE_PREFIX}-python-mako \
+    ${MINGW_PACKAGE_PREFIX}-python-markdown \
     ${MINGW_PACKAGE_PREFIX}-libffi \
     ${MINGW_PACKAGE_PREFIX}-pkgconf \
     ${MINGW_PACKAGE_PREFIX}-cairo \
