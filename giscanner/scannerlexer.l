@@ -278,6 +278,8 @@ stringtext				([^\\\"])|(\\.)
 
 "\""{stringtext}*"\""			{ return STRING; }
 "L\""{stringtext}*"\""			{ return STRING; }
+"@\""{stringtext}*"\""			{ return STRING; }
+"@"[a-z][a-zA-Z_0-9]*			{ return STRING; }
 
 .					{ print_error(scanner); }
 
