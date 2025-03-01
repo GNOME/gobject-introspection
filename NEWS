@@ -1,3 +1,24 @@
+1.83.2 - 2025-03-01
+-------------------
+
+* Improve GType inspection helper [!494]
+* Parse C11's _Alignas [#520]
+* Respect custom Python binary [!503]
+* Fix build on the latest Windows SDK [!498]
+* Small performance improvement when looking up a signal information [!504]
+* Use standard imports in the JavaScript templates for g-ir-doctool [!501]
+* Ensure that enumeration members can be marked as deprecated [!512]
+* Add more test coverage for structured union types [!348]
+* Add an option to skip tests when building [!507]
+* Fix various MSVC compatibility issues [!511]
+* Add support for "static" virtual functions [!361]
+* Allow specifying the format of the documentation inside doc blocks [!401]
+* Handle C99's _Complex [!515]
+* Consider UCRT64 and CLANG64 as mingw32 compilers [!516]
+* Handle static NSString syntax [!518]
+* Add instance parameter checks to strict validation [!506, !521]
+* Documentation improvements [!481, !483, !485, !500]
+
 1.82.0 - 2024-09-13
 -------------------
 
