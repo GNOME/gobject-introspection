@@ -244,7 +244,7 @@ class MainTransformer(object):
         if (transfer not in (OPT_TRANSFER_NONE, None) and
                 not node.name.startswith('free') and
                 not node.name.startswith('destroy')):
-            message.warn_node(node,
+            message.strict_node(node,
                 '"transfer" annotation of "{0}" on instance parameter of '
                 '{1}: should not be applied to a method\'s instance '
                 'parameter unless this is a free() or destroy() method'.format(
