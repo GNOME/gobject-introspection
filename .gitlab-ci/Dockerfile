@@ -1,4 +1,4 @@
-FROM fedora:38
+FROM fedora:41
 
 RUN dnf -y install \
     autoconf \
@@ -44,6 +44,7 @@ RUN dnf -y install \
     python3-markdown \
     python3-packaging \
     python3-pip \
+    python3-setuptools \
     python3-rnc2rng \
     python3-wheel \
     readline-devel \
@@ -54,17 +55,18 @@ RUN dnf -y install \
     zlib-devel \
  && dnf clean all
 
-RUN pip3 install meson==1.4.2
+RUN sed -i -e 's/# %wheel/%wheel/' -e '0,/%wheel/{s/%wheel/# %wheel/}' /etc/sudoers
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
-RUN useradd -u $HOST_USER_ID -ms /bin/bash user
-RUN echo 'user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN useradd -u $HOST_USER_ID -G wheel -ms /bin/bash user
 
 USER user
 WORKDIR /home/user
 
 ENV LANG C.UTF-8
+
+RUN pip3 install --user meson==1.4.2
 
 ENV PYENV_ROOT /home/user/.pyenv
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"

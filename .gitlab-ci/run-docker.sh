@@ -16,7 +16,7 @@ fi
 set -e
 
 REGISTRY="registry.gitlab.gnome.org/gnome/gobject-introspection"
-TAG="${REGISTRY}:v14"
+TAG="${REGISTRY}:v15"
 
 ${CMD} build \
         ${format} \
@@ -25,6 +25,7 @@ ${CMD} build \
         --file "Dockerfile" .
 ${CMD} run \
         --rm \
+        --userns=keep-id \
         --volume "$(pwd)/..:/home/user/app" --workdir "/home/user/app" \
         --tty --interactive \
         "${TAG}" \

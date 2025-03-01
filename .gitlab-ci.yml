@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-image: registry.gitlab.gnome.org/gnome/gobject-introspection:v14
+image: registry.gitlab.gnome.org/gnome/gobject-introspection:v15
 
 cache:
   paths:
@@ -39,7 +39,7 @@ fedora-x86_64-meson:
       - public
 
 fedora-x86_64-subprojects:
-  image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v7
+  image: registry.gitlab.gnome.org/gnome/gobject-introspection:min-v8
   stage: build
   variables:
     GIT_SUBMODULE_STRATEGY: normal

@@ -1,4 +1,4 @@
-FROM fedora:38
+FROM fedora:41
 
 RUN dnf -y install \
     flex \
@@ -16,11 +16,10 @@ RUN dnf -y install \
     python3-packaging \
     python3-pip \
     python3-rnc2rng \
+    python3-setuptools \
     python3-wheel \
     zlib-devel \
  && dnf clean all
-
-RUN pip3 install meson==1.4.2
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
@@ -30,3 +29,5 @@ USER user
 WORKDIR /home/user
 
 ENV LANG C.UTF-8
+
+RUN pip3 install --user meson==1.4.2
