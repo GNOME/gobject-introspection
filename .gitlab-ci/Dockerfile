@@ -65,6 +65,7 @@ USER user
 WORKDIR /home/user
 
 ENV LANG C.UTF-8
+ENV PATH="/usr/bin:/home/user/.local/bin"
 
 RUN pip3 install --user meson==1.4.2
 
