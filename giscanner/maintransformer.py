@@ -998,10 +998,6 @@ class MainTransformer(object):
         self._apply_annotations_params(node, node.parameters, block)
         self._apply_annotations_return(node, node.retval, block)
 
-        # ensure vfunc instance parameter is still valid
-        if isinstance(node, ast.VFunction):
-            node.check_instance_parameter()
-
     def _apply_annotations_field(self, parent, parent_block, field):
         block = self._blocks.get('%s.%s' % (self._get_annotation_name(parent), field.name))
 
@@ -1566,15 +1562,14 @@ method or constructor of some type."""
             else:
                 continue
 
-            # Ignore reserved or private values with no arguments
-            if field.private:
+            # Check the first parameter is the object
+            if len(callback.parameters) == 0:
                 continue
-            if not callback.parameters:
-                if (field.name.startswith('_') or
-                callback.retval.type.is_equiv((ast.TYPE_ANY, ast.TYPE_NONE))):
-                    continue
-
-            vfunc = ast.VFunction.from_callback(field.name, callback, node_type)
+            firstparam_type = callback.parameters[0].type
+            if firstparam_type != node_type:
+                continue
+            vfunc = ast.VFunction.from_callback(field.name, callback)
+            vfunc.instance_parameter = callback.parameters[0]
             vfunc.inherit_file_positions(callback)
 
             prefix = self._get_annotation_name(class_struct)
