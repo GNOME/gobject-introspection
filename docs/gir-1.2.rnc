@@ -78,7 +78,7 @@ CInclude =
 DocFormat =
   ## Format used for the included documentation.
   element doc:format {
-    ## Name of the documentation format. For example, 'gi-docgen' or 'gtk-doc'.
+    ## Name of the documentation format. Valid values are: gi-docgen, gtk-doc-docbook, gtk-doc-markdown, hotdoc, unknown.
     attribute name { xsd:string },
 
     empty
