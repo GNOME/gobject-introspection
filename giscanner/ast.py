@@ -857,7 +857,11 @@ class VFunction(Callable):
 
     def update_instance_parameter(self, instance_type):
         def parameter_can_be_instance(parameter):
-            if parameter.type != instance_type:
+            # We alias GInitiallyUnownedClass with the fields of GObjectClass,
+            # which means the type of the instance parameter of the virtual
+            # function do not match the type of the instance
+            if not (instance_type.target_giname == 'GObject.InitiallyUnowned' and parameter.type.target_giname == 'GObject.Object') \
+                    and parameter.type != instance_type:
                 return False
             return (parameter.direction not in
                         (PARAM_DIRECTION_OUT, PARAM_DIRECTION_INOUT))
