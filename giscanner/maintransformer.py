@@ -1615,7 +1615,7 @@ method or constructor of some type."""
             # They keys are method names of candidates for getters. The values
             # are priority weights that measure how tasteful was the heuristic
             # used to propose their candidate.
-            getter = {}
+            getter_candidates = {}
             if prop.setter is None:
                 if prop.writable and not prop.construct_only:
                     setter = 'set_' + normalized_name
@@ -1623,17 +1623,17 @@ method or constructor of some type."""
                 setter = prop.setter
             if prop.getter is None:
                 if prop.readable:
-                    getter[f"get_{normalized_name}"] = 50
+                    getter_candidates[f"get_{normalized_name}"] = 50
                     # Heuristic: boolean properties can have getters that are
                     # prefixed by is_property_name, like: gtk_window_is_maximized()
                     if prop.type.is_equiv(ast.TYPE_BOOLEAN) and not normalized_name.startswith("is_"):
-                        getter[f"is_{normalized_name}"] = 25
+                        getter_candidates[f"is_{normalized_name}"] = 25
                     # Heuristic: read-only properties can have getters that are
                     # just the property name, like: gtk_widget_has_focus()
                     if not prop.writable and prop.type.is_equiv(ast.TYPE_BOOLEAN):
-                        getter[normalized_name] = 10
+                        getter_candidates[normalized_name] = 10
             else:
-                getter[prop.getter] = 99
+                getter_candidates[prop.getter] = 99
             for method in node.methods:
                 if not method.introspectable:
                     continue
@@ -1648,7 +1648,7 @@ method or constructor of some type."""
                         method.set_property = prop.name
                     prop.setter = method.name
                     continue
-                if getter is not {} and method.name in getter:
+                if getter_candidates is not {} and method.name in getter_candidates:
                     if method.get_property is None:
                         method.get_property = prop.name
                     elif method.get_property != prop.name:
@@ -1660,8 +1660,8 @@ method or constructor of some type."""
                     # Check the priority of the last matching getter
                     current_priority = -1
                     if current_getter := prop.getter:
-                        current_priority = getter.get(current_getter, -1)
-                    if getter[method.name] >= current_priority:
+                        current_priority = getter_candidates.get(current_getter, -1)
+                    if getter_candidates[method.name] >= current_priority:
                         prop.getter = method.name
                     continue
 
