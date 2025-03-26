@@ -45,6 +45,56 @@ from giscanner.transformer import Transformer
 from . import utils
 
 
+def process_wrapper_binary(option, opt_str, value, parser):
+    if value is None:
+        setattr(parser.values, option.dest, None)
+    else:
+        setattr(parser.values, option.dest, [value])
+
+
+def process_wrapper_args_begin(option, opt, value, parser, wrapper):
+    wrapper_cmd = getattr(parser.values, option.dest)
+    if wrapper_cmd is None:
+        parser.error(f"--{wrapper}-wrapper-args-begin must be called after --use-{wrapper}-wrapper")
+    while len(parser.rargs) > 0 and parser.rargs[0] != f"--{wrapper}-wrapper-args-end":
+        arg = parser.rargs.pop(0)
+        wrapper_cmd.append(arg)
+
+
+def process_wrapper_args_end(option, opt, value, parser):
+    pass
+
+
+def get_cross_compile_option_group(parser):
+    group = optparse.OptionGroup(parser, "Cross compilation options")
+
+    group.add_option("", "--use-binary-wrapper",
+                     dest="wrapper", type="string", default=None,
+                     help="wrapper to use for running programs (useful when cross-compiling)",
+                     action="callback", callback=process_wrapper_binary)
+    group.add_option("", "--binary-wrapper-args-begin",
+                     help="Start additional binary wrapper arguments",
+                     dest="wrapper", default=None,
+                     action="callback", callback=lambda option, opt, value, parser: process_wrapper_args_begin(option, opt, value, parser, "binary"))
+    group.add_option("", "--binary-wrapper-args-end",
+                     help="End additional binary wrapper arguments",
+                     action="callback", callback=process_wrapper_args_end)
+
+    group.add_option("", "--use-ldd-wrapper",
+                     dest="ldd_wrapper", type="string", default=None,
+                     help="wrapper to use instead of ldd (useful when cross-compiling)",
+                     action="callback", callback=process_wrapper_binary)
+    group.add_option("", "--ldd-wrapper-args-begin",
+                     help="Start additional ldd wrapper arguments",
+                     dest="ldd_wrapper", default=None,
+                     action="callback", callback=lambda option, opt, value, parser: process_wrapper_args_begin(option, opt, value, parser, "ldd"))
+    group.add_option("", "--ldd-wrapper-args-end",
+                     help="End additional ldd wrapper arguments",
+                     action="callback", callback=process_wrapper_args_end)
+
+    return group
+
+
 def process_cflags_begin(option, opt, value, parser):
     cflags = getattr(parser.values, option.dest)
     while len(parser.rargs) > 0 and parser.rargs[0] != '--cflags-end':
@@ -120,12 +170,10 @@ def _get_option_parser():
     parser.add_option("", "--program",
                       action="store", dest="program", default=None,
                       help="program to execute")
-    parser.add_option("", "--use-binary-wrapper",
-                      action="store", dest="wrapper", default=None,
-                      help="wrapper to use for running programs (useful when cross-compiling)")
-    parser.add_option("", "--use-ldd-wrapper",
-                      action="store", dest="ldd_wrapper", default=None,
-                      help="wrapper to use instead of ldd (useful when cross-compiling)")
+
+    group = get_cross_compile_option_group(parser)
+    parser.add_option_group(group)
+
     parser.add_option("", "--lib-dirs-envvar",
                       action="store", dest="lib_dirs_envvar", default=None,
                       help="environment variable to write a list of library directories to (for running the transient binary), instead of standard LD_LIBRARY_PATH")
@@ -438,7 +486,7 @@ def create_binary(transformer, options, args):
 
     shlibs = resolve_shlibs(options, binary, options.libraries)
     if options.wrapper:
-        binary.args = [options.wrapper] + binary.args
+        binary.args = options.wrapper + binary.args
 
         libtool = utils.get_libtool_command(options)
 
