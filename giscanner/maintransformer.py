@@ -1616,6 +1616,7 @@ method or constructor of some type."""
             # are priority weights that measure how tasteful was the heuristic
             # used to propose their candidate.
             getter_candidates = {}
+            found_getter_candidates = []
             if prop.setter is None:
                 if prop.writable and not prop.construct_only:
                     setter = 'set_' + normalized_name
@@ -1649,6 +1650,7 @@ method or constructor of some type."""
                     prop.setter = method.name
                     continue
                 if getter_candidates is not {} and method.name in getter_candidates:
+                    found_getter_candidates.append(method.name)
                     if method.get_property is None:
                         method.get_property = prop.name
                     elif method.get_property != prop.name:
@@ -1664,6 +1666,12 @@ method or constructor of some type."""
                     if getter_candidates[method.name] >= current_priority:
                         prop.getter = method.name
                     continue
+            if len(found_getter_candidates) > 1:
+                getter_annotations = "\n".join(f"- '(getter {candidate})'" for candidate in found_getter_candidates)
+                message.warn_node(node,
+                                  f"Multiple getter candidates for property '{node.name}:{prop.name}' found, "
+                                  f"'{prop.getter}' was chosen by a heuristic. "
+                                  f"Please annotate the property with one of the following to ensure it is consistent:\n{getter_annotations}")
 
     def _pass_member_numeric_name(self, node):
         """Validate the name of the members of enumeration types."""
