@@ -96,7 +96,7 @@ if cc.get_argument_syntax() == 'msvc'
       msvc_crt_cflag = b_vscrt == 'static_from_buildtype' ? '/MT' : '/MD'
     endif
   else
-    msvc_crt_cflag = b_vscrt
+    msvc_crt_cflag = '/' + b_vscrt
   endif
   extra_giscanner_cflags += msvc_crt_cflag
   extra_giscanner_args = ['--cflags-begin'] + extra_giscanner_cflags + ['--cflags-end']
