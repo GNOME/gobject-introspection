@@ -100,5 +100,35 @@ from giscanner.utils import dll_dirs
 dll_dirs = dll_dirs()
 dll_dirs.add_dll_dirs(['gio-2.0'])
 
+def get_rspfile_args(rspfile):
+    '''
+    Response files are useful on Windows where there is a command-line character
+    limit of 8191 because when passing sources as arguments to glib-mkenums this
+    limit can be exceeded in large codebases.
+
+    There is no specification for response files and each tool that supports it
+    generally writes them out in slightly different ways, but some sources are:
+    https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-response-files
+    https://docs.microsoft.com/en-us/windows/desktop/midl/the-response-file-command
+    '''
+    import shlex
+    if not os.path.isfile(rspfile):
+        sys.exit('Response file {!r} does not exist'.format(rspfile))
+    try:
+        with open(rspfile, 'r') as f:
+            cmdline = f.read()
+    except OSError as e:
+        sys.exit('Response file {!r} could not be read: {}'
+                 .format(rspfile, e.strerror))
+    return shlex.split(cmdline)
+
+
+# Support reading an rspfile of the form @filename which contains the args
+# to be parsed
+if sys.argv[-1].startswith('@'):
+    args = sys.argv[0:-1] + get_rspfile_args(sys.argv[-1][1:])
+else:
+    args = sys.argv
+
 from giscanner.@TOOL_MODULE@ import @TOOL_FUNCTION@
-sys.exit(@TOOL_FUNCTION@(sys.argv))
+sys.exit(@TOOL_FUNCTION@(args))
