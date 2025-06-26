@@ -571,7 +571,7 @@ if rnc2rng.found()
   endforeach
 
   foreach gir: uninstalled_gir_files
-    gir_name = gir.full_path().split('/')[-1]
+    gir_name = fs.name(gir.full_path())
     test('validate-@0@'.format(gir_name).underscorify(),
       python,
       args: [

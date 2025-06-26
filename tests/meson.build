@@ -198,7 +198,7 @@ if (glib_dep.type_name() == 'pkgconfig' and
   # FIXME: Remove? Those tests doesn't actually do anything for typelibs ...
   foreach typelib : test_typelibs
     gi_tester = files('gi-tester')
-    typelib_name = typelib.full_path().split('/')[-1]
+    typelib_name = fs.name(typelib.full_path())
     test(
       'gi-tester' + typelib_name,
       python,

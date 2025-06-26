@@ -587,7 +587,7 @@ endif
 gi_tester = files(join_paths('..', 'gi-tester'))
 
 foreach gir : test_girs
-  gir_name = gir.full_path().split('/')[-1]
+  gir_name = fs.name(gir.full_path())
   test(
     'gi-tester-' + gir_name,
     python,
@@ -663,7 +663,7 @@ if has_girdoctool and glib_dep.type_name() == 'pkgconfig'
 endif
 
 foreach typelib : test_typelibs
-  typelib_name = typelib.full_path().split('/')[-1]
+  typelib_name = fs.name(typelib.full_path())
   test(
     'gi-tester-' + typelib_name,
     python,
