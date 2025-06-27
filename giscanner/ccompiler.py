@@ -367,11 +367,32 @@ class CCompiler(object):
         includes.extend(include_paths)
         extra_postargs.extend(extra_args)
 
-        return self.compiler.compile(sources=source,
+        tmp = None
+
+        rsp_len = sum(len(i) + 1 for i in list(*source) + extra_postargs) + sum(len(i) + 3 for i in macros + includes)
+
+        # Serialize to a response file if CommandLineToArgW etc.
+        # can get overloaded. The limit is 32k but e.g. GStreamer's CI
+        # can pile up pretty quickly, so let's follow Meson here.
+        if self.check_is_msvc() and rsp_len >= 8192:
+            # There seems to be no provision for deduplication in higher layers
+            includes = list(set(includes))
+            macros = list(set(macros))
+            if extra_postargs:
+                tmp = tempfile.mktemp()
+                with open(tmp, 'w') as f:
+                    f.write(' '.join(extra_postargs))
+                extra_postargs = [f'@{tmp}']
+
+        try:
+            return self.compiler.compile(sources=source,
                                      macros=macros,
                                      include_dirs=includes,
                                      extra_postargs=extra_postargs,
                                      output_dir=os.path.abspath(os.sep))
+        finally:
+            if tmp and not utils.have_debug_flag('save-temps'):
+                os.unlink(tmp)
 
     def resolve_windows_libs(self, libraries, options):
         args = []
