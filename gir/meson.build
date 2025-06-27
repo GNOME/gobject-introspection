@@ -1,4 +1,4 @@
-gir_files = [
+base_gir_files = [
   {'name': 'DBus', 'file': 'DBus-1.0.gir' },
   {'name': 'DBus-GLib', 'file': 'DBusGLib-1.0.gir' },
   {'name': 'fontconfig', 'file': 'fontconfig-2.0.gir' },
@@ -18,8 +18,9 @@ uninstalled_gir_files = []
 # Copy gir files to build directory to have them all in a single place.
 # This is needed when gobject-introspection is a subproject because Meson
 # will add --includedir pointing to build directory automatically.
-foreach gir: gir_files
-  fs.copyfile(gir.get('file'))
+gir_files = []
+foreach gir: base_gir_files
+  gir_files += [{'name': gir.get('name'), 'file': fs.copyfile(gir.get('file'))}]
 endforeach
 
 cairo_conf = configuration_data()
@@ -49,7 +50,7 @@ gir_files += [{'name': 'cairo', 'file': cairo_gir}]
 
 typelibdir = join_paths(get_option('libdir'), 'girepository-1.0')
 installed_gir_files = []
-foreach gir: gir_files
+foreach gir: base_gir_files
   installed_gir_files += gir.get('file')
 endforeach
 
