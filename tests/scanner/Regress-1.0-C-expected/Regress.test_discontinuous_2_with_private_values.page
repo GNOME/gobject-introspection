@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<page id="Regress.test_discontinuous_2_with_private_values"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    <link xref="index" group="function" type="guide"/>
+    <api:function>
+      <api:returns>
+        <api:type>RegressTestDiscontinuousFlags</api:type>
+      </api:returns>
+      <api:name>regress_test_discontinuous_2_with_private_values</api:name>
+    </api:function>
+  </info>
+  <title>regress_test_discontinuous_2_with_private_values</title>
+  <synopsis><code mime="text/x-csrc">
+RegressTestDiscontinuousFlags regress_test_discontinuous_2_with_private_values (void);
+  </code></synopsis>
+
+
+<terms>
+<item>
+<title><code>Returns</code></title>
+  <p>REGRESS_TEST_DISCONTINUOUS_FLAG2 with a private value higher than the largest RegressTestDiscontinuousFlags enum value.</p>
+</item>
+</terms>
+
+</page>
