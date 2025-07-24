@@ -1649,7 +1649,7 @@ method or constructor of some type."""
                         method.set_property = prop.name
                     prop.setter = method.name
                     continue
-                if getter_candidates is not {} and method.name in getter_candidates:
+                if getter_candidates != {} and method.name in getter_candidates:
                     found_getter_candidates.append(method.name)
                     if method.get_property is None:
                         method.get_property = prop.name
