@@ -275,7 +275,7 @@ set_or_merge_base_type (GISourceType *type,
 %token ELLIPSIS ADDEQ SUBEQ MULEQ DIVEQ MODEQ XOREQ ANDEQ OREQ SL SR
 %token SLEQ SREQ EQ NOTEQ LTEQ GTEQ ANDAND OROR PLUSPLUS MINUSMINUS ARROW
 
-%token AUTO BREAK CASE COMPLEX CONST CONTINUE DEFAULT DO ELSE ENUM
+%token AUTO ALIGNOF BREAK CASE COMPLEX CONST CONTINUE DEFAULT DO ELSE ENUM
 %token EXTENSION EXTERN FOR GOTO IF INLINE REGISTER RESTRICT
 %token RETURN SHORT SIGNED SIZEOF STATIC STRUCT SWITCH THREAD_LOCAL TYPEDEF
 %token UNION UNSIGNED VOID VOLATILE WHILE
@@ -526,6 +526,15 @@ unary_expression
 		if ($$->const_int_set) {
 			$$->base_type = gi_source_basic_type_new ("guint64");
 		}
+	  }
+	| ALIGNOF unary_expression
+	  {
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
+	  }
+	| ALIGNOF '(' type_name ')'
+	  {
+		ctype_free ($3);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_file, lineno);
 	  }
 	| SIZEOF unary_expression
 	  {

@@ -206,6 +206,9 @@ stringtext				([^\\\"])|(\\.)
 
 [a-zA-Z_][a-zA-Z_0-9]*			{ if (scanner->macro_scan) return check_identifier(scanner, yytext); else REJECT; }
 
+"alignof"				{ return ALIGNOF; }
+"_Alignof"				{ return ALIGNOF; }
+"__alignof__"				{ return ALIGNOF; }
 "asm"           		        { if (!parse_ignored_macro()) REJECT; }
 "auto"					{ return AUTO; }
 "break"					{ return BREAK; }
