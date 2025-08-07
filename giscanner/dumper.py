@@ -253,9 +253,11 @@ class DumpCompiler(object):
             args.extend(pkg_config_libs)
             self._compiler.get_external_link_flags(args, self._options.libraries)
 
-        if sys.platform == 'darwin':
+        if sys.platform in ('darwin', 'linux'):
             # If the libraries' ID are of the form (@rpath/libfoo.dylib),
             # then nothing previously can have added the needed rpaths
+            # For the linux case, covers when uninstalled libraries
+            # supplied transitive requirements
             rpath_entries_to_add = [lib.replace('-L/', '-Wl,-rpath,/') for lib in pkg_config_libs if lib.startswith('-L/')]
             args.extend(rpath_entries_to_add)
 
