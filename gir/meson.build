@@ -45,6 +45,8 @@ cairo_gir = configure_file(
   input: 'cairo-1.0.gir.in',
   output: 'cairo-1.0.gir',
   configuration: cairo_conf,
+  install: true,
+  install_dir: girdir,
 )
 gir_files += [{'name': 'cairo', 'file': cairo_gir}]
 
