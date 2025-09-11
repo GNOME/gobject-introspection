@@ -594,9 +594,13 @@ typedef struct {
   guint32 symbol;
   guint32 signature;
 
-  guint16 is_static   : 1;
-  guint16 reserved    : 15;
-  guint16 reserved2   : 16;
+  guint16 is_static     : 1;
+  guint16 is_async      : 1;
+  guint16 sync_or_async : 10;
+  guint16 reserved      : 4;
+
+  guint16 finish        : 10;
+  guint16 reserved2     : 6;
 } FunctionBlob;
 
 /**
@@ -940,6 +944,7 @@ typedef struct {
 } EnumBlob;
 
 #define ACCESSOR_SENTINEL       0x3ff
+#define ASYNC_SENTINEL          0x3ff
 
 /**
  * PropertyBlob:
@@ -1064,14 +1069,18 @@ typedef struct {
   guint16 must_not_be_implemented : 1;
   guint16 class_closure           : 1;
   guint16 throws                  : 1;
-  guint16 reserved                :11;
+  guint16 is_async                : 1;
+  guint16 sync_or_async           : 10;
   guint16 signal;
 
   guint16 struct_offset;
   guint16 invoker : 10; /* Number of bits matches @index in FunctionBlob */
-  guint16 reserved2 : 6;
+  guint16 reserved : 6;
 
-  guint32 reserved3;
+  guint16 finish                  : 10;
+  guint16 reserved2               : 6;
+  guint16 reserved3               : 16;
+
   guint32 signature;
 } VFuncBlob;
 

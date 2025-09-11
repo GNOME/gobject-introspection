@@ -1702,6 +1702,9 @@ _g_ir_node_build_typelib (GIrNode         *node,
 	blob->name = _g_ir_write_string (node->name, strings, data, offset2);
 	blob->symbol = _g_ir_write_string (function->symbol, strings, data, offset2);
 	blob->signature = signature;
+	blob->is_async = 0;
+	blob->sync_or_async = ASYNC_SENTINEL;
+	blob->finish = ASYNC_SENTINEL;
 
         if (function->is_setter || function->is_getter)
           {
@@ -1872,6 +1875,9 @@ _g_ir_node_build_typelib (GIrNode         *node,
 	blob->class_closure = 0; /* FIXME */
 	blob->throws = vfunc->throws; /* Deprecated. Also stored in SignatureBlob. */
 	blob->reserved = 0;
+	blob->is_async = 0;
+	blob->sync_or_async = ASYNC_SENTINEL;
+	blob->finish = ASYNC_SENTINEL;
 
 	if (vfunc->invoker)
 	  {
