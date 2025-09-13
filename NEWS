@@ -1,3 +1,16 @@
+1.86.0 - 2025-09-13
+-------------------
+
+- giscanner: Added ability to add wrapper script arguments [!530]
+- g-ir-tools: Support reading @rspfiles for arguments [!532]
+- Update gobject-introspection-tests [!536]
+- giscanner: support alignof expressions [!538]
+- dumper: Fix introspection binaries missing rpaths for uninstalled ELF shlibs [!540]
+- meson: Fix fs.copyfile semantics breaking GIR build with Ninja 1.12+ [!534]
+- giscanner: Deduplicate arguments and use response files for MSVC [!535]
+- scanner: Prefer some getters over others [!473]
+- girepository: Initialize the async functions parameters [!544]
+
 1.84.0 - 2025-03-15
 -------------------
 
