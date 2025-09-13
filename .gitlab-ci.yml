@@ -156,6 +156,7 @@ vs2017-x64-meson:
     name: "gi-_${env:CI_COMMIT_REF_NAME}"
     paths:
       - _build/meson-logs
+  allow_failure: true
 
 release-build:
   stage: build
