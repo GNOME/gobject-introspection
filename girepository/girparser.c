@@ -1272,26 +1272,25 @@ start_parameter (GMarkupParseContext *context,
 
   state_switch (ctx, STATE_FUNCTION_PARAMETER);
 
+  if (caller_allocates == NULL)
+    param->caller_allocates = FALSE;
+  else
+    param->caller_allocates = strcmp (caller_allocates, "1") == 0;
+
   if (direction && strcmp (direction, "out") == 0)
     {
       param->in = FALSE;
       param->out = TRUE;
-      if (caller_allocates == NULL)
-	param->caller_allocates = FALSE;
-      else
-	param->caller_allocates = strcmp (caller_allocates, "1") == 0;
     }
   else if (direction && strcmp (direction, "inout") == 0)
     {
       param->in = TRUE;
       param->out = TRUE;
-      param->caller_allocates = FALSE;
     }
   else
     {
       param->in = TRUE;
       param->out = FALSE;
-      param->caller_allocates = FALSE;
     }
 
   if (retval && strcmp (retval, "1") == 0)

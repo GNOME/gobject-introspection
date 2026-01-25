@@ -710,8 +710,14 @@ class MainTransformer(object):
             annotated_direction = ast.PARAM_DIRECTION_INOUT
         elif ANN_OUT in annotations:
             annotated_direction = ast.PARAM_DIRECTION_OUT
+        elif ANN_IN in annotations:
+            annotated_direction = ast.PARAM_DIRECTION_IN
 
-            options = annotations[ANN_OUT]
+        if annotated_direction in (ast.PARAM_DIRECTION_OUT, ast.PARAM_DIRECTION_INOUT):
+            if annotated_direction == ast.PARAM_DIRECTION_OUT:
+                options = annotations[ANN_OUT]
+            else:
+                options = annotations[ANN_INOUT]
             if len(options) == 0:
                 if node.type.target_giname and node.type.ctype:
                     target = self._transformer.lookup_giname(node.type.target_giname)
@@ -727,8 +733,6 @@ class MainTransformer(object):
                     caller_allocates = True
                 elif option == OPT_OUT_CALLEE_ALLOCATES:
                     caller_allocates = False
-        elif ANN_IN in annotations:
-            annotated_direction = ast.PARAM_DIRECTION_IN
 
         if (annotated_direction is not None) and (annotated_direction != node.direction):
             node.direction = annotated_direction

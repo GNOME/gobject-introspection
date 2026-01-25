@@ -504,7 +504,8 @@ write_callable_info (const gchar    *namespace,
 	              g_arg_info_is_caller_allocates (arg) ? "1" : "0");
 	  break;
 	case GI_DIRECTION_INOUT:
-	  xml_printf (file, " direction=\"inout\"");
+	  xml_printf (file, " direction=\"inout\" caller-allocates=\"%s\"",
+	              g_arg_info_is_caller_allocates (arg) ? "1" : "0");
 	  break;
 	default:
 	  g_assert_not_reached ();

@@ -284,6 +284,11 @@ OPT_OUT_CALLER_ALLOCATES = 'caller-allocates'
 OUT_OPTIONS = [OPT_OUT_CALLEE_ALLOCATES,
                OPT_OUT_CALLER_ALLOCATES]
 
+# (inout) annotation options
+# We reuse the same two constants as for (out)
+INOUT_OPTIONS = [OPT_OUT_CALLEE_ALLOCATES,
+                 OPT_OUT_CALLER_ALLOCATES]
+
 # (not) annotation options
 OPT_NOT_NULLABLE = 'nullable'
 OPT_NOT_OPTIONAL = 'optional'
@@ -960,7 +965,7 @@ class GtkDocAnnotatable(object):
 
     def _do_validate_inout(self, position, ann_name, options):
         '''
-        Validate the ``(in-out)`` annotation.
+        Validate the ``(inout)`` annotation.
 
         :param position: :class:`giscanner.message.Position` of the line in the source file
                          containing the annotation to be validated
@@ -968,7 +973,8 @@ class GtkDocAnnotatable(object):
         :param options: annotation options to validate
         '''
 
-        self._validate_annotation(position, ann_name, options, exact_n_options=0)
+        self._validate_annotation(position, ann_name, options, max_n_options=1,
+                                  choices=INOUT_OPTIONS)
 
     def _do_validate_method(self, position, ann_name, options):
         '''
