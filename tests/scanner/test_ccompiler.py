@@ -234,6 +234,29 @@ class UnixCCompilerTest(unittest.TestCase):
                           '-Wno-deprecated-declarations'],
                          args)
 
+    def test_compile_args_dry_run(self):
+        """Compile dry-run produces expected compiler args."""
+        args = self.compile_args(environ=dict(CC='gcc'), source='a.c')
+        self.assertListStartsWith(args, ['gcc'])
+        self.assertIn('-c', args)
+
+    def test_preprocess_args_dry_run(self):
+        """Preprocess dry-run produces expected preprocessor args."""
+        args = self.preprocess_args(environ=dict(CC='gcc'), source='a.c')
+        self.assertListStartsWith(args, ['gcc'])
+        self.assertIn('-E', args)
+
+
+class MSVCCompilerSetuptoolsTest(unittest.TestCase):
+    """Tests for MSVCCompiler compatibility with Setuptools."""
+
+    @unittest.skipIf(os.name != 'nt', 'MSVC compiler only on Windows')
+    def test_msvc_compiler_instantiation_setuptools_ge_81(self):
+        """MSVCCompiler can be instantiated with Setuptools >= 81 without TypeError."""
+        from giscanner.msvccompiler import get_msvc_compiler
+        compiler = get_msvc_compiler()
+        self.assertIsNotNone(compiler)
+
 
 if __name__ == '__main__':
     unittest.main()
