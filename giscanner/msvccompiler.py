@@ -38,9 +38,9 @@ def get_msvc_compiler():
 
 class MSVCCompiler(DistutilsMSVCCompiler):
 
-    def __init__(self, verbose=0, dry_run=0, force=0):
+    def __init__(self, verbose=0, force=0):
         super(DistutilsMSVCCompiler, self).__init__()
-        CCompiler.__init__(self, verbose, dry_run, force)
+        CCompiler.__init__(self, verbose=verbose, force=force)
         self.__paths = []
         self.__arch = None  # deprecated name
         self.initialized = False
