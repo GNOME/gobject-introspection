@@ -19,6 +19,7 @@
 #
 
 import os
+import re
 import shlex
 import subprocess
 import tempfile
@@ -149,6 +150,7 @@ class CCompiler(object):
     compiler_cmd = ''
     compiler = None
     _cflags_no_deprecation_warnings = ''
+    _needs_escaping_macros = True
 
     def __init__(self,
                  environ=os.environ,
@@ -214,6 +216,12 @@ class CCompiler(object):
             else:
                 self.compiler_cmd = 'cl.exe'
                 self._cflags_no_deprecation_warnings = "-wd4996"
+                # MSVC 2026 no longer allows escaped quotes in macro definitions.
+                # https://developercommunity.visualstudio.com/t/Spurious-C7772-C1903-in-2026-Insiders-wh/11082089
+                output = subprocess.check_output([self.compiler_cmd], universal_newlines=True, stderr=subprocess.STDOUT)
+                version = re.search(r'\w([0-9]+\.[0-9]+\.[0-9]+)\w', output)
+                if version and version.group(0) >= '19.50':
+                    self._needs_escaping_macros = False
         else:
             if (isinstance(self.compiler, Mingw32CCompiler)):
                 self.compiler_cmd = self.compiler.compiler[0]
@@ -523,7 +531,7 @@ class CCompiler(object):
                     # macros for compiling using distutils
                     # get dropped for MSVC builds, so
                     # escape the escape character.
-                    if self.check_is_msvc():
+                    if self._needs_escaping_macros:
                         macro_value = macro_value.replace('\"', '\\\"')
                 macros.append((macro_name, macro_value))
             elif option.startswith('-U'):
