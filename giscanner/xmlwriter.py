@@ -89,7 +89,7 @@ class XMLWriter(object):
         # of an "encoding" xml property means utf-8.
         # See: http://www.opentag.com/xfaq_enc.htm#enc_default
         self._data = StringIO()
-        self._data.write('<?xml version="1.0"?>\n')
+        self._data.write('<?xml version="1.0" encoding="utf-8"?>\n')
         self._tag_stack = []
         self._indent = 0
         self._indent_unit = 2
