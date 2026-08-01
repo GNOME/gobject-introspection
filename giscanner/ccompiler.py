@@ -150,7 +150,7 @@ class CCompiler(object):
     compiler_cmd = ''
     compiler = None
     _cflags_no_deprecation_warnings = ''
-    _needs_escaping_macros = True
+    _needs_escaping_macros = False
 
     def __init__(self,
                  environ=os.environ,
@@ -220,8 +220,8 @@ class CCompiler(object):
                 # https://developercommunity.visualstudio.com/t/Spurious-C7772-C1903-in-2026-Insiders-wh/11082089
                 output = subprocess.check_output([self.compiler_cmd], universal_newlines=True, stderr=subprocess.STDOUT)
                 version = re.search(r'\w([0-9]+\.[0-9]+\.[0-9]+)\w', output)
-                if version and version.group(0) >= '19.50':
-                    self._needs_escaping_macros = False
+                if not version or version.group(0) < '19.50':
+                    self._needs_escaping_macros = True
         else:
             if (isinstance(self.compiler, Mingw32CCompiler)):
                 self.compiler_cmd = self.compiler.compiler[0]
