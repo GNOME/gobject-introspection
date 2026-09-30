@@ -82,7 +82,10 @@ class UnixCCompilerTest(unittest.TestCase):
         except ImportError as e:
             raise unittest.SkipTest(e)
 
-        with patch.object(distutils.ccompiler.CCompiler, 'spawn') as spawn:
+        # setuptools >= 84 replaced spawn() with call(), but that might not
+        # exist in older versions
+        with patch.object(distutils.ccompiler.CCompiler, 'spawn') as spawn, \
+             patch.object(distutils.ccompiler.CCompiler, 'call', create=True) as call:
             with Environ(environ):
                 cc = CCompiler(compiler_name=compiler_name)
                 # Avoid check if target is newer from source.
@@ -90,9 +93,14 @@ class UnixCCompilerTest(unittest.TestCase):
                 # Don't actually do anything.
                 cc.compiler.dry_run = True
                 cc.compile(pkg_config_cflags, cpp_includes, [source], init_sections)
-        self.assertEqual(1, spawn.call_count)
-        args, kwargs = spawn.call_args
-        return args[0]
+
+        if spawn.call_count:
+            args, kwargs = spawn.call_args
+            return args[0]
+        else:
+            self.assertEqual(1, call.call_count)
+            args, kwargs = call.call_args
+            return args[0]
 
     def preprocess_args(self, environ={}, compiler_name=None,
                         source='a.c', output=None, cpp_options=[]):
@@ -103,7 +111,10 @@ class UnixCCompilerTest(unittest.TestCase):
         except ImportError as e:
             raise unittest.SkipTest(e)
 
-        with patch.object(distutils.ccompiler.CCompiler, 'spawn') as spawn:
+        # setuptools >= 84 replaced spawn() with call(), but that might not
+        # exist in older versions
+        with patch.object(distutils.ccompiler.CCompiler, 'spawn') as spawn, \
+             patch.object(distutils.ccompiler.CCompiler, 'call', create=True) as call:
             with Environ(environ):
                 cc = CCompiler(compiler_name=compiler_name)
                 # Avoid check if target is newer from source.
@@ -111,9 +122,14 @@ class UnixCCompilerTest(unittest.TestCase):
                 # Don't actually do anything.
                 cc.compiler.dry_run = True
                 cc.preprocess(source, output, cpp_options)
-        self.assertEqual(1, spawn.call_count)
-        args, kwargs = spawn.call_args
-        return args[0]
+
+        if spawn.call_count:
+            args, kwargs = spawn.call_args
+            return args[0]
+        else:
+            self.assertEqual(1, call.call_count)
+            args, kwargs = call.call_args
+            return args[0]
 
     @unittest.skip("Currently a Python build time compiler is used as the default.")
     def test_compile_default(self):
